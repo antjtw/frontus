@@ -13,7 +13,8 @@ To set up a new instance:
 
 - `git config --path core.worktree ../`
 
-- ```cat >.get/hooks/post-receive <<EOF
+- Then:
+```cat >.get/hooks/post-receive <<EOF
 #!/bin/sh -x
 # Unset GIT_DIR or the universe will implode
 unset GIT_DIR
