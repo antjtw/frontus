@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="prospectus.css" media="all"> 
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+    <title>Login</title>
+    <script type='text/javascript' src="/brijj/brijj.js"></script>
+    <script>
+    	function doLogin() {
+    	  var u = document.querySelector("input[name=username]").value;
+    	  var p = document.querySelector("input[name=password]").value;
+    	  ProspectBrijj.login(u,p, didLogin);
+    	}
+
+    	function didLogin(x) {
+    	  alert("didLogin"+x);
+    	}
+    </script> 
+</head>
+
+<body>
+    <div class="container">
+        <h1>Login Page</h1>
+        <form id="login" action="" method="post" onsubmit="doLogin(); return false;">
+            <fieldset>
+                <label>Email:</label>
+                <input placeholder="email" tabindex="1" autocapitalize="off" name="username" type="text">
+                <label>Passphrase:</label>
+                <input id="login_password" placeholder="passphrase" tabindex="2" name="password" type="password">
+                <br>
+                <button type="submit" class="btn btn-large btn-primary" tabindex="3">Sign in...</button>
+            </fieldset>
+        </form>
+        <input class="btn" type="button" value="Forgot your passphrase?"/>
+    </div>  
+    <script src="/script/jquery-min.js"></script>
+    <script src="/script/bootstrap.js"></script>
+</body>
+</html>
