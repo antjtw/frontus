@@ -38,15 +38,17 @@
 
     /* Downsize the brand/project name a bit */
     .navbar .brand {
-      padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
-      font-size: 16px;
-      font-weight: bold;
+      padding: 14px 20px 16px; 			/* Increase vertical padding to match navbar links */
+      font-family: 'Alegreya', serif; 	/* add jsl */
+      font-size: 60px; 					/* 16px; jsl */
+      									/* font-weight: bold; jsl*/
+      color: #008147;					/* #777777; jsl */
       text-shadow: 0 -1px 0 rgba(0,0,0,.5);
     }
 
     /* Navbar links: increase padding for taller navbar */
     .navbar .nav > li > a {
-      padding: 15px 20px;
+      padding: 15px 20px 35px; /* was 15px 20px; jsl */
     }
 
     /* Offset the responsive button for proper vertical alignment */
@@ -169,6 +171,7 @@
       .navbar-inner {
         border-radius: 0;
         margin: -20px 0;
+        padding: -0px -0px +20px; /* add jsl */
       }
 
       .carousel .item {
@@ -197,6 +200,7 @@
 
       .navbar-inner {
         margin: -20px;
+        padding: -0px -0px +20px; /* add jsl */
       }
 
       .carousel {

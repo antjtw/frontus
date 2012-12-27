@@ -13,7 +13,7 @@ To set up a new instance:
 
 - `git config --path core.worktree ../`
 
-- `cat >.get/hooks/post-receive <<EOF
+- ```cat >.get/hooks/post-receive <<EOF
 #!/bin/sh -x
 # Unset GIT_DIR or the universe will implode
 unset GIT_DIR
@@ -23,7 +23,7 @@ cd `git config --get core.worktree` || exit
 git checkout -f
 git submodule update --init --recursive --force
 EOF
-`
+```
 
 
 
