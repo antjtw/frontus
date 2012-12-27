@@ -19,7 +19,7 @@ cat >.get/hooks/post-receive <<EOF
 #!/bin/sh -x
 # Unset GIT_DIR or the universe will implode
 unset GIT_DIR
-
+#    
 # Change directory to the working tree; exit on failure
 cd `git config --get core.worktree` || exit
 git checkout -f
