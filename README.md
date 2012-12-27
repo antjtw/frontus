@@ -26,3 +26,13 @@ EOF
 `
 
 
+
+On the client side:
+
+`git remote add ec2-testing propectus-testing:/var/repo/frontus`
+
+`git push ec2-testing +master:refs/heads/master`
+
+
+Subsequent deployments are done with: `git push ec2-testing`.
+
