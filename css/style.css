@@ -35,14 +35,20 @@
          -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
               box-shadow: 0 2px 10px rgba(0,0,0,.25);
     }
+    /* jsl change the navbar to handle logo image instead */
+.navbar-inverse .navbar-inner {
+  background-color: #008047;
+  background-image: none;
+  border-color: #252525;
+}
 
     /* Downsize the brand/project name a bit */
     .navbar .brand {
       padding: 14px 20px 16px; 			/* Increase vertical padding to match navbar links */
-      font-family: 'Alegreya', serif; 	/* add jsl */
-      font-size: 60px; 					/* 16px; jsl */
+    /*  font-family: 'Alegreya', serif; */	/* add jsl */
+    /*  font-size: 60px; 				*/	/* 16px; jsl */
       									/* font-weight: bold; jsl*/
-      color: #008147;					/* #777777; jsl */
+      color: #008047;					/* #777777; jsl */
       text-shadow: 0 -1px 0 rgba(0,0,0,.5);
     }
 
