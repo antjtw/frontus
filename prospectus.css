@@ -32,6 +32,7 @@ h1 {
   margin-bottom: 30px;
   text-align: center;
  }
+ 
 h2 {
   font-size: 1.7em;
   letter-spacing: -1px;
@@ -40,8 +41,30 @@ h2 {
   font-weight: normal;
   color: $grayLight;
 }
+
 p {
 	font-size: 1.1em; 
 	line-height: 1.7em;
 }
 
+/* Home Navigation */
+
+#homelogo {
+	height:50px;
+	width:282px;
+	padding-top:10px;
+}
+
+#topbar {
+	margin-bottom: 20px;
+	height:70px;
+}
+
+#corenav {
+	margin-bottom: 10px;
+}
+
+.btn-home {
+	height: 40px;	
+	margin-top:5px;
+}
