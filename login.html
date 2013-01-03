@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="prospectus.css" media="all"> 
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <title>Login</title>
+    <title>Login | Prospect.us</title>
     <script type='text/javascript' src="/brijj/brijj.js"></script>
     <script>
     	function doLogin() {
@@ -51,9 +51,9 @@
                         <form id="login" action="" method="post" onsubmit="doLogin(); return false;">
                             <fieldset>
                                 <label class="loginLabel">Email:</label>
-                                <input class="loginInput" placeholder="email" tabindex="1" autocapitalize="off" name="username" type="text">
+                                <input required class="loginInput" placeholder="email" tabindex="1" autocapitalize="off" name="username" type="email">
                                 <label class="loginLabel">Password:</label>
-                                <input class="loginInput" id="login_password" placeholder="password" tabindex="2" name="password" type="password">
+                                <input required class="loginInput" id="login_password" placeholder="password" tabindex="2" name="password" type="password">
                                 <a id="forgotLink" href="#">Forgot Your Password?</a>
                                 <br>
                                 <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>

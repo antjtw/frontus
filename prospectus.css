@@ -114,7 +114,8 @@ p {
 
 #loginButton {
 	width: 300px;
-	margin-left:50px;
-	margin-top:10px;
+	margin-left:47px;
+	text-align:center;
+	margin-top:15px;
 	margin-bottom:15px;	
 }
