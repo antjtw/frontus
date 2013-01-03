@@ -66,5 +66,55 @@ p {
 
 .btn-home {
 	height: 40px;	
+	width:80px;
 	margin-top:5px;
+}
+
+/* Login */
+
+#login {
+	width:400px;
+	border:thin solid #000;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	padding-top:10px;
+	margin-top:20px;
+	margin-left:269px;
+	background-color: #f5f5f5;
+  	*background-color: #e6e6e6;
+	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+	background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+	background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+	background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+	background-repeat: repeat-x;
+}
+
+#forgotLink {
+	font-size: 12px;
+	text-decoration: underline;
+	margin-left: 40px;
+	line-height:5px;	
+}
+
+.loginLabel {
+	margin-left: 40px;	
+}
+
+.loginInput {
+	width:300px;
+	margin-right: 40px;
+	margin-left: 40px;
+}
+
+#login_password {
+	margin-bottom: 0px;	
+}
+
+#loginButton {
+	width: 300px;
+	margin-left:50px;
+	margin-top:10px;
+	margin-bottom:15px;	
 }
