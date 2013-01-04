@@ -289,18 +289,16 @@ p {
 @media (max-width: 320px) { 
 
 #login {
-	width:280px;
+	width:260px;
 	
 }
 
 .loginInput {
-	width:180px;
-	margin-right: 40px;
-	margin-left: 40px;
+	width:160px;
 }
 
 #loginButton {
-	width: 180px;
+	width: 160px;
 }
 
 }
