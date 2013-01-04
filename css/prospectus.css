@@ -50,7 +50,7 @@ p {
 /* Home Navigation */
 
 #corenav {
-	margin-bottom: 10px;
+	margin-bottom: -10px;
 }
 
 #homelogo {
@@ -168,20 +168,6 @@ p {
 	height:55px;
 }
 
-.btn.btn-home {
-	height: 30px;
-	width:60px;
-	font-size:12px;
-}
-
-.btn.btn-home.btn-success {
-	height: 30px;
-	width:60px;
-	font-size:12px;
-	padding-left:7px;
-	padding-right:7px;
-}
-
 .nav {
 	font-size:12px;
 }
@@ -189,7 +175,7 @@ p {
 
 }
 
-@media (max-width: 480px) { 
+@media (max-width: 320px) { 
 
 #homelogo {
 	height:25px;
@@ -233,7 +219,6 @@ p {
 	border-radius: 10px;
 	padding-top:10px;
 	margin-top:20px;
-	margin-left:269px;
 	background-color: #f5f5f5;
   	*background-color: #e6e6e6;
 	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
@@ -244,15 +229,23 @@ p {
 	background-repeat: repeat-x;
 }
 
+.center {
+    *display:inline; /* ie 7 */
+    display:inline-block;
+    text-align:left;
+    zoom:1; /* ie7 junk */
+}
+
 #forgotLink {
 	font-size: 12px;
 	text-decoration: underline;
-	margin-left: 40px;
-	line-height:5px;	
+	line-height:5px;
+	margin-left:45px;	
 }
 
 .loginLabel {
-	margin-left: 40px;	
+	text-align:left;
+	margin-left: 45px;	
 }
 
 .loginInput {
@@ -267,8 +260,47 @@ p {
 
 #loginButton {
 	width: 300px;
-	margin-left:47px;
 	text-align:center;
 	margin-top:15px;
-	margin-bottom:15px;	
+	margin-bottom:15px;
+	margin-left:48px;
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+
+#login {
+	width:300px;
+	
+}
+
+.loginInput {
+	width:200px;
+	margin-right: 40px;
+	margin-left: 40px;
+}
+
+#loginButton {
+	width: 200px;
+}
+
+}
+
+@media (max-width: 320px) { 
+
+#login {
+	width:280px;
+	
+}
+
+.loginInput {
+	width:180px;
+	margin-right: 40px;
+	margin-left: 40px;
+}
+
+#loginButton {
+	width: 180px;
+}
+
 }
