@@ -189,6 +189,40 @@ p {
 
 }
 
+@media (max-width: 480px) { 
+
+#homelogo {
+	height:25px;
+	width:141px;
+	padding-top:17px;
+}
+
+#topbar {
+	margin-bottom: 10px;
+	height:55px;
+}
+
+.btn.btn-home {
+	height: 30px;
+	width:60px;
+	font-size:12px;
+}
+
+.btn.btn-home.btn-success {
+	height: 30px;
+	width:60px;
+	font-size:12px;
+	padding-left:7px;
+	padding-right:7px;
+}
+
+.nav {
+	font-size:12px;
+}
+	
+
+}
+
 /* Login */
 
 #login {
