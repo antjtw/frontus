@@ -49,6 +49,10 @@ p {
 
 /* Home Navigation */
 
+#corenav {
+	margin-bottom: 10px;
+}
+
 #homelogo {
 	height:50px;
 	width:282px;
@@ -60,14 +64,100 @@ p {
 	height:70px;
 }
 
-#corenav {
-	margin-bottom: 10px;
+.btn-home {
+	height: 40px;	
+	width:80px;
+	margin-top:5px;
+}
+
+
+/* Large desktop */
+@media (min-width: 1200px) {
+	
+#homelogo {
+	height:50px;
+	width:282px;
+	padding-top:10px;
+}
+
+#topbar {
+	margin-bottom: 20px;
+	height:70px;
 }
 
 .btn-home {
 	height: 40px;	
 	width:80px;
 	margin-top:5px;
+}
+
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+
+#homelogo {
+	height:40px;
+	width:226px;
+	padding-top:10px;
+}
+
+#topbar {
+	margin-bottom: 20px;
+	height:55px;
+}
+
+.btn-home {
+	height: 30px;	
+	width:60px;
+	margin-top:5px;
+}
+
+
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+
+#homelogo {
+	height:40px;
+	width:226px;
+	padding-top:10px;
+}
+
+#topbar {
+	margin-bottom: 10px;
+	height:55px;
+}
+
+.btn-home {
+	height: 30px;	
+	width:60px;
+}
+
+
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+
+#homelogo {
+	height:25px;
+	width:141px;
+	padding-top:18px;
+}
+
+#topbar {
+	margin-bottom: 10px;
+	height:55px;
+}
+
+.btn-home {
+	height: 30px;
+	width:60px;
+}
+	
+
 }
 
 /* Login */
