@@ -3,32 +3,39 @@
     <head>
         <meta charset="utf-8" />
         <title>File Upload</title>
-        
+
         <!-- Our CSS stylesheet file -->
         <link rel="stylesheet" href="styles.css" />
-        
+
         <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
     </head>
-    
+
     <body>
-		
+
 		<header>
 			<h1>Upload files</h1>
 		</header>
-		
+
 		<div id="dropbox">
 			<span class="message">Drop files here to upload. <br /></span>
+			<div class="preview" style="display:none">
+				<span class="imageHolder"><img /><span class="uploaded"></span></span>
+				<div class="progressHolder"><div class="progress"></div></div>
+			</div>
 		</div>
-		
+
+
+
+
         <footer>
         </footer>
-        
-		<script src="/js/jquery-1.8.3.js"></script>
+
+		<script src="/frontus/js/jquery-1.8.3.js"></script>
 		<script src="jquery.filedrop.js"></script>
         <script src="script.js"></script>
-    
+
     </body>
 </html>
 

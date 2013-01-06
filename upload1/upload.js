@@ -17,7 +17,7 @@ define([
 	'dijit/Dialog',
 	'dijit/ProgressBar',
 	'dijit/_TemplatedMixin',
-  	'dojo/text!/upload1/ProgressBar.html',
+  	'dojo/text!/frontus/upload1/ProgressBar.html',
    	'dijit/form/Button',
    	'dijit/form/CheckBox'
 ], function(lang, declare, Deferred, array, fx, xhr, dom, domConstruct, domClass, domStyle, query, has, on, aspect, registry, Dialog, ProgressBar, _TemplatedMixin, template, Button, CheckBox) {
@@ -150,7 +150,7 @@ define([
       					dfd = this.createThumb(file, newWidth);
       				}
       				else {
-      					img.src = '/upload1/resources/mallard.png';
+      					img.src = 'resources/mallard.png';
       					img.onload = function() {	 // resize to fit icon
       						newHeight = Math.floor(img.height * newWidth / img.width);
       						img.width = newWidth;
@@ -177,16 +177,16 @@ define([
       			}
       			else {
       				if (fileType.match(/video\/*/)) {
-      					img.src = '/upload1/resources/icons-64/file-video.png'
+      					img.src = 'resources/icons-64/file-video.png'
       				}
       				else if (fileType.match(/audio\/*/)) {
-      					img.src = '/upload1/resources/icons-64/file-audio.png'
+      					img.src = 'resources/icons-64/file-audio.png'
       				}
       				else if (fileType.match(/text\/*/)) {
-      					img.src = '/upload1/resources/icons-64/file-text.png'
+      					img.src = 'resources/icons-64/file-text.png'
       				}
       				else {
-      					img.src = '/upload1/resources/icons-64/file.png'
+      					img.src = 'resources/icons-64/file.png'
       				}
       				domConstruct.place(img, el, 'first');
       				dfd.resolve(img);

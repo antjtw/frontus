@@ -4,7 +4,7 @@
 <title>Drag and Drop File Uploader</title>
 <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.8.2/dijit/themes/claro/document.css" rel="stylesheet" type="text/css">
 <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.8.2/dijit/themes/claro/claro.css" rel="stylesheet" type="text/css">
-<link href="/upload1/uploader.css" rel="stylesheet" type="text/css">
+<link href="uploader.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 body { padding: 20px; }
 #dropTarget {
@@ -35,12 +35,12 @@ body { padding: 20px; }
 <div id="dropTarget">Drop files from your desktop here</div>
 <p>Note: pause/resume only works with Firefox 4.</p>
 
-<script src="/dojo-1.8.2/dojo/dojo.js" data-dojo-config="async: true"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 <script type="text/javascript">
-require(['dojo/_base/kernel', 'dojo/ready','/upload1/upload.js'], function(kernel, ready, Uploader) {
+require(['dojo/_base/kernel', 'dojo/ready','upload.js'], function(kernel, ready, Uploader) {
 	ready(function() {
 		var upl = new Uploader({
-			url: '/fileUpload',
+			url: '/fileUpload/',
 			dropTarget: 'dropTarget',
 			maxKBytes: 50000,
 			maxNumFiles: 10
