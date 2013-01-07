@@ -68,10 +68,13 @@ function checkPassword() {
                                 <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text">
                                 
                                 <label class="loginLabel">Password:</label>
-                                <input required class="loginInput" placeholder="password" id="password1" tabindex="4" name="password" type="password">
-                                
+                                <input required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
+  if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
+                                                                
                                 <label class="loginLabel">Confirm Password:</label>
-                                <input required class="loginInput" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password">
+                                <input required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password" onchange="
+  this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');
+">
                                 
                                 <label class="checkbox registerBox">
       								<input type="checkbox" required> I agree to the Terms of Use &amp; Privacy Policy
