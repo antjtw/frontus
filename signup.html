@@ -13,10 +13,12 @@
 
 <script> 
 function checkPassword() { 
+
     if (document.registerform.password.value != document.registerform.confirmpassword.value) { 
-        alert ('The passwords must match!');
-        return false; 
-    }
+        document.registerform.confirmpassword.setCustomValidity('Passwords must match.');
+    } else {
+    document.registerform.confirmpassword.value.setCustomValidity('');
+	}
 } 
 </script>
 
@@ -66,7 +68,7 @@ function checkPassword() {
                                 <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text">
                                 
                                 <label class="loginLabel">Password:</label>
-                                <input required class="loginInput" placeholder="password" tabindex="4" name="password" type="password">
+                                <input required class="loginInput" placeholder="password" id="password1" tabindex="4" name="password" type="password">
                                 
                                 <label class="loginLabel">Confirm Password:</label>
                                 <input required class="loginInput" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password">
@@ -83,6 +85,7 @@ function checkPassword() {
                                 <br>
                             </fieldset>
                         </form>
+                       
                     </div>
         	</section>
     	</div>  
