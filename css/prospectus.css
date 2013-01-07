@@ -71,7 +71,7 @@ p {
 }
 
 
-/* Large desktop */
+/* Home Navigation - Large desktop */
 @media (min-width: 1200px) {
 	
 #homelogo {
@@ -93,7 +93,7 @@ p {
 
 }
  
-/* Portrait tablet to landscape and desktop */
+/* Home Navigation - Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 
 
 #homelogo {
@@ -123,7 +123,7 @@ p {
 
 }
  
-/* Landscape phone to portrait tablet */
+/* Home Navigation - Landscape phone to portrait tablet */
 @media (max-width: 767px) { 
 
 #homelogo {
@@ -154,7 +154,7 @@ p {
 
 }
  
-/* Landscape phones and down */
+/* Home Navigation - Landscape phones and down */
 @media (max-width: 480px) { 
 
 #homelogo {
@@ -266,7 +266,7 @@ p {
 	margin-left:48px;
 }
 
-/* Landscape phones and down */
+/* Login - Landscape phones and down */
 @media (max-width: 480px) { 
 
 #login {
