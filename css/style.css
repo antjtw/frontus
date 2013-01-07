@@ -5,6 +5,7 @@
     /* Padding below the footer and lighter body text */
 
     body {
+	  margin-top:25px;
       padding-bottom: 40px;
       color: #5a5a5a;
     }
@@ -501,6 +502,26 @@
 
 #loginButton {
 	width: 160px;
+}
+
+}
+
+/* Register */
+
+.registerBox {
+	margin-left:42px;
+	font-size:12px;
+}
+
+/* Register - Landscape phones and down */
+@media (max-width: 480px) {
+
+.registerBox {
+	font-size:10px;
+}
+
+#registerTitle {
+	font-size:22px;
 }
 
 }

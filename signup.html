@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<script type='text/javascript' src="js/jquery-1.8.3.js"></script>
+
+<script> 
+function checkPassword() { 
+    if (document.registerform.password.value != document.registerform.confirmpassword.value) { 
+        alert ('The passwords must match!');
+        return false; 
+    }
+} 
+</script>
+
+</head>
+
+<body>
+    <div class="container">
+    	<div class="row-fluid">
+
+            <section id="topbar">
+        		<div class="span12" id="homenav">
+        			<a href="index.html"><img src="img/logo2.png" id="homelogo" alt="Prospect.us logo"></a>
+        			<div class="btn-toolbar pull-right">
+        			<button class="btn btn-home" type="button" onclick="location.href='login.html'">Login</button>
+            		<button class="btn btn-home btn-success" type="button">Sign Up</button>
+            		</div>
+        		</div>
+    		</section>
+        </div>
+            
+        <div class="row-fluid">
+            <section id="corenav">
+                <div class="span12 navbar">
+                    <div>
+                        <ul class="nav">
+                        <li><a href="#">FOR COMPANIES</a></li>
+                        <li><a href="#">FOR FUNDERS</a></li>
+                        <li><a href="#">ABOUT US</a></li>
+                        </ul>
+                    </div>
+                </div>   
+            </section>
+       </div>
+       
+       <div class="row-fluid">         
+         	<section>   
+                	<div class="span12 pagination-centered">
+                    	<br>
+                    	<h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
+                        <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+                            <fieldset>
+                            	<label class="loginLabel">Company Name:</label>
+                                <input required class="loginInput" placeholder="company" tabindex="1" autocapitalize="off" name="companyname" type="text">
+                                <label class="loginLabel">First Name:</label>
+                                <input required class="loginInput" placeholder="Alan" tabindex="2" autocapitalize="off" name="firstname" type="text">
+                                <label class="loginLabel">Last Name:</label>
+                                <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text">
+                                
+                                <label class="loginLabel">Password:</label>
+                                <input required class="loginInput" placeholder="password" tabindex="4" name="password" type="password">
+                                
+                                <label class="loginLabel">Confirm Password:</label>
+                                <input required class="loginInput" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password">
+                                
+                                <label class="checkbox registerBox">
+      								<input type="checkbox" required> I agree to the Terms of Use &amp; Privacy Policy
+    							</label>
+                                
+                                <label class="checkbox registerBox">
+      								<input type="checkbox" required> I agree to use fully electronic communications
+    							</label>
+                                
+                                <button id="loginButton" type="submit" class="btn btn-success" tabindex="6" onClick="return checkPassword();">Get Started</button>
+                                <br>
+                            </fieldset>
+                        </form>
+                    </div>
+        	</section>
+    	</div>  
+    </div>
+    <script src="/script/jquery-min.js"></script>
+    <script src="/script/bootstrap.js"></script>
+</body>
+</html>
