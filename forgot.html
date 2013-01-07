@@ -8,19 +8,7 @@
 <link rel="stylesheet" type="text/css" href="css/prospectus.css" media="all"> 
 <link href="css/bootstrap.css" rel="stylesheet" media="screen">
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
-<title>Login | Prospect.us</title>
-    <script type='text/javascript' src="/brijj/brijj.js"></script>
-    <script>
-    	function doLogin() {
-    	  var u = document.querySelector("input[name=username]").value;
-    	  var p = document.querySelector("input[name=password]").value;
-    	  ProspectBrijj.login(u,p, didLogin);
-    	}
-
-    	function didLogin(x) {
-    	  alert("didLogin"+x);
-    	}
-    </script> 
+<title>Forgot Password | Prospect.us</title>
 </head>
 
 <body>
@@ -56,16 +44,13 @@
          	<section>   
                 	<div class="span12 pagination-centered">
                     	<br>
-                    	<h1>Welcome Back</h1>
+                    	<h1>Forgot your password?</h1>
                         <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
                             <fieldset>
                                 <label class="loginLabel">Email:</label>
                                 <input required class="loginInput" placeholder="email" tabindex="1" autocapitalize="off" name="username" type="email">
-                                <label class="loginLabel">Password:</label>
-                                <input required class="loginInput" id="login_password" placeholder="password" tabindex="2" name="password" type="password">
-                                <a id="forgotLink" href="forgot.html">Forgot Your Password?</a>
                                 <br>
-                                <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
+                                <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Reset my password</button>
                                 <br>
                             </fieldset>
                         </form>
