@@ -146,7 +146,7 @@
            
                      <fieldset>
                         <div class="row-fluid">
-                        	<a class="btn" id="btnAdd">Add another term</a>
+                        	<a class="btn" id="btnAdd">Add another Founder</a>
                         </div>
                         <script>
 						$("#btnAdd").click(function() {
@@ -260,6 +260,8 @@
                         	<script>
 							$("#btnAdded").click(function() {
 							var fieldvalue = document.querySelector("input[name=extraselect]").value;
+							
+							<!-- reveals extra form inputs -->
 								
 								if (fieldvalue != '' && document.getElementById(fieldvalue+'hide').style.display != "block")
 								{
@@ -268,6 +270,9 @@
 								else {
 								  document.getElementById(fieldvalue+'hide').style.display = "none";
 								}
+							
+							<!-- Clears the text box -->	
+							document.querySelector("input[name=extraselect]").value = ''
 							});
 							</script>
                      </fieldset>
