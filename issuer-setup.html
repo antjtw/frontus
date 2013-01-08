@@ -33,14 +33,13 @@
   {
 	var fieldvalue = document.querySelector("input[name=extraselect]").value;
 	
-    if (fieldvalue != '')
+    if (fieldvalue != '' && document.getElementById(fieldvalue+'hide').style.display != "block")
     {
       document.getElementById(fieldvalue+'hide').style.display = "block";
     }
-    else
-    {
+	else {
       document.getElementById(fieldvalue+'hide').style.display = "none";
-    }
+	}
   }
   
 </script>
@@ -251,7 +250,7 @@
                          <div class="row-fluid">
                             <div class="span12">
                             <label>Extras</label>
-                            <input name="extraselect" type="text" class="span3" style="margin: 0 auto;" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;,&quot;Anti-dilution&quot;,&quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
+                            <input name="extraselect" type="text" class="span3" style="margin: 0 auto;" autocomplete="off" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;, &quot;Anti-dilution&quot;, &quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
                             <button type="submit" class="btn" onMouseDown="showhidefield();">Add</button>
                             </div>
                         </div>
