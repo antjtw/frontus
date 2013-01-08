@@ -11,21 +11,38 @@
 <title>Set-Up | Prospect.us</title>
 
 <script type='text/javascript' src="js/jquery-1.8.3.js"></script>
+<script type='text/javascript' src="js/bootstrap.min.js"></script>
 
 <script language="JavaScript">
-  function showhidefield()
+  function showhideselect(type, target)
   {
-	var mySelect = document.getElementById("vestingselect"); 
+	var mySelect = document.getElementById(type+'select'); 
+	var fieldvalue = mySelect.options[mySelect.selectedIndex].value
 	
-    if (mySelect.options[mySelect.selectedIndex].value === 'Yes')
+    if (fieldvalue === 'Yes')
     {
-      document.getElementById("vestinghide").style.display = "block";
+      document.getElementById(target+'hide').style.display = "block";
     }
     else
     {
-      document.getElementById("vestinghide").style.display = "none";
+      document.getElementById(target+'hide').style.display = "none";
     }
   }
+  
+  function showhidefield()
+  {
+	var fieldvalue = document.querySelector("input[name=extraselect]").value;
+	
+    if (fieldvalue != '')
+    {
+      document.getElementById(fieldvalue+'hide').style.display = "block";
+    }
+    else
+    {
+      document.getElementById(fieldvalue+'hide').style.display = "none";
+    }
+  }
+  
 </script>
 
 </head>
@@ -74,7 +91,11 @@
         <div class="row-fluid">
     
     <section>
+    
+    <!-- Form Start -->
         	<form id="setupform">
+            
+            <!-- Section 1: Company Formation -->
             	<fieldset>
             		<legend>1. Company Formation</legend>
                     
@@ -106,6 +127,9 @@
                     
                     
                   <br>  
+                  
+              <!-- Section 2: Founder Information -->
+              
                   <fieldset>           
                     <legend>2. Founders</legend>
                     <div id="filler">
@@ -145,6 +169,10 @@
                   </fieldset>
                   
                   <br>  
+                  
+               <!-- Section 3: Founding Terms -->
+               
+               
                   <fieldset>   
                     <legend>3. Founding Terms</legend>
                     	<div class="row-fluid">   
@@ -165,36 +193,74 @@
                     	<div class="row-fluid">
                         	<div class="span2">
                               <label>Vesting</label>
-                              <select id="vestingselect" class="span12" onChange="showhidefield()">
+                              <select id="vestingselect" class="span12" onChange="showhideselect('vesting', 'vesting')">
                         		<option>No</option>
                             	<option>Yes</option>                   
-                        	  </select>   
+                        	  </select> 
                             </div>
                         </div>
                         <div class="row-fluid">
                             <div id="vestinghide" style="display:none">
                                 <div class="span2">
-                                  <label>Cliff Date</label>
-                                  <input type="date" class="span12"> 
-                                </div>
-                                <div class="span2">
-                                  <label>Cliff Percentage</label>
+                                  <label>Vesting Months</label>
                                   <input type="text" class="span12"> 
                                 </div>
                                 <div class="span2">
-                                  <label>Interval</label>
+                                  <label>Vesting Cliff Months</label>
                                   <input type="text" class="span12"> 
                                 </div>
                                 <div class="span2">
-                                  <label>Percentage</label>
+                                  <label>Percentage at Cliff</label>
                                   <input type="text" class="span12"> 
                                 </div>
+                                <div class="span2">
+                                  <label>Post Cliff Vesting Freq.</label>
+                                  <input type="text" class="span12"> 
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="row-fluid">
+                            <div id="Accelerationhide" style="display:none">
+                                <div class="span2">
+                                  <label>Acceleration</label>
+                              	  <select class="span12">
+                        			<option>Select</option>
+                            		<option>Single-Trigger</option>
+                            		<option>Double-Trigger</option>                 
+                        	  	  </select>
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="row-fluid">
+                            <div id="Anti-dilutionhide" style="display:none">
+                                <div class="span2">
+                                  <label>Anti-dilution</label>
+                              	  <select class="span12">
+                                    <option>Select</option>
+                        			<option>Weighted Broad</option>
+                            		<option>Weighted Narrow</option>
+                            		<option>Full Ratchet</option>                 
+                        	  	  </select>
+                                </div>
+                            </div>
+                         </div>
+                         
+                         
+                         <div class="row-fluid">
+                            <div class="span12">
+                            <label>Extras</label>
+                            <input name="extraselect" type="text" class="span3" style="margin: 0 auto;" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;,&quot;Anti-dilution&quot;,&quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
+                            <button type="submit" class="btn" onMouseDown="showhidefield();">Add</button>
                             </div>
                         </div>
                      </fieldset>
           
                   <br>
-                    
+                  
+               <!-- Section 4: Founding Docs -->
+                 
                   <fieldset>
                     <legend>4. Founding Documents</legend>
                     
@@ -205,13 +271,17 @@
                   </fieldset>
                    
                   <br> 
+                  
+              <!-- Section 5: Finish -->
                   <fieldset>
                     <legend>5. You're done!</legend>
                     	
                         <button class="btn-large btn-success">Complete Setup</button>
                   </fieldset>
 
-            </form>        
+            </form>  
+            
+         <!-- End of Form -->      
     </section>
     </div>
     
