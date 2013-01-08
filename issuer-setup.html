@@ -212,10 +212,10 @@
                             <div id="Accelerationhide" style="display:none">
                                 <div class="span2">
                                   <label>Acceleration</label>
-                              	  <select class="span12">
-                        			<option>Select</option>
-                            		<option>Single-Trigger</option>
-                            		<option>Double-Trigger</option>                 
+                              	  <select id="AccelerationInput" class="span12">
+                        			<option value="0">Select</option>
+                            		<option value="1">Single-Trigger</option>
+                            		<option value="2">Double-Trigger</option>                 
                         	  	  </select>
                                 </div>
                             </div>
@@ -254,10 +254,12 @@
                             <label>Extras</label>
                             <input id="extraselect" name="extraselect" type="text" class="span3" style="margin: 0 auto;" autocomplete="off" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;, &quot;Anti-dilution&quot;, &quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
                             <a id="btnAdded" data-role="button" class="btn">Add</a>
+                            <a id="btnRemoved" data-role="button" class="btn">Delete</a>
                             </div>
                         </div>
                         
                         	<script>
+							<!-- Adds forms -->
 							$("#btnAdded").click(function() {
 							var fieldvalue = document.querySelector("input[name=extraselect]").value;
 							
@@ -268,13 +270,32 @@
 								  document.getElementById(fieldvalue+'hide').style.display = "block";
 								}
 								else {
+								}
+							
+							<!-- Clears the text box -->	
+							document.querySelector("input[name=extraselect]").value = ''
+							});
+							
+							<!-- Removes forms -->
+							$("#btnRemoved").click(function() {
+							var fieldvalue = document.querySelector("input[name=extraselect]").value;
+							
+							<!-- reveals extra form inputs -->
+								
+								if (fieldvalue != '' && document.getElementById(fieldvalue+'hide').style.display != "none")
+								{
 								  document.getElementById(fieldvalue+'hide').style.display = "none";
+								  $( '#'+fieldvalue+"Input" ).val(0);
+								}
+								else {
 								}
 							
 							<!-- Clears the text box -->	
 							document.querySelector("input[name=extraselect]").value = ''
 							});
 							</script>
+                            
+                            
                      </fieldset>
           
                   <br>
