@@ -239,108 +239,9 @@
                             </div>
                          </div>
                          
-                         <div class="row-fluid">
-                            <div id="Accelerationhide" style="display:none">
-                                <div class="span2">
-                                  <label>Acceleration</label>
-                              	  <select id="AccelerationInput" class="span12">
-                        			<option value="0">Select</option>
-                            		<option value="1">Single-Trigger</option>
-                            		<option value="2">Double-Trigger</option>                 
-                        	  	  </select>
-                                </div>
-                            </div>
+                         <div id="extraInputsBox">
                          </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Anti-dilutionhide" style="display:none">
-                                <div class="span2">
-                                  <label>Anti-dilution</label>
-                              	  <select id="Anti-dilutionInput" class="span12">
-                                    <option value="0">Select</option>
-                        			<option value="1">Weighted Broad</option>
-                            		<option value="2">Weighted Narrow</option>
-                            		<option value="3">Full Ratchet</option>                 
-                        	  	  </select>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Co-Sale Agreementhide" style="display:none">
-                                <div class="span2">
-                                  <label>Co-Sale Agreement</label>
-                              	  <input type="text" placeholder="Fill in"</div>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Liquidation Preferencehide" style="display:none">
-                                <div class="span2">
-                                  <label>Liquidation Preference</label>
-                              	  <select id="Liquidation PreferenceInput" class="span12">
-                                    <option value="0">Select</option>
-                        			<option value="1">Stacked Preference</option>
-                            		<option value="2">Pari Passu (Blended)</option>                
-                        	  	  </select>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Participating Preferredhide" style="display:none">
-                                <div class="span2">
-                                  <label>Participating Preferred</label>
-                              	  <select id="Participating PreferredInput" class="span12">
-                                    <option value="0">Select</option>
-                        			<option value="1">Full Participation</option>
-                            		<option value="2">Capped Participation</option>                
-                        	  	  </select>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Pay-to-Playhide" style="display:none">
-                                <div class="span2">
-                                  <label>Pay-to-Play</label>
-                              	  <select id="Pay-to-PlayInput" class="span12">
-                                    <option value="0">Select</option>
-                        			<option value="1">Yes</option>
-                            		<option value="2">No</option>                
-                        	  	  </select>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Pro Rata Righthide" style="display:none">
-                                <div class="span2">
-                                  <label>Pro Rata Right</label>
-                              	  <input type="text" placeholder="Fill in"</div>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         
-                         <div class="row-fluid">
-                            <div id="Restrictions on Saleshide" style="display:none">
-                                <div class="span2">
-                                  <label>Restrictions on Sales</label>
-                              	  <input type="text" placeholder="Fill in"</div>
-                                </div>
-                            </div>
-                         </div>
-                         
-                         <div class="row-fluid">
-                            <div id="Voting Rightshide" style="display:none">
-                                <div class="span2">
-                                  <label>Voting Rights</label>
-                              	  <input type="text" placeholder="Fill in"</div>
-                                </div>
-                            </div>
-                         </div>
+
                          
                          
                          <div class="row-fluid">
@@ -348,7 +249,6 @@
                             <label>Extras</label>
                             <input id="extraselect" name="extraselect" type="text" class="span3" minLength=0 style="margin: 0 auto;" autocomplete="off" placeholder="Add another term..." data-provide="typeahead" data-items="8">
                             <a id="btnAdded" data-role="button" class="btn">Add</a>
-                            <a id="btnRemoved" data-role="button" class="btn">Delete</a>
                             </div>
                         </div>
                         
@@ -357,33 +257,50 @@
 							$("#btnAdded").click(function() {
 							var fieldvalue = document.querySelector("input[name=extraselect]").value;
 							
-							<!-- reveals extra form inputs -->
+							<!-- adds extra form inputs -->
 								
-								if (fieldvalue != '' && document.getElementById(fieldvalue+'hide').style.display != "block")
+								if (fieldvalue === 'Acceleration')
 								{
-								  document.getElementById(fieldvalue+'hide').style.display = "block";
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Acceleration'><div class='span2'><label>Acceleration</label><select id='AccelerationInput' class='span12'><option value='0'>Select</option><option value='1'>Single-Trigger</option><option value='2'>Double-Trigger</option></select></div></div></div>");
+								}
+								if (fieldvalue === 'Anti-dilution')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Anti-dilution'><div class='span2'><label>Anti-dilution</label><select id='Anti-dilutionInput' class='span12'><option value='0'>Select</option><option value='1'>Weighted Broad</option><option value='2'>Weighted Narrow</option><option value='3'>Full Ratchet</option></select></div></div></div>");
+								}
+								if (fieldvalue === 'Co-Sale Agreement')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Co-Sale Agreementhide'><div class='span2'><label>Co-Sale Agreement</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								}
+								if (fieldvalue === 'Liquidation Preference')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Liquidation Preference'><div class='span2'><label>Liquidation Preference</label><select id='Liquidation PreferenceInput' class='span12'><option value='0'>Select</option><option value='1'>Stacked Preference</option><option value='2'>Pari Passu (Blended)</option></select></div></div></div>");
+								}
+								if (fieldvalue === 'Participating Preferred')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Participating Preferred'><div class='span2'><label>Participating Preferred</label><select id='Participating PreferredInput' class='span12'><option value='0'>Select</option><option value='1'>Full Participation</option><option value='2'>Capped Participation</option></select></div></div></div>");
+								}
+								if (fieldvalue === 'Pay-to-Play')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Pay-to-Play'><div class='span2'><label>Pay-to-Play</label><select id='Pay-to-PlayInput' class='span12'><option value='0'>Select</option><option value='1'>Yes</option><option value='2'>No</option></select></div></div></div>");
+								}
+								if (fieldvalue === 'Pro Rata Right')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Pro Rata Right'><div class='span2'><label>Pro Rata Right</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								}
+								if (fieldvalue === 'Restrictions on Sales')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Restrictions on Sales'><div class='span2'><label>Restrictions on Sales</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								}
+								if (fieldvalue === 'Voting Rights')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Voting Rights'><div class='span2'><label>Voting Rights</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								}
+								if (fieldvalue === 'Dividend')
+								{
+								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Dividend'><div class='span2'><label>Dividend</label><input type='text' placeholder='Fill in'</div></div></div></div>");
 								}
 								else {
 								}
-							
-							<!-- Clears the text box -->	
-							document.querySelector("input[name=extraselect]").value = ''
-							});
-							
-							<!-- Removes forms -->
-							$("#btnRemoved").click(function() {
-							var fieldvalue = document.querySelector("input[name=extraselect]").value;
-							
-							<!-- reveals extra form inputs -->
-								
-								if (fieldvalue != '' && document.getElementById(fieldvalue+'hide').style.display != "none")
-								{
-								  document.getElementById(fieldvalue+'hide').style.display = "none";
-								  $( '#'+fieldvalue+"Input" ).val(0);
-								}
-								else {
-								}
-							
 							<!-- Clears the text box -->	
 							document.querySelector("input[name=extraselect]").value = ''
 							});
