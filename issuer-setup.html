@@ -23,9 +23,11 @@
 	$("#extraselect").typeahead({
                         minLength: 0,
                         items: 9999,
-                        source: ["Acceleration", "Anti-dilution", "Co-Sale Agreement", "Dividend", "Liquidation Preference", "Participating Preferred", "Pay-to-Play", "Pro Rata Right", "Restrictions on Sales", "Voting Rights"]
+                        source: source
                     });
 	 $("#extraselect").on('focus', $("#extraselect").typeahead.bind($("#extraselect"), 'lookup'));
+
+
 	 
 	 <!-- Code for creating new Founders with unique name and id -->
 	 
@@ -251,6 +253,7 @@
                          <div id="extraInputsBox">
                          </div>
                          
+                         
 
                          
                          
@@ -263,6 +266,10 @@
                         </div>
                         
                         	<script>
+							
+							var source = ["Acceleration", "Anti-dilution", "Co-Sale Agreement", "Dividend", "Liquidation Preference", "Participating Preferred", "Pay-to-Play", "Pro Rata Right", "Restrictions on Sales", "Voting Rights"];
+							
+							
 							<!-- Adds forms -->
 							$("#btnAdded").click(function() {
 							var fieldvalue = document.querySelector("input[name=extraselect]").value;
@@ -312,9 +319,19 @@
 								}
 								else {
 								}
+								
+							<!-- Remove selected item from source list -->
+							
+							for (var i = 0; i < source.length; i ++) {
+								if (source[i] == fieldvalue) { 
+									source.splice(i, 1);
+									break;
+								}
+							}
 							<!-- Clears the text box -->	
 							document.querySelector("input[name=extraselect]").value = ''
 							});
+						
 							</script>
                             
                             
