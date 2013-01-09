@@ -252,11 +252,7 @@
                          
                          <div id="extraInputsBox">
                          </div>
-                         
-                         
-
-                         
-                         
+                                  
                          <div class="row-fluid">
                             <div class="span12">
                             <label>Extras</label>
@@ -279,43 +275,43 @@
 								
 								if (fieldvalue === 'Acceleration' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Acceleration'><div class='span2'><label>Acceleration</label><select id='AccelerationInput' class='span12'><option value='0'>Select</option><option value='1'>Single-Trigger</option><option value='2'>Double-Trigger</option></select></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='AccelerationDelete'><div id='Acceleration'><div class='span2'><label>Acceleration</label><select id='AccelerationInput' class='span12'><option value='0'>Select</option><option value='1'>Single-Trigger</option><option value='2'>Double-Trigger</option></select></div><a data-role='button' class='btn' onClick='btnDeleted(\"AccelerationDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Anti-dilution' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Anti-dilution'><div class='span2'><label>Anti-dilution</label><select id='Anti-dilutionInput' class='span12'><option value='0'>Select</option><option value='1'>Weighted Broad</option><option value='2'>Weighted Narrow</option><option value='3'>Full Ratchet</option></select></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='Anti-dilutionDelete'><div id='Anti-dilution'><div class='span2'><label>Anti-dilution</label><select id='Anti-dilutionInput' class='span12'><option value='0'>Select</option><option value='1'>Weighted Broad</option><option value='2'>Weighted Narrow</option><option value='3'>Full Ratchet</option></select></div><a data-role='button' class='btn' onClick='btnDeleted(\"Anti-dilutionDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Co-Sale Agreement' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Co-Sale Agreementhide'><div class='span2'><label>Co-Sale Agreement</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='Co-SaleAgreementDelete'><div id='Co-Sale Agreement'><div class='span2'><label>Co-Sale Agreement</label><input type='text' placeholder='Fill in'</div><a data-role='button' class='btn' onClick=\"btnDeleted('Co-Sale AgreementDelete')\";>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Liquidation Preference' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Liquidation Preference'><div class='span2'><label>Liquidation Preference</label><select id='Liquidation PreferenceInput' class='span12'><option value='0'>Select</option><option value='1'>Stacked Preference</option><option value='2'>Pari Passu (Blended)</option></select></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid'id='LiquidationPreferenceDelete'><div id='Liquidation Preference'><div class='span2'><label>Liquidation Preference</label><select id='Liquidation PreferenceInput' class='span12'><option value='0'>Select</option><option value='1'>Stacked Preference</option><option value='2'>Pari Passu (Blended)</option></select></div><a data-role='button' class='btn' onClick='btnDeleted(\"Liquidation PreferenceDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Participating Preferred' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Participating Preferred'><div class='span2'><label>Participating Preferred</label><select id='Participating PreferredInput' class='span12'><option value='0'>Select</option><option value='1'>Full Participation</option><option value='2'>Capped Participation</option></select></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='ParticipatingPreferredDelete'><div id='Participating Preferred'><div class='span2'><label>Participating Preferred</label><select id='Participating PreferredInput' class='span12'><option value='0'>Select</option><option value='1'>Full Participation</option><option value='2'>Capped Participation</option></select></div><a data-role='button' class='btn' onClick='btnDeleted(\"Participating PreferredDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Pay-to-Play' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Pay-to-Play'><div class='span2'><label>Pay-to-Play</label><select id='Pay-to-PlayInput' class='span12'><option value='0'>Select</option><option value='1'>Yes</option><option value='2'>No</option></select></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='Pay-to-PlayDelete'><div id='Pay-to-Play'><div class='span2'><label>Pay-to-Play</label><select id='Pay-to-PlayInput' class='span12'><option value='0'>Select</option><option value='1'>Yes</option><option value='2'>No</option></select></div><a data-role='button' class='btn' onClick='btnDeleted(\"Pay-to-PlayDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Pro Rata Right' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Pro Rata Right'><div class='span2'><label>Pro Rata Right</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='ProRataRightDelete'><div id='Pro Rata Right'><div class='span2'><label>Pro Rata Right</label><input type='text' placeholder='Fill in'</div><a data-role='button' class='btn' onClick='btnDeleted(\"Pro Rata RightDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Restrictions on Sales' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Restrictions on Sales'><div class='span2'><label>Restrictions on Sales</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='RestrictionsonSalesDelete'><div id='Restrictions on Sales'><div class='span2'><label>Restrictions on Sales</label><input type='text' placeholder='Fill in'</div><a data-role='button' class='btn' onClick='btnDeleted(\"Restrictions on SalesDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Voting Rights' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Voting Rights'><div class='span2'><label>Voting Rights</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='VotingRightsDelete'><div id='Voting Rights'><div class='span2'><label>Voting Rights</label><input type='text' placeholder='Fill in'</div><a data-role='button' class='btn' onClick='btnDeleted(\"Voting RightsDelete\")';>Delete</a></div></div>");
 								}
 								if (fieldvalue === 'Dividend' && inputcheck == null)
 								{
-								  $("#extraInputsBox").append("<div class='row-fluid'><div id='Dividend'><div class='span2'><label>Dividend</label><input type='text' placeholder='Fill in'</div></div></div></div>");
+								  $("#extraInputsBox").append("<div class='row-fluid' id='DividendDelete'><div id='Dividend'><div class='span2'><label>Dividend</label><input type='text' placeholder='Fill in'</div><a data-role='button' class='btn' onClick='btnDeleted(\"DividendDelete\")';>Delete</a></div></div>");
 								}
 								else {
 								}
@@ -331,6 +327,16 @@
 							<!-- Clears the text box -->	
 							document.querySelector("input[name=extraselect]").value = ''
 							});
+							
+					<!-- Removes Added forms -->
+							function  btnDeleted(value)
+  {
+							var txt = value.replace(/\s+/g, '');
+							$('#'+txt).remove();
+							source.push(value.substring(0, value.length-6))
+							source.sort()
+							
+							};
 						
 							</script>
                             
