@@ -163,6 +163,16 @@
       line-height: 1;
       letter-spacing: -1px;
     }
+	
+	/* TypeAhead
+    ------------------------- */
+	
+	/* Show full list on hover */
+	.typeahead {
+		max-height: 200px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
 
 
 

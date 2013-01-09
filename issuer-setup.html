@@ -12,8 +12,19 @@
 
 <script type='text/javascript' src="js/jquery-1.8.3.js"></script>
 <script type='text/javascript' src="js/bootstrap.min.js"></script>
+<script type='text/javascript' src="js/bootstrap-typeahead.js"></script>
 
 <script language="JavaScript">
+
+	$(document).ready(function() {
+		
+	$("#extraselect").typeahead({
+                        minLength: 0,
+                        items: 9999,
+                        source: ["Acceleration", "Anti-dilution", "Co-Sale Agreement", "Dividend", "Liquidation Preference", "Participating Preferred", "Pay-to-Play", "Pro Rata Right", "Restrictions on Sales", "Voting Rights"]
+                    });
+	 $("#extraselect").on('focus', $("#extraselect").typeahead.bind($("#extraselect"), 'lookup'));
+	}); // end ready
 
 <!-- Vesting Selection Function -->
   function showhideselect(type, target)
@@ -252,7 +263,7 @@
                          <div class="row-fluid">
                             <div class="span12">
                             <label>Extras</label>
-                            <input id="extraselect" name="extraselect" type="text" class="span3" style="margin: 0 auto;" autocomplete="off" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;, &quot;Anti-dilution&quot;, &quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
+                            <input id="extraselect" name="extraselect" type="text" class="span3" minLength=0 style="margin: 0 auto;" autocomplete="off" placeholder="Add another term..." data-provide="typeahead" data-items="8" data-source="[&quot;Acceleration&quot;, &quot;Anti-dilution&quot;, &quot;Co-Sale Agreement&quot;, &quot;Dividend&quot;, &quot;Liquidation Preference&quot;, &quot;Participating Preferred&quot;, &quot;Pay-to-Play&quot;, &quot;Pro Rata Right&quot;, &quot;Restrictions on Sales&quot;, &quot;Voting Rights&quot;]">
                             <a id="btnAdded" data-role="button" class="btn">Add</a>
                             <a id="btnRemoved" data-role="button" class="btn">Delete</a>
                             </div>
