@@ -16,8 +16,16 @@
       text-align: center;
     }
   </style>
+  
+<script type="text/javascript">
+		function loadContent() {
+			$("#contentarea").load("http://testing.prospect.us/brijj/call/ProspectBrijj.proc/getusers");
+		}
+
+</script>
+
 </head>
-<body>
+<body onLoad="loadContent();">
 
 
       <div id="myGrid" style="width:700px;height:500px;"></div>
@@ -82,5 +90,7 @@
     grid.registerPlugin(checkboxSelector);
   })
 </script>
+
+<div id="contentarea"></div>
 </body>
 </html>
