@@ -27,14 +27,21 @@
   }
 
   function forgotForm() {
+  /* This hack is a workaround for the Chrome handling of required attributes */
+	var qs = document.querySelectorAll("#login-form input[required]");
+	for(var i=0;i < qs.length;i++) { qs[i].removeAttribute("required"); qs[i].setAttribute("requiredx"); }
   	document.querySelector('#login-form').style.display='none';
   	document.querySelector('#forgot-form').style.display='block';
   }
   function doForgot() {
     var u = document.querySelector("#forgot-form input[name=username]").value;
-    ProspectBrijj.forgot(u, didForget);
+    ProspectBrijj.forgot(u, [didForget, forgetError] );
   }
 
+  function forgetError(x) {
+	var fed = document.querySelector("#forgot-error-div");
+	fed.innerHTML = x.message;
+  }
   function didForget(x) {
   	var fed = document.querySelector("#forgot-error-div");
 	if (x) {
