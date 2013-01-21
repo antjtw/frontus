@@ -9,6 +9,18 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 <title>Forgot Password | Prospect.us</title>
+
+<script>
+    	function doForgot() {
+    	  var u = document.querySelector("input[name=username]").value;
+    	  ProspectBrijj.forgot(u, didForget);
+    	}
+
+    	function didForget(x) {
+    	  alert("didForget: "+x);
+    	}
+</script>
+
 </head>
 
 <body>
@@ -45,7 +57,7 @@
                 	<div class="span12 pagination-centered">
                     	<br>
                     	<h1>Forgot your password?</h1>
-                        <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+                        <form id="login" class="center" action="" method="post" onsubmit="doForgot(); return false;">
                             <fieldset>
                                 <label class="loginLabel">Email:</label>
                                 <input required class="loginInput" placeholder="email" tabindex="1" autocapitalize="off" name="username" type="email">
@@ -58,7 +70,8 @@
         	</section>
     	</div>  
     </div>
-    <script src="/script/jquery.js"></script>
-    <script src="/script/bootstrap.js"></script>
-</body>
+    <script src="./script/jquery.js"></script>
+    <script src="./script/bootstrap.js"></script>
+    <script src="/brijj/brijj.js"></script>
+  </body>
 </html>
