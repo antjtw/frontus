@@ -10,8 +10,6 @@
 <link href="css/style.css" rel="stylesheet">
 <title>Reset Password | Prospect.us</title>
 
-<script type='text/javascript' src="js/jquery-1.8.3.js"></script>
-
 <script> 
 function checkPassword() { 
 
@@ -21,6 +19,26 @@ function checkPassword() {
     document.resetPasswordForm.confirmpassword.value.setCustomValidity('');
 	}
 } 
+
+function getParams() {
+  var params = document.location.search.substring(1).split('&');
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i].split('=');
+    params[unescape(param[0])] = unescape(param[1]);
+  }
+  return params;
+}
+
+function doReset() {
+   var p = document.querySelector("input[name=password]").value;
+   var m = getParams();
+   var c = m['code'];
+   ProspectBrijj.resetPassword(p,c, didReset);
+}
+
+function didReset(x) {
+	  alert("didReset: "+x);
+}
 </script>
 
 </head>
@@ -59,7 +77,7 @@ function checkPassword() {
                 	<div class="span12 pagination-centered">
                     	<br>
                     	<h1>Reset Password</h1>
-                        <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+                        <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
                             <fieldset>
                                 <label class="loginLabel">Password:</label>
                                 <input required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
@@ -78,7 +96,8 @@ function checkPassword() {
         	</section>
     	</div>  
     </div>
-    <script src="/script/jquery-min.js"></script>
-    <script src="/script/bootstrap.js"></script>
-</body>
+    <script src="./script/jquery.js"></script>
+    <script src="./script/bootstrap.js"></script>
+    <script src="/brijj/brijj.js"></script>
+  </body>
 </html>
