@@ -441,6 +441,16 @@
 	margin-bottom: 0px;	
 }
 
+#forgotButton {
+    text-align:center;
+/*
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    */
+    margin: 15px auto 0 auto;
+    display: block;
+}
 #loginButton {
 	width: 300px;
 	text-align:center;
