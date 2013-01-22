@@ -520,3 +520,10 @@
 
 .btn.btn-home {
 }
+
+/* Invitation Grid */
+
+tr:hover, tr.selected {
+	background-color: #33FF99;
+	cursor: default;
+}
