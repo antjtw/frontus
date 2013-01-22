@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="slick.grid.css" type="text/css"/>
   <link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
   <link rel="stylesheet" type="text/css" href="examples/examples.css">
-  <script type='text/javascript' src="../../js/jquery-1.8.3.js"></script>
+  <script type='text/javascript' src="../js/jquery-1.8.3.js"></script>
+  <script type='text/javascript' src="../brijj/brijj.js"></script>
   <style>
     .cell-title {
       font-weight: bold;
@@ -20,7 +21,15 @@
   
 <script type="text/javascript">
 		$(document).ready(function() {
-			$("#contentarea").load("http://testing.prospect.us/brijj/call/ProspectBrijj.proc/getusers").ajaxComplete(function(event, XMLHttpRequest, ajaxOptions) {
+			
+			ProspectBrijj.proc("getusers",{}, worked);
+
+				function worked(x) {
+				  
+				}
+		
+		
+		
 				
 				function formatter(row, cell, value, columnDef, dataContext) {
 						return value;
@@ -33,21 +42,8 @@
 				
 				  var grid;
 				  var data = [];
-				  var columns = [
-					{id: "email", name: "Email", field: "email", width: 120, cssClass: "cell-title", formatter: formatter},
-					{id: "issuer", name: "Issuer", field: "issuer"},
-					{id: "invitation-sent", name: "Invitation Sent?", sortable: false, width: 120, minWidth: 20, maxWidth: 120, cssClass: "cell-effort-driven", field: "invitationSent", formatter: Slick.Formatters.Checkmark},
-					{id: "dateStart", name: "Date Sent", field: "dateStart", minWidth: 120},
-					{id: "registered-sent", name: "Registered?", sortable: false, width: 100, minWidth: 20, maxWidth: 120, cssClass: "cell-effort-driven", field: "registered", formatter: Slick.Formatters.Checkmark},
-					{id: "finish", name: "Registration Date", field: "dateFinished", minWidth: 110},
-				  ];
-				
-				  var options = {
-					editable: false,
-					enableAddRow: false,
-					enableCellNavigation: true
-				  };
-				
+				  var columns = [];
+				  
 				  $(function () {
 					 
 					var checkboxSelector = new Slick.CheckboxSelectColumn({
@@ -55,6 +51,19 @@
 					});
 				
 					columns.push(checkboxSelector.getColumnDefinition());
+					columns.push({id: "email", name: "Email", field: "email", width: 180, cssClass: "cell-title", formatter: formatter});
+					columns.push({id: "issuer", name: "Issuer", field: "issuer"});
+					columns.push({id: "invitation-sent", name: "Invitation Sent?", sortable: false, width: 120, minWidth: 20, maxWidth: 120, cssClass: "cell-effort-driven", field: "invitationSent", formatter: Slick.Formatters.Checkmark});
+					columns.push({id: "dateStart", name: "Date Sent", field: "dateStart", minWidth: 120});
+					columns.push({id: "registered-sent", name: "Registered?", sortable: false, width: 100, minWidth: 20, maxWidth: 120, cssClass: "cell-effort-driven", field: "registered", formatter: Slick.Formatters.Checkmark});
+					columns.push({id: "finish", name: "Registration Date", field: "dateFinished", minWidth: 110});
+				
+				  var options = {
+					editable: false,
+					enableAddRow: false,
+					enableCellNavigation: true
+				  };
+				
 					
 					var i = 0
 					
@@ -83,11 +92,8 @@
 					grid.registerPlugin(checkboxSelector);
 					
 				  })
-				  
-				
-							});
+			});
 		
-        });
 		
 
 </script>
@@ -96,7 +102,7 @@
 <body>
 
 
-      <div id="myGrid" style="width:700px;height:500px;"></div>
+      <div id="myGrid" style="width:800px;height:500px;"></div>
 
 
 <script src="lib/firebugx.js"></script>
