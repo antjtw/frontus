@@ -27,6 +27,37 @@
 }
 </style>
 <script>
+
+  function getParams() {
+  var params = document.location.search.substring(1).split('&');
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i].split('=');
+    params[unescape(param[0])] = unescape(param[1]);
+  }
+  return params;
+}
+
+  function retrievedRegister(x) {
+	  document.getElementById('contentarea').innerHTML = x;
+	  var table = document.getElementById("contentarea");
+	  var trs = table.getElementsByTagName("td");
+	  $(trs).each(function (index) {
+		  x = ($(this).text());
+		  if (index == 0) {
+			  var d = document.getElementsByName('firstname')[0];
+			  d.value = x;
+		  }
+		  else if (index == 1) {
+			  var d = document.getElementsByName('lastname')[0];
+			  d.value = x;
+		  }
+		  else if (index == 2) {
+			  var d = document.getElementsByName('investoremail')[0];
+			  d.value = x;
+		  }
+	  });
+  }
+
   function doLogin() {
     var u = document.querySelector("#login-form input[name=username]").value;
     var p = document.querySelector("#login-form input[name=password]").value;
@@ -194,11 +225,16 @@
           <h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
           <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <label class="loginLabel">Company Name:</label> <input required class="loginInput" placeholder="company" tabindex="1"
-                autocapitalize="off" name="companyname" type="text"> <label class="loginLabel">First Name:</label> <input
-                required class="loginInput" placeholder="Alan" tabindex="2" autocapitalize="off" name="firstname" type="text">
-              <label class="loginLabel">Last Name:</label> <input required class="loginInput" placeholder="McGee" tabindex="3"
-                autocapitalize="off" name="lastname" type="text"> <label class="loginLabel">Password:</label> <input
+              <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
+                autocapitalize="off" name="investoremail" type="text" disabled="true"> 
+                
+              <label class="loginLabel">First Name:</label> 
+              <input required class="loginInput" tabindex="2" autocapitalize="off" name="firstname" type="text" disabled="true">
+                
+              <label class="loginLabel">Last Name:</label> 
+              <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text" disabled="true"> 
+                
+                <label class="loginLabel">Password:</label> <input
                 required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password"
                 id="password1" tabindex="4" name="password" type="password"
                 onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
@@ -249,13 +285,25 @@
 <div id='TOS' class='boilerplate' style='display:none;'>
 </div>
 
+<div id="contentarea" style="display:none;"></div>
 
 
     
     
   </div>
-  <script src="script/jquery.js"></script>
+  <script src="../script/jquery.js"></script>
   <script src="script/bootstrap.js"></script>
   <script src="brijj/brijj.js"></script>
+  
+  <script>
+   $(document).ready(function() {
+	  var m = getParams();
+	  var c = m['code']
+	  if (m['code'] != undefined) {
+		  signupForm()
+		  ProspectBrijj.procn("registerformfill",{a: c}, retrievedRegister);
+	  };
+  });
+  </script>
 </body>
 </html>
