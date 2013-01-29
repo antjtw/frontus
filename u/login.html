@@ -38,33 +38,36 @@
 }
 
   function retrievedRegister(x) {
-	  document.getElementById('contentarea').innerHTML = x;
-	  var table = document.getElementById("contentarea");
-	  var trs = table.getElementsByTagName("td");
-	  $(trs).each(function (index) {
-		  x = ($(this).text());
-		  if (index == 0) {
-			  var d = document.getElementsByName('firstname')[0];
-			  d.value = x;
-		  }
-		  else if (index == 1) {
-			  var d = document.getElementsByName('lastname')[0];
-			  d.value = x;
-		  }
-		  else if (index == 2) {
-			  var d = document.getElementsByName('investoremail')[0];
-			  d.value = x;
-		  }
-	  });
+		document.getElementsByName('firstname')[0].value = x[1][0];
+		document.getElementsByName('lastname')[0].value = x[1][1];
+		document.getElementsByName('investoremail')[0].value = x[1][2];
   }
 
   function doLogin() {
-    var u = document.querySelector("#login-form input[name=username]").value;
+	var u = document.querySelector("#login-form input[name=username]").value;
     var p = document.querySelector("#login-form input[name=password]").value;
     ProspectBrijj.login(u, p, didLogin);
   }
 
   function didLogin(x) {
+    if (x) {
+      document.location.href = 'home.html';
+      return;
+    }
+    var errdiv = document.querySelector('#login-error-div');
+    errdiv.innerHTML = 'Invalid email/password combination';
+  }
+  
+  function doRegister() {
+    var u = document.querySelector("#signup-form input[name=investoremail]").value;
+    var p = document.querySelector("#signup-form input[name=password]").value;
+	var m = getParams();
+	var code = m['code']
+	
+    ProspectBrijj.activate(u, code, p, didRegister);
+  }
+
+  function didRegister(x) {
     if (x) {
       document.location.href = 'home.html';
       return;
@@ -160,6 +163,7 @@
           .setCustomValidity('Passwords must match.');
     } else {
       document.registerform.confirmpassword.setCustomValidity('');
+	  
     }
   }
 </script>
@@ -223,7 +227,7 @@
         <div id='signup-form' style='display: none' class="span12 pagination-centered">
           <br>
           <h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
-          <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+          <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doRegister(); return false;">
             <fieldset>
               <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
                 autocapitalize="off" name="investoremail" type="text" disabled="true"> 
@@ -251,7 +255,7 @@
               <label class="checkbox registerBox"> <input type="checkbox" required> I agree to use fully electronic
                 communications
               </label>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="6" onClick="return checkPassword();">Get
+              <button id="loginButton" type="submit" class="btn btn-success" tabindex="6">Get
                 Started</button>
               <br>
             </fieldset>
@@ -285,8 +289,6 @@
 <div id='TOS' class='boilerplate' style='display:none;'>
 </div>
 
-<div id="contentarea" style="display:none;"></div>
-
 
     
     
@@ -301,7 +303,7 @@
 	  var c = m['code']
 	  if (m['code'] != undefined) {
 		  signupForm()
-		  ProspectBrijj.procn("registerformfill",{a: c}, retrievedRegister);
+		  ProspectBrijj.formFillout(c, retrievedRegister);
 	  };
   });
   </script>
