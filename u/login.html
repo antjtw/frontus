@@ -51,7 +51,7 @@
 
   function didLogin(x) {
     if (x) {
-      document.location.href = 'home.html';
+      document.location.href = '../v/profile.html';
       return;
     }
     var errdiv = document.querySelector('#login-error-div');
@@ -64,16 +64,19 @@
 	var m = getParams();
 	var code = m['code']
 	
-    ProspectBrijj.activate(u, code, p, didRegister);
+    ProspectBrijj.activate(u, code, p, [didRegister, didntRegister]);
   }
 
   function didRegister(x) {
-    if (x) {
-      document.location.href = 'home.html';
+      loginForm()
+	  var errdiv = document.querySelector('#login-error-div');
+      errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
       return;
-    }
-    var errdiv = document.querySelector('#login-error-div');
-    errdiv.innerHTML = 'Invalid email/password combination';
+  }
+  
+  function didntRegister(x) {
+	 var errdiv = document.querySelector('#register-error-div');
+     errdiv.innerHTML = 'Invalid Code'; 
   }
 
   function displayRadio(value) {
@@ -227,6 +230,7 @@
         <div id='signup-form' style='display: none' class="span12 pagination-centered">
           <br>
           <h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
+          <div id="register-error-div" class="text-error">Hello</div>
           <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doRegister(); return false;">
             <fieldset>
               <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
