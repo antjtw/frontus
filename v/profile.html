@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<base href="../"/>
+	<title>Investor Profile</title>
+	
+	<link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/prospectus.css">
+<!--     <link rel="stylesheet" href="css/style.css"> -->
+	<link rel="stylesheet" href="css/more.css">
+  
+</head>
+<body>
+  <div id="navbar-example" class="navbar navbar-static">
+    <div class="navbar-inner">
+      <div class="container" style="width: auto;">
+        <a class="brand" href="#"><img class="logo" src="img/logo2.png"/></a>
+
+        <ul class="nav" role="navigation">
+          <li class="dropdown">
+            <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+              <li><a tabindex="-1" href="http://google.com">Action</a></li>
+              <li><a tabindex="-1" href="#anotherAction">Another action</a></li>
+              <li><a tabindex="-1" href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a tabindex="-1" href="#">Separated link</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropdown 2 <b class="caret"></b></a>
+               <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                    <li><a tabindex="-1" href="#">Action</a></li>
+                                    <li><a tabindex="-1" href="#">Another action</a></li>
+                                    <li><a tabindex="-1" href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a tabindex="-1" href="#">Separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- /navbar-example -->
+	
+	
+	
+	<h1>Profile Settings</h1>
+	
+	<h3>Personal Info</h3>
+	<ul>
+	<li>
+	<label>Name
+		<input type="text" name="first_name" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true, propercase:true"/>
+		<input type="text" name="middle" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true, propercase:true"/>
+		<input type="text" name="last_name" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true, propercase:true"/>
+	</label>
+	</li>
+	
+	<li>
+	<label>Email <input type="text" name="email" disabled data-dojo-type="dijit/form/TextBox"></label>
+	</li>
+
+	<li>
+	<label>Twitter: http://twitter.com/<input type="text" name="twitter"/>
+	</label>
+	</li>
+	
+	<li>
+	<label>LinkedIn: http://linkedin.com/<input type="text" name="linkedin"/>
+	</label>
+	</li>
+	
+	<li>
+	<label>Angel List: http://angel.com/<input type="text" name="angel"/>
+	</label>
+	</li>
+	
+	<li>
+	<label>Website: <input type="url" name="website"/></label>
+	</li>
+	
+	<li>
+	<label> Photo: <input type="file" name="photo"/></label> 
+	</li>
+	
+	<li>
+	<label><input type="checkbox" name="investment_group"/>I'm part of an investment group
+	</label>
+	</li>
+	
+	<li>
+	<label>Company<input type="text" name="company"></label>
+	</li>
+	
+	<li>
+	<h3>Where should your investments send snail mail?</h3>
+	<label>Address: <input type="text" name="address1"/></label>
+					<input type="text" name="address2"/>
+	<label>City/State/Zip <input type="text" name="city"/>
+			<input type="text" name="state"/>
+			<input type="text" name="zip"/>
+			</label>
+    </li>
+	</ul>
+	
+	<h3>Login Credentials</h3>
+	<label>Password: <input type="password" name="password" disabled></label>
+	<button>Change</button>
+	
+	<script>
+	// from config.js
+	 dojoConfig = {
+	    async: 1,
+	    cacheBust: false,
+	    tlmSiblingOfDojo: false,
+	    isDebug: true,
+	    packages: [
+	        { name: "app", location: "js" },
+	        { name: "bootstrap", location: document.baseURI+"dojo-bootstrap" }
+	    ]
+	};
+	</script>
+	
+	<!-- the hosted version: 
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.1/dojo/dojo.js" data-dojo-config="async: true"></script>
+		-->
+
+    <script src="dojo-1.8.2/dojo/dojo.js"></script>
+	<script>
+	// from application.js
+	require([
+	    'dojo/query',
+	    'dojo/dom-attr',
+	    'dojo/dom-construct',
+	    'dojo/dom-style',
+	    'bootstrap/Scrollspy',
+	    'bootstrap/Affix',
+	    'dojo/NodeList-html',
+	    'dojo/NodeList-manipulate',
+	    'dojo/domReady!'
+	], function(q, attr, constr, domStyle){
+	    "use strict";
+
+	    window.prettyPrint && window.prettyPrint();
+	    q(".container-body [href=#], .navbar [href=#]").on("click", function(e){ e.preventDefault(); return false; });
+
+	    var pagelist = q("ul.nav.nav-pills.nav-stacked.bs-page-sidenav");
+	    var menuLinkTop = q('.menu-link-top');
+	    q(".container-body .marker").forEach(function(div, i){
+	        var id = attr.get(div, "id"),
+	            title = q(div).query('> h3').text();
+	        if(title && id){
+	            if(i === 0){
+	                constr.place('<li class="active"><a href="#'+id+'">'+title+'</a></li>', menuLinkTop[0], "before");
+	            } else {
+	                constr.place('<li><a href="#'+id+'">'+title+'</a></li>', menuLinkTop[0], "before");
+	            }
+	        }
+	    });
+	    q('[data-spy="scroll"]').forEach(function(elm){
+	        q(elm).scrollspy('refresh');
+	    });
+	/*
+	    q(window).on('scroll', function(e){
+	        if(e.target.body.scrollTop >= 540){
+	            //menuLinkTop.addClass('affix').addClass('affix-bottom');
+	            //menuLinkTop.affix();
+	            domStyle.set(menuLinkTop[0], "display", "block");
+	        } else {
+	            //menuLinkTop.removeClass('affix').removeClass('affix-bottom');
+	            domStyle.set(menuLinkTop[0], "display", "none");
+	        }
+	        console.log();
+	    });
+	*/
+
+	});
+	
+	</script>
+	
+
+	<script type="text/javascript" charset="utf-8">
+	    require([ 'dojo/query', 'dojo/dom-class', 'dojo/_base/array', /*'js/application.js', */ 'bootstrap/Dropdown', 'bootstrap/Button', 'dojo/domReady!' ], function(q, domClass, array){
+	        var text = q('#dropfontstext'),
+	            drop = q('#dropfonts'),
+				drop1=q('#drop1'),
+				drop2=q('#drop2');
+	        drop.on('select', function(e){
+	            var a = q(e.selectedItem).query('> a');
+	            var cls = a[0].className;
+	            array.forEach(['font-arial', 'font-tahoma', 'font-times', 'font-verdana'], function(fontCls){
+	                text.removeClass(fontCls);
+	            });
+	            text.addClass(cls);
+	        });
+			drop1.on('select', function(e) {
+				var a = q(e.selectedItem).query('> a');
+				var ih = a[0].innerHTML;
+				console.log(ih);
+			});
+	    });
+	</script>
+	
+	<script src="brijj/brijj.js"></script>
+	
+	<script>
+		function loadInvestorMenu(q, x) {
+				var ul = q('ul',q('#drop1')[0].parentNode)[0];
+				ul.innerHTML="";
+				for(var i=1;i<x.length;i++) {
+					ll = x[i][0];
+					var li = document.createElement('li');
+				//	<li><a tabindex="-1" href="http://google.com">Action</a></li>
+	              	li.innerHTML='<a tabindex="-1" href="http://clem">'+ll+'</a></li>';
+					ul.appendChild(li);
+				};
+		}
+	</script>
+	
+	<script>
+	require(['dojo/query'], function(q) { 
+		ProspectBrijj.login('abc@def.com','ddd', function(aaa) {
+			ProspectBrijj.proc('investments', function(x) { loadInvestorMenu(q,x); } );
+			ProspectBrijj.proc('profile', function(x) {
+				var y = x[0]; // the fieldnames
+				var z = x[1]; // the values
+				var h = {};
+				for(var i=0;i<y.length;i++) {
+					h[y[i]]=i;
+					var d = q('input[name='+y[i]+']')[0];
+					if (d) d.value=z[i];
+				}
+	  		});
+		});
+	});
+	</script>
+	
+</body>
+</html>

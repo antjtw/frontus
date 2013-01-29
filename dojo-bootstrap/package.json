@@ -1,0 +1,17 @@
+{
+    "name":"dojo-bootstrap",
+    "version":"1.0",
+    "main":"main",
+    "dependencies":{
+        "dojo":"current",
+        "util":"current"
+    },
+    "description":"Implementation of the Twitter Bootstrap using the Dojo Toolkit.",
+    "licenses":[
+        {
+            "type":"Apache License",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "keywords":["JavaScript", "Dojo", "Twitter Bootstrap"],
+}
