@@ -60,11 +60,14 @@
   
   function doRegister() {
     var u = document.querySelector("#signup-form input[name=investoremail]").value;
+	var f = document.querySelector("#signup-form input[name=firstname]").value;
+	var l = document.querySelector("#signup-form input[name=lastname]").value;
+	alert(l)
     var p = document.querySelector("#signup-form input[name=password]").value;
 	var m = getParams();
 	var code = m['code']
 	
-    ProspectBrijj.activate(u, code, p, [didRegister, didntRegister]);
+    ProspectBrijj.activate(u, code, p, f, l, [didRegister, didntRegister]);
   }
 
   function didRegister(x) {
@@ -119,7 +122,7 @@
     var qs = document.querySelectorAll("#login-form input[requiredx]");
     for ( var i = 0; i < qs.length; i++) {
       qs[i].removeAttribute("requiredx");
-      qs[i].setAttribute("required");
+      qs[i].setAttribute("required", false);
     }
     displayRadio(0);
     buttonRadio(0);
@@ -130,7 +133,7 @@
     var qs = document.querySelectorAll("#login-form input[required]");
     for ( var i = 0; i < qs.length; i++) {
       qs[i].removeAttribute("required");
-      qs[i].setAttribute("requiredx");
+      qs[i].setAttribute("requiredx", false);
     }
     displayRadio(1);
     buttonRadio(2);
@@ -142,21 +145,19 @@
   }
 
   function doForgot() {
+	fed.innerHTML = "An email to reset your password has been sent";
     var u = document.querySelector("#forgot-form input[name=username]").value;
     ProspectBrijj.forgot(u, [ didForget, forgetError ]);
   }
 
   function forgetError(x) {
     var fed = document.querySelector("#forgot-error-div");
-    fed.innerHTML = x.message;
   }
   function didForget(x) {
     var fed = document.querySelector("#forgot-error-div");
     if (x) {
-      fed.innerHTML = "Email to reset password has been sent";
-      document.querySelector("#forgot-form button[type=submit]").disabled = true;
-    } else
-      fed.innerHTML = "Failed to send email to reset password";
+      fed.innerHTML = "An email to reset your password has been sent";
+    }
   }
 
   function checkPassword() {
@@ -208,7 +209,7 @@
               <label class="loginLabel">Email:</label> <input required class="loginInput" placeholder="email" tabindex="1"
                 autocapitalize="off" name="username" type="email"> <label class="loginLabel">Password:</label> <input
                 required class="loginInput" id="login_password" placeholder="password" tabindex="2" name="password" type="password">
-              <button id="forgotButton" class="btn" onClick="forgotForm()">Forgot Your Password?</button>
+              <a id="forgotButton" class="btn" onClick="forgotForm(); return false;">Forgot Your Password?</a>
               <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
               <br>
             </fieldset>
@@ -237,10 +238,10 @@
                 autocapitalize="off" name="investoremail" type="text" disabled="true"> 
                 
               <label class="loginLabel">First Name:</label> 
-              <input required class="loginInput" tabindex="2" autocapitalize="off" name="firstname" type="text" disabled="true">
+              <input required class="loginInput" tabindex="2" autocapitalize="off" name="firstname" type="text">
                 
               <label class="loginLabel">Last Name:</label> 
-              <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text" disabled="true"> 
+              <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text"> 
                 
                 <label class="loginLabel">Password:</label> <input
                 required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password"

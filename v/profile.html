@@ -222,19 +222,17 @@
 	
 	<script>
 	require(['dojo/query'], function(q) { 
-		ProspectBrijj.login('abc@def.com','ddd', function(aaa) {
-			ProspectBrijj.proc('investments', function(x) { loadInvestorMenu(q,x); } );
-			ProspectBrijj.proc('profile', function(x) {
-				var y = x[0]; // the fieldnames
-				var z = x[1]; // the values
-				var h = {};
-				for(var i=0;i<y.length;i++) {
-					h[y[i]]=i;
-					var d = q('input[name='+y[i]+']')[0];
-					if (d) d.value=z[i];
-				}
-	  		});
-		});
+		  ProspectBrijj.proc('investments', function(x) { loadInvestorMenu(q,x); } );
+		  ProspectBrijj.proc('profile', function(x) {
+			  var y = x[0]; // the fieldnames
+			  var z = x[1]; // the values
+			  var h = {};
+			  for(var i=0;i<y.length;i++) {
+				  h[y[i]]=i;
+				  var d = q('input[name='+y[i]+']')[0];
+				  if (d) d.value=z[i];
+			  }
+		  });
 	});
 	</script>
 	

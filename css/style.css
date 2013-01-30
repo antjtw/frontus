@@ -449,6 +449,7 @@
     margin-right: auto;
     */
     margin: 15px auto 0 auto;
+	width:150px;
     display: block;
 }
 #loginButton {
