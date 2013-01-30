@@ -128,7 +128,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.1/dojo/dojo.js" data-dojo-config="async: true"></script>
 		-->
 
-    <script src="dojo-1.8.2/dojo/dojo.js"></script>
+    <script src="dojo/dojo/dojo.js"></script>
 	<script>
 	// from application.js
 	require([
@@ -145,7 +145,7 @@
 	    "use strict";
 
 	    window.prettyPrint && window.prettyPrint();
-	    q(".container-body [href=#], .navbar [href=#]").on("click", function(e){ e.preventDefault(); return false; });
+	    q(".container-body [href='#'], .navbar [href='#']").on("click", function(e){ e.preventDefault(); return false; });
 
 	    var pagelist = q("ul.nav.nav-pills.nav-stacked.bs-page-sidenav");
 	    var menuLinkTop = q('.menu-link-top');
