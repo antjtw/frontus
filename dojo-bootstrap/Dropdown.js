@@ -63,7 +63,7 @@ define([
                 clearMenus();
                 if (!isActive) {
                     
-                    ProspectBrijj.proc('investments',function(x) {
+                    SWBrijj.proc('investments',function(x) {
                         loadInvestorMenu(query, x);
                         
                         domClass.toggle(targetNode, 'open');
