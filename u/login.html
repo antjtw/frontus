@@ -62,12 +62,24 @@
     var u = document.querySelector("#signup-form input[name=investoremail]").value;
 	var f = document.querySelector("#signup-form input[name=firstname]").value;
 	var l = document.querySelector("#signup-form input[name=lastname]").value;
-	alert(l)
-    var p = document.querySelector("#signup-form input[name=password]").value;
-	var m = getParams();
-	var code = m['code']
-	
-    SWBrijj.activate(u, code, p, f, l, [didRegister, didntRegister]);
+	var x = 0
+	var y = 0
+	if (document.querySelector("#signup-form input[name=TOSBox]").checked) {
+		x = 1;
+	}
+	if (document.querySelector("#signup-form input[name=electBox]").checked) {
+		y = 1;
+	}
+	var p = document.querySelector("#signup-form input[name=password]").value;
+	if (x != 1 || y != 1) {
+		var errdiv = document.querySelector('#register-error-div');
+     	errdiv.innerHTML = 'Must agree to TOS and Digital Communications';
+	}
+	else {
+		var m = getParams();
+		var code = m['code']
+		SWBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
+	}
   }
 
   function didRegister(x) {
@@ -248,16 +260,15 @@
                 id="password1" tabindex="4" name="password" type="password"
                 onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
   if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
-              <label class="loginLabel">Confirm Password:</label> <input required class="loginInput" required
+              <label class="loginLabel">Confirm Password:</label> <input required class="loginInput"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5"
                 name="confirmpassword" type="password"
-                onchange="
-  this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');
-">
-              <label class="checkbox registerBox"> <input type="checkbox" required> I agree to the <span class='hreffy'
+                onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');">
+                
+              <label class="checkbox registerBox"> <input type="checkbox" required name="TOSBox"> I agree to the <span class='hreffy'
                 onClick='return showTOS();'>Terms of Use</span> &amp; <span class='hreffy' onClick='return showPrivacy();'>Privacy Policy</span>
                 </label>
-              <label class="checkbox registerBox"> <input type="checkbox" required> I agree to use fully electronic
+              <label class="checkbox registerBox"> <input type="checkbox" required name="electBox"> I agree to use fully electronic
                 communications
               </label>
               <button id="loginButton" type="submit" class="btn btn-success" tabindex="6">Get
