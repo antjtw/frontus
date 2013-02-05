@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <title>Prospectus Grid</title>
+  <title>Sharewave Grid</title>
   <script type='text/javascript' src="../js/jquery-1.8.3.js"></script>
   <script type='text/javascript' src="../brijj/brijj.js"></script>
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -21,7 +21,7 @@
 <script type="text/javascript">
 		$(document).ready(function() {
 			
-			ProspectBrijj.procn("getusers",{}, worked);
+			SWBrijj.procn("getusers",{}, worked);
 
 				function worked(x) {
 				  document.getElementById('contentarea').innerHTML = x;
@@ -67,7 +67,7 @@ function submitEmail() {
 			  var cell = rows[i].getElementsByTagName("td")[2];
 			  var id = cell.innerHTML;
 			  alert(id);
-			  ProspectBrijj.procn("send_invites",{a: id, b: 'abc@def.com'}, inserted);  
+			  SWBrijj.procn("send_invites",{a: id, b: 'abc@def.com'}, inserted);  
 		  }
 };
 

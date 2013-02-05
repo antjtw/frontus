@@ -9,7 +9,7 @@
 <link href="css/bootstrap.css" rel="stylesheet" media="screen">
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
-<title>Login | Prospect.us</title>
+<title>Login |ShareWave</title>
 <style>
 .hreffy {
   cursor: pointer;
@@ -47,7 +47,7 @@
   function doLogin() {
 	var u = document.querySelector("#login-form input[name=username]").value;
     var p = document.querySelector("#login-form input[name=password]").value;
-    ProspectBrijj.login(u, p, didLogin);
+    SWBrijj.login(u, p, didLogin);
   }
 
   function didLogin(x) {
@@ -79,7 +79,7 @@
 	else {
 		var m = getParams();
 		var code = m['code']
-		ProspectBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
+		SWBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
 	}
   }
 
@@ -162,7 +162,7 @@
 	loginForm()
 	var fed = document.querySelector("#login-error-div");
 	fed.innerHTML = "An email to reset your password has been sent";
-    ProspectBrijj.forgot(u, [ didForget, forgetError ]);
+    SWBrijj.forgot(u, [ didForget, forgetError ]);
   }
 
   function forgetError(x) {
@@ -192,7 +192,7 @@
     <div class="row-fluid">
       <section id="topbar">
         <div class="span12" id="homenav">
-          <a href="index.html"><img src="img/logo2.png" id="homelogo" alt="Prospect.us logo"></a>
+          <a href="index.html"><img src="img/logo2.png" id="homelogo" alt="ShareWave Logo"></a>
           <div class="btn-toolbar pull-right">
             <button id='login-button' class="btn btn-home" type="button" disabled onclick="loginForm()">Login</button>
             <button id='signup-button' class="btn btn-home btn-success" type="button" onclick="signupForm()">Sign Up</button>
@@ -322,7 +322,7 @@
 	  var c = m['code']
 	  if (m['code'] != undefined) {
 		  signupForm()
-		  ProspectBrijj.formFillout(c, retrievedRegister);
+		  SWBrijj.formFillout(c, retrievedRegister);
 	  };
   });
   </script>

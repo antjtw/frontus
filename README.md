@@ -37,8 +37,8 @@ done
 
 On the client side:
 
-`git remote add ec2-testing propectus-testing:/var/repo/frontus`
-'git remote set-url ec2-testing prospectus-testing:/var/repo/frontus'
+`git remote add ec2-testing sharewave-testing:/var/repo/frontus`
+'git remote set-url ec2-testing sharewave-testing:/var/repo/frontus'
 
 `git push ec2-testing +master:refs/heads/master`
 
