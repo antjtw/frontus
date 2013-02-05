@@ -38,6 +38,7 @@
 }
 
   function retrievedRegister(x) {
+	    alert(x)
 		document.getElementsByName('firstname')[0].value = x[1][0];
 		document.getElementsByName('lastname')[0].value = x[1][1];
 		document.getElementsByName('investoremail')[0].value = x[1][2];
@@ -157,8 +158,10 @@
   }
 
   function doForgot() {
-	fed.innerHTML = "An email to reset your password has been sent";
     var u = document.querySelector("#forgot-form input[name=username]").value;
+	loginForm()
+	var fed = document.querySelector("#login-error-div");
+	fed.innerHTML = "An email to reset your password has been sent";
     ProspectBrijj.forgot(u, [ didForget, forgetError ]);
   }
 
@@ -166,7 +169,7 @@
     var fed = document.querySelector("#forgot-error-div");
   }
   function didForget(x) {
-    var fed = document.querySelector("#forgot-error-div");
+    var fed = document.querySelector("#login-error-div");
     if (x) {
       fed.innerHTML = "An email to reset your password has been sent";
     }
@@ -243,7 +246,7 @@
         <div id='signup-form' style='display: none' class="span12 pagination-centered">
           <br>
           <h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
-          <div id="register-error-div" class="text-error">Hello</div>
+          <div id="register-error-div" class="text-error"></div>
           <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doRegister(); return false;">
             <fieldset>
               <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"

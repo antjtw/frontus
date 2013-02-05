@@ -30,16 +30,30 @@ function getParams() {
   return params;
 }
 
+function retrievedReset(x) {
+		if (typeof x[1] === 'undefined' || x[1][1] === true) {
+			alert("This is not a valid reset code, redirecting you to the login page");
+			document.location.href = 'u/login.html';
+		}
+		else {
+		document.getElementsByName('investoremail')[0].value = x[1][0];
+		//document.getElementsByName('email')[0].value = x[1][2];
+		}
+  }
+
 function doReset() {
    var p = document.querySelector("input[name=password]").value;
    var m = getParams();
    var c = m['code'];
-   ProspectBrijj.resetPassword(p,c, didReset);
+   ProspectBrijj.resetPassword(p,c, [didReset, didntReset]);
 }
 
 function didReset(x) {
-	  alert("didReset: "+x);
 	  document.location.href = 'u/login.html';
+}
+
+function didntReset(x) {
+	  alert("didntReset: "+x);
 }
 </script>
 
@@ -81,12 +95,16 @@ function didReset(x) {
                     	<h1>Reset Password</h1>
                         <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
                             <fieldset>
+                            	
+                                <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
+                autocapitalize="off" name="investoremail" type="text" disabled="true"> 
+                
                                 <label class="loginLabel">Password:</label>
-                                <input required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
+                                <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
   if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
   
                                 <label class="loginLabel">Confirm Password:</label>
-                                <input required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password" onchange="
+                                <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password" onchange="
   this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');
 ">
                                 <br>
@@ -101,5 +119,17 @@ function didReset(x) {
     <script src="script/jquery.js"></script>
     <script src="script/bootstrap.js"></script>
     <script src="brijj/brijj.js"></script>
+    <script>
+   $(document).ready(function() {
+	  var m = getParams();
+	  var c = m['code']
+	  if (c != undefined) {
+		  ProspectBrijj.resetFillout(c, retrievedReset);
+	  }
+	  else {
+		  document.location.href = 'u/login.html';
+	  }
+  });
+  </script>
   </body>
 </html>
