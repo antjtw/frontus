@@ -42,6 +42,7 @@
                                 </ul>
                             </li>
                         </ul>
+                        <button id="logoutButton" class="btn">Log out</button>
                     </div>
                 </div>
             </div> <!-- /navbar-example -->
@@ -52,8 +53,10 @@
             <h1>Profile Settings</h1>
             <button id="editButton" class="btn">Turn On Editing</button>
            
-            <fieldset>           
+            <fieldset>      
                             <legend>Personal Information</legend>
+                            	<div id="photoDiv" class="row-fluid profileLine"> 
+                                </div>
                                 <div class="row-fluid profileLine hiddenField">   
                                     <div class="span1">
                                       <label>Name:</label>              
@@ -107,12 +110,12 @@
                                        <input disabled class="switchable profileUneditable" type="url" name="website"/>
                                     </div><!--/span-->
                                 </div>
-                                <div class="row-fluid profileLines hiddenField">   
+                                <div id="companyCheck" class="row-fluid profileLines hiddenField">   
                                     <div class="span6">
-                                       <input disabled class="switchable profileUneditable" type="checkbox" name="investment_group"/><span>I'm part of an investment group</span>
+                                       <input id="showCompany" class="profileUneditable" type="checkbox" name="investment_group"/><span>I'm part of an investment group</span>
                                     </div><!--/span-->
                                 </div>
-                                <div class="row-fluid profileLines hiddenField">   
+                                <div id="companyField" class="row-fluid profileLines hiddenField doubleHide">   
                                     <div class="span1">
                                       <label>Company:</label>              
                                     </div><!--/span-->
@@ -168,6 +171,7 @@
                 </div>
             
             </fieldset>
+           
         </div>
       </div>
       
@@ -318,6 +322,10 @@
 			  for(var i=0;i<y.length;i++) {
 				  h[y[i]]=i;
 				  var d = q('input[name='+y[i]+']')[0];
+				  if (y[i] === "email") {
+						  var src = "<img id='profilePic' src='photo/" + z[i] + "' style='width:250px; height:250px;'/>"				
+						  jQuery("#photoDiv").append(src);
+					  }
 				  if (d) {
 					   d.value=z[i];
 					   jQuery(d).parent().parent().removeClass("hiddenField");
@@ -334,12 +342,19 @@
     <script>
 	$(document).ready(function() {
 		
+		 jQuery("#showCompany").click(function(){
+			 jQuery("#companyField").toggleClass("doubleHide");
+			 
+		 });
+		
 		 jQuery('.switchable').keydown(function(){
 		 var contents = jQuery(this).val();
 		 var charlength = contents.length;
 		 newwidth =  charlength*7 + 20;
 		 jQuery(this).css({width:newwidth});
 		});
+		
+		
 	});
 	
 	jQuery("#editButton").click(function() {
@@ -356,7 +371,9 @@
 					jQuery(this).parent().parent().addClass("hiddenField");
 				}
    			 }
+		jQuery("#companyCheck").toggleClass("hiddenField");
 		});
+		if (jQuery("#editButton").text() === "Turn On Editing") {
 		var firstName = document.querySelector("input[name=first_name]").value;
 		var lastName = document.querySelector("input[name=last_name]").value;
 		var street = document.querySelector("input[name=street]").value;
@@ -367,10 +384,20 @@
 		var country = document.querySelector("input[name=country]").value;
 		var phone = document.querySelector("input[name=phone]").value;
 		SWBrijj.proc("user_update",firstName, lastName, street, state, postalcode, twitter, linkedin, country, phone, updated);
+		
+		}
 	});
 	
 	function updated(x) {
   }
+  
+  	jQuery("#logoutButton").click(function() {
+		SWBrijj.logout(doneLogout);
+	});
+	
+	function doneLogout() {
+		document.location.href = 'u/login.html';
+	}
   
   	jQuery("#resetButton").click(function() {
 		jQuery("#profilePage").addClass("hiddenField");
@@ -379,8 +406,11 @@
 	
 	function doReset() {
 		var oldpassword = document.querySelector("input[name=oldpassword]").value;
-		var newpassword = document.querySelector("input[name=password]").value;
 		var newpassword = document.querySelector("input[name=confirmpassword]").value;
+		SWBrijj.proc("change_password", oldpassword, newpassword, doneChange);
+	}
+	
+	function doneChange () {
 		jQuery("#profilePage").removeClass("hiddenField");
 		jQuery("#changePassword").addClass("hiddenField");
 	}

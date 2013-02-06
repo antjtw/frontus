@@ -533,6 +533,10 @@ tr:hover, tr.selected {
 	display:none;
 }
 
+.doubleHide {
+	display:none;
+}
+
 .profileLogo {
 	height: 40px;
 }
