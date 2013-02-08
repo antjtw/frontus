@@ -24,11 +24,17 @@
 <script type="text/javascript">
 		$(document).ready(function() {
 			
-			SWBrijj.procn("getusers",{}, worked);
+			SWBrijj.procn("getusers",{}, [worked, notLoggedIn]);
 
 				function worked(x) {
 				  document.getElementById('contentarea').innerHTML = x;
 				  createtable()
+				  jQuery("#emailSubmit").show();
+				}
+				
+				function notLoggedIn(x) {
+				  alert("You are not logged in, redirecting to homepage");
+				  document.location.href = '../index.html';
 				}
 		
 		
@@ -69,7 +75,6 @@ function submitEmail() {
 		  for (i = 0; i < rows.length; i++) {
 			  var cell = rows[i].getElementsByTagName("td")[2];
 			  var id = cell.innerHTML;
-			  alert(id);
 			  SWBrijj.procn("send_invites",{a: id, b: 'abc@def.com'}, inserted);  
 		  }
 };
@@ -86,7 +91,7 @@ function inserted(x) {
 
 
       <div id="contentarea"></div>
-      <button onClick="submitEmail();">Submit Selected</button>
+      <button id="emailSubmit" onClick="submitEmail();" style="display:none;">Submit Selected</button>
 
 </body>
 </html>
