@@ -324,6 +324,12 @@
 		  signupForm()
 		  SWBrijj.formFillout(c, retrievedRegister);
 	  };
+	  
+		 jQuery('#login_password').keydown(function(){
+			 var fed = document.querySelector("#login-error-div");
+			 fed.innerHTML = "";
+		});
+		
   });
   </script>
 </body>
