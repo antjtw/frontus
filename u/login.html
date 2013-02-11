@@ -38,7 +38,6 @@
 }
 
   function retrievedRegister(x) {
-	    alert(x)
 		document.getElementsByName('firstname')[0].value = x[1][0];
 		document.getElementsByName('lastname')[0].value = x[1][1];
 		document.getElementsByName('investoremail')[0].value = x[1][2];
@@ -85,6 +84,8 @@
 
   function didRegister(x) {
       loginForm()
+	  var greeting = document.querySelector("#Greeting");
+	  greeting.innerHTML = "Welcome!";
 	  var errdiv = document.querySelector('#login-error-div');
       errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
       return;
@@ -217,7 +218,7 @@
       <section>
         <div id="login-form" class="span12 pagination-centered">
           <br>
-          <h1>Welcome Back</h1>
+          <h1 id="Greeting">Welcome Back</h1>
           <div id="login-error-div" class="text-error"></div>
           <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>

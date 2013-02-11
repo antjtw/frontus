@@ -529,12 +529,11 @@ tr:hover, tr.selected {
 
 /* Profile */
 
-.hiddenField {
+.hiddenFieldx {
 	display:none;
 }
 
 .doubleHide {
-	display:none;
 }
 
 .profileLogo {

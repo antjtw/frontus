@@ -179,7 +179,7 @@
         </div>
       </div>
       
-      <div id="changePassword" class="hiddenField">
+      <div id="changePassword" class="hiddenFieldx">
       <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
           <fieldset>
               
@@ -200,6 +200,8 @@
               <br>
           </fieldset>
       </form>
+      
+      <p><button id="goBackButton" class="btn" tabindex="3">Go Back</button></p>
       </div>
       
     </div>
@@ -367,13 +369,13 @@
 			jQuery(this).toggleClass("profileUneditable");
 			if (jQuery(this).is(':disabled')){
         		jQuery(this).removeAttr('disabled');
-				jQuery(this).parent().parent().removeClass("hiddenField");
+				jQuery(this).parent().parent().removeClass("hiddenField"); 
 				jQuery("#editButton").text("Save Changes");
     		} else {
         		jQuery(this).attr('disabled', 'disabled');
 				jQuery("#editButton").text("Turn On Editing");
 				if (jQuery(this).val().length === 0) {
-					jQuery(this).parent().parent().addClass("hiddenField");
+					jQuery(this).parent().parent().addClass("hiddenField"); 
 				}
    			 }
 		jQuery("#companyCheck").toggleClass("hiddenField");
@@ -405,8 +407,13 @@
 	}
   
   	jQuery("#resetButton").click(function() {
-		jQuery("#profilePage").addClass("hiddenField");
-		jQuery("#changePassword").removeClass("hiddenField");
+		jQuery("#profilePage").addClass("hiddenFieldx");
+		jQuery("#changePassword").removeClass("hiddenFieldx");
+	});
+	
+	jQuery("#goBackButton").click(function() {
+		jQuery("#profilePage").removeClass("hiddenFieldx");
+		jQuery("#changePassword").addClass("hiddenFieldx");
 	});
 	
 	function doReset() {
