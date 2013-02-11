@@ -432,6 +432,9 @@
         jQuery("#successPassword").show();
 		jQuery("#profilePage").removeClass("hiddenFieldx");
 		jQuery("#changePassword").addClass("hiddenFieldx");
+		document.querySelector("input[name=oldpassword]").value = "";
+		document.querySelector("input[name=password]").value = "";
+		document.querySelector("input[name=confirmpassword]").value = "";
 	}
 	
 	</script>
