@@ -8,7 +8,6 @@
 	
 	<link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/style.css">
 <!--     <link rel="stylesheet" href="css/style.css"> -->
 	<link rel="stylesheet" href="css/more.css">
@@ -185,12 +184,10 @@
           <fieldset>
               
               <label class="loginLabel">Old Password:</label>
-              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="oldpassword" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
-    if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
+              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="oldpassword" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');">
     
               <label class="loginLabel">New Password:</label>
-              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
-    if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
+              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');">
     
               <label class="loginLabel">Confirm New Password:</label>
               <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password" onchange="
