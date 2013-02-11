@@ -180,6 +180,7 @@
       </div>
       
       <div id="changePassword" class="hiddenFieldx">
+      <div id="passwordChangeError" class="text-error"></div>
       <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
           <fieldset>
               
@@ -419,13 +420,18 @@
 	function doReset() {
 		var oldpassword = document.querySelector("input[name=oldpassword]").value;
 		var newpassword = document.querySelector("input[name=confirmpassword]").value;
-		SWBrijj.proc("change_password", oldpassword, newpassword, doneChange);
+		SWBrijj.proc("change_password", oldpassword, newpassword, [doneChange, wrongPassword]);
+	}
+	
+	function wrongPassword () {
+		var errdiv = document.querySelector('#passwordChangeError');
+    	errdiv.innerHTML = 'Wrong Old Password';
 	}
 	
 	function doneChange () {
         jQuery("#successPassword").show();
-		jQuery("#profilePage").removeClass("hiddenField");
-		jQuery("#changePassword").addClass("hiddenField");
+		jQuery("#profilePage").removeClass("hiddenFieldx");
+		jQuery("#changePassword").addClass("hiddenFieldx");
 	}
 	
 	</script>
