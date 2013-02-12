@@ -97,7 +97,7 @@
   }
 
   function displayRadio(value) {
-    var ids = [ '#login-form', '#forgot-form', '#signup-form' ];
+    var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];
     for ( var i = 0; i < ids.length; i++) {
       document.querySelector(ids[i]).style.display = value == i ? 'block'
           : 'none';
@@ -157,6 +157,11 @@
     displayRadio(2);
     buttonRadio(1);
   }
+  
+  function registerForm() {
+    displayRadio(3);
+    buttonRadio(1);
+  }
 
   function doForgot() {
     var u = document.querySelector("#forgot-form input[name=username]").value;
@@ -186,6 +191,23 @@
 	  
     }
   }
+  
+  function doPreregister() {
+	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
+	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
+	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+    SWBrijj.companyPreregister(email, cName, pName, [didPreregister, failedPreregister]);
+  }
+  
+  function didPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "Thanks! We'll be in touch with sign up information."; 
+  }
+  
+  function failedPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "This email is already registered!."; 
+  }
 </script>
 </head>
 <body>
@@ -196,7 +218,7 @@
           <a href="index.html"><img src="img/logo2.png" id="homelogo" alt="ShareWave Logo"></a>
           <div class="btn-toolbar pull-right">
             <button id='login-button' class="btn btn-home" type="button" disabled onclick="loginForm()">Login</button>
-            <button id='signup-button' class="btn btn-home btn-success" type="button" onclick="signupForm()">Sign Up</button>
+            <button id='signup-button' class="btn btn-home btn-success" type="button" onclick="registerForm()">Sign Up</button>
           </div>
         </div>
       </section>
@@ -226,7 +248,7 @@
                 autocapitalize="off" name="username" type="email"> <label class="loginLabel">Password:</label> <input
                 required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
               <a id="forgotButton" class="btn" onClick="forgotForm(); return false;">Forgot Your Password?</a>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
               <br>
             </fieldset>
           </form>
@@ -239,7 +261,7 @@
             <fieldset>
               <label class="loginLabel">Email:</label> <input required class="loginInput" placeholder="email" tabindex="1"
                 autocapitalize="off" name="username" type="email"> <br>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Reset my password</button>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Reset my password</button>
               <br>
             </fieldset>
           </form>
@@ -275,10 +297,26 @@
               <label class="checkbox registerBox"> <input type="checkbox" required name="electBox"> I agree to use fully electronic
                 communications
               </label>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="6">Get
+              <button type="submit" class="loginButton btn btn-success" tabindex="6">Get
                 Started</button>
               <br>
             </fieldset>
+          </form>
+        </div>
+        <div id="CompanyRegister-form" style='display: none' class="span12 pagination-centered">
+          <br>
+          <h1>Company registration</h1>
+          <div id="register-success-div" class="text-error"></div>
+          <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
+            <fieldset>
+              <label class="loginLabel">Company Name:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text"> 
+              <label class="loginLabel">Email:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
+              <label class="loginLabel">Name:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text">
+            </fieldset>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Register</button>
           </form>
         </div>
       </section>
@@ -321,9 +359,15 @@
    $(document).ready(function() {
 	  var m = getParams();
 	  var c = m['code']
+	  var d = m['issuer']
+	  if (d == "yes") {
+		alert("we have a company!");  
+	  }
+	  else {
 	  if (m['code'] != undefined) {
 		  signupForm()
 		  SWBrijj.formFillout(c, retrievedRegister);
+	  }
 	  };
 	  
 		 jQuery('#login_password').keydown(function(){
