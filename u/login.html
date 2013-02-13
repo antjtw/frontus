@@ -195,8 +195,9 @@
   function doPreregister() {
 	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
 	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
+	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-    SWBrijj.companyPreregister(email, cName, pName, [didPreregister, failedPreregister]);
+    SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
   }
   
   function didPreregister(x) {
@@ -310,7 +311,9 @@
           <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
             <fieldset>
               <label class="loginLabel">Company Name:</label> 
-              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text"> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text">
+              <label class="loginLabel">Company Domain:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> 
               <label class="loginLabel">Email:</label> 
               <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
               <label class="loginLabel">Name:</label> 
