@@ -38,7 +38,6 @@
 }
 
   function retrievedRegister(x) {
-	    alert(x)
 		document.getElementsByName('firstname')[0].value = x[1][0];
 		document.getElementsByName('lastname')[0].value = x[1][1];
 		document.getElementsByName('investoremail')[0].value = x[1][2];
@@ -85,6 +84,8 @@
 
   function didRegister(x) {
       loginForm()
+	  var greeting = document.querySelector("#Greeting");
+	  greeting.innerHTML = "Welcome!";
 	  var errdiv = document.querySelector('#login-error-div');
       errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
       return;
@@ -96,7 +97,7 @@
   }
 
   function displayRadio(value) {
-    var ids = [ '#login-form', '#forgot-form', '#signup-form' ];
+    var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];
     for ( var i = 0; i < ids.length; i++) {
       document.querySelector(ids[i]).style.display = value == i ? 'block'
           : 'none';
@@ -156,6 +157,11 @@
     displayRadio(2);
     buttonRadio(1);
   }
+  
+  function registerForm() {
+    displayRadio(3);
+    buttonRadio(1);
+  }
 
   function doForgot() {
     var u = document.querySelector("#forgot-form input[name=username]").value;
@@ -185,6 +191,24 @@
 	  
     }
   }
+  
+  function doPreregister() {
+	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
+	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
+	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
+	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+    SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
+  }
+  
+  function didPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "Thanks! We'll be in touch with sign up information."; 
+  }
+  
+  function failedPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "This email is already registered!."; 
+  }
 </script>
 </head>
 <body>
@@ -195,7 +219,7 @@
           <a href="index.html"><img src="img/logo2.png" id="homelogo" alt="ShareWave Logo"></a>
           <div class="btn-toolbar pull-right">
             <button id='login-button' class="btn btn-home" type="button" disabled onclick="loginForm()">Login</button>
-            <button id='signup-button' class="btn btn-home btn-success" type="button" onclick="signupForm()">Sign Up</button>
+            <button id='signup-button' class="btn btn-home btn-success" type="button" onclick="registerForm()">Sign Up</button>
           </div>
         </div>
       </section>
@@ -217,15 +241,15 @@
       <section>
         <div id="login-form" class="span12 pagination-centered">
           <br>
-          <h1>Welcome Back</h1>
+          <h1 id="Greeting"></h1>
           <div id="login-error-div" class="text-error"></div>
           <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <label class="loginLabel">Email:</label> <input required class="loginInput" placeholder="email" tabindex="1"
+              <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
                 autocapitalize="off" name="username" type="email"> <label class="loginLabel">Password:</label> <input
-                required class="loginInput" id="login_password" placeholder="password" tabindex="2" name="password" type="password">
+                required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
               <a id="forgotButton" class="btn" onClick="forgotForm(); return false;">Forgot Your Password?</a>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
               <br>
             </fieldset>
           </form>
@@ -238,7 +262,7 @@
             <fieldset>
               <label class="loginLabel">Email:</label> <input required class="loginInput" placeholder="email" tabindex="1"
                 autocapitalize="off" name="username" type="email"> <br>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Reset my password</button>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Reset my password</button>
               <br>
             </fieldset>
           </form>
@@ -256,15 +280,15 @@
               <input required class="loginInput" tabindex="2" autocapitalize="off" name="firstname" type="text">
                 
               <label class="loginLabel">Last Name:</label> 
-              <input required class="loginInput" placeholder="McGee" tabindex="3" autocapitalize="off" name="lastname" type="text"> 
+              <input required class="loginInput" tabindex="3" autocapitalize="off" name="lastname" type="text"> 
                 
                 <label class="loginLabel">Password:</label> <input
-                required class="loginInput" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password"
+                required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}"
                 id="password1" tabindex="4" name="password" type="password"
                 onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
   if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
               <label class="loginLabel">Confirm Password:</label> <input required class="loginInput"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" tabindex="5"
                 name="confirmpassword" type="password"
                 onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');">
                 
@@ -274,10 +298,28 @@
               <label class="checkbox registerBox"> <input type="checkbox" required name="electBox"> I agree to use fully electronic
                 communications
               </label>
-              <button id="loginButton" type="submit" class="btn btn-success" tabindex="6">Get
+              <button type="submit" class="loginButton btn btn-success" tabindex="6">Get
                 Started</button>
               <br>
             </fieldset>
+          </form>
+        </div>
+        <div id="CompanyRegister-form" style='display: none' class="span12 pagination-centered">
+          <br>
+          <h1>Company registration</h1>
+          <div id="register-success-div" class="text-error"></div>
+          <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
+            <fieldset>
+              <label class="loginLabel">Company Name:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text">
+              <label class="loginLabel">Company Domain:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> 
+              <label class="loginLabel">Email:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
+              <label class="loginLabel">Name:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text">
+            </fieldset>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Register</button>
           </form>
         </div>
       </section>
@@ -320,9 +362,18 @@
    $(document).ready(function() {
 	  var m = getParams();
 	  var c = m['code']
+	  var d = m['issuer']
+	  if (d == "yes") {
+		alert("we have a company!");  
+	  }
+	  else if (d == 'y') {
+		  registerForm()
+	  }
+	  else {
 	  if (m['code'] != undefined) {
 		  signupForm()
 		  SWBrijj.formFillout(c, retrievedRegister);
+	  }
 	  };
 	  
 		 jQuery('#login_password').keydown(function(){

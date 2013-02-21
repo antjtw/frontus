@@ -8,7 +8,6 @@
 	
 	<link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/style.css">
 <!--     <link rel="stylesheet" href="css/style.css"> -->
 	<link rel="stylesheet" href="css/more.css">
@@ -179,17 +178,16 @@
         </div>
       </div>
       
-      <div id="changePassword" class="hiddenField">
+      <div id="changePassword" class="hiddenFieldx">
+      <div id="passwordChangeError" class="text-error"></div>
       <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
           <fieldset>
               
               <label class="loginLabel">Old Password:</label>
-              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="oldpassword" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
-    if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
+              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="oldpassword" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');">
     
               <label class="loginLabel">New Password:</label>
-              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
-    if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
+              <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" placeholder="password" id="password1" tabindex="4" name="password" type="password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');">
     
               <label class="loginLabel">Confirm New Password:</label>
               <input required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" placeholder="confirm password" tabindex="5" name="confirmpassword" type="password" onchange="
@@ -200,6 +198,8 @@
               <br>
           </fieldset>
       </form>
+      
+      <p><button id="goBackButton" class="btn" tabindex="3">Go Back</button></p>
       </div>
       
     </div>
@@ -367,13 +367,13 @@
 			jQuery(this).toggleClass("profileUneditable");
 			if (jQuery(this).is(':disabled')){
         		jQuery(this).removeAttr('disabled');
-				jQuery(this).parent().parent().removeClass("hiddenField");
+				jQuery(this).parent().parent().removeClass("hiddenField"); 
 				jQuery("#editButton").text("Save Changes");
     		} else {
         		jQuery(this).attr('disabled', 'disabled');
 				jQuery("#editButton").text("Turn On Editing");
 				if (jQuery(this).val().length === 0) {
-					jQuery(this).parent().parent().addClass("hiddenField");
+					jQuery(this).parent().parent().addClass("hiddenField"); 
 				}
    			 }
 		jQuery("#companyCheck").toggleClass("hiddenField");
@@ -405,20 +405,36 @@
 	}
   
   	jQuery("#resetButton").click(function() {
-		jQuery("#profilePage").addClass("hiddenField");
-		jQuery("#changePassword").removeClass("hiddenField");
+		jQuery("#profilePage").addClass("hiddenFieldx");
+		jQuery("#changePassword").removeClass("hiddenFieldx");
+	});
+	
+	jQuery("#goBackButton").click(function() {
+		jQuery("#profilePage").removeClass("hiddenFieldx");
+		jQuery("#changePassword").addClass("hiddenFieldx");
+		document.querySelector("input[name=oldpassword]").value = "";
+		document.querySelector("input[name=password]").value = "";
+		document.querySelector("input[name=confirmpassword]").value = "";
 	});
 	
 	function doReset() {
 		var oldpassword = document.querySelector("input[name=oldpassword]").value;
 		var newpassword = document.querySelector("input[name=confirmpassword]").value;
-		SWBrijj.proc("change_password", oldpassword, newpassword, doneChange);
+		SWBrijj.proc("change_password", oldpassword, newpassword, [doneChange, wrongPassword]);
+	}
+	
+	function wrongPassword () {
+		var errdiv = document.querySelector('#passwordChangeError');
+    	errdiv.innerHTML = 'Wrong Old Password';
 	}
 	
 	function doneChange () {
         jQuery("#successPassword").show();
-		jQuery("#profilePage").removeClass("hiddenField");
-		jQuery("#changePassword").addClass("hiddenField");
+		jQuery("#profilePage").removeClass("hiddenFieldx");
+		jQuery("#changePassword").addClass("hiddenFieldx");
+		document.querySelector("input[name=oldpassword]").value = "";
+		document.querySelector("input[name=password]").value = "";
+		document.querySelector("input[name=confirmpassword]").value = "";
 	}
 	
 	</script>

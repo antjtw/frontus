@@ -1,0 +1,98 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Sharewave Grid</title>
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/bootstrap-responsive.css">
+  <style>
+    .cell-title {
+      font-weight: bold;
+    }
+
+    .cell-effort-driven {
+      text-align: center;
+    }
+  </style>
+  
+<script type='text/javascript' src="../js/jquery-1.8.3.js"></script>
+<script src="lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="lib/jquery.event.drag-2.0.min.js"></script>
+<script type='text/javascript' src="../brijj/brijj.js"></script>
+  
+<script type="text/javascript">
+		$(document).ready(function() {
+			
+			SWBrijj.procn("get_companies",{}, [worked, notLoggedIn]);
+
+				function worked(x) {
+				  document.getElementById('contentarea').innerHTML = x;
+				  createtable()
+				  jQuery("#emailSubmit").show();
+				}
+				
+				function notLoggedIn(x) {
+				  alert("You are not logged in, redirecting to homepage");
+				  document.location.href = '../index.html';
+				}
+		
+		
+		
+				function createtable() {
+					
+				var table = document.getElementById("contentarea");
+				var rows = table.getElementsByTagName("tr");
+				for (i = 0; i < rows.length; i++) {
+					var currentRow = rows[i];
+					var createClickHandler = 
+						function(row) 
+						{
+							return function() { 
+											  var cell = row.getElementsByTagName("td")[2];
+											  var id = cell.innerHTML;
+											  $(this).toggleClass("selected");
+											 };
+						};
+
+        			currentRow.onclick = createClickHandler(currentRow);
+    			}
+			}
+			
+				  
+				
+				
+	});
+			
+		
+		
+
+</script>
+<script>
+function submitEmail() {
+	var table = document.getElementById("contentarea");
+	var rows = table.getElementsByClassName("selected");
+		  for (i = 0; i < rows.length; i++) {
+			  var cell = rows[i].getElementsByTagName("td")[0];
+			  var id = cell.innerHTML;
+			  alert(id);
+			  SWBrijj.procn("company_invite",{a: id, b: 'abc@def.com'}, inserted);  
+		  }
+};
+
+function inserted(x) {
+				  alert(x)
+			  };
+      
+   
+</script> 
+
+</head>
+<body>
+
+
+      <div id="contentarea"></div>
+      <button id="emailSubmit" onClick="submitEmail();" style="display:none;">Submit Selected</button>
+
+</body>
+</html>

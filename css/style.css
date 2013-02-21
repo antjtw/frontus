@@ -450,7 +450,7 @@
 	width:150px;
     display: block;
 }
-#loginButton {
+.loginButton {
 	width: 300px;
 	text-align:center;
 	margin-top:15px;
@@ -529,12 +529,11 @@ tr:hover, tr.selected {
 
 /* Profile */
 
-.hiddenField {
+.hiddenFieldx {
 	display:none;
 }
 
 .doubleHide {
-	display:none;
 }
 
 .profileLogo {
