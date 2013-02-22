@@ -103,19 +103,6 @@
           : 'none';
     }
   }
-
-	function showPrivacy() {
-		document.querySelector('#privacy-policy').style.display='block';
-		document.querySelector('#TOS').style.display='none';
-		return false;
-	}
-	function showTOS() {
-		$( '#TOS' ).load('u/tos.html', function() {
-		document.querySelector('#privacy-policy').style.display='none';
-		document.querySelector('#TOS').style.display='block';
-		return false;
-	});
-	}
 	
   function buttonRadio(value) {
     var ids = [ '#login-button', '#signup-button' ];
@@ -218,7 +205,7 @@
         <section id="topbar">
           <div class="span12" id="homenav">
             <div class="pull-right">
-              <a class="allCaps" onclick="loginForm()">LOGIN</a>
+              <a id="loginButton" class="allCaps" onclick="loginForm()">LOGIN</a>
             </div>
           </div>
         </section>
@@ -232,10 +219,10 @@
           	<p class="standardText">a beautifully simple way to organize, visualize and communicate with investors</p>
           </div>
           <div class="inviteBar">
-          	<a href="" class="inviteButton standardText">Request an Invite</a>
+          	<a id="inviteButton" class="standardText">Request an Invite</a>
           </div>
           <div style="position: relative;">
-          	<img src="u/images/monsters.png"> 
+          	<img id="monstersPic" src="u/images/monsters.png"> 
             <a><img id="playbutton" src="u/images/play-button.png"></a>        
           </div>
         </div>
@@ -278,6 +265,27 @@
     
     <div class="row-fluid">
       <section>
+    
+
+        <div id="CompanyRegister-form" class="span12 pagination-centered">
+          <br>
+          <div id="register-success-div" class="text-error"></div>
+          <form id="registrationForm" action="" method="post" onsubmit="doPreregister(); return false;">
+            <fieldset>
+              <p>Dear Sharewave,</p>
+              
+              <p><span>My name is</span><input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text"><span>and my email is</span><input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              
+              <p><span>My company name is</span><input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
+              
+              <p><span>online at http://</span><input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span>
+            </fieldset>
+              <button id="registerButton" type="submit" class="btn" tabindex="3">Request an invite</button>
+          </form>
+        </div>
+        
+        
+        
         <div id="login-form" style='display: none' class="span12 pagination-centered">
           <br>
           <div id="login-error-div" class="text-error"></div>
@@ -292,25 +300,8 @@
             </fieldset>
           </form>
         </div>
-    
-
-        <div id="CompanyRegister-form" class="span12 pagination-centered">
-          <br>
-          <div id="register-success-div" class="text-error"></div>
-          <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
-            <fieldset>
-              <label class="loginLabel">Company Name:</label> 
-              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text">
-              <label class="loginLabel">Company Domain:</label> 
-              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> 
-              <label class="loginLabel">Email:</label> 
-              <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
-              <label class="loginLabel">Name:</label> 
-              <input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text">
-            </fieldset>
-              <button type="submit" class="btn btn-success loginButton" tabindex="3">Register</button>
-          </form>
-        </div>
+        
+        
       </section>
     </div>
   </div>
@@ -318,7 +309,14 @@
   <div class="footerBar">
     <div class="container">  
       <div class="row-fluid">
-      <footer class="footer">Text in here</footer>
+      <footer class="footer">
+          <div class="span12">
+            <a id="blogButton" class="allCaps footText">BLOG</a>
+            <div class="pull-right">
+             <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   </div>
@@ -329,9 +327,11 @@
   <script src="brijj/brijj.js"></script>
   
   <script>
-   $(document).ready(function() {
-		
-  });
+   $( "#inviteButton" ).click(function() {
+     $('html, body').animate({
+         scrollTop: $( "#CompanyRegister-form" ).offset().top + 110
+     }, 600);
+ });
   </script>
 </body>
 </html>
