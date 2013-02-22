@@ -421,7 +421,6 @@ function submitRegistration() {
 }
 
 function didRegister(x) {
-	alert(x);
 }
 
 function userCreation() {
@@ -435,7 +434,7 @@ function userCreation() {
 		if (document.getElementsByName('admin' + i)[0].checked === true) {
 			admin = "yes";
 		}
-		// SWBrijj.registerInvestors(name, domain, email, admin, didRegister);
+	    SWBrijj.registerInvestors(name, domain, email, admin, didRegister);
 		i = i + 1;
 	   }
 	else {
