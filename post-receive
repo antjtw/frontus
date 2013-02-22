@@ -1,15 +1,18 @@
 #!/bin/sh -x
-# Unset GIT_DIR or the universe will implode
-unset GIT_DIR
-# Change directory to the working tree; exit on failure
-cd ../ || exit
 
-while read oldrev newrev refname
-do
-    branch=$(git rev-parse --symbolic --abbrev-ref $refname)
-    if [ "master" = "$branch" ]; then
-    echo "checking out master"
-    git checkout -f master
-    git submodule update --init --recursive --force
-    fi
-done
+## this no longer gets called
+
+## Unset GIT_DIR or the universe will implode
+#unset GIT_DIR
+## Change directory to the working tree; exit on failure
+#cd ../ || exit
+#
+#while read oldrev newrev refname
+#do
+#    branch=$(git rev-parse --symbolic --abbrev-ref $refname)
+#    if [ "master" = "$branch" ]; then
+#    echo "checking out master"
+#    git checkout -f master
+#    git submodule update --init --recursive --force
+#    fi
+#done
