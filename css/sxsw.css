@@ -1,0 +1,69 @@
+/* Fonts and Typography */
+
+.standardText {
+	font-size: 18px;
+	font-family: "Helvetica Neue";
+	line-height: 24px;
+	color: #505154;
+}
+
+.allCaps {
+	font-size: 11px;
+	font-family: "Helvetica Neue";
+	color: #505154;
+}
+
+/* Index page CSS */
+
+.bannerBar {
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+	
+}
+
+.headline {
+	margin-top: 30px;	
+}
+
+.tagline {
+	width: 400px;
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;	
+}
+
+.inviteBar {
+	width: 300px;
+	height: 26px;
+	margin-top: 5px;
+	padding-top:3px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #cc4900;
+}
+
+.inviteButton {
+	color: #FFF;
+}
+
+#playbutton {
+	position: absolute; 
+	top: 25px; 
+	left: 427px;
+}
+
+.iconRow {
+	margin-top: 100px;	
+}
+
+.iconText {
+	margin-top: 20px;	
+	width: 220px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.footerBar {
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+}
