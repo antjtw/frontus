@@ -1,0 +1,337 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<base href=".." />
+<meta name="author" content="">
+<link href="css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/sxsw.css" rel="stylesheet">
+<title>Home |ShareWave</title>
+<style>
+.hreffy {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #9922AA;
+/*  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  */
+}
+
+.boilerplate {
+  height: 480px;
+  overflow: auto;
+}
+</style>
+<script>
+
+  function getParams() {
+  var params = document.location.search.substring(1).split('&');
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i].split('=');
+    params[unescape(param[0])] = unescape(param[1]);
+  }
+  return params;
+}
+
+  function retrievedRegister(x) {
+		document.getElementsByName('firstname')[0].value = x[1][0];
+		document.getElementsByName('lastname')[0].value = x[1][1];
+		document.getElementsByName('investoremail')[0].value = x[1][2];
+  }
+
+  function doLogin() {
+	var u = document.querySelector("#login-form input[name=username]").value;
+    var p = document.querySelector("#login-form input[name=password]").value;
+    SWBrijj.login(u, p, didLogin);
+  }
+
+  function didLogin(x) {
+    if (x) {
+      document.location.href = '../v/profile.html';
+      return;
+    }
+    var errdiv = document.querySelector('#login-error-div');
+    errdiv.innerHTML = 'Invalid email/password combination';
+  }
+  
+  function doRegister() {
+    var u = document.querySelector("#signup-form input[name=investoremail]").value;
+	var f = document.querySelector("#signup-form input[name=firstname]").value;
+	var l = document.querySelector("#signup-form input[name=lastname]").value;
+	var x = 0
+	var y = 0
+	if (document.querySelector("#signup-form input[name=TOSBox]").checked) {
+		x = 1;
+	}
+	if (document.querySelector("#signup-form input[name=electBox]").checked) {
+		y = 1;
+	}
+	var p = document.querySelector("#signup-form input[name=password]").value;
+	if (x != 1 || y != 1) {
+		var errdiv = document.querySelector('#register-error-div');
+     	errdiv.innerHTML = 'Must agree to TOS and Digital Communications';
+	}
+	else {
+		var m = getParams();
+		var code = m['code']
+		SWBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
+	}
+  }
+
+  function didRegister(x) {
+      loginForm()
+	  var greeting = document.querySelector("#Greeting");
+	  greeting.innerHTML = "Welcome!";
+	  var errdiv = document.querySelector('#login-error-div');
+      errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
+      return;
+  }
+  
+  function didntRegister(x) {
+	 var errdiv = document.querySelector('#register-error-div');
+     errdiv.innerHTML = 'Invalid Code'; 
+  }
+
+  function displayRadio(value) {
+    var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];
+    for ( var i = 0; i < ids.length; i++) {
+      document.querySelector(ids[i]).style.display = value == i ? 'block'
+          : 'none';
+    }
+  }
+
+	function showPrivacy() {
+		document.querySelector('#privacy-policy').style.display='block';
+		document.querySelector('#TOS').style.display='none';
+		return false;
+	}
+	function showTOS() {
+		$( '#TOS' ).load('u/tos.html', function() {
+		document.querySelector('#privacy-policy').style.display='none';
+		document.querySelector('#TOS').style.display='block';
+		return false;
+	});
+	}
+	
+  function buttonRadio(value) {
+    var ids = [ '#login-button', '#signup-button' ];
+    for ( var i = 0; i < ids.length; i++) {
+      var e = document.querySelector(ids[i]);
+      if (value == i) {
+        e.disabled = true;
+        e.className = 'btn btn-home';
+      } else {
+        e.disabled = false;
+        e.className = 'btn btn-home btn-success';
+      }
+    }
+  }
+
+  function loginForm() {
+    /* This hack is a workaround for the Chrome handling of required attributes */
+    var qs = document.querySelectorAll("#login-form input[requiredx]");
+    for ( var i = 0; i < qs.length; i++) {
+      qs[i].removeAttribute("requiredx");
+      qs[i].setAttribute("required", false);
+    }
+    displayRadio(0);
+    buttonRadio(0);
+  }
+
+  function forgotForm() {
+    /* This hack is a workaround for the Chrome handling of required attributes */
+    var qs = document.querySelectorAll("#login-form input[required]");
+    for ( var i = 0; i < qs.length; i++) {
+      qs[i].removeAttribute("required");
+      qs[i].setAttribute("requiredx", false);
+    }
+    displayRadio(1);
+    buttonRadio(2);
+  }
+
+  function signupForm() {
+    displayRadio(2);
+    buttonRadio(1);
+  }
+  
+  function registerForm() {
+    displayRadio(3);
+    buttonRadio(1);
+  }
+
+  function doForgot() {
+    var u = document.querySelector("#forgot-form input[name=username]").value;
+	loginForm()
+	var fed = document.querySelector("#login-error-div");
+	fed.innerHTML = "An email to reset your password has been sent";
+    SWBrijj.forgot(u, [ didForget, forgetError ]);
+  }
+
+  function forgetError(x) {
+    var fed = document.querySelector("#forgot-error-div");
+  }
+  function didForget(x) {
+    var fed = document.querySelector("#login-error-div");
+    if (x) {
+      fed.innerHTML = "An email to reset your password has been sent";
+    }
+  }
+
+  function checkPassword() {
+
+    if (document.registerform.password.value != document.registerform.confirmpassword.value) {
+      document.registerform.confirmpassword
+          .setCustomValidity('Passwords must match.');
+    } else {
+      document.registerform.confirmpassword.setCustomValidity('');
+	  
+    }
+  }
+  
+  function doPreregister() {
+	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
+	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
+	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
+	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+    SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
+  }
+  
+  function didPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "Thanks! We'll be in touch with sign up information."; 
+  }
+  
+  function failedPreregister(x) {
+	var fed = document.querySelector("#register-success-div");
+	fed.innerHTML = "This email is already registered!."; 
+  }
+</script>
+</head>
+<body>
+  <div class="bannerBar">
+    <div class="container">
+      <div class="row-fluid">
+        <section id="topbar">
+          <div class="span12" id="homenav">
+            <div class="pull-right">
+              <a class="allCaps" onclick="loginForm()">LOGIN</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    
+    
+     <div class="row-fluid pagination-centered headline">
+        <div>
+          <img src="u/images/logo.png">
+          <div class="tagline">
+          	<p class="standardText">a beautifully simple way to organize, visualize and communicate with investors</p>
+          </div>
+          <div class="inviteBar">
+          	<a href="" class="inviteButton standardText">Request an Invite</a>
+          </div>
+          <div style="position: relative;">
+          	<img src="u/images/monsters.png"> 
+            <a><img id="playbutton" src="u/images/play-button.png"></a>        
+          </div>
+        </div>
+     </div>
+   </div>
+   
+   </div>
+   
+   <div class="container">
+    
+     
+    <div class="row-fluid iconRow">
+    <section>
+    	<ul class="thumbnails">
+  			<li class="span4 pagination-centered">
+   				<div>
+                	<img src="u/images/icon-manage.png">
+                    <p class="standardText iconText">Effortlessly Manage Cap Table and Options</p>
+    			</div>
+  			</li>
+            
+            <li class="span4 pagination-centered">
+   				<div>
+                	<img src="u/images/icon-generate.png">
+                    <p class="standardText iconText">Easily Generate Rich Board Packages</p>
+    			</div>
+  			</li>
+            
+            <li class="span4 pagination-centered">
+   				<div>
+                	<img src="u/images/icon-signature.png">
+                    <p class="standardText iconText">Simplify the Paper Trail with Electronic Signatures</p>
+    			</div>
+  			</li>
+		</ul>
+    </section>
+    
+    </div>
+    
+    
+    <div class="row-fluid">
+      <section>
+        <div id="login-form" style='display: none' class="span12 pagination-centered">
+          <br>
+          <div id="login-error-div" class="text-error"></div>
+          <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+            <fieldset>
+              <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
+                autocapitalize="off" name="username" type="email"> <label class="loginLabel">Password:</label> <input
+                required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
+              <a id="forgotButton" class="btn" onClick="forgotForm(); return false;">Forgot Your Password?</a>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
+              <br>
+            </fieldset>
+          </form>
+        </div>
+    
+
+        <div id="CompanyRegister-form" class="span12 pagination-centered">
+          <br>
+          <div id="register-success-div" class="text-error"></div>
+          <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
+            <fieldset>
+              <label class="loginLabel">Company Name:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text">
+              <label class="loginLabel">Company Domain:</label> 
+              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> 
+              <label class="loginLabel">Email:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
+              <label class="loginLabel">Name:</label> 
+              <input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text">
+            </fieldset>
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Register</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <div class="footerBar">
+    <div class="container">  
+      <div class="row-fluid">
+      <footer class="footer">Text in here</footer>
+      </div>
+    </div>
+  </div>
+    
+
+  <script src="script/jquery.js"></script>
+  <script src="script/bootstrap.js"></script>
+  <script src="brijj/brijj.js"></script>
+  
+  <script>
+   $(document).ready(function() {
+		
+  });
+  </script>
+</body>
+</html>
