@@ -57,44 +57,6 @@
     var errdiv = document.querySelector('#login-error-div');
     errdiv.innerHTML = 'Invalid email/password combination';
   }
-  
-  function doRegister() {
-    var u = document.querySelector("#signup-form input[name=investoremail]").value;
-	var f = document.querySelector("#signup-form input[name=firstname]").value;
-	var l = document.querySelector("#signup-form input[name=lastname]").value;
-	var x = 0
-	var y = 0
-	if (document.querySelector("#signup-form input[name=TOSBox]").checked) {
-		x = 1;
-	}
-	if (document.querySelector("#signup-form input[name=electBox]").checked) {
-		y = 1;
-	}
-	var p = document.querySelector("#signup-form input[name=password]").value;
-	if (x != 1 || y != 1) {
-		var errdiv = document.querySelector('#register-error-div');
-     	errdiv.innerHTML = 'Must agree to TOS and Digital Communications';
-	}
-	else {
-		var m = getParams();
-		var code = m['code']
-		SWBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
-	}
-  }
-
-  function didRegister(x) {
-      loginForm()
-	  var greeting = document.querySelector("#Greeting");
-	  greeting.innerHTML = "Welcome!";
-	  var errdiv = document.querySelector('#login-error-div');
-      errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
-      return;
-  }
-  
-  function didntRegister(x) {
-	 var errdiv = document.querySelector('#register-error-div');
-     errdiv.innerHTML = 'Invalid Code'; 
-  }
 
   function displayRadio(value) {
     var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];

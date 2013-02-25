@@ -142,13 +142,26 @@ input.loginInput {
 #playbutton {
 	left: 327px;
 }
-	
+
 }
 
 @media (max-width: 480px) {
 	
 #playbutton {
 	left: 160px;
+}
+
+#registrationForm {
+	width:280px;
+	padding-left: 5px;	
+	padding-right: 5px;	
+	
+}
+
+#registerButton {
+	width:120px;
+	margin-top:30px;
+	margin-left:120px;
 }
 	
 }
