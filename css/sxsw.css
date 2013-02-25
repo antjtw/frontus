@@ -62,12 +62,17 @@
 	cursor: pointer;
 }
 
+#loginModal {
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+}
+
 .modal-body {
 	padding:0px;
 	overflow:hidden;
 }
 
-#myModal {
+#sxswVideo {
 	height:400px;
 }
 
@@ -90,6 +95,7 @@
 	margin-top:200px;
 	margin-bottom:10px;
 	width:600px;
+	height:250px;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
@@ -142,6 +148,11 @@ input.loginInput {
 
 #blogButton {
 	cursor: pointer;
+}
+
+.socialPlacement {
+	margin-right:5px;
+	margin-left:5px;
 }
 
 .hidden {

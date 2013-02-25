@@ -154,13 +154,11 @@
 	var button = document.querySelector("#registerButton");
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
 	$(button).addClass("hidden");
-	var string = "<p>Hi " + pName + ",</p> <p>Thank you for submitting an invitation to sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam'>@sharewaveteam</a>.</p>"
+	var string = "<p>Hi " + pName + ",</p> <p>Thank you for submitting an invitation to sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
 	fed.innerHTML = string; 
   }
   
   function failedPreregister(x) {
-	var fed = document.querySelector("#register-success-div");
-	fed.innerHTML = "This email is already registered!."; 
   }
 </script>
 </head>
@@ -171,7 +169,7 @@
         <section id="topbar">
           <div class="span12" id="homenav">
             <div class="pull-right">
-              <a id="loginButton" class="allCaps" onclick="loginForm()">LOGIN</a>
+              <a id="loginButton" class="allCaps" data-toggle="modal" href="#loginModal">LOGIN</a>
             </div>
           </div>
         </section>
@@ -189,7 +187,7 @@
           </div>
           <div style="position: relative;">
           	<img id="monstersPic" src="u/images/monsters.png"> 
-            <a class="video" data-toggle="modal" href="#myModal"><img id="playbutton" src="u/images/play-button.png"></a>        
+            <a class="video" data-toggle="modal" href="#sxswVideo"><img id="playbutton" src="u/images/play-button.png"></a>        
           </div>
         </div>
      </div>
@@ -197,14 +195,28 @@
    
    </div>
    
-   <div class="container">
-   
-    
-	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="loginModal" class="modal hide fade">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
   <div class="modal-body">
-    <iframe width="100%" height="100%" src="http://www.youtube.com/embed/AsBsBU3vn6M?rel=0" frameborder="0" allowfullscreen></iframe>
+   <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
+            <fieldset>
+              <input placeholder="User ID" required class="loginInput" tabindex="1"  autocapitalize="off" name="username" type="email"> 
+              <input placeholder="Password" required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
+              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
+              <br>
+            </fieldset>
+          </form>
   </div>
 </div>
+
+<div id="sxswVideo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-body" aria-hidden="true">
+    <iframe src='http://player.vimeo.com/video/43992862' width="100%" height="100%" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>.</p>
+  </div>
+</div>
+   
+   <div class="container">
+   
       
 
     <div class="row-fluid iconRow">
@@ -249,33 +261,18 @@
             <div id="companyReserve">
               <p>Dear Sharewave,</p>
               
-              <p><span>My name is</span><input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text"><span>and my email is</span><input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              <p><span>My name is</span><input required class="loginInput" id="login_password" tabindex="1" name="personalName" type="text"><span>and my email is</span><input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
               
-              <p><span>My company name is</span><input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
+              <p><span>My company name is</span><input required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
               
-              <p><span>online at http://</span><input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span></p>
+              <p><span>online at http://</span><input required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span></p>
             </fieldset>
-              <button id="registerButton" type="submit" class="btn" tabindex="3">Request an invite</button>
+              <button id="registerButton" type="submit" class="btn" tabindex="5">Request an invite</button>
           </form>
           </div>
-          <div id="registerBar" class="standardText">Spread the Word</div>
+          <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png"><img class="socialPlacement" src="u/images/icon-facebook.png"><img class="socialPlacement" src="u/images/icon-linkedin.png"></div>
         </div>
         
-        
-        
-        <div id="login-form" style='display: none' class="span12 pagination-centered">
-          <br>
-          <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
-            <fieldset>
-              <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
-                autocapitalize="off" name="username" type="email"> <label class="loginLabel">Password:</label> <input
-                required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
-              <a id="forgotButton" class="btn" onClick="forgotForm(); return false;">Forgot Your Password?</a>
-              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
-              <br>
-            </fieldset>
-          </form>
-        </div>
         
         
       </section>
@@ -287,7 +284,7 @@
       <div class="row-fluid">
       <footer class="footer">
           <div class="span12">
-            <a id="blogButton" class="allCaps footText">BLOG</a>
+            <img class="socialPlacement" src="u/images/icon-twitter.png"><a id="blogButton" href='https://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
             <div class="pull-right">
              <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
             </div>
