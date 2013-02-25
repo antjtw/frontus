@@ -200,8 +200,9 @@
   <div class="modal-body">
    <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <input placeholder="User ID" required class="loginInput" tabindex="1"  autocapitalize="off" name="username" type="email"> 
-              <input placeholder="Password" required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
+              <input placeholder="User ID" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
+              <br> 
+              <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
               <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
               <br>
             </fieldset>
@@ -303,7 +304,7 @@
   <script>
    $( "#inviteButton" ).click(function() {
      $('html, body').animate({
-         scrollTop: $( "#CompanyRegister-form" ).offset().top + 110
+         scrollTop: $( "#CompanyRegister-form" ).offset().top + 140
      }, 600);
  });
   </script>

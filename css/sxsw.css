@@ -67,6 +67,10 @@
 	background-repeat: repeat;	
 }
 
+.checkInput {
+	margin-top:10px;
+}
+
 .modal-body {
 	padding:0px;
 	overflow:hidden;
