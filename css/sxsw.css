@@ -62,6 +62,15 @@
 	cursor: pointer;
 }
 
+.modal-body {
+	padding:0px;
+	overflow:hidden;
+}
+
+#myModal {
+	height:400px;
+}
+
 #monstersPic {
 	margin-right: 65px;	
 }
@@ -79,6 +88,7 @@
 
 #registrationForm {
 	margin-top:200px;
+	margin-bottom:10px;
 	width:600px;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -117,6 +127,11 @@ input.loginInput {
 	margin-left:350px;;
 }
 
+#registerBar {
+	margin-left: 180px;
+	padding-top: 0px;
+}
+
 .footerBar {
 	height:30px;
 	margin-top:200px;
@@ -127,6 +142,10 @@ input.loginInput {
 
 #blogButton {
 	cursor: pointer;
+}
+
+.hidden {
+	display: none;
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
