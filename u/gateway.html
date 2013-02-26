@@ -172,11 +172,7 @@
           <div class="tagline">
           	<p class="headerText">a beautifully simple way to organize, visualize and communicate with investors</p>
           </div>
-          <a id="inviteButton" class="headerText">
-          <div class="inviteBar">
-        	Request an Invite
-          </div>
-          </a>
+          <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an invite</button>
           <div style="position: relative;">
           	<img id="monstersPic" src="u/images/monsters.png"> 
             <a class="video" data-toggle="modal" href="#sxswVideo"><img id="playbutton" src="u/images/play-button.png"></a>        
@@ -311,7 +307,7 @@
   
    $( "#inviteButton" ).click(function() {
      $('html, body').animate({
-         scrollTop: $( "#CompanyRegister-form" ).offset().top + 140
+         scrollTop: $( "#CompanyRegister-form" ).offset().top + 190
      }, 600);
  });
  
