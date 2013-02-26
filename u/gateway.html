@@ -10,22 +10,6 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/sxsw.css" rel="stylesheet">
 <title>Home |ShareWave</title>
-<style>
-.hreffy {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #9922AA;
-/*  outline: thin dotted #333;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-  */
-}
-
-.boilerplate {
-  height: 480px;
-  overflow: auto;
-}
-</style>
 <script>
 
   function getParams() {
@@ -196,16 +180,15 @@
    </div>
    
    <div id="loginModal" class="modal hide fade">
-  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <div class="modal-body">
-   <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
-            <fieldset>
+  <button type="button" class="close" data-dismiss="modal">&times;</button>
+  <div id="login" class="modal-body center">
+   <form class="center" action="" method="post" onsubmit="doLogin(); return false;">
+            <fieldset id="loginForm">
               <input placeholder="User ID" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
               <br> 
               <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
-              <button type="submit" class="btn btn-success loginButton" tabindex="3">Sign in</button>
-              <br>
             </fieldset>
+            <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
           </form>
   </div>
 </div>
@@ -261,14 +244,15 @@
             <fieldset>
             <div id="companyReserve">
               <p>Dear Sharewave,</p>
+
               
-              <p><span>My name is</span><input required class="loginInput" id="login_password" tabindex="1" name="personalName" type="text"><span>and my email is</span><input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              <p><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span>and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
               
-              <p><span>My company name is</span><input required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
+              <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
               
-              <p><span>online at http://</span><input required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span></p>
+              <p><span>online at http://</span><input id="domain" required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span></p>
             </fieldset>
-              <button id="registerButton" type="submit" class="btn" tabindex="5">Request an invite</button>
+              <button disabled id="registerButton" type="submit" class="btn" tabindex="5">Request an invite</button>
           </form>
           </div>
           <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png"><img class="socialPlacement" src="u/images/icon-facebook.png"><img class="socialPlacement" src="u/images/icon-linkedin.png"></div>
@@ -298,15 +282,44 @@
 
   <script src="script/jquery.js"></script>
   <script src="script/bootstrap.js"></script>
+  <script src="script/bootstrap-tooltip.js"></script>
   <script src="script/bootstrap-lightbox.js"></script>
   <script src="brijj/brijj.js"></script>
   
   <script>
+  
+  $(document).ready(function () {
+
+    $( "#name" ).tooltip({'trigger':'hover', 'title': 'Enter your name'});
+	$( "#email" ).tooltip({'trigger':'hover', 'title': 'Enter your email'});
+	$( "#domain" ).tooltip({'trigger':'hover', 'title': "Enter your company's domain"});
+	$( "#company" ).tooltip({'trigger':'hover', 'title': 'Enter you company'});
+
+});
+  
+  
    $( "#inviteButton" ).click(function() {
      $('html, body').animate({
          scrollTop: $( "#CompanyRegister-form" ).offset().top + 140
      }, 600);
  });
+ 
+ 	$(".loginInput").keyup(function() {
+	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
+	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
+	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
+	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+	if (email.length > 0 && cName.length > 0 && Domain.length > 0 && pName.length > 0) {
+		$("#registerButton").removeAttr('disabled');
+	}
+	else {
+		if ($("#registerButton").is(':disabled')){	
+		}
+		else {
+			$("#registerButton").attr('disabled', 'disabled');
+		}
+	}
+	});
   </script>
 </body>
 </html>

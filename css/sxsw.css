@@ -24,6 +24,25 @@
 
 #loginButton {
 	cursor: pointer;
+	float:right;
+	width:100px;
+}
+
+button.close{
+	display:block;
+	width:30px;
+	height:30px;
+	border-radius:15px;
+	font-size:12px;
+	color:#000;
+	line-height:10px;
+	text-align:center;
+	text-decoration:none;
+	background:#000;
+	margin-top:-10px;
+	margin-right:-10px;
+	background-color: #cc4900;
+	opacity:1;
 }
 
 .headline {
@@ -65,10 +84,31 @@
 #loginModal {
 	background-image: url(../u/images/bkg.png);
 	background-repeat: repeat;	
+	width:500px;
+	height:220px;
+	margin-left:-250px;
 }
 
-.checkInput {
+#login {
+	margin-left:100px;;
+	width:500px;
+}
+
+#loginForm {
+	width:300px;
+}
+
+.center {
+    *display:inline; /* ie 7 */
+    display:inline-block;
+    text-align:left;
+    zoom:1; /* ie7 junk */
+}
+
+input.checkInput {
 	margin-top:10px;
+	width:300px;
+	height:30px;
 }
 
 .modal-body {
@@ -131,10 +171,23 @@ input.loginInput {
 	margin-right:5px;
 }
 
+input.loginInput:focus, textarea:focus, select:focus {
+	outline-width:none;
+	outline: none;
+	box-shadow:none;
+	border-color:black;
+ }
+ 
+input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:focus {
+	outline: none;
+	box-shadow:none;
+	border-color:black;
+}
+
 #registerButton {
 	width:240px;
 	margin-top:30px;
-	margin-left:350px;;
+	margin-left:350px;
 }
 
 #registerBar {
@@ -175,6 +228,12 @@ input.loginInput {
 	
 #playbutton {
 	left: 327px;
+}
+
+#loginModal {
+	width:95%;
+	height:220px;
+	margin-left:0px;
 }
 
 }
