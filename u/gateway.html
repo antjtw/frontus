@@ -143,6 +143,12 @@
   }
   
   function failedPreregister(x) {
+	var fed = document.querySelector("#companyReserve");
+	var button = document.querySelector("#registerButton");
+	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+	$(button).addClass("hidden");
+	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
+	fed.innerHTML = string; 
   }
 </script>
 </head>
