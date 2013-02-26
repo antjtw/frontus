@@ -138,7 +138,7 @@
 	var button = document.querySelector("#registerButton");
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
 	$(button).addClass("hidden");
-	var string = "<p>Hi " + pName + ",</p> <p>Thank you for submitting an invitation to sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
+	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
 	fed.innerHTML = string; 
   }
   
@@ -164,11 +164,13 @@
         <div>
           <img src="u/images/logo.png">
           <div class="tagline">
-          	<p class="standardText">a beautifully simple way to organize, visualize and communicate with investors</p>
+          	<p class="headerText">a beautifully simple way to organize, visualize and communicate with investors</p>
           </div>
+          <a id="inviteButton" class="headerText">
           <div class="inviteBar">
-          	<a id="inviteButton" class="standardText">Request an Invite</a>
+        	Request an Invite
           </div>
+          </a>
           <div style="position: relative;">
           	<img id="monstersPic" src="u/images/monsters.png"> 
             <a class="video" data-toggle="modal" href="#sxswVideo"><img id="playbutton" src="u/images/play-button.png"></a>        
@@ -188,7 +190,7 @@
               <br> 
               <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
             </fieldset>
-            <button id="loginButton" type="submit" class="btn btn-success" tabindex="3">Sign in</button>
+            <button id="loginSubmitButton" type="submit" class="btn btn-sxsw" tabindex="3">Sign in</button>
           </form>
   </div>
 </div>
@@ -246,17 +248,20 @@
               <p>Dear Sharewave,</p>
 
               
-              <p><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span>and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span>and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
               
               <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us</span></p>
               
-              <p><span>online at http://</span><input id="domain" required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"> <span>Please let me know when Sharewave is ready.</span></p>
+              <p><span>online at http://</span><input id="domain" required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"></p>
+              
+              <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
-              <button disabled id="registerButton" type="submit" class="btn" tabindex="5">Request an invite</button>
+              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an invite</button>
           </form>
           </div>
           <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png"><img class="socialPlacement" src="u/images/icon-facebook.png"><img class="socialPlacement" src="u/images/icon-linkedin.png"></div>
         </div>
+       </div>
         
         
         
@@ -288,14 +293,14 @@
   
   <script>
   
-  $(document).ready(function () {
-
-    $( "#name" ).tooltip({'trigger':'hover', 'title': 'Enter your name'});
-	$( "#email" ).tooltip({'trigger':'hover', 'title': 'Enter your email'});
-	$( "#domain" ).tooltip({'trigger':'hover', 'title': "Enter your company's domain"});
-	$( "#company" ).tooltip({'trigger':'hover', 'title': 'Enter you company'});
-
-});
+//  $(document).ready(function () {
+//
+//    $( "#name" ).tooltip({'trigger':'hover', 'title': 'Enter your name'});
+//	$( "#email" ).tooltip({'trigger':'hover', 'title': 'Enter your email'});
+//	$( "#domain" ).tooltip({'trigger':'hover', 'title': "Enter your company's domain"});
+//	$( "#company" ).tooltip({'trigger':'hover', 'title': 'Enter you company'});
+//
+//});
   
   
    $( "#inviteButton" ).click(function() {
