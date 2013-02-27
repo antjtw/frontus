@@ -31,7 +31,6 @@
 
 #loginButton {
 	cursor: pointer;
-	float:right;
 	width:100px;
 }
 
@@ -133,7 +132,7 @@ button.close:hover {
 }
 
 #login {
-	margin-left:50px;;
+	margin-left:40px;;
 	width:500px;
 }
 
@@ -146,7 +145,6 @@ button.close:hover {
 	float:right;
 	width:100px;
 	margin-top:10px;
-	margin-right:0px;
 }
 
 .center {
@@ -167,7 +165,7 @@ input.checkInput {
 	overflow:hidden;
 }
 
-#sxswVideo {
+#Video {
 	height:400px;
 }
 
@@ -321,14 +319,42 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #loginModal {
-	width:95%;
+	margin-top:50px;
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+	width:500px;
 	height:220px;
-	margin-left:0px;
+	left:50%;
+	margin-left:-250px;
 }
 
 }
 
 @media (max-width: 480px) {
+	
+#loginModal {
+	margin-top:50px;
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+	width:400px;
+	height:200px;
+	left:50%;
+	margin-left:-200px;
+}
+
+input.checkInput {
+	margin-top:10px;
+	width:300px;
+	height:30px;
+}
+
+#loginSubmitButton {
+	cursor: pointer;
+	float:right;
+	width:100px;
+	margin-top:10px;
+	margin-right:70px;
+}
 	
 .tagline {
 	width: 320px;
@@ -341,7 +367,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	width: 200px;
 }
 
-#sxswVideo {
+#Video {
 	height:200px;
 }
 
@@ -358,10 +384,11 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #registrationForm {
+	margin-top:100px;
 	width:400px;
 	height:360px;
-	padding-left: 5px;	
-	padding-right: 5px;	
+	padding-left: 10px;	
+	padding-right: 10px;	
 	
 }
 
@@ -382,9 +409,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #registerButton {
-	width:120px;
+	width:200px;
 	margin-top:30px;
-	margin-left:250px;
+	margin-left:100px;
 }
 
 #registerBar {
@@ -394,6 +421,40 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (max-width: 320px) {
+	
+#loginModal {
+	margin-top:50px;
+	background-image: url(../u/images/bkg.png);
+	background-repeat: repeat;	
+	width:280px;
+	height:200px;
+	left:50%;
+	margin-left:-140px;
+}
+
+input.checkInput {
+	margin-top:10px;
+	width:250px;
+	height:30px;
+}
+
+#login {
+	margin-left:8px;;
+	width:500px;
+}
+
+#loginSubmitButton {
+	cursor: pointer;
+	float:right;
+	width:100px;
+	margin-top:10px;
+	margin-right:150px;
+}
+	
+#homelogo {
+	width:280px;
+	height:auto;
+}
 	
 .tagline {
 	width: 300px;
@@ -435,9 +496,13 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #registerButton {
-	width:120px;
+	width:200px;
 	margin-top:30px;
-	margin-left:150px;
+	margin-left:50px;
+}
+
+.footText {
+	font-size:10px;
 }
 	
 }
