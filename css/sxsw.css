@@ -20,6 +20,16 @@
 	color: #505154;
 }
 
+/* For Hiding Things! */
+
+.hidden {
+	display: none;
+}
+
+.invisible {
+	visibility:hidden;
+}
+
 /* Index page CSS */
 
 .bannerBar {
@@ -296,10 +306,6 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 .socialPlacement {
 	margin-right:5px;
 	margin-left:5px;
-}
-
-.hidden {
-	display: none;
 }
 
 @media (min-width: 768px) and (max-width: 979px) {

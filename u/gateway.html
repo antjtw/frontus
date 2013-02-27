@@ -11,8 +11,8 @@
 <meta property="og:title" content="sharewave"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="http://sharewave.com/"/>
-<meta property="og:image" content="http://s3.amazonaws.com/sharewave/www/images/icon-200x200.png"/>
-<link rel="image_src" href="http://s3.amazonaws.com/sharewave/www/images/icon-200x200.png" />
+<meta property="og:image" content="http://www.sharewave.com/img/icon-200x200.png"/>
+<link rel="image_src" href="http://www.sharewave.com/img/icon-200x200.png" />
 <link rel="icon" type="image/png" href="[ROB ADD FAVICON HERE]">
 <base href=".." />
 <meta name="author" content="">
@@ -38,10 +38,8 @@
   }
 
   function doLogin() {
-	alert("working");
-	var u = document.querySelector("#login-form input[name=username]").value;
-    var p = document.querySelector("#login-form input[name=password]").value;
-    SWBrijj.login(u, p, didLogin);
+	var error = document.querySelector("#error-message");
+	$(error).removeClass("invisible");
   }
 
   function didLogin(x) {
@@ -173,14 +171,14 @@
    <div id="loginModal" class="modal hide fade">
   <button type="button" class="close" data-dismiss="modal">&times;</button>
   <div id="login" class="modal-body center">
-   <form class="center" method="post" onsubmit="doLogin(); return false;">
+   <form class="center" method="post">
             <fieldset id="loginForm">
-              <p>Invalid Login</p>
+              <p id="error-message" class="invisible">Invalid Login</p>
               <input placeholder="User ID" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
               <br> 
               <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
             </fieldset>
-            <button id="loginSubmitButton" type="submit" class="btn btn-sxsw" tabindex="3">Sign in</button>
+            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw" tabindex="3">Sign in</button>
           </form>
   </div>
 </div>
@@ -248,7 +246,7 @@
           </div>
           </form>
           </div>
-          <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"><img class="socialPlacement" src="u/images/icon-facebook.png" alt="Facebook Icon"><img class="socialPlacement" src="u/images/icon-linkedin.png" alt="LinkedIn Icon"></div>      
+          <div id="registerBar" class="standardText">Spread the Word <a href="https://twitter.com/intent/tweet?text=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors+at&via=sharewaveteam&url=http://bit.ly/shwvtw"><img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"></a><a href="https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb&t=Sharewave%3A+Feed+Your+Investors"><img class="socialPlacement" src="u/images/icon-facebook.png" alt="Facebook Icon"></a><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+Feed+Your+Investors&source=Sharewave&summary=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors"><img class="socialPlacement" src="u/images/icon-linkedin.png" alt="LinkedIn Icon"></a></div>      
         
         
       </section>
@@ -260,7 +258,7 @@
       <div class="row-fluid">
       <footer class="footer">
           <div class="span12">
-            <img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"><a id="blogButton" href='https://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
+            <img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"><a id="blogButton" href='http://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
             <div class="pull-right">
              <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
             </div>
