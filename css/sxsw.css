@@ -127,7 +127,7 @@ button.close:hover {
 	background-image: url(../u/images/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
-	height:220px;
+	height:250px;
 	margin-left:-250px;
 }
 
@@ -323,7 +323,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	background-image: url(../u/images/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
-	height:220px;
+	height:250px;
 	left:50%;
 	margin-left:-250px;
 }
@@ -337,7 +337,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	background-image: url(../u/images/bkg.png);
 	background-repeat: repeat;	
 	width:400px;
-	height:200px;
+	height:230px;
 	left:50%;
 	margin-left:-200px;
 }
@@ -427,7 +427,7 @@ input.checkInput {
 	background-image: url(../u/images/bkg.png);
 	background-repeat: repeat;	
 	width:280px;
-	height:200px;
+	height:230px;
 	left:50%;
 	margin-left:-140px;
 }

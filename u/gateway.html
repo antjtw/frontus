@@ -1,9 +1,19 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="UTF-8">
+<title>Sharewave: Feed your investors</title>
+<meta name="keywords" content="investors, private companies, cap tables, analytics, board books, e-sign, e-signatures, voting, communication, options management" />
+<meta name="description" content="Sharewave - a beautifully simple way to organize, visualize, and communicate with investors" />
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta property="og:site_name" content="sharewave" />
+<meta property="og:description" content="Sharewave - a beautifully simple way to organize, visualize, and communicate with investors"/>
+<meta property="og:title" content="sharewave"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="http://sharewave.com/"/>
+<meta property="og:image" content="http://s3.amazonaws.com/sharewave/www/images/icon-200x200.png"/>
+<link rel="image_src" href="http://s3.amazonaws.com/sharewave/www/images/icon-200x200.png" />
+<link rel="icon" type="image/png" href="[ROB ADD FAVICON HERE]">
 <base href=".." />
 <meta name="author" content="">
 <link href="css/bootstrap.css" rel="stylesheet" media="screen">
@@ -28,18 +38,13 @@
   }
 
   function doLogin() {
+	alert("working");
 	var u = document.querySelector("#login-form input[name=username]").value;
     var p = document.querySelector("#login-form input[name=password]").value;
     SWBrijj.login(u, p, didLogin);
   }
 
   function didLogin(x) {
-    if (x) {
-      document.location.href = '../v/profile.html';
-      return;
-    }
-    var errdiv = document.querySelector('#login-error-div');
-    errdiv.innerHTML = 'Invalid email/password combination';
   }
 
   function displayRadio(value) {
@@ -94,24 +99,6 @@
   function registerForm() {
     displayRadio(3);
     buttonRadio(1);
-  }
-
-  function doForgot() {
-    var u = document.querySelector("#forgot-form input[name=username]").value;
-	loginForm()
-	var fed = document.querySelector("#login-error-div");
-	fed.innerHTML = "An email to reset your password has been sent";
-    SWBrijj.forgot(u, [ didForget, forgetError ]);
-  }
-
-  function forgetError(x) {
-    var fed = document.querySelector("#forgot-error-div");
-  }
-  function didForget(x) {
-    var fed = document.querySelector("#login-error-div");
-    if (x) {
-      fed.innerHTML = "An email to reset your password has been sent";
-    }
   }
 
   function checkPassword() {
@@ -188,6 +175,7 @@
   <div id="login" class="modal-body center">
    <form class="center" method="post" onsubmit="doLogin(); return false;">
             <fieldset id="loginForm">
+              <p>Invalid Login</p>
               <input placeholder="User ID" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
               <br> 
               <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
