@@ -138,7 +138,7 @@
 	var button = document.querySelector("#registerButton");
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
 	$(button).addClass("hidden");
-	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
+	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='http://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
 	fed.innerHTML = string; 
   }
   
@@ -147,7 +147,7 @@
 	var button = document.querySelector("#registerButton");
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
 	$(button).addClass("hidden");
-	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='https://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
+	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='http://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
 	fed.innerHTML = string; 
   }
 </script>
@@ -172,10 +172,10 @@
           <div class="tagline">
           	<p class="headerText">a beautifully simple way to organize, visualize and communicate with investors</p>
           </div>
-          <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an Invite</button>
+          <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Top']);">Request an Invite</button>
           <div style="position: relative;">
           	<img id="monstersPic" src="img/monsters.png" alt="The Sharewave Investors"> 
-            <a class="video" data-toggle="modal" href="#Video"><img id="playbutton" src="img/play-button.png" alt="Video Play Button"></a>        
+            <a class="video" data-toggle="modal" href="#Video" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Video', 'Open']);"><img id="playbutton" src="img/play-button.png" alt="Video Play Button"></a>        
           </div>
         </div>
      </div>
@@ -259,7 +259,7 @@
               
               <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
-              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an invite</button>
+              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
           </div>
           </form>
           </div>
@@ -278,7 +278,7 @@
       <div class="row-fluid">
       <footer class="footer">
           <div class="span12">
-            <img style="padding-right:10px;" class="socialPlacement" src="img/icon-twitter.png" alt="Twitter Icon"><a id="blogButton" href='http://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
+            <img href="http://twitter.com/sharewaveteam" style="padding-right:10px;" class="socialPlacement" src="img/icon-twitter.png" alt="Twitter Icon"><a id="blogButton" href='http://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
             <div class="pull-right">
              <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
             </div>
