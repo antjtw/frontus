@@ -168,14 +168,14 @@
     
      <div class="row-fluid pagination-centered headline">
         <div>
-          <img src="u/images/logo.png">
+          <img src="u/images/logo.png" alt="Sharewave Logo">
           <div class="tagline">
           	<p class="headerText">a beautifully simple way to organize, visualize and communicate with investors</p>
           </div>
           <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an invite</button>
           <div style="position: relative;">
-          	<img id="monstersPic" src="u/images/monsters.png"> 
-            <a class="video" data-toggle="modal" href="#sxswVideo"><img id="playbutton" src="u/images/play-button.png"></a>        
+          	<img id="monstersPic" src="u/images/monsters.png" alt="The Sharewave Investors"> 
+            <a class="video" data-toggle="modal" href="#sxswVideo"><img id="playbutton" src="u/images/play-button.png" alt="Video Play Button"></a>        
           </div>
         </div>
      </div>
@@ -186,7 +186,7 @@
    <div id="loginModal" class="modal hide fade">
   <button type="button" class="close" data-dismiss="modal">&times;</button>
   <div id="login" class="modal-body center">
-   <form class="center" action="" method="post" onsubmit="doLogin(); return false;">
+   <form class="center" method="post" onsubmit="doLogin(); return false;">
             <fieldset id="loginForm">
               <input placeholder="User ID" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
               <br> 
@@ -199,7 +199,7 @@
 
 <div id="sxswVideo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-body" aria-hidden="true">
-    <iframe src='http://player.vimeo.com/video/43992862' width="100%" height="100%" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>.</p>
+    <iframe src="http://player.vimeo.com/video/60659047" width="100%" height="400px" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
   </div>
 </div>
    
@@ -208,30 +208,30 @@
       
 
     <div class="row-fluid iconRow">
-    <section>
-    	<ul class="thumbnails">
-  			<li class="span4 pagination-centered">
-   				<div>
-                	<img src="u/images/icon-manage.png">
-                    <p class="standardText iconText">Effortlessly Manage Cap Table and Options</p>
-    			</div>
-  			</li>
-            
-            <li class="span4 pagination-centered">
-   				<div>
-                	<img src="u/images/icon-generate.png">
-                    <p class="standardText iconText">Easily Generate Rich Board Packages</p>
-    			</div>
-  			</li>
-            
-            <li class="span4 pagination-centered">
-   				<div>
-                	<img src="u/images/icon-signature.png">
-                    <p class="standardText iconText">Simplify the Paper Trail with Electronic Signatures</p>
-    			</div>
-  			</li>
-		</ul>
-    </section>
+      <section>
+          <ul class="thumbnails">
+              <li class="span4 pagination-centered">
+                  <div>
+                      <img src="u/images/icon-manage.png" alt="investor manage icon">
+                      <p class="standardText iconText">Effortlessly Manage Cap Table and Options</p>
+                  </div>
+              </li>
+              
+              <li class="span4 pagination-centered">
+                  <div>
+                      <img src="u/images/icon-generate.png" alt="investor generate icon">
+                      <p class="standardText iconText">Easily Generate Rich Board Packages</p>
+                  </div>
+              </li>
+              
+              <li class="span4 pagination-centered">
+                  <div>
+                      <img src="u/images/icon-signature.png" alt="investor signature icon">
+                      <p class="standardText iconText">Simplify the Paper Trail with Electronic Signatures</p>
+                  </div>
+              </li>
+          </ul>
+      </section>
     
     </div>
     
@@ -245,8 +245,8 @@
         <div id="CompanyRegister-form" class="span12 pagination-centered">
           <br>
           <form id="registrationForm" action="" method="post" onsubmit="doPreregister(); return false;">
+          <div id="companyReserve">
             <fieldset>
-            <div id="companyReserve">
               <p>Dear Sharewave,</p>
 
               
@@ -259,12 +259,10 @@
               <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
               <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5">Request an invite</button>
+          </div>
           </form>
           </div>
-          <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png"><img class="socialPlacement" src="u/images/icon-facebook.png"><img class="socialPlacement" src="u/images/icon-linkedin.png"></div>
-        </div>
-       </div>
-        
+          <div id="registerBar" class="standardText">Spread the Word <img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"><img class="socialPlacement" src="u/images/icon-facebook.png" alt="Facebook Icon"><img class="socialPlacement" src="u/images/icon-linkedin.png" alt="LinkedIn Icon"></div>      
         
         
       </section>
@@ -276,7 +274,7 @@
       <div class="row-fluid">
       <footer class="footer">
           <div class="span12">
-            <img class="socialPlacement" src="u/images/icon-twitter.png"><a id="blogButton" href='https://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
+            <img class="socialPlacement" src="u/images/icon-twitter.png" alt="Twitter Icon"><a id="blogButton" href='https://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
             <div class="pull-right">
              <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
             </div>
