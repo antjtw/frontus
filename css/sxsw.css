@@ -173,10 +173,11 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
+	height:380px;
 }
 
 #Video {
-	height:400px;
+	height:380px;
 }
 
 #monstersPic {
@@ -349,6 +350,16 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	margin-left:-200px;
 }
 
+.modal-body {
+
+	height:300px;
+}
+
+#Video {
+	height:300px;
+}
+
+
 input.checkInput {
 	margin-top:10px;
 	width:300px;
@@ -437,6 +448,15 @@ input.checkInput {
 	height:230px;
 	left:50%;
 	margin-left:-140px;
+}
+
+.modal-body {
+
+	height:200px;
+}
+
+#Video {
+	height:200px;
 }
 
 input.checkInput {
