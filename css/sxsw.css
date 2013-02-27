@@ -206,6 +206,7 @@ input.checkInput {
 }
 
 #name.loginInput {
+	width:150px;
 }
 
 #email.loginInput {
@@ -306,7 +307,8 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 @media (min-width: 768px) and (max-width: 979px) {
 
 #playbutton {
-	left: 327px;
+	left: 50%;
+	margin-left:-15px;
 }
 	
 }
@@ -314,7 +316,8 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 @media (max-width: 767px) {
 	
 #playbutton {
-	left: 327px;
+	left: 50%;
+	margin-left:-26px;
 }
 
 #loginModal {
@@ -334,6 +337,14 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	margin-right: auto;	
 }
 
+#inviteButton {	
+	width: 200px;
+}
+
+#sxswVideo {
+	height:200px;
+}
+
 	
 #monstersPic {
 	margin-right: 0px;	
@@ -348,16 +359,32 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 #registrationForm {
 	width:400px;
-	height:450px;
+	height:360px;
 	padding-left: 5px;	
 	padding-right: 5px;	
 	
 }
 
+#name.loginInput {
+	width:290px;
+}
+
+#email.loginInput {
+	width:200px;
+}
+
+#company.loginInput {
+	width:200px;
+}
+
+#domain.loginInput {
+	width:160px;
+}
+
 #registerButton {
 	width:120px;
 	margin-top:30px;
-	margin-left:120px;
+	margin-left:250px;
 }
 
 #registerBar {
@@ -368,16 +395,49 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 @media (max-width: 320px) {
 	
+.tagline {
+	width: 300px;
+}
+	
 #registrationForm {
 	width:300px;
-	height:450px;
+	height:400px;
 	padding-left: 5px;	
 	padding-right: 5px;	
 	
 }
+
+#playbutton {
+	left: 50%;
+	margin-left:-15px;
+	width:45px;
+	height:45px;
+}
 	
 #registerBar {
 	margin-left: 10px;
-}	
+}
+
+#name.loginInput {
+	width:190px;
+}
+
+#email.loginInput {
+	width:150px;
+}
+
+#company.loginInput {
+	width:250px;
+}
+
+#domain.loginInput {
+	width:250px;
+}
+
+#registerButton {
+	width:120px;
+	margin-top:30px;
+	margin-left:150px;
+}
 	
 }
