@@ -30,6 +30,17 @@
 	visibility:hidden;
 }
 
+/* Bootstrap alterations */
+
+.modal {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    left: 100px;
+    width: auto;
+    margin: 0;
+  }
+
 /* Index page CSS */
 
 .bannerBar {
@@ -174,12 +185,14 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
-	height:380px;
+	height:600px;
+	max-height:600px;
 }
 
 #Video {
-	height:380px;
+	height:600px;
 }
+
 
 #monstersPic {
 	margin-right: 65px;	
@@ -312,6 +325,15 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+	
+.modal-body {
+	height:500px;
+	max-height:500px;
+}
+
+#Video {
+	height:500px;
+}
 
 #playbutton {
 	left: 50%;
@@ -321,6 +343,20 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (max-width: 767px) {
+	
+.modal-body {
+	height:400px;
+	max-height:400px;
+}
+
+#Video {
+	height:400px;
+}
+
+.modal {
+    right: 30px;
+    left: 30px;
+  }
 	
 #playbutton {
 	left: 50%;
@@ -344,6 +380,11 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (max-width: 480px) {
+	
+.modal {
+    right: 20px;
+    left: 20px;
+  }
 	
 #loginModal {
 	margin-top:50px;
@@ -444,6 +485,11 @@ input.checkInput {
 }
 
 @media (max-width: 320px) {
+	
+.modal {
+    right: 10px;
+    left: 10px;
+  }
 	
 #loginModal {
 	margin-top:50px;
