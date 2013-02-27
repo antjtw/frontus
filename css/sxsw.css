@@ -34,7 +34,7 @@
 
 .bannerBar {
 	padding-top:10px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	
 }
@@ -134,7 +134,7 @@ button.close:hover {
 }
 
 #loginModal {
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
 	height:250px;
@@ -202,7 +202,7 @@ input.checkInput {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;
 	margin-left: auto;
 	margin-right: auto;
@@ -295,7 +295,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	height:30px;
 	margin-top:200px;
 	padding-top:10px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 }
 
@@ -327,7 +327,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
 	height:250px;
@@ -341,7 +341,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:400px;
 	height:230px;
@@ -431,7 +431,7 @@ input.checkInput {
 	
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:280px;
 	height:230px;
