@@ -337,6 +337,10 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	margin-left:-250px;
 }
 
+#registerBar {
+	margin-left: 70px;
+}
+
 }
 
 @media (max-width: 480px) {
@@ -491,8 +495,6 @@ input.checkInput {
 #registrationForm {
 	width:300px;
 	height:400px;
-	padding-left: 5px;	
-	padding-right: 5px;	
 	
 }
 
