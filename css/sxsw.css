@@ -33,7 +33,6 @@
 /* Bootstrap alterations */
 
 .modal {
-    position: fixed;
     top: 20px;
     right: 100px;
     left: 100px;
@@ -151,6 +150,7 @@ button.close:hover {
 	width:500px;
 	height:250px;
 	margin-left:-250px;
+	left:50%;
 }
 
 #login {
