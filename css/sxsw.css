@@ -34,9 +34,10 @@
 
 .modal {
     top: 20px;
-    right: 150px;
-    left: 150px;
+    right: 200px;
+    left: 200px;
     width: auto;
+	max-width:839px;
     margin: 0;
   }
 
@@ -185,13 +186,13 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
-	height:540px;
-	max-height:540px;
-	max-width:970px;
+	height:472px;
+	max-height:472px;
+	max-width:839px;
 }
 
 #Video {
-	height:540px;
+	height:472px;
 }
 
 
