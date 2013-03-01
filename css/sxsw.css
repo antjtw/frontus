@@ -34,8 +34,8 @@
 
 .modal {
     top: 20px;
-    right: 100px;
-    left: 100px;
+    right: 150px;
+    left: 150px;
     width: auto;
     margin: 0;
   }
@@ -185,12 +185,13 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
-	height:600px;
-	max-height:600px;
+	height:540px;
+	max-height:540px;
+	max-width:970px;
 }
 
 #Video {
-	height:600px;
+	height:540px;
 }
 
 
@@ -327,17 +328,17 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 @media (min-width: 768px) and (max-width: 979px) {
 	
 .modal-body {
-	height:500px;
-	max-height:500px;
+	height:400px;
+	max-height:400px;
 }
 
 #Video {
-	height:500px;
+	height:400px;
 }
 
 #playbutton {
 	left: 50%;
-	margin-left:-15px;
+	margin-left:-40px;
 }
 	
 }
@@ -345,12 +346,12 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 @media (max-width: 767px) {
 	
 .modal-body {
-	height:400px;
-	max-height:400px;
+	height:390px;
+	max-height:390px;
 }
 
 #Video {
-	height:400px;
+	height:390px;
 }
 
 .modal {
@@ -398,11 +399,11 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 .modal-body {
 
-	height:300px;
+	height:240px;
 }
 
 #Video {
-	height:300px;
+	height:240px;
 }
 
 
@@ -503,11 +504,11 @@ input.checkInput {
 
 .modal-body {
 
-	height:200px;
+	height:170px;
 }
 
 #Video {
-	height:200px;
+	height:170px;
 }
 
 input.checkInput {

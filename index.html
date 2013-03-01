@@ -130,6 +130,9 @@
 	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
 	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
+	if (Domain.length == 0) {
+		Domain = "blank"
+	}
     SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
   }
   
@@ -200,7 +203,7 @@
 
 <div id="Video" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-body" aria-hidden="true">
-    <iframe src="http://player.vimeo.com/video/60659047" style="width:100%; height:100%;" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+    <iframe src="http://player.vimeo.com/video/60776538" style="width:100%; height:100%;" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
   </div>
 </div>
    
@@ -255,7 +258,7 @@
               
               <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
               
-              <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" required class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"></p>
+              <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"></p>
               
               <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
@@ -321,7 +324,7 @@ var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.
   
    $( "#inviteButton" ).click(function() {
      $('html, body').animate({
-         scrollTop: $( "#CompanyRegister-form" ).offset().top + 190
+         scrollTop: $( "#CompanyRegister-form" ).offset().top + 100
      }, 600);
  });
  
@@ -331,7 +334,7 @@ var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.
 	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
 	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
 	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-	if (email.length > 0 && cName.length > 0 && Domain.length > 0 && pName.length > 0 && emailTest === true) {
+	if (email.length > 0 && cName.length > 0 && pName.length > 0 && emailTest === true) {
 		$("#registerButton").removeAttr('disabled');
 	}
 	else {
