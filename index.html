@@ -345,6 +345,13 @@ var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.
 		}
 	}
 	});
+	
+	$(document).ready(function() {
+		$( "#Video").on('hidden', function () {
+		 vimeoWrap = $('#Video');
+  		 vimeoWrap.html( vimeoWrap.html() );
+	  })
+});
   </script>
 </body>
 </html>
