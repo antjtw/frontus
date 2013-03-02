@@ -20,11 +20,31 @@
 	color: #505154;
 }
 
+/* For Hiding Things! */
+
+.hidden {
+	display: none;
+}
+
+.invisible {
+	visibility:hidden;
+}
+
+/* Bootstrap alterations */
+
+.modal {
+    top: 20px;
+    right: 150px;
+    left: 150px;
+    width: auto;
+    margin: 0;
+  }
+
 /* Index page CSS */
 
 .bannerBar {
 	padding-top:10px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	
 }
@@ -32,6 +52,7 @@
 #loginButton {
 	cursor: pointer;
 	width:100px;
+	padding-right:10px;
 }
 
 button.close{
@@ -124,11 +145,12 @@ button.close:hover {
 }
 
 #loginModal {
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
-	height:220px;
+	height:250px;
 	margin-left:-250px;
+	left:50%;
 }
 
 #login {
@@ -163,11 +185,15 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
+	height:540px;
+	max-height:540px;
+	max-width:970px;
 }
 
 #Video {
-	height:400px;
+	height:540px;
 }
+
 
 #monstersPic {
 	margin-right: 65px;	
@@ -192,7 +218,7 @@ input.checkInput {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;
 	margin-left: auto;
 	margin-right: auto;
@@ -285,7 +311,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	height:30px;
 	margin-top:200px;
 	padding-top:10px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 }
 
@@ -296,22 +322,42 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 .socialPlacement {
 	margin-right:5px;
 	margin-left:5px;
-}
-
-.hidden {
-	display: none;
+	cursor:pointer;
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+	
+.modal-body {
+	height:400px;
+	max-height:400px;
+}
+
+#Video {
+	height:400px;
+}
 
 #playbutton {
 	left: 50%;
-	margin-left:-15px;
+	margin-left:-40px;
 }
 	
 }
 
 @media (max-width: 767px) {
+	
+.modal-body {
+	height:390px;
+	max-height:390px;
+}
+
+#Video {
+	height:390px;
+}
+
+.modal {
+    right: 30px;
+    left: 30px;
+  }
 	
 #playbutton {
 	left: 50%;
@@ -320,27 +366,46 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:500px;
-	height:220px;
+	height:250px;
 	left:50%;
 	margin-left:-250px;
+}
+
+#registerBar {
+	margin-left: 70px;
 }
 
 }
 
 @media (max-width: 480px) {
 	
+.modal {
+    right: 20px;
+    left: 20px;
+  }
+	
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:400px;
-	height:200px;
+	height:230px;
 	left:50%;
 	margin-left:-200px;
 }
+
+.modal-body {
+
+	height:240px;
+}
+
+#Video {
+	height:240px;
+}
+
 
 input.checkInput {
 	margin-top:10px;
@@ -422,14 +487,28 @@ input.checkInput {
 
 @media (max-width: 320px) {
 	
+.modal {
+    right: 10px;
+    left: 10px;
+  }
+	
 #loginModal {
 	margin-top:50px;
-	background-image: url(../u/images/bkg.png);
+	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:280px;
-	height:200px;
+	height:230px;
 	left:50%;
 	margin-left:-140px;
+}
+
+.modal-body {
+
+	height:170px;
+}
+
+#Video {
+	height:170px;
 }
 
 input.checkInput {
@@ -463,8 +542,6 @@ input.checkInput {
 #registrationForm {
 	width:300px;
 	height:400px;
-	padding-left: 5px;	
-	padding-right: 5px;	
 	
 }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url> 
+    <loc>http://www.sharewave.com/</loc> 
+    <video:video>     
+      <video:player_loc allow_embed="yes">http://www.vimeo.com/moogaloop.swf?clip_id=60776538</video:player_loc>
+      <video:thumbnail_loc>https://s3.amazonaws.com/sharewave/www/images/animation-still.png</video:thumbnail_loc>
+      <video:title>Sharewave: Feed your investors</video:title>  
+      <video:description>a beautifully simple way to organzie, visualize, and communicate with investors</video:description>
+    </video:video>
+  </url>
+</urlset>
