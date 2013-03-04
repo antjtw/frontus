@@ -34,11 +34,9 @@
 
 .modal {
     top: 20px;
-    right: 200px;
-    left: 200px;
-    width: auto;
-	max-width:839px;
+	width:839px;
     margin: 0;
+	margin-left:-419px;
   }
 
 /* Index page CSS */
@@ -309,13 +307,6 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .footerBar {
-	margin-top:200px;
-	padding-top:10px;
-	background-image: url(../img/bkg.png);
-	background-repeat: repeat;
-}
-
-.flushfooterBar {
 	padding-top:10px;
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;
@@ -332,6 +323,12 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+	
+.modal {
+	width:711px;	
+	left:50%;
+	margin-left:-355px;
+}
 	
 .modal-body {
 	height:400px;
@@ -361,8 +358,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .modal {
-    right: 30px;
-    left: 30px;
+    left:50%;
+	margin-left:-347px;
+	width:693px;
   }
 	
 #playbutton {
@@ -389,8 +387,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 @media (max-width: 480px) {
 	
 .modal {
-    right: 20px;
-    left: 20px;
+    left:50%;
+	margin-left:-214px;
+	width:427px;
   }
 	
 #loginModal {
@@ -494,8 +493,10 @@ input.checkInput {
 @media (max-width: 320px) {
 	
 .modal {
-    right: 10px;
-    left: 10px;
+    left:50%;
+	margin-top:50px;
+	margin-left:-150px;
+	width:300px;
   }
 	
 #loginModal {
