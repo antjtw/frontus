@@ -309,11 +309,16 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .footerBar {
-	height:30px;
 	margin-top:200px;
 	padding-top:10px;
 	background-image: url(../img/bkg.png);
-	background-repeat: repeat;	
+	background-repeat: repeat;
+}
+
+.flushfooterBar {
+	padding-top:10px;
+	background-image: url(../img/bkg.png);
+	background-repeat: repeat;
 }
 
 #blogButton {
