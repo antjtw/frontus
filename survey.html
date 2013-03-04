@@ -37,6 +37,21 @@
    </div>
 </div>
 
+<div id="loginModal" class="modal hide fade">
+  <button type="button" class="close" data-dismiss="modal">&times;</button>
+  <div id="login" class="modal-body center">
+   <form class="center" method="post">
+            <fieldset id="loginForm">
+              <p id="error-message" class="invisible">Invalid Login</p>
+              <input placeholder="Username" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
+              <br> 
+              <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
+            </fieldset>
+            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw" tabindex="3">Sign in</button>
+          </form>
+  </div>
+</div>
+
 <div class="container">
 <h2>Thanks for showing so much interest in Sharewave!</h2>
 <p>We have a few brief (and anonymous) questions that will help us better understand your company. We read every response, and reflect on them as we iterate our product.</p>
@@ -132,5 +147,11 @@ Other</label></li>
   
 <script src="script/jquery.js"></script>
 <script src="script/bootstrap.js"></script>
+<script>
+function doLogin() {
+	var error = document.querySelector("#error-message");
+	$(error).removeClass("invisible");
+  }
+</script>
 </body>
 </html>
