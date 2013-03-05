@@ -407,6 +407,10 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	width:460px;
  }
  
+ #loginModal {
+	margin-top:10px;
+}
+ 
  #registrationForm {
 	margin-top:100px;
 	width:540px;
@@ -454,7 +458,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
   }
 	
 #loginModal {
-	margin-top:50px;
+	margin-top:10px;
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:400px;
@@ -561,7 +565,7 @@ input.checkInput {
   }
 	
 #loginModal {
-	margin-top:50px;
+	margin-top:10px;
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:280px;

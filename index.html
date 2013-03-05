@@ -197,11 +197,11 @@
    <form id="betaLogin" class="center" method="post">
             <fieldset id="loginForm">
               <p style="height:20px;" id="error-message" class="text-error"></p>
-              <input placeholder="Username" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
+              <input placeholder="Username" required class="checkInput"  autocapitalize="off" name="username" type="email">
               <br> 
-              <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
+              <input placeholder="Password" required class="checkInput" id="login_password" name="password" type="password">			  <br>
             </fieldset>
-            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw" tabindex="3">Sign in</button>
+            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw">Sign in</button>
           </form>
   </div>
 </div>
@@ -258,13 +258,13 @@
               <p>Dear Sharewave,</p>
 
               
-              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" name="companyEmail" type="text"><span>.</span></p>
               
-              <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"></p>
+              <p><span>My company name is</span><input id="company" required class="loginInput" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" autocapitalize="off" name="companyDomain" type="text"></p>
               
               <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
-              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
+              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
           </div>
           </form>
           </div>
