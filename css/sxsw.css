@@ -137,7 +137,7 @@ button.close:hover {
 
 #playbutton {
 	position: absolute; 
-	top: 25px; 
+	top: 0px; 
 	left: 50%;
 	margin-left:-40px;
 	cursor: pointer;
@@ -554,9 +554,9 @@ input.checkInput {
 
 #playbutton {
 	left: 50%;
-	margin-left:-15px;
-	width:45px;
-	height:45px;
+	margin-left:-20px;
+	width:55px;
+	height:55px;
 }
 	
 #registerBar {
