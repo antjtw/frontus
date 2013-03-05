@@ -393,18 +393,18 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 	
 .modal-body {
-	height:281px;
-	max-height:281px;
+	height:259px;
+	max-height:259px;
 }
 
 #Video {
-	height:281px;
+	height:259px;
 }
 
 .modal {
     left:50%;
-	margin-left:-250px;
-	width:500px;
+	margin-left:-230px;
+	width:460px;
  }
  
  #registrationForm {
