@@ -528,6 +528,7 @@ input.checkInput {
 #login {
 	margin-left:8px;;
 	width:500px;
+	height:230px;
 }
 
 #loginSubmitButton {
