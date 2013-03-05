@@ -196,10 +196,11 @@ input.checkInput {
 
 #monstersPic {
 	margin-right: 65px;	
+	padding-bottom:30px;
 }
 
 .iconRow {
-	margin-top: 100px;	
+	margin-top: 50px;	
 }
 
 .iconText {
