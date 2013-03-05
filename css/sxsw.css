@@ -362,7 +362,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
     left:50%;
 	margin-left:-347px;
 	width:693px;
-  }
+ }
 	
 #playbutton {
 	left: 50%;
@@ -383,6 +383,66 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	margin-left: 70px;
 }
 
+}
+
+@media (max-width: 568px) {
+	
+#playbutton {
+	left: 50%;
+	margin-left:-40px;
+}
+	
+.modal-body {
+	height:281px;
+	max-height:281px;
+}
+
+#Video {
+	height:281px;
+}
+
+.modal {
+    left:50%;
+	margin-left:-250px;
+	width:500px;
+ }
+ 
+ #registrationForm {
+	margin-top:100px;
+	width:540px;
+	height:315px;
+	padding-left: 10px;	
+	padding-right: 10px;	
+	
+}
+
+#name.loginInput {
+	width:150px;
+}
+
+#email.loginInput {
+	width:170px;
+}
+
+#company.loginInput {
+	width:200px;
+}
+
+#domain.loginInput {
+	width:160px;
+}
+
+#registerButton {
+	width:200px;
+	margin-top:30px;
+	margin-left:310px;
+}
+
+#registerBar {
+	margin-left: 15px;
+}
+	
+	
 }
 
 @media (max-width: 480px) {
