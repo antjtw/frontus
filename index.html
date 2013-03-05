@@ -53,11 +53,16 @@
   }
 
   function doLogin() {
-	var error = document.querySelector("#error-message");
-	$(error).removeClass("invisible");
+	var greeting = document.querySelector("#error-message");
+	greeting.innerHTML = "";
+	var username = document.querySelector("#betaLogin input[name=username]").value;
+	var password = document.querySelector("#betaLogin input[name=password]").value;
+	SWBrijj.betaLogin(username, password, didntLogin);
   }
 
-  function didLogin(x) {
+  function didntLogin(x) {
+	var greeting = document.querySelector("#error-message");
+	greeting.innerHTML = x;
   }
 
   function displayRadio(value) {
@@ -189,9 +194,9 @@
    <div id="loginModal" class="modal hide fade">
   <button type="button" class="close" data-dismiss="modal">&times;</button>
   <div id="login" class="modal-body center">
-   <form class="center" method="post">
+   <form id="betaLogin" class="center" method="post">
             <fieldset id="loginForm">
-              <p id="error-message" class="invisible">Invalid Login</p>
+              <p style="height:20px;" id="error-message" class="text-error"></p>
               <input placeholder="Username" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
               <br> 
               <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
