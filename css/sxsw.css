@@ -128,7 +128,7 @@ button.close:hover {
 #inviteButton {
 	color: #FFF;
 	cursor: pointer;	
-	width: 300px;
+	width: 170px;
 }
 
 #inviteButton:hover {
@@ -210,7 +210,7 @@ input.checkInput {
 }
 
 #registrationForm {
-	margin-top:200px;
+	margin-top:20px;
 	margin-bottom:10px;
 	width:600px;
 	height:300px;
@@ -280,9 +280,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #registerButton {
-	width:240px;
+	width:170px;
 	margin-top:30px;
-	margin-left:350px;
+	margin-left:395px;
 }
 
 .btn-sxsw {
