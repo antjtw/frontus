@@ -21,7 +21,8 @@
 }
 
 a.allCaps:hover {
-	color: #f76c1b;
+	color: #E2520F;
+	text-decoration: none;
 }
 
 /* For Hiding Things! */
