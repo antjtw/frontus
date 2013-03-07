@@ -48,6 +48,10 @@
 	
 }
 
+#topBlogButton {
+	margin-right:80px;
+}
+
 #loginButton {
 	cursor: pointer;
 	width:100px;
@@ -451,6 +455,10 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 @media (max-width: 480px) {
 	
+#topBlogButton {
+	margin-right:30px;
+}
+	
 #homelogo {
 	width:300px;
 	height:auto;
@@ -568,6 +576,10 @@ input.checkInput {
 }
 
 @media (max-width: 320px) {
+	
+#topBlogButton {
+	margin-right:20px;
+}
 	
 .modal {
     left:50%;
