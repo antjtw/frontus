@@ -20,6 +20,10 @@
 	color: #505154;
 }
 
+a.allCaps:hover {
+	color: #f76c1b;
+}
+
 /* For Hiding Things! */
 
 .hidden {
