@@ -1,0 +1,83 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* Fonts */
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;	
+}
+
+h2 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	line-height:20px;
+	font-weight: lighter;	
+}
+
+.menuHeaderText {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	color: #BDC3C7;
+	padding-right:20px;
+}
+
+.bodyText {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+
+
+/* Navigation Bar at Top of Page */
+
+#navBar {
+	padding-top:25px;
+	height:50px;
+	background-color: #34495E;	
+}
+
+/* Profile Editing */
+
+/* Side Bar Navigation */
+
+#sidebar {
+	padding-top:20px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #BDC3C7;	
+}
+
+#sideButtons {
+	list-style-type: none;
+	width:100%;
+	margin-left:0px; 
+}
+
+.navTabs {
+	padding-top:8px;
+	padding-bottom:8px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-color: #bdc3c7;
+	color: #34495E;
+	
+}
+
+#bottomTab {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-color: #bdc3c7;
+}
+
+/* Central Profile Section */
+
+#detailsEdit {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #BDC3C7;
+	
+}
