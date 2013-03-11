@@ -38,34 +38,173 @@
           <div class="row-fluid">
             <div id="sidebar" class="span2">
             <ul id="sideButtons">
-              <li class="navTabs bodyText">My Profile</li>
-              <li id="bottomTab" class="navTabs bodyText">Password</li>
+              <li id="profileTab" class="navTabs bodyText selected">My Profile</li>
+              <li id="passwordTab" class="navTabs bodyText bottomTab">Password</li>
             
             </ul>
             
             </div>
-            <div id="profileEdit" class="span10">
+            <div id="profileEdit" class="span10 coreEdit">
+            
+            <h1>Edit Account</h1>
+     
+            <div id="editProfileFP" class="row-fluid">
+                <div id="detailsEdit" class="span8">
+                
+                <form id="editProfile">
+                    <fieldset>      
+                        <legend class="headline2">Personal Information</legend>
+                        	<div class="formBounder">
+                                <div class="row-fluid">   
+                                      <label class="bodyText">Name</label>              
+                                    <input style="width:100%;" type="text" name="name" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true, propercase:true"/>   
+                                </div>
+                                <div class="row-fluid">   
+                                      <label class="bodyText">Email</label>              
+                                      <input style="width:100%;" type="text" name="email" data-dojo-type="dijit/form/TextBox">
+                                </div>
+                                <div class="row-fluid">   
+                                      <label class="bodyText">Twitter:</label>              
+                                      <span class="bodyText urlField">http://twitter.com/</span><input style="width:100%;;" type="text" name="twitter" maxlength="20"/>
+                                </div>
+                                <div class="row-fluid">   
+                                      <label class="bodyText">LinkedIn:</label>              
+                                      <span class="bodyText urlField">http://linkedin.com/</span><input style="width:100%;" type="text" name="linkedin" maxlength="20"/>
+                                </div>
+                                <div class="row-fluid">   
+                                      <label class="bodyText">Website:</label>              
+                                       <input style="width:100%;" type="url" name="website"/>
+                                </div>
+                            </div>
+                            
+                      </fieldset>
+                      <fieldset>
+                            <legend class="headline2">Investment Group</legend>
+                            <div id="companyCheck" class="row-fluid">   
+                                   <input id="showCompany" type="checkbox" name="investment_group"/><span class="bodyText">I'm part of an investment group</span>
+                            </div>
+                            <br>
+                            <div id="companyField" class="row-fluid profileLines hiddenField doubleHide">   
+                                  <label class="bodyText">Company:</label>              
+                                   <input type="text" name="company">
+                            </div>
+                    </fieldset>
+                    
+                    <fieldset> 
+                        <legend class="headline2">Address</legend>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">Address 1</label>              
+                                <input type="text" name="address1"/> 
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">Address 2</label>              
+                                <input type="text" name="address2"/> 
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">City</label>              
+                                <input type="text" name="city"/>
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">State</label>              
+                                <input type="text" name="state"/>
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">Zipcode</label>              
+                                <input type="text" name="postalcode"/>
+                            </div>
+                            <div class="row-fluid">   
+                                <label class="bodyText">Country:</label>              
+                                <input type="text" name="country" maxlength="2"/> 
+                            </div>
+                            
+                            <div class="row-fluid ">
+                            <div style="margin-top:30px;">
+                            <a class="saveButton">Save</a>
+                            </div>
+                            <div class="pull-right">
+                            Delete Account
+                            </div>
+                            </div>
+                    
+                    </fieldset>
+                
+                </form>
+                </div>
+                
+                <div id="photoEdit" class="span4">
+                
+                <form id="editPhoto">
+                <fieldset>
+                <legend class="headline2">Profile Photo</legend>
+                <div id="editProfilePhoto"> 
+                </div>
+                </fieldset>
+                </form>
+                <form id="submitPhoto" class="form-inline">
+                <fieldset>
+                <legend class="headline2">Upload Photo</legend>
+                <a id="chooseButton">Choose file</a>
+                <label>no file chosen</label>
+                </fieldset>
+                </form>
+                <br>
+                <a id="uploadButton">Upload</a>
+         
+                </div>
+            </div>
+            </div>
+            <div id="passwordEdit" class="span10 hide coreEdit">
             
             <h1>Edit Account</h1>
             
-            <div class="row-fluid">
-            <div id="detailsEdit" class="span8">
-            
-            <h2>My Profile</h2>
-            
+            <form id="editPasswordBlock">
+                    <fieldset>      
+                        <legend class="headline2">Password</legend>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">Current Password</label>              
+                                <input type="password" name="currentPassword" data-dojo-props="trim:true, propercase:true"/>   
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">New Password</label>              
+                                  <input type="password" name="newPassword">
+                            </div>
+                            <div class="row-fluid">   
+                                  <label class="bodyText">Confirm Password</label>              
+                                  <input type="password" name="passwordconfirm"/>
+                            </div>
+                    </fieldset>
+             </form>
+             	<br>
+             	<div>
+                <a class="saveButton">Save</a>
+                <a id="chooseButton">Cancel</a>
+                </div>
             </div>
-            
-            <div id="photoEdit" class="span4">
-            
-            <h2>Profile Photo</h2>
-            
-            </div>
-            
-            </div>
-            </div>
-          
           </div>
         </div>
      </div>
+     <script src="brijj/brijj.js"></script>
+     <script src="dojo/dojo/dojo.js"></script>
+     <script type='text/javascript' src="js/jquery-1.8.3.js"></script>
+     <script>
+	$(document).ready(function() {
+		
+		jQuery("#passwordTab").click(function() {
+		jQuery("#profileEdit").addClass("hide");
+		jQuery("#profileTab").removeClass("selected");
+		jQuery("#passwordEdit").removeClass("hide");
+		jQuery("#passwordTab").addClass("selected");
+	});
+	
+		jQuery("#profileTab").click(function() {
+		jQuery("#profileEdit").removeClass("hide");
+		jQuery("#profileTab").addClass("selected");
+		jQuery("#passwordEdit").addClass("hide");
+		jQuery("#passwordTab").removeClass("selected");
+	});
+		
+	});
+	
+	</script>
 </body>
 </html>

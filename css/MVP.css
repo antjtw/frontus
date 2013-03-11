@@ -1,6 +1,12 @@
 @charset "UTF-8";
 /* CSS Document */
 
+/* Hide */
+
+.hide {
+	visible:none;
+}
+
 /* Fonts */
 
 h1 {
@@ -30,6 +36,12 @@ h2 {
 	line-height: 18px;
 }
 
+.headline2 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	font-weight: lighter;	
+}
+
 
 
 /* Navigation Bar at Top of Page */
@@ -45,10 +57,7 @@ h2 {
 /* Side Bar Navigation */
 
 #sidebar {
-	padding-top:20px;
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-right-color: #BDC3C7;	
+	padding-top:20px;	
 }
 
 #sideButtons {
@@ -59,25 +68,107 @@ h2 {
 
 .navTabs {
 	padding-top:8px;
+	padding-left:40px;
 	padding-bottom:8px;
 	border-top-width: 1px;
 	border-top-style: solid;
 	border-color: #bdc3c7;
 	color: #34495E;
+	cursor:pointer;
 	
 }
 
-#bottomTab {
+.bottomTab {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-color: #bdc3c7;
 }
 
+.selected {
+	background-color: #34495E;
+	color: #FFFFFF;
+}
+
 /* Central Profile Section */
+
+#mainBody {
+	
+}
 
 #detailsEdit {
 	border-right-width: 1px;
 	border-right-style: solid;
 	border-right-color: #BDC3C7;
+	padding-right:20px;
 	
+}
+
+.span10.coreEdit {
+	margin-left:0px;
+	padding-left:20px;
+	padding-top:20px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-color: #bdc3c7;
+}
+
+#editProfileFP {
+	margin-top:40px;
+}
+
+#editPasswordBlock {
+	margin-top:40px;
+}
+
+#editProfilePhoto {
+	height:250px;
+	width:250px;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;	
+}
+
+.formBounder {
+	width:340px;
+}
+
+.urlField {
+	padding-right: 10px;
+	color: #7f8c8d;	
+}
+
+/* Buttons */
+
+.saveButton {
+	background-color: #3498db;
+	color:#ffffff;
+	padding-top: 10px;
+	padding-right: 60px;
+	padding-bottom: 10px;
+	padding-left: 60px;	
+}
+
+#chooseButton {
+	background-color: #ffffff;
+	color:#333333;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	border: 1px solid #bdc3c7;
+}
+
+#uploadButton {
+	background-color: #3498db;
+	color:#ffffff;
+	padding-top: 10px;
+	padding-right: 100px;
+	padding-bottom: 10px;
+	padding-left: 100px;
+	border: 1px solid #bdc3c7;
 }
