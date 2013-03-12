@@ -33,6 +33,10 @@ label {
 	visible:none;
 }
 
+.invisible {
+	visibility:hidden;
+}
+
 /* Fonts */
 
 h1 {
@@ -170,7 +174,7 @@ h2 {
 }
 
 #editPasswordBlock {
-	margin-top:40px;
+	margin-top:-8px;
 }
 
 #editProfilePhoto {
@@ -261,6 +265,20 @@ h2 {
 }
 
 /* Alerts */
+
+.passwordChangeSuccess {
+	background-color:#1ABC96;
+	color:#ffffff;
+	margin-top:5px;
+	padding-top:10px;
+	padding-bottom:10px;
+	padding-left:10px;
+	width:100%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+}
 
 .textalert {
 	margin-top:-10px;

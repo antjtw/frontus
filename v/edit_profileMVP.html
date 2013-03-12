@@ -462,6 +462,8 @@
                 
                   <p class="headline1">Edit Account</p>
                   
+                  <div id="passwordSuccess" class="passwordChangeSuccess bodyText invisible">Your Password has been changed. Please check your email for confirmation.</div>
+                  
                   <form name="passwordChange" id="editPasswordBlock">
                           <fieldset>      
                               <legend class="headline2">Password</legend>
@@ -648,6 +650,10 @@
 	
 	function doneChange(x) {
 		jQuery("#checkPasswordAlert").addClass("hide");
+		jQuery("#passwordSuccess").removeClass("invisible");
+		document.querySelector("input[name=currentPassword]").value = "";
+		document.querySelector("input[name=newPassword]").value = "";
+		document.querySelector("input[name=passwordconfirm]").value = "";
 		}
 		
 	function passwordFail(x) {
