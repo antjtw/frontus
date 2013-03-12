@@ -238,6 +238,15 @@ h2 {
 	padding-left: 60px;	
 }
 
+.adisabled {
+	background-color:#2980B9;
+	cursor:default;
+}
+
+.adisabled:hover {
+	background-color:#2980B9;
+}
+
 .saveButton:hover {
 	background-color: #2980B9;
 	color:#ffffff;

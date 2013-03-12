@@ -462,7 +462,7 @@
                 
                   <p class="headline1">Edit Account</p>
                   
-                  <div id="passwordSuccess" class="passwordChangeSuccess bodyText invisible">Your Password has been changed. Please check your email for confirmation.</div>
+                  <div id="passwordSuccess" class="passwordChangeSuccess bodyText invisible"><img src="img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
                   
                   <form name="passwordChange" id="editPasswordBlock">
                           <fieldset>      
@@ -554,7 +554,7 @@
                    </form>
                       <br>
                       <div>
-                      <a id="newPassword" class="saveButton button">Save</a>
+                      <a disabled id="newPassword" class="saveButton button adisabled">Save</a>
                       </div>
                 </div>
               </div>
@@ -620,6 +620,13 @@
 		jQuery("#profileTab").addClass("selected");
 		jQuery("#passwordEdit").addClass("hide");
 		jQuery("#passwordTab").removeClass("selected");
+		document.querySelector("input[name=currentPassword]").value = "";
+		document.querySelector("input[name=newPassword]").value = "";
+		document.querySelector("input[name=passwordconfirm]").value = "";
+		jQuery("#newPasswordAlert").addClass("hide");
+		jQuery("#confirmPasswordAlert").addClass("hide");
+		jQuery("#checkPasswordAlert").addClass("hide");
+		jQuery("#passwordSuccess").addClass("invisible");
 	});
 		
 	});
@@ -643,13 +650,19 @@
   }
   
   	jQuery("#newPassword").click(function() {
+		if(jQuery("#newPassword").hasClass('adisabled')) {
+			
+		}
+		else {
 		var oldpassword = document.querySelector("input[name=currentPassword]").value;
 		var newpassword = document.querySelector("input[name=passwordconfirm]").value;
 		SWBrijj.proc("change_password", oldpassword, newpassword, [doneChange, passwordFail]);
+		}
 	});
 	
 	function doneChange(x) {
 		jQuery("#checkPasswordAlert").addClass("hide");
+		jQuery("#newPassword").addClass("adisabled");
 		jQuery("#passwordSuccess").removeClass("invisible");
 		document.querySelector("input[name=currentPassword]").value = "";
 		document.querySelector("input[name=newPassword]").value = "";
@@ -700,13 +713,21 @@
     if (document.querySelector("input[name=passwordconfirm]").value) {
 	  if (document.querySelector("input[name=newPassword]").value != document.querySelector("input[name=passwordconfirm]").value) {
 		  jQuery("#confirmPasswordAlert").removeClass("hide");
+		  jQuery("#newPassword").addClass("adisabled"); 
 	  }
 	  else {
 		  jQuery("#confirmPasswordAlert").addClass("hide");
+		  if(jQuery("#newPasswordAlert").hasClass("hide")) {
+			  jQuery("#newPassword").removeClass("adisabled");
+		  }
+		  else {
+			 jQuery("#newPassword").addClass("adisabled"); 
+		  }
 	  }
 	}
 	else {
 		  jQuery("#confirmPasswordAlert").addClass("hide");
+		  jQuery("#newPassword").addClass("adisabled"); 
 	  }
   }
 	</script>
