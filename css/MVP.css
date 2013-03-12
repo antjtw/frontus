@@ -65,6 +65,13 @@ h2 {
 	color: #1e2d3d;	
 }
 
+.headline1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;	
+	color: #1e2d3d;
+}
+
 .headline2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
@@ -127,6 +134,10 @@ h2 {
 }
 
 /* Central Profile Section */
+
+.headline1 {
+	margin-top:20px;
+}
 
 #mainBody {
 	background-color:#FFFFFF;
@@ -243,4 +254,40 @@ h2 {
 	padding-bottom: 10px;
 	padding-left: 100px;
 	border: 1px solid #bdc3c7;
+}
+
+/* Alerts */
+
+.textalert {
+	margin-top:-10px;
+	margin-left: 20px;
+	width:260px;
+	padding-bottom:7px;
+	padding-top:7px;
+	background-color: #34495E;
+	color:#FFFFFF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.alertContents {
+	margin-left:10px;
+	vertical-align: middle;
+}
+
+.alertMessage {
+	margin-left:10px;
+}
+
+.alertpointer {
+	position:absolute;
+	margin-left:16px;
+	margin-top:-15px;
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	
+	border-right:10px solid #34495E; 
 }
