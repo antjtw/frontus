@@ -1,6 +1,32 @@
 @charset "UTF-8";
 /* CSS Document */
 
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+body {
+	overflow-y: scroll;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: -112px;
+	margin-left: auto;
+}
+
+/* Bootstrap overrides */
+
+label {
+	cursor: default;
+}
+
 /* Hide */
 
 .hide {
@@ -13,13 +39,15 @@ h1 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 24px;
 	font-weight: lighter;	
+	color: #1e2d3d;
 }
 
 h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
 	line-height:20px;
-	font-weight: lighter;	
+	font-weight: lighter;
+	color: #1e2d3d;	
 }
 
 .menuHeaderText {
@@ -34,14 +62,23 @@ h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
+	color: #1e2d3d;	
 }
 
 .headline2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
-	font-weight: lighter;	
+	font-weight: lighter;
+	color: #1e2d3d;		
 }
 
+.copyright {
+	color:#7f8c8d;
+}
+
+.compulsoryStar {
+	color: #F00;	
+}
 
 
 /* Navigation Bar at Top of Page */
@@ -92,7 +129,7 @@ h2 {
 /* Central Profile Section */
 
 #mainBody {
-	
+	background-color:#FFFFFF;
 }
 
 #detailsEdit {
@@ -104,6 +141,7 @@ h2 {
 }
 
 .span10.coreEdit {
+	height:100%;
 	margin-left:0px;
 	padding-left:20px;
 	padding-top:20px;
@@ -134,7 +172,7 @@ h2 {
 }
 
 .formBounder {
-	width:340px;
+	width:360px;
 }
 
 .urlField {
@@ -142,7 +180,35 @@ h2 {
 	color: #7f8c8d;	
 }
 
+/* Footer */
+
+#push,
+#footer {
+  height: 112px;
+}
+
+.footerLinks {
+	margin-top:15px;
+}
+
+.footerBar {
+	height: 112px;
+	background-color: #34495E;
+}
+
+#copyrightBar {
+	margin-top:20px;
+}
+
 /* Buttons */
+
+.button {
+	cursor: pointer;	
+}
+
+.button:hover {
+	text-decoration: none;
+}
 
 .saveButton {
 	background-color: #3498db;
@@ -153,13 +219,19 @@ h2 {
 	padding-left: 60px;	
 }
 
-#chooseButton {
+.saveButton:hover {
+	background-color: #2980B9;
+	color:#ffffff;
+}
+
+.chooseButton {
 	background-color: #ffffff;
 	color:#333333;
 	padding-top: 10px;
 	padding-right: 20px;
 	padding-bottom: 10px;
 	padding-left: 20px;
+	margin-right:10px;
 	border: 1px solid #bdc3c7;
 }
 
