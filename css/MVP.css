@@ -29,10 +29,6 @@ label {
 
 /* Hide */
 
-.hide {
-	visible:none;
-}
-
 .invisible {
 	visibility:hidden;
 }
@@ -239,12 +235,12 @@ h2 {
 }
 
 .adisabled {
-	background-color:#2980B9;
+	background-color:#BDC3C7;
 	cursor:default;
 }
 
-.adisabled:hover {
-	background-color:#2980B9;
+.saveButton.adisabled:hover {
+	background-color:#BDC3C7;
 }
 
 .saveButton:hover {
@@ -275,12 +271,35 @@ h2 {
 
 /* Alerts */
 
+.divInline {
+	position:absolute;
+	display: inline-block;	
+	margin-top:8px;
+	margin-left:-10px;
+}
+
+.divInline.hide {
+	display:none;
+}
+
+.alertpointerdiv {
+	position:absolute;
+	margin-left:16px;
+	margin-top:-3px;
+	width: 0; 
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	
+	border-right:10px solid #34495E; 
+}
+
 .passwordChangeSuccess {
 	background-color:#1ABC96;
 	color:#ffffff;
 	margin-top:5px;
-	padding-top:10px;
-	padding-bottom:10px;
+	padding-top:4px;
+	padding-bottom:4px;
 	padding-left:10px;
 	width:100%;
 	-webkit-border-radius: 5px;
@@ -309,16 +328,4 @@ h2 {
 
 .alertMessage {
 	margin-left:10px;
-}
-
-.alertpointer {
-	position:absolute;
-	margin-left:16px;
-	margin-top:-15px;
-	width: 0; 
-	height: 0; 
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent; 
-	
-	border-right:10px solid #34495E; 
 }

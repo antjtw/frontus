@@ -439,14 +439,13 @@
                     <fieldset>
                     <legend class="headline2">Profile Photo</legend>
                     <div id="editProfilePhoto"> 
-                    <img src="img/default-profile.png">
                     </div>
                     </fieldset>
                     </form>
                     <form id="submitPhoto" class="form-inline">
                     <fieldset>
                     <legend class="headline2">Upload Photo</legend>
-                    <a class="chooseButton bodyText button">Choose file</a>
+                    <input type="file" name="photoUpload" id="newPhoto" />
                     <label class="bodyText">no file chosen</label>
                     </fieldset>
                     </form>
@@ -470,86 +469,45 @@
                               
                               	  <p class="bodyText">Passwords need to be 8 characters min, including uppercase, lowercase, and a number
                                   <div class="row-fluid">   
-                                        <label class="bodyText">Current Password</label> 
-                                        <table>
-                                          <tr>
-                                            <td>            
-                                            <input id="currentPassword" type="password" name="currentPassword" data-dojo-props="trim:true, propercase:true"/>
-                                            </td>
-                                            <td>
-                                            <table id="checkPasswordAlert" class="hide">
-                                              <tr>
-                                                <td>
-                                                  <div class="alertpointer"></div>
-                                                </td>
-                                                <td>  
-                                                  <div class="textalert bodyText">
-                                                  	<div class="alertContents">
-                                                          <img src="img/alert-icon.png">
-                                                          <span class="alertMessage">Incorrect Password</span>
-                                                     </div>
-                                                  </div>
-                                              	</td>
-                                               </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </table>              
+                                    <label class="bodyText">Current Password</label>           
+                                        <input id="currentPassword" type="password" name="currentPassword" data-dojo-props="trim:true, propercase:true"/>
+                                        <div class="divInline hide" id="checkPasswordAlert"> 
+                                         <div class="alertpointerdiv"></div>
+                                          <div class="textalert bodyText">
+                                            <div class="alertContents">
+                                                  <img src="img/alert-icon.png">
+                                                  <span class="alertMessage">Incorrect Password</span>
+                                           </div>
+                                        </div>  
+                                       </div>        
                                   </div>
                                   <div class="row-fluid">   
-                                        <label class="bodyText">New Password</label> 
-                                        <table>
-                                          <tr>
-                                            <td>            
-                                            <input id="newestPassword" type="password" name="newPassword">
-                                            </td>
-                                            <td>
-                                            <table id="newPasswordAlert" class="hide">
-                                              <tr>
-                                                <td>
-                                                  <div class="alertpointer"></div>
-                                                </td>
-                                                <td>  
-                                                  <div class="textalert bodyText">
-                                                  	<div class="alertContents">
-                                                          <img src="img/alert-icon.png">
-                                                          <span id="passwordRegexAlert" class="alertMessage"></span>
-                                                     </div>
-                                                  </div>
-                                              	</td>
-                                               </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </table>             
+                                    <label class="bodyText">New Password</label>          
+                                        <input id="newestPassword" type="password" name="newPassword">
+                                        <div class="divInline hide" id="newPasswordAlert"> 
+                                         <div class="alertpointerdiv"></div>
+                                          <div class="textalert bodyText">
+                                            <div class="alertContents">
+                                                  <img src="img/alert-icon.png">
+                                                  <span id="passwordRegexAlert" class="alertMessage"></span>
+                                             </div>
+                                          </div>  
+                                         </div>             
                                   </div>
                                   <div class="row-fluid">   
-                                        <label class="bodyText">Confirm Password</label>  
-                                        <table>
-                                          <tr>
-                                            <td>            
-                                            <input id="passwordconfirm" type="password" name="passwordconfirm"/>
-                                            </td>
-                                            <td>
-                                            <table id="confirmPasswordAlert" class="hide">
-                                              <tr>
-                                                <td>
-                                                  <div class="alertpointer"></div>
-                                                </td>
-                                                <td>  
-                                                  <div class="textalert bodyText">
-                                                  	<div class="alertContents">
-                                                          <img src="img/alert-icon.png">
-                                                          <span class="alertMessage">Passwords don't match</span>
-                                                     </div>
-                                                  </div>
-                                              	</td>
-                                               </tr>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </table>
+                                    <label class="bodyText">Confirm Password</label>  
+                                    <input id="passwordconfirm" type="password" name="passwordconfirm"/>
+                                    <div class="divInline hide" id="confirmPasswordAlert"> 
+                                     <div class="alertpointerdiv"></div>
+                                      <div class="textalert bodyText">
+                                        <div class="alertContents">
+                                              <img src="img/alert-icon.png">
+                                              <span class="alertMessage">Passwords don't match</span>
+                                         </div>
+                                      </div>  
+                                     </div>          
                                   </div>
+                                  
                           </fieldset>
                    </form>
                       <br>
@@ -604,7 +562,11 @@
 			  else {
 				  document.querySelector("select[name=" + y[i] + "]").value = z[i]
 			  }
-			  }
+			  if (y[i] === "email") {
+					  var src = "<img id='profilePic' src='photo/" + z[i] + "' style='width:250px; height:250px;'/>"				
+					  jQuery("#editProfilePhoto").append(src);
+				  }
+			  }			
 		  }
 	  });
 		
@@ -648,6 +610,13 @@
 	
 	function updated(x) {
   }
+  
+  jQuery("#uploadButton").click(function() {
+		var photos = document.getElementById('newPhoto');
+		var photoData = new FormData();
+		photoData.append('photos', photos);		
+		alert(photoData);
+	});
   
   	jQuery("#newPassword").click(function() {
 		if(jQuery("#newPassword").hasClass('adisabled')) {
