@@ -53,11 +53,16 @@
   }
 
   function doLogin() {
-	var error = document.querySelector("#error-message");
-	$(error).removeClass("invisible");
+	var greeting = document.querySelector("#error-message");
+	greeting.innerHTML = "";
+	var username = document.querySelector("#betaLogin input[name=username]").value;
+	var password = document.querySelector("#betaLogin input[name=password]").value;
+	SWBrijj.betaLogin(username, password, didntLogin);
   }
 
-  function didLogin(x) {
+  function didntLogin(x) {
+	var greeting = document.querySelector("#error-message");
+	greeting.innerHTML = x;
   }
 
   function displayRadio(value) {
@@ -162,6 +167,7 @@
         <section id="topbar">
           <div class="span12" id="homenav">
             <div class="pull-right">
+              <a id="topBlogButton" class="allCaps" data-toggle="modal" href='http://blog.sharewave.com' target='_self'>BLOG</a>
               <a id="loginButton" class="allCaps" data-toggle="modal" href="#loginModal">LOGIN</a>
             </div>
           </div>
@@ -173,10 +179,11 @@
         <div>
           <img id="homelogo" src="img/homelogo.png" alt="Sharewave Logo">
           <div class="tagline">
-          	<p class="headerText">a beautifully simple way to organize, visualize and communicate with investors</p>
+          	<p style="margin-bottom:0px;" class="headerText">a beautifully simple way for private companies to</p>
+            <p style="margin-top:0px;" class="headerText">organize, visualize and share information with their investors</p>
           </div>
           <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Top']);">Request an Invite</button>
-          <div style="position: relative;">
+          <div style="position: relative; margin-top:50px;">
           	<img id="monstersPic" src="img/monsters.png" alt="The Sharewave Investors"> 
             <a class="video" data-toggle="modal" href="#Video" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Video', 'Open']);"><img id="playbutton" src="img/play-button.png" alt="Video Play Button"></a>        
           </div>
@@ -189,14 +196,14 @@
    <div id="loginModal" class="modal hide fade">
   <button type="button" class="close" data-dismiss="modal">&times;</button>
   <div id="login" class="modal-body center">
-   <form class="center" method="post">
+   <form id="betaLogin" class="center" method="post">
             <fieldset id="loginForm">
-              <p id="error-message" class="invisible">Invalid Login</p>
-              <input placeholder="Username" required class="checkInput" tabindex="1"  autocapitalize="off" name="username" type="email">
+              <p style="height:20px;" id="error-message" class="text-error"></p>
+              <input placeholder="Username" required class="checkInput"  autocapitalize="off" name="username" type="email">
               <br> 
-              <input placeholder="Password" required class="checkInput" id="login_password" tabindex="2" name="password" type="password">			  <br>
+              <input placeholder="Password" required class="checkInput" id="login_password" name="password" type="password">			  <br>
             </fieldset>
-            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw" tabindex="3">Sign in</button>
+            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw">Sign in</button>
           </form>
   </div>
 </div>
@@ -208,32 +215,33 @@
 </div>
    
    <div class="container">
-   
-      
-
     <div class="row-fluid iconRow">
       <section>
           <ul class="thumbnails">
               <li class="span4 pagination-centered">
                   <div>
                       <img src="img/icon-manage.png" alt="investor manage icon">
-                      <p class="standardText iconText">Effortlessly Manage</p>
-                      <p class="standardText iconText" style="margin-top:-10px;">Cap Table and Options</p>
+                      <p class="standardText iconText">Easily Manage</p>
+                      <p class="standardText iconText" style="margin-top:-15px;">Your Cap Table</p>
+                      <p class="standardText iconText" style="margin-top:-15px;">& Employee Options</p>
                   </div>
               </li>
               
               <li class="span4 pagination-centered">
                   <div>
                       <img src="img/icon-generate.png" alt="investor generate icon">
-                      <p class="standardText iconText">Easily Generate</p
-                      ><p class="standardText iconText" style="margin-top:-10px;">Rich Board Packages</p>
+                      <p class="standardText iconText">Quickly Build & Share</p>
+                      <p class="standardText iconText" style="margin-top:-15px;">Rich Board and</p>
+                      <p class="standardText iconText" style="margin-top:-15px;">Investor Presentations</p>
                   </div>
               </li>
               
               <li class="span4 pagination-centered">
                   <div>
                       <img src="img/icon-signature.png" alt="investor signature icon">
-                      <p class="standardText iconText">Simplify the Paper Trail with Electronic Signatures</p>
+                      <p class="standardText iconText">Stop Chasing Signatures, </p>
+                      <p class="standardText iconText" style="margin-top:-15px;">with E-Sign and</p>
+                      <p class="standardText iconText" style="margin-top:-15px;">Audit Trails</p>
                   </div>
               </li>
           </ul>
@@ -256,32 +264,32 @@
               <p>Dear Sharewave,</p>
 
               
-              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" tabindex="1" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" tabindex="2" name="companyEmail" type="text"><span>.</span></p>
+              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" name="companyEmail" type="text"><span>.</span></p>
               
-              <p><span>My company name is</span><input id="company" required class="loginInput" tabindex="3" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" tabindex="4" autocapitalize="off" name="companyDomain" type="text"></p>
+              <p><span>My company name is</span><input id="company" required class="loginInput" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" autocapitalize="off" name="companyDomain" type="text"></p>
               
               <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
             </fieldset>
-              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
+              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
           </div>
           </form>
           </div>
           <div id="registerBar" class="standardText">Spread the Word 
           <a href="https://twitter.com/intent/tweet?text=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors+at&via=sharewaveteam&url=http://bit.ly/shwvtw"><img class="socialPlacement" src="img/icon-twitter.png" alt="Twitter Icon"></a>
           <img class="socialPlacement" src="img/icon-facebook.png" alt="Facebook Icon" onClick="window.open('https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb&t=Sharewave%3A+Feed+Your+Investors','mywindow','width=500,height=300')">
-          <img class="socialPlacement" src="img/icon-linkedin.png" alt="LinkedIn Icon" onClick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+Feed+Your+Investors&source=Sharewave&summary=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors','mywindow','width=500,height=300')"></div>      
+          <img class="socialPlacement" src="img/icon-linkedin.png" alt="LinkedIn Icon" onClick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+Feed+Your+Investors&source=Sharewave&summary=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors','mywindow','width=500,height=400')"></div>      
         
         
       </section>
     </div>
   </div>
   
-  <div class="footerBar">
+  <div style="margin-top:200px;" class="footerBar">
     <div class="container">  
       <div class="row-fluid">
       <footer class="footer">
           <div class="span12">
-            <a href="http://twitter.com/sharewaveteam"><img style="padding-right:10px;" class="socialPlacement" src="img/icon-twitter.png" alt="Twitter Icon"></a><a id="blogButton" href='http://blog.sharewave.com' target='_blank' class="allCaps footText">BLOG</a>
+            <a href="http://twitter.com/sharewaveteam"><img style="padding-right:10px;" class="socialPlacement" src="img/icon-twitter.png" alt="Twitter Icon"></a><a id="blogButton" href='http://blog.sharewave.com' target='_self' class="allCaps footText">BLOG</a>
             <div class="pull-right">
              <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
             </div>
@@ -345,6 +353,13 @@ var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.
 		}
 	}
 	});
+	
+	$(document).ready(function() {
+		$( "#Video").on('hidden', function () {
+		 vimeoWrap = $('#Video');
+  		 vimeoWrap.html( vimeoWrap.html() );
+	  })
+});
   </script>
 </body>
 </html>

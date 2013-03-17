@@ -1,0 +1,331 @@
+@charset "UTF-8";
+/* CSS Document */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+body {
+	overflow-y: scroll;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: -112px;
+	margin-left: auto;
+}
+
+/* Bootstrap overrides */
+
+label {
+	cursor: default;
+}
+
+/* Hide */
+
+.invisible {
+	visibility:hidden;
+}
+
+/* Fonts */
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;	
+	color: #1e2d3d;
+}
+
+h2 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	line-height:20px;
+	font-weight: lighter;
+	color: #1e2d3d;	
+}
+
+.menuHeaderText {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	color: #BDC3C7;
+	padding-right:20px;
+}
+
+.bodyText {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: #1e2d3d;	
+}
+
+.headline1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;	
+	color: #1e2d3d;
+}
+
+.headline2 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	font-weight: lighter;
+	color: #1e2d3d;		
+}
+
+.copyright {
+	color:#7f8c8d;
+}
+
+.compulsoryStar {
+	color: #F00;	
+}
+
+
+/* Navigation Bar at Top of Page */
+
+#navBar {
+	padding-top:25px;
+	height:50px;
+	background-color: #34495E;	
+}
+
+/* Profile Editing */
+
+/* Side Bar Navigation */
+
+#sidebar {
+	padding-top:20px;	
+}
+
+#sideButtons {
+	list-style-type: none;
+	width:100%;
+	margin-left:0px; 
+}
+
+.navTabs {
+	padding-top:8px;
+	padding-left:40px;
+	padding-bottom:8px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-color: #bdc3c7;
+	color: #34495E;
+	cursor:pointer;
+	
+}
+
+.bottomTab {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-color: #bdc3c7;
+}
+
+.selected {
+	background-color: #34495E;
+	color: #FFFFFF;
+}
+
+/* Central Profile Section */
+
+.headline1 {
+	margin-top:20px;
+}
+
+#mainBody {
+	background-color:#FFFFFF;
+}
+
+#detailsEdit {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #BDC3C7;
+	padding-right:20px;
+	
+}
+
+.span10.coreEdit {
+	height:100%;
+	margin-left:0px;
+	padding-left:20px;
+	padding-top:20px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-color: #bdc3c7;
+}
+
+#passwordEdit {
+	padding-bottom:150px;	
+}
+
+#editProfileFP {
+	margin-top:40px;
+}
+
+#editPasswordBlock {
+	margin-top:-8px;
+}
+
+#editProfilePhoto {
+	height:250px;
+	width:250px;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;	
+}
+
+.formBounder {
+	width:360px;
+}
+
+.urlField {
+	padding-right: 10px;
+	color: #7f8c8d;	
+}
+
+/* Footer */
+
+#push,
+#footer {
+  height: 112px;
+}
+
+.footerLinks {
+	margin-top:15px;
+}
+
+.footerBar {
+	height: 112px;
+	background-color: #34495E;
+}
+
+#copyrightBar {
+	margin-top:20px;
+}
+
+/* Buttons */
+
+.button {
+	cursor: pointer;	
+}
+
+.button:hover {
+	text-decoration: none;
+}
+
+.saveButton {
+	background-color: #3498db;
+	color:#ffffff;
+	padding-top: 10px;
+	padding-right: 60px;
+	padding-bottom: 10px;
+	padding-left: 60px;	
+}
+
+.adisabled {
+	background-color:#BDC3C7;
+	cursor:default;
+}
+
+.saveButton.adisabled:hover {
+	background-color:#BDC3C7;
+}
+
+.saveButton:hover {
+	background-color: #2980B9;
+	color:#ffffff;
+}
+
+.chooseButton {
+	background-color: #ffffff;
+	color:#333333;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	margin-right:10px;
+	border: 1px solid #bdc3c7;
+}
+
+#uploadButton {
+	background-color: #3498db;
+	color:#ffffff;
+	padding-top: 10px;
+	padding-right: 100px;
+	padding-bottom: 10px;
+	padding-left: 100px;
+	border: 1px solid #bdc3c7;
+}
+
+/* Alerts */
+
+.divInline {
+	position:absolute;
+	display: inline-block;	
+	margin-top:8px;
+	margin-left:-10px;
+}
+
+.divInline.hide {
+	display:none;
+}
+
+.alertpointerdiv {
+	position:absolute;
+	margin-left:16px;
+	margin-top:-3px;
+	width: 0; 
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	
+	border-right:10px solid #34495E; 
+}
+
+.passwordChangeSuccess {
+	background-color:#1ABC96;
+	color:#ffffff;
+	margin-top:5px;
+	padding-top:4px;
+	padding-bottom:4px;
+	padding-left:10px;
+	width:100%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+}
+
+.textalert {
+	margin-top:-10px;
+	margin-left: 20px;
+	width:260px;
+	padding-bottom:7px;
+	padding-top:7px;
+	background-color: #34495E;
+	color:#FFFFFF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.alertContents {
+	margin-left:10px;
+	vertical-align: middle;
+}
+
+.alertMessage {
+	margin-left:10px;
+}

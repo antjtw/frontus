@@ -20,6 +20,11 @@
 	color: #505154;
 }
 
+a.allCaps:hover {
+	color: #E2520F;
+	text-decoration: none;
+}
+
 /* For Hiding Things! */
 
 .hidden {
@@ -34,10 +39,9 @@
 
 .modal {
     top: 20px;
-    right: 150px;
-    left: 150px;
-    width: auto;
+	width:839px;
     margin: 0;
+	margin-left:-419px;
   }
 
 /* Index page CSS */
@@ -47,6 +51,10 @@
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	
+}
+
+#topBlogButton {
+	margin-right:80px;
 }
 
 #loginButton {
@@ -102,7 +110,7 @@ button.close:hover {
 }
 
 .tagline {
-	width: 400px;
+	width: 450px;
 	margin-top: 5px;
 	margin-left: auto;
 	margin-right: auto;	
@@ -129,7 +137,7 @@ button.close:hover {
 #inviteButton {
 	color: #FFF;
 	cursor: pointer;	
-	width: 300px;
+	width: 170px;
 }
 
 #inviteButton:hover {
@@ -138,7 +146,7 @@ button.close:hover {
 
 #playbutton {
 	position: absolute; 
-	top: 25px; 
+	top: 0px; 
 	left: 50%;
 	margin-left:-40px;
 	cursor: pointer;
@@ -185,22 +193,23 @@ input.checkInput {
 .modal-body {
 	padding:0px;
 	overflow:hidden;
-	height:540px;
-	max-height:540px;
-	max-width:970px;
+	height:472px;
+	max-height:472px;
+	max-width:839px;
 }
 
 #Video {
-	height:540px;
+	height:472px;
 }
 
 
 #monstersPic {
-	margin-right: 65px;	
+	padding-bottom:30px;
+	margin-left:10px;
 }
 
 .iconRow {
-	margin-top: 100px;	
+	margin-top: 50px;	
 }
 
 .iconText {
@@ -211,7 +220,7 @@ input.checkInput {
 }
 
 #registrationForm {
-	margin-top:200px;
+	margin-top:20px;
 	margin-bottom:10px;
 	width:600px;
 	height:300px;
@@ -281,9 +290,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 #registerButton {
-	width:240px;
+	width:170px;
 	margin-top:30px;
-	margin-left:350px;
+	margin-left:395px;
 }
 
 .btn-sxsw {
@@ -308,11 +317,9 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .footerBar {
-	height:30px;
-	margin-top:200px;
 	padding-top:10px;
 	background-image: url(../img/bkg.png);
-	background-repeat: repeat;	
+	background-repeat: repeat;
 }
 
 #blogButton {
@@ -326,6 +333,12 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+	
+.modal {
+	width:711px;	
+	left:50%;
+	margin-left:-355px;
+}
 	
 .modal-body {
 	height:400px;
@@ -355,9 +368,10 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .modal {
-    right: 30px;
-    left: 30px;
-  }
+    left:50%;
+	margin-left:-347px;
+	width:693px;
+ }
 	
 #playbutton {
 	left: 50%;
@@ -380,15 +394,89 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 }
 
+@media (max-width: 568px) {
+	
+#playbutton {
+	left: 50%;
+	margin-left:-40px;
+}
+	
+.modal-body {
+	height:259px;
+	max-height:259px;
+}
+
+#Video {
+	height:259px;
+}
+
+.modal {
+    left:50%;
+	margin-left:-230px;
+	width:460px;
+ }
+ 
+ #loginModal {
+	margin-top:10px;
+}
+ 
+ #registrationForm {
+	margin-top:100px;
+	width:540px;
+	height:315px;
+	padding-left: 10px;	
+	padding-right: 10px;	
+	
+}
+
+#name.loginInput {
+	width:150px;
+}
+
+#email.loginInput {
+	width:170px;
+}
+
+#company.loginInput {
+	width:200px;
+}
+
+#domain.loginInput {
+	width:160px;
+}
+
+#registerButton {
+	width:200px;
+	margin-top:30px;
+	margin-left:310px;
+}
+
+#registerBar {
+	margin-left: 15px;
+}
+	
+	
+}
+
 @media (max-width: 480px) {
 	
+#topBlogButton {
+	margin-right:30px;
+}
+	
+#homelogo {
+	width:300px;
+	height:auto;
+}
+	
 .modal {
-    right: 20px;
-    left: 20px;
+    left:50%;
+	margin-left:-214px;
+	width:427px;
   }
 	
 #loginModal {
-	margin-top:50px;
+	margin-top:10px;
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:400px;
@@ -422,10 +510,16 @@ input.checkInput {
 }
 	
 .tagline {
-	width: 320px;
+	width: 400px;
 	margin-top: 5px;
 	margin-left: auto;
 	margin-right: auto;	
+}
+
+
+.headerText {
+	font-size: 14px;
+	line-height: 20px;
 }
 
 #inviteButton {	
@@ -438,7 +532,8 @@ input.checkInput {
 
 	
 #monstersPic {
-	margin-right: 0px;	
+	margin-right: 0px;
+	margin-left:0px;	
 }
 	
 #playbutton {
@@ -487,13 +582,19 @@ input.checkInput {
 
 @media (max-width: 320px) {
 	
+#topBlogButton {
+	margin-right:20px;
+}
+	
 .modal {
-    right: 10px;
-    left: 10px;
+    left:50%;
+	margin-top:50px;
+	margin-left:-150px;
+	width:300px;
   }
 	
 #loginModal {
-	margin-top:50px;
+	margin-top:10px;
 	background-image: url(../img/bkg.png);
 	background-repeat: repeat;	
 	width:280px;
@@ -520,6 +621,7 @@ input.checkInput {
 #login {
 	margin-left:8px;;
 	width:500px;
+	height:230px;
 }
 
 #loginSubmitButton {
@@ -531,12 +633,12 @@ input.checkInput {
 }
 	
 #homelogo {
-	width:280px;
+	width:240px;
 	height:auto;
 }
 	
 .tagline {
-	width: 300px;
+	width: 280px;
 }
 	
 #registrationForm {
@@ -547,9 +649,10 @@ input.checkInput {
 
 #playbutton {
 	left: 50%;
-	margin-left:-15px;
-	width:45px;
-	height:45px;
+	margin-left:-24px;
+	margin-top:-10px;
+	width:55px;
+	height:55px;
 }
 	
 #registerBar {
@@ -582,4 +685,15 @@ input.checkInput {
 	font-size:10px;
 }
 	
+}
+
+
+/* Features Page */
+
+.featureHeaders {
+	font-size: 16px;
+	font-family: "Helvetica Neue";
+	line-height: 24px;
+	font-weight: bold;
+	color: #000;
 }
