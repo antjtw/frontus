@@ -22,10 +22,17 @@
 	}
 	
 	function get_contacts() {
-		SWBrijj.proc("put_dropbox_contacts", "initial", function(x) {
+		SWBrijj.proc("put_contacts_to_dropbox", "initial", function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
+
+	function update_contacts() {
+		SWBrijj.proc("update_dropbox_contacts", "initial.xlsx", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
 	</script>
 </head>
 
@@ -34,7 +41,9 @@
 	<p>
 	<button onClick="authorize()">Authorize dropbox</button>
 	<p>
-	<button onClick="get_contacts()">Put Contacts Spreadsheet in Dropbox</button>
+	<button onClick="get_contacts()">Get My Contacts From Sharewave</button>
+	<p>
+	<button onClick="update_contacts()">Store My Contacts At Sharewave</button>
 	<p>
 	<div id="dbresponse">
 	</div>
