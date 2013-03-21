@@ -15,7 +15,16 @@
 
 	function doList() {
 		SWBrijj.proc("get_google_list", function(x) {
-			document.querySelector("#stuff").innerHTML=x;
+			var tbl = "<table border=2>";
+			for(var i = 1;i<x.length; i++) {
+				tbl += "<tr>";
+				for(var j=0;j<x[i].length;j++) {
+					tbl += "<td>"+x[i][j]+"</td>";
+				}
+				tbl += "</tr>";
+			}
+			tbl+= "</table>";
+			document.querySelector("#stuff").innerHTML=tbl;
 		});
 	}
 	</script>
