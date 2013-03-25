@@ -4,6 +4,7 @@
 html,
 body {
   height: 100%;
+  background-color:#f1f1f1;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -25,6 +26,13 @@ body {
 
 label {
 	cursor: default;
+}
+
+.center {
+    *display:inline; /* ie 7 */
+    display:inline-block;
+    text-align:left;
+    zoom:1; /* ie7 junk */
 }
 
 /* Hide */
@@ -54,7 +62,7 @@ h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 11px;
 	line-height: 16px;
-	color: #BDC3C7;
+	color: #8d8d8d;
 	padding-right:20px;
 }
 
@@ -63,6 +71,15 @@ h2 {
 	font-size: 12px;
 	line-height: 18px;
 	color: #1e2d3d;	
+}
+
+.subText {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10px;
+	line-height: 14px;
+	color: #8d8d8d;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
 }
 
 .headline1 {
@@ -94,6 +111,62 @@ h2 {
 	padding-top:25px;
 	height:50px;
 	background-color: #34495E;	
+}
+
+/* Login */
+
+#login-form {
+	margin-top:140px;
+}
+
+#login {
+	width:500px;
+	padding-top:10px;
+	margin-top:10px;
+}
+
+#forgotLink {
+	font-size: 12px;
+	text-decoration: underline;
+	line-height:5px;
+	margin-left:45px;	
+}
+
+.loginLabel {
+	text-align:left;
+	margin-left: 42px;	
+}
+
+#login .loginInput {
+	width:337px;
+	padding-top:7px;
+	padding-bottom:7px;
+	border-radius:0px;
+	margin-left:74px;
+}
+
+#login_password {
+	margin-bottom: 0px;	
+}
+
+#forgotButton {
+/*
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    */
+	margin-top:10px;
+    margin-left:80px;
+	width:200px;
+    display: block;
+	float:left;
+}
+.loginButton {
+	float:right;
+	margin-top:15px;
+	margin-bottom:15px;
+	width:144px;
+	height:34px;
 }
 
 /* Profile Editing */
@@ -223,6 +296,16 @@ h2 {
 
 .button:hover {
 	text-decoration: none;
+}
+
+.greenButton {
+	background-color: #1abc96;
+	color:#ffffff;
+	padding-right: 20px;
+	padding-left: 20px;
+	margin-right:75px;
+	border: 1px solid #bdc3c7;
+	
 }
 
 .saveButton {
