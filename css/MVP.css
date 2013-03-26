@@ -41,6 +41,10 @@ label {
 	visibility:hidden;
 }
 
+.remove {
+	display: none;
+}
+
 /* Fonts */
 
 h1 {
@@ -70,7 +74,7 @@ h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
-	color: #1e2d3d;	
+	color: #7f8c8d;	
 }
 
 .subText {
@@ -93,7 +97,8 @@ h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
 	font-weight: lighter;
-	color: #1e2d3d;		
+	color: #1e2d3d;	
+	line-height:20px;	
 }
 
 .copyright {
@@ -115,7 +120,8 @@ h2 {
 
 /* Login */
 
-#login-form {
+.pagination-centered.gateway {
+	margin-left:0px;
 	margin-top:140px;
 }
 
@@ -143,6 +149,7 @@ h2 {
 	padding-bottom:7px;
 	border-radius:0px;
 	margin-left:74px;
+	background-color:#f1f1f1;
 }
 
 #login_password {
@@ -161,6 +168,7 @@ h2 {
     display: block;
 	float:left;
 }
+
 .loginButton {
 	float:right;
 	margin-top:15px;
@@ -168,6 +176,41 @@ h2 {
 	width:144px;
 	height:34px;
 }
+
+.textalert.loginErrorBox {
+	margin-left:0px;
+	margin-top:20px;
+	width:311px;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+/* Password Reset */
+
+#forgot {
+	width:500px;
+	padding-top:10px;
+	margin-top:10px;
+}
+
+#cancelButton {
+	margin-top:25px;
+	margin-left:220px;
+    display: block;
+	float:left;
+}
+
+.resetLabel {
+	text-align:left;
+	margin-left: 76px;
+	margin-bottom:10px;	
+}
+
+#resetConfirm {
+	margin-top:50px;
+}
+
+
 
 /* Profile Editing */
 
@@ -269,6 +312,9 @@ h2 {
 }
 
 /* Footer */
+#minimumGap {
+	min-height:150px;
+}
 
 #push,
 #footer {

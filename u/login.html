@@ -17,91 +17,45 @@
   <div class="container">
     <div class="row-fluid">
       <section>
-        <div id="login-form" class="span12 pagination-centered">
-          <img src="img/logo.png">
-          <div id="login-error-div" class="text-error"></div>
+        <div id="login-form" class="span12 pagination-centered gateway">
+          <div><img class="center loginLogo" src="img/logo-144x24.png"></div>
+          <div>
+          	<div id="login-error-div" class="textalert center loginErrorBox remove"><img src="img/alert-icon.png">Sorry, we didn't recognize that email/password combination. Please try again.</div>
+          </div>
           <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <input placeholder="email" required class="loginInput" tabindex="1" autocapitalize="off" name="username" type="email"> 
-              <input placeholder="password" required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
-              <a id="forgotButton" class="subText" onClick="forgotForm(); return false;">Forgot Password?</a>
-              <button type="submit" class="button greenButton loginButton" tabindex="3">Sign in</button>
+              <input placeholder="Email" required class="loginInput" tabindex="1" autocapitalize="off" name="username" type="email"> 
+              <input placeholder="Password" required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
+              <a id="forgotButton" class="subText button" onClick="forgotForm(); return false;">Forgot Password?</a>
+              <button type="submit" class="button greenButton loginButton bodyText" tabindex="3">Sign in</button>
               <br>
             </fieldset>
           </form>
         </div>
-        <div id="forgot-form" style="display: none" class="span12 pagination-centered">
-          <br>
-          <h1>Forgot your password?</h1>
+        <div id="forgot-form" style="display: none" class="span12 pagination-centered gateway">
+          <img src="img/logo-144x24.png">
           <div id="forgot-error-div" class="text-error"></div>
           <form id="login" class="center" action="" method="post" onsubmit="doForgot(); return false;">
             <fieldset>
-              <label class="loginLabel">Email:</label> <input required class="loginInput" placeholder="email" tabindex="1"
-                autocapitalize="off" name="username" type="email"> <br>
-              <button type="submit" class="btn btn-success loginButton" tabindex="3">Reset my password</button>
+              <label class="resetLabel headline2">Reset Your Password</label> <input required class="loginInput" placeholder="Email" tabindex="1" autocapitalize="off" name="username" type="email">
+              <a id="cancelButton" class="subText button" onClick="loginForm(); return false;">Cancel</a>
+              <button type="submit" class="button greenButton loginButton bodyText" tabindex="3">Reset Password</button>
               <br>
             </fieldset>
           </form>
         </div>
-        <div id='signup-form' style='display: none' class="span12 pagination-centered">
-          <br>
-          <h1 id="registerTitle">Welcome, we're excited to get you on board.</h1>
-          <div id="register-error-div" class="text-error"></div>
-          <form name="registerform" id="login" class="center" action="" method="post" onsubmit="doRegister(); return false;">
-            <fieldset>
-              <label class="loginLabel">Email:</label> <input required class="loginInput" tabindex="1"
-                autocapitalize="off" name="investoremail" type="text" disabled="true"> 
-                
-              <label class="loginLabel">First Name:</label> 
-              <input required class="loginInput" tabindex="2" autocapitalize="off" name="firstname" type="text">
-                
-              <label class="loginLabel">Last Name:</label> 
-              <input required class="loginInput" tabindex="3" autocapitalize="off" name="lastname" type="text"> 
-                
-                <label class="loginLabel">Password:</label> <input
-                required class="loginInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}"
-                id="password1" tabindex="4" name="password" type="password"
-                onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 6 characters, including UPPER/lowercase and numbers' : '');
-  if(this.checkValidity()) form.confirmpassword.pattern = this.value;">
-              <label class="loginLabel">Confirm Password:</label> <input required class="loginInput"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}" id="register_password" tabindex="5"
-                name="confirmpassword" type="password"
-                onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');">
-                
-              <label class="checkbox registerBox"> <input type="checkbox" required name="TOSBox"> I agree to the <span class='hreffy'
-                onClick='return showTOS();'>Terms of Use</span> &amp; <span class='hreffy' onClick='return showPrivacy();'>Privacy Policy</span>
-                </label>
-              <label class="checkbox registerBox"> <input type="checkbox" required name="electBox"> I agree to use fully electronic
-                communications
-              </label>
-              <button type="submit" class="loginButton btn btn-success" tabindex="6">Get
-                Started</button>
-              <br>
-            </fieldset>
-          </form>
-        </div>
-        <div id="CompanyRegister-form" style='display: none' class="span12 pagination-centered">
-          <br>
-          <h1>Company registration</h1>
-          <div id="register-success-div" class="text-error"></div>
-          <form id="login" class="center" action="" method="post" onsubmit="doPreregister(); return false;">
-            <fieldset>
-              <label class="loginLabel">Company Name:</label> 
-              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyName" type="text">
-              <label class="loginLabel">Company Domain:</label> 
-              <input required class="loginInput" tabindex="1" autocapitalize="off" name="companyDomain" type="text"> 
-              <label class="loginLabel">Email:</label> 
-              <input required class="loginInput" id="login_password" tabindex="2" name="companyEmail" type="text">
-              <label class="loginLabel">Name:</label> 
-              <input required class="loginInput" id="login_password" tabindex="2" name="personalName" type="text">
-            </fieldset>
-              <button type="submit" class="btn btn-success loginButton" tabindex="3">Register</button>
-          </form>
+        <div id="resetmessage" style="display: none" class="span12 pagination-centered gateway">
+          <img src="img/logo.png">
+          <div id="resetConfirm">
+            <p class="headline2">Please Check your Email</p>
+            <p class="bodyText">We've sent Reset Password Instructions to your email address.</p>
+            <p style="margin-top:-8px;" class="bodyText">You should receive your in 10-15 minutes.</p>
+          </div>
         </div>
       </section>
     </div>
   </div>
-
+<div id="minimumGap"></div>
 <div id="push"></div>   
      </div>
      
@@ -138,110 +92,35 @@
   
   <script>
 
-  function getParams() {
-  var params = document.location.search.substring(1).split('&');
-  for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
-    params[unescape(param[0])] = unescape(param[1]);
-  }
-  return params;
-}
-
-  function retrievedRegister(x) {
-		document.getElementsByName('firstname')[0].value = x[1][0];
-		document.getElementsByName('lastname')[0].value = x[1][1];
-		document.getElementsByName('investoremail')[0].value = x[1][2];
-  }
-
   function doLogin() {
 	var u = document.querySelector("#login-form input[name=username]").value;
     var p = document.querySelector("#login-form input[name=password]").value;
-    SWBrijj.login(u, p, didLogin);
+    SWBrijj.login(u, p, Login);
   }
 
-  function didLogin(x) {
+  function Login(x) {
     if (x) {
       document.location.href = 'v/edit_profileMVP.html';
       return;
     }
-    var errdiv = document.querySelector('#login-error-div');
-    errdiv.innerHTML = 'Invalid email/password combination';
+    jQuery("#login-error-div").removeClass("remove");
+	document.querySelector("#login-form input[name=username]").value = "";
+    document.querySelector("#login-form input[name=password]").value = "";
   }
   
-  function doRegister() {
-    var u = document.querySelector("#signup-form input[name=investoremail]").value;
-	var f = document.querySelector("#signup-form input[name=firstname]").value;
-	var l = document.querySelector("#signup-form input[name=lastname]").value;
-	var x = 0
-	var y = 0
-	if (document.querySelector("#signup-form input[name=TOSBox]").checked) {
-		x = 1;
-	}
-	if (document.querySelector("#signup-form input[name=electBox]").checked) {
-		y = 1;
-	}
-	var p = document.querySelector("#signup-form input[name=password]").value;
-	if (x != 1 || y != 1) {
-		var errdiv = document.querySelector('#register-error-div');
-     	errdiv.innerHTML = 'Must agree to TOS and Digital Communications';
-	}
-	else {
-		var m = getParams();
-		var code = m['code']
-		SWBrijj.activate(u, code, p, f, l, x, [didRegister, didntRegister]);
-	}
-  }
-
-  function didRegister(x) {
-      loginForm()
-	  var greeting = document.querySelector("#Greeting");
-	  greeting.innerHTML = "Welcome!";
-	  var errdiv = document.querySelector('#login-error-div');
-      errdiv.innerHTML = 'Welcome to ShareWave! Please login to confirm your registration';
-      return;
-  }
-  
-  function didntRegister(x) {
-	 var errdiv = document.querySelector('#register-error-div');
-     errdiv.innerHTML = 'Invalid Code'; 
-  }
 
   function displayRadio(value) {
-    var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];
+    var ids = [ '#login-form', '#forgot-form', '#resetmessage' ];
     for ( var i = 0; i < ids.length; i++) {
       document.querySelector(ids[i]).style.display = value == i ? 'block'
           : 'none';
     }
   }
 
-	function showPrivacy() {
-		document.querySelector('#privacy-policy').style.display='block';
-		document.querySelector('#TOS').style.display='none';
-		return false;
-	}
-	function showTOS() {
-		$( '#TOS' ).load('u/tos.html', function() {
-		document.querySelector('#privacy-policy').style.display='none';
-		document.querySelector('#TOS').style.display='block';
-		return false;
-	});
-	}
-	
-  function buttonRadio(value) {
-    var ids = [ '#login-button', '#signup-button' ];
-    for ( var i = 0; i < ids.length; i++) {
-      var e = document.querySelector(ids[i]);
-      if (value == i) {
-        e.disabled = true;
-        e.className = 'btn btn-home';
-      } else {
-        e.disabled = false;
-        e.className = 'btn btn-home btn-success';
-      }
-    }
-  }
-
   function loginForm() {
+	jQuery("#login-error-div").addClass("remove");
+	document.querySelector("#login-form input[name=username]").value = "";
+    document.querySelector("#login-form input[name=password]").value = "";
     /* This hack is a workaround for the Chrome handling of required attributes */
     var qs = document.querySelectorAll("#login-form input[requiredx]");
     for ( var i = 0; i < qs.length; i++) {
@@ -249,7 +128,6 @@
       qs[i].setAttribute("required", false);
     }
     displayRadio(0);
-    buttonRadio(0);
   }
 
   function forgotForm() {
@@ -260,7 +138,6 @@
       qs[i].setAttribute("requiredx", false);
     }
     displayRadio(1);
-    buttonRadio(2);
   }
 
   function signupForm() {
@@ -278,17 +155,14 @@
 	loginForm()
 	var fed = document.querySelector("#login-error-div");
 	fed.innerHTML = "An email to reset your password has been sent";
-    SWBrijj.forgot(u, [ didForget, forgetError ]);
+	displayRadio(2);
+    SWBrijj.forgot(u, [didForget, errorForget]);
   }
 
-  function forgetError(x) {
-    var fed = document.querySelector("#forgot-error-div");
-  }
   function didForget(x) {
-    var fed = document.querySelector("#login-error-div");
-    if (x) {
-      fed.innerHTML = "An email to reset your password has been sent";
-    }
+  }
+  
+  function errorForget(x) {
   }
 
   function checkPassword() {
@@ -320,31 +194,5 @@
 	fed.innerHTML = "This email is already registered!."; 
   }
 </script>
-  
-  <script>
-   $(document).ready(function() {
-	  var m = getParams();
-	  var c = m['code']
-	  var d = m['issuer']
-	  if (d == "yes") {
-		alert("we have a company!");  
-	  }
-	  else if (d == 'y') {
-		  registerForm()
-	  }
-	  else {
-	  if (m['code'] != undefined) {
-		  signupForm()
-		  SWBrijj.formFillout(c, retrievedRegister);
-	  }
-	  };
-	  
-		 jQuery('#login_password').keydown(function(){
-			 var fed = document.querySelector("#login-error-div");
-			 fed.innerHTML = "";
-		});
-		
-  });
-  </script>
 </body>
 </html>
