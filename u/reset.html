@@ -25,9 +25,8 @@
                     	<div><img class="center loginLogo" src="img/logo-144x24.png"></div>
                         <form name="resetPasswordform" id="login" class="center" action="" method="post" onsubmit="doReset(); return false;">
                             <fieldset>
-                				<div class="row-fluid">
                                 <label class="resetLabel headline2">Reset Your Password</label>
-  
+  								<div class="row-fluid">
   								<input class="loginInput" placeholder="New Password" id="newest_password" type="password" name="newPassword">
   
   								<div class="divInline hide" id="newPasswordAlert"> 
@@ -112,10 +111,25 @@
 	
 	function doReset() {
 	   var p = document.querySelector("input[name=newPassword]").value;
-	   alert(p);
 	   var m = getParams();
 	   var c = m['code'];
-	   SWBrijj.resetPassword(p,c, [didReset, didntReset]);
+		if (p.match(/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}/)) {
+			jQuery("#newPasswordAlert").addClass("hide");
+			if (document.querySelector("input[name=newPassword]").value === document.querySelector("input[name=passwordconfirm]").value)
+			{
+			jQuery("#confirmPasswordAlert").addClass("hide");
+			SWBrijj.resetPassword(p,c, [didReset, didntReset]);
+			}
+			else {
+			jQuery("#confirmPasswordAlert").removeClass("hide");
+				
+			}
+		}
+		else  {
+			jQuery("#newPasswordAlert").removeClass("hide");
+			var error = document.querySelector("#passwordRegexAlert");
+			error.innerHTML = "Check the password requirements";
+		}
 	}
 	
 	function didReset(x) {
@@ -123,7 +137,6 @@
 	}
 	
 	function didntReset(x) {
-		  alert("didntReset: "+x);
 	}
 	
 	$("#newest_password").focusout(function() {
@@ -141,10 +154,6 @@
 	  }
 	  else {
 		  jQuery("#confirmPasswordAlert").addClass("hide");
-		  if(jQuery("#newPasswordAlert").hasClass("hide")) {
-		  }
-		  else {
-		  }
 	  }
 	}
 	else {
@@ -178,6 +187,7 @@
 			error.innerHTML = "Check the password requirements";
 		}
 	}
+	
 	</script>
     <script>
    $(document).ready(function() {
