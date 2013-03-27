@@ -20,12 +20,26 @@
 			document.location.href=ru;
 		});
 	}
+
+	function get_contacts() {
+		SWBrijj.proc("get_google_contacts", "select * from public", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
 	</script>
 </head>
 
 <body>
 	<h1>OAuth for google</h1>
 	<button onClick="authorize()">Authorize google</button>
+	<p>
+	<p>
+	<button onClick="get_contacts()">Get My Contacts From Sharewave</button>
+	<p>
+	<p>
+	<div id="dbresponse">
+	</div>
 	
 	<script src="brijj/brijj.js"></script>
 	
