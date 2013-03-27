@@ -24,10 +24,11 @@
           </div>
           <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <input placeholder="Email" required class="loginInput" tabindex="1" autocapitalize="off" name="username" type="email"> 
-              <input placeholder="Password" required class="loginInput" id="login_password" tabindex="2" name="password" type="password">
+              <input placeholder="Email" class="loginInput LI" tabindex="1" autocapitalize="off" name="username" type="email"> 
+              <input placeholder="Password" class="loginInput LI" id="login_password" tabindex="2" name="password" type="password">
+              
               <a id="forgotButton" class="subText button" onClick="forgotForm(); return false;">Forgot Password?</a>
-              <button type="submit" class="button greenButton loginButton bodyText" tabindex="3">Sign in</button>
+              <button disabled id="signInButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Sign in</button>
               <br>
             </fieldset>
           </form>
@@ -37,9 +38,9 @@
           <div id="forgot-error-div" class="text-error"></div>
           <form id="login" class="center" action="" method="post" onsubmit="doForgot(); return false;">
             <fieldset>
-              <label class="resetLabel headline2">Reset Your Password</label> <input required class="loginInput" placeholder="Email" tabindex="1" autocapitalize="off" name="username" type="email">
+              <label class="resetLabel headline2">Reset Your Password</label> <input required class="loginInput FI" placeholder="Email" tabindex="1" autocapitalize="off" name="username" type="email">
               <a id="cancelButton" class="subText button" onClick="loginForm(); return false;">Cancel</a>
-              <button type="submit" class="button greenButton loginButton bodyText" tabindex="3">Reset Password</button>
+              <button disabled id="resetButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Reset Password</button>
               <br>
             </fieldset>
           </form>
@@ -48,7 +49,7 @@
           <img src="img/logo-144x24.png">
           <div id="resetConfirm">
             <p class="headline2">Please Check your Email</p>
-            <p class="bodyText">We've sent Reset Password Instructions to your email address.</p>
+            <p class="bodyText">We've sent reset password instructions to your email address.</p>
             <p style="margin-top:-8px;" class="bodyText">You should receive your in 10-15 minutes.</p>
           </div>
         </div>
@@ -89,6 +90,52 @@
   <script src="script/jquery.js"></script>
   <script src="script/bootstrap.js"></script>
   <script src="brijj/brijj.js"></script>
+  
+  <script>
+  
+  var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+	
+	function isEmail (s) {
+	   return String(s).search (isEmail_re) != -1;
+	}
+	
+	
+  jQuery(".LI").keyup(function() {
+	var email = document.querySelector("#login-form input[name=username]").value;
+	var emailTest = isEmail(email);
+	var password = document.querySelector("#login-form input[name=password]").value;
+	if (email.length > 0 && password.length > 0 && emailTest === true) {
+		jQuery("#signInButton").removeAttr('disabled');
+		jQuery("#signInButton").removeClass("adisabled"); 
+	}
+	else {
+		if ($("#signInButton").is(':disabled')){	
+		}
+		else {
+			$("#signInButton").attr('disabled', 'disabled');
+			jQuery("#signInButton").addClass("adisabled"); 
+		}
+	}
+	});
+	
+	jQuery(".FI").keyup(function() {
+	var email = document.querySelector("#forgot-form input[name=username]").value;
+	var emailTest = isEmail(email);
+	if (email.length > 0 && emailTest === true) {
+		jQuery("#resetButton").removeAttr('disabled');
+		jQuery("#resetButton").removeClass("adisabled"); 
+	}
+	else {
+		if (jQuery("#resetButton").is(':disabled')){	
+		}
+		else {
+			jQuery("#resetButton").attr('disabled', 'disabled');
+			jQuery("#resetButton").addClass("adisabled"); 
+		}
+	}
+	});
+  
+  </script>
   
   <script>
 
@@ -174,24 +221,6 @@
       document.registerform.confirmpassword.setCustomValidity('');
 	  
     }
-  }
-  
-  function doPreregister() {
-	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
-	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
-	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
-	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-    SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
-  }
-  
-  function didPreregister(x) {
-	var fed = document.querySelector("#register-success-div");
-	fed.innerHTML = "Thanks! We'll be in touch with sign up information."; 
-  }
-  
-  function failedPreregister(x) {
-	var fed = document.querySelector("#register-success-div");
-	fed.innerHTML = "This email is already registered!."; 
   }
 </script>
 </body>

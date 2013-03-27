@@ -35,6 +35,21 @@ label {
     zoom:1; /* ie7 junk */
 }
 
+input.loginInput:focus, textarea:focus, select:focus {
+	outline-width:none;
+	outline: none;
+	box-shadow:none;
+	border-color:#cccccc;
+	color:black;
+ }
+ 
+input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:focus {
+	outline: none;
+	box-shadow:none;
+	border-color:#cccccc;
+	color:black;
+}
+
 /* Hide */
 
 .invisible {
@@ -363,12 +378,12 @@ h2 {
 	padding-left: 60px;	
 }
 
-.adisabled {
+.button.adisabled {
 	background-color:#BDC3C7;
 	cursor:default;
 }
 
-.saveButton.adisabled:hover {
+.button.adisabled:hover {
 	background-color:#BDC3C7;
 }
 
