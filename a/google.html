@@ -21,8 +21,8 @@
 		});
 	}
 
-	function get_contacts() {
-		SWBrijj.proc("get_google_contacts", "select * from public", function(x) {
+	function put_contacts() {
+		SWBrijj.proc("update_google_contacts", "initial", function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
@@ -35,7 +35,7 @@
 	<button onClick="authorize()">Authorize google</button>
 	<p>
 	<p>
-	<button onClick="get_contacts()">Get My Contacts From Sharewave</button>
+	<button onClick="put_contacts()">Send My Contacts To Sharewave</button>
 	<p>
 	<p>
 	<div id="dbresponse">
