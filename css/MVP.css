@@ -359,6 +359,15 @@ h2 {
 	text-decoration: none;
 }
 
+.button.adisabled {
+	background-color:#BDC3C7;
+	cursor:default;
+}
+
+.button.adisabled:hover {
+	background-color:#BDC3C7;
+}
+
 .greenButton {
 	background-color: #1abc96;
 	color:#ffffff;
@@ -376,15 +385,6 @@ h2 {
 	padding-right: 60px;
 	padding-bottom: 10px;
 	padding-left: 60px;	
-}
-
-.button.adisabled {
-	background-color:#BDC3C7;
-	cursor:default;
-}
-
-.button.adisabled:hover {
-	background-color:#BDC3C7;
 }
 
 .saveButton:hover {
