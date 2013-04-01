@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<base href="../"/>
+	<title>Google authorization</title>
+	
+	<link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/more.css">
+  
+	<script>
+
+	function authorize() {
+		SWBrijj.proc("get_google_access", function(x) {
+			var ru = x[1][0];
+			document.cookie="rux="+encodeURIComponent(ru)+";path=/";
+			document.location.href=ru;
+		});
+	}
+
+	function put_select_to_google() {
+		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	</script>
+</head>
+
+<body>
+	<h1>OAuth for google</h1>
+	<button onClick="authorize()">Authorize google</button>
+	<p>
+	<button onClick="put_select_to_google()">Put any select query results to your google docs first worksheet</button>
+    </p>
+
+	<div id="dbresponse">
+	</div>
+	
+	<script src="brijj/brijj.js"></script>
+	
+</body>
+</html>
