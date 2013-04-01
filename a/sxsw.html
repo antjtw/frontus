@@ -21,9 +21,9 @@
 		});
 	}
 
-	function put_select_to_google() {
-		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
-			document.querySelector("#dbresponse").innerHTML=x;
+	function download() {
+		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user', function(x) {
+			document.location.href=x;
 		});
 	}
 
@@ -32,10 +32,8 @@
 
 <body>
 	<h1>OAuth for google</h1>
-	<button onClick="authorize()">Authorize google</button>
-    <br>
 	<p>
-	<button onClick="put_select_to_google()">Put any select query results to your google docs first worksheet</button>
+	<button onClick="download()">Download latest sxsw</button>
     </p>
 
 	<div id="dbresponse">
