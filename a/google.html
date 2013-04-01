@@ -21,8 +21,26 @@
 		});
 	}
 
-	function put_contacts() {
-		SWBrijj.proc("update_google_contacts", "initial", function(x) {
+	function put_contacts_to_google() {
+		SWBrijj.proc("put_contacts_to_google", "initial", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	function put_from_google_contacts() {
+		SWBrijj.proc("put_from_google_contacts", "initial.xlsx", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	function put_select_to_google() {
+		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	function put_select_to_sheet_google() {
+		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", "Company", function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
@@ -35,8 +53,13 @@
 	<button onClick="authorize()">Authorize google</button>
 	<p>
 	<p>
-	<button onClick="put_contacts()">Send My Contacts To Sharewave</button>
+	<button onClick="put_contacts_to_google()">Get My Contacts From Sharewave</button>
 	<p>
+	<button onClick="put_from_google_contacts()">Store My Contacts At Sharewave</button>
+	<p>
+	<button onClick="put_select_to_google()">Put any select query results to your google docs first worksheet</button>
+	<p>
+	<button onClick="put_select_to_sheet_google()">Put any select query results to your google docs to worksheet Company</button>
 	<p>
 	<div id="dbresponse">
 	</div>
