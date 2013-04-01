@@ -22,7 +22,7 @@
 	}
 
 	function download() {
-		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user', function(x) {
+		SWBrijj.getXlsx("put_select_to_excel", 'select * from public.sxsw', function(x) {
 			document.location.href=x;
 		});
 	}
