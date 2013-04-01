@@ -21,14 +21,26 @@
 		});
 	}
 	
-	function get_contacts() {
+	function put_contacts_to_dropbox() {
 		SWBrijj.proc("put_contacts_to_dropbox", "initial", function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
-	function update_contacts() {
-		SWBrijj.proc("update_dropbox_contacts", "initial.xlsx", function(x) {
+	function put_from_dropbox_contacts() {
+		SWBrijj.proc("put_from_dropbox_contacts", "initial.xlsx", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	function put_select_to_dropbox() {
+		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
+	function put_select_to_sheet_dropbox() {
+		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect", "Company", function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
@@ -41,9 +53,13 @@
 	<p>
 	<button onClick="authorize()">Authorize dropbox</button>
 	<p>
-	<button onClick="get_contacts()">Get My Contacts From Sharewave</button>
+	<button onClick="put_contacts_to_dropbox()">Get My Contacts From Sharewave</button>
 	<p>
-	<button onClick="update_contacts()">Store My Contacts At Sharewave</button>
+	<button onClick="put_from_dropbox_contacts()">Store My Contacts At Sharewave</button>
+	<p>
+	<button onClick="put_select_to_dropbox()">Put any select query results to your dropbox first worksheet</button>
+	<p>
+	<button onClick="put_select_to_sheet_dropbox()">Put any select query results to your dropbox to worksheet Company</button>
 	<p>
 	<div id="dbresponse">
 	</div>
