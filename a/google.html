@@ -22,7 +22,7 @@
 	}
 
 	function put_contacts_to_google() {
-		SWBrijj.proc("put_contacts_to_google", "initial", function(x) {
+		SWBrijj.proc("createSheetFromContacts", document.querySelector("#toSheetName").value, function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
@@ -53,7 +53,8 @@
 	<button onClick="authorize()">Authorize google</button>
 	<p>
 	<p>
-	<button onClick="put_contacts_to_google()">Get My Contacts From Sharewave</button>
+	<button onClick="put_contacts_to_google()">Push my Contacts From Sharewave to this Google Spreadsheet:</button>
+	<input type="text" id="toSheetName" name="toSheetName" value="initial"></input>
 	<p>
 	<button onClick="put_from_google_contacts()">Store My Contacts At Sharewave</button>
 	<p>
