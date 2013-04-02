@@ -30,6 +30,7 @@ a.allCaps:hover {
 	font-family: "Helvetica Neue";
 	line-height: 22px;
 	color: #505154;
+	padding-left:0px;
 }
 
 .jobHeader {
@@ -719,5 +720,5 @@ input.checkInput {
 
 #emailSend {
 	margin-top: 20px;
-	margin-bottom: 30px;
+	margin-bottom: 60px;
 }
