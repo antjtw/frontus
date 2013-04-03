@@ -337,7 +337,16 @@ h2 {
 }
 
 .footerLinks {
-	margin-top:15px;
+	float: left;
+	list-style-type:none;
+	min-height: 20px;
+	margin: 10px 0;
+	padding: 0;
+}
+
+.footerLinks li {
+	display: inline;
+	margin-right: 20px;
 }
 
 .footerBar {
@@ -345,8 +354,8 @@ h2 {
 	background-color: #34495E;
 }
 
-#copyrightBar {
-	margin-top:20px;
+#socialMedia {
+	margin: 30px 0;
 }
 
 /* Buttons */
