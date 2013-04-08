@@ -3,7 +3,7 @@
 
 html,
 body {
-  height: 100%;
+  height: 100% !important;
   background-color:#f1f1f1;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -37,6 +37,10 @@ body {
 
 /* Bootstrap overrides */
 
+.container {
+	width: 1024px;
+}
+
 label {
 	cursor: default;
 }
@@ -63,6 +67,27 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	color:black;
 }
 
+.modal-backdrop {
+	background-color: #FFF;
+}
+
+.modal {
+	margin-left: -180px;
+	width: 360px;
+	background-color: #e3e3e3;
+	border: 0;
+}
+
+[class^="icon-"], [class*=" icon-"]{
+    background:none;
+  }
+
+/* Document Viewer Styling */
+
+.DV-views{
+  display:none;
+}
+
 /* Hide */
 
 .invisible {
@@ -76,17 +101,17 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 /* Fonts */
 
 h1 {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 24px;
-	font-weight: lighter;	
+	font-family: 'Open Sans', sans-serif !important;
+	font-size: 24px !important;
+	font-weight: normal !important;	
 	color: #1e2d3d;
 }
 
 h2 {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 18px;
+	font-family: 'Open Sans', sans-serif !important;
+	font-size: 18px !important;
 	line-height:20px;
-	font-weight: lighter;
+	font-weight: normal !important;
 	color: #1e2d3d;	
 }
 
@@ -112,6 +137,7 @@ h2 {
 	color: #8d8d8d;
 	text-transform: uppercase;
 	letter-spacing: 1pt;
+	font-weight:normal !important;
 }
 
 .headline1 {
@@ -339,6 +365,167 @@ h2 {
 	color: #7f8c8d;	
 }
 
+/* Document Views */
+
+.statusBlock {
+	background-color: #FFF;
+	display:inline-block;
+}
+
+.statusBlock > div:first-child {
+	background-color: #e3e3e3;
+	height: 36px;
+	padding: 20px 0 0 0;
+}
+
+.statusBlock .subText {
+	color: #1e2d3d;
+	margin: 0 0 0 50px;
+}
+
+.statusBlock div:first-child i {
+	float: left;
+	margin: 0 0 0 15px;
+}
+
+.statusBlock ul {
+	list-style: none;
+}
+
+.docLibrary {
+	width: 100%;
+	margin: 40px 0 0 0;
+}
+
+.searchBox {
+	float:right;
+}
+
+.title {
+	display: inline-block;
+}
+
+.title.sortedDown:after {
+	content: ' ';
+	height: 0;
+	position: absolute;
+	width: 0;
+	top: 10px;
+	margin: 0 0 0 10px;
+
+	border: 6px solid transparent;
+	border-top-color: #333;
+}
+
+.title.sortedUp:after {
+	content: ' ';
+	height: 0;
+	position: absolute;
+	width: 0;
+	top: 4px;
+	margin: 0 0 0 10px;
+
+	border: 6px solid transparent;
+	border-bottom-color: #333;
+}
+
+.tableView {
+	width:100%;
+	margin: 0 auto 0 auto;
+}
+
+.tableView tr {
+	background-color: #FFF;
+	border-bottom-width: thin;
+	border-bottom-style: solid;
+	border-bottom-color: #f1f1f1;
+}
+
+.tableView th {
+	width: 340px;
+	height: 27px;
+	text-align: left;
+	padding: 0 0 0 20px;
+	position: relative;
+}
+
+.tableView td {
+	padding: 5px 40px 0 0;
+	width:250px;
+	height:55px;
+	padding: 0 0 0 20px;
+}
+
+.tableView td[class="button"] {
+	padding: 5px 10px 0 0;
+	width: 30px;
+}
+
+.tableView td[class="button"] a {
+	color: #7f8c8d;
+}
+
+.dateFormatting {
+	padding: 0 10px 0 0;
+}
+
+.documentView i {
+	color: #7f8c8d;
+}
+
+/* Document Viewer */
+
+.navPills {
+	margin: 20px 0 10px 0;
+}
+
+.navPills li {
+	float:left;
+	display: inline;
+	margin: 0 10px 0 0;
+	padding: 3px 0 0 0;
+	width: 65px;
+	height: 24px;
+	text-align: center;
+}
+
+.selectedPill {
+	background-color: #FFF;
+	-moz-border-radius: 18px;
+	-webkit-border-radius: 18px;
+	border-radius: 18px;
+	-moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
+	-webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
+}
+
+.pageTurn {
+	margin: 20px 0 10px 0;
+}
+
+.pageTurn li {
+	float:left;
+	display: inline;
+	margin: 0 10px 0 0;
+	padding: 3px 0 0 0;
+	width: 65px;
+	height: 24px;
+	text-align: center;
+}
+
+/* Document Status */
+
+.documentInfo {
+	float: right;
+	height: 265px;
+	width: 330px;
+	margin: 0 0 20px 0;
+}
+
+.recipientInfo {
+	width: 663px;
+}
+
 /* Footer */
 #minimumGap {
 	min-height:150px;
@@ -374,6 +561,8 @@ h2 {
 
 .button {
 	cursor: pointer;	
+	border: 0;
+	box-sizing:border-box;
 }
 
 .button:hover {
@@ -389,14 +578,31 @@ h2 {
 	background-color:#BDC3C7;
 }
 
-.greenButton {
-	background-color: #1abc96;
+.button.blueButton {
 	color:#ffffff;
-	padding-right: 20px;
-	padding-left: 20px;
-	margin-right:75px;
-	border: 1px solid #bdc3c7;
-	
+	background-color:#3498db;
+	width: 143px;
+	height: 37px;
+	text-align:center;
+	padding: 12px 0 0 0;
+}
+
+.button.greenButton {
+	color:#ffffff;
+	background-color:#1abc96;
+	width: 143px;
+	height: 37px;
+	text-align:center;
+	padding: 12px 0 0 0;
+}
+
+.button.greyButton {
+	color:#ffffff;
+	background-color:#bdc3c7;
+	width: 143px;
+	height: 37px;
+	text-align:center;
+	padding: 12px 0 0 0;
 }
 
 .saveButton {
@@ -452,6 +658,44 @@ h2 {
   background-color: #94a3a6;
   color: #000000;
 }
+
+/* Modal CSS */
+
+.deleteConfirm {
+	width: 400px;
+}
+
+.modalHeader {
+	display: block;
+	text-align: center;
+	padding: 0 0 20px 0;
+	margin: 50px 30px 0 30px;
+	border-bottom-width: thin;
+	border-bottom-style: solid;
+	border-color: #bdc3c7;
+}
+
+.modalHeader p {
+	color: #000;
+}
+
+.modalText {
+	padding: 10px 0 0 0;
+	margin: 30px 0 70px 0;
+	display: block;
+	text-align: center;
+}
+
+.modalButtons {
+	display: block;
+	text-align: center;
+	padding: 0 0 20px 0;
+}
+
+.modalButtons button {
+	padding: 0 !important;
+}
+
 /* Alerts */
 
 .divInline {
@@ -548,4 +792,23 @@ h2 {
   bottom: 120px;
   padding-top: 10px;
   background-color: #e0e0ff;
+
+/* Clear fix */
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
 }

@@ -1,0 +1,24 @@
+<div class="container">
+
+	     <h1><a href="v/docLibrary.html#/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docName}}</h1>
+         
+         <ul class="subText navPills cf">
+         	<li class="selectedPill button">View</li>
+         	<a href="v/docLibrary.html#/documents/{{docName}}/status"><li class="button">Status</li></a>
+         </ul>
+         
+         <ul class="subText pageTurn cf">
+         	<li class="button">Previous</li>
+            <li class="button">Next</li>
+         </ul>
+         
+         <ul class="subText pageTurn cf">
+         	<li class="button" ng-click="zoomOut()">Zoom Out</li>
+            <li class="button" ng-click="zoomIn()">Zoom In</li>
+         </ul>
+	     
+	     <div id="canvas" style="border: 1px gray solid; float: left"></div>
+          
+</div>
+
+         
