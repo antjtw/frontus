@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<base href="../"/>
+	<title>Edit Investor Profile | Sharewave</title>
+	<link rel="stylesheet" href="css/MVP.css">
+	<!--{{/i/head.inc}}-->
+</head>
+
+<body>
+	<div id="wrap">
+
+     <!--{{/i/nav.inc}}-->
+
+        <div id="mainBody">
+          <div class="container">
+            <div class="row-fluid">
+	
+	
+	            <fieldset> 
+                    <legend class="headline2">Sign-ups</legend>
+                    <div class="formBounder">
+                      <div class="row-fluid">   
+                            <label class="bodyText">GoogleSpreadsheet name</label>              
+                          <input type="text" style="width:90%;" name="worksheet" value="signups"/> 
+                      </div>
+					  <a id="toGoogle" class="bodyText button">Create worksheet</a>
+					  <div id="googleResult" class="alertMessage"></div>
+					</div>
+				</fieldset>
+    
+	
+	
+	
+	
+            </div>
+          </div>
+        </div>
+
+      <div id="push"></div>   
+	</div>
+     
+      <!--{{/i/foot.inc}}-->
+
+	<script>
+		jQuery("#toGoogle").click(function() {
+			var gsn = document.querySelector("input[name=worksheet]").value;
+			SWBrijj.proc("signUpsToGoogle", gsn, [
+				function(x) { document.querySelector("#googleResult").innerHTML=x;},
+				function(x) { document.querySelector("#googleResult").innerHTML=x.message;}
+				]
+				);
+		});
+	  </script>
+
+	</body>
+</html>
