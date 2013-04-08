@@ -16,7 +16,7 @@
 	function doDocsList() {
 		SWBrijj.proc("get_my_company_list", function(x) {
 			var tbl = "<table border=2>";
-			for(var i = 1;i<x.length; i++) {
+			for(var i = 0;i<x.length; i++) {
 				tbl += "<tr>";
 				for(var j=0;j<x[i].length;j++) {
 					tbl += "<td>"+x[i][j]+"</td>";
