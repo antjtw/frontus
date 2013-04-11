@@ -45,6 +45,12 @@
 		});
 	}
 
+	function put_dropbox_to_db() {
+		SWBrijj.proc("put_dropbox_to_db", function(x) {
+			document.querySelector("#dbresponse").innerHTML=x;
+		});
+	}
+
 	</script>
 </head>
 
@@ -60,6 +66,8 @@
 	<button onClick="put_select_to_dropbox()">Put any select query results to your dropbox first worksheet</button>
 	<p>
 	<button onClick="put_select_to_sheet_dropbox()">Put any select query results to your dropbox to worksheet Company</button>
+	<p>
+	<button onClick="put_dropbox_to_db()">Store my document files at Sharewave</button>
 	<p>
 	<div id="dbresponse">
 	</div>
