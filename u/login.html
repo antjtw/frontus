@@ -24,8 +24,8 @@
           </div>
           <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
             <fieldset>
-              <input placeholder="Email" class="loginInput LI" tabindex="1" autocapitalize="off" name="username" type="email"> 
-              <input placeholder="Password" class="loginInput LI" id="login_password" tabindex="2" name="password" type="password">
+              <input placeholder="Email" class="loginInput LI" autocomplete="off" tabindex="1" autocapitalize="off" name="username" type="email"> 
+              <input placeholder="Password" class="loginInput LI" autocomplete="off" id="login_password" tabindex="2" name="password" type="password">
               
               <a id="forgotButton" class="subText button" onClick="forgotForm(); return false;">Forgot Password?</a>
               <button disabled id="signInButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Sign in</button>
@@ -38,7 +38,8 @@
           <div id="forgot-error-div" class="text-error"></div>
           <form id="login" class="center" action="" method="post" onsubmit="doForgot(); return false;">
             <fieldset>
-              <label class="resetLabel headline2">Reset Your Password</label> <input required class="loginInput FI" placeholder="Email" tabindex="1" autocapitalize="off" name="username" type="email">
+              <label class="resetLabel headline2">Reset Your Password</label> 
+              <input required class="loginInput FI" placeholder="Email" tabindex="1" autocapitalize="off" autocomplete="off" name="username" type="email">
               <a id="cancelButton" class="subText button" onClick="loginForm(); return false;">Cancel</a>
               <button disabled id="resetButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Reset Password</button>
               <br>
