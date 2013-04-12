@@ -32,6 +32,15 @@
     
 	
 	
+				<div id="login-dialog" ng-show="show==true" ng-controller="LoginController">
+				  <form class="well form-inline" action="" ng-submit="connect()">
+				    <h3>Login</h3>
+				    <input ng-model="username" type="text" val="username" placeholder="Username">
+				    <input ng-model="password" type="password" val="password" placeholder="Password">
+					<span>{{result}}</span>
+				    <button type="submit" class="btn">Log in</button>
+				  </form>
+				</div>
 	
 	
             </div>
@@ -59,15 +68,6 @@
       <div id="push"></div>   
 	</div>
 	
-	<div id="login-dialog" ng-show="show==true" ng-controller="LoginController">
-	  <form class="well form-inline" action="" ng-submit="connect()">
-	    <h3>Login</h3>
-	    <input ng-model="username" type="text" val="username" placeholder="Username">
-	    <input ng-model="password" type="password" val="password" placeholder="Password">
-		<span>{{result}}</span>
-	    <button type="submit" class="btn">Log in</button>
-	  </form>
-	</div>
 
       <!--{{/i/foot.inc}}-->
 
@@ -98,7 +98,12 @@
 		    $scope.connect = function() {
 			  SWBrijj.login($scope.username, $scope.password, function(data) { 
 				if (data) { $scope.show = false; $scope.result=""; } else $scope.result = "Login failed";
-				$scope.$apply(); });
+				$scope.$apply();
+				var os = angular.element(document.querySelector("#demoDiv")).scope();
+				os.busy = false;
+				os.nextPage();
+				os.$apply();
+			  });
 			};
 		};
 		
@@ -106,7 +111,8 @@
 				app.directive("interested", function() {
 					return {
 						// scope: { item: '=' }
-						template: "<span>{{item.company_name}} ( < a hg_ref='http://{{item.company_domain}}' > {{item.company_domain}}</a> )</span>"
+						template: "<div><span>{{item.company_name}} ( <a hg_ref='http://{{item.company_domain}}' > {{item.company_domain}}</a> )</span>"+
+						"<p><span>{{item.name}} ( {{item.email}} )</span><small>created {{item.created}}</small></div>"
 					}
 				});
 		
@@ -119,7 +125,7 @@
 		    if ($scope.busy) return;
 		    $scope.busy = true;
 
-			SWBrijj.procm("signUps", 10, $scope.before, [ function(data) {
+			SWBrijj.procm("signUps", 30, $scope.before, [ function(data) {
 		      var items = data;
 		      for (var i = 0; i < data.length; i++) {
 		        $scope.items.push(data[i]);
