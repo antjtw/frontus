@@ -1,9 +1,0 @@
-[submodule "dojo/dojo"]
-	path = dojo/dojo
-	url = http://github.com/dojo/dojo.git
-[submodule "dojo/dojox"]
-	path = dojo/dojox
-	url = http://github.com/dojo/dojox.git
-[submodule "dojo/dijit"]
-	path = dojo/dijit
-	url = http://github.com/dojo/dijit.git

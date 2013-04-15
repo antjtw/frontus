@@ -1,6 +1,5 @@
 User-agent: *
-Disallow: /doc/
-Disallow: /dojo/
 Disallow: /email/
 Disallow: /js/
 Disallow: /script/
+Disallow: /i/
