@@ -13,7 +13,7 @@
 
      <!--{{/i/nav.inc}}-->
 
-        <div id="mainBody">
+        <div id="wrap">
           <div class="container">
             <div class="row-fluid">
 	
@@ -87,16 +87,15 @@
 		
 		jQuery("#toGoogle").click(function() {
 			var gsn = document.querySelector("input[name=worksheet]").value;
-			SWBrijj.proc("signUpsToGoogle", gsn, [
-				function(x) { document.querySelector("#googleResult").innerHTML=x;},
-				nli]
-				);
+			SWBrijj.proc("signUpsToGoogle", gsn)
+				.then(function(x) { document.querySelector("#googleResult").innerHTML=x;})
+				.except(nli);
 		});
 		
 		
 		var LoginController = function($scope) {
 		    $scope.connect = function() {
-			  SWBrijj.login($scope.username, $scope.password, function(data) { 
+			  SWBrijj.login($scope.username, $scope.password).then(function(data) { 
 				if (data) { $scope.show = false; $scope.result=""; } else $scope.result = "Login failed";
 				$scope.$apply();
 				var os = angular.element(document.querySelector("#demoDiv")).scope();
@@ -125,7 +124,7 @@
 		    if ($scope.busy) return;
 		    $scope.busy = true;
 
-			SWBrijj.procm("signUps", 30, $scope.before, [ function(data) {
+			SWBrijj.procm("signUps", 30, $scope.before).then(function(data) {
 		      var items = data;
 		      for (var i = 0; i < data.length; i++) {
 		        $scope.items.push(data[i]);
@@ -133,7 +132,7 @@
 		      $scope.before = $scope.items[$scope.items.length - 1].created;
 		      $scope.busy = false;
 			  $scope.$apply();
-		    }, nli ]  );
+		    }).except(nli);
 		  };
 		});
 		

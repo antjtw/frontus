@@ -12,7 +12,7 @@ body {
 	overflow-y: scroll;
 }
 
-#wrap {
+.wrap {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
@@ -20,6 +20,19 @@ body {
 	margin-right: auto;
 	margin-bottom: -112px;
 	margin-left: auto;
+	background-color:#FFFFFF;
+}
+
+/* includes the 50 pixels from the nav bar */
+.wrap-nav {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin-top: 0;
+  margin-right: auto;
+  margin-bottom: -162px;
+  margin-left: auto;
+  background-color:#FFFFFF;
 }
 
 /* Bootstrap overrides */
@@ -89,7 +102,7 @@ h2 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
-	color: #7f8c8d;	
+	color: #7f8c8d;
 }
 
 .subText {
@@ -122,6 +135,10 @@ h2 {
 
 .compulsoryStar {
 	color: #F00;	
+}
+
+.spacer {
+  min-height: 20px;
 }
 
 
@@ -231,11 +248,11 @@ h2 {
 
 /* Side Bar Navigation */
 
-#sidebar {
+.sidebar {
 	padding-top:20px;	
 }
 
-#sideButtons {
+.sideButtons {
 	list-style-type: none;
 	width:100%;
 	margin-left:0px; 
@@ -270,10 +287,6 @@ h2 {
 	margin-top:20px;
 }
 
-#mainBody {
-	background-color:#FFFFFF;
-}
-
 #detailsEdit {
 	border-right-width: 1px;
 	border-right-style: solid;
@@ -296,15 +309,15 @@ h2 {
 	padding-bottom:150px;	
 }
 
-#editProfileFP {
+.editProfileFP {
 	margin-top:40px;
 }
 
-#editPasswordBlock {
+.editPasswordBlock {
 	margin-top:-8px;
 }
 
-#editProfilePhoto {
+.editProfilePhoto {
 	height:250px;
 	width:250px;
 	border-top-width: thin;
@@ -318,7 +331,7 @@ h2 {
 }
 
 .formBounder {
-	width:360px;
+	width:620px;
 }
 
 .urlField {
@@ -331,8 +344,7 @@ h2 {
 	min-height:150px;
 }
 
-#push,
-#footer {
+.push {
   height: 112px;
 }
 
@@ -412,7 +424,7 @@ h2 {
 	border: 1px solid #bdc3c7;
 }
 
-#uploadButton {
+.uploadButton {
 	background-color: #3498db;
 	color:#ffffff;
 	padding-top: 10px;
@@ -422,6 +434,24 @@ h2 {
 	border: 1px solid #bdc3c7;
 }
 
+.authButton {
+  background-color: #38a344;
+  color:#ffffff;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-botton: 10px;
+  display: inline-block;
+}
+
+.authButton:hover {
+  background-color: #94a3a6;
+  color: #000000;
+}
 /* Alerts */
 
 .divInline {
@@ -481,4 +511,41 @@ h2 {
 
 .alertMessage {
 	margin-left:10px;
+}
+
+.divider {
+  border-top: solid black 2px;
+}
+
+.start-intro {
+  margin-top:10px;
+  margin-left:80px;
+  width:100px;
+  display: block;
+  float:right;
+  opacity: 0.5;
+}
+
+.todo-list {
+  opacity: 0.5;
+  display: block;
+  width: 280px;
+  border: dashed 1px grey;
+  position: fixed;
+  right: 1em;
+  top: 140px;
+  padding-top: 10px;
+  background-color: #ffe0ff;
+}
+
+.sub-todo-list {
+  opacity: 0.5;
+  display: block;
+  width: 280px;
+  border: dashed 1px grey;
+  position: fixed;
+  right: 1em;
+  bottom: 120px;
+  padding-top: 10px;
+  background-color: #e0e0ff;
 }

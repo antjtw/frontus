@@ -118,7 +118,7 @@
 			if (document.querySelector("input[name=newPassword]").value === document.querySelector("input[name=passwordconfirm]").value)
 			{
 			jQuery("#confirmPasswordAlert").addClass("hide");
-			SWBrijj.resetPassword(p,c, [didReset, didntReset]);
+			SWBrijj.resetPassword(p,c).then(didReset).except(didntReset);
 			}
 			else {
 			jQuery("#confirmPasswordAlert").removeClass("hide");
@@ -194,7 +194,7 @@
 	  var m = getParams();
 	  var c = m['code']
 	  if (c != undefined) {
-		  SWBrijj.resetFillout(c, retrievedReset);
+		  SWBrijj.resetFillout(c).then(retrievedReset);
 	  }
 	  else {
 		  document.location.href = 'u/login.html';

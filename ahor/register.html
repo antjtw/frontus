@@ -1,0 +1,10 @@
+<!-- Register Page -->
+<form ng-submit="checkRegister()">
+    Username: <input type="text" ng-model="user" placeholder="Enter your username" required>
+    <br />
+    Password: <input type="password" ng-model="pass" placeholder="Enter your password" required>
+    <br />
+    Password Again: <input type="password" ng-model="pass2" placeholder="Confirm your password" required>
+    <input class="btn-primary" type="submit" value="Register">
+    <div><p id="error2" class="text-error"></p></div>
+</form>

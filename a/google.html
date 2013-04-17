@@ -14,7 +14,7 @@
 	<script>
 
 	function authorize() {
-		SWBrijj.proc("get_google_access", function(x) {
+		SWBrijj.proc("get_google_access").then(function(x) {
 			var ru = x[1][0];
 			document.cookie="rux="+encodeURIComponent(ru)+";path=/";
 			document.location.href=ru;
@@ -22,25 +22,25 @@
 	}
 
 	function put_contacts_to_google() {
-		SWBrijj.proc("createSheetFromContacts", document.querySelector("#toSheetName").value, function(x) {
+		SWBrijj.proc("createSheetFromContacts", document.querySelector("#toSheetName").value).then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_from_google_contacts() {
-		SWBrijj.proc("put_from_google_contacts", "initial", function(x) {
+		SWBrijj.proc("put_from_google_contacts", "initial").then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_select_to_google() {
-		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
+		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect").then( function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_select_to_sheet_google() {
-		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", "Company", function(x) {
+		SWBrijj.proc("put_select_to_google", "select company,name,state,when_founded from public.company",  "testselect", "Company").then( function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}

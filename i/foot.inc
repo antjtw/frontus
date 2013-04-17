@@ -1,4 +1,4 @@
- <div id="footer" class="footerBar">
+ <div class="footerBar">
   <div class="container"> 
   	<footer> 
    	 <div class="row-fluid">
@@ -21,7 +21,3 @@
   </div>
 </div>
 
- <script src="brijj/brijj.js"></script>
- <!-- <script src="dojo/dojo/dojo.js"></script> -->
- <script type='text/javascript' src="js/jquery-1.8.3.js"></script>
- <script src="script/bootstrap.js"></script>

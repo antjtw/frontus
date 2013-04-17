@@ -14,7 +14,7 @@
 	<script>
 
 	function authorize() {
-		SWBrijj.proc("get_google_access", function(x) {
+		SWBrijj.proc("get_google_access").then(function(x) {
 			var ru = x[1][0];
 			document.cookie="rux="+encodeURIComponent(ru)+";path=/";
 			document.location.href=ru;
@@ -22,7 +22,7 @@
 	}
 
 	function download() {
-		SWBrijj.getXlsx("put_select_to_excel", 'select * from public.sxsw', function(x) {
+		SWBrijj.getXlsx("put_select_to_excel", 'select * from public.sxsw').then(function(x) {
 			document.location.href=x;
 		});
 	}

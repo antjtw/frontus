@@ -1,228 +1,25 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<base href=".." />
-<meta name="author" content="">
-<link href="css/bootstrap.css" rel="stylesheet" media="screen">
-<link href="css/bootstrap-responsive.css" rel="stylesheet">
-<link href="css/MVP.css" rel="stylesheet">
-<title>Login |ShareWave</title>
-
-</head>
-<body>
-  <div id="wrap">
-  <div class="container">
-    <div class="row-fluid">
-      <section>
-        <div id="login-form" class="span12 pagination-centered gateway">
-          <div><img class="center loginLogo" src="img/logo-144x24.png"></div>
-          <div>
-          	<div id="login-error-div" class="textalert center loginErrorBox remove"><img src="img/alert-icon.png">Sorry, we didn't recognize that email/password combination. Please try again.</div>
-          </div>
-          <form id="login" class="center" action="" method="post" onsubmit="doLogin(); return false;">
-            <fieldset>
-              <input placeholder="Email" class="loginInput LI" autocomplete="off" tabindex="1" autocapitalize="off" name="username" type="email"> 
-              <input placeholder="Password" class="loginInput LI" autocomplete="off" id="login_password" tabindex="2" name="password" type="password">
-              
-              <a id="forgotButton" class="subText button" onClick="forgotForm(); return false;">Forgot Password?</a>
-              <button disabled id="signInButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Sign in</button>
-              <br>
-            </fieldset>
-          </form>
-        </div>
-        <div id="forgot-form" style="display: none" class="span12 pagination-centered gateway">
-          <img src="img/logo-144x24.png">
-          <div id="forgot-error-div" class="text-error"></div>
-          <form id="login" class="center" action="" method="post" onsubmit="doForgot(); return false;">
-            <fieldset>
-              <label class="resetLabel headline2">Reset Your Password</label> 
-              <input required class="loginInput FI" placeholder="Email" tabindex="1" autocapitalize="off" autocomplete="off" name="username" type="email">
-              <a id="cancelButton" class="subText button" onClick="loginForm(); return false;">Cancel</a>
-              <button disabled id="resetButton" type="submit" class="button greenButton loginButton bodyText adisabled" tabindex="3">Reset Password</button>
-              <br>
-            </fieldset>
-          </form>
-        </div>
-        <div id="resetmessage" style="display: none" class="span12 pagination-centered gateway">
-          <img src="img/logo-144x24.png">
-          <div id="resetConfirm">
-            <p class="headline2">Please Check your Email</p>
-            <p class="bodyText">We've sent reset password instructions to your email address.</p>
-            <p style="margin-top:-8px;" class="bodyText">You should receive your in 10-15 minutes.</p>
-          </div>
-        </div>
-      </section>
-    </div>
+<div class="span12 pagination-centered gateway">
+  <div><img class="center loginLogo" src="img/logo-144x24.png"></div>
+  <div>
+  	<div ng-show="showError" class="textalert center loginErrorBox">
+	<img src="img/alert-icon.png"/>Sorry, we didn't recognize that email/password combination. Please try again.</div>
   </div>
-<div id="minimumGap"></div>
-<div id="push"></div>   
-     </div>
-     
-     <div id="footer" class="footerBar">
-      <div class="container"> 
-      	<footer> 
-       	 <div class="row-fluid">
-            <ul class="footerLinks menuHeaderText">
-              	<li class="button">ABOUT</li>
-                <li class="button">BLOG</li>
-                <li class="button">CONTACT</li>
-                <li class="button">TERMS</li>
-                <li class="button">PRIVACY</li>
-             </ul>
-              <div class="pull-right" id="socialMedia">
-               <a href="https://twitter.com/intent/tweet?text=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors+at&via=sharewaveteam&url=http://bit.ly/shwvtw"><img class="socialPlacement" src="img/twitter_v2.png" alt="Twitter Icon"></a>
-               <img class="socialPlacement" src="img/linkedin_v2.png" alt="LinkedIn Icon" onClick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+Feed+Your+Investors&source=Sharewave&summary=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors','mywindow','width=500,height=400')">
-              </div>
-            </div>
-         <div class="row-fluid" id="copyrightBar">
-         	<span class="menuHeaderText copyright">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
-         </div>
-        </footer>
-      </div>
-    </div>
 
+  <form id="login" class="center" ng-submit="doLogin()">
+    <fieldset>
+      <input placeholder="Email" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username"
+             type="email" ng-model="username"
+             data-step='1' data-intro='The username (which is an email address) goes here'
+        />
+      <input placeholder="Password" class="loginInput" autocomplete="off" tabindex="2" name="password"
+             type="password" ng-model="password"
+             data-step='2' data-intro='The password goes here'
+        />
+      
+	  <a id="forgotButton" class="subText button" href="u/index.html#/forgot"><i class="icon-question-sign"></i> Forgot Password?</a>
+	  <button type="submit" ng-disabled="forgotLogin()" ng-click="doLogin()" ng-class="loginClass()" tabindex="3">Sign in</button>
+      <br>
+    </fieldset>
+  </form>
 
-    
-    
-  </div>
-  <script src="script/jquery.js"></script>
-  <script src="script/bootstrap.js"></script>
-  <script src="brijj/brijj.js"></script>
-  
-  <script>
-  
-  var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-	
-	function isEmail (s) {
-	   return String(s).search (isEmail_re) != -1;
-	}
-	
-	
-  jQuery(".LI").keyup(function() {
-	var email = document.querySelector("#login-form input[name=username]").value;
-	var emailTest = isEmail(email);
-	var password = document.querySelector("#login-form input[name=password]").value;
-	if (email.length > 0 && password.length > 0 && emailTest === true) {
-		jQuery("#signInButton").removeAttr('disabled');
-		jQuery("#signInButton").removeClass("adisabled"); 
-	}
-	else {
-		if ($("#signInButton").is(':disabled')){	
-		}
-		else {
-			$("#signInButton").attr('disabled', 'disabled');
-			jQuery("#signInButton").addClass("adisabled"); 
-		}
-	}
-	});
-	
-	jQuery(".FI").keyup(function() {
-	var email = document.querySelector("#forgot-form input[name=username]").value;
-	var emailTest = isEmail(email);
-	if (email.length > 0 && emailTest === true) {
-		jQuery("#resetButton").removeAttr('disabled');
-		jQuery("#resetButton").removeClass("adisabled"); 
-	}
-	else {
-		if (jQuery("#resetButton").is(':disabled')){	
-		}
-		else {
-			jQuery("#resetButton").attr('disabled', 'disabled');
-			jQuery("#resetButton").addClass("adisabled"); 
-		}
-	}
-	});
-  
-  </script>
-  
-  <script>
-
-  function doLogin() {
-	var u = document.querySelector("#login-form input[name=username]").value;
-    var p = document.querySelector("#login-form input[name=password]").value;
-    SWBrijj.login(u, p, Login);
-  }
-
-  function Login(x) {
-    if (x) {
-      document.location.href = 'v/edit_profileMVP.html';
-      return;
-    }
-    jQuery("#login-error-div").removeClass("remove");
-	document.querySelector("#login-form input[name=username]").value = "";
-    document.querySelector("#login-form input[name=password]").value = "";
-  }
-  
-
-  function displayRadio(value) {
-    var ids = [ '#login-form', '#forgot-form', '#resetmessage' ];
-    for ( var i = 0; i < ids.length; i++) {
-      document.querySelector(ids[i]).style.display = value == i ? 'block'
-          : 'none';
-    }
-  }
-
-  function loginForm() {
-	jQuery("#login-error-div").addClass("remove");
-	document.querySelector("#login-form input[name=username]").value = "";
-    document.querySelector("#login-form input[name=password]").value = "";
-    /* This hack is a workaround for the Chrome handling of required attributes */
-    var qs = document.querySelectorAll("#login-form input[requiredx]");
-    for ( var i = 0; i < qs.length; i++) {
-      qs[i].removeAttribute("requiredx");
-      qs[i].setAttribute("required", false);
-    }
-    displayRadio(0);
-  }
-
-  function forgotForm() {
-    /* This hack is a workaround for the Chrome handling of required attributes */
-    var qs = document.querySelectorAll("#login-form input[required]");
-    for ( var i = 0; i < qs.length; i++) {
-      qs[i].removeAttribute("required");
-      qs[i].setAttribute("requiredx", false);
-    }
-    displayRadio(1);
-  }
-
-  function signupForm() {
-    displayRadio(2);
-    buttonRadio(1);
-  }
-  
-  function registerForm() {
-    displayRadio(3);
-    buttonRadio(1);
-  }
-
-  function doForgot() {
-    var u = document.querySelector("#forgot-form input[name=username]").value;
-	loginForm()
-	var fed = document.querySelector("#login-error-div");
-	fed.innerHTML = "An email to reset your password has been sent";
-	displayRadio(2);
-    SWBrijj.forgot(u, [didForget, errorForget]);
-  }
-
-  function didForget(x) {
-  }
-  
-  function errorForget(x) {
-  }
-
-  function checkPassword() {
-
-    if (document.registerform.password.value != document.registerform.confirmpassword.value) {
-      document.registerform.confirmpassword
-          .setCustomValidity('Passwords must match.');
-    } else {
-      document.registerform.confirmpassword.setCustomValidity('');
-	  
-    }
-  }
-</script>
-</body>
-</html>
+</div>

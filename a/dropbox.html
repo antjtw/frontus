@@ -16,37 +16,37 @@
 	<script>
 
 	function authorize() {
-		SWBrijj.proc("get_dropbox_access", function(x) {
+		SWBrijj.proc("get_dropbox_access").then(function(x) {
 			document.location.href=x[1][0];
 		});
 	}
 	
 	function put_contacts_to_dropbox() {
-		SWBrijj.proc("put_contacts_to_dropbox", "initial", function(x) {
+		SWBrijj.proc("put_contacts_to_dropbox", "initial").then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_from_dropbox_contacts() {
-		SWBrijj.proc("put_from_dropbox_contacts", "initial.xlsx", function(x) {
+		SWBrijj.proc("put_from_dropbox_contacts", "initial.xlsx").then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_select_to_dropbox() {
-		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect", function(x) {
+		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect").then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_select_to_sheet_dropbox() {
-		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect", "Company", function(x) {
+		SWBrijj.proc("put_select_to_dropbox", "select company,name,state,when_founded from public.company",  "testselect", "Company").then( function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}
 
 	function put_dropbox_to_db() {
-		SWBrijj.proc("put_dropbox_to_db", function(x) {
+		SWBrijj.proc("put_dropbox_to_db").then(function(x) {
 			document.querySelector("#dbresponse").innerHTML=x;
 		});
 	}

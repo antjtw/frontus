@@ -57,7 +57,7 @@
 	greeting.innerHTML = "";
 	var username = document.querySelector("#betaLogin input[name=username]").value;
 	var password = document.querySelector("#betaLogin input[name=password]").value;
-	SWBrijj.betaLogin(username, password, didntLogin);
+	SWBrijj.betaLogin(username, password).then(didntLogin);
   }
 
   function didntLogin(x) {
@@ -138,7 +138,7 @@
 	if (Domain.length == 0) {
 		Domain = "blank"
 	}
-    SWBrijj.companyPreregister(Domain, email, cName, pName, [didPreregister, failedPreregister]);
+    SWBrijj.companyPreregister(Domain, email, cName, pName).then(didPreregister).except(failedPreregister);
   }
   
   function didPreregister(x) {

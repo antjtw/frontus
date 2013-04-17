@@ -14,7 +14,7 @@
 	<script>
 
 	function doList() {
-		SWBrijj.proc("get_google_list", function(x) {
+		SWBrijj.proc("get_google_list").then(function(x) {
 			var tbl = "<table border=2>";
 			for(var i = 1;i<x.length; i++) {
 				tbl += "<tr>";

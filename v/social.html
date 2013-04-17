@@ -1,0 +1,80 @@
+<div class='sub-todo-list'>
+  <ul>
+    <li>The redirect back from oauthorization needs to be more aware (handling denied and tunnels)</li>
+    <li>LinkedIn authentication is not yet implemented</li>
+    <li>Facebook authentication is not yet implemented</li>
+    <li>Google authentication is not yet implemented</li>
+    <li>The Twitter API needs to do something</li>
+  </ul>
+</div>
+<div>
+    <form>
+      <fieldset>
+        <div class="formBounder">
+          <div class="row-fluid">
+            <label class="bodyText">Email <span class="compulsoryStar">*</span></label>
+            <input disabled style="width:90%;" type="text" name="email" ng-model="email">
+          </div>
+          <div class="row-fluid divider"
+               data-step='2' data-intro='Twitter authenticates, but does not do anything with the oauth token, yet'
+            >
+            <label class="bodyText">Twitter</label>
+            <span class="bodyText urlField">http://twitter.com/</span>
+            <input type="text" name="twitter" maxlength="20" ng-model="twitter"/>
+            <div class="authButton" ng-click="authTwitter()">Authenticate Twitter</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="row-fluid divider"
+               data-step='3' data-intro='LinkedIn authentication is not yet implemented'
+            >
+            <div class="authButton" ng-click="authLinkedin()">Authenticate LinkedIn</div>
+          </div>
+          <div class="row-fluid divider">
+            <div class="authButton" ng-click="authGoogle()">Authenticate Google</div>
+          </div>
+
+          <div class="row-fluid divider"
+               data-step='1' data-intro='Just as a demo, the dropbox section shows a list of the files currently in the sharewave dropbox sandbox'
+            >
+            <div class="authButton" ng-click="authDropbox()">Authenticate Dropbox</div>
+            <ul><li ng-repeat="df in dropboxFiles">{{df.dropbox_list}}</li></ul>
+          </div>
+          <div class="row-fluid divider">
+            <label class="bodyText">Facebook</label>
+            <input type="text" name="facebook" ng-model="facebook"/>
+            <div class="authButton" ng-click="authFaceboox()">Authenticate Facebook</div>
+          </div>
+        </div>
+        <div class="row-fluid divider"
+          data-step='4' data-intro='This is a hold-over from the previous implementation.  Should probably be removed'
+          >
+          <label class="bodyText">Website</label>
+          <input style="width:90%;" type="url" name="website" ng-model="website"/>
+        </div>
+      </fieldset>
+      <fieldset>
+        <div class="formBounder">
+          <legend class="headline2">Investment Group</legend>
+          <div id="companyCheck" class="row-fluid"
+               data-step='5' data-intro='This is also a hold-over from the previous implementation.  Not sure if it should be kept.'
+            >
+            <input id="showCompany" type="checkbox" name="investment_group" ng-model="investment_group"/>
+            <span class="bodyText">I'm part of an investment group</span>
+          </div>
+          <br>
+
+          <div id="companyField" class="row-fluid profileLines hiddenField doubleHide">
+            <label class="bodyText">Company:</label>
+            <input type="text" style="width:90%;" name="company" ng-model="company"/>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="row-fluid ">
+        <div style="margin-top:30px;"><a class="saveButton button" ng-click="socialSave()">Save</a></div>
+        <div class="pull-right">Delete Account</div>
+      </div>
+      </fieldset>
+    </form>
+</div>
+	

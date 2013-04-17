@@ -1,0 +1,12 @@
+<!-- Login Page or index. First page you see in the login app -->
+<h2>Welcome to the angularjs Login Test!</h2>
+<form ng-submit="checkLogin()">
+    Username: <input type="text" ng-model="user" placeholder="Enter your username" required>
+    <br />
+    Password: <input type="password" ng-model="pass" placeholder="Enter your password" required>
+    <br />
+    <input class="btn-primary" type="submit" value="Login">
+</form>
+<div><p id="error" class="text-error"></p></div>
+<br />
+<a href="#/register"><i class="icon-pencil"></i> Register Here</a>

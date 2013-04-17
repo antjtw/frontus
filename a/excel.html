@@ -14,19 +14,19 @@
 	<script>
 
 	function download() {
-		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user', function(x) {
+		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user').then(function(x) {
 			document.location.href=x;
 		});
 	}
 
 	function download2() {
-		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user', 'Contacts', function(x) {
+		SWBrijj.getXlsx("put_select_to_excel", 'select email,phone,city from public.user', 'Contacts').then(function(x) {
 			document.location.href=x;
 		});
 	}
 
 	function download3() {
-		SWBrijj.getXlsx("put_select_to_excel", 'select company,name,state,when_founded from public.company', 'Company', function(x) {
+		SWBrijj.getXlsx("put_select_to_excel", 'select company,name,state,when_founded from public.company', 'Company').then(function(x) {
 			document.location.href=x;
 		});
 	}
