@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html data-ng-app="ReportsApp">
+<head>
+  <!--{{/i/head.inc}}-->
+  <title>Sharewave Reporting</title>
+  <script src="/lib/angular/ng-infinite-scroll.js"></script>
+  <script src="ReportsApp.js" type="text/javascript"></script>
+</head>
+<body>
+<!--{{/i/nav.inc}}-->
+<button class="start-intro" onclick="introJs().start()">Start</button>
+<div class='todo-list'>
+  <ul>
+  </ul>
+</div>
+
+<div class="wrap-nav" ng-controller="ReportsCtrl">
+  <div class="container">
+    <div class="row-fluid">
+      <div class="sidebar span2">
+        <ul class="sideButtons">
+          <li ng-class="{navTabs: true, bodyText: true, selected:tab('/signups')}" ng:click="toSignups()">Signups</li>
+          <li ng-class="{navTabs: true, bodyText: true, bottomTab: true, selected:tab('/storage')}" ng:click="toStorage()">Storage</li>
+        </ul>
+      </div>
+      <div class="span10 coreEdit" data-ng-view=""></div>
+    </div>
+  </div>
+</div>
+
+<!--{{/i/foot.inc}}-->
+</body>
+</html>

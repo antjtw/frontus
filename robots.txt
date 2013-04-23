@@ -1,5 +1,5 @@
 User-agent: *
-Disallow: /email/
-Disallow: /js/
-Disallow: /script/
+Disallow: /lib/
+Disallow: /cmn/
 Disallow: /i/
+Disallow: /email/
