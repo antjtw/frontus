@@ -2,19 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f2c5e218-8fef-4d37-a65e-ab380c7837b5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/v/social.html" afterPath="$PROJECT_DIR$/v/social.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="frontus.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366673940325" ignored="false" />
+    <file path="/Dummy.txt" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366691421509" ignored="false" />
     <file path="/a.coffee" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366426661253" ignored="false" />
     <file path="/ProfileApp.js" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366525587182" ignored="false" />
     <file path="/fragment.js" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366429399693" ignored="false" />
     <file path="/a.css" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366488357373" ignored="false" />
     <file path="/a.html" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366488419115" ignored="false" />
-    <file path="/social.html" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366678721627" ignored="false" />
+    <file path="/social.html" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366691497302" ignored="false" />
     <file path="/MVP.css" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366652407868" ignored="false" />
     <file path="/a.dummy" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366652335579" ignored="false" />
     <file path="/a.xml" changelist="f2c5e218-8fef-4d37-a65e-ab380c7837b5" time="1366488348439" ignored="false" />
@@ -49,7 +47,7 @@
       <file leaf-file-name="social.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/v/social.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="96" selection-start="3387" selection-end="3387" vertical-scroll-proportion="0.8737374">
+            <state line="27" column="107" selection-start="1377" selection-end="1377" vertical-scroll-proportion="0.27093595">
               <folding>
                 <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#fieldset#0;n#form#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#div#1;n#fieldset#0;n#form#0;n#div#1;n#!!top" expanded="true" />
@@ -59,10 +57,17 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="brijj.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="http://localhost/frontus/brijj/brijj.js">
+          <provider selected="true" editor-type-id="httpFileEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="photo.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/v/photo.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="269" vertical-scroll-proportion="-0.0">
+            <state line="0" column="0" selection-start="0" selection-end="269" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -71,7 +76,7 @@
       <file leaf-file-name="password.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/v/password.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="114" vertical-scroll-proportion="-0.0">
+            <state line="0" column="0" selection-start="0" selection-end="114" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -80,7 +85,7 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/v/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="17" selection-start="918" selection-end="918" vertical-scroll-proportion="-26.875">
+            <state line="43" column="17" selection-start="918" selection-end="918" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -106,7 +111,6 @@
     <option name="changedFiles">
       <list>
         <option value="localhost/frontus/v/ProfileApp.js" />
-        <option value="localhost/frontus/brijj/brijj.js" />
         <option value="$PROJECT_DIR$/a/dropbox.html" />
         <option value="$PROJECT_DIR$/v/ProfileApp.js" />
         <option value="$PROJECT_DIR$/i/foot.inc" />
@@ -120,6 +124,7 @@
         <option value="$PROJECT_DIR$/u/index.html" />
         <option value="$PROJECT_DIR$/css/MVP.css" />
         <option value="$PROJECT_DIR$/v/index.html" />
+        <option value="localhost/frontus/brijj/brijj.js" />
         <option value="$PROJECT_DIR$/v/social.html" />
       </list>
     </option>
@@ -127,8 +132,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="150" />
     <option name="y" value="22" />
-    <option name="width" value="1432" />
-    <option name="height" value="1348" />
+    <option name="width" value="1650" />
+    <option name="height" value="1349" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -178,6 +183,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -296,19 +302,18 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.sourceCode.HTML" />
-    <property name="restartRequiresConfirmation" value="true" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PublishConfig" serverName="Local" serverId="891888b0-a8cf-420c-9a1a-22cd0438b828">
     <servers>
@@ -409,14 +414,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="150" y="22" width="1432" height="1348" extended-state="0" />
+    <frame x="150" y="22" width="1650" height="1349" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294036" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3449255" sideWeight="0.5357724" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46422765" sideWeight="0.99934727" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29870927" sideWeight="0.5369618" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46303818" sideWeight="0.99934727" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32903227" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -524,11 +529,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/intro.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="445" column="10" selection-start="14832" selection-end="14832" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/i/head.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="5" selection-start="880" selection-end="880" vertical-scroll-proportion="0.0" />
@@ -602,14 +602,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/v/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="17" selection-start="918" selection-end="918" vertical-scroll-proportion="-26.875">
+        <state line="43" column="17" selection-start="918" selection-end="918" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="http://localhost/frontus/brijj/brijj.js">
+      <provider selected="true" editor-type-id="httpFileEditor">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/v/social.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="96" selection-start="3387" selection-end="3387" vertical-scroll-proportion="0.8737374">
+        <state line="27" column="107" selection-start="1377" selection-end="1377" vertical-scroll-proportion="0.27093595">
           <folding>
             <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#fieldset#0;n#form#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#div#1;n#fieldset#0;n#form#0;n#div#1;n#!!top" expanded="true" />
