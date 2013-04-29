@@ -1,9 +1,9 @@
 <div class="container">
 
-	     <h1><a href="v/docLibrary.html#/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docName}}</h1>
+	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docName}}</h1>
          
          <ul class="subText navPills cf">
-         	<a href="v/docLibrary.html#/documents/{{docName}}/view"><li class="button">View</li></a>
+         	<a href="/company/documents/{{docName}}/view"><li class="button">View</li></a>
          	<li class="selectedPill button">Status</li>
          </ul>
         
@@ -19,7 +19,7 @@
                         <th class="button"><span class="title sortedDown">Name</span></th><th colspan="2" class="button"><span class="title">Status</span></th>
                       </tr>
                       <tr ng-repeat="doc in documents  | filter:query  | orderBy:docOrder">
-                        <td><a href="v/docLibrary.html#/documents/{{doc.docname}}/view">{{doc.docname}}</a></td><td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td><td class="button"><a ng-click="open(doc)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-trash  icon-large"></i></span></a></td>
+                        <td><a href="/company/documents/{{doc.docname}}/view">{{doc.docname}}</a></td><td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td><td class="button"><a ng-click="open(doc)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-trash  icon-large"></i></span></a></td>
                       </tr>
                     </table>      
                  </section>
