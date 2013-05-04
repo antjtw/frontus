@@ -20,7 +20,6 @@ body {
 	margin-right: auto;
 	margin-bottom: -112px;
 	margin-left: auto;
-	background-color:#FFFFFF;
 }
 
 /* includes the 50 pixels from the nav bar */
@@ -80,7 +79,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 [class^="icon-"], [class*=" icon-"]{
     background:none;
-  }
+}
 
 /* Document Viewer Styling */
 
@@ -476,7 +475,8 @@ h2 {
 /* Document Viewer */
 
 .navPills {
-	margin: 20px 0 10px 0;
+	margin: 20px 0 20px 0;
+	height: 24px;
 }
 
 .navPills li {
@@ -501,6 +501,7 @@ h2 {
 
 .pageTurn {
 	margin: 20px 0 10px 0;
+	height: 24px;
 }
 
 .pageTurn li {
@@ -511,6 +512,18 @@ h2 {
 	width: 65px;
 	height: 24px;
 	text-align: center;
+}
+
+.docPanel {
+	background-color: #FFFFFF;
+	width: 1024px;
+	height: 1000px;
+	overflow: auto;
+}
+
+.signature {
+	width: 60px;
+	height: 30px;
 }
 
 /* Document Status */
@@ -527,7 +540,7 @@ h2 {
 }
 
 /* Footer */
-#minimumGap {
+.minimumGap {
 	min-height:150px;
 }
 
@@ -661,10 +674,6 @@ h2 {
 
 /* Modal CSS */
 
-.deleteConfirm {
-	width: 400px;
-}
-
 .modalHeader {
 	display: block;
 	text-align: center;
@@ -694,6 +703,64 @@ h2 {
 
 .modalButtons button {
 	padding: 0 !important;
+}
+
+/* Modal Specialized */
+
+.deleteConfirm {
+	width: 400px;
+}
+
+.shareModal {
+	margin-left: -263px;
+	width: 527px;
+	height:423px;
+}
+
+.shareModal .modalText {
+	margin-bottom: 20px;
+}
+
+/* Dropdown */
+
+.dropdown-toggle {
+    display: block;
+    margin: 0;
+    padding: 9px 12px 8px 12px;
+    background-color: #0088cc;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: #0088cc;
+  color: white;
+  top: 100%;
+  left: -143px;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 177px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+}
+
+.dropdown-menu li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 20px;
+  color:white;
+  white-space: nowrap;
+}
+
+.dropdown .caret {
+  border-top: 4px solid white;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
 }
 
 /* Alerts */

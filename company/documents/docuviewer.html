@@ -1,24 +1,78 @@
-<div class="container">
+<div class="container" ng-controller="ModalShareCtrl">
+		
+            <div modal="shouldBeOpen" close="close()" options="opts">
+                <div class="modalHeader">
+                    <p class="subText">Share Document</p>
+                </div>
+               	
+                <div class="modalText">
+                <form>
+                    <p>Add People</p>
+                    <input ng_model="sendeeEmail" type="email">
+                    <p>Message</p>
+                    <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+                </div>
+                </form>
+                <div class="modalButtons">
+                    <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail)">Send</button>
+                </div>
+            </div>
 
-	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docName}}</h1>
+	     <h1>
+         <a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{documents.docname}}
+         </h1>
+		<div style="float:right">
+             <a class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</a>
+             <div style="float:right;" class="dropdown clearfix" ng-class="{open: open}">
+                <a class="dropdown-toggle" href="#" ng-click="open=!open"><span class="caret"></span></a>
+                <ul class="dropdown-menu subText" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">Print Document</a></li>
+                    <li><a tabindex="-1" href="#">Download Document</a></li>
+                </ul>
+            </div>
+        </div>
          
          <ul class="subText navPills cf">
          	<li class="selectedPill button">View</li>
-         	<a href="v/docLibrary.html#/documents/{{docName}}/status"><li class="button">Status</li></a>
+         	<a href="/company/documents/status?doc={{documents.doc_id}}"><li class="button">Status</li></a>
          </ul>
          
          <ul class="subText pageTurn cf">
-         	<li class="button">Previous</li>
-            <li class="button">Next</li>
-         </ul>
-         
-         <ul class="subText pageTurn cf">
-         	<li class="button" ng-click="zoomOut()">Zoom Out</li>
-            <li class="button" ng-click="zoomIn()">Zoom In</li>
+         	<li class="button" ng-click="previousPage(currentPage.pageNum)">Previous</li>
+            <li><input ng-model="currentPage.pageNum" ng-change="jumpPage(currentPage.pageNum)" style="width:20px;"></li>
+            <li class="button" ng-click="nextPage(currentPage.pageNum)">Next</li>
          </ul>
 	     
-	     <div draggable>Drag me!</div>
+	     <div class="docPanel">
+         	<img ng-src="{{currentPage.src}}"></img>
+         </div>
           
 </div>
+<script>
+		var ModalShareCtrl = function ($scope) {
+		
+		  $scope.modalUp = function () {
+			$scope.shouldBeOpen = true;
+		  };
+		
+		  $scope.close = function () {
+			$scope.closeMsg = 'I was closed at: ' + new Date();
+			$scope.shouldBeOpen = false;
+		  };
+		
+		  $scope.opts = {
+			backdropFade: true,
+			dialogFade:true,
+    		dialogClass: 'modal shareModal'
+		  };
+		
+		};
+		
+			
+				
+		function failed() {
+				alert("failed")
+			}
+ </script>
 
          

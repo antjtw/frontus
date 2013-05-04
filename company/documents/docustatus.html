@@ -1,9 +1,9 @@
 <div class="container">
 
-	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docName}}</h1>
+	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{document1.docname}}</h1>
          
          <ul class="subText navPills cf">
-         	<a href="/company/documents/{{docName}}/view"><li class="button">View</li></a>
+         	<a href="/company/documents/view?doc={{document1.doc_id}}"><li class="button">View</li></a>
          	<li class="selectedPill button">Status</li>
          </ul>
         
@@ -17,9 +17,10 @@
                  <table class="tableView bodyText">
                       <tr class="subText">
                         <th class="button"><span class="title sortedDown">Name</span></th><th colspan="2" class="button"><span class="title">Status</span></th>
-                      </tr>
-                      <tr ng-repeat="doc in documents  | filter:query  | orderBy:docOrder">
-                        <td><a href="/company/documents/{{doc.docname}}/view">{{doc.docname}}</a></td><td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td><td class="button"><a ng-click="open(doc)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-trash  icon-large"></i></span></a></td>
+                        <tr ng-repeat="person in userStatus">
+                        <td>{{person.sent_to}}</td>
+               			<td>{{person.event}}</td>
+                        </tr>
                       </tr>
                     </table>      
                  </section>
@@ -34,13 +35,13 @@
                 <li>Last Resent:</li>
                 <li>
                     <ul>
-                        <li>{{document.last_updated | date:"short"}}</li>
+                        <li>{{document1.last_updated | date:"short"}}</li>
                         <li>Last Edited</li>
                     </ul>
                 </li>
                 <li>
                     <ul>
-                        <li>{{document.last_updated | date:"short"}}</li>
+                        <li>{{document1.last_updated | date:"short"}}</li>
                         <li>Deadline</li>
                     </ul>
                 </li>

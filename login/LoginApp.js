@@ -26,7 +26,10 @@ function LoginCtrl($scope, $location){
     $scope.showError = false;
     $scope.doLogin = function() {
       SWBrijj.login($scope.username, $scope.password).then(function(x) { 
-         if(x) $location.path("home");
+         if(x) {
+			document.location.href = x;
+			console.log("redirecting to: "+x);
+		}
          else $scope.showError = true;
          $scope.$apply();
       });

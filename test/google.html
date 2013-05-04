@@ -1,0 +1,36 @@
+<div class='sub-todo-list'>
+  <ul>
+    <li>The redirect back from oauthorization needs to be more aware (handling denied)</li>
+	<li>The redirect back from oauthorization should return to this page</li>
+	<li>Need to check the expiration time of access tokens</li>
+	<li>Need to make refresh tokens work to refresh tokens</li>
+	<li>Check for google authorization on page load</li>
+  </ul>
+</div>
+<div>
+    <form>
+      <fieldset>
+          <div class="row-fluid divider">
+            <div class="authButton" ng-click="authGoogle()"
+				data-step='1' data-intro='Start by authenticating with Google'
+			>Authenticate Google</div>
+          </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="formBounder">
+          <legend class="List of Google Drive files">Investment Group</legend>
+          <div class="row-fluid"
+               data-step='2' data-intro='Mime type of Google files to retrieve'
+            >
+            <label class="bodyText">Mime Type</label>
+			<input type="text" name="mime-type" ng-model="mimeType"/>
+          </div>
+		  <div class="button blueButton" ng-click="googleList()">Get List</div>
+          <div ng-repeat='gfile in gfiles'>
+		   <span ng-click='import(gfile.url)'>{{gfile.name}}</a> <small>last modified {{gfile.updated}}</small>
+		  </div>
+      </fieldset>
+    </form>
+</div>
+	

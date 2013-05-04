@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html data-ng-app="TestApp">
+  <head>
+    <!--{{/i/head.inc}}-->
+    <title>Test Scaffolding | ShareWave</title>
+    <script src="TestApp.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <!--{{/i/nav.inc}}-->
+    <button class="start-intro" onclick="introJs().start()">Start</button>
+    <div class='todo-list'>
+      <ul>
+      </ul>
+    </div>
+
+    <div class="wrap-nav" ng-controller="MainTestController">
+      <div class="container">
+        <div class="row-fluid">
+          <div class="sidebar span2">
+            <ul class="sideButtons">
+              <li ng-class="{navTabs: true, bodyText: true, selected:tab('/google')}" ng:click="toGoogle()">Google Integration</li>
+              <li ng-class="{navTabs: true, bodyText: true, selected:tab('/dropbox')}" ng:click="toDropbox()">Dropbox Integration</li>
+              <li ng-class="{navTabs: true, bodyText: true, selected:tab('/linkedin')}" ng:click="toLinkedin()">LinkedIn Integration</li>
+              <li ng-class="{navTabs: true, bodyText: true, selected:tab('/twitter')}" ng:click="toTwitter()">Twitter Integration</li>
+              <li ng-class="{navTabs: true, bodyText: true, bottomTab: true, selected:tab('/other')}" ng:click="toOther()">Other</li>
+            </ul>
+          </div>
+        <div class="span10 coreEdit" data-ng-view=""></div>
+        </div>
+      </div>
+    </div>
+
+    <!--{{/i/foot.inc}}-->
+  </body>
+</html>
