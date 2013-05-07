@@ -131,14 +131,64 @@ function documentStatusController($scope, $routeParams) {
   
   SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {
 	$scope.document1 = data[0];
+	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + "."
 	console.log($scope.document1);
-	$scope.$apply();
+	SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(data) {
+		$scope.activity = data;
+		$scope.activity.push({activity: "created", icon: "icon-star-empty", whendone: $scope.document1.last_updated});
+		for (var i = 0; i < $scope.activity.length; i++) {
+		if ($scope.activity[i].activity == "shared") {
+			$scope.activity[i].activity = "shared with"
+			$scope.activity[i].icon = "icon-edit"
+		}
+		else if ($scope.activity[i].activity == "viewed") {
+			$scope.activity[i].activity = "viewed by"
+			$scope.activity[i].icon = "icon-eye-open"
+		}
+		}
+		$scope.$apply();
+		});
 	});
 	
   SWBrijj.procm("document.document_status", parseInt(docId)).then(function(data) {
 	$scope.userStatus = data;
+	for (var i = 0; i < $scope.userStatus.length; i++) {
+		$scope.userStatus[i].shown = false
+	}
 	$scope.$apply();
 	});
+	
+	
+	$scope.activityOrder = function(card) {
+	   if (card.activity == "created") {
+		   return 0
+	   }
+	   else {
+	   		return -card.whendone
+	   }
+	};
+	
+	$scope.share = function(message, email) {
+		 SWBrijj.procm("document.share_document", parseInt(docId), email, message).then(function(data) {
+				console.log(data);
+			});
+	};
+	
+	$scope.opendetails = function(selected) {
+		 $scope.userStatus.forEach(function(name) {		  
+			if (selected == name.sent_to)
+				if (name.shown == true) {
+					name.shown = false;
+				}
+				else {
+					SWBrijj.procm("document.get_I_docstatus", name.sent_to).then(function(data) {
+				name.lastlogin = data[0].loggedin;
+				name.shown = true;
+				$scope.$apply();
+			});
+				}
+			});
+	};
 }
 
 /* Services */

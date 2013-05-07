@@ -1,11 +1,41 @@
-<div class="container">
+<div class="container" ng-controller="ModalShareCtrl">
+
+		<div modal="shouldBeOpen" close="close()" options="opts">
+                <div class="modalHeader">
+                    <p class="subText">Share Document</p>
+                </div>
+               	
+                <div class="modalText">
+                <form>
+                    <p>Add People</p>
+                    <input ng_model="sendeeEmail" type="email">
+                    <p>Message</p>
+                    <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+                </div>
+                </form>
+                <div class="modalButtons">
+                    <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail)">Send</button>
+                </div>
+            </div>
 
 	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{document1.docname}}</h1>
+         
+         <div style="float:right">
+             <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</button>
+             <div style="float:right;" class="dropdown clearfix" ng-class="{open: open}">
+                <a class="dropdown-toggle" href="#" ng-click="open=!open"><span class="caret"></span></a>
+                <ul class="dropdown-menu subText" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">Print Document</a></li>
+                    <li><a tabindex="-1" href="#">Download Document</a></li>
+                </ul>
+            </div>
+        </div>
          
          <ul class="subText navPills cf">
          	<a href="/company/documents/view?doc={{document1.doc_id}}"><li class="button">View</li></a>
          	<li class="selectedPill button">Status</li>
          </ul>
+         
         
          <div class="row-fluid">
          
@@ -17,11 +47,17 @@
                  <table class="tableView bodyText">
                       <tr class="subText">
                         <th class="button"><span class="title sortedDown">Name</span></th><th colspan="2" class="button"><span class="title">Status</span></th>
-                        <tr ng-repeat="person in userStatus">
-                        <td>{{person.sent_to}}</td>
-               			<td>{{person.event}}</td>
-                        </tr>
                       </tr>
+                      	<tbody ng-repeat="person in userStatus">
+                        <tr>
+                        <td><img src=""><p>{{person.name}}</p><p>{{person.sent_to}}</p></td>
+               			<td>{{person.event}}</td>
+                        <td class="button" ng-click="(opendetails(person.sent_to))"><i class="icon-plus"></i></td>
+                        </tr>
+                        <tr ng-Show="person.shown">
+                        <td rowspan="3">Last login: {{person.lastlogin | date:'shortTime'}}</td>
+                        </tr>
+                        </tbody>
                     </table>      
                  </section>
              </div>
@@ -51,7 +87,20 @@
              <section class="documentInfo statusBlock">
              <div>
              <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
-             </div>     
+             </div> 
+             <div class="activityBlock">
+             <table>
+             <tr ng-repeat="active in activity | orderBy:activityOrder">
+             	<td><i class="{{active.icon}} icon"></i></td>
+             	<td>
+                	<table>
+                		<tr><td>{{active.activity}} <ng-pluralize count="active.count" when="{'0': '', '1': '1 person', 'other': '{{active.count}} people'}"></ng-pluralize></td></tr>
+                        <tr><td>{{active.whendone | date:"MMMM d, y"}}</td></tr>
+                    </table>
+                </td>
+             </tr>
+             </table> 
+             </div>   
              </section>
          </div>
           

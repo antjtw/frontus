@@ -1,33 +1,42 @@
 <!DOCTYPE html>
-<html data-ng-app="ReportsApp">
+<html ng-app='ReportsApp'>
 <head>
   <!--{{/i/head.inc}}-->
-  <title>Sharewave Reporting</title>
-  <script src="/lib/angular/ng-infinite-scroll.js"></script>
+  <title>Sharewave Reporting!!</title>
   <script src="ReportsApp.js" type="text/javascript"></script>
 </head>
 <body>
-<!--{{/i/nav.inc}}-->
-<button class="start-intro" onclick="introJs().start()">Start</button>
-<div class='todo-list'>
-  <ul>
-  </ul>
-</div>
-
-<div class="wrap-nav" ng-controller="ReportsCtrl">
-  <div class="container">
-    <div class="row-fluid">
-      <div class="sidebar span2">
-        <ul class="sideButtons">
-          <li ng-class="{navTabs: true, bodyText: true, selected:tab('/signups')}" ng:click="toSignups()">Signups</li>
-          <li ng-class="{navTabs: true, bodyText: true, bottomTab: true, selected:tab('/storage')}" ng:click="toStorage()">Storage</li>
-        </ul>
+	<!--{{/i/nav.inc}}-->
+	<div class="container">
+		<div class="row-fluid">
+			<div ng-controller="ContactCtrl">
+				<div ng-repeat='item in items'>
+					<h1>{{item.name}}, you're looking awesome today!</h1>
+				</div>
+			</div>
+		 </div>  
+		<div class="row-fluid">
+			<div ng-controller="SignupCntCtl">
+				<div class="span4">
+					<strong>Signups Today</strong>
+					<h2>{{signupcnt_today}}</h2>
+				</div>
+				<div class="span4">
+					<strong>Signups Yesterday</strong>
+					<h2>{{signupcnt_yesterday}}</h2>
+				</div>
+				<div class="span4">
+					<strong>Signups All-Time</strong>
+					<h2>{{signupcnt_all}}</h2>
+				</div>
+				<br><br><br><br><br>
+				<button class="button greenButton" ng-click="downloadExcel()">Download signups</button>
+			</div>
+         </div>  
       </div>
-      <div class="span10 coreEdit" data-ng-view=""></div>
-    </div>
-  </div>
-</div>
-
-<!--{{/i/foot.inc}}-->
+	  <div id="minimumGap"></div>
+      <div id="push"></div>   
+	</div>
+	<!--{{/i/foot.inc}}-->
 </body>
 </html>

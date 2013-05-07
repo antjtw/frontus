@@ -48,19 +48,18 @@ var documentListController = function($scope) {
 function documentViewController($scope, $routeParams) {
   var docId = $routeParams.doc;
   
-  console.log("Outside Loop");
   $scope.init = function () {
-  	  console.log("Happening");
-	  SWBrijj.procm("document.get_docmetaI", docId).then(function(data) {
+	  SWBrijj.procm("document.get_docmetaI",  parseInt(docId)).then(function(data) {
 		$scope.documents = data[0];
 		$scope.$apply();
 		});
+		
   };
   
   
   var imageObj = new Image();
   
-  	imageObj.src = 'https://s3.amazonaws.com/s3.documentcloud.org/documents/19864/pages/goldman-sachs-internal-emails-p1-large.gif';
+  imageObj.src = "/photo/docpg?id="+docId+"&page=1";
   
   imageObj.onload = function() {
 	  	var width = 1024;
@@ -71,7 +70,7 @@ function documentViewController($scope, $routeParams) {
 		for(var i=1; i<n; i++) {
 			$scope.images.push({"src": "", "pagenum": i});
 		};
-		$scope.images[0].src = "https://s3.amazonaws.com/s3.documentcloud.org/documents/19864/pages/goldman-sachs-internal-emails-p1-large.gif"
+		$scope.images[0].src = imageObj.src;
 		$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
 		$scope.images;
 		$scope.$apply();
@@ -82,7 +81,7 @@ function documentViewController($scope, $routeParams) {
 		var pageRequired = parseInt(value) + 1;
 		console.log(pageRequired);
 		if ($scope.images[pageRequired-1].src == "") {
-			$scope.images[pageRequired-1].src ='https://s3.amazonaws.com/s3.documentcloud.org/documents/19864/pages/goldman-sachs-internal-emails-p' +pageRequired + '-large.gif';
+			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
 		}
 		$scope.currentPage.src = ($scope.images[pageRequired-1].src)
 		$scope.currentPage.pageNum = pageRequired;
@@ -93,7 +92,7 @@ function documentViewController($scope, $routeParams) {
 		var pageRequired = parseInt(value) - 1;
 		if (pageRequired > 0) {
 			if ($scope.images[pageRequired-1].src == "") {
-				$scope.images[pageRequired-1].src ='https://s3.amazonaws.com/s3.documentcloud.org/documents/19864/pages/goldman-sachs-internal-emails-p' +pageRequired + '-large.gif';
+				$scope.images[pageRequired-1].src ='/photo/docpg?id=' +$scope.currentDoc+'&page='+pageRequired;
 			}
 			$scope.currentPage.src = ($scope.images[pageRequired-1].src)
 			$scope.currentPage.pageNum = pageRequired;
@@ -103,7 +102,7 @@ function documentViewController($scope, $routeParams) {
 	$scope.jumpPage = function(value) {
 		var pageRequired = value;
 		if ($scope.images[pageRequired-1].src == "") {
-			$scope.images[pageRequired-1].src ='https://s3.amazonaws.com/s3.documentcloud.org/documents/19864/pages/goldman-sachs-internal-emails-p' +pageRequired + '-large.gif';
+			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
 		}
 		$scope.currentPage.src = ($scope.images[pageRequired-1].src)
 		$scope.currentPage.pageNum = pageRequired;

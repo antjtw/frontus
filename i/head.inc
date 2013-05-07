@@ -1,11 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap-responsive.css">
 <link type="text/css" rel="stylesheet" href="/lib/fontawesome/css/font-awesome.css">
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
-<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
-
+<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Arvo|Dosis:700">
  <script src="/brijj/brijj.js"></script>
  <script src="/lib/jquery/jquery-1.8.3.js"></script>
  <script src="/lib/bootstrap/bootstrap.js"></script>
