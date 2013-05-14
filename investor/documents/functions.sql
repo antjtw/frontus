@@ -12,5 +12,5 @@ end $$;
 create type document.investor_list as (doc integer, status document.activity_type, docname character varying, last_updated timestamp);
 
 CREATE OR REPLACE FUNCTION document.get_investordocs(user_id email) returns setof document.investor_list language plpgsql as $$
-begin return query select doc, status, docname, last_updated from document.docinfo i, (select doc_id as doc, max(activity) as status from document.docshares where sent_to=user_id group by doc_id) as d where d.doc=i.doc_id;
+begin return query select doc, status, docname, last_updated from document.docinfo i, (select doc_id as doc, max(activity) as status from document.docshares where sent_to=user_id group by doc_id) as d where d.doc=i.doc_id and d.doc not in (SELECT doc_id from document.revoked rev where rev.sent_to=user_id);
 end $$;

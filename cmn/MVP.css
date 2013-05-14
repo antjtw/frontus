@@ -575,6 +575,35 @@ h2 {
 	width: 663px;
 }
 
+.personButtons {
+	height:10px;
+	border-bottom-style :none !important;
+}
+
+.personButtons .button {
+	margin: 0 10px 0 0;
+}
+
+.personDetails {
+	height:100px;
+}
+
+.personDetails > td div {
+	display:inline-block;
+	float:left;
+	text-align:center;
+	width:120px;
+}
+
+.hltext {
+	color: orange;
+}
+
+.doubleTime {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
 /* Footer */
 .minimumGap {
 	min-height:150px;
@@ -612,7 +641,7 @@ h2 {
 	cursor: pointer;	
 	border: 0;
 	box-sizing:border-box;
-	font-family: 'Open Sans', sans-serif;
+	vertical-align: middle;
 }
 
 .button:hover {

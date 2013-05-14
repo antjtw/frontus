@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ModalShareCtrl">
+<div class="container">
 
 		<div modal="shouldBeOpen" close="close()" options="opts">
                 <div class="modalHeader">
@@ -17,8 +17,51 @@
                     <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail)">Send</button>
                 </div>
             </div>
-
-	     <h1><a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{document1.docname}}</h1>
+            
+         <div modal="revokeModal" close="revclose()" options="revopts">
+                <div class="modalHeader">
+                    <p class="subText">Revoke Access</p>
+                </div>
+               	
+                <div class="modalText">
+                {{revoke}} will no longer be able to view this document.
+                </div>
+                
+                <div class="modalButtons">
+                    <button class="button subText greyButton" ng-click="revclose();">Take me back!</button>
+					<button class="button subText greenButton" ng-click="revclose(); revokeUser(revoke)">Revoke</button>
+                </div>
+            </div>
+            
+            <div modal="remModal" close="remclose()" options="remopts">
+                <div class="modalHeader">
+                    <p class="subText">Send Reminder</p>
+                </div>
+               	
+                <div class="modalText">
+                Send a reminder to {{reminder}}.
+                <p>Message</p>
+                    <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+                </div>
+                
+                <div class="modalButtons">
+                    <button class="button subText greyButton" ng-click="remclose();">Never Mind!</button>
+					<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>
+                </div>
+            </div>
+		<div>
+            <a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>
+            <div ng-hide="editorEnabled">
+                <h1>{{page_title}}</h1>
+                <a href="#" ng-click="enableEditor()"><i class="button icon-pencil icon-2x"></i></a>
+            </div>
+            <div ng-show="editorEnabled">
+                <input ng-model="editableTitle" ng-show="editorEnabled">
+                <a href="#" ng-click="save()">Save</a>
+                or
+                <a href="#" ng-click="disableEditor()">cancel</a>.
+            </div>
+         </div>		
          
          <div style="float:right">
              <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</button>
@@ -52,10 +95,43 @@
                         <tr>
                         <td><img src=""><p>{{person.name}}</p><p>{{person.sent_to}}</p></td>
                			<td>{{person.event}}</td>
-                        <td class="button" ng-click="(opendetails(person.sent_to))"><i class="icon-plus"></i></td>
+                        <td class="button" ng-click="(opendetails(person.sent_to))"><i class="{{person.button}}"></i></td>
                         </tr>
-                        <tr ng-Show="person.shown">
-                        <td rowspan="3">Last login: {{person.lastlogin | date:'shortTime'}}</td>
+                        <tr ng-Show="person.shown" class="personButtons">
+                        <td><span class="button">View Full Profile</span><span class="button" ng-click="revmodalUp(person.sent_to)">Revoke Access</span><span class="button" ng-click="remmodalUp(person.sent_to)">Send Reminder</span></td>
+                        </tr>
+                        <tr ng-Show="person.shown" class="personDetails">
+                            <td colspan="2">
+                                <div><p>Delivered</p><p class="doubleTime">{{person.whenshared | date:'MMMM dd, yyyy'}}</p><p>{{person.whenshared | date:'h:mm a'}}</p></div>
+                                
+                                <div>
+                                    <div ng-switch on="person.lastlogin" >
+                                        <span ng-switch-when="0"><p class="hltext">Never Logged In</p></span>
+                                        <span ng-switch-default><p>Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
+                                    </div>
+                                </div>
+                               
+                                <div>
+                                    <div ng-switch on="person.lastviewed" >
+                                        <span ng-switch-when="0"><p class="hltext">Unviewed</p></span>
+                                        <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{person.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.lastviewed | date:'h:mm a'}}</p></span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                	<div ng-switch on="person.signed" >
+                                        <span ng-switch-when="0"><p class="hltext">Unsigned</p></span>
+                                        <span ng-switch-default><p class="doubleTime">{{person.signed | date:'MMMM dd, yyyy'}}</p><p>{{person.signed | date:'h:mm a'}}</p></span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                	<div ng-switch on="person.reminder" >
+                                    	<p ng-switch-when="0"></p>
+                                        <span ng-switch-default><p>Resent</p><p class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</p></span>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>      
@@ -106,4 +182,3 @@
           
 </div>
 
-         
