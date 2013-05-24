@@ -95,7 +95,7 @@ function UploadCtrl($scope) {
 
     $scope.uploadDropbox = function() {
       Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
-        SWBrijj.uploadLinks(files).then( function(x) { console.log(x);}) ;
+        SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
       }, cancel: function() { console.log('canceled'); }
       })
     }

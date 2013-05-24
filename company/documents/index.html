@@ -6,6 +6,33 @@
 	<!--{{/i/head.inc}}-->
    	<script src="CompanyDocuments.js"></script>
     <script src="/lib/moment.min.js"></script>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
+            data-app-key="cg7umgovyixtqhi"></script>
+
+    <style>
+      .dropbox {
+        width: 15em;
+        height: 3em;
+        border: 2px solid #DDD;
+        border-radius: 8px;
+        background-color: #FEFFEC;
+        text-align: center;
+        color: #BBB;
+        font-size: 2em;
+        font-family: Arial, sans-serif;
+      }
+      .dropbox span {
+        margin-top: 0.9em;
+        display: block;
+      }
+      .dropbox.not-available {
+        background-color: #F88;
+      }
+      .dropbox.over {
+        background-color: #bfb;
+      }
+
+    </style>
     
 </head>
 
@@ -23,35 +50,6 @@
      
       <!--{{/i/foot.inc}}-->
 	
-	<script>
-		
-		  
-		var ModalDeleteCtrl = function ($scope) {
-		
-		  $scope.open = function (doc) {
-			$scope.shouldBeOpen = true;
-			$scope.currentDoc = doc;
-			console.log(doc);
-		  };
-		
-		  $scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-		
-		  $scope.opts = {
-			backdropFade: true,
-			dialogFade:true
-		  };
-		
-		};
-		
-			
-				
-		function failed() {
-				alert("failed")
-			}
-	  </script>
 
 	</body>
 </html>

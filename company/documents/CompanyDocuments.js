@@ -63,7 +63,149 @@ var documentListController = function($scope) {
 				$scope.documents.splice($scope.documents.indexOf(docname),1);
 			});
 		});				  
-	};		
+	};
+
+	$scope.open = function (doc) {
+			$scope.shouldBeOpen = true;
+			$scope.currentDoc = doc;
+			console.log(doc);
+		  };
+		
+	$scope.close = function () {
+			$scope.closeMsg = 'I was closed at: ' + new Date();
+			$scope.shouldBeOpen = false;
+		  };
+		
+	$scope.opts = {
+			backdropFade: true,
+			dialogFade:true
+		  };
+
+	$scope.upModalUp = function () {
+			$scope.upModal = true;
+		  };
+		
+	$scope.upClose = function () {
+			$scope.closeMsg = 'I was closed at: ' + new Date();
+			$scope.upModal = false;
+		  };
+		
+	$scope.upopts = {
+			backdropFade: true,
+			dialogFade:true,
+    		dialogClass: 'modal shareModal'
+		 };
+
+	$scope.dropText = 'Drop files here...';
+    $scope.files = [];
+
+    $scope.fmtFileSize = function (file) {
+        if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
+        else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
+        else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
+        else return file.size + " bytes";
+    };
+
+    // init event handlers
+    function dragEnterLeave(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        $scope.dropText = "Drop files here...";
+        $scope.dropClass = "";
+        $scope.$apply();
+    }
+
+    function dragOver(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+      console.log(evt.dataTransfer.types);
+        var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.some( function(x) { return x == 'Files'; } );
+        $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
+        $scope.dropClass = ok ? 'over' : 'not-available';
+        $scope.$apply();
+    }
+
+    function drop(evt) {
+        // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
+        evt.stopPropagation();
+        evt.preventDefault();
+        $scope.dropText = 'Drop more files here...';
+        $scope.dropClass = '';
+        $scope.$apply();
+        var files = evt.dataTransfer.files;
+        if (files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+                $scope.files.push(files[i])
+            }
+        }
+        $scope.$apply();
+
+      // might as well go ahead and upload ( no point in getting a click
+      $scope.uploadFile();
+    }
+
+    var dropbox = angular.element(".dropbox")[0];
+
+    dropbox.addEventListener("dragenter", dragEnterLeave, false);
+    dropbox.addEventListener("dragleave", dragEnterLeave, false);
+    dropbox.addEventListener("dragover", dragOver, false);
+    dropbox.addEventListener("drop", drop, false);
+
+    $scope.setFiles = function (element) {
+        $scope.files = [];
+        for (var i = 0; i < element.files.length; i++) {
+            $scope.files.push(element.files[i]);
+        }
+        $scope.progressVisible = false;
+    };
+
+    $scope.uploadDropbox = function() {
+      Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
+        SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
+      }, cancel: function() { console.log('canceled'); }
+      })
+    }
+    $scope.uploadFile = function () {
+        var fd = new FormData();
+        $scope.progressVisible = true;
+        for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+        SWBrijj.uploadFile(fd).then(function (x) {
+            console.log(x);
+        }).except(function (x) {
+            alert(x.message);
+        });
+        /*var xhr = new XMLHttpRequest()
+         xhr.upload.addEventListener("progress", uploadProgress, false);
+         xhr.addEventListener("load", uploadComplete, false);
+         xhr.addEventListener("error", uploadFailed, false);
+         xhr.addEventListener("abort", uploadCanceled, false);
+         xhr.open("POST", "/fileupload");
+         xhr.send(fd) */
+    };
+
+    function uploadProgress(evt) {
+        $scope.$apply(function () {
+            if (evt.lengthComputable) {
+                $scope.progress = Math.round(evt.loaded * 100 / evt.total)
+            } else {
+                $scope.progress = 'unable to compute'
+            }
+        })
+    }
+
+    function uploadComplete(evt) {
+        alert(evt.target.responseText)
+    }
+
+    function uploadFailed(evt) {
+        alert("There was an error attempting to upload the file.")
+    }
+
+    function uploadCanceled(evt) {
+        $scope.progressVisible = false;
+        $scope.$apply();
+        alert("The upload has been canceled by the user or the browser dropped the connection.")
+    }	
 };
 
 function documentViewController($scope, $routeParams) {
@@ -137,10 +279,26 @@ function documentViewController($scope, $routeParams) {
 
 	};
 	
-	  $scope.share = function(message, email) {
+	$scope.share = function(message, email) {
 		 SWBrijj.procm("document.share_document", parseInt(docId), email, message).then(function(data) {
 				console.log(data);
 			});
+
+	$scope.modalUp = function () {
+			$scope.shouldBeOpen = true;
+		  };
+		
+	$scope.close = function () {
+			$scope.closeMsg = 'I was closed at: ' + new Date();
+			$scope.shouldBeOpen = false;
+		  };
+		
+	$scope.opts = {
+			backdropFade: true,
+			dialogFade:true,
+    		dialogClass: 'modal shareModal'
+		  };
+		
 	};
 }
 

@@ -47,6 +47,7 @@ var documentListController = function($scope) {
 
 function documentViewController($scope, $routeParams) {
   var docId = $routeParams.doc;
+  $scope.currentDoc = docId;
   
   $scope.init = function () {
 	  SWBrijj.procm("document.get_docmetaI",  parseInt(docId)).then(function(data) {
@@ -60,20 +61,28 @@ function documentViewController($scope, $routeParams) {
   var imageObj = new Image();
   
   imageObj.src = "/photo/docpg?id="+docId+"&page=1";
+
+  $scope.doclength = 1;
   
   imageObj.onload = function() {
-	  	var width = 1024;
-		var scaling = (imageObj.height/imageObj.width)
-		var height = (1024 * scaling)
-		var n = 26;
-		$scope.images = []
-		for(var i=1; i<n; i++) {
-			$scope.images.push({"src": "", "pagenum": i});
-		};
-		$scope.images[0].src = imageObj.src;
-		$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
-		$scope.images;
-		$scope.$apply();
+  		SWBrijj.procm("document.get_doclength", parseInt(docId)).then(function(data) {
+	  		console.log(data);
+			$scope.doclength = data[0];
+			console.log($scope.doclength);
+			var width = 1024;
+			var scaling = (imageObj.height/imageObj.width)
+			var height = (1024 * scaling)
+			var n = $scope.doclength.get_doclength + 1;
+			console.log(n);
+			$scope.images = []
+			for(var i=1; i<n; i++) {
+				$scope.images.push({"src": "", "pagenum": i});
+			};
+			$scope.images[0].src = imageObj.src;
+			$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
+			$scope.images;
+			$scope.$apply();
+		});
       };
 
 	$scope.nextPage = function(value) {
