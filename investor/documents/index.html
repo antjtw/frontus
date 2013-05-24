@@ -29,36 +29,6 @@
 	</div>
      
       <!--{{/i/foot.inc}}-->
-	
-	<script>
-		
-		  
-		var ModalDeleteCtrl = function ($scope) {
-		
-		  $scope.open = function (doc) {
-			$scope.shouldBeOpen = true;
-			$scope.currentDoc = doc;
-			console.log(doc);
-		  };
-		
-		  $scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-		
-		  $scope.opts = {
-			backdropFade: true,
-			dialogFade:true
-		  };
-		
-		};
-		
-			
-				
-		function failed() {
-				alert("failed")
-			}
-	  </script>
 
 	</body>
 </html>
