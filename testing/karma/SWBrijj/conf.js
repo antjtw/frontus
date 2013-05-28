@@ -67,8 +67,8 @@ captureTimeout = 60000;
 singleRun = false;
 
 proxies = {
-	//'/' : 'http://localhost:4040/'
-	'/' : 'http://testing.sharewave.com/'
+	'/' : 'http://localhost:4040/'
+	//'/' : 'http://testing.sharewave.com/'
 
 };
 

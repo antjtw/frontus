@@ -17,7 +17,7 @@ window.brijj = new function() {
     catch(err) {
       if (err == "fileUpload") { return sendIframe(url, args /*, callback, errorHandler */ ); }
       else if (err == "formUpload") { body = args[0]; }
-      else return alert(err);
+      else return console.log(err);
     }
 
     var req = new XMLHttpRequest();
@@ -42,7 +42,7 @@ window.brijj = new function() {
   };
 
   this.defaultErrorHandler = function(ex,q) {
-	  alert((ex.javaClassName ? ex.javaClassName : "" )+": "+ex.message);
+	  console.log((ex.javaClassName ? ex.javaClassName : "" )+": "+ex.message);
 	  console.log({error: ex, request: q});
   }
   
@@ -89,7 +89,7 @@ window.brijj = new function() {
         }
         break;
       default:
-        alert("serializing unknown data type: "+typeof data);
+        console.log("serializing unknown data type: "+typeof data);
         return "u:" + data;
       }
     };
@@ -128,7 +128,7 @@ window.brijj = new function() {
      switch(toEval[0]) {
      case 'c': self.handleCallback(callback, eval(toEval.substring(2))); break;
      case 'x': self.handleException( errorHandler, eval(toEval.substring(2)) ); break;
-     default: alert("unknown server-response type: "+toEval[0]);
+     default: console.log("unknown server-response type: "+toEval[0]);
      }
      }
    }
