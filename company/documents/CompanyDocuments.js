@@ -52,12 +52,15 @@ var documentListController = function($scope) {
 			$scope.docOrder = field;
 		}
 	}
+
+	$scope.searchFilter = function (obj) {
+        var re = new RegExp($scope.query, 'i');
+        return !$scope.query || re.test(obj.docname);
+    };
 			
 	$scope.delete = function(docname) {
-	  console.log(docname.docname);
-	  SWBrijj.procm("document.delete_document", docname.docname).then(function(data) {
+	  SWBrijj.procm("document.delete_document", parseInt(docname.doc_id)).then(function(data) {
 		  console.log(data);
-		  console.log(docname);
 		  $scope.documents.forEach(function(docu) {				  
 			if (docname === docu)
 				$scope.documents.splice($scope.documents.indexOf(docname),1);

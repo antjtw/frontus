@@ -41,7 +41,12 @@ var documentListController = function($scope) {
 		else {
 			$scope.docOrder = field;
 		}
-	}
+	};
+
+	$scope.searchFilter = function (obj) {
+        var re = new RegExp($scope.query, 'i');
+        return !$scope.query || re.test(obj.docname);
+    };
 							 		
 };
 
