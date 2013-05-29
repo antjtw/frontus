@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ModalDeleteCtrl">
+<div class="container">
           
 	<div modal="shouldBeOpen" close="close()" options="opts">
 		<div class="modalHeader">
@@ -13,6 +13,28 @@
 			<button class="button subText greenButton" ng-click="close(); delete(currentDoc)">Delete Document</button>
 		</div>
 	</div>
+
+	<div modal="upModal" close="upClose()" options="upopts">
+		<div class="modalHeader">
+			<p class="subText">Upload a Doc</p>
+		</div>
+		<div class="modalText">
+
+			<div class="dropbox" ng-class="dropClass">
+			    <span>{{dropText}}</span>
+			  </div>
+
+			  <div ng-show="files.length">
+			    <div ng-repeat="file in files.slice(0)">
+			      <span>{{file.webkitRelativePath || file.name}}</span>
+			      (<span>{{fmtFileSize(file)}}</span>)
+			    </div>
+			  </div>
+		</div>
+		<div class="modalButtons">
+			<input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox()" value="Upload with dropbox" />
+		</div>
+	</div>
                 
 <div class="row-fluid">
 
@@ -20,7 +42,7 @@
 	
 	<h1 style="float:left;">Documents</h1>
 	
-	<button class="button subText blueButton" style="float:right;">Add Document</button>
+	<a ng-click="upModalUp()"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
 
 	<br>
     
@@ -32,7 +54,7 @@
               <tr class="subText">
                 <th class="button" ng-click="setOrder('docname')"><span class="title sortedDown">Name</span></th><th colspan="5" class="button" ng-click="setOrder('last_updated')"><span class="title">Last Updated</span></th>
               </tr>
-              <tr ng-repeat="doc in documents  | filter:query  | orderBy:docOrder">
+              <tr ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
                 <td><a href="/company/documents/view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
                 <!-- The four buttons for each row -->

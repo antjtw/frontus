@@ -36,9 +36,9 @@ begin return query select max(page) from document.page_images where doc_id=did;
 end $$;
 
 -- Company delete document function
-CREATE or REPLACE FUNCTION document.delete_document(userid email, delname varchar) returns int language plpgsql as $$
+CREATE or REPLACE FUNCTION document.delete_document(userid email, docid int) returns int language plpgsql as $$
 declare num int;
-begin delete from document.documentview where company in (select document.companies(userid)) and docname = delname;
+begin delete from document.documentview where company in (select document.companies(userid)) and doc_id = docid;
  GET DIAGNOSTICS num = ROW_COUNT;
  return num;
 end $$;	
