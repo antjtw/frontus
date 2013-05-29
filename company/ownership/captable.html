@@ -1,0 +1,25 @@
+ <table>
+    <tr class="column-label">
+   	  <td colspan="2">Ownership</td>
+   	  <td>Shareholder</td>
+      <td ng-repeat="header in filteredHeaders(columnheader)" colspan="2">{{header}}</td>
+    </tr>
+    <tr ng-repeat="row in rows">
+   	  <td>
+   	  	<input ng-model="cells['Ownership1'+row]"></input>
+   	  </td>
+   	  <td>
+   	  	<input disabled value="{{(percentage(cells['Ownership1'+row]) | number:2) + '%'}}"></input>
+   	  </td>
+      <td ng-repeat="column in filteredColumns(columns)">
+        <div>
+          <input ng-model="cells[column+row]"></input>
+        </div>
+      </td>
+    </tr>
+    <tr>
+    	<td>
+    		<input disabled value="{{total() || '0'}}"></disabled>
+    	</td>
+    </tr>
+  </table>
