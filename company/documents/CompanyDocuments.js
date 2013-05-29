@@ -36,7 +36,7 @@ docviews.directive('indstatus', function() {
 /* Controllers */
 
 var documentListController = function($scope) {
-	SWBrijj.procm("document.get_companydocs").then(function(data) {
+	SWBrijj.procm("document.get_docmeta").then(function(data) {
 	console.log(data)
 	$scope.documents = data;
 	$scope.$apply();
@@ -215,7 +215,7 @@ function documentViewController($scope, $routeParams) {
   var docId = $routeParams.doc;
   $scope.currentDoc = docId;
 
-  SWBrijj.procm("document.get_docmeta", parseInt(docId)).then(function(data) {
+  SWBrijj.tblm("document.docinfo", parseInt(docId)).then(function(data) {
 	$scope.documents = data[0];
 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.documents.docname + "."
 	$scope.$apply();

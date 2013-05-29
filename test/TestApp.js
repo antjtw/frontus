@@ -95,7 +95,7 @@ function UploadCtrl($scope) {
 
     $scope.uploadDropbox = function() {
       Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
-        SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
+        SWBrijj.uploadLink.apply(null,files).then( function(x) { console.log(x);}) ;
       }, cancel: function() { console.log('canceled'); }
       })
     }
@@ -157,7 +157,7 @@ function TwitterCtrl($scope) {
       });
   };
   //noinspection JSUnresolvedVariable
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
 }
 
 function DropboxCtrl($scope, $location) {  
@@ -184,7 +184,7 @@ function DropboxCtrl($scope, $location) {
   }
 
 
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
     SWBrijj.procm('oauth.dropbox_list','')
       .then(function(x)  { $scope.dropboxFiles=x; $scope.$apply(); })
       .except( function(x) {} );
@@ -226,7 +226,7 @@ function OtherCtrl($scope) {
         alert('heh');
     };
     
-    SWBrijj.proc('profile').then(function(x) { initPage($scope,x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
 app.controller("FileDNDCtrl", function($scope, $element) {

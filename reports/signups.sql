@@ -19,6 +19,21 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function get_signups(userid varchar, mimetype varchar, whenx date) returns bytea language plpgsql as $$
+declare 
+  cs cursor for select * from sxsw;
+  result bytea;
+begin
+  open cs;
+  if mimetype = 'application/ms-excel' then
+   select asExcel('cs') into result;
+    return result;
+  elsif mimetype = 'application/csv' then
+    select asCsv('cs') into result;
+      return result;
+  else raise exception 'unknown mime type';
+  end if;
+end $$;
 
 
 
