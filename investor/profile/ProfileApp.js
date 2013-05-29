@@ -31,7 +31,7 @@ function ContactCtrl($scope) {
       });
   };
   //noinspection JSUnresolvedVariable
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
 }
 
 function SocialCtrl($scope, $location) {  
@@ -58,7 +58,7 @@ function SocialCtrl($scope, $location) {
   }
 
 
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
     SWBrijj.procm('oauth.dropbox_list','')
       .then(function(x)  { $scope.dropboxFiles=x; $scope.$apply(); })
       .except( function(x) {} );
@@ -100,7 +100,7 @@ function PhotoCtrl($scope) {
         alert('heh');
     };
     
-    SWBrijj.proc('profile').then(function(x) { initPage($scope,x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
 app.controller("FileDNDCtrl", function($scope, $element) {
