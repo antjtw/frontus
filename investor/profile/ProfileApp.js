@@ -26,7 +26,7 @@ app.controller("MainProfileController", function($scope, $location) {
 
 function ContactCtrl($scope) {
   $scope.contactSave = function () {
-      SWBrijj.proc("contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { alert("saved: "+x);
       });
   };
