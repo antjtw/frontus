@@ -160,6 +160,8 @@ describe("Document sharing tests", function() {
 			console.log("Shared with", x[0]["sent_to"]);
 			expect({value: x[0]["event"]}).toBe("shared");
 			expect({value: x[0]["sent_to"]}).toBe(secondAccount);
+		}).except(function(x){ 
+			fail("Verifying document sharing failed");
 		});
 	});
 
@@ -179,6 +181,8 @@ describe("Document sharing tests", function() {
 			console.log("Shared with", x[0]["sent_to"]);
 			expect({value: x[0]["event"]}).toBe("reminder");
 			expect({value: x[0]["sent_to"]}).toBe(secondAccount);
+		}).except(function(x){ 
+			fail("Verifying document reminder failed");
 		});
 	});
 
