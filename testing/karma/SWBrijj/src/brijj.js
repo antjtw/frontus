@@ -1,13 +1,13 @@
 
 window.brijj = new function() {
-	var self = this;
-	
+  var self = this;
+  
   this.handleDownload = function(data) {
-	  var form = document.createElement("form");
-	  form.action=data;
-	  form.method="POST";
-	  document.body.appendChild(form);
-	  form.submit();
+    var form = document.createElement("form");
+    form.action=data;
+    form.method="POST";
+    document.body.appendChild(form);
+    form.submit();
   };
 
   this._execute = function(path, scriptName, methodName, args) {
@@ -17,7 +17,7 @@ window.brijj = new function() {
     catch(err) {
       if (err == "fileUpload") { return sendIframe(url, args /*, callback, errorHandler */ ); }
       else if (err == "formUpload") { body = args[0]; }
-      else return console.log(err);
+      else return alert(err);
     }
 
     var req = new XMLHttpRequest();
@@ -42,8 +42,8 @@ window.brijj = new function() {
   };
 
   this.defaultErrorHandler = function(ex,q) {
-	  console.log((ex.javaClassName ? ex.javaClassName : "" )+": "+ex.message);
-	  console.log({error: ex, request: q});
+    alert((ex.javaClassName ? ex.javaClassName : "" )+": "+ex.message);
+    console.log({error: ex, request: q});
   }
   
   this.handleCallback = function(cb,reply) {
@@ -82,14 +82,14 @@ window.brijj = new function() {
         else {
               var nft = false, reply = "o:{";
               for (var element in data) {
-            	  if (nft) reply += ", "; else nft = true;
-            	  reply += encodeURIComponent(element + ":"+self.serialize(data[element]));
+                if (nft) reply += ", "; else nft = true;
+                reply += encodeURIComponent(element + ":"+self.serialize(data[element]));
               }
               return reply + "}";
         }
         break;
       default:
-        console.log("serializing unknown data type: "+typeof data);
+        alert("serializing unknown data type: "+typeof data);
         return "u:" + data;
       }
     };
@@ -128,7 +128,7 @@ window.brijj = new function() {
      switch(toEval[0]) {
      case 'c': self.handleCallback(callback, eval(toEval.substring(2))); break;
      case 'x': self.handleException( errorHandler, eval(toEval.substring(2)) ); break;
-     default: console.log("unknown server-response type: "+toEval[0]);
+     default: alert("unknown server-response type: "+toEval[0]);
      }
      }
    }
@@ -223,6 +223,10 @@ p.resetFillout = function(p0, callback) {
   return brijj._execute(p._path, 'SWBrijj', 'resetFillout', arguments); };
 p.resetPassword = function(p0, p1, callback) {
   return brijj._execute(p._path, 'SWBrijj', 'resetPassword', arguments); };
+p.tbl = function(p0, callback) {
+  return brijj._execute(p._path, 'SWBrijj', 'tbl', arguments); };
+p.tblm = function(p0, callback) {
+  return brijj._execute(p._path, 'SWBrijj', 'tblm', arguments); };
 p.uploadFile = function(p0, callback) {
   return brijj._execute(p._path, 'SWBrijj', 'uploadFile', arguments); };
 p.uploadImage = function(p0, callback) {
@@ -232,4 +236,3 @@ p.uploadImage = function(p0, callback) {
 p.uploadLink = function(p0, callback) {
   return brijj._execute(p._path, 'SWBrijj', 'uploadLink', arguments); };
     _.SWBrijj=p; } })();
-

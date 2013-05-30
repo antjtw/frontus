@@ -1,12 +1,8 @@
-//Setup environment:
-// - Must be able to log in
-// - Must be able to upload and view documents
-// - Must have at least 1 document already uploaded
 
-var username = "dexter+1@sharewave.com";
-var password = "never-";
-var secondsToSleep = 4; //At least 3 recommended
-var secondAccount = "eric+1@sharewave.com";
+var usernameIssuer = "phantom+ceo@sharewave.com";
+var passwordIssuer = "never-";
+var secondsToSleep = 2; //At least 2 recommended
+var usernameInvestor = "eric+1@sharewave.com";
 
 describe("Login tests", function() {
 
@@ -19,212 +15,243 @@ describe("Login tests", function() {
 		result.then(function(x) {
 			console.log("Should not log in result", x);
 			expect({value: x.length}).toBe(0);
+		}).except(function(x) {
+			 fail("Log in 1", x);
 		});
 	});
 	
 	it("Should log in", function() {
-		var result = SWBrijj.login(username, password);
+		var result = SWBrijj.login(usernameIssuer, passwordIssuer);
 		result.then(function(x) {
 			console.log("Should log in result", x);
 			expect({value: x.length}).toBeGreaterThan(0);
+		}).except(function(x) {
+			 fail("Log in 2", x);
 		});
 	});
 });
 
 describe("Document view/upload/delete tests", function() {
 	var numberOfDocuments = 0;
+	var files;
 
 	beforeEach(function() {
-		sleep(1);
+		sleep(2);
 	});
 
 	it("Should display company documents", function() {
-		var result = SWBrijj.procm("document.get_companydocs");
+		var result = SWBrijj.tblm("document.docinfo");
 		result.then(function(x) {
 			numberOfDocuments = x.length;
 			console.log("Number of Documents", numberOfDocuments);
 			expect({value: numberOfDocuments}).toBeGreaterThan(0);
+		}).except(function(x) {
+			fail("Getting company docs", x);
 		});
 	});
 
 	it("Should upload exactly 1 company document", function() {
 		var fd = new FormData();
-		fd.append("uploadedFile", new Blob(["Hello world!"], { type: "text/plain" }));
+		var blob = pdfBlob;
+		fd.append("uploadedFile", blob, "file1.pdf");
 		var result = SWBrijj.uploadFile(fd);
 		sleep(secondsToSleep);
 		result.then(function(x) {
 			console.log("Upload file result", x);
 			expect({value: x}).toBe(1);
 		}).except(function(x) {
-			 fail("Error in SWBrijj upload");
+			 fail("SWBrijj upload 1", x);
 		});
 	});
 
 	it("Should upload exactly 3 company documents", function() {
 		var fd = new FormData();
-		fd.append("uploadedFile", new Blob(["Hello world!"], { type: "text/plain" }));
-		fd.append("uploadedFile", new Blob(["foo"], { type: "text/plain" }));
-		fd.append("uploadedFile", new Blob(["bar"], { type: "text/plain" }));
+		var blob = pdfBlob;
+		fd.append("uploadedFile", blob, "File 2.pdf");
+		fd.append("uploadedFile", blob, "File 3.pdf");
+		fd.append("uploadedFile", blob, "File 4.pdf");
 		var result = SWBrijj.uploadFile(fd);
 		sleep(secondsToSleep * 3);
 		result.then(function(x) {
 			console.log("Upload file result", x);
 			expect({value: x}).toBe(3);
 		}).except(function(x) {
-			 fail("Error in SWBrijj upload");
+			 fail("SWBrijj upload 3", x);
 		});
 	});	
 
 	it("Should display the correct number of documents after 4 new uploads", function() {
-		var result = SWBrijj.procm("document.get_companydocs");
+		var result = SWBrijj.tblm("document.docinfo");
 		result.then(function(x) {
 			console.log("Number of Documents after 4 uploads", x.length);
 			expect({value: x.length}).toBe(numberOfDocuments + 4);
+			files = [getDocId("file1", x), getDocId("File 2", x), getDocId("File 3", x), getDocId("File 4", x)];
+			console.log("File id's", files);
+		}).except(function(x) {
+			 fail("Verifying correct number of documents", x);
 		});
 	});
 
-	//May need updating after delete fix
 	it("Should delete the files created", function() {
-		var result = SWBrijj.procm("document.delete_document", "blob");
-		sleep(secondsToSleep);
-		result.then(function(x) {
-			console.log("Delete", x);
-		}).except(function(x) {
-			fail("Error deleting files");
-		});
+		for (var i = 0; i < 4; i++) {
+			var result = SWBrijj.procm("document.delete_document", files[i]);
+			sleep(secondsToSleep);
+			result.then(function(x) {
+				console.log("Delete", x);
+			}).except(function(x) {
+				fail("Deleting files", x);
+			});
+		};
 	});
 
 	it("Should display the correct number of documents after the file deletes", function() {
-		var result = SWBrijj.procm("document.get_companydocs");
+		var result = SWBrijj.tblm("document.docinfo");
 		result.then(function(x) {
 			console.log("Number of Documents after deletions", x.length);
 			expect({value: x.length}).toBe(numberOfDocuments);
+		}).except(function(x) {
+			fail("Verifying deletes");
 		});
 	});
 
 });
 
-describe("Document sharing tests", function() {
+describe("Document status tests", function() {
 	var docId = 0;
+	var filename = "testFile"; //Name of file
 
-	afterEach(function() {
-		sleep(1);
-	});
-
-	it("Should upload a document to use for testing", function() {
+	it("Should upload one document for sharing testing", function() {
 		var fd = new FormData();
-		fd.append("uploadedFile", new Blob(["Hello world!"], { type: "text/plain" }));
+		var blob = pdfBlob;
+		fd.append("uploadedFile", blob, filename + ".pdf");
 		var result = SWBrijj.uploadFile(fd);
 		sleep(secondsToSleep);
 		result.then(function(x) {
 			console.log("Upload file result", x);
 			expect({value: x}).toBe(1);
 		}).except(function(x) {
-			 fail("Error in creating document");
+			 fail("Error uploading", x);
 		});
-		sleep(secondsToSleep);
+	});
+
+	afterEach(function() {
+		sleep(3);
 	});
 
 	it("Should get docId", function() {
-		var result = SWBrijj.procm("document.get_companydocs");
+		var result = SWBrijj.tblm("document.docinfo");
+		sleep(secondsToSleep);
 		result.then(function(x) {
-			console.log("Documents", x);
-			docId = getDocId("blob", x);
-			console.log("docId", docId);
+			docId = getDocId(filename, x);
+			console.log("Document ID", docId);
 		}).except(function(x) {
-			fail("Error getting docId");
+			fail("Getting docId", x);
 		});
 	});
 
 	it("Should verify the docId corresponds to the correct document", function() {
-		var result = SWBrijj.procm("document.get_docmeta", docId);
+		var result = SWBrijj.procm("document.get_docdetail", docId);
 		result.then(function(x) {
-			console.log("Document metadata", x);
-			expect({value: x[0]["docname"]}).toBe("blob");
+			console.log("Document detail", x);
+			expect({value: x[0]["docname"]}).toBe(filename);
+		}).except(function(x) {
+			fail("Getting doc detail", x);
 		});
 	});
 
 	it("Should share a document with another person", function() {
-		var result = SWBrijj.procm("document.share_document", docId, secondAccount, "Sharing");
+		var result = SWBrijj.procm("document.share_document", docId, usernameInvestor, "Sharing test");
 		result.then(function(x) {
 			console.log("Share", x);
-		}).except(function() {
-			fail("Sharing failed");
+		}).except(function(x) {
+			fail("Sharing", x);
 		});
 	});
 
 	it("Should verify that the document has been shared correctly", function(){
 		var result = SWBrijj.procm("document.document_status", docId);
 		result.then(function(x) {
-			console.log("Shared status", x[0]["event"]);
-			console.log("Shared with", x[0]["sent_to"]);
+			console.log("Status", x[0]["event"]);
+			console.log("User", x[0]["sent_to"]);
 			expect({value: x[0]["event"]}).toBe("shared");
-			expect({value: x[0]["sent_to"]}).toBe(secondAccount);
+			expect({value: x[0]["sent_to"]}).toBe(usernameInvestor);
 		}).except(function(x){ 
-			fail("Verifying document sharing failed");
+			fail("Verifying document sharing", x);
 		});
 	});
 
 	it("Should send a reminder", function() {
-		var result = SWBrijj.procm("document.remind_document", docId, secondAccount, "Reminder");
+		var result = SWBrijj.procm("document.remind_document", docId, usernameInvestor, "Reminder");
 		result.then(function(x) {
 			console.log("Remind", x);
-		}).except(function() {
-			fail("Remind failed");
+		}).except(function(x) {
+			fail("Remind", x);
 		});
 	});
 	
 	it("Should verify that the reminder has been sent correctly", function(){
 		var result = SWBrijj.procm("document.document_status", docId);
 		result.then(function(x) {
-			console.log("Shared status", x[0]["event"]);
-			console.log("Shared with", x[0]["sent_to"]);
+			console.log("Status", x[0]["event"]);
+			console.log("User", x[0]["sent_to"]);
 			expect({value: x[0]["event"]}).toBe("reminder");
-			expect({value: x[0]["sent_to"]}).toBe(secondAccount);
+			expect({value: x[0]["sent_to"]}).toBe(usernameInvestor);
 		}).except(function(x){ 
-			fail("Verifying document reminder failed");
+			fail("Verifying document reminder", x);
 		});
 	});
 
  	it("Should revoke access a document", function() {
-		var result = SWBrijj.procm("document.document_revoke", docId, secondAccount);
+		var result = SWBrijj.procm("document.document_revoke", docId, usernameInvestor);
 		result.then(function(x) {
 			console.log("Revoke", x);
-		}).except(function() {
-			fail("Revoke failed"); //Should fail right now, broken
+		}).except(function(x) {
+			fail("Revoke", x);
 		});
 	});
 
+	it("Should verify that the document has been revoked correctly", function(){
+		var result = SWBrijj.procm("document.document_status", docId);
+		result.then(function(x) {
+			console.log("Status", x[0]["event"]);
+			console.log("User", x[0]["sent_to"]);
+			expect({value: x[0]["event"]}).toBe("revoked");
+			expect({value: x[0]["sent_to"]}).toBe(usernameInvestor);
+		}).except(function(x){ 
+			fail("Verifying document reminder", x);
+		});
+	});
+
+	it("Should rename the uploaded file", function() {
+		var result = SWBrijj.procm("document.title_change", docId, "File Renamed");
+		result.then(function(x) {
+			console.log("File rename", x);
+		}).except(function(x) {
+			fail("Renaming", x)
+		});
+	});
+
+	it("Should verify the file has been renamed", function() {
+		var result = SWBrijj.procm("document.get_docdetail", docId);
+		result.then(function(x) {
+			console.log("Document detail", x);
+			expect({value: x[0]["docname"]}).toBe("File Renamed");
+		}).except(function(x) {
+			fail("Verifying rename", x);
+		});
+	});
+
+	it("Should delete the files created", function() {
+		var result = SWBrijj.procm("document.delete_document", docId);
+		sleep(secondsToSleep);
+		result.then(function(x) {
+			console.log("Delete", x);
+		}).except(function(x) {
+			fail("Deleting shared/revoked file", x);
+		});
+	});
+
+	//TODO: Check activity feed, currently broken. Check document information
 	//TODO: Share with someone, revoke, and then re-share
-
+	//TODO: Renaming test
 });
-
-
-//Connect to the server and see if files exist
-function checkFiles(documentToCheck, x, count) {
-	var counter = 0;
-	for (var i = 0; i < x.length; i++) { //iterate through documents
-		var doc = x[i]["docname"];
-		if (doc == documentToCheck) {
-			counter = counter + 1;
-		}
-	}
-	return Boolean(count == counter);
-};
-
-//Gets the docId from the doc name
-function getDocId(docname, x) {
-	console.log("getDocId", "Getting id for " + docname);
-	for (var i = 0; i < x.length; i++) {
-		var doc = x[i]["docname"];
-		if (doc == docname) {
-			return x[i]["doc_id"];
-		}
-	}
-};
-
-//function to manually fail
-function fail(msg) {
-	console.error("Fail", msg);
-	expect({value: false}).toBe(true);
-};
