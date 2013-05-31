@@ -4,7 +4,7 @@ var passwordIssuer = "never-";
 var secondsToSleep = 2; //At least 2 recommended
 var usernameInvestor = "eric+1@sharewave.com";
 
-describe("Login tests", function() {
+describe("Account tests", function() {
 
 	afterEach(function() {
 		sleep(2);
@@ -29,6 +29,8 @@ describe("Login tests", function() {
 			 fail("Log in 2", x);
 		});
 	});
+
+	//TODO: Update contact information, currently broken
 });
 
 describe("Document view/upload/delete tests", function() {
@@ -254,4 +256,5 @@ describe("Document status tests", function() {
 	//TODO: Check activity feed, currently broken. Check document information
 	//TODO: Share with someone, revoke, and then re-share
 	//TODO: Renaming test
+	//TODO: Go on investor account to check that file has been shared and revoked
 });
