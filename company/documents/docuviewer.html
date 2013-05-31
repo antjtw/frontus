@@ -11,10 +11,11 @@
                     <input ng_model="sendeeEmail" type="email">
                     <p>Message</p>
                     <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
+                    <p>Needs Signing? : <input type="checkbox" ng-model="needsign">Yes</p>
                 </div>
                 </form>
                 <div class="modalButtons">
-                    <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail)">Send</button>
+                    <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail, needsign)">Send</button>
                 </div>
             </div>
 

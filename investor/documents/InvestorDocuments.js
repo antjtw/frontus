@@ -53,11 +53,23 @@ var documentListController = function($scope) {
 function documentViewController($scope, $routeParams) {
   var docId = $routeParams.doc;
   $scope.currentDoc = docId;
+  $scope.signable = "";
   
   $scope.init = function () {
 	  SWBrijj.procm("document.get_docmetaI",  parseInt(docId)).then(function(data) {
 		$scope.documents = data[0];
 		$scope.$apply();
+		SWBrijj.proc("document.get_docstatus", parseInt(docId)).then(function(data) {
+			console.log(data[1][0]);
+			if (data[1][0] == "needsign") {
+				$scope.signable = 0;
+			}
+			else {
+				$scope.signable = 2;	
+			}
+
+			});
+
 		});
 		
   };
@@ -122,6 +134,19 @@ function documentViewController($scope, $routeParams) {
 		$scope.currentPage.pageNum = pageRequired;
 
 	};
+
+	$scope.submitSign = function(sig) {
+		if (sig == false || sig == undefined) {
+			alert("Need to click the box");
+		}
+		if (sig == true) {
+			SWBrijj.procm("document.sign_document", parseInt(docId)).then(function(data) {
+				$scope.signable = 1;
+				$scope.$apply();
+			});
+		}
+	};
+
 }
 
 /* Services */

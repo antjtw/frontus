@@ -88,7 +88,7 @@ function PasswordCtrl($scope) {
     };
     
     $scope.changePassword = function() {
-        SWBrijj.proc("change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
+        SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) alert("changed successfully");
             else alert("Oops.  Change failed");
         }).except(function(x) {alert("Oops.  Change failed: "+x); });

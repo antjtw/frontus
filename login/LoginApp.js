@@ -25,6 +25,7 @@ function LoginCtrl($scope, $location){
     $scope.password = "";
     $scope.showError = false;
     $scope.doLogin = function() {
+      $scope.$apply();
       SWBrijj.login($scope.username, $scope.password).then(function(x) { 
          if(x) {
 			document.location.href = x;
