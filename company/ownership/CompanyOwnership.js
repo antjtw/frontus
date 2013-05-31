@@ -14,7 +14,24 @@ owner.config(function($routeProvider, $locationProvider) {
 
 var captableController = function($scope, $parse) {
 
-    $scope.columnheader = ['Ownership', 'Shareholder', 'Common'];
+    $scope.columnheader = ['Ownership', 'Shareholder'];
+    $scope.customheaders = []
+    SWBrijj.tblm('ownership.my_captable_columns').then(function(data) {
+      for (var i=1; i<=Object.keys(data[0]['columnheaders']).length; i++) {
+        console.log(data[0]['columnheaders'][i]);
+        $scope.customheaders.push({"word":data[0]['columnheaders'][i], "index":i});
+      };
+    });
+
+    $scope.cells = {};
+    SWBrijj.tblm('ownership.my_captable').then(function(data) { 
+      for(var i=0; i<data.length; i++) {
+        $scope.cells['Shareholder1'+data[i]['row']] = data[i]['shareholder'];
+        $scope.cells['Ownership1'+data[i]['row']] = data[i]['shares'];
+      };
+      $scope.$apply();
+    });
+
     $scope.columns = []
     for(var i=0; i<$scope.columnheader.length; i++) {
     			if ($scope.columnheader[i] == "Shareholder") {
@@ -26,19 +43,9 @@ var captableController = function($scope, $parse) {
 				}
 			};
     $scope.rows = [1, 2, 3, 4];
-    $scope.cells = {};
     $scope.activeInvestor = {name:""}
 
 
-    $scope.filteredHeaders = function(headers) {
-    	var result = [];
-        angular.forEach(headers, function(value) {
-            if (value != "Ownership" && value != "Shareholder") {
-            	result.push(value);
-            }
-        });
-        return result;
-    };
 
     $scope.filteredColumns = function(headers) {
     	var result = [];
@@ -79,6 +86,19 @@ var captableController = function($scope, $parse) {
 
     $scope.getActive = function(row) {
         $scope.activeInvestor = row
+    };
+
+    $scope.saveRow = function(row) {
+      SWBrijj.proc('ownership.update_captable', parseInt(row), $scope.cells["Shareholder1" + row], parseInt($scope.cells["Ownership1" + row])).then(function(data) { 
+        console.log(data);
+      });
+    };
+
+    $scope.saveHeader = function(index) {
+        console.log($scope.customheaders[index-1]['word']);
+        SWBrijj.proc('ownership.update_captable_header', String(index-1), $scope.customheaders[index-1]['word']).then(function(data) { 
+        console.log(data);
+      });
     };
 
 };
