@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var owner = angular.module('companyownership', ['ui.bootstrap']);
+var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event']);
 
 owner.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -27,6 +27,8 @@ var captableController = function($scope, $parse) {
 			};
     $scope.rows = [1, 2, 3, 4];
     $scope.cells = {};
+    $scope.activeInvestor = {name:""}
+
 
     $scope.filteredHeaders = function(headers) {
     	var result = [];
@@ -55,6 +57,10 @@ var captableController = function($scope, $parse) {
       for(var i=1; i<=$scope.rows.length; i++) {
       	if ($scope.cells["Ownership1" + i] != null) {
       			x = x + parseInt($scope.cells["Ownership1" + i]);
+            if (i == $scope.rows.length) {
+              $scope.rows.push((i+1))
+              return x
+            }
       	}
       }
       return x;
@@ -69,6 +75,10 @@ var captableController = function($scope, $parse) {
       }
       var percent = (x / y) * 100;
       return percent;
+    };
+
+    $scope.getActive = function(row) {
+        $scope.activeInvestor = row
     };
 
 };

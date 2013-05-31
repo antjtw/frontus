@@ -1,25 +1,39 @@
- <table>
-    <tr class="column-label">
-   	  <td colspan="2">Ownership</td>
-   	  <td>Shareholder</td>
-      <td ng-repeat="header in filteredHeaders(columnheader)" colspan="2">{{header}}</td>
-    </tr>
-    <tr ng-repeat="row in rows">
-   	  <td>
-   	  	<input ng-model="cells['Ownership1'+row]"></input>
-   	  </td>
-   	  <td>
-   	  	<input disabled value="{{(percentage(cells['Ownership1'+row]) | number:2) + '%'}}"></input>
-   	  </td>
-      <td ng-repeat="column in filteredColumns(columns)">
-        <div>
-          <input ng-model="cells[column+row]"></input>
-        </div>
-      </td>
-    </tr>
-    <tr>
-    	<td>
-    		<input disabled value="{{total() || '0'}}"></disabled>
-    	</td>
-    </tr>
-  </table>
+ 
+<div class="container">
+  <div class="row-fluid">
+    <div class="span9" style="overflow:auto; min-height:800px;">
+     <table>
+        <tr class="column-label">
+       	  <td colspan="2">Ownership</td>
+       	  <td>Shareholder</td>
+          <td ng-repeat="header in filteredHeaders(columnheader)" colspan="2"><input ng-model="header"></input></td>
+          <td>{{header}}</td>
+        </tr>
+        <tr ng-repeat="row in rows">
+       	  <td>
+       	  	<input ui-event="{ focus : 'getActive(row)' }" ng-model="cells['Ownership1'+row]"></input>
+       	  </td>
+       	  <td>
+       	  	<input disabled value="{{(percentage(cells['Ownership1'+row]) | number:2) + '%'}}"></input>
+       	  </td>
+          <td ng-repeat="column in filteredColumns(columns)">
+            <div>
+              <input ui-event="{ focus : 'getActive(row)' }" ng-model="cells[column+row]"></input>
+            </div>
+          </td>
+        </tr>
+        <tr>
+        	<td>
+        		<input disabled value="{{total() || '0'}}"></disabled>
+        	</td>
+        </tr>
+      </table>
+    </div>
+    <div class="span3">
+    {{cells['Shareholder1' + activeInvestor]}}
+    {{cells['Ownership1' + activeInvestor]}}
+    <br>
+    <input ng-model="cells['Stock' + activeInvestor]"></input>
+    </div>
+  </div>
+</div>
