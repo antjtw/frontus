@@ -14,35 +14,56 @@ owner.config(function($routeProvider, $locationProvider) {
 
 var captableController = function($scope, $parse) {
 
-    $scope.columnheader = ['Ownership', 'Shareholder', 'Common'];
-    $scope.columns = []
-    for(var i=0; i<$scope.columnheader.length; i++) {
-    			if ($scope.columnheader[i] == "Shareholder") {
-    				$scope.columns.push($scope.columnheader[i]+'1')
-    			}
-    			else {
-				$scope.columns.push($scope.columnheader[i]+'1')
-				$scope.columns.push($scope.columnheader[i]+'2')
-				}
-			};
-    $scope.rows = [1, 2, 3, 4];
+    $scope.columnheader = ['Ownership', 'Shareholder'];
+    $scope.customheaders = [];
+    $scope.columns = [];
     $scope.cells = {};
+
+    SWBrijj.tblm('ownership.my_captable_columns').then(function(data) {
+
+      for(var i=1; i<=Object.keys(data[0]['columnheaders']).length; i++) {
+        console.log(data[0]['columnheaders'][i]);
+        $scope.customheaders.push({"word":data[0]['columnheaders'][i], "index":i});
+      };
+
+      for(var i=0; i<$scope.columnheader.length; i++) {
+            if ($scope.columnheader[i] == "Shareholder") {
+              $scope.columns.push($scope.columnheader[i]+'1')
+            }
+            else {
+          $scope.columns.push($scope.columnheader[i]+'1')
+          $scope.columns.push($scope.columnheader[i]+'2')
+          }
+        };
+
+        for(var i=1; i<=(2 * $scope.customheaders.length); i += 2) {
+          $scope.columns.push(i);
+          var j = i + 1
+          $scope.columns.push(j);
+      };
+
+      console.log($scope.columns);
+
+      $scope.$apply();
+    });
+
+
+    SWBrijj.tblm('ownership.my_captable').then(function(data) { 
+      for(var i=0; i<data.length; i++) {
+        $scope.cells['Shareholder1'+data[i]['row']] = data[i]['shareholder'];
+        $scope.cells['Ownership1'+data[i]['row']] = data[i]['shares'];
+      };
+      $scope.$apply();
+    });
+
+    $scope.rows = [1, 2, 3, 4];
     $scope.activeInvestor = {name:""}
 
 
-    $scope.filteredHeaders = function(headers) {
-    	var result = [];
-        angular.forEach(headers, function(value) {
-            if (value != "Ownership" && value != "Shareholder") {
-            	result.push(value);
-            }
-        });
-        return result;
-    };
 
     $scope.filteredColumns = function(headers) {
     	var result = [];
-    	i = 0
+    	var i = 0
         angular.forEach(headers, function(value) {
             if (i >= 2) {
             	result.push(value);
@@ -79,6 +100,19 @@ var captableController = function($scope, $parse) {
 
     $scope.getActive = function(row) {
         $scope.activeInvestor = row
+    };
+
+    $scope.saveRow = function(row) {
+      SWBrijj.proc('ownership.update_captable', parseInt(row), $scope.cells["Shareholder1" + row], parseInt($scope.cells["Ownership1" + row])).then(function(data) { 
+        console.log(data);
+      });
+    };
+
+    $scope.saveHeader = function(index) {
+        console.log($scope.customheaders[index-1]['word']);
+        SWBrijj.proc('ownership.update_captable_header', String(index), $scope.customheaders[index-1]['word']).then(function(data) { 
+        console.log(data);
+      });
     };
 
 };

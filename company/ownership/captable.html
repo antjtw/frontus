@@ -1,4 +1,4 @@
- 
+
 <div class="container">
   <div class="row-fluid">
     <div class="span9" style="overflow:auto; min-height:800px;">
@@ -6,19 +6,20 @@
         <tr class="column-label">
        	  <td colspan="2">Ownership</td>
        	  <td>Shareholder</td>
-          <td ng-repeat="header in filteredHeaders(columnheader)" colspan="2"><input ng-model="header"></input></td>
-          <td>{{header}}</td>
+          <td ng-repeat="header in customheaders" colspan="2">
+            <input ui-event="{ blur : 'saveHeader(header.index)' }" ng-model="header.word"></input>
+          </td>
         </tr>
         <tr ng-repeat="row in rows">
        	  <td>
-       	  	<input ui-event="{ focus : 'getActive(row)' }" ng-model="cells['Ownership1'+row]"></input>
+       	  	<input ui-event="{ focus : 'getActive(row)', blur : 'saveRow(row)' }" ng-model="cells['Ownership1'+row]"></input>
        	  </td>
        	  <td>
        	  	<input disabled value="{{(percentage(cells['Ownership1'+row]) | number:2) + '%'}}"></input>
        	  </td>
           <td ng-repeat="column in filteredColumns(columns)">
             <div>
-              <input ui-event="{ focus : 'getActive(row)' }" ng-model="cells[column+row]"></input>
+              <input ui-event="{ focus : 'getActive(row)', blur : 'saveRow(row)' }" ng-model="cells[column+row]"></input>
             </div>
           </td>
         </tr>

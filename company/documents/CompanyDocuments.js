@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['ui.bootstrap']);
+var docviews = angular.module('documentviews', ['ui.bootstrap', '$strap.directives']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -282,10 +282,11 @@ function documentViewController($scope, $routeParams) {
 
 	};
 	
-	$scope.share = function(message, email) {
-		 SWBrijj.procm("document.share_document", parseInt(docId), email, message).then(function(data) {
+	$scope.share = function(message, email, sign) {
+		 SWBrijj.procm("document.share_document", parseInt(docId), email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
+		};
 
 	$scope.modalUp = function () {
 			$scope.shouldBeOpen = true;
@@ -301,8 +302,6 @@ function documentViewController($scope, $routeParams) {
 			dialogFade:true,
     		dialogClass: 'modal shareModal'
 		  };
-		
-	};
 }
 
 function documentStatusController($scope, $routeParams) {
@@ -312,25 +311,47 @@ function documentStatusController($scope, $routeParams) {
 	$scope.document1 = data[0];
 	$scope.page_title = data[0].docname;
 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + "."
-	console.log($scope.document1);
-	SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(data) {
+
+	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
+	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
-		$scope.activity.push({activity: "created", icon: "icon-star-empty", whendone: $scope.document1.last_updated});
-		for (var i = 0; i < $scope.activity.length; i++) {
-		if ($scope.activity[i].activity == "shared") {
-			$scope.activity[i].activity = "shared with"
-			$scope.activity[i].icon = "icon-edit"
-		}
-		else if ($scope.activity[i].activity == "viewed") {
-			$scope.activity[i].activity = "viewed by"
-			$scope.activity[i].icon = "icon-eye-open"
-		}
-		else if ($scope.activity[i].activity == "reminder") {
-			$scope.activity[i].activity = "reminded "
-			$scope.activity[i].icon = "icon-bullhorn"
-		}
-		}
-		$scope.$apply();
+		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
+			$scope.activityDetail = person;
+			for (var i = 0; i < $scope.activity.length; i++) {
+				if ($scope.activity[i].count == 1) {
+					for (var j = 0; j < $scope.activityDetail.length; j++) {
+							if ($scope.activity[i].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
+								if ($scope.activity[i].activity == $scope.activityDetail[j].activity) {
+										$scope.activity[i].namethem = $scope.activityDetail[j].sent_to;
+									}
+							}
+					}
+				}
+			}
+
+			$scope.activity.push({activity: "created", icon: "icon-star-empty", when_sent: $scope.document1.last_updated});
+			for (var i = 0; i < $scope.activity.length; i++) {
+			if ($scope.activity[i].activity == "shared") {
+				$scope.activity[i].activity = "shared with "
+				$scope.activity[i].icon = "icon-edit"
+			}
+			else if ($scope.activity[i].activity == "viewed") {
+				$scope.activity[i].activity = "viewed by "
+				$scope.activity[i].icon = "icon-eye-open"
+			}
+			else if ($scope.activity[i].activity == "reminder") {
+				$scope.activity[i].activity = "reminded "
+				$scope.activity[i].icon = "icon-bullhorn"
+			}
+			else if ($scope.activity[i].activity == "signed") {
+				$scope.activity[i].activity = "signed by "
+				$scope.activity[i].icon = "icon-ok-circle"
+			}
+			}
+			$scope.$apply();
+
+
+			});
 		});
 	});
 	
@@ -359,7 +380,13 @@ function documentStatusController($scope, $routeParams) {
 	for (var i = 0; i < $scope.userStatus.length; i++) {
 		$scope.userStatus[i].shown = false;
 		$scope.userStatus[i].button = "icon-plus";
-	}
+		if ($scope.userStatus[i].event == "revoked") {
+			$scope.userStatus[i].rstatus = 1;
+		}
+		if ($scope.userStatus[i].event == "needsign") {
+			$scope.userStatus[i].event = "needs signing";
+		};
+	};
 	$scope.$apply();
 	});
 	
@@ -369,15 +396,15 @@ function documentStatusController($scope, $routeParams) {
 		   return 0
 	   }
 	   else {
-	   		return -card.whendone
+	   		return -card.when_sent
 	   }
 	};
 	
-	$scope.share = function(message, email) {
-		 SWBrijj.procm("document.share_document", parseInt(docId), email, message).then(function(data) {
+	$scope.share = function(message, email, sign) {
+		 SWBrijj.procm("document.share_document", parseInt(docId), email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
-	};
+		};
 	
 	$scope.remind = function(message, email) {
 		 SWBrijj.procm("document.remind_document", parseInt(docId), email, message).then(function(data) {
@@ -399,7 +426,7 @@ function documentStatusController($scope, $routeParams) {
 					name.button = "icon-plus";
 				}
 				else {
-					SWBrijj.procm("document.get_I_docstatus", name.sent_to).then(function(data) {
+					SWBrijj.procm("document.get_I_docstatus", name.sent_to, parseInt(docId)).then(function(data) {
 						name.whenshared = data[1].loggedin;
 						if (data[0].loggedin != null) {
 							name.lastlogin = data[0].loggedin;
@@ -419,11 +446,17 @@ function documentStatusController($scope, $routeParams) {
 						else {
 							name.signed = 0;	
 						}
-						if (data[4].loggedin != null) {
+						if (data[5].loggedin != null) {
+							console.log(data[5])
+							name.column5 = 2
+							name.reminder = data[5].loggedin;
+						}
+						else if (data[4].loggedin != null) {
+							name.column5 = 1
 							name.reminder = data[4].loggedin;
 						}
 						else {
-							name.reminder = 0;	
+							name.column5 = 0;	
 						}
 						name.button = "icon-minus";
 						name.shown = true;
