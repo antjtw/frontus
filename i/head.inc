@@ -13,6 +13,7 @@
  <script src="/lib/angular/angular-ui.js"></script>
  <script src="/lib/angular/angular-resource.js"></script>
  <script src="/lib/angular/ui-bootstrap-tpls-0.2.0.js"></script>
+ <script src="/lib/angular/ui-utils/event.js"></script>
 
 <link type="text/css" rel="stylesheet" href="/lib/introjs.css">
 <script src="/lib/intro.js"></script>

@@ -15,6 +15,11 @@ CREATE OR REPLACE FUNCTION document.get_doc_activity(docid integer) RETURNS SETO
 BEGIN RETURN QUERY SELECT * from document.activity_feed where doc_id=docid;
 END $$;
 
+CREATE TYPE document.activity_cluster as (count bigint, doc_id int, when_sent date, activity document.activity_type);
+CREATE OR REPLACE FUNCTION document.get_doc_activity_cluster(docid integer) RETURNS SETOF document.activity_cluster LANGUAGE plpgsql AS $$
+BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
+END $$;
+
 CREATE OR REPLACE FUNCTION document.delete_document() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
   delete from document.library where doc_id = OLD.doc_id;
@@ -70,19 +75,29 @@ CREATE TRIGGER share_document INSTEAD OF INSERT ON document.my_shares FOR EACH R
 GRANT INSERT on document.my_shares TO investor;
 
 -- Share document, sends email and tracks action
-CREATE or REPLACE FUNCTION document.share_document(docid int, xemail character varying, message character varying) returns void
+CREATE or REPLACE FUNCTION document.share_document(docid int, xemail character varying, message character varying, sign boolean) returns void
 language plpgsql as $$
 declare
   template text = mail.get_mail_template('doc-share.html');
   comp account.company_type;
   doc text;
+  sendtype document.activity_type;
 begin
   select company into comp from account.my_role where role='issuer';
   template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/documents/view?doc=' , docid));
   template = replace(template, '{{company}}', comp);
   select docname into doc from document.my_library where doc_id=docid;
   template = replace(template, '{{name}}', doc);
-  perform mail.send_mail(xemail, concat(doc,' has been shared with you!'), template);
+  IF sign = 't' THEN
+    perform mail.send_mail(xemail, concat(doc,' needs your signature'), template);
+    insert into document.my_shares(doc_id, sent_to, sent_from, activity, sender) values (docid, xemail, comp, 'needsign', (select distinct email from account.my_role));
+  ELSE
+    perform mail.send_mail(xemail, concat(doc,' has been shared with you!'), template);
+  END IF;
+  perform access from document.my_revoked where doc_id=docid and sent_to=xemail;
+  IF FOUND THEN
+    INSERT INTO document.my_revoked(doc_id, sent_to, sent_from, sender, access) values (docid, xemail, current_user, (Select company from account.my_role where role='issuer'), 'unrevoked');
+  END IF;
   insert into document.my_shares(doc_id, sent_to, sent_from, activity, sender) values (docid, xemail, comp, 'shared', (select distinct email from account.my_role));
 end $$;
 
@@ -104,14 +119,14 @@ begin
 end $$;
 
 -- Sharing information for document status page
-CREATE TYPE document.shared_status as (sent_to email, whensent timestamp, event document.activity_type);
+CREATE TYPE document.shared_status as (sent_to account.email, whensent timestamp, event document.activity_type);
 
 CREATE or REPLACE FUNCTION document.document_status(docid int) returns setof document.shared_status 
 language plpgsql as $$
 begin 
 return query 
       (select sent_to, max(when_sent) as whensent, max(activity) as event from document.my_shares where doc_id=docid and sent_to not in (SELECT sent_to from document.my_revoked x where x.doc_id=docid) GROUP BY sent_to)
-UNION (select sent_to, max(when_revoked) as whensent, max(access)   as event from document.my_revoked where doc_id=docid GROUP BY sent_to);
+UNION (select sent_to, max(when_revoked) as whensent, max(access) as event from document.my_revoked where doc_id=docid GROUP BY sent_to);
 RETURN;
 end $$;
 
@@ -127,14 +142,15 @@ end $$;
 
 create type document.I_doc_status_type as (loggedin timestamp);
 
-CREATE OR REPLACE FUNCTION document.get_i_docstatus(investor account.email)
+CREATE OR REPLACE FUNCTION document.get_i_docstatus(investor account.email, docid int)
  RETURNS SETOF document.i_doc_status_type
  LANGUAGE plpgsql
 AS $function$
 begin 
   return query select max(login_time) as loggedin from document.user_tracker where email=investor;
-  return query select min(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='shared';
-  return query select max(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='viewed';
-  return query select min(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='signed';
-  return query select max(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='reminder';
+  return query select min(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='shared' and doc_id=docid;
+  return query select max(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='viewed' and doc_id=docid;
+  return query select min(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='signed' and doc_id=docid;
+  return query select max(when_sent) as loggedin from document.my_shares where sent_to=investor and activity='reminder' and doc_id=docid;
+  return query select max(when_revoked) as loggedin from document.my_revoked where sent_to=investor and access='revoked' and doc_id=docid;
 end $function$;
