@@ -10,7 +10,8 @@ basePath = '';
 files = [
   ANGULAR_SCENARIO,
   ANGULAR_SCENARIO_ADAPTER,
-  'src/*.js',
+  'http://localhost:4040/brijj/brijj.js',
+  'http://code.jquery.com/jquery-1.10.1.min.js',
   'test/*.js'
 ];
 
@@ -55,7 +56,7 @@ autoWatch = true;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['Chrome'];
+// browsers = ['Chrome'];
 
 
 // If browser does not capture in given timeout [ms], kill it
