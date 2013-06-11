@@ -17,7 +17,7 @@ END $$;
 
 CREATE TYPE document.activity_cluster as (count bigint, doc_id int, when_sent date, activity document.activity_type);
 CREATE OR REPLACE FUNCTION document.get_doc_activity_cluster(docid integer) RETURNS SETOF document.activity_cluster LANGUAGE plpgsql AS $$
-BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
+BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent::date, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
 END $$;
 
 CREATE OR REPLACE FUNCTION document.delete_document() returns TRIGGER language plpgsql SECURITY DEFINER AS $$

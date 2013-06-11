@@ -1,40 +1,61 @@
-
 <div class="container">
   <div class="row-fluid">
-    <div class="span9" style="overflow:auto; min-height:800px;">
-     <table>
-        <tr class="column-label">
-       	  <td colspan="2">Ownership</td>
-       	  <td>Shareholder</td>
-          <td ng-repeat="header in customheaders" colspan="2">
-            <input ui-event="{ blur : 'saveHeader(header.index)' }" ng-model="header.word"></input>
-          </td>
-        </tr>
+    <div class="span9 docLibrary statusBlock" style="overflow:auto;">
+     <table class="tableView bodyText">
+          <tr class="column-label">
+         	  <th colspan="2">Ownership</th>
+         	  <th class="longRow">Shareholder</th>
+            <th ng-repeat="one in issues">
+              <input ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
+            </th>
+          </tr>
         <tr ng-repeat="row in rows">
-       	  <td>
-       	  	<input ui-event="{ focus : 'getActive(row)', blur : 'saveRow(row)' }" ng-model="cells['Ownership1'+row]"></input>
-       	  </td>
-       	  <td>
-       	  	<input disabled value="{{(percentage(cells['Ownership1'+row]) | number:2) + '%'}}"></input>
-       	  </td>
-          <td ng-repeat="column in filteredColumns(columns)">
-            <div>
-              <input ui-event="{ focus : 'getActive(row)', blur : 'saveRow(row)' }" ng-model="cells[column+row]"></input>
-            </div>
+          <td><input disabled value="{{shareSum(row);}}"></input></td>
+          <td><input disabled value="{{sharePercentage(row, rows) | number:3}}%"></input></td>
+          <td class="longRow"><input ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input></td>
+          <td ng-repeat="header in issues">
+            <input ui-event="{focus : 'getActiveTransaction(row.name, header.key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChange(row[header.key])" ng-model='row[header.key]'></input>
           </td>
         </tr>
-        <tr>
-        	<td>
-        		<input disabled value="{{total() || '0'}}"></disabled>
-        	</td>
+        <tr class='tablefooter'>
+          <td><input disabled value="{{totalShares(rows);}}"></input></td>
+          <td><input disabled value="100%"></input></td>
+          <td></td>
+          <td ng-repeat="one in issues">
+            <input disabled value="{{colTotal(one.issue, rows);}}"</input>
+          </td>
         </tr>
       </table>
     </div>
+
+
     <div class="span3">
-    {{cells['Shareholder1' + activeInvestor]}}
-    {{cells['Ownership1' + activeInvestor]}}
-    <br>
-    <input ng-model="cells['Stock' + activeInvestor]"></input>
+    <div ng-switch on="sideBar" >
+        <span ng-switch-when="1">
+          <p>Issue Name <input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.issue"></input></p>
+          <p>Issue Type<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.type"></input></p>
+          <p>Strike Price<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.strike"></input></p>
+          <p>Vesting Schedule<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.vesting"></input></p>
+        </span>
+        <span ng-switch-when="2">
+          <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
+          <button ng-click="createTran();">Add</button>
+          <tabs>
+            <pane ng-repeat="tran in activeTran" heading="{{tran.date | date:'yyyy/MM/dd'}}" active="tran.active">
+              <p>Date<input disabled ng-model="tran.date"></input></p>
+              <p>Type<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.type"></input></p>
+              <p>Units<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
+              <button ng-click="deleteTran(tran);">Delete</button>
+            </pane>
+          </tabs>
+        </span>
+        <span ng-switch-when="3">
+          <p>Investor Email <input ng-model="activeInvestorName"></input></p>
+        </span>
+        <span ng-switch-default>
+          <p>Welcome To Your Captable</p>
+        </span>
+    </div>
     </div>
   </div>
 </div>

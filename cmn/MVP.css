@@ -122,7 +122,7 @@ h2 {
 	padding-right:20px;
 }
 
-.bodyText {
+.bodyText, .bodyText input {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -426,6 +426,26 @@ h2 {
 	margin: 40px 0 0 0;
 }
 
+.docLibrary .column-label {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary .tablefooter {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary input {
+	border: 0px;
+	padding: 0px;
+	width: 100px;
+}
+
+.docLibrary input:disabled {
+	background-color: white;
+}
+
 .searchBox {
 	float:right;
 }
@@ -435,7 +455,7 @@ h2 {
 }
 
 .tableView {
-	width:100%;
+	width:auto;
 	margin: 0 auto 0 auto;
 }
 
@@ -448,17 +468,21 @@ h2 {
 
 .tableView th {
 	width: 340px;
-	height: 27px;
+	height: 30px;
 	text-align: left;
-	padding: 0 0 0 20px;
+	padding: 0 0 0 10px;
 	position: relative;
 }
 
 .tableView td {
 	padding: 5px 40px 0 0;
 	width:250px;
-	height:55px;
-	padding: 0 0 0 20px;
+	height:35px;
+	padding: 0 0 0 10px;
+}
+
+.longRow td {
+	width: 200px;
 }
 
 .tableView td[class="button"] {

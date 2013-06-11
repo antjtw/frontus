@@ -109,7 +109,8 @@ var captableController = function($scope, $parse) {
     };
 
     $scope.saveHeader = function(index) {
-        console.log($scope.customheaders[index-1]['word']);
+        console.log($scope.customheaders[index-1]);
+        if 
         SWBrijj.proc('ownership.update_captable_header', String(index), $scope.customheaders[index-1]['word']).then(function(data) { 
         console.log(data);
       });
