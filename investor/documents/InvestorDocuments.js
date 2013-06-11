@@ -41,17 +41,35 @@ var documentListController = function($scope) {
 		else {
 			$scope.docOrder = field;
 		}
-	}
+	};
+
+	$scope.searchFilter = function (obj) {
+        var re = new RegExp($scope.query, 'i');
+        return !$scope.query || re.test(obj.docname);
+    };
 							 		
 };
 
 function documentViewController($scope, $routeParams) {
   var docId = $routeParams.doc;
+  $scope.currentDoc = docId;
+  $scope.signable = "";
   
   $scope.init = function () {
 	  SWBrijj.procm("document.get_docmetaI",  parseInt(docId)).then(function(data) {
 		$scope.documents = data[0];
 		$scope.$apply();
+		SWBrijj.proc("document.get_docstatus", parseInt(docId)).then(function(data) {
+			console.log(data[1][0]);
+			if (data[1][0] == "needsign") {
+				$scope.signable = 0;
+			}
+			else {
+				$scope.signable = 2;	
+			}
+
+			});
+
 		});
 		
   };
@@ -60,20 +78,28 @@ function documentViewController($scope, $routeParams) {
   var imageObj = new Image();
   
   imageObj.src = "/photo/docpg?id="+docId+"&page=1";
+
+  $scope.doclength = 1;
   
   imageObj.onload = function() {
-	  	var width = 1024;
-		var scaling = (imageObj.height/imageObj.width)
-		var height = (1024 * scaling)
-		var n = 26;
-		$scope.images = []
-		for(var i=1; i<n; i++) {
-			$scope.images.push({"src": "", "pagenum": i});
-		};
-		$scope.images[0].src = imageObj.src;
-		$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
-		$scope.images;
-		$scope.$apply();
+  		SWBrijj.procm("document.get_doclength", parseInt(docId)).then(function(data) {
+	  		console.log(data);
+			$scope.doclength = data[0];
+			console.log($scope.doclength);
+			var width = 1024;
+			var scaling = (imageObj.height/imageObj.width)
+			var height = (1024 * scaling)
+			var n = $scope.doclength.get_doclength + 1;
+			console.log(n);
+			$scope.images = []
+			for(var i=1; i<n; i++) {
+				$scope.images.push({"src": "", "pagenum": i});
+			};
+			$scope.images[0].src = imageObj.src;
+			$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
+			$scope.images;
+			$scope.$apply();
+		});
       };
 
 	$scope.nextPage = function(value) {
@@ -108,6 +134,19 @@ function documentViewController($scope, $routeParams) {
 		$scope.currentPage.pageNum = pageRequired;
 
 	};
+
+	$scope.submitSign = function(sig) {
+		if (sig == false || sig == undefined) {
+			alert("Need to click the box");
+		}
+		if (sig == true) {
+			SWBrijj.procm("document.sign_document", parseInt(docId)).then(function(data) {
+				$scope.signable = 1;
+				$scope.$apply();
+			});
+		}
+	};
+
 }
 
 /* Services */

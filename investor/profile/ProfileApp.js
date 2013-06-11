@@ -26,12 +26,12 @@ app.controller("MainProfileController", function($scope, $location) {
 
 function ContactCtrl($scope) {
   $scope.contactSave = function () {
-      SWBrijj.proc("contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { alert("saved: "+x);
       });
   };
   //noinspection JSUnresolvedVariable
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
 }
 
 function SocialCtrl($scope, $location) {  
@@ -58,7 +58,7 @@ function SocialCtrl($scope, $location) {
   }
 
 
-    SWBrijj.proc('profile').then(function(x) { initPage($scope, x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
     SWBrijj.procm('oauth.dropbox_list','')
       .then(function(x)  { $scope.dropboxFiles=x; $scope.$apply(); })
       .except( function(x) {} );
@@ -88,7 +88,7 @@ function PasswordCtrl($scope) {
     };
     
     $scope.changePassword = function() {
-        SWBrijj.proc("change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
+        SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) alert("changed successfully");
             else alert("Oops.  Change failed");
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
@@ -100,7 +100,7 @@ function PhotoCtrl($scope) {
         alert('heh');
     };
     
-    SWBrijj.proc('profile').then(function(x) { initPage($scope,x) }).except(initFail);
+    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
 app.controller("FileDNDCtrl", function($scope, $element) {
