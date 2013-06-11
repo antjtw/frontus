@@ -724,3 +724,12 @@ input.checkInput {
 	margin-top: 20px;
 	margin-bottom: 60px;
 }
+
+.jobsBar {
+	background-color: #ea680f;
+	position: fixed;
+	vertical-align: middle;
+	height: 30px;
+	z-index: 1000;
+	border-bottom: 4px solid white;
+}
