@@ -1,5 +1,5 @@
 
-var app = angular.module('ProfileApp', ['ngResource']);
+var app = angular.module('ProfileApp', ['ngResource','brijj']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
@@ -24,7 +24,7 @@ app.controller("MainProfileController", function($scope, $location) {
       return p == x; };
 } );
 
-function ContactCtrl($scope) {
+function ContactCtrl($scope, SWBrijj) {
   $scope.contactSave = function () {
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { alert("saved: "+x);
@@ -34,7 +34,7 @@ function ContactCtrl($scope) {
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
 }
 
-function SocialCtrl($scope, $location) {  
+function SocialCtrl($scope, $location, SWBrijj) {  
   $scope.contactSave = function(){
      SWBrijj.proc("social_update", $scope.twitter, $scope.linkedin, $scope.google, $scope.dropbox, $scope.facebook).
         then(function(x) { alert("done: "+x); });
@@ -65,7 +65,7 @@ function SocialCtrl($scope, $location) {
 
 }
 
-function PasswordCtrl($scope) {
+function PasswordCtrl($scope, SWBrijj) {
     $scope.currentPassword="";
     $scope.newPassword="";
     $scope.passwordConfirm="";
@@ -95,7 +95,7 @@ function PasswordCtrl($scope) {
     };
 }
 
-function PhotoCtrl($scope) {
+function PhotoCtrl($scope, SWBrijj) {
     $scope.upload = function () {
         alert('heh');
     };
@@ -103,7 +103,7 @@ function PhotoCtrl($scope) {
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
-app.controller("FileDNDCtrl", function($scope, $element) {
+app.controller("FileDNDCtrl", function($scope, $element, SWBrijj) {
     var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
@@ -211,7 +211,6 @@ function initPage($scope, x) {
   var z = x[1]; // the values
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
-  $scope.$apply();
 }
 	function initFail(x) {
 		document.location.href='/login';

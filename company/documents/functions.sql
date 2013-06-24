@@ -131,7 +131,7 @@ RETURN;
 end $$;
 
 -- Gets document
-CREATE or REPLACE FUNCTION document.get_document(user_id email, docid int) returns bytea language plpgsql as $$
+CREATE or REPLACE FUNCTION document.get_document(user_id account.email, docid int) returns bytea language plpgsql as $$
 declare
   docu bytea;
 begin 

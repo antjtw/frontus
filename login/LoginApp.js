@@ -1,8 +1,8 @@
 //app for the program
-var app = angular.module('LoginApp', ['ngResource']);
+var app = angular.module('LoginApp', ['ngResource','brijj']);
 
 //this is used to assign the correct template and controller for each URL path
-app.config(function($routeProvider, $locationProvider){
+app.config(function($routeProvider, $locationProvider, SWBrijj){
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
@@ -20,19 +20,17 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 //Controller for the Login Page
-function LoginCtrl($scope, $location){
+function LoginCtrl($scope, $location, SWBrijj){
     $scope.username = "";
     $scope.password = "";
     $scope.showError = false;
     $scope.doLogin = function() {
-      $scope.$apply();
       SWBrijj.login($scope.username, $scope.password).then(function(x) { 
          if(x) {
 			document.location.href = x;
 			console.log("redirecting to: "+x);
 		}
          else $scope.showError = true;
-         $scope.$apply();
       });
     }
     
@@ -57,7 +55,7 @@ function HomeCtrl($scope){
 }
 
 //Controller for the home page
-function ForgotCtrl($scope, $location) {
+function ForgotCtrl($scope, $location, SWBrijj) {
     $scope.username="";
     $scope.fed="";
     $scope.showReset = false;
