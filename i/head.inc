@@ -9,7 +9,7 @@
  <script src="/brijj/brijj.js"></script>
  <script src="/lib/jquery/jquery-1.8.3.js"></script>
  <script src="/lib/bootstrap/bootstrap.js"></script>
- <script src="/lib/angular/angular.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
  <script src="/lib/angular/angular-ui.js"></script>
  <script src="/lib/angular/angular-resource.js"></script>
  <script src="/lib/angular/ui-bootstrap-tpls-0.2.0.js"></script>

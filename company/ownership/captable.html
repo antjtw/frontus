@@ -13,9 +13,10 @@
           <td><input disabled value="{{shareSum(row);}}"></input></td>
           <td><input disabled value="{{sharePercentage(row, rows) | number:3}}%"></input></td>
           <td class="longRow"><input ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input></td>
-          <td ng-repeat="key in issuekeys">
-            <input ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChange(row[key])" ng-model='row[key]'></input>
-          </td>
+            <td ng-repeat="key in issuekeys">
+              <input ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key])" ng-model='row[key]'></input>
+              <input ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key+'a'])" ng-model='row[key+"a"]'></input>
+            </td>
         </tr>
         <tr class='tablefooter'>
           <td><input disabled value="{{totalShares(rows);}}"></input></td>

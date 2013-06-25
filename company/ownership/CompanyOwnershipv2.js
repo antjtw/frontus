@@ -126,9 +126,11 @@ var captableController = function($scope, $parse) {
 			      if (row.name == tran.investor) {
 			      	if (tran.issue in row) {
 			      		row[tran.issue] = row[tran.issue] + tran.units
+                row[tran.issue+"a"] = row[tran.issue+"a"] + tran.amount
 			      	}
 			      	else {
 			      	row[tran.issue] = tran.units;
+              row[tran.issue+"a"] = tran.amount;
 			      	};
 			      }
 			    });
@@ -266,9 +268,16 @@ $scope.saveIssue = function(issue) {
   }
 };
 
-$scope.tranChange = function(value) {
+$scope.tranChangeU = function(value) {
   if ($scope.activeTran.length < 2) {
   $scope.activeTran[0]['units'] = value;
+  };
+};
+
+$scope.tranChangeA = function(value) {
+  console.log("here we are");
+  if ($scope.activeTran.length < 2) {
+  $scope.activeTran[0]['amount'] = value;
   };
 };
 
