@@ -1,11 +1,12 @@
 <div class="container">
+
   <div class="row-fluid">
     <ul class="subText navPills cf">
       <a href="/company/ownership/"><li class="button">Edit</li></a>
       <li class="selectedPill button">Grants</li>
-      <a href="/company/ownership/status/"><li class="button">Status</li></a>
      </ul>
   </div>
+  
   <div class="row-fluid">
     <div class="span9 docLibrary statusBlock" style="overflow:auto;">
      <table class="tableView bodyText">
@@ -47,7 +48,7 @@
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
                     <p>Underlying Security
-                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in tran.allowKeys">
+                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
                       <option></option>
                       </select>
                     </p>

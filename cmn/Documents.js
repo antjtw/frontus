@@ -1,4 +1,13 @@
 
+function getIntProperty(se, z) {
+  var lh = getComputed(se, z);
+  lh = parseFloat(lh.replace("px",""))
+  return lh;
+}
+
+function getComputed(se, z) {
+  return (se.currentStyle) ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+}
 
 angular.module('draggable', []).
     directive('draggable', ['$document' , function($document) {
@@ -131,6 +140,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
   $scope.init = function () {
     $scope.signable = "";
+    $scope.when_signed = "";
     $scope.notes=[];
 
     SWBrijj.tblm("document.my_investor_doc_length", "doc_id", $scope.docId).then(function(data) {
@@ -139,7 +149,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       $scope.currentPage = 1;
     });
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-      $scope.signable = data["signature_requested"] ? 0 : 2;
+      $scope.signable = data["signature_status"] == 'signature requested';
+      $scope.signed = data["when_signed"];
     });
   };
 
@@ -177,9 +188,25 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
   $scope.newBox = function(event) {
     var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable" >'+
-        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: auto;"/></div>')($scope);
+        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: hidden; height: 20px;"/></div>')($scope);
     aa.scope().initdrag(event);
     aa.scope().ntype='text';
+    bb = aa[0].querySelector("textarea");
+/*    window.setInterval( function() {
+       if (bb.clientHeight < bb.scrollHeight) bb.style.height = (bb.scrollHeight+5) +"px";
+       if (bb.clientWidth < bb.scrollWidth) bb.style.width = (bb.scrollWidth + 5) +"px";
+    }, 300);
+    */
+    bb.addEventListener('input', function(e) {
+      if (bb.clientHeight < bb.scrollHeight) {
+        var pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb,'padding-bottom');
+        bb.style.height = (bb.scrollHeight - pad) + "px";
+      }
+      if (bb.clientWidth < bb.scrollWidth) {
+        var pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb,'padding-right');
+        bb.style.width = (bb.scrollWidth - pad) +"px";
+      }
+    }, 0);
   };
 
   $scope.newCheck = function(event) {
@@ -234,7 +261,9 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   };
 
   $scope.submitSign = function(sig) {
-    alert("not yet implemented: submitSign");
+    SWBrijj.procm("document.sign_document", $scope.docId).then(function(data) {
+       window.location.reload();
+    }).except(function(x) { alert(x.message); });
     /*
      if (sig == false || sig == undefined) {
      alert("Need to click the box");
@@ -268,34 +297,75 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     var ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      for(var i = 0; i<$scope.notes.length;i++) {
-        var note = $scope.notes[i];
+      for(var nnum = 0; nnum<$scope.notes.length;nnum++) {
+        var note = $scope.notes[nnum];
         var ntype = note.scope().ntype;
         var notex = note[0];
         if (ntype == 'text') {
           var annotext = note.scope().$$nextSibling.annotext;
-          ctx.fillStyle = "blue";
-          ctx.font = "16px Optima";
           var se = notex.querySelector("textarea");
+
+          var lh = getIntProperty(se, 'line-height');
+          var padx = getIntProperty(se, 'padding-left');
+          var pady = getIntProperty(se, 'padding-top');
+          var bl = getIntProperty(se, 'border-left') +
+                   getIntProperty(notex, 'border-left');
+
+          var bt = getIntProperty(se, 'border-top') +
+              getIntProperty(notex, 'border-top');
+
+          ctx.fillStyle = "blue";
+          // ctx.font = "16px Optima";
+          ctx.font = getComputed(se,'font');
           var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
-          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
-          ctx.fillText(annotext, ll + 4, tt - 4);
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetTop;
+
+          tt += pady;
+          ll += padx;
+
+          ll += 2;
+          tt -= 4;
+
+          var anoray = annotext.split('\n');
+          for(var i=0;i<anoray.length;i++) {
+            ctx.fillText(anoray[i], ll, tt + lh * (i+1));
+          }
         }
         else if (ntype == 'check') {
-          ctx.fillStyle = "darkgray";
+          ctx.fillStyle = "blue";
           ctx.font = "28px FontAwesome";
           var se = notex.querySelector("i");
           var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
-          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
-          ctx.fillText("\uf00c", ll + 4 , tt - 4);
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight + se.offsetTop;
+
+          tt -= 4
+          var lh = getIntProperty(se, 'line-height');
+          var padx = getIntProperty(se, 'padding-left');
+          var pady = getIntProperty(se, 'padding-top');
+          var bl = getIntProperty(se, 'border-left') +
+              getIntProperty(notex, 'border-left');
+
+          var bt = getIntProperty(se, 'border-top') +
+              getIntProperty(notex, 'border-top');
+
+          tt += pady;
+          ll += padx;
+
+
+          ctx.fillText("\uf00c", ll , tt);
         }
         else if (ntype == 'canvas') {
           var se = notex.querySelector("canvas");
           var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
-          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetTop;
+
+
           var ctxxx = se.getContext('2d');
           var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
-          ctx.putImageData(imgData,ll,tt);
+          var imgx = new Image();
+          imgx.src = se.toDataURL("image/png");
+          // ctx.putImageData(imgData,ll,tt);
+          ctx.drawImage(imgx, ll, tt);
         }
       }
 
@@ -309,10 +379,12 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           var docpanel = document.querySelector(".docPanel");
           var imgurl = docpanel.style.backgroundImage;
           docpanel.style.backgroundImage = imgurl;
+/*
           for(var i = 0;i<$scope.notes.length;i++) {
             document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
           }
           $scope.notes = [];
+          */
         }).
     except(function(x) {
           console.log(x.message); } );

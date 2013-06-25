@@ -65,6 +65,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
+    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
+      $rootScope.notification.show("fail", "Please enter a name more than 2 letters in length");
+      return;
+    } 
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { 
           console.log("saved: "+x);
@@ -110,11 +114,11 @@ function SocialCtrl($scope, $location, SWBrijj) {
 
 }
 
-function ViewerCtrl($scope, $route, $rootScope, $routeParams) { 
+function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
   var rowNumber;
   SWBrijj.tbl('account.company_investors').then(function(x) { //TODO: NEW TBLM with where statement
-    for (var i = 1; i < x.length; i++) { //Can't use indexOf, Objects not supported
+    for (var i = 1; i < x.length; i++) {
       if (x[i][0] == userId) {
         rowNumber = i;
       } //Get email

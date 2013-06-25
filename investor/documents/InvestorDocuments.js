@@ -23,6 +23,13 @@ docviews.config(function($routeProvider, $locationProvider) {
 });
 */
 
+docviews.filter('fromNow', function() {
+  return function(date) {
+    var d = moment(date);
+    if (d) return d.fromNow();
+  }
+});
+
 
 /* Controllers */
 
@@ -37,14 +44,14 @@ function InvestorDocumentListController($scope, SWBrijj) {
 	  $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
 	};
 
-  $scope.status = function(doc) {
-    if (doc.signature_requested) return 'signature requested';
-    else return '';
-  }
 	$scope.searchFilter = function (obj) {
      var re = new RegExp($scope.query, 'i');
      return !$scope.query || re.test(obj.docname);
   };
+
+  $scope.time = function(doc) {
+    return doc.when_signed || doc.signature_deadline;
+  }
 							 		
 }
 

@@ -72,16 +72,15 @@ END $$;
 
 CREATE TRIGGER delete_issue INSTEAD OF DELETE on ownership.company_issue FOR EACH ROW EXECUTE PROCEDURE ownership.delete_issue();
 
-
 -- Creates and Updates Transactions
-CREATE OR REPLACE FUNCTION ownership.update_transaction(key character varying, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newtype character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS SETOF bigint AS
+CREATE OR REPLACE FUNCTION ownership.update_transaction(key character varying, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newtype character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS SETOF int AS
 $$
 BEGIN
 	IF key = '' THEN
 	INSERT INTO ownership.company_transaction (tran_id, investor, company, issue, units, date, amount, type) VALUES (DEFAULT, newinvestor, (select distinct company from account.companies), newissue, newunits, newdate::date, newamount, newtype::ownership.transaction_type);
 	RETURN QUERY SELECT document.pseudo_encrypt(currval('ownership.transaction_tran_id_seq')::int);
 	ELSE
-	RETURN QUERY UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, type=newtype::ownership.transaction_type, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key::integer and company=(select distinct company from account.companies) RETURNING tran_id::bigint;
+	RETURN QUERY UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, type=newtype::ownership.transaction_type, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key::integer and company=(select distinct company from account.companies) RETURNING tran_id::int;
 	END IF;
 END;
 $$
@@ -179,4 +178,43 @@ BEGIN
 END $$;
 
 CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.delete_grant();
+
+-- Share and Audit
+
+CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+    INSERT INTO ownership.audit (company, email) VALUES (NEW.company, NEW.email);
+  RETURN NEW;
+END $$;
+CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
+GRANT INSERT on ownership.company_audit TO investor;
+
+-- Share document, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
+language plpgsql as $$
+declare
+  template text = mail.get_mail_template('cap-share.html');
+  comp account.company_type;
+  sendtype document.activity_type;
+begin
+  select distinct company into comp from account.companies;
+  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
+  template = replace(template, '{{company}}', comp);
+  perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
+  insert into ownership.company_audit(company, email) values (comp, xemail);
+end $$;
+
+-- Get most recent view
+
+CREATE OR REPLACE FUNCTION ownership.get_company_views() RETURNS SETOF ownership.company_views AS $$
+BEGIN
+	RETURN QUERY SELECT company, max(whendone) as whendone, email FROM ownership.company_views GROUP BY email, company;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- Get login info for investors who have logged in
+
+CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
+GRANT SELECT on ownership.user_tracker TO investor;
 

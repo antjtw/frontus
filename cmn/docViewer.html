@@ -1,21 +1,14 @@
 <div ng-init="init()">
 
   <div class="annotation-control">
-  <div ng-switch on="signable" >
-    <span ng-switch-when="0"><p>Click below to sign this document</p>
-               <p>Sign here: <input type="checkbox" ng-model="signature"></p>
-               <button ng-click="submitSign(signature);">Send signature</button></span>
-    <span ng-switch-when="1">Thanks for the signature!</span>
-    <span ng-switch-default></span>
-  </div>
-
-  <div>
+  <div ng-hide="signed">
     <button ng-click="clearNotes($event)">Clear annotations</button>
     <span style="width:20px"></span>
     <button ng-click="newCheck($event)">Attach checkbox</button>
     <button ng-click="newBox($event)">Attach textbox</button>
     <button ng-click="newPad($event)">Attach canvas</button>
     <button ng-click="saveNotes($event)">Save annotations</button>
+    <button ng-show="signable" ng-click="submitSign();">Sign</button>
   </div>
   </div>
 

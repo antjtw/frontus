@@ -2,6 +2,7 @@
 var app = angular.module('LoginApp', ['brijj']);
 
 
+
 //Controller for the Login Page
 function LoginCtrl($scope, $location, SWBrijj){
     $scope.username = "";

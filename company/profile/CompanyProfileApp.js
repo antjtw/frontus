@@ -9,7 +9,6 @@ app.config(function($routeProvider, $locationProvider){
   $routeProvider.
       when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
       when('/people', {controller:PeopleCtrl, templateUrl:'people.html'}).
-      //when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -58,7 +57,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
-      $route.reload(); $scope.$apply();
+      $route.reload();
         $rootScope.notification.show("success", "An admin has been created successfully.");
     }).except(function(x) {
         console.log(x);
@@ -67,9 +66,13 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
+    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
+      $rootScope.notification.show("fail", "Please enter a company name more than 2 letters in length");
+      return;
+    } 
     SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video).then(function (x) { 
         console.log("saved: "+x);
-        $route.reload(); $scope.$apply();
+        $route.reload();
         $rootScope.notification.show("success", "Your company profile has been updated successfully.");
     }).except(function(x) {
         console.log(x);
@@ -85,7 +88,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   SWBrijj.tbl('account.my_company').then(function(x) { initPage($scope, x) }).except(initFail);
 
   $scope.activity = [];
-  SWBrijj.procm('document.get_company_activity').then(function(data) {
+  SWBrijj.tblm('document.activity_feed').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
@@ -125,10 +128,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
-    console.log(x);
     $scope.people = x;
     $scope.sort = 'name';
-    $scope.$apply();
   }).except(initFail);
 
   $scope.sortBy = function(col) {
