@@ -8,12 +8,12 @@
                 <div class="modalText">
                 <form>
                     <p>Add People</p>
-                    <input ng_model="sendeeEmail" type="email">
+                    <input ng-model="sendeeEmail" type="email">
                     <p>Message</p>
                     <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
-                    <p>Needs Signing? : <input type="checkbox" ng-model="needsign">Yes</p>
-                </div>
+                    <label>Needs Signing? : <input type="checkbox" ng-model="needsign"/>Yes</label>
                 </form>
+                  </div>
                 <div class="modalButtons">
                     <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail, needsign)">Send</button>
                 </div>
@@ -35,7 +35,7 @@
          
          <ul class="subText navPills cf">
          	<li class="selectedPill button">View</li>
-         	<a href="/company/documents/status?doc={{documents.doc_id}}"><li class="button">Status</li></a>
+         	<li class="button"><a href="/company/documents/status?doc={{documents.doc_id}}">Status</a></li>
          </ul>
          
          <ul class="subText pageTurn cf">
@@ -45,7 +45,7 @@
          </ul>
 	     
 	     <div class="docPanel">
-         	<img ng-src="{{currentPage.src}}"></img>
+         	<img ng-src="{{currentPage.src}}"/>
          </div>
           
 </div>

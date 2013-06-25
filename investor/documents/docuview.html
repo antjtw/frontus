@@ -22,10 +22,10 @@
                 <th class="button"><span class="title">Deadline</span></th>
               </tr>
               <tr ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
-                <td><a href="/investor/documents/view?doc={{doc.doc}}">{{doc.docname}}</a></td>
+                <td><a href="/investor/documents/view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
-                <!-- The four buttons for each row -->
-                <td>{{doc.status}}</td>
+                <td>{{status(doc)}}</td>
+                <td><span class="dateFormatting">{{doc.signature_deadline | fromNow}}</span></td>
                 <td></td>
               </tr>
             </table>

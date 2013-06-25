@@ -1,50 +1,13 @@
 <div class="container">
-          
-	<div modal="shouldBeOpen" close="close()" options="opts">
-		<div class="modalHeader">
-			<p class="subText">Delete Document</p>
-		</div>
-		<div class="modalText">
-			<p>Are you sure?</p>
-			<p>You will no longer be able to view or share this document</p>
-		</div>
-		<div class="modalButtons">
-			<button class="button subText greyButton" ng-click="close()">Cancel</button>
-			<button class="button subText greenButton" ng-click="close(); delete(currentDoc)">Delete Document</button>
-		</div>
-	</div>
 
-	<div modal="upModal" close="upClose()" options="upopts">
-		<div class="modalHeader">
-			<p class="subText">Upload a Doc</p>
-		</div>
-		<div class="modalText">
+  <div modal="shouldBeOpen" close="close()" options="opts" modaldelete></div>
+	<div modal="upModal" close="upClose()" options="upopts" modalupload></div>
 
-			<div class="dropbox" ng-class="dropClass">
-			    <span>{{dropText}}</span>
-			  </div>
-
-			  <div ng-show="files.length">
-			    <div ng-repeat="file in files.slice(0)">
-			      <span>{{file.webkitRelativePath || file.name}}</span>
-			      (<span>{{fmtFileSize(file)}}</span>)
-			    </div>
-			  </div>
-		</div>
-		<div class="modalButtons">
-			<input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox()" value="Upload with dropbox" />
-		</div>
-	</div>
-                
-<div class="row-fluid">
-
-	<br>
-	
-	<h1 style="float:left;">Documents</h1>
-	
-	<a ng-click="upModalUp()"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
-
-	<br>
+  <div class="row-fluid">
+  	<br>
+  	<h1 style="float:left;">Documents</h1>
+  	<a ng-click="upModal=true"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
+  	<br>
     
     <section class="docLibrary statusBlock">
          <div>
@@ -67,4 +30,5 @@
     </section>
 
 
+</div>
 </div>
