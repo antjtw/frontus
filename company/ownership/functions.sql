@@ -101,8 +101,6 @@ END $$;
 CREATE TRIGGER create_transaction INSTEAD OF INSERT on ownership.company_transaction FOR EACH ROW EXECUTE PROCEDURE ownership.create_transaction();
 
 
-
-
 -- Delete Transactions
 CREATE OR REPLACE FUNCTION ownership.delete_transaction(inve character varying, iss character varying, dat character varying) RETURNS VOID AS
 $$
