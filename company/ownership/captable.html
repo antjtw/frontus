@@ -4,9 +4,9 @@
      <table class="tableView bodyText">
           <tr class="column-label">
          	  <th colspan="2">Ownership</th>
-         	  <th class="longRow">Shareholder</th>
+         	  <th><span class="longrow">Shareholder</span></th>
             <th ng-repeat="one in issues">
-              <input ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
+              <input class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
             </th>
           </tr>
         <tr ng-repeat="row in rows">
@@ -14,8 +14,8 @@
           <td><input disabled value="{{sharePercentage(row, rows) | number:3}}%"></input></td>
           <td class="longRow"><input ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input></td>
             <td ng-repeat="key in issuekeys">
-              <input ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key])" ng-model='row[key]'></input>
-              <input ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key+'a'])" ng-model='row[key+"a"]'></input>
+              <input class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+              <input class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
             </td>
         </tr>
         <tr class='tablefooter'>
@@ -84,8 +84,8 @@
           <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
           <button ng-click="createTran();">Add</button>
           <tabs>
-            <pane ng-repeat="tran in activeTran" heading="{{tran.date | date:'yyyy/MM/dd'}}" active="tran.active">
-              <p>Date<input disabled ng-model="tran.date"></input></p>
+            <pane ng-repeat="tran in activeTran" heading="{{tran.datekey}}" active="tran.active">
+              <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
               <p>Paid<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
               <p>Shares<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
               <button ng-click="deleteTran(tran);">Delete</button>

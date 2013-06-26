@@ -394,6 +394,21 @@ h2 {
 	color: #7f8c8d;	
 }
 
+/* Captable */
+
+.capEditHeaders {
+	width: 200px !important;
+};
+
+.longrow {
+	width: 150px !important;
+}
+
+.captablepair {
+	display: inline-block;
+	float: left;
+};
+
 /* Document Views */
 
 .statusBlock {
@@ -479,10 +494,6 @@ h2 {
 	width:250px;
 	height:35px;
 	padding: 0 0 0 10px;
-}
-
-.longRow td {
-	width: 200px;
 }
 
 .tableView td[class="button"] {

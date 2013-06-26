@@ -71,13 +71,13 @@ CREATE TRIGGER delete_issue INSTEAD OF DELETE on ownership.company_issue FOR EAC
 
 
 -- Creates and Updates Transactions
-CREATE OR REPLACE FUNCTION ownership.update_transaction(newinvestor character varying, investorkey character varying, issuekey character varying, newissue character varying, newunits double precision, datekey character varying, newamount double precision) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION ownership.update_transaction(newinvestor character varying, investorkey character varying, issuekey character varying, newissue character varying, newunits double precision, datekey character varying, newdate character varying, newamount double precision) RETURNS VOID AS
 $$
 BEGIN
 	IF issuekey = 'undefined' THEN
 	INSERT INTO ownership.company_transaction (investor, company, issue, units, date, amount) VALUES (newinvestor, (select distinct company from account.companies), newissue, newunits, datekey::date, newamount);
 	ELSE
-	UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount where issue=issuekey and company=(select distinct company from account.companies) and investor=investorkey and date=datekey::date;
+	UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date where issue=issuekey and company=(select distinct company from account.companies) and investor=investorkey and date=datekey::date;
 	END IF;
 END;
 $$
@@ -85,7 +85,7 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION ownership.update_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount where issue=OLD.issue and company=OLD.company and investor=OLD.investor and date=OLD.date;
+    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount, date=NEW.date where issue=OLD.issue and company=OLD.company and investor=OLD.investor and date=OLD.date;
     RETURN NEW;
 END $$;
 
