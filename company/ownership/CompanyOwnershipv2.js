@@ -24,7 +24,23 @@ if(!Array.prototype.indexOf) {
 }
 
 owner.run(function($rootScope) {
-  /* Calculates the Total Shares owned by an investor across all rounds */
+
+/* Calculates the Total Shares owned by an investor across all rounds */
+$rootScope.rowOrdering = function(row) {
+  var total = 0
+  for (var key in row) {
+    if (row.hasOwnProperty(key)) {
+      if (key != "name") {
+        if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey") {
+          total = total + parseInt(row[key]['u']);
+        }
+      }
+    }
+  }
+  return -total;
+  };
+
+/* Calculates the Total Shares owned by an investor across all rounds */
 $rootScope.shareSum = function(row) {
   var total = 0
   for (var key in row) {
@@ -91,6 +107,8 @@ var captableController = function($scope, $parse) {
       });
   });
 	$scope.issues = []
+  $scope.issueSort = 'date';
+  $scope.rowSort = '-name';
 	$scope.rows = []
 	$scope.uniquerows = []
   $scope.activeTran = []
@@ -106,7 +124,7 @@ var captableController = function($scope, $parse) {
 	      oneissue.key = oneissue.issue;
         $scope.issuekeys.push(oneissue.key);
 	    });
-	    $scope.issues.push({"name":"", "date":Date.today()})
+	    $scope.issues.push({"name":"", "date":Date(2100, 1, 1)})
 
 		// Pivot shenanigans
 		SWBrijj.tblm('ownership.company_transaction').then(function(trans) {
@@ -261,13 +279,13 @@ $scope.saveIssue = function(issue) {
   else {
 
     if (issue['key'] != null) {
-      console.log("here");
-      var d1 = issue['date'].toUTCString();
+      var dateconvert = new Date(issue['date']);
+      var d1 = dateconvert.toUTCString();
       console.log(d1);
-      if (transaction['partpref'] != null) {
+      if (issue['partpref'] != null) {
           var partpref = $scope.strToBool(issue['partpref']);
         };
-        if (transaction['liquidpref'] != null) {
+        if (issue['liquidpref'] != null) {
           var liquidpref = $scope.strToBool(issue['liquidpref']);
         };
 
@@ -484,7 +502,6 @@ $scope.saveTran = function(transaction) {
 };
 
   $scope.strToBool = function(string){
-    console.log(string);
     switch(String(string).toLowerCase()){
       case "true": case "yes": case "1": return true;
       case "false": case "no": case "0": case null: return false;
