@@ -444,12 +444,12 @@ $scope.saveTran = function(transaction) {
           transaction['key'] = "undefined";
         };
         if (parseFloat(transaction['amount']) % 1 != 0) {
-          transaction['amount'] = "0";
         };
         if (transaction['partpref'] != null) {
           var partpref = $scope.strToBool(transaction['partpref']);
         };
         if (transaction['liquidpref'] != null) {
+          console.log("here");
           var liquidpref = $scope.strToBool(transaction['liquidpref']);
         };
         if (transaction['vestingbegins'] == undefined) {
@@ -459,6 +459,7 @@ $scope.saveTran = function(transaction) {
         else {
           var vestcliffdate = (transaction['vestingbegins']).toUTCString();
         }
+
         SWBrijj.proc('ownership.update_transaction', transaction['investor'], transaction['investorkey'], transaction['key'], transaction['issue'], parseFloat(transaction['units']), transaction['datekey'], d1, parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           console.log(data);
           var tempunits = 0;
@@ -483,7 +484,8 @@ $scope.saveTran = function(transaction) {
 };
 
   $scope.strToBool = function(string){
-    switch(string.toLowerCase()){
+    console.log(string);
+    switch(String(string).toLowerCase()){
       case "true": case "yes": case "1": return true;
       case "false": case "no": case "0": case null: return false;
       default: return Boolean(string);
