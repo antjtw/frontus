@@ -12,7 +12,7 @@
         <tr ng-repeat="row in rows | orderBy:rowOrdering">
           <td><input disabled value="{{shareSum(row);}}"></input></td>
           <td><input disabled value="{{sharePercentage(row, rows) | number:3}}%"></input></td>
-          <td class="longRow"><input ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input></td>
+          <td><input style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input></td>
             <td ng-repeat="key in issuekeys">
               <span ng-switch on="row.editable">
                 <span ng-switch-default>

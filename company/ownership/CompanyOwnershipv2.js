@@ -383,10 +383,17 @@ $scope.nameChangeRL = function(investor) {
 };
 
 $scope.updateRow = function(investor) {
+  console.log(investor);
   if (investor.name == "") {
     var index = $scope.rows.indexOf(investor);
     $scope.rows.splice(index, 1);
   }
+  angular.forEach($scope.rows, function(row) {
+    if(investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
+      console.log("repeat");
+      investor.name = investor.name + " (1)";
+    }
+  });
   if (investor.name != investor.namekey) {
     var index = $scope.rows.indexOf(investor);
     angular.forEach($scope.trans, function(tran) { 
@@ -447,11 +454,11 @@ $scope.saveTran = function(transaction) {
   if (transaction == undefined) {
     return
   }
-  if (transaction['units'] == 0) {
+  if (transaction['units'] == 0 && transaction['amount'] == 0) {
     $scope.deleteTran(transaction);
     return
   };
-  if (transaction['issue'] == undefined || parseInt(transaction['units']) % 1 != 0) {
+  if (transaction['issue'] == undefined || (parseInt(transaction['units']) % 1 != 0 && parseInt(transaction['amount'] % 1 != 0))) {
     console.log("not saving");
     return;
   }
