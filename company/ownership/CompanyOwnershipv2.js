@@ -464,7 +464,7 @@ $scope.saveTran = function(transaction) {
       			if (row.name == tran.investor) {
           				if (tran.issue == transaction.issue) {
                     tran.key = tran.issue;
-                    tran.datekey = d1
+                    transaction.datekey = d1
           					tempunits = tempunits + parseInt(tran.units);
                     tempamount = tempamount + parseInt(tran.amount);
           					row[tran.issue]['u'] = tempunits;
