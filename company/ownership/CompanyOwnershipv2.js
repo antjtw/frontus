@@ -106,7 +106,7 @@ var captableController = function($scope, $parse) {
 	      oneissue.key = oneissue.issue;
         $scope.issuekeys.push(oneissue.key);
 	    });
-	    $scope.issues.push({name:""})
+	    $scope.issues.push({"name":"", "date":Date.today()})
 
 		// Pivot shenanigans
 		SWBrijj.tblm('ownership.company_transaction').then(function(trans) {
@@ -226,6 +226,7 @@ $scope.saveIssue = function(issue) {
   if (issue['issue'] == null && issue['key'] == null) {
     return
   }
+
   else if (issue['issue'] == "" && issue['key'] != null) {
   	SWBrijj.proc('ownership.delete_issue', issue['key']).then(function(data) {
   		angular.forEach($scope.issues, function(oneissue) {
@@ -242,47 +243,58 @@ $scope.saveIssue = function(issue) {
       });
   	});
   	$scope.$apply();
+    return
   }
-  else{ 
-    if (issue['key'] != null) {
-  var partpref = $scope.strToBool(issue['partpref']);
-  var liquidpref = $scope.strToBool(issue['liquidpref']);
-  if (issue['vestingbegins'] == undefined) {
-    var vestcliffdate = null
-  }
+
   else {
-    var vestcliffdate = (issue['vestingbegins']).toUTCString();
-  }
-    SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function(data) { 
-      if (issue['issue'] != issue.key) {
-        angular.forEach($scope.rows, function(row) {
-        	row[issue['issue']] = row[issue.key];
-          delete row[issue.key];
+
+    if (issue['key'] != null) {
+      console.log("here");
+      var d1 = issue['date'].toUTCString();
+      console.log(d1);
+      var partpref = $scope.strToBool(issue['partpref']);
+      var liquidpref = $scope.strToBool(issue['liquidpref']);
+
+      if (issue['vestingbegins'] == undefined) {
+        var vestcliffdate = null
+      }
+
+      else {
+        var vestcliffdate = (issue['vestingbegins']).toUTCString();
+      }
+
+      SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function(data) { 
+        console.log("saved");
+        if (issue['issue'] != issue.key) {
+          angular.forEach($scope.rows, function(row) {
+          	row[issue['issue']] = row[issue.key];
+            delete row[issue.key];
+          });
+        };
+        angular.forEach($scope.trans, function(tran) {
+          if (tran.issue == issue.key) {
+            tran.issue = issue['issue'];
+          }
         });
-      };
-      angular.forEach($scope.trans, function(tran) {
-        if (tran.issue == issue.key) {
-          tran.issue = issue['issue'];
-        }
-      });
-      var index = $scope.issuekeys.indexOf(issue.key);
-      $scope.issuekeys[index] = issue['issue'];
-      issue.key=issue['issue'];
-      $scope.$apply();
-    	});
+        var index = $scope.issuekeys.indexOf(issue.key);
+        $scope.issuekeys[index] = issue['issue'];
+        issue.key=issue['issue'];
+        $scope.$apply();
+      	});
     } 
+
     else {
-    var d1 = (Date.today()).toUTCString();
-    var expire = null;
-    SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function(data) { 
-      issue.key=issue['issue'];
-      $scope.issues.push({name:""})
-      $scope.issuekeys.push(issue.key);
-      angular.forEach($scope.rows, function(row) {
-        row[issue.key] = {"u":null, "a":null};
-      });
-      $scope.$apply();
-    });	
+      var d1 = (Date.today()).toUTCString();
+      var expire = null;
+      SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function(data) { 
+        issue.key=issue['issue'];
+        $scope.issues.push({name:""})
+        $scope.issuekeys.push(issue.key);
+        angular.forEach($scope.rows, function(row) {
+          row[issue.key] = {"u":null, "a":null};
+        });
+        $scope.$apply();
+      });	
     }
   }
 };
