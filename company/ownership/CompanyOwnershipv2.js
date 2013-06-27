@@ -264,8 +264,12 @@ $scope.saveIssue = function(issue) {
       console.log("here");
       var d1 = issue['date'].toUTCString();
       console.log(d1);
-      var partpref = $scope.strToBool(issue['partpref']);
-      var liquidpref = $scope.strToBool(issue['liquidpref']);
+      if (transaction['partpref'] != null) {
+          var partpref = $scope.strToBool(issue['partpref']);
+        };
+        if (transaction['liquidpref'] != null) {
+          var liquidpref = $scope.strToBool(issue['liquidpref']);
+        };
 
       if (issue['vestingbegins'] == undefined) {
         var vestcliffdate = null
