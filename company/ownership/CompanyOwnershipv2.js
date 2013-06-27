@@ -118,11 +118,11 @@ var captableController = function($scope, $parse) {
           tran.investorkey = tran.investor;
 			      if ($scope.uniquerows.indexOf(tran.investor) == -1) {
 			      	$scope.uniquerows.push(tran.investor);
-			      	$scope.rows.push({"name":tran.investor, "namekey":tran.investor});
+			      	$scope.rows.push({"name":tran.investor, "namekey":tran.investor, "editable":"yes"});
 			      }
 			    });
 
-        $scope.rows.push({"name":""});
+        $scope.rows.push({"name":"", "editable":"0"});
 
 			angular.forEach($scope.trans, function(tran) {
 				angular.forEach($scope.rows, function(row) {
@@ -327,7 +327,12 @@ $scope.getActiveInvestor = function(investor) {
   $scope.sideBar=3;
   console.log(investor);
   if (investor.name == "") {
-    $scope.rows.push({"name":""});
+    var values = {"name":"", "editable":"0"}
+    angular.forEach($scope.issuekeys, function(key) {
+      values[key] = {"u":null, "a":null};
+    });
+    console.log(values);
+    $scope.rows.push(values);
   }
   $scope.activeInvestorName = investor.name;
   $scope.$apply();
@@ -335,6 +340,20 @@ $scope.getActiveInvestor = function(investor) {
 
 $scope.nameChangeLR = function(investor) {
   $scope.activeInvestorName = investor.name;
+  if ((investor.name).length > 0) {
+    angular.forEach($scope.rows, function(row) {
+      if (row.name == investor.name) {
+        row.editable = "yes";
+      }
+    });
+  }
+  else {
+    angular.forEach($scope.rows, function(row) {
+      if (row.name == investor.name) {
+        row.editable = "0";
+      }
+    });
+  }
 };
 
 $scope.nameChangeRL = function(investor) {
