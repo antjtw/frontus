@@ -110,9 +110,10 @@ var captableController = function($scope, $parse) {
 		// Pivot shenanigans
 		SWBrijj.tblm('ownership.company_transaction').then(function(trans) {
 				$scope.trans = trans
+        console.log(trans);
 				angular.forEach($scope.trans, function(tran) {
 				  tran.key = tran.issue;
-          tran.datekey = Date.parse(tran['date']).toString('yyyy-MM-dd');
+          tran.datekey = tran['date'].toUTCString();
           tran.investorkey = tran.investor;
 			      if ($scope.uniquerows.indexOf(tran.investor) == -1) {
 			      	$scope.uniquerows.push(tran.investor);
@@ -221,19 +222,19 @@ $scope.getActiveIssue = function(issue) {
 $scope.saveIssue = function(issue) {
   console.log(issue);
   if (issue['date'] != undefined) {
-  var d1 = Date.parse(issue['date']).toString('yyyy-MM-dd');
+  var d1 = issue['date'].toUTCString();
 }
   else {
   	d1 = null;
   }
   if (issue['vestingbegins'] != undefined) {
-  var vestcliffdate = Date.parse(issue['vestingbegins']).toString('yyyy-MM-dd');
+  var vestcliffdate = issue['vestingbegins'].toUTCString();
 }
   else {
     vestcliffdate = null;
   }
   if (issue['expiration'] != undefined) {
-  var expire = Date.parse(issue['expiration']).toString('yyyy-MM-dd');
+  var expire = issue['expiration'].toUTCString();
 }
   else {
   	expire = null;
@@ -350,7 +351,7 @@ $scope.createTran = function() {
 }
 
 $scope.deleteTran = function(tran) {
-    var d1 = Date.parse(tran['date']).toString('yyyy-MM-dd');
+    var d1 = tran['date'].toUTCString();
     SWBrijj.proc('ownership.delete_transaction', tran['investor'], tran['issue'], d1).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
       $scope.trans.splice(index, 1);
@@ -367,7 +368,7 @@ $scope.deleteTran = function(tran) {
 }
 
 $scope.saveTran = function(transaction) {
-  var d1 = Date.parse(transaction['date']).toString('yyyy-MM-dd');
+  var d1 = transaction['date'].toUTCString();
   if (transaction['units'] == 0) {
     $scope.deleteTran(transaction);
     return
@@ -392,9 +393,7 @@ $scope.saveTran = function(transaction) {
       			if (row.name == tran.investor) {
           				if (tran.issue == transaction.issue) {
                     tran.key = tran.issue;
-                    console.log(transaction['date']);
-                    tran.datekey = Date.parse(transaction['date']).toString('yyyy-MM-dd');
-                    console.log(tran['datekey']);
+                    tran.datekey = d1
           					tempunits = tempunits + parseInt(tran.units);
                     tempamount = tempamount + parseInt(tran.amount);
           					row[tran.issue]['u'] = tempunits;

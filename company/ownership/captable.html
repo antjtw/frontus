@@ -84,7 +84,7 @@
           <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
           <button ng-click="createTran();">Add</button>
           <tabs>
-            <pane ng-repeat="tran in activeTran" heading="{{tran.datekey}}" active="tran.active">
+            <pane ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
               <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
               <p>Paid<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
               <p>Shares<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
