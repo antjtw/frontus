@@ -23,7 +23,8 @@
           <td><input disabled value="100%"></input></td>
           <td></td>
           <td ng-repeat="one in issues">
-            <input disabled value="{{colTotal(one.issue, rows);}}"</input>
+            <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}"</input>
+            <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}"</input>
           </td>
         </tr>
       </table>

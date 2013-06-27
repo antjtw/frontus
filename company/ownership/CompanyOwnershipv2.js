@@ -59,7 +59,7 @@ $rootScope.shareSum = function(row) {
       return ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * 100);
     };
 
-  $rootScope.colTotal = function(header, rows) {
+  $rootScope.colTotal = function(header, rows, type) {
       var total = 0;
       angular.forEach(rows, function(row) {
       for (var key in row) {
@@ -212,6 +212,9 @@ $scope.getActiveIssue = function(issue) {
   else {
     $scope.activeIssue.liquidpref = $scope.tf[1];
   }
+  if ($scope.activeIssue.name == "") {
+    $scope.activeIssue.date = (Date.today()).toUTCString();
+  }
   // Set Freq Value for Angularjs Select
   var index = $scope.freqtypes.indexOf(issue.vestfreq);
   $scope.activeIssue.vestfreq = $scope.freqtypes[index];
@@ -221,7 +224,7 @@ $scope.getActiveIssue = function(issue) {
 $scope.saveIssue = function(issue) {
   console.log(issue);
   if (issue['issue'] == null && issue['key'] == null) {
-
+    return
   }
   else if (issue['issue'] == "" && issue['key'] != null) {
   	SWBrijj.proc('ownership.delete_issue', issue['key']).then(function(data) {
@@ -244,6 +247,12 @@ $scope.saveIssue = function(issue) {
     if (issue['key'] != null) {
   var partpref = $scope.strToBool(issue['partpref']);
   var liquidpref = $scope.strToBool(issue['liquidpref']);
+  if (issue['vestingbegins'] == undefined) {
+    var vestcliffdate = null
+  }
+  else {
+    var vestcliffdate = (issue['vestingbegins']).toUTCString();
+  }
     SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function(data) { 
       if (issue['issue'] != issue.key) {
         angular.forEach($scope.rows, function(row) {
@@ -263,6 +272,8 @@ $scope.saveIssue = function(issue) {
     	});
     } 
     else {
+    var d1 = (Date.today()).toUTCString();
+    var expire = null;
     SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function(data) { 
       issue.key=issue['issue'];
       $scope.issues.push({name:""})
