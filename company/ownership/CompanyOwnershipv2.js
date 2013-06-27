@@ -179,9 +179,21 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
 	angular.forEach($scope.trans, function(tran) {
 		if (tran.investor == currenttran) {
       if (tran.issue == currentcolumn){
-    			if (first == 0) {
+    		if (first == 0) {
     			tran['active'] = true
     			first = first + 1
+        }
+        if (String(tran['partpref']) == "true") {
+          tran.partpref = $scope.tf[0];
+        }
+        else {
+          tran.partpref = $scope.tf[1];
+        }
+        if (String(tran['liquidpref']) == "true") {
+          tran.liquidpref = $scope.tf[0];
+        }
+        else {
+          tran.liquidpref = $scope.tf[1];
         }
   			$scope.activeTran.push(tran);
       }
@@ -361,6 +373,23 @@ $scope.deleteTran = function(tran) {
     SWBrijj.proc('ownership.delete_transaction', tran['investor'], tran['issue'], d1).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
       $scope.trans.splice(index, 1);
+      angular.forEach($scope.rows, function(row) {
+        if (row.name === tran['investor']) {
+          row[tran['issue']] = (parseInt(row[tran['issue']]) - parseInt(tran['units']))
+          row[tran['issue']] = {"u":null, "a":null};
+        };
+      });
+      $scope.$apply();
+  });
+}
+
+$scope.manualdeleteTran = function(tran) {
+    var d1 = tran['date'].toUTCString();
+    SWBrijj.proc('ownership.delete_transaction', tran['investor'], tran['issue'], d1).then(function(data) { 
+      var index = $scope.trans.indexOf(tran);
+      $scope.trans.splice(index, 1);
+      var index = $scope.activeTran.indexOf(tran);
+      $scope.activeTran.splice(index, 1);
       angular.forEach($scope.rows, function(row) { 
         if (row.name === tran['investor']) {
           row[tran['issue']] = (parseInt(row[tran['issue']]) - parseInt(tran['units']))
@@ -373,6 +402,7 @@ $scope.deleteTran = function(tran) {
 
 $scope.saveTran = function(transaction) {
   var savingActive = $scope.activeTran
+  console.log(transaction);
   if (transaction == undefined) {
     return
   }
@@ -386,7 +416,6 @@ $scope.saveTran = function(transaction) {
   }
   else {
         console.log("transaction saving");
-        console.log(transaction);
         var d1 = transaction['date'].toUTCString();
         if (transaction['key'] == undefined) {
           transaction['key'] = "undefined";
@@ -394,7 +423,20 @@ $scope.saveTran = function(transaction) {
         if (parseFloat(transaction['amount']) % 1 != 0) {
           transaction['amount'] = "0";
         };
-        SWBrijj.proc('ownership.update_transaction', transaction['investor'], transaction['investorkey'], transaction['key'], transaction['issue'], parseFloat(transaction['units']), transaction['datekey'], d1, parseFloat(transaction['amount'])).then(function(data) { 
+        if (transaction['partpref'] != null) {
+          var partpref = $scope.strToBool(transaction['partpref']);
+        };
+        if (transaction['liquidpref'] != null) {
+          var liquidpref = $scope.strToBool(transaction['liquidpref']);
+        };
+        if (transaction['vestingbegins'] == undefined) {
+          var vestcliffdate = null
+        }
+
+        else {
+          var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+        }
+        SWBrijj.proc('ownership.update_transaction', transaction['investor'], transaction['investorkey'], transaction['key'], transaction['issue'], parseFloat(transaction['units']), transaction['datekey'], d1, parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           console.log(data);
           var tempunits = 0;
           var tempamount = 0;

@@ -89,47 +89,47 @@
               <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
               <p>Paid<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
               <p>Shares<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
-              <button ng-click="deleteTran(tran);">Delete</button>
+              <button ng-click="manualdeleteTran(tran);">Delete</button>
 
               <accordion close-others="true">
                 <accordion-group heading="Valuation">
-                  <p>Pre Money<input pattern="[0-9]*(.[0-9]*)*" ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.premoney"></input></p>
-                  <p>Post Money<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.postmoney"></input></p>
-                  <p>Price Per Share<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.ppshare"></input></p>
-                  <p>Total Authorized<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.totalauth"></input></p>
+                  <p>Pre Money<input pattern="[0-9]*(.[0-9]*)*" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.premoney"></input></p>
+                  <p>Post Money<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.postmoney"></input></p>
+                  <p>Price Per Share<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.ppshare"></input></p>
+                  <p>Total Authorized<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.totalauth"></input></p>
                   <p>Liquidation Preference
-                    <select ng-init="activeIssue.liquidpref" ng-change="saveTran(tran)" ng-model="activeIssue.liquidpref" ng-options="i for i in tf">
+                    <select ng-init="tranIssue.liquidpref" ng-change="saveTran(tran)" ng-model="tran.liquidpref" ng-options="i for i in tf">
                     </select>
                   </p>
                   <p>Participating Preferred
-                    <select ng-init="activeIssue.partpref" ng-change="saveTran(tran)" ng-model="activeIssue.partpref" ng-options="i for i in tf">
+                    <select ng-init="tran.partpref" ng-change="saveTran(tran)" ng-model="tran.partpref" ng-options="i for i in tf">
                     </select>
                   </p>
                 </accordion-group>
                 <accordion-group heading="Options">
                   <p>Underlying Security
-                    <select ng-init="activeIssue.optundersec" ng-change="saveTran(tran)" ng-model="activeIssue.optundersec" ng-options="i for i in issuekeys">
+                    <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
                     </select>
                   </p>
-                  <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.price"></input></p>
+                  <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
                   <p>Granted</p>
-                  <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.terms"></input></p>
-                  <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="activeIssue.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                  <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.vestcliff"></input></p>
+                  <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
+                  <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                  <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
                   <p>Post Cliff Frequency
-                    <select ng-init="activeIssue.vestfreq" ng-change="saveTran(tran)" ng-model="activeIssue.vestfreq" ng-options="i for i in freqtypes">
+                    <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                     </select>
                   </p>
                 </accordion-group>
                 <accordion-group heading="Debt">
                   <p>Underlying Security
-                    <select ng-init="activeIssue.debtundersec" ng-change="saveTran(tran)" ng-model="activeIssue.debtundersec" ng-options="i for i in issuekeys">
+                    <select ng-init="tran.debtundersec" ng-change="saveTran(tran)" ng-model="tran.debtundersec" ng-options="i for i in issuekeys">
                     </select>
                   </p>
-                  <p>Interest Rate<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.interestrate"></input></p>
-                  <p>Valuation Cap<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.valcap"></input></p>
-                  <p>Discount<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.discount"></input></p>
-                  <p>Term<input ui-event="{blur : 'saveTran(tran)'}" ng-model="activeIssue.term"></input></p>
+                  <p>Interest Rate<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.interestrate"></input></p>
+                  <p>Valuation Cap<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.valcap"></input></p>
+                  <p>Discount<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.discount"></input></p>
+                  <p>Term<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.term"></input></p>
                 </accordion-group>
               </accordion>
             </pane>

@@ -71,13 +71,13 @@ CREATE TRIGGER delete_issue INSTEAD OF DELETE on ownership.company_issue FOR EAC
 
 
 -- Creates and Updates Transactions
-CREATE OR REPLACE FUNCTION ownership.update_transaction(newinvestor character varying, investorkey character varying, issuekey character varying, newissue character varying, newunits double precision, datekey character varying, newdate character varying, newamount double precision) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION ownership.update_transaction(newinvestor character varying, investorkey character varying, issuekey character varying, newissue character varying, newunits double precision, datekey character varying, newdate character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS VOID AS
 $$
 BEGIN
 	IF issuekey = 'undefined' THEN
 	INSERT INTO ownership.company_transaction (investor, company, issue, units, date, amount) VALUES (newinvestor, (select distinct company from account.companies), newissue, newunits, datekey::date, newamount);
 	ELSE
-	UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date where issue=issuekey and company=(select distinct company from account.companies) and investor=investorkey and date=datekey::date;
+	UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where issue=issuekey and company=(select distinct company from account.companies) and investor=investorkey and date=datekey::date;
 	END IF;
 END;
 $$
@@ -85,7 +85,7 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION ownership.update_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount, date=NEW.date where issue=OLD.issue and company=OLD.company and investor=OLD.investor and date=OLD.date;
+    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount, date=NEW.date, premoney=NEW.premoney, postmoney=NEW.postmoney, ppshare=NEW.ppshare, totalauth=NEW.totalauth, partpref=NEW.partpref, liquidpref=NEW.liquidpref, price=NEW.price, optundersec=NEW.optundersec, terms=NEW.terms, vestingbegins=NEW.vestingbegins, vestcliff=NEW.vestcliff, vestfreq=NEW.vestfreq, debtundersec=NEW.debtundersec, interestrate=NEW.interestrate, valcap=NEW.valcap, discount=NEW.discount, term=NEW.term where issue=OLD.issue and company=OLD.company and investor=OLD.investor and date=OLD.date;
     RETURN NEW;
 END $$;
 
