@@ -64,8 +64,8 @@ $rootScope.shareSum = function(row) {
       angular.forEach(rows, function(row) {
       for (var key in row) {
           if (key == header) {
-            if (parseInt(row[key]['u']) % 1 == 0 && String(key) != "$$hashKey") {
-            total = total + parseInt(row[key]['u']);
+            if (parseInt(row[key][type]) % 1 == 0 && String(key) != "$$hashKey") {
+            total = total + parseInt(row[key][type]);
               }
           }
       };
