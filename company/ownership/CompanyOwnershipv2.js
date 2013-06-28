@@ -27,7 +27,7 @@ owner.service('calculateauth', function() {
   this.adding = function(total, issue, rows) {
     var leftover = total
     angular.forEach(rows, function(row) {
-      if (issue.issue in row && row.nameeditable != 0 && row[issue.issue]['u'] != NaN) {
+      if (issue.issue in row && row.nameeditable != 0 && parseInt(issue.issue['u']) % 1 != 0) {
         leftover = leftover - row[issue.issue]['u'];
       }
     });
@@ -330,6 +330,7 @@ $scope.saveIssue = function(issue) {
 
       SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function(data) { 
         console.log("saved");
+        var oldissue = issue['key'];
         if (issue['issue'] != issue.key) {
           angular.forEach($scope.rows, function(row) {
           	row[issue['issue']] = row[issue.key];
@@ -343,10 +344,15 @@ $scope.saveIssue = function(issue) {
         var shares = {"u":leftovers};
         angular.forEach($scope.rows, function(row) {
           if (keepgoing) {
-            if (row.name == issuename+" (unissued)") {
+            if (row.name == oldissue+" (unissued)") {
               keepgoing = false;
               if (issue.totalauth > 0 || issue.totalauth < 0) {
+                console.log("we're here");
+                console.log(row);
+                console.log(issue.issue);
                 row[issuename] = shares;
+                row['name'] = issue.issue + " (unissued)";
+                console.log(row);
               }
               else {
                 deleterow = $scope.rows.indexOf(row);
