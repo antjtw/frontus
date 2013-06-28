@@ -518,11 +518,13 @@ $scope.saveTran = function(transaction) {
   if (transaction == undefined) {
     return
   }
-  if (transaction['units'] == 0 && transaction['amount'] == 0) {
+  console.log(parseInt(transaction['amount']) % 1);
+  console.log(parseInt(transaction['units']) % 1);
+  if (isNaN(parseInt(transaction['units']) % 1) && isNaN(parseInt(transaction['amount']) % 1)) {
     $scope.deleteTran(transaction);
     return
-  };
-  if (transaction['issue'] == undefined || (parseInt(transaction['units']) % 1 != 0 && parseInt(transaction['amount'] % 1 != 0))) {
+  }
+  else if (transaction['issue'] == undefined || (parseInt(transaction['units']) % 1 != 0 && parseInt(transaction['amount'] % 1 != 0))) {
     console.log("not saving");
     return;
   }
