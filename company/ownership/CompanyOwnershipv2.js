@@ -23,6 +23,18 @@ if(!Array.prototype.indexOf) {
     };
 }
 
+owner.service('calculateauth', function() {
+  this.adding = function(total, issue, rows) {
+    var leftover = total
+    angular.forEach(rows, function(row) {
+      if (issue.issue in row && row.nameeditable != 0 && row[issue.issue]['u'] != NaN) {
+        leftover = leftover - row[issue.issue]['u'];
+      }
+    });
+    return leftover
+  };
+});
+
 owner.run(function($rootScope) {
 
 /* Calculates the Total Shares owned by an investor across all rounds */
@@ -91,7 +103,7 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse) {
+var captableController = function($scope, $parse, calculateauth) {
   $scope.issuetypes = [];
   $scope.freqtypes = [];
   $scope.issuekeys = [];
@@ -176,6 +188,20 @@ var captableController = function($scope, $parse) {
         });
       });
 
+      angular.forEach($scope.issues, function(issue) {
+        console.log(issue.issue);
+        if (parseFloat(issue.totalauth) % 1 == 0) {
+          var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+          console.log(issue.totalauth);
+          console.log(leftovers);
+          if (leftovers != 0) {
+            var issuename = String(issue.issue)
+            var shares = {"u":leftovers};
+            $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
+            $scope.rows[($scope.rows.length)-1][issuename] = shares
+          }
+        }
+      });
 		$scope.$apply();
 		});
 	});
@@ -305,6 +331,33 @@ $scope.saveIssue = function(issue) {
             delete row[issue.key];
           });
         };
+        var keepgoing = true;
+        var deleterow = -1;
+        var issuename = String(issue.issue)
+        var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+        var shares = {"u":leftovers};
+        angular.forEach($scope.rows, function(row) {
+          if (keepgoing) {
+            if (row.name == issuename+" (unissued)") {
+              keepgoing = false;
+              if (issue.totalauth > 0 || issue.totalauth < 0) {
+                row[issuename] = shares;
+              }
+              else {
+                deleterow = $scope.rows.indexOf(row);
+              }
+            }
+          }
+        });
+        if (keepgoing != false) {
+          if (leftovers != NaN) {
+            $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
+            $scope.rows[($scope.rows.length)-1][issuename] = shares;
+          };
+        }
+        if (deleterow > -1) {
+          $scope.rows.splice(deleterow, 1);
+        };
         angular.forEach($scope.trans, function(tran) {
           if (tran.issue == issue.key) {
             tran.issue = issue['issue'];
@@ -387,12 +440,12 @@ $scope.updateRow = function(investor) {
   if (investor.name == "") {
     var index = $scope.rows.indexOf(investor);
     $scope.rows.splice(index, 1);
+    return
   }
   angular.forEach($scope.rows, function(row) {
     if(investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
-      console.log("repeat");
       investor.name = investor.name + " (1)";
-    }
+    };
   });
   if (investor.name != investor.namekey) {
     var index = $scope.rows.indexOf(investor);
