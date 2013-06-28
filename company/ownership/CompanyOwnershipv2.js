@@ -43,7 +43,7 @@ $rootScope.rowOrdering = function(row) {
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (key != "name") {
-        if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey") {
+        if (!isNaN(parseInt(row[key]['u'])) && String(key) != "$$hashKey") {
           total = total + parseInt(row[key]['u']);
         }
       }
@@ -58,7 +58,7 @@ $rootScope.shareSum = function(row) {
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (key != "name") {
-        if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey") {
+        if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
           total = total + parseInt(row[key]['u']);
         }
       }
@@ -73,7 +73,7 @@ $rootScope.shareSum = function(row) {
       for (var key in row) {
         if (row.hasOwnProperty(key)) {
           if (key != "name") {
-            if (parseInt(row[key]['u']) % 1 == 0 && String(key) != "$$hashKey") {
+            if (parseInt(row[key]['u']) % 1 == 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
               total = total + parseInt(row[key]['u']);
             }
           };
