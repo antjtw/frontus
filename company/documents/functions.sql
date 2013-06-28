@@ -17,7 +17,7 @@ END $$;
 
 CREATE TYPE document.activity_cluster as (count bigint, doc_id int, when_sent date, activity document.activity_type);
 CREATE OR REPLACE FUNCTION document.get_doc_activity_cluster(docid integer) RETURNS SETOF document.activity_cluster LANGUAGE plpgsql AS $$
-BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
+BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent::date, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
 END $$;
 
 CREATE OR REPLACE FUNCTION document.delete_document() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
@@ -141,6 +141,17 @@ begin
 end $$;
 
 create type document.I_doc_status_type as (loggedin timestamp);
+
+CREATE TYPE document.docs_shared_with_investor AS (doc_id int);
+--Gets all documents shared with an investor
+CREATE OR REPLACE FUNCTION document.get_investor_docs(investor account.email)
+  RETURNS SETOF document.docs_shared_with_investor
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY SELECT DISTINCT doc_id FROM document.my_shares WHERE sent_to = investor;
+END $$;
+
 
 CREATE OR REPLACE FUNCTION document.get_i_docstatus(investor account.email, docid int)
  RETURNS SETOF document.i_doc_status_type

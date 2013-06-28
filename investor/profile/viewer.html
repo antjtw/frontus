@@ -1,0 +1,40 @@
+<!--Notification Bar-->
+<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
+
+<div class="editProfileFP row-fluid">
+  <div id="detailsEdit" class="span9"> <!-- detailsEdit = Vertical line -->
+    <h1>{{name}}</h1>
+    <div class="span4"> <!-- Photo -->
+      <form>
+        <div class="editProfilePhoto">
+          <img ng-src="/photo/user?id=investor:{{email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+        </div>
+      </form>
+    </div>
+    <div class="span5">
+      <p>
+          <input type="text" ng-model="name" name="name" disabled>
+          <span class="label">Name</span>
+      </p>
+      <ul ng-repeat="docId in docIds">
+        <li>{{docId}}</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <div class="sidebar span3">
+    <form>
+      <fieldset>
+        <p>
+          <input type="text" ng-model="email" name="email" disabled>
+          <span class="label">Email</span>
+        </p>
+        <p>
+          <textarea ng-model="street" name="street" rows="3" disabled></textarea>
+          <span class="label">Address</span>
+        </p>
+      </fieldset>
+    </form>
+  </div>
+</div>
