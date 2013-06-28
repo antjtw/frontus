@@ -177,6 +177,21 @@ var captableController = function($scope, $parse, calculateauth) {
 			    });
 		  });
 
+      angular.forEach($scope.issues, function(issue) {
+        console.log(issue.issue);
+        if (parseFloat(issue.totalauth) % 1 == 0) {
+          var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+          console.log(issue.totalauth);
+          console.log(leftovers);
+          if (leftovers != 0) {
+            var issuename = String(issue.issue)
+            var shares = {"u":leftovers, "a":null};
+            $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
+            $scope.rows[($scope.rows.length)-1][issuename] = shares
+          }
+        }
+      });
+
       angular.forEach($scope.rows, function(row) {
         angular.forEach($scope.issuekeys, function(issuekey) {
           if (issuekey in row) {
@@ -188,20 +203,6 @@ var captableController = function($scope, $parse, calculateauth) {
         });
       });
 
-      angular.forEach($scope.issues, function(issue) {
-        console.log(issue.issue);
-        if (parseFloat(issue.totalauth) % 1 == 0) {
-          var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
-          console.log(issue.totalauth);
-          console.log(leftovers);
-          if (leftovers != 0) {
-            var issuename = String(issue.issue)
-            var shares = {"u":leftovers};
-            $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
-            $scope.rows[($scope.rows.length)-1][issuename] = shares
-          }
-        }
-      });
 		$scope.$apply();
 		});
 	});
@@ -279,6 +280,11 @@ $scope.getActiveIssue = function(issue) {
 
 $scope.saveIssue = function(issue) {
   console.log(issue);
+  angular.forEach($scope.issues, function(coreissue) {
+    if(issue.issue == coreissue.issue && issue['$$hashKey'] != coreissue['$$hashKey']) {
+      issue.issue = issue.issue + " (1)";
+    };
+  });
   if (issue['issue'] == null && issue['key'] == null) {
     return
   }
