@@ -27,7 +27,7 @@ owner.service('calculateauth', function() {
   this.adding = function(total, issue, rows) {
     var leftover = total
     angular.forEach(rows, function(row) {
-      if (issue.issue in row && row.nameeditable != 0 && parseInt(issue.issue['u']) % 1 != 0) {
+      if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseInt(row[issue.issue]['u']))) {
         leftover = leftover - row[issue.issue]['u'];
       }
     });
