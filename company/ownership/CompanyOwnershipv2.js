@@ -245,7 +245,7 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
 	});
   if ($scope.activeTran.length < 1) {
     var newTran = {}
-    newTran = {"active":true, "new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "key":undefined};
+    newTran = {"active":true, "new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":undefined};
     $scope.trans.push(newTran);
     $scope.activeTran.push(newTran);
   }
@@ -293,9 +293,14 @@ $scope.saveIssue = function(issue) {
           $scope.issuekeys.splice(indexed, 1);
   			}
       });
-
       angular.forEach($scope.rows, function(row) {
-        delete row[issue.key];
+        if (issue.key in row) {
+          delete row[issue.key];
+        }
+        if (row["name"] == issue.key+ " (unissued)") {
+          var index = $scope.rows.indexOf(row);
+          $scope.rows.splice(index, 1);
+        }
       });
   	});
   	$scope.$apply();
@@ -350,7 +355,7 @@ $scope.saveIssue = function(issue) {
           }
         });
         if (keepgoing != false) {
-          if (leftovers != NaN) {
+          if (parseInt(leftovers) % 1 == 0) {
             $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
             $scope.rows[($scope.rows.length)-1][issuename] = shares;
           };
@@ -464,7 +469,7 @@ $scope.updateRow = function(investor) {
 
 $scope.createTran = function() {
   var newTran = {}
-  newTran = {"new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "key":"undefined"};
+  newTran = {"new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":"undefined"};
 	$scope.trans.push(newTran);
   $scope.activeTran.push(newTran);
 }
@@ -554,6 +559,15 @@ $scope.saveTran = function(transaction) {
                     row[tran.issue]['a'] = tempamount;
           				}
           		}
+              if (row.name == tran.issue+" (unissued)") {
+                angular.forEach($scope.issues, function(issue) {
+                  if (issue.issue == tran.issue) {
+                    var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+                    var shares = {"u":leftovers};
+                    row[issue.issue] = shares;
+                  }
+                });
+              }
           	});
           });
           $scope.$apply();
