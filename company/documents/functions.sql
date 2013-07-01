@@ -15,6 +15,10 @@ CREATE OR REPLACE FUNCTION document.get_doc_activity(docid integer) RETURNS SETO
 BEGIN RETURN QUERY SELECT * from document.activity_feed where doc_id=docid;
 END $$;
 
+CREATE OR REPLACE FUNCTION document.get_investor_activity(investor account.email) RETURNS SETOF document.activity_feed LANGUAGE plpgsql AS $$
+BEGIN RETURN QUERY SELECT * from document.activity_feed where investor=sent_to;
+END $$;
+
 CREATE TYPE document.activity_cluster as (count bigint, doc_id int, when_sent date, activity document.activity_type);
 CREATE OR REPLACE FUNCTION document.get_doc_activity_cluster(docid integer) RETURNS SETOF document.activity_cluster LANGUAGE plpgsql AS $$
 BEGIN RETURN QUERY SELECT count(d.when_sent) AS count, d.doc_id, d.when_sent::date, d.activity from document.activity_feed d where d.doc_id=docid GROUP BY d.when_sent, d.doc_id, d.activity;
@@ -127,6 +131,15 @@ begin
 return query 
       (select sent_to, max(when_sent) as whensent, max(activity) as event from document.my_shares where doc_id=docid and sent_to not in (SELECT sent_to from document.my_revoked x where x.doc_id=docid) GROUP BY sent_to)
 UNION (select sent_to, max(when_revoked) as whensent, max(access) as event from document.my_revoked where doc_id=docid GROUP BY sent_to);
+RETURN;
+end $$;
+
+CREATE or REPLACE FUNCTION document.document_status_by_investor(docid int, investor account.email) returns setof document.shared_status 
+language plpgsql as $$
+begin 
+return query 
+      (select sent_to, max(when_sent) as whensent, max(activity) as event from document.my_shares where doc_id=docid and sent_to=investor and sent_to not in (SELECT sent_to from document.my_revoked x where x.doc_id=docid) GROUP BY sent_to)
+UNION (select sent_to, max(when_revoked) as whensent, max(access) as event from document.my_revoked where doc_id=docid and sent_to=investor GROUP BY sent_to);
 RETURN;
 end $$;
 
