@@ -23,7 +23,7 @@ if(!Array.prototype.indexOf) {
     };
 }
 
-owner.service('calculateauth', function() {
+owner.service('calculate', function() {
   this.adding = function(total, issue, rows) {
     var leftover = total
     angular.forEach(rows, function(row) {
@@ -33,6 +33,15 @@ owner.service('calculateauth', function() {
     });
     return leftover
   };
+
+  this.sum = function(current, additional) {
+    if (!isNaN(parseInt(additional))) {
+      return (current + parseInt(additional));
+    }
+    else {
+      return current;
+    }
+  }
 });
 
 owner.run(function($rootScope) {
@@ -103,7 +112,7 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse, calculateauth) {
+var captableController = function($scope, $parse, calculate) {
   $scope.issuetypes = [];
   $scope.freqtypes = [];
   $scope.issuekeys = [];
@@ -134,6 +143,7 @@ var captableController = function($scope, $parse, calculateauth) {
 		$scope.issues = data;
 		angular.forEach($scope.issues, function(oneissue) {
 	      oneissue.key = oneissue.issue;
+        console.log(oneissue);
         $scope.issuekeys.push(oneissue.key);
 	    });
 	    $scope.issues.push({"name":"", "date":Date(2100, 1, 1)})
@@ -158,8 +168,8 @@ var captableController = function($scope, $parse, calculateauth) {
 				angular.forEach($scope.rows, function(row) {
 			      if (row.name == tran.investor) {
 			      	if (tran.issue in row) {
-			      		row[tran.issue]["u"] = row[tran.issue]["u"] + tran.units
-                row[tran.issue]["a"] = row[tran.issue]["a"] + tran.amount
+			      		row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
+                row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
 			      	}
 			      	else {
               row[tran.issue] = {}
@@ -180,7 +190,7 @@ var captableController = function($scope, $parse, calculateauth) {
       angular.forEach($scope.issues, function(issue) {
         console.log(issue.issue);
         if (parseFloat(issue.totalauth) % 1 == 0) {
-          var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+          var leftovers = calculate.adding(issue.totalauth, issue, $scope.rows);
           console.log(issue.totalauth);
           console.log(leftovers);
           if (leftovers != 0) {
@@ -346,7 +356,7 @@ $scope.saveIssue = function(issue) {
         var keepgoing = true;
         var deleterow = -1;
         var issuename = String(issue.issue)
-        var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+        var leftovers = calculate.adding(issue.totalauth, issue, $scope.rows);
         var shares = {"u":leftovers};
         angular.forEach($scope.rows, function(row) {
           if (keepgoing) {
@@ -488,7 +498,7 @@ $scope.createTran = function() {
 
 $scope.deleteTran = function(tran) {
     var d1 = tran['date'].toUTCString();
-    SWBrijj.proc('ownership.delete_transaction', tran['investor'], tran['issue'], d1).then(function(data) { 
+    SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
       $scope.trans.splice(index, 1);
       angular.forEach($scope.rows, function(row) {
@@ -503,7 +513,7 @@ $scope.deleteTran = function(tran) {
 
 $scope.manualdeleteTran = function(tran) {
     var d1 = tran['date'].toUTCString();
-    SWBrijj.proc('ownership.delete_transaction', tran['investor'], tran['issue'], d1).then(function(data) { 
+    SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
       $scope.trans.splice(index, 1);
       var index = $scope.activeTran.indexOf(tran);
@@ -537,8 +547,8 @@ $scope.saveTran = function(transaction) {
   else {
         console.log("transaction saving");
         var d1 = transaction['date'].toUTCString();
-        if (transaction['key'] == undefined) {
-          transaction['key'] = "undefined";
+        if (transaction['tran_id'] == undefined) {
+          transaction['tran_id'] = -1;
         };
         if (parseFloat(transaction['amount']) % 1 != 0) {
         };
@@ -557,7 +567,7 @@ $scope.saveTran = function(transaction) {
           var vestcliffdate = (transaction['vestingbegins']).toUTCString();
         }
 
-        SWBrijj.proc('ownership.update_transaction', transaction['investor'], transaction['investorkey'], transaction['key'], transaction['issue'], parseFloat(transaction['units']), transaction['datekey'], d1, parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
+        SWBrijj.proc('ownership.update_transaction', transaction['tran_id'], transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           console.log(data);
           var tempunits = 0;
           var tempamount = 0;
@@ -567,8 +577,8 @@ $scope.saveTran = function(transaction) {
           				if (tran.issue == transaction.issue) {
                     tran.key = tran.issue;
                     transaction.datekey = d1
-          					tempunits = tempunits + parseInt(tran.units);
-                    tempamount = tempamount + parseInt(tran.amount);
+          					tempunits = calculate.sum(tempunits, tran.units);
+                    tempamount = calculate.sum(tempamount, tran.amount);
           					row[tran.issue]['u'] = tempunits;
                     row[tran.issue]['a'] = tempamount;
           				}
@@ -576,7 +586,7 @@ $scope.saveTran = function(transaction) {
               if (row.name == tran.issue+" (unissued)") {
                 angular.forEach($scope.issues, function(issue) {
                   if (issue.issue == tran.issue) {
-                    var leftovers = calculateauth.adding(issue.totalauth, issue, $scope.rows);
+                    var leftovers = calculate.adding(issue.totalauth, issue, $scope.rows);
                     var shares = {"u":leftovers};
                     row[issue.issue] = shares;
                   }
