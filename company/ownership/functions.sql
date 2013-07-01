@@ -71,17 +71,20 @@ CREATE TRIGGER delete_issue INSTEAD OF DELETE on ownership.company_issue FOR EAC
 
 
 -- Creates and Updates Transactions
-CREATE OR REPLACE FUNCTION ownership.update_transaction(key integer, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION ownership.update_transaction(key character varying, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS SETOF bigint AS
 $$
 BEGIN
-	IF key = -1 THEN
-	INSERT INTO ownership.company_transaction (investor, company, issue, units, date, amount) VALUES (newinvestor, (select distinct company from account.companies), newissue, newunits, newdate, newamount);
+	IF key = '' THEN
+	INSERT INTO ownership.company_transaction (tran_id, investor, company, issue, units, date, amount) VALUES (DEFAULT, newinvestor, (select distinct company from account.companies), newissue, newunits, newdate::date, newamount);
+	RETURN QUERY SELECT document.pseudo_encrypt(currval('ownership.transaction_tran_id_seq')::int);
 	ELSE
-	UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key and company=(select distinct company from account.companies);
+	RETURN QUERY UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key::integer and company=(select distinct company from account.companies) RETURNING tran_id::bigint;
 	END IF;
 END;
 $$
 LANGUAGE plpgsql;
+
+GRANT SELECT ON ownership.transaction_tran_id_seq to investor;
 
 CREATE OR REPLACE FUNCTION ownership.update_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
@@ -94,7 +97,7 @@ CREATE TRIGGER update_transaction INSTEAD OF UPDATE on ownership.company_transac
 
 CREATE OR REPLACE FUNCTION ownership.create_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    INSERT INTO ownership.transaction (investor, company, issue, units, date, amount) VALUES (NEW.investor, NEW.company, NEW.issue, NEW.units, NEW.date, NEW.amount);
+    INSERT INTO ownership.transaction (tran_id, investor, company, issue, units, date, amount) VALUES (DEFAULT, NEW.investor, NEW.company, NEW.issue, NEW.units, NEW.date, NEW.amount);
     RETURN NEW;
 END $$;
 
