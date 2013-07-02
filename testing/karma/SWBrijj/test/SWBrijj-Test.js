@@ -203,7 +203,7 @@ describe("Document status tests", function() {
 		});
 	});
 
- 	it("Should revoke access a document", function() {
+ 	it("Should revoke access to a document", function() {
 		var result = SWBrijj.procm("document.document_revoke", docId, usernameInvestor);
 		result.then(function(x) {
 			console.log("Revoke", x);
@@ -220,7 +220,7 @@ describe("Document status tests", function() {
 			expect({value: x[0]["event"]}).toBe("revoked");
 			expect({value: x[0]["sent_to"]}).toBe(usernameInvestor);
 		}).except(function(x){ 
-			fail("Verifying document reminder", x);
+			fail("Verifying document revoke", x);
 		});
 	});
 
@@ -255,6 +255,5 @@ describe("Document status tests", function() {
 
 	//TODO: Check activity feed, currently broken. Check document information
 	//TODO: Share with someone, revoke, and then re-share
-	//TODO: Renaming test
 	//TODO: Go on investor account to check that file has been shared and revoked
 });

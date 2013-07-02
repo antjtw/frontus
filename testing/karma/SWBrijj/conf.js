@@ -58,7 +58,6 @@ autoWatch = true;
 // - IE (only Windows)
 // browsers = ['Chrome'];
 
-
 // If browser does not capture in given timeout [ms], kill it
 captureTimeout = 60000;
 

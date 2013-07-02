@@ -1,5 +1,5 @@
 
-var app = angular.module('ProfileApp', ['ngResource']);
+var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
@@ -7,11 +7,12 @@ app.config(function($routeProvider, $locationProvider){
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/contact', {controller:ContactCtrl, templateUrl:'contact.html'}).
-      when('/social', {controller:SocialCtrl, templateUrl: 'social.html'}).
-      when('/password', {controller:PasswordCtrl, templateUrl: 'password.html'}).
-      when('/photo', {controller:PhotoCtrl, templateUrl: 'photo.html'}).
-      otherwise({redirectTo:'/contact'});
+      when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
+      when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
+      // when('/social', {controller:SocialCtrl, templateUrl: 'social.html'}).
+      // when('/password', {controller:PasswordCtrl, templateUrl: 'password.html'}).
+      //when('/photo', {controller:PhotoCtrl, templateUrl: 'photo.html'}).
+      otherwise({redirectTo:'/'});
 });
 
 app.controller("MainProfileController", function($scope, $location) {
@@ -24,14 +25,58 @@ app.controller("MainProfileController", function($scope, $location) {
       return p == x; };
 } );
 
-function ContactCtrl($scope) {
+app.run(function($rootScope) {
+  $rootScope.notification = {};
+  $rootScope.notification.color = "success";
+  $rootScope.notification.visible = false;
+  $rootScope.notification.message = "Notification Message";
+
+  $rootScope.notification.show = function (color, message) {
+    $rootScope.notification.visible = true;
+    $rootScope.notification.color = color;
+    $rootScope.notification.message = message;
+    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
+  };
+});
+
+function ContactCtrl($scope, $route, $rootScope) {
+
+  $scope.pictureModalOpen = function () {
+    $scope.pictureModal = true;
+  };
+
+  $scope.pictureModalClose = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.pictureModal = false;
+  };
+
+  $scope.passwordModalOpen = function () {
+    $scope.passwordModal = true;
+  };
+
+  $scope.passwordModalClose = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.passwordModal = false;
+  };
+
+  $scope.opts = {
+    backdropFade: true,
+    dialogFade:true
+  };
+
   $scope.contactSave = function () {
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
-        .then(function (x) { alert("saved: "+x);
+        .then(function (x) { 
+          console.log("saved: "+x);
+          $route.reload(); $scope.$apply();
+          $rootScope.notification.show("success", "Your profile has been updated successfully.");
+      }).except(function(x) {
+          $rootScope.notification.show("fail", "There was an error updating your profile.");
       });
   };
   //noinspection JSUnresolvedVariable
-    SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
+  SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
+
 }
 
 function SocialCtrl($scope, $location) {  
@@ -65,7 +110,137 @@ function SocialCtrl($scope, $location) {
 
 }
 
-function PasswordCtrl($scope) {
+function ViewerCtrl($scope, $route, $rootScope, $routeParams) { 
+  var userId = $routeParams.id;
+  SWBrijj.tbl('account.company_investors').then(function(x) {
+    for (var i = 1; i < x.length; i++) { //Can't use indexOf, Objects not supported
+      if (x[i][0] == userId) {
+        rowNumber = i;
+      } //Get email
+    }
+    initPage($scope, x, rowNumber);
+  }).except(initFail);
+
+  SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
+    $scope.docs = x;
+    var i = 0;
+    angular.forEach($scope.docs, function(x) {
+      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+        SWBrijj.procm('document.document_status_by_investor', x['doc_id'], userId).then(function(z) {
+          $scope.docs[i].docname = y[0]["docname"];
+          $scope.docs[i].event = z[0]['event'];
+          $scope.docs[i].shown = false;
+          $scope.docs[i].button = "icon-plus";
+          if ($scope.docs[i].event == "revoked") {
+            $scope.docs[i].rstatus = 1;
+          };
+          if ($scope.docs[i].event == "needsign") {
+            $scope.docs[i].event = "needs signing";
+          };
+          i++;
+          $scope.$apply();
+        });
+      });
+    });
+    //console.log($scope.docs);
+  });
+
+  $scope.getDocName = function(docs) {
+    // for(var i = 0; i < $scope.docs.length; i++) {
+    //   console.log($scope.docs[0]);
+    //   console.log(i);
+    //   if($scope.docs[i]['doc_id'] == docId){
+    //     return $scope.docs[i]['docname'];
+    //   }
+    // }
+    return "null";
+  };
+
+    $scope.activity = [];
+    SWBrijj.procm('document.get_investor_activity', userId).then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      console.log(x);
+      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname']});
+        if ($scope.activity[i].activity == "shared") {
+          $scope.activity[i].activity = "Shared ";
+          $scope.activity[i].icon = "icon-edit";
+        }
+        else if ($scope.activity[i].activity == "viewed") {
+          $scope.activity[i].activity = "Viewed ";
+          $scope.activity[i].icon = "icon-eye-open";
+        }
+        else if ($scope.activity[i].activity == "reminder") {
+          $scope.activity[i].activity = "Reminded for ";
+          $scope.activity[i].icon = "icon-bullhorn";
+        }
+        else if ($scope.activity[i].activity == "signed") {
+          $scope.activity[i].activity = "Signed ";
+          $scope.activity[i].icon = "icon-ok-circle";
+        }
+        i++;
+      });
+    });
+  });
+
+  $scope.activityOrder = function(card) {
+     if (card.activity == "created") {
+       return 0;
+     } else {
+        return -card.when_sent;
+     }
+  };
+
+  $scope.opendetails = function(selected) {
+    $scope.docs.forEach(function(doc) {     
+      if (selected == doc.doc_id)
+        if (doc.shown == true) {
+          doc.shown = false;
+          doc.button = "icon-plus";
+        } else {
+          SWBrijj.procm("document.get_I_docstatus", userId, parseInt(selected)).then(function(data) {
+            doc.whenshared = data[1].loggedin;
+            if (data[0].loggedin != null) {
+              doc.lastlogin = data[0].loggedin;
+            }
+            else {
+              doc.lastlogin = 0; 
+            }
+            if (data[2].loggedin != null) {
+              doc.lastviewed = data[2].loggedin;
+            }
+            else {
+              doc.lastviewed = 0;  
+            }
+            if (data[3].loggedin != null) {
+              doc.signed = data[3].loggedin;
+            }
+            else {
+              doc.signed = 0;  
+            }
+            if (data[5].loggedin != null) {
+              console.log(data[5])
+              doc.column5 = 2
+              doc.reminder = data[5].loggedin;
+            }
+            else if (data[4].loggedin != null) {
+              doc.column5 = 1
+              doc.reminder = data[4].loggedin;
+            }
+            else {
+              doc.column5 = 0; 
+            }
+            doc.button = "icon-minus";
+            doc.shown = true;
+            $scope.$apply();
+          });
+        }
+    });
+  };
+}
+
+function PasswordCtrl($scope, $route, $rootScope) {
     $scope.currentPassword="";
     $scope.newPassword="";
     $scope.passwordConfirm="";
@@ -89,8 +264,15 @@ function PasswordCtrl($scope) {
     
     $scope.changePassword = function() {
         SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
-            if (x[1][0]) alert("changed successfully");
-            else alert("Oops.  Change failed");
+            if (x[1][0]) { 
+              $route.reload(); $scope.$apply();
+              $rootScope.notification.show("success", "Your password has been updated successfully.");
+              console.log("changed successfully");
+            } else { 
+              $route.reload(); $scope.$apply();
+              $rootScope.notification.show("fail", "There was an error updating your password.");
+              console.log("Oops.  Change failed");
+            }
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };
 }
@@ -103,7 +285,7 @@ function PhotoCtrl($scope) {
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
-app.controller("FileDNDCtrl", function($scope, $element) {
+app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope) {
     var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
@@ -115,45 +297,6 @@ app.controller("FileDNDCtrl", function($scope, $element) {
         else return file.size + " bytes";
     };
 
-    // init event handlers
-    function dragEnterLeave(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        $scope.dropText = "Drop files here...";
-        $scope.dropClass = "";
-        $scope.$apply();
-    }
-    
-    function dragOver(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.contains('Files');
-        $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
-        $scope.dropClass = ok ? 'over' : 'not-available';
-        $scope.$apply();
-    }
-    
-    function drop(evt) {
-        // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
-        evt.stopPropagation();
-        evt.preventDefault();
-        $scope.dropText = 'Drop more files here...';
-        $scope.dropClass = '';
-        $scope.$apply();
-        var files = evt.dataTransfer.files;
-        if (files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-                $scope.files.push(files[i])
-            }
-        }
-        $scope.$apply();
-    }
-    
-    dropbox.addEventListener("dragenter", dragEnterLeave, false);
-    dropbox.addEventListener("dragleave", dragEnterLeave, false);
-    dropbox.addEventListener("dragover", dragOver, false);
-    dropbox.addEventListener("drop", drop, false);
-
     $scope.setFiles = function(element) {
         $scope.files = [];
         for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
@@ -164,7 +307,15 @@ app.controller("FileDNDCtrl", function($scope, $element) {
         var fd = new FormData();
         $scope.progressVisible = true;
         for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
-        SWBrijj.uploadImage(fd).then(function(x) { console.log(x); }).except( function(x) { alert(x); });
+        SWBrijj.uploadImage(fd).then(function(x) {
+          $route.reload(); $scope.$apply();
+          console.log(x);
+          $rootScope.notification.show("green", "Your profile picture has been updated successfully.");
+        }).except( function(x) { 
+          $route.reload(); $scope.$apply();
+          console.log(x);
+          $rootScope.notification.show("fail", "There was an error updating your profile picture.");
+        });
         /*var xhr = new XMLHttpRequest()
         xhr.upload.addEventListener("progress", uploadProgress, false);
         xhr.addEventListener("load", uploadComplete, false);
@@ -206,9 +357,10 @@ app.controller("FileDNDCtrl", function($scope, $element) {
 
 
 
-function initPage($scope, x) {
+function initPage($scope, x, row) {
+  if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames
-  var z = x[1]; // the values
+  var z = x[row]; // the values
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
   $scope.$apply();

@@ -54,11 +54,11 @@ function b64toBlob(b64Data, contentType, sliceSize) {
  //    }
 
     //var blob = new Blob(byteArrays, {type: contentType});
-    //var blob = new Blob([ab], {type: contentType});
-    var bb = new WebKitBlobBuilder();
-    bb.append(ab);
-    console.log(ab);
-    var blob = bb.getBlob(contentType);
+    var blob = new Blob([ab], {type: contentType});
+    // var bb = new WebKitBlobBuilder();
+    // bb.append(ab);
+    // console.log(ab);
+    // var blob = bb.getBlob(contentType);
     return blob;
 }
 

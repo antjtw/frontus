@@ -1,0 +1,107 @@
+<!--Notification Bar-->
+<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
+
+<div class="editProfileFP row-fluid">
+  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+    <h1>{{name}}</h1>
+    <div class="row-fluid">
+      <div class="span5"> <!-- Photo -->
+        <form>
+          <div class="editProfilePhoto">
+            <img ng-src="/photo/user?id=investor:{{email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+          </div>
+        </form>
+      </div>
+      <div class="span7">
+        <p>
+            <input type="text" ng-model="name" name="name" disabled>
+            <span class="label">Name</span>
+        </p>
+      </div>
+    </div>
+    <div class="row-fluid">
+    <section class="recipientInfo statusBlock">
+      <div><i class="icon-user icon-2x"></i><p class="subText">Document Status</p></div>
+      <table class="tableView bodyText">
+        <tr class="subText">
+          <th class="button"><span class="title sortedDown">Name</span></th>
+          <th colspan="2" class="button"><span class="title">Status</span></th>
+        </tr>
+        <tbody ng-repeat="doc in docs">
+          <tr>
+          <td><img src="">{{doc.docname}}</td>
+          <td>{{doc.event}}</td>
+          <td class="button" ng-click="(opendetails(doc.doc_id))"><i class="{{doc.button}}"></i>
+          </tr>
+          <tr ng-Show="doc.shown" class="personDetails">
+            <td colspan="2">
+                <div><p>Delivered</p><p class="doubleTime">{{doc.whenshared | date:'MMMM dd, yyyy'}}</p><p>{{doc.whenshared | date:'h:mm a'}}</p></div>
+                <div>
+                    <div ng-switch on="doc.lastlogin" >
+                        <span ng-switch-when="0"><p class="hltext">Never Logged In</p></span>
+                        <span ng-switch-default><p>Last Seen</p><p class="doubleTime">{{doc.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastlogin | date:'h:mm a'}}</p></span>
+                    </div>
+                </div>
+               
+                <div>
+                    <div ng-switch on="doc.lastviewed" >
+                        <span ng-switch-when="0"><p class="hltext">Unviewed</p></span>
+                        <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{doc.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastviewed | date:'h:mm a'}}</p></span>
+                    </div>
+                </div>
+                
+                <div>
+                  <div ng-switch on="doc.signed" >
+                        <span ng-switch-when="0"><p class="hltext">Unsigned</p></span>
+                        <span ng-switch-default><p>Signed</p><p class="doubleTime">{{doc.signed | date:'MMMM dd, yyyy'}}</p><p>{{doc.signed | date:'h:mm a'}}</p></span>
+                    </div>
+                </div>
+                
+                <div>
+                  <div ng-switch on="doc.column5" >
+                      <p ng-switch-default="0"></p>
+                        <span ng-switch-when="2"><p>Revoked</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></span>
+                        <span ng-switch-when="1"><p>Resent</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+    </div>
+  </div>
+  <div class="sidebar span4">
+    <form>
+      <fieldset>
+        <p>
+          <input type="text" ng-model="email" name="email" disabled>
+          <span class="label">Email</span>
+        </p>
+        <p>
+          <textarea ng-model="street" name="street" rows="3" disabled></textarea>
+          <span class="label">Address</span>
+        </p>
+      </fieldset>
+    </form>
+
+    <section class="documentInfo statusBlock">
+    <div>
+    <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
+    </div> 
+    <div class="activityBlock">
+      <table>
+        <tr ng-repeat="active in activity | orderBy:activityOrder">
+        <td><i class="{{active.icon}} icon"></i></td>
+        <td>
+            <table>
+              <tr><td>{{active.activity}} {{active.docname}}</td></tr>
+                  <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+              </table>
+          </td>
+        </tr>
+      </table> 
+    </div>   
+    </section>
+  </div>
+</div>
