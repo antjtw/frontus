@@ -44,7 +44,9 @@ owner.service('calculate', function() {
   }
 
   this.debt = function(rows, issue, row) {
-    var mon = issue.premoney;
+    var mon = parseInt(issue.premoney);
+    console.log("calc debt");
+    console.log(mon);
     if (isNaN(parseInt(mon))) {
       return null
     }
@@ -52,11 +54,13 @@ owner.service('calculate', function() {
       angular.forEach(rows, function(r) {
         if (r[issue.issue] != undefined) {
           if (isNaN(parseInt(r[issue.issue]['u'])) && !isNaN(parseInt(r[issue.issue]['a']))) {
-            mon = mon + r[issue.issue]['a'];
+            mon = mon + parseInt(r[issue.issue]['a']);
           };
         };
       });
     };
+    console.log(mon)
+    console.log(row[issue.issue]['a']);
     return ((parseFloat(row[issue.issue]['a'])/parseFloat(mon)) * 100)
   };
 });
@@ -469,9 +473,18 @@ $scope.saveIssue = function(issue) {
             tran.postmoney = issue.postmoney;
           }
         });
+
+        angular.forEach($scope.rows, function(row) {
+        if (row[issue.issue] != undefined) {
+          if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
+            row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+            };
+          };
+        });
+
         var index = $scope.issuekeys.indexOf(issue.key);
-        $scope.issuekeys[index] = issue['issue'];
-        issue.key=issue['issue'];
+        $scope.issuekeys[index] = issue.issue;
+        issue.key=issue.issue;
         $scope.$apply();
       	});
     } 
