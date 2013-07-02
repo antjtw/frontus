@@ -112,11 +112,15 @@ function SocialCtrl($scope, $location) {
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams) { 
   var userId = $routeParams.id;
+  var rowNumber;
   SWBrijj.tbl('account.company_investors').then(function(x) {
     for (var i = 1; i < x.length; i++) { //Can't use indexOf, Objects not supported
       if (x[i][0] == userId) {
         rowNumber = i;
       } //Get email
+    }
+    if (null == rowNumber) {
+      document.location.href = "/investor/profile";
     }
     initPage($scope, x, rowNumber);
   }).except(initFail);
@@ -162,7 +166,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams) {
     angular.forEach(data, function(x) {
       console.log(x);
       SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname']});
+        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
         if ($scope.activity[i].activity == "shared") {
           $scope.activity[i].activity = "Shared ";
           $scope.activity[i].icon = "icon-edit";
@@ -350,12 +354,6 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
     }
 }
 );
-
-
-
-
-
-
 
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
