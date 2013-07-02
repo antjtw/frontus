@@ -9,7 +9,7 @@
               <input class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
             </th>
           </tr>
-        <tr ng-repeat="row in rows | orderBy:rowOrdering">
+        <tr ng-repeat="row in rows">
           <td><input disabled value="{{shareSum(row);}}"></input></td>
           <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
           <td>
@@ -21,7 +21,7 @@
                 <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
               </span>
           </td>
-          <td ng-repeat="key in issuekeys">
+          <td ng-repeat="key in issuekeys | orderBy:issueSort">
             <span ng-switch on="row.editable">
               <span ng-switch-default>
               <input class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>

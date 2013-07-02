@@ -45,8 +45,6 @@ owner.service('calculate', function() {
 
   this.debt = function(rows, issue, row) {
     var mon = parseInt(issue.premoney);
-    console.log("calc debt");
-    console.log(mon);
     if (isNaN(parseInt(mon))) {
       return null
     }
@@ -59,8 +57,6 @@ owner.service('calculate', function() {
         };
       });
     };
-    console.log(mon)
-    console.log(row[issue.issue]['a']);
     return ((parseFloat(row[issue.issue]['a'])/parseFloat(mon)) * 100)
   };
 });
@@ -90,6 +86,44 @@ owner.service('switchval', function() {
     }
     return tran;
   };
+});
+
+owner.service('sorting', function() {
+
+  this.issuekeys = function(keys, issues) {
+    var sorted = []
+    angular.forEach(issues, function(issue) {
+      angular.forEach(keys, function(key) {
+        if (issue.issue == key) {
+          sorted.push(key);
+        };
+      });
+    });
+    return sorted;
+  };
+
+  this.issuedate = function(a,b) {
+  if (a.date < b.date)
+     return -1;
+  if (a.date > b.date)
+    return 1;
+  return 0;
+  };
+
+  this.row = function(prop) {
+    return function(a, b) {
+        var i = 0
+        while (i < prop.length) {
+        if (a[prop[i]]['u'] < b[prop[i]]['u'])
+           return 1;
+        if (a[prop[i]]['u'] > b[prop[i]]['u'])
+          return -1;
+        i++
+        }
+        return 0;
+    }
+  };
+
 });
 
 owner.run(function($rootScope) {
@@ -185,7 +219,8 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse, calculate, switchval) {
+var captableController = function($scope, $parse, calculate, switchval, sorting) {
+
   $scope.issuetypes = [];
   $scope.freqtypes = [];
   $scope.issuekeys = [];
@@ -241,8 +276,6 @@ var captableController = function($scope, $parse, calculate, switchval) {
         });
 		  });
 
-      $scope.rows.push({"name":"", "editable":"0"});
-
 			angular.forEach($scope.trans, function(tran) {
 				angular.forEach($scope.rows, function(row) {
 			      if (row.name == tran.investor) {
@@ -266,6 +299,16 @@ var captableController = function($scope, $parse, calculate, switchval) {
 			    });
 		  });
 
+      angular.forEach($scope.rows, function(row) {
+        angular.forEach($scope.issues, function(issue) {
+          if (row[issue.issue] != undefined) {
+            if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
+              row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+            };
+          };
+        });
+      });
+
       angular.forEach($scope.issues, function(issue) {
         if (parseFloat(issue.totalauth) % 1 == 0) {
           var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
@@ -278,6 +321,7 @@ var captableController = function($scope, $parse, calculate, switchval) {
         }
       });
 
+
       angular.forEach($scope.rows, function(row) {
         angular.forEach($scope.issuekeys, function(issuekey) {
           if (issuekey in row) {
@@ -288,16 +332,17 @@ var captableController = function($scope, $parse, calculate, switchval) {
         });
       });
 
-      angular.forEach($scope.rows, function(row) {
-        angular.forEach($scope.issues, function(issue) {
-          if (row[issue.issue] != undefined) {
-            if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
-              row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-            };
-          };
-        });
-      });
 
+    $scope.issues.sort(sorting.issuedate);
+    $scope.issuekeys= sorting.issuekeys($scope.issuekeys, $scope.issues);
+    $scope.rows.sort(sorting.row($scope.issuekeys));
+
+    var values = {"name":"", "editable":"0"}
+    angular.forEach($scope.issuekeys, function(key) {
+      values[key] = {"u":null, "a":null};
+    });
+    $scope.rows.push(values);
+    
 		$scope.$apply();
 		});
 	});
