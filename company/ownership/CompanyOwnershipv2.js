@@ -12,17 +12,6 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
-if(!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(needle) {
-        for(var i = 0; i < this.length; i++) {
-            if(this[i] === needle) {
-                return i;
-            }
-        }
-        return -1;
-    };
-}
-
 owner.service('calculate', function() {
   this.whatsleft = function(total, issue, rows) {
     var leftover = total
@@ -189,15 +178,19 @@ $rootScope.shareSum = function(row) {
     var percentage = 0
     var totalpercentage = 0
     angular.forEach(issuekeys, function(key) {
-      if (row[key]['x'] != undefined) {
-        percentage = percentage + row[key]['x'];
-      };
+      if (row[key] != undefined) {
+        if (row[key]['x'] != undefined) {
+          percentage = percentage + row[key]['x'];
+        };
+      }
     });
     angular.forEach(rows, function(r) {
       angular.forEach(issuekeys, function(key) {
-        if (r[key]['x'] != undefined) {
-          totalpercentage = totalpercentage + r[key]['x'];
-        };
+        if (row[key] != undefined) {
+          if (r[key]['x'] != undefined) {
+            totalpercentage = totalpercentage + r[key]['x'];
+          };
+        }
       });
     });
     return (percentage + ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * (100 - totalpercentage)));
