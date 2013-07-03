@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives']);
+var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj']);
 
 owner.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -227,7 +227,7 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse, calculate, switchval, sorting) {
+var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
 
   $scope.issuetypes = [];
   $scope.freqtypes = [];
@@ -351,7 +351,6 @@ var captableController = function($scope, $parse, calculate, switchval, sorting)
     });
     $scope.rows.push(values);
     
-		$scope.$apply();
 		});
 	});
 
@@ -538,7 +537,6 @@ $scope.saveIssue = function(issue) {
         var index = $scope.issuekeys.indexOf(issue.key);
         $scope.issuekeys[index] = issue.issue;
         issue.key=issue.issue;
-        $scope.$apply();
       	});
     } 
 
@@ -740,7 +738,6 @@ $scope.saveTran = function(transaction) {
               });
             }
           });
-          $scope.$apply();
         });
       };
 };
@@ -754,10 +751,36 @@ $scope.saveTran = function(transaction) {
   };
 };
 
-var grantController = function($scope, $parse, calculate, switchval, sorting) {
+var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+
+  $scope.rows = []
+  $scope.uniquerows = []
+
   SWBrijj.tblm('ownership.company_options').then(function(data) {
+
     $scope.trans = data;
-    console.log($scope.trans);
+    angular.forEach($scope.trans, function(tran) {
+    tran.datekey = tran['date'].toUTCString();
+    if ($scope.uniquerows.indexOf(tran.investor) == -1) {
+      $scope.uniquerows.push(tran.investor);
+      $scope.rows.push({"name":tran.investor, "namekey":tran.investor, "editable":"yes", "granted":0, "forfeited":0});
+      }
+    });
+
+    angular.forEach($scope.trans, function(tran) {
+        angular.forEach($scope.rows, function(row) {
+          if (row.name == tran.investor) {
+            if (parseInt(tran.units) > 0) {
+              row["granted"] = calculate.sum(row["granted"], tran.units);
+            }
+            else {
+              row["forfeited"] = calculate.sum(row["forfeited"], tran.units);
+            }
+          };
+        });
+      });
+
+    console.log($scope.rows);
   });
 };
 
