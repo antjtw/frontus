@@ -8,6 +8,7 @@ app.config(function($routeProvider, $locationProvider){
 
   $routeProvider.
       when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
+      when('/people', {controller:PeopleCtrl, templateUrl:'people.html'}).
       //when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
       otherwise({redirectTo:'/'});
 });
@@ -118,6 +119,16 @@ function ContactCtrl($scope, $route, $rootScope) {
         return -card.when_sent;
      }
   };
+
+}
+
+function PeopleCtrl($scope, $route, $rootScope) {
+
+  SWBrijj.tblm('account.company_investors').then(function(x) {
+    console.log(x);
+    $scope.people = x;
+    $scope.$apply();
+  }).except(initFail);
 
 }
 

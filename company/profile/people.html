@@ -1,0 +1,20 @@
+<!--Notification Bar-->
+<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
+
+<div class="editProfileFP row-fluid">
+  <h1>People</h1>
+  <section class="recipientInfo statusBlock">
+    <div><i class="icon-user icon-2x"></i><p class="subText">Admins</p></div>
+    <table class="tableView bodyText">
+      <tr class="subText">
+        <th class="button" colspan="2"><span class="title sortedDown">Name</span></th>
+      </tr>
+      <tbody ng-repeat="person in people | orderBy: order">
+        <tr>
+        <td><img src="">{{person.name}}</td>
+        <td class="button" ng-click="(opendetails(person.noaction))"><i class="icon-cog"></i>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
