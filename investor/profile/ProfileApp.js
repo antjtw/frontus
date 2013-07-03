@@ -149,19 +149,8 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams) {
     //console.log($scope.docs);
   });
 
-  $scope.getDocName = function(docs) {
-    // for(var i = 0; i < $scope.docs.length; i++) {
-    //   console.log($scope.docs[0]);
-    //   console.log(i);
-    //   if($scope.docs[i]['doc_id'] == docId){
-    //     return $scope.docs[i]['docname'];
-    //   }
-    // }
-    return "null";
-  };
-
-    $scope.activity = [];
-    SWBrijj.procm('document.get_investor_activity', userId).then(function(data) {
+  $scope.activity = [];
+  SWBrijj.procm('document.get_investor_activity', userId).then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       console.log(x);
@@ -176,7 +165,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams) {
           $scope.activity[i].icon = "icon-eye-open";
         }
         else if ($scope.activity[i].activity == "reminder") {
-          $scope.activity[i].activity = "Reminded for ";
+          $scope.activity[i].activity = "Reminded  ";
           $scope.activity[i].icon = "icon-bullhorn";
         }
         else if ($scope.activity[i].activity == "signed") {

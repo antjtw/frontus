@@ -41,9 +41,28 @@ function ContactCtrl($scope, $route, $rootScope) {
     $scope.pictureModal = false;
   };
 
+  $scope.adminModalOpen = function () {
+    $scope.adminModal = true;
+  };
+
+  $scope.adminModalClose = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.adminModal = false;
+  };
+
   $scope.opts = {
     backdropFade: true,
     dialogFade:true
+  };
+
+  $scope.create_admin = function() {
+    SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
+      $route.reload(); $scope.$apply();
+        $rootScope.notification.show("success", "An admin has been created successfully.");
+    }).except(function(x) {
+        console.log(x);
+        $rootScope.notification.show("fail", "There was an error adding an admin.");
+    });
   };
 
   $scope.contactSave = function () {
@@ -63,6 +82,42 @@ function ContactCtrl($scope, $route, $rootScope) {
   }).except(initFail);
 
   SWBrijj.tbl('account.my_company').then(function(x) { initPage($scope, x) }).except(initFail);
+
+  $scope.activity = [];
+  SWBrijj.procm('document.get_company_activity').then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
+        if ($scope.activity[i].activity == "shared") {
+          $scope.activity[i].activity = "Shared ";
+          $scope.activity[i].icon = "icon-edit";
+        }
+        else if ($scope.activity[i].activity == "viewed") {
+          $scope.activity[i].activity = "Viewed ";
+          $scope.activity[i].icon = "icon-eye-open";
+        }
+        else if ($scope.activity[i].activity == "reminder") {
+          $scope.activity[i].activity = "Reminded ";
+          $scope.activity[i].icon = "icon-bullhorn";
+        }
+        else if ($scope.activity[i].activity == "signed") {
+          $scope.activity[i].activity = "Signed ";
+          $scope.activity[i].icon = "icon-ok-circle";
+        }
+        i++;
+        $scope.$apply();
+      });
+    });
+  });
+
+  $scope.activityOrder = function(card) {
+     if (card.activity == "created") {
+       return 0;
+     } else {
+        return -card.when_sent;
+     }
+  };
 
 }
 
