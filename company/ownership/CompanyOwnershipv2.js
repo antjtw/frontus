@@ -9,6 +9,8 @@ owner.config(function($routeProvider, $locationProvider) {
     
   $routeProvider.
       when('/', {templateUrl: 'captable.html',   controller: captableController}).
+      when('/grant', {templateUrl: 'grant.html', controller: grantController}).
+      when('/status', {templateUrl: 'status.html', controller: statusController}).
       otherwise({redirectTo: '/'});
 });
 
@@ -72,6 +74,19 @@ owner.service('switchval', function() {
     }
     else {
       tran.type = 0;
+    }
+    return tran;
+  };
+
+  this.typereverse = function(tran) {
+    if (tran == 1) {
+      tran = "options";
+    }
+    else if (tran == 2) {
+      tran = "debt";
+    }
+    else {
+      tran = "shares";
     }
     return tran;
   };
@@ -668,6 +683,8 @@ $scope.saveTran = function(transaction) {
     return;
   }
   else {
+        transaction = switchval.typeswitch(transaction);
+        transaction.type = switchval.typereverse(transaction.type);
         var d1 = transaction['date'].toUTCString();
         if (transaction['tran_id'] == undefined) {
           transaction['tran_id'] = '';
@@ -687,7 +704,7 @@ $scope.saveTran = function(transaction) {
         else {
           var vestcliffdate = (transaction['vestingbegins']).toUTCString();
         }
-        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
+        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, transaction['type'], parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           transaction = switchval.typeswitch(transaction);
           var tempunits = 0;
           var tempamount = 0;
@@ -735,6 +752,15 @@ $scope.saveTran = function(transaction) {
       default: return Boolean(string);
     }
   };
+};
 
+var grantController = function($scope, $parse, calculate, switchval, sorting) {
+  SWBrijj.tblm('ownership.company_options').then(function(data) {
+    $scope.trans = data;
+    console.log($scope.trans);
+  });
+};
+
+var statusController = function($scope) {
 
 };
