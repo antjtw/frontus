@@ -129,3 +129,34 @@ CREATE TRIGGER delete_transaction INSTEAD OF DELETE ON ownership.company_transac
 -- Grants Page
 CREATE OR REPLACE VIEW ownership.company_options AS (SELECT * from ownership.company_transaction where company = (select distinct company from account.companies) and type='options');
 GRANT SELECT ON ownership.company_options to investor;
+
+
+-- Update or Create Grants
+CREATE OR REPLACE FUNCTION ownership.update_grant(key character varying, newtran_id character varying, newaction character varying, newdate character varying, newunit double precision) RETURNS SETOF bigint AS
+$$
+BEGIN
+	IF key = '' THEN
+	INSERT INTO ownership.company_grants (grant_id, tran_id, company, unit, date, action) VALUES (nextval('ownership.transaction_tran_id_seq')::int, newtran_id::integer, (select distinct company from account.companies), newunit, newdate::date, newaction::ownership.grant_type) RETURNING grant_id::bigint;
+	ELSE
+	RETURN QUERY UPDATE ownership.company_grants SET unit=newunit, date=newdate::date, action=newaction::ownership.grant_type where tran_id=newtran_id::integer and grant_id=key::int and company=(select distinct company from account.companies) RETURNING grant_id::bigint;
+	END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ownership.update_grant() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+    UPDATE ownership.grants SET unit=NEW.unit, date=NEW.date, action=NEW.action where tran_id=OLD.tran_id and grant_id=OLD.grant_id and company=OLD.company;
+    RETURN NEW;
+END $$;
+
+CREATE TRIGGER update_grant INSTEAD OF UPDATE on ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.update_grant();
+
+
+CREATE OR REPLACE FUNCTION ownership.create_grant() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+    INSERT INTO ownership.grants (tran_id, grant_id, company, unit, date, action) VALUES (New.tran_id, NEW.grant_id, NEW.company, NEW.unit, NEW.date, NEW.action);
+    RETURN NEW;
+END $$;
+
+CREATE TRIGGER create_grant INSTEAD OF INSERT on ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.create_grant();

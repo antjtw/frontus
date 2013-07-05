@@ -78,6 +78,7 @@
             <accordion-group heading="Options">
               <p>Underlying Security
                 <select ng-init="activeIssue.optundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec" ng-options="i for i in issuekeys">
+                <option></option>
                 </select>
               </p>
               <p>Price<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.price"></input></p>
@@ -93,6 +94,7 @@
             <accordion-group heading="Debt">
               <p>Underlying Security
                 <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.debtundersec" ng-options="i for i in issuekeys">
+                <option></option>
                 </select>
               </p>
               <p>Interest Rate<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.interestrate"></input></p>
@@ -133,6 +135,7 @@
                   <accordion-group heading="Options">
                     <p>Underlying Security
                       <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
+                      <option></option>
                       </select>
                     </p>
                     <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
@@ -150,6 +153,7 @@
                     <accordion-group heading="Debt">
                       <p>Underlying Security
                         <select ng-init="tran.debtundersec" ng-change="saveTran(tran)" ng-model="tran.debtundersec" ng-options="i for i in issuekeys">
+                        <option></option>
                         </select>
                       </p>
                       <p>Interest Rate<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.interestrate"></input></p>

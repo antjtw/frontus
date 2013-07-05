@@ -647,7 +647,6 @@ $scope.deleteTran = function(tran) {
           row[tran['issue']] = {"u":null, "a":null};
         };
       });
-      $scope.$apply();
   });
 }
 
@@ -664,7 +663,6 @@ $scope.manualdeleteTran = function(tran) {
           row[tran['issue']] = {"u":null, "a":null};
         };
       });
-      $scope.$apply();
   });
 }
 
@@ -704,8 +702,12 @@ $scope.saveTran = function(transaction) {
         }
         SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, transaction['type'], parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           transaction = switchval.typeswitch(transaction);
-          var tempunits = 0;
-          var tempamount = 0;
+          if (transaction.units > 0) {
+            var tempunits = 0;
+          };
+          if (transaction.amount > 0) {
+            var tempamount = 0;
+          };
           angular.forEach($scope.rows, function(row) {
           	angular.forEach(savingActive, function(tran) {
       			if (row.name == tran.investor) {
@@ -756,8 +758,10 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   $scope.rows = []
   $scope.uniquerows = []
 
+  // Initialisation. Get the transactions and the grants
   SWBrijj.tblm('ownership.company_options').then(function(data) {
 
+    // Pivot from transactions to the rows of the table
     $scope.trans = data;
     angular.forEach($scope.trans, function(tran) {
     tran.datekey = tran['date'].toUTCString();
@@ -767,6 +771,13 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       }
     });
 
+    // Get the full set of company grants
+    SWBrijj.tblm('ownership.company_grants').then(function(data) {
+
+    $scope.grants = data;
+    console.log($scope.grants);
+
+    //Calculate the total granted and forfeited for each row
     angular.forEach($scope.trans, function(tran) {
         angular.forEach($scope.rows, function(row) {
           if (row.name == tran.investor) {
@@ -780,8 +791,53 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
         });
       });
 
-    console.log($scope.rows);
+    });
   });
+
+
+  //Get the active row for the sidebar
+  $scope.getActiveTransaction = function(currenttran) {
+    $scope.sideBar = 1;
+    $scope.activeTran = [];
+    $scope.activeInvestor = currenttran;
+    var first = 0
+    angular.forEach($scope.trans, function(tran) {
+      if (tran.investor == currenttran) {
+        if (first == 0) {
+          tran['active'] = true
+          first = first + 1
+        }
+        tran = switchval.typeswitch(tran);
+        $scope.activeTran.push(tran);
+      }
+    });
+
+    //Pair the correct grants with the selected rows transactions
+    angular.forEach($scope.activeTran, function(tran) {
+      var activeAct = []
+      angular.forEach($scope.grants, function(grant) {
+        if (tran.tran_id == grant.tran_id) {
+          activeAct.push(grant);
+        };
+      });
+      tran.activeAct = activeAct;
+    });
+    console.log($scope.activeTran);
+  };
+
+  $scope.saveGrant = function(grant) {
+    console.log(grant);
+    if (grant.grant_id == undefined) {
+      grant.grant_id = "";
+    }
+    var d1 = grant['date'].toUTCString();
+    SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseInt(grant.unit)).then(function(data) {
+      console.log(data);
+    });
+  };
+
+
+
 };
 
 var statusController = function($scope) {
