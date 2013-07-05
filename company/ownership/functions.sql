@@ -136,13 +136,15 @@ CREATE OR REPLACE FUNCTION ownership.update_grant(key character varying, newtran
 $$
 BEGIN
 	IF key = '' THEN
-	INSERT INTO ownership.company_grants (grant_id, tran_id, company, unit, date, action) VALUES (nextval('ownership.transaction_tran_id_seq')::int, newtran_id::integer, (select distinct company from account.companies), newunit, newdate::date, newaction::ownership.grant_type) RETURNING grant_id::bigint;
+	RETURN QUERY INSERT INTO ownership.company_grants (grant_id, tran_id, company, unit, date, action) VALUES (document.pseudo_encrypt(nextval('ownership.grants_grant_id_seq')::int), newtran_id::integer, (select distinct company from account.companies), newunit, newdate::date, newaction::ownership.grant_type) RETURNING grant_id::bigint;
 	ELSE
 	RETURN QUERY UPDATE ownership.company_grants SET unit=newunit, date=newdate::date, action=newaction::ownership.grant_type where tran_id=newtran_id::integer and grant_id=key::int and company=(select distinct company from account.companies) RETURNING grant_id::bigint;
 	END IF;
 END;
 $$
 LANGUAGE plpgsql;
+
+GRANT USAGE, SELECT ON ownership.grants_grant_id_seq to investor;
 
 CREATE OR REPLACE FUNCTION ownership.update_grant() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN

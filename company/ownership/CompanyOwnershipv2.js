@@ -225,6 +225,11 @@ $rootScope.shareSum = function(row) {
       return total;
     };
 
+    $rootScope.postIssues = function(keys, issue) {
+      console.log(keys);
+      console.log(issue);
+    };
+
 });
 
 var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
@@ -367,6 +372,13 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
   $scope.activeTran = [];
   $scope.activeIssue = currentcolumn;
   $scope.activeInvestor = currenttran;
+
+  // Get the all the issues that aren't the current issue for the drop downs
+  var allowablekeys = angular.copy($scope.issuekeys);
+  var index = allowablekeys.indexOf(currentcolumn);
+  allowablekeys.splice(index, 1);
+  $scope.allowKeys = allowablekeys;
+
 	var first = 0
 	angular.forEach($scope.trans, function(tran) {
 		if (tran.investor == currenttran) {
@@ -405,6 +417,13 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
 $scope.getActiveIssue = function(issue) {
 	$scope.sideBar = 1;
 	$scope.activeIssue = issue;
+
+  // Get the all the issues that aren't the current issue for the drop downs
+  var allowablekeys = angular.copy($scope.issuekeys);
+  var index = allowablekeys.indexOf(issue.issue);
+  allowablekeys.splice(index, 1);
+  $scope.allowKeys = allowablekeys;
+
   // Set Boolean Values for the Angularjs Select
   if (String($scope.activeIssue.partpref) == "true") {
     $scope.activeIssue.partpref = $scope.tf[0];
@@ -775,7 +794,14 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     SWBrijj.tblm('ownership.company_grants').then(function(data) {
 
     $scope.grants = data;
-    console.log($scope.grants);
+
+    angular.forEach($scope.grants, function(grant) {
+      angular.forEach($scope.trans, function(tran) {
+        if (grant.tran_id == tran.tran_id) {
+          grant.investor = tran.investor;
+        }
+      });
+    });
 
     //Calculate the total granted and forfeited for each row
     angular.forEach($scope.trans, function(tran) {
@@ -790,6 +816,19 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           };
         });
       });
+
+    angular.forEach($scope.grants, function(grant) {
+      angular.forEach($scope.rows, function(row) {
+        if (row.name == grant.investor) {
+          if (parseInt(grant.unit) > 0) {
+            if (row[grant.action] == undefined) {
+              row[grant.action] = 0;
+            };
+            row[grant.action] = calculate.sum(row[grant.action], grant.unit);
+          };
+        };
+      });
+    });
 
     });
   });
@@ -820,19 +859,43 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           activeAct.push(grant);
         };
       });
+      activeAct.push({"unit":null, "tran_id":tran.tran_id, "date":(Date.today()), "action":null});
       tran.activeAct = activeAct;
     });
-    console.log($scope.activeTran);
   };
 
   $scope.saveGrant = function(grant) {
     console.log(grant);
+    if (grant.action == null || isNaN(parseInt(grant.unit))) {
+      return;
+    }
     if (grant.grant_id == undefined) {
       grant.grant_id = "";
     }
     var d1 = grant['date'].toUTCString();
     SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseInt(grant.unit)).then(function(data) {
-      console.log(data);
+      angular.forEach($scope.activeTran, function(tran) {
+        if (tran.tran_id == grant.tran_id) {
+          angular.forEach(tran.activeAct, function(act) {
+            if (act.grant_id == "") {
+              act.grant_id = data[1][0];
+              grant.grant_id = data[1][0];
+              $scope.grants.push(grant);
+            }
+          });
+        };
+      });
+
+      angular.forEach($scope.activeTran, function(tran) {
+        var activeAct = []
+        angular.forEach($scope.grants, function(grant) {
+          if (tran.tran_id == grant.tran_id) {
+            activeAct.push(grant);
+          };
+        });
+        activeAct.push({"unit":null, "tran_id":tran.tran_id, "date":(Date.today()), "action":null});
+        tran.activeAct = activeAct;
+      });
     });
   };
 

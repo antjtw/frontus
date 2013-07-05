@@ -77,7 +77,7 @@
             </accordion-group>
             <accordion-group heading="Options">
               <p>Underlying Security
-                <select ng-init="activeIssue.optundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec" ng-options="i for i in issuekeys">
+                <select ng-init="activeIssue.optundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec" ng-options="i for i in allowKeys">
                 <option></option>
                 </select>
               </p>
@@ -93,7 +93,7 @@
             </accordion-group>
             <accordion-group heading="Debt">
               <p>Underlying Security
-                <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.debtundersec" ng-options="i for i in issuekeys">
+                <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
                 <option></option>
                 </select>
               </p>
@@ -134,7 +134,7 @@
                 <span ng-show="trantype('options', tran);">
                   <accordion-group heading="Options">
                     <p>Underlying Security
-                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
+                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in allowKeys">
                       <option></option>
                       </select>
                     </p>
@@ -152,7 +152,7 @@
                 <span ng-show="trantype('debt', tran);">
                     <accordion-group heading="Debt">
                       <p>Underlying Security
-                        <select ng-init="tran.debtundersec" ng-change="saveTran(tran)" ng-model="tran.debtundersec" ng-options="i for i in issuekeys">
+                        <select ng-init="tran.debtundersec" ng-change="saveTran(tran)" ng-model="tran.debtundersec" ng-options="i for i in allowKeys">
                         <option></option>
                         </select>
                       </p>
