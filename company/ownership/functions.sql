@@ -162,3 +162,21 @@ BEGIN
 END $$;
 
 CREATE TRIGGER create_grant INSTEAD OF INSERT on ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.create_grant();
+
+
+CREATE OR REPLACE FUNCTION ownership.delete_grant(key integer) RETURNS VOID AS
+$$
+BEGIN
+	DELETE FROM ownership.company_grants where company=(select distinct company from account.companies) and grant_id=key;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ownership.delete_grant() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+	DELETE FROM ownership.grants where company=OLD.company and grant_id=OLD.grant_id;    
+	RETURN NEW;
+END $$;
+
+CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.delete_grant();
+

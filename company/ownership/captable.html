@@ -75,33 +75,37 @@
                 </select>
               </p>
             </accordion-group>
-            <accordion-group heading="Options">
-              <p>Underlying Security
-                <select ng-init="activeIssue.optundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec" ng-options="i for i in allowKeys">
-                <option></option>
-                </select>
-              </p>
-              <p>Price<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.price"></input></p>
-              <p>Granted</p>
-              <p>Term (months)<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.terms"></input></p>
-              <p>Vesting Cliff Date<input ng-change="saveIssue(activeIssue)" type="text" ng-model="activeIssue.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-              <p>Vesting Cliff %<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.vestcliff"></input></p>
-              <p>Post Cliff Frequency
-                <select ng-init="activeIssue.vestfreq" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.vestfreq" ng-options="i for i in freqtypes">
-                </select>
-              </p>
-            </accordion-group>
-            <accordion-group heading="Debt">
-              <p>Underlying Security
-                <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
-                <option></option>
-                </select>
-              </p>
-              <p>Interest Rate<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.interestrate"></input></p>
-              <p>Valuation Cap<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.valcap"></input></p>
-              <p>Discount<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.discount"></input></p>
-              <p>Term<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.term"></input></p>
-            </accordion-group>
+            <span ng-show="trantype('options', activeIssue.type);">
+              <accordion-group heading="Options">
+                <p>Underlying Security
+                  <select ng-init="activeIssue.optundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec" ng-options="i for i in allowKeys">
+                  <option></option>
+                  </select>
+                </p>
+                <p>Price<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.price"></input></p>
+                <p>Granted</p>
+                <p>Term (months)<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.terms"></input></p>
+                <p>Vesting Cliff Date<input ng-change="saveIssue(activeIssue)" type="text" ng-model="activeIssue.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                <p>Vesting Cliff %<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.vestcliff"></input></p>
+                <p>Post Cliff Frequency
+                  <select ng-init="activeIssue.vestfreq" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.vestfreq" ng-options="i for i in freqtypes">
+                  </select>
+                </p>
+              </accordion-group>
+            </span>
+            <span ng-show="trantype('debt', activeIssue.type);">
+              <accordion-group heading="Debt">
+                <p>Underlying Security
+                  <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)" ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
+                  <option></option>
+                  </select>
+                </p>
+                <p>Interest Rate<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.interestrate"></input></p>
+                <p>Valuation Cap<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.valcap"></input></p>
+                <p>Discount<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.discount"></input></p>
+                <p>Term<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.term"></input></p>
+              </accordion-group>
+            </span>
           </accordion>
         </span>
 
@@ -131,7 +135,7 @@
                     </select>
                   </p>
                 </accordion-group>
-                <span ng-show="trantype('options', tran);">
+                <span ng-show="trantype('options', tran.type);">
                   <accordion-group heading="Options">
                     <p>Underlying Security
                       <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in allowKeys">
@@ -149,7 +153,7 @@
                     </p>
                   </accordion-group>
                 </span>
-                <span ng-show="trantype('debt', tran);">
+                <span ng-show="trantype('debt', tran.type);">
                     <accordion-group heading="Debt">
                       <p>Underlying Security
                         <select ng-init="tran.debtundersec" ng-change="saveTran(tran)" ng-model="tran.debtundersec" ng-options="i for i in allowKeys">

@@ -44,7 +44,7 @@
           <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
           <tabs>
             <pane ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
-              <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+              <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
