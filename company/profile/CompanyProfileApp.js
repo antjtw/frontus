@@ -1,5 +1,5 @@
 
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event']);
+var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
@@ -31,7 +31,7 @@ app.run(function($rootScope) {
   };
 });
 
-function ContactCtrl($scope, $route, $rootScope) {
+function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
@@ -122,7 +122,7 @@ function ContactCtrl($scope, $route, $rootScope) {
 
 }
 
-function PeopleCtrl($scope, $route, $rootScope) {
+function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     console.log(x);

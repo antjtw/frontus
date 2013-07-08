@@ -1,5 +1,5 @@
 
-var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event']);
+var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
@@ -39,7 +39,7 @@ app.run(function($rootScope) {
   };
 });
 
-function ContactCtrl($scope, $route, $rootScope) {
+function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
@@ -233,7 +233,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams) {
   };
 }
 
-function PasswordCtrl($scope, $route, $rootScope) {
+function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.currentPassword="";
     $scope.newPassword="";
     $scope.passwordConfirm="";
@@ -278,7 +278,7 @@ function PhotoCtrl($scope) {
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
 
-app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope) {
+app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope, SWBrijj) {
     var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
