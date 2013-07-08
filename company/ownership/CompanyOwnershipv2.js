@@ -263,7 +263,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
 	SWBrijj.tblm('ownership.company_issue').then(function(data) {
 		$scope.issues = data;
 		angular.forEach($scope.issues, function(oneissue) {
-        oneissue.atype = switchval.tran(oneissue.type);
+        oneissue = switchval.typeswitch(oneissue);
 	      oneissue.key = oneissue.issue;
         $scope.issuekeys.push(oneissue.key);
 	    });
@@ -558,6 +558,7 @@ $scope.saveIssue = function(issue) {
             tran.valcap = issue.valcap;
             tran.discount = issue.discount;
             tran.term = issue.term;
+            $scope.saveTran(tran);
           }
         });
 
