@@ -127,9 +127,17 @@ function PeopleCtrl($scope, $route, $rootScope) {
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     console.log(x);
     $scope.people = x;
+    $scope.sort = 'name';
     $scope.$apply();
   }).except(initFail);
 
+  $scope.sortBy = function(col) {
+      if ($scope.sort == col) {
+        $scope.sort = ('-' + col);
+      } else {
+        $scope.sort = col;
+      }
+    }
 }
 
 app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope) {
