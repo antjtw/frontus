@@ -124,7 +124,7 @@ function ContactCtrl($scope, $route, $rootScope) {
 
 function PeopleCtrl($scope, $route, $rootScope) {
 
-  SWBrijj.tblm('account.company_investors').then(function(x) {
+  SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     console.log(x);
     $scope.people = x;
     $scope.$apply();
@@ -163,13 +163,6 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
           console.log(x);
           $rootScope.notification.show("fail", "There was an error updating your company logo.");
         });
-        /*var xhr = new XMLHttpRequest()
-        xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", uploadComplete, false);
-        xhr.addEventListener("error", uploadFailed, false);
-        xhr.addEventListener("abort", uploadCanceled, false);
-        xhr.open("POST", "/fileupload");
-        xhr.send(fd) */
     };
 
     function uploadProgress(evt) {
@@ -206,8 +199,9 @@ function initPage($scope, x, row) {
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
   $scope.$apply();
 }
-	function initFail(x) {
-		document.location.href='/login';
-	}
+
+function initFail(x) {
+	document.location.href='/login';
+}
 
 	function updated(x) {}
