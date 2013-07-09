@@ -305,7 +305,7 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
           console.log(x);
           $rootScope.notification.show("green", "Your profile picture has been updated successfully.");
         }).except( function(x) { 
-          $route.reload(); $scope.$apply();
+          $route.reload();
           console.log(x);
           $rootScope.notification.show("fail", "There was an error updating your profile picture.");
         });
@@ -350,7 +350,6 @@ function initPage($scope, x, row) {
   var z = x[row]; // the values
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
-  $scope.$apply();
 }
 	function initFail(x) {
 		document.location.href='/login';

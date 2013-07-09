@@ -140,7 +140,7 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
     }
 }
 
-app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope) {
+app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope, SWBrijj) {
     var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
@@ -205,7 +205,6 @@ function initPage($scope, x, row) {
   var z = x[row]; // the values
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
-  $scope.$apply();
 }
 
 function initFail(x) {
