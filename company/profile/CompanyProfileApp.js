@@ -67,6 +67,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
+    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
+      $rootScope.notification.show("fail", "Please enter a company name more than 2 letters in length");
+      return;
+    } 
     SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video).then(function (x) { 
         console.log("saved: "+x);
         $route.reload();
@@ -123,7 +127,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
-  
+
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     $scope.people = x;
     $scope.sort = 'name';
