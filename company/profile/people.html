@@ -8,6 +8,7 @@
     <table class="tableView bodyText">
       <tr class="subText">
         <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
+        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">Email</th>
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
