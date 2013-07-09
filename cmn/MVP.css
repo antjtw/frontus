@@ -122,7 +122,7 @@ h2 {
 	padding-right:20px;
 }
 
-.bodyText {
+.bodyText, .bodyText input {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -423,7 +423,26 @@ h2 {
 
 .docLibrary {
 	width: 100%;
-	margin: 40px 0 0 0;
+}
+
+.docLibrary .column-label {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary .tablefooter {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary input {
+	border: 0px;
+	padding: 0px;
+	width: 100px;
+}
+
+.docLibrary input:disabled {
+	background-color: white;
 }
 
 .searchBox {
@@ -435,7 +454,7 @@ h2 {
 }
 
 .tableView {
-	width:100%;
+	width:auto;
 	margin: 0 auto 0 auto;
 }
 
@@ -448,17 +467,17 @@ h2 {
 
 .tableView th {
 	width: 340px;
-	height: 27px;
+	height: 30px;
 	text-align: left;
-	padding: 0 0 0 20px;
+	padding: 0 0 0 10px;
 	position: relative;
 }
 
 .tableView td {
 	padding: 5px 40px 0 0;
 	width:250px;
-	height:55px;
-	padding: 0 0 0 20px;
+	height:35px;
+	padding: 0 0 0 10px;
 }
 
 .tableView td[class="button"] {
@@ -610,6 +629,27 @@ h2 {
 #socialMedia {
 	margin: 30px 0;
 }
+
+/* Captable */
+
+.capEditHeaders {
+	width: 200px !important;
+};
+
+.longRow td {
+	width: 150px !important;
+}
+
+.captablepair {
+	display: inline-block;
+	float: left;
+};
+
+/* Grants Table */
+
+.tableView tr.rowSelected {
+	background-color: #f0f0f0;
+};
 
 /* Buttons */
 
