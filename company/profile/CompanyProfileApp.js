@@ -58,7 +58,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
-      $route.reload(); $scope.$apply();
+      $route.reload();
         $rootScope.notification.show("success", "An admin has been created successfully.");
     }).except(function(x) {
         console.log(x);
@@ -69,7 +69,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.contactSave = function () {
     SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video).then(function (x) { 
         console.log("saved: "+x);
-        $route.reload(); $scope.$apply();
+        $route.reload();
         $rootScope.notification.show("success", "Your company profile has been updated successfully.");
     }).except(function(x) {
         console.log(x);
@@ -123,12 +123,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
-
+  
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
-    console.log(x);
     $scope.people = x;
     $scope.sort = 'name';
-    $scope.$apply();
   }).except(initFail);
 
   $scope.sortBy = function(col) {

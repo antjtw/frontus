@@ -110,11 +110,11 @@ function SocialCtrl($scope, $location) {
 
 }
 
-function ViewerCtrl($scope, $route, $rootScope, $routeParams) { 
+function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
   var rowNumber;
   SWBrijj.tbl('account.company_investors').then(function(x) { //TODO: NEW TBLM with where statement
-    for (var i = 1; i < x.length; i++) { //Can't use indexOf, Objects not supported
+    for (var i = 1; i < x.length; i++) {
       if (x[i][0] == userId) {
         rowNumber = i;
       } //Get email
