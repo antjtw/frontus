@@ -16,7 +16,7 @@
             <th>Forfeited</th>
             <th>Exercised</th>
           </tr>
-        <tr ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows">
+        <tr ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows" ng-class="{rowSelected:row.state}">
           <td>
             <input disabled style="width:180px;" ng-model="row.name"></input>
           </td>
@@ -27,12 +27,10 @@
         </tr>
         <tr class='tablefooter'>
           <td></td>
-          <td></td>
-          <td></td>
-          <td ng-repeat="one in issues">
-            <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}"</input>
-            <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}"</input>
-          </td>
+          <td><input disabled value="{{totalTranAction('granted', trans)}}"></input></td>
+          <td><input disabled value="{{totalGrantAction('vested', grants);}}"></input></td>
+          <td><input disabled value="{{totalTranAction('forfeited', trans)}}"></input></td>
+          <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></input></td>
         </tr>
       </table>
     </div>
@@ -54,7 +52,7 @@
                       </select>
                     </p>
                     <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                    <p>Granted {{tran.units}}</p>
+                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
                     <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
                     <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
                     <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>

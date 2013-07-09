@@ -83,7 +83,7 @@
                   </select>
                 </p>
                 <p>Price<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.price"></input></p>
-                <p>Granted</p>
+                <p>Granted <input disabled value="{{totalGranted(activeIssue.issue, trans);}}"></input></p>
                 <p>Term (months)<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.terms"></input></p>
                 <p>Vesting Cliff Date<input ng-change="saveIssue(activeIssue)" type="text" ng-model="activeIssue.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                 <p>Vesting Cliff %<input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.vestcliff"></input></p>
@@ -143,7 +143,7 @@
                       </select>
                     </p>
                     <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                    <p>Granted</p>
+                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
                     <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
                     <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                     <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>

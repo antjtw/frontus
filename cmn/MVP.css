@@ -645,6 +645,12 @@ h2 {
 	float: left;
 };
 
+/* Grants Table */
+
+.tableView tr.rowSelected {
+	background-color: #f0f0f0;
+};
+
 /* Buttons */
 
 .button {
