@@ -180,3 +180,31 @@ END $$;
 
 CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.delete_grant();
 
+-- Share and Audit
+
+CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+    INSERT INTO ownership.audit (company, email) VALUES (NEW.company, NEW.email);
+  RETURN NEW;
+END $$;
+CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
+GRANT INSERT on ownership.company_audit TO investor;
+
+-- Share document, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
+language plpgsql as $$
+declare
+  template text = mail.get_mail_template('doc-share.html');
+  comp account.company_type;
+  doc text;
+  sendtype document.activity_type;
+begin
+  select company into comp from account.my_role where role='issuer';
+  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/documents/view?doc=' , docid));
+  template = replace(template, '{{company}}', comp);
+  select docname into doc from document.my_library where doc_id=docid;
+  template = replace(template, '{{name}}', doc);
+
+  insert into ownership.company_audit(company, email) values ((select distinct company from account.companies), xemail);
+end $$;
+

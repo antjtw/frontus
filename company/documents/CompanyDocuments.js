@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['ui.bootstrap', '$strap.directives']);
+var docviews = angular.module('documentviews', ['ui.bootstrap', '$strap.directives', 'brijj']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -35,7 +35,7 @@ docviews.directive('indstatus', function() {
 
 /* Controllers */
 
-var documentListController = function($scope) {
+var documentListController = function($scope, SWBrijj) {
 	SWBrijj.tblm('document.docinfo').then(function(data) { 
 	console.log(data)
 	$scope.documents = data;
@@ -211,7 +211,7 @@ var documentListController = function($scope) {
     }	
 };
 
-function documentViewController($scope, $routeParams) {
+function documentViewController($scope, $routeParams, SWBrijj) {
   var docId = $routeParams.doc;
   $scope.currentDoc = docId;
 
@@ -304,7 +304,7 @@ function documentViewController($scope, $routeParams) {
 		  };
 }
 
-function documentStatusController($scope, $routeParams) {
+function documentStatusController($scope, $routeParams, SWBrijj) {
   var docId = $routeParams.doc;
   
   SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {

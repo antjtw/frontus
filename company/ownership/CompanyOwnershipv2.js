@@ -830,6 +830,28 @@ $scope.saveTran = function(transaction) {
       default: return Boolean(string);
     }
   };
+
+
+  // Captable Sharing Modal
+  $scope.modalUp = function () {
+      $scope.capShare = true;
+      };
+    
+  $scope.close = function () {
+      $scope.closeMsg = 'I was closed at: ' + new Date();
+      $scope.capShare = false;
+      };
+    
+  $scope.opts = {
+      backdropFade: true,
+      dialogFade:true
+      };
+
+  $scope.Sharing = function (message, email) {
+    SWBrijj.procm("ownership.share_captable", email, message).then(function(data) {
+      console.log(data);
+    });
+  };
 };
 
 

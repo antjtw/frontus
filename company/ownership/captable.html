@@ -1,5 +1,30 @@
 <div class="container">
+
+  <div modal="capShare" close="close()" options="opts">
+    <div class="modalHeader">
+        <p class="subText">Share Document</p>
+    </div>
+    
+    <div class="modalText">
+    <form>
+        <p>Add People</p>
+        <input ng-model="sendeeEmail" type="email">
+        <p>Message</p>
+        <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
+        <br>
+    </div>
+    </form>
+    <div class="modalButtons">
+        <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail)">Send</button>
+    </div>
+  </div>
+
+
   <div class="row-fluid">
+    <div style="float:right">
+       <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Captable</button>
+    </div>
+
     <ul class="subText navPills cf">
       <li class="selectedPill button">Edit</li>
       <a href="/company/ownership/grant"><li class="button">Grants</li></a>
