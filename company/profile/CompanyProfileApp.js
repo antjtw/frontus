@@ -9,7 +9,6 @@ app.config(function($routeProvider, $locationProvider){
   $routeProvider.
       when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
       when('/people', {controller:PeopleCtrl, templateUrl:'people.html'}).
-      //when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -89,7 +88,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   SWBrijj.tbl('account.my_company').then(function(x) { initPage($scope, x) }).except(initFail);
 
   $scope.activity = [];
-  SWBrijj.procm('document.get_company_activity').then(function(data) {
+  SWBrijj.tblm('document.activity_feed').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {

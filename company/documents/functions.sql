@@ -19,8 +19,9 @@ CREATE OR REPLACE FUNCTION document.get_investor_activity(investor account.email
 BEGIN RETURN QUERY SELECT * from document.activity_feed where investor=sent_to;
 END $$;
 
+--TODO: Add my_company_user_audit
 CREATE OR REPLACE FUNCTION document.get_company_activity() RETURNS SETOF document.activity_feed LANGUAGE plpgsql AS $$
-BEGIN RETURN QUERY SELECT * from document.activity_feed;
+BEGIN RETURN QUERY (SELECT when_sent, sent_to, sender, sent_from, doc_id, activity::text from document.activity_feed) UNION (SELECT when_sent::date, sent_to, ''::account.email as sender, sent_from, 0 as doc_id, activity::text FROM account.my_company_user_audit);
 END $$;
 
 CREATE TYPE document.activity_cluster as (count bigint, doc_id int, when_sent date, activity document.activity_type);
