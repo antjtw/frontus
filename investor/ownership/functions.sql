@@ -11,7 +11,7 @@ GRANT SELECT ON ownership.my_company_transaction to INVESTOR;
 CREATE OR REPLACE VIEW ownership.my_company_othertran AS (select sum(units) as units from ownership.transaction where investor != current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
 GRANT SELECT ON ownership.my_company_othertran to INVESTOR;
 
-CREATE OR REPLACE VIEW ownership.my_company_audit AS (SELECT * from ownership.audit where company in (SELECT distinct company from ownership.audit where email=current_user));
+CREATE OR REPLACE VIEW ownership.my_company_audit AS (SELECT * from ownership.audit where email=current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
 GRANT SELECT ON ownership.my_company_audit to INVESTOR;
 
 CREATE OR REPLACE VIEW ownership.my_company_views AS (SELECT * from ownership.views where company in (SELECT distinct company from ownership.audit where email=current_user));

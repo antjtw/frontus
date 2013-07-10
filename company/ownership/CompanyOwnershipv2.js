@@ -1104,6 +1104,7 @@ var statusController = function($scope, SWBrijj) {
       $scope.userStatus[i].button = "icon-plus";
       $scope.userStatus[i].viewed = "unviewed";
       $scope.userStatus[i].viewflag = 0;
+      $scope.userStatus[i].lastlogin = 0;
       if ($scope.userStatus[i].fullview == false) {
         $scope.userStatus[i].fullview = "personal";
       }
@@ -1115,6 +1116,15 @@ var statusController = function($scope, SWBrijj) {
             person.viewed = "viewed";
             person.whenviewed = view.whendone;
             person.viewflag = 1;
+          }
+        });
+      });
+    })
+    SWBrijj.tblm("ownership.user_tracker").then(function(logins) {
+      angular.forEach($scope.userStatus, function(person) {
+        angular.forEach(logins, function(login) {
+          if (login.email == person.email) {
+            person.lastlogin = login.logintime;
           }
         });
       });
