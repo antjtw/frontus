@@ -11,13 +11,16 @@ app.config(function($routeProvider, $locationProvider){
       when('/forgot', {controller:ForgotCtrl, templateUrl: 'forgot.html'}).
       when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
       when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
-      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html', redirectTo: function(parms, path, search) {
-        SWBrijj.logout();
-        return '/';
-    }}).
+      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
      // when('/register', {controller:RegisterCtrl, templateUrl: 'u/register.html'}).
       otherwise({redirectTo:'/'});
 });
+
+function LogoutCtrl($scope, SWBrijj) {
+        console.log("here");
+        SWBrijj.logout();
+        document.location.href = "/login/";
+    };
 
 //Controller for the Login Page
 function LoginCtrl($scope, $location, SWBrijj){
@@ -41,9 +44,6 @@ function LoginCtrl($scope, $location, SWBrijj){
     $scope.loginClass = function() {
         return "button greenButton loginButton bodyText" + ($scope.loginDisabled() ? " adisabled" : "");
     }
-}
-
-function LogoutCtrl($scope) {
 }
 
 //Controller for the home page

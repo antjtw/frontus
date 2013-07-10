@@ -12,7 +12,7 @@
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
-        <td><img src="">{{person.name}} <span class="label" ng-show="person.role=='issuer'">ADMIN</span></td> 
+        <td><img src=""><a href="/investor/profile/view?id={{person.email}}">{{person.name}}</a> <span class="label" ng-show="person.role=='issuer'">ADMIN</span></td> 
         <td><img src="">{{person.email}}</td>
         <td class="button" ng-click="(opendetails(person.noaction))"><i class="icon-cog"></i>
         </tr>
