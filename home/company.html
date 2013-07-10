@@ -1,0 +1,26 @@
+<!--Notification Bar-->
+<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
+
+<div class="editProfileFP row-fluid">
+  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+    <h1 ng-bind="company">Home</h1>
+    <div class="row-fluid">
+      <div><p class="subText">Activity Feed</p></div>
+      <table>
+        <tr ng-repeat="active in activity | orderBy:activityOrder">
+          <td><i class="{{active.icon}} icon"></i></td>
+          <td>
+              <table>
+                <tr><td>{{active.activity}} <a href="{{active.link}}">{{active.name}}</a></td></tr>
+                    <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+                </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sidebar span4">
+    <h2>Notifications</h2>
+  </div>
+</div>
