@@ -292,8 +292,12 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
   $scope.activeTran = []
 
   $scope.investorOrder = "name";
+
+  SWBrijj.procm('ownership.mark_viewed', company).then(function(x) {
+    console.log(x);
+  });
   
-	SWBrijj.proc('ownership.get_my_issues', company).then(function(data) {
+	SWBrijj.procm('ownership.get_my_issues', company).then(function(data) {
     console.log(data);
 		$scope.issues = data;
     for(var i = 0, l = $scope.issues.length; i < l; i++) {
@@ -303,7 +307,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
 	    };
 
 		// Pivot shenanigans
-		SWBrijj.proc('ownership.get_my_transactions', company).then(function(trans) {
+		SWBrijj.procm('ownership.get_my_transactions', company).then(function(trans) {
       console.log(trans);
 			$scope.trans = trans
       for(var i = 0, l = $scope.trans.length; i < l; i++) {

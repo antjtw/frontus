@@ -1091,6 +1091,46 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
 };
 
-var statusController = function($scope) {
+var statusController = function($scope, SWBrijj) {
+
+  SWBrijj.tblm("ownership.company_audit").then(function(data) {
+    $scope.userStatus = data;
+    for (var i = 0; i < $scope.userStatus.length; i++) {
+      $scope.userStatus[i].shown = false;
+      $scope.userStatus[i].button = "icon-plus";
+      $scope.userStatus[i].viewed = "unviewed";
+      $scope.userStatus[i].viewflag = 0;
+      if ($scope.userStatus[i].fullview == false) {
+        $scope.userStatus[i].fullview = "personal";
+      }
+    };
+    SWBrijj.procm("ownership.get_company_views").then(function(views) {
+      angular.forEach($scope.userStatus, function(person) {
+        angular.forEach(views, function(view) {
+          if (view.email == person.email) {
+            person.viewed = "viewed";
+            person.whenviewed = view.whendone;
+            person.viewflag = 1;
+          }
+        });
+      });
+    })
+  });
+
+
+
+  $scope.opendetails = function(selected) {
+   $scope.userStatus.forEach(function(name) {     
+    if (selected == name.email)
+      if (name.shown == true) {
+        name.shown = false;
+        name.button = "icon-plus";
+      }
+      else {
+        name.button = "icon-minus";
+        name.shown = true;
+      }
+    });
+  };
 
 };

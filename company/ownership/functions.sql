@@ -205,3 +205,12 @@ begin
   insert into ownership.company_audit(company, email) values (comp, xemail);
 end $$;
 
+-- Get most recent view
+
+CREATE OR REPLACE FUNCTION ownership.get_company_views() RETURNS SETOF ownership.company_views AS $$
+BEGIN
+	RETURN QUERY SELECT company, max(whendone) as whendone, email FROM ownership.company_views GROUP BY email, company;
+END;
+$$
+LANGUAGE plpgsql;
+
