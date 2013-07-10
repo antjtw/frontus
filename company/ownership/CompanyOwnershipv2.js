@@ -413,7 +413,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
   $scope.activeTran = [];
   $scope.activeIssue = currentcolumn;
   $scope.activeInvestor = currenttran;
-
   // Get the all the issues that aren't the current issue for the drop downs
   var allowablekeys = angular.copy($scope.issuekeys);
   var index = allowablekeys.indexOf(currentcolumn);
@@ -440,6 +439,7 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
         else {
           tran.liquidpref = $scope.tf[1];
         }
+        console.log(tran);
         tran = switchval.typeswitch(tran);
   			$scope.activeTran.push(tran);
       }
@@ -451,7 +451,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     $scope.trans.push(newTran);
     $scope.activeTran.push(newTran);
   }
-
 	$scope.$apply();
 };
 
@@ -633,6 +632,7 @@ $scope.saveIssue = function(issue) {
 };
 
 $scope.tranChangeU = function(value) {
+  console.log("thing firing");
   if ($scope.activeTran.length < 2) {
   $scope.activeTran[0]['units'] = value;
   };
@@ -713,6 +713,8 @@ $scope.createTran = function() {
 }
 
 $scope.deleteTran = function(tran) {
+  console.log("deleting");
+  console.log(tran);
     var d1 = tran['date'].toUTCString();
     SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
@@ -744,14 +746,17 @@ $scope.manualdeleteTran = function(tran) {
 
 $scope.saveTran = function(transaction) {
   var savingActive = $scope.activeTran
-  if (transaction == undefined) {
+  if (transaction == undefined || isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
+    console.log("transaction is undefined")
     return
   }
-  if (isNaN(parseInt(transaction['units']) % 1) && isNaN(parseInt(transaction['amount']) % 1)) {
+  if (isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
+    console.log("deleting transaction");
     $scope.deleteTran(transaction);
     return
   }
   else if (transaction['issue'] == undefined || (parseInt(transaction['units']) % 1 != 0 && parseInt(transaction['amount'] % 1 != 0))) {
+    console.log("incomplete transaction");
     return;
   }
   else {
@@ -776,15 +781,13 @@ $scope.saveTran = function(transaction) {
         }
 
         transaction = switchval.typeswitch(transaction);
-        console.log(transaction.atype);
-        transaction.type= switchval.typereverse(transaction.atype);
-        console.log(transaction.type);
+        transaction.type = switchval.typereverse(transaction.atype);
         SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function(data) { 
           transaction = switchval.typeswitch(transaction);
-          if (transaction.units > 0) {
+          if (transaction.units >= 0) {
             var tempunits = 0;
           };
-          if (transaction.amount > 0) {
+          if (transaction.amount >= 0) {
             var tempamount = 0;
           };
           angular.forEach($scope.rows, function(row) {
@@ -821,6 +824,7 @@ $scope.saveTran = function(transaction) {
           });
         });
       };
+      console.log("done saving");
 };
 
   $scope.strToBool = function(string){
@@ -847,7 +851,7 @@ $scope.saveTran = function(transaction) {
       dialogFade:true
       };
 
-  $scope.Sharing = function (message, email) {
+  $scope.share = function (message, email) {
     SWBrijj.procm("ownership.share_captable", email, message).then(function(data) {
       console.log(data);
     });

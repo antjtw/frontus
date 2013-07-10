@@ -194,17 +194,14 @@ GRANT INSERT on ownership.company_audit TO investor;
 CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
 language plpgsql as $$
 declare
-  template text = mail.get_mail_template('doc-share.html');
+  template text = mail.get_mail_template('cap-share.html');
   comp account.company_type;
-  doc text;
   sendtype document.activity_type;
 begin
-  select company into comp from account.my_role where role='issuer';
-  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/documents/view?doc=' , docid));
+  select distinct company into comp from account.companies;
+  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
   template = replace(template, '{{company}}', comp);
-  select docname into doc from document.my_library where doc_id=docid;
-  template = replace(template, '{{name}}', doc);
-
-  insert into ownership.company_audit(company, email) values ((select distinct company from account.companies), xemail);
+  perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
+  insert into ownership.company_audit(company, email) values (comp, xemail);
 end $$;
 
