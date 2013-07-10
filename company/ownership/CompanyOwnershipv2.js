@@ -625,7 +625,11 @@ $scope.saveIssue = function(issue) {
         angular.forEach($scope.rows, function(row) {
           row[issue.key] = {"u":null, "a":null};
         });
-        $scope.$apply();
+
+        var allowablekeys = angular.copy($scope.issuekeys);
+        var index = allowablekeys.indexOf(issue.issue);
+        allowablekeys.splice(index, 1);
+        $scope.allowKeys = allowablekeys;
       });	
     }
   }
