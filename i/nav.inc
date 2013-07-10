@@ -14,16 +14,16 @@
       </section>
     </div>
     <div class="navbar navbar-inner dropdown">
-      <a class="brand dropdown-toggle" href="#" ng-bind="selected">Company</a>
+      <a class="brand dropdown-toggle" href="#" ng-bind="selected.name">Company</a>
       <ul class="dropdown-menu">
         <li ng-repeat="company in companies">
-          <a>{{company.name}}</a>
+          <a ng-click="select('{{company.company}}')">{{company.name}}</a>
         </li>
       </ul>
       <ul class="nav">
-        <li><a class="menuHeaderText button" href="">INVESTMENTS</a></li>
-        <li><a class="menuHeaderText button" href="">ALERTS</a></li>
-        <li><a class="menuHeaderText button" href="">SETTINGS</a></li>
+        <li ng-show="ownership.visible"><a class="menuHeaderText button" href="{{ownership.link}}">Ownership</a></li>
+        <li ng-show="documents.visible"><a class="menuHeaderText button" href="{{documents.link}}">Documents</a></li>
+        <li ng-show="people.visible"><a class="menuHeaderText button" href="{{people.link}}">People</a></li>
       </ul>
     </div>
   </div>
