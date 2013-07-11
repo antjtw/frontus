@@ -72,16 +72,15 @@ END $$;
 
 CREATE TRIGGER delete_issue INSTEAD OF DELETE on ownership.company_issue FOR EACH ROW EXECUTE PROCEDURE ownership.delete_issue();
 
-
 -- Creates and Updates Transactions
-CREATE OR REPLACE FUNCTION ownership.update_transaction(key character varying, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newtype character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS SETOF bigint AS
+CREATE OR REPLACE FUNCTION ownership.update_transaction(key character varying, newinvestor character varying, newissue character varying, newunits double precision, newdate character varying, newtype character varying, newamount double precision, newpremoney double precision, newpostmoney double precision, newppshare double precision, newtotalauth double precision, newpartpref boolean, newliquidpref boolean, newoptundersec character varying, newprice double precision, newterms double precision, newvestcliffdate character varying, newvestcliff double precision, newvestclifffreq character varying, newdebtundersec character varying, newinterestrate double precision, newvalcap double precision, newdiscount double precision, newterm double precision) RETURNS SETOF int AS
 $$
 BEGIN
 	IF key = '' THEN
 	INSERT INTO ownership.company_transaction (tran_id, investor, company, issue, units, date, amount, type) VALUES (DEFAULT, newinvestor, (select distinct company from account.companies), newissue, newunits, newdate::date, newamount, newtype::ownership.transaction_type);
 	RETURN QUERY SELECT document.pseudo_encrypt(currval('ownership.transaction_tran_id_seq')::int);
 	ELSE
-	RETURN QUERY UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, type=newtype::ownership.transaction_type, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key::integer and company=(select distinct company from account.companies) RETURNING tran_id::bigint;
+	RETURN QUERY UPDATE ownership.company_transaction SET units=newunits, issue=newissue, investor=newinvestor, amount=newamount, date=newdate::date, type=newtype::ownership.transaction_type, premoney=newpremoney, postmoney=newpostmoney, ppshare=newppshare, totalauth=newtotalauth, partpref=newpartpref, liquidpref=newliquidpref, price=newprice, optundersec=newoptundersec, terms=newterms, vestingbegins=newvestcliffdate::date, vestcliff=newvestcliff, vestfreq=newvestclifffreq::ownership.frequency_type, debtundersec=newdebtundersec, interestrate=newinterestrate, valcap=newvalcap, discount=newdiscount, term=newterm where tran_id=key::integer and company=(select distinct company from account.companies) RETURNING tran_id::int;
 	END IF;
 END;
 $$

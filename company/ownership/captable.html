@@ -19,6 +19,42 @@
     </div>
   </div>
 
+  <div modal="capDelete" close="dclose()" options="opts">
+    <div class="modalHeader">
+        <p class="subText">Delete?</p>
+    </div>
+    
+    <div class="modalText">
+    <form>
+        <p>This action will delete the issue and all the underlying rows? Do you mean to do this?</p>
+        <br>
+    </div>
+    </form>
+    <div class="modalButtons">
+        <button class="button subText greenButton" ng-click="dclose(); deleteIssue(activeIssue);">Yes</button>
+        <button class="button subText greyButton" ng-click="dclose(); revertIssue(activeIssue);">No</button>
+
+    </div>
+  </div>
+
+  <div modal="rowDelete" close="rclose()" options="opts">
+    <div class="modalHeader">
+        <p class="subText">Delete?</p>
+    </div>
+    
+    <div class="modalText">
+    <form>
+        <p>This action will delete the person and all their transactions? Do you mean to do this?</p>
+        <br>
+    </div>
+    </form>
+    <div class="modalButtons">
+        <button class="button subText greenButton" ng-click="rclose(); deletePerson();">Yes</button>
+        <button class="button subText greyButton" ng-click="rclose(); revertPerson();">No</button>
+
+    </div>
+  </div>
+
 
   <div class="row-fluid">
     <div style="float:right">

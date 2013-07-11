@@ -47,7 +47,7 @@
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
                     <p>Underlying Security
-                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
+                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in tran.allowKeys">
                       <option></option>
                       </select>
                     </p>
