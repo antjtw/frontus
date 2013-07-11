@@ -28,7 +28,7 @@
         </tr>
         <tbody ng-repeat="admin in admins">
           <tr>
-          <td><img src="">{{admin.name}}</td>
+          <td><img src=""><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
           <td class="button" ng-click="(opendetails(admin.noaction))"><i class="icon-cog"></i>
           </tr>
         </tbody>

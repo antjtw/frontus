@@ -3,18 +3,18 @@
 
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1>{{name}}</h1>
+    <h1>{{user.name}}</h1>
     <div class="row-fluid">
       <div class="span5"> <!-- Photo -->
         <form>
           <div class="editProfilePhoto">
-            <img ng-src="/photo/user?id=investor:{{email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+            <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
           </div>
         </form>
       </div>
       <div class="span7">
         <p>
-            <input type="text" ng-model="name" name="name" disabled>
+            <input type="text" ng-model="user.name" disabled>
             <span class="label">Name</span>
         </p>
       </div>
@@ -75,11 +75,11 @@
     <form>
       <fieldset>
         <p>
-          <input type="text" ng-model="email" name="email" disabled>
+          <input type="text" ng-model="user.email" disabled>
           <span class="label">Email</span>
         </p>
         <p>
-          <textarea ng-model="street" name="street" rows="3" disabled></textarea>
+          <textarea ng-model="user.street" rows="3" disabled></textarea>
           <span class="label">Address</span>
         </p>
       </fieldset>
