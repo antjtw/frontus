@@ -446,15 +446,17 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     }
   });
   if ($scope.activeTran.length < 1) {
-    var newTran = {}
-    newTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":undefined};
+    var anewTran = {}
+    anewTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":undefined};
     angular.forEach($scope.issues, function(issue) {
       if (issue.issue == $scope.activeIssue) {
-        newTran = $scope.tranInherit(newTran, issue);
+        anewTran = $scope.tranInherit(anewTran, issue);
+        console.log("the new transaction");
+        console.log(anewTran);
       }
     });
-    $scope.trans.push(newTran);
-    $scope.activeTran.push(newTran);
+    $scope.trans.push(anewTran);
+    $scope.activeTran.push(anewTran);
   }
   $scope.$apply();
 };
@@ -492,6 +494,7 @@ $scope.getActiveIssue = function(issue) {
 };
 
 $scope.saveIssue = function(issue) {
+  console.log("saving issue");
   angular.forEach($scope.issues, function(coreissue) {
     if(issue.issue == coreissue.issue && issue['$$hashKey'] != coreissue['$$hashKey']) {
       issue.issue = issue.issue + " (1)";
@@ -565,7 +568,9 @@ $scope.saveIssue = function(issue) {
         angular.forEach($scope.trans, function(tran) {
           if (tran.issue == issue.key) {
             tran = $scope.tranInherit(tran, issue);
-            $scope.saveTran(tran);
+            if (tran.tran_id != undefined) {
+              $scope.saveTran(tran);
+            };
           }
         });
 
@@ -657,6 +662,7 @@ $scope.getActiveInvestor = function(investor) {
     $scope.rows.push(values);
   }
   $scope.activeInvestorName = investor.name;
+  $scope.activeInvestorNameKey = investor.name;
   $scope.$apply();
 };
 
@@ -683,8 +689,13 @@ $scope.nameChangeRL = function(investor) {
 };
 
 $scope.updateRow = function(investor) {
-  if (investor.name == "") {
+  if (investor.name == "" && investor.namekey != undefined) {
     $scope.rmodalUp();
+    return
+  }
+  if (investor.name == "") {
+    var index = $scope.rows.indexOf(investor);
+    $scope.rows.splice(index, 1);
     return
   }
   angular.forEach($scope.rows, function(row) {
@@ -707,6 +718,28 @@ $scope.updateRow = function(investor) {
   $scope.$apply();
 };
 
+$scope.revertPerson = function(investor) {
+  angular.forEach($scope.rows, function(row) {
+    if (row.namekey == investor) {
+      row.name = row.namekey;
+    }
+  });
+};
+
+$scope.deletePerson = function(investor) {
+  angular.forEach($scope.trans, function(tran) {
+    if (tran.investor == investor) {
+      $scope.deleteTran(tran);
+    }
+  });
+  angular.forEach($scope.rows, function(row) {
+    if (row.namekey == investor) {
+      var index = $scope.rows.indexOf(row);
+      $scope.rows.splice(index, 1);
+    }
+  });
+};
+
 $scope.createTran = function() {
   var newTran = {}
   newTran = {"new":"yes", "atype":0, "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":"undefined"};
@@ -720,8 +753,6 @@ $scope.createTran = function() {
 }
 
 $scope.deleteTran = function(tran) {
-  console.log("deleting");
-  console.log(tran);
     var d1 = tran['date'].toUTCString();
     SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function(data) { 
       var index = $scope.trans.indexOf(tran);
@@ -752,6 +783,8 @@ $scope.manualdeleteTran = function(tran) {
 }
 
 $scope.saveTran = function(transaction) {
+  console.log("saving");
+  console.log(transaction);
   var savingActive = $scope.activeTran
   if (transaction == undefined || isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
     console.log("transaction is undefined")
@@ -759,6 +792,7 @@ $scope.saveTran = function(transaction) {
   }
   if (isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
     console.log("deleting transaction");
+    console.log(transaction);
     $scope.deleteTran(transaction);
     return
   }
@@ -798,8 +832,9 @@ $scope.saveTran = function(transaction) {
             var tempamount = 0;
           };
           angular.forEach($scope.rows, function(row) {
-            angular.forEach(savingActive, function(tran) {
+            angular.forEach($scope.trans, function(tran) {
             if (row.name == tran.investor) {
+                if (tran.investor == transaction.investor) {
                   if (tran.issue == transaction.issue) {
                     tran.key = tran.issue;
                     tran.tran_id=data[1][0];
@@ -809,6 +844,7 @@ $scope.saveTran = function(transaction) {
                     row[tran.issue]['u'] = tempunits;
                     row[tran.issue]['a'] = tempamount;
                   }
+                }
               }
               if (row.name == tran.issue+" (unissued)") {
                 angular.forEach($scope.issues, function(issue) {
@@ -843,7 +879,6 @@ $scope.saveTran = function(transaction) {
   };
 
   $scope.tranInherit = function(tran, issue) {
-    console.log(issue);
     tran.issue = issue.issue;
     tran.totalauth = issue.totalauth;
     tran.premoney = issue.premoney;
@@ -865,6 +900,8 @@ $scope.saveTran = function(transaction) {
     tran.term = issue.term;
     return tran
   };
+
+
 
   //Captable Delete Modal
 
