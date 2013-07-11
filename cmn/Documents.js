@@ -3,59 +3,73 @@
 angular.module('draggable', []).
     directive('draggable', ['$document' , function($document) {
       return {
-        restrict: 'A',
+        restrict: 'EA',
+        replace: true,
+        transclude: true,
+        scope: true,
+        template: "<div>" +
+            '<span style="display:inline-block" ng-transclude></span>' +
+            '<ul style="float:right; display:inline-block; list-style-type:none; cursor:pointer"><li ng-click="closeMe($event)" style="line-height:14px"><i class="icon-remove-sign"></i></li><li ng-click="biggerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-up"></i></li><li ng-click="smallerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-down"></i></li></ul>' +
+            "</div>",
         link: function(scope, elm, attrs) {
-          var startX, startY, initialMouseX, initialMouseY;
+          // the elm[0] is to unwrap the angular element
+          document.querySelector('.docPanel').appendChild(elm[0]);
+          scope.$parent.notes.push(elm);
           elm.css({position: 'absolute'});
+        },
 
-          elm.bind('mousedown', function($event) {
-                if ($event.target.tagName == 'DIV') {
-                  startX = elm.prop('offsetLeft');
-                  startY = elm.prop('offsetTop');
-                  initialMouseX = $event.clientX;
-                  initialMouseY = $event.clientY;
-                  $document.bind('mousemove', mousemove);
-                  $document.bind('mouseup', mouseup);
-                  return false;
-                } else {
-                  return true;
-                }
-              }
+           controller: ["$scope", "$element", "$attrs", "$transclude",
+             function($scope, $element, $attrs, $transclude, otherInjectables) {
 
-          );
+    /*           $transclude(function(clone, scope) {
+                 $scope.annotation = scope;
+                 // $element.prepend(clone);
+               });
+      */
+               $scope.mousedown = function($event) {
+                 if ($event.target.tagName == 'DIV') {
+                   $scope.initdrag($event);
+                   return false;
+                 } else {
+                   return true;
+                 }
+               }
+               $element.bind('mousedown', $scope.mousedown);
+               $scope.mousemove = function($event) {
+                 var dx = $event.clientX - $scope.initialMouseX;
+                 var dy = $event.clientY - $scope.initialMouseY;
+                 $element.css({
+                   top:  $scope.startY + dy + 'px',
+                   left: $scope.startX + dx + 'px'
+                 });
+                 return false;
+               }
 
-          function mousemove($event) {
-            var dx = $event.clientX - initialMouseX;
-            var dy = $event.clientY - initialMouseY;
-            elm.css({
-              top:  startY + dy + 'px',
-              left: startX + dx + 'px'
-            });
-            return false;
-          }
+               $scope.mouseup = function() {
+                 $document.unbind('mousemove', $scope.mousemove);
+                 $document.unbind('mouseup', $scope.mouseup);
+               }
 
-          function mouseup() {
-            $document.unbind('mousemove', mousemove);
-            $document.unbind('mouseup', mouseup);
-          }
-
-
-          function initdrag(ev) {
+               $scope.initdrag = function(ev) {
 //            startX = elm.prop('offsetLeft');
 //            startY = elm.prop('offsetTop');
-            startX = ev.clientX-5;
-            startY = ev.clientY-5 + $document.scrollTop();
-            initialMouseX = ev.clientX;
-            initialMouseY = ev.clientY;
-            mousemove(ev);
-            $document.bind('mousemove', mousemove);
-            $document.bind('mouseup', mouseup);
-          }
+                 $scope.startX = ev.clientX-5;
+                 $scope.startY = ev.clientY-5 + $document.scrollTop();
+                 $scope.initialMouseX = ev.clientX;
+                 $scope.initialMouseY = ev.clientY;
+                 $scope.mousemove(ev);
+                 $document.bind('mousemove', $scope.mousemove);
+                 $document.bind('mouseup', $scope.mouseup);
+               }
 
-          scope.initdrag = initdrag;
-        }
+             }]
       };
-    }]);
+    }])
+    /*.directive('checkbox', function() {
+      return {
+        restrict: 'A',
+        template: '<i class="button icon-ok icon-2x" background-color:white"></i>'
+      }}) */;
 
 
 
@@ -129,6 +143,24 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     });
   };
 
+  $scope.closeMe = function(ev) {
+    var z = ev.currentTarget;
+    while(z.attributes.draggable === undefined) z= z.parentElement;
+    z.parentElement.removeChild(z);
+    for(var i=0;i<$scope.notes.length; i++) {
+      if ($scope.notes[i][0] === z) { $scope.notes.splice(i,1);
+        return; }
+    }
+  }
+
+  $scope.biggerMe = function(elem,ev) {
+    alert("make me bigger");
+  }
+
+  $scope.smallerMe = function(elem,ev) {
+    alert("make me smaller");
+  }
+
   $scope.nextPage = function(value) { $scope.currentPage = value+1; };
   $scope.previousPage = function(value) { $scope.currentPage = value-1; };
   $scope.jumpPage = function(value) {
@@ -144,45 +176,61 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   };
 
   $scope.newBox = function(event) {
-    var nscope = $scope.$new();
-    nscope.ntype = 'text';
-    $scope.notes.push(nscope);
-    var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable" ><textarea ng-model="annotext" class="row-fluid" type="textarea"/></div>')(nscope);
-    aa = aa[0];
-    nscope.element = aa;
-    document.querySelector('.docPanel').appendChild(aa);
-    nscope.initdrag(event);
-    // aa.style.top = event.currentTarget.clientY+"pt";
-    // aa.style.left = event.currentTarget.clientX+"pt";
-
+    var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable" >'+
+        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: auto;"/></div>')($scope);
+    aa.scope().initdrag(event);
+    aa.scope().ntype='text';
   };
 
   $scope.newCheck = function(event) {
-    var nscope = $scope.$new();
-    nscope.ntype='check';
-    $scope.notes.push(nscope);
     var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable">'+
-        '<i class="button icon-ok icon-2x" background-color:white"></i></div>')(nscope);
-    aa = aa[0];
-    nscope.element = aa;
-    document.querySelector('.docPanel').appendChild(aa);
-    nscope.initdrag(event);
-    // aa.style.top = event.currentTarget.clientY+"pt";
-    // aa.style.left = event.currentTarget.clientX+"pt";
+        '<i class="button icon-ok icon-2x" background-color:white"></i>' +
+        '</div>')($scope);
+    aa.scope().initdrag(event);
+    aa.scope().ntype='check'
   };
 
   $scope.newPad = function(event) {
-    var nscope = $scope.$new();
-    nscope.ntype='canvas';
-    $scope.notes.push(nscope);
     var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable">'+
-        '<canvas style="background-color:white"></canvas></div>')(nscope);
-    aa = aa[0];
-    nscope.element = aa;
-    document.querySelector('.docPanel').appendChild(aa);
-    nscope.initdrag(event);
-    // aa.style.top = event.currentTarget.clientY+"pt";
-    // aa.style.left = event.currentTarget.clientX+"pt";
+        '<canvas style="background-color:white"></canvas></div>')($scope);
+    aa.scope().initdrag(event);
+    aa.scope().ntype='canvas';
+
+
+
+    var canvas = aa[0].querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    ctx.lineCap = 'round';
+    this.color='blue';
+    ctx.lineWidth = '2';
+    ctx.fillStyle = 'white'
+    ctx.setAlpha(0);
+    ctx.fillRect(0,0,200,200);
+    ctx.setAlpha(0.5);
+
+    canvas.addEventListener('mousedown', function(e) {
+      this.down = true;
+      this.X = e.offsetX ;
+      this.Y = e.offsetY ;
+    }, 0);
+    canvas.addEventListener('mouseup', function() {
+      this.down = false;
+    }, 0);
+    canvas.addEventListener('mousemove', function(e) {
+      this.style.cursor = 'pointer';
+      if(this.down) {
+        with(ctx) {
+          beginPath();
+          moveTo(this.X, this.Y);
+          lineTo(e.offsetX , e.offsetY );
+          strokeStyle = this.color;
+          stroke();
+        }
+        this.X = e.offsetX ;
+        this.Y = e.offsetY ;
+      }
+    }, 0);
+
   };
 
   $scope.submitSign = function(sig) {
@@ -201,7 +249,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   }
 
   $scope.clearNotes = function(event) {
-    SWBrijj.deletePage( $scope.docId, $scope.currentPage);
+    SWBrijj.deletePage( $scope.docId, $scope.currentPage).then(function(x) {
+    var docpanel = document.querySelector(".docPanel");
+    var imgurl = docpanel.style.backgroundImage;
+    docpanel.style.backgroundImage = imgurl;
+    });
   };
 
   $scope.saveNotes = function(event) {
@@ -218,25 +270,32 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
       for(var i = 0; i<$scope.notes.length;i++) {
         var note = $scope.notes[i];
-
-        if (note.ntype == 'text') {
+        var ntype = note.scope().ntype;
+        var notex = note[0];
+        if (ntype == 'text') {
+          var annotext = note.scope().$$nextSibling.annotext;
           ctx.fillStyle = "blue";
           ctx.font = "16px Optima";
-          var se = note.element.querySelector("textarea");
-          var ll = note.element.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
-          var tt = note.element.offsetTop - docpanel.offsetTop + se.offsetHeight;
-          ctx.fillText(note.annotext, ll + 4, tt - 4);
+          var se = notex.querySelector("textarea");
+          var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
+          ctx.fillText(annotext, ll + 4, tt - 4);
         }
-        if (note.ntype == 'check') {
+        else if (ntype == 'check') {
           ctx.fillStyle = "darkgray";
           ctx.font = "28px FontAwesome";
-          var se = note.element.querySelector("i");
-          var ll = note.element.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
-          var tt = note.element.offsetTop - docpanel.offsetTop + se.offsetHeight;
+          var se = notex.querySelector("i");
+          var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
           ctx.fillText("\uf00c", ll + 4 , tt - 4);
         }
-        if (note.ntype == 'canvas') {
-          alert('canvas saving not yet implemented');
+        else if (ntype == 'canvas') {
+          var se = notex.querySelector("canvas");
+          var ll = notex.offsetLeft  - docpanel.offsetLeft + se.offsetLeft;
+          var tt = notex.offsetTop - docpanel.offsetTop + se.offsetHeight;
+          var ctxxx = se.getContext('2d');
+          var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
+          ctx.putImageData(imgData,ll,tt);
         }
       }
 
@@ -245,8 +304,19 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
 
     var z = canvas.toDataURL('image/tiff');
-    SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).then(function(x) { console.log(x);}).
-    except(function(x) { console.log(x.message); } );
+    SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
+        then(function(x) {
+          var docpanel = document.querySelector(".docPanel");
+          var imgurl = docpanel.style.backgroundImage;
+          docpanel.style.backgroundImage = imgurl;
+          for(var i = 0;i<$scope.notes.length;i++) {
+            document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+          }
+          $scope.notes = [];
+        }).
+    except(function(x) {
+          console.log(x.message); } );
+      $scope.$apply();
     return;
     }
   // must set the src AFTER the onload function for IE9
