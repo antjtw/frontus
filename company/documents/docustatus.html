@@ -8,7 +8,7 @@
                 <div class="modalText">
                 <form>
                     <p>Add People</p>
-                    <input ng_model="sendeeEmail" type="email">
+                    <input ng-model="sendeeEmail" type="email">
                     <p>Message</p>
                     <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
                     <br>
@@ -17,8 +17,8 @@
                       <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
                     </div>
                     <p>Needs Signing? : <input type="checkbox" ng-model="needsign">Yes</p>
-                </div>
                 </form>
+                </div>
                 <div class="modalButtons">
                     <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail, needsign)">Send</button>
                 </div>
@@ -55,14 +55,14 @@
 					<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>
                 </div>
             </div>
-		<div>
+
             <a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>
             <div ng-hide="editorEnabled">
                 <h1>{{page_title}}</h1>
                 <a href="#" ng-click="enableEditor()"><i class="button icon-pencil icon-2x"></i></a>
             </div>
             <div ng-show="editorEnabled">
-                <input ng-model="editableTitle" ng-show="editorEnabled">
+                <input ng-model="editableTitle" ng-show="editorEnabled"/>
                 <a href="#" ng-click="save()">Save</a>
                 or
                 <a href="#" ng-click="disableEditor()">cancel</a>.
@@ -81,7 +81,7 @@
         </div>
          
          <ul class="subText navPills cf">
-         	<a href="/company/documents/view?doc={{document1.doc_id}}"><li class="button">View</li></a>
+         	<li class="button"><a href="/company/documents/view?doc={{document1.doc_id}}">View</a></li>
          	<li class="selectedPill button">Status</li>
          </ul>
          
@@ -117,36 +117,36 @@
                             </div>
                             </td>
                         </tr>
-                        <tr ng-Show="person.shown" class="personDetails">
+                        <tr ng-show="person.shown" class="personDetails">
                             <td colspan="2">
                                 <div><p>Delivered</p><p class="doubleTime">{{person.whenshared | date:'MMMM dd, yyyy'}}</p><p>{{person.whenshared | date:'h:mm a'}}</p></div>
-                                
+
                                 <div>
                                     <div ng-switch on="person.lastlogin" >
-                                        <span ng-switch-when="0"><p class="hltext">Never Logged In</p></span>
-                                        <span ng-switch-default><p>Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
+                                        <span ng-switch-when="0"><span class="hltext">Never Logged In</span></span>
+                                        <span ng-switch-default><span>Last Seen</span><span class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</span><span>{{person.lastlogin | date:'h:mm a'}}</span></span>
                                     </div>
                                 </div>
-                               
+
                                 <div>
                                     <div ng-switch on="person.lastviewed" >
-                                        <span ng-switch-when="0"><p class="hltext">Unviewed</p></span>
-                                        <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{person.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.lastviewed | date:'h:mm a'}}</p></span>
+                                        <span ng-switch-when="0"><span class="hltext">Unviewed</span></span>
+                                        <span ng-switch-default>Viewed<span class="doubleTime">{{person.lastviewed | date:'MMMM dd, yyyy'}}</span><span>{{person.lastviewed | date:'h:mm a'}}</span></span>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                 	<div ng-switch on="person.signed" >
-                                        <span ng-switch-when="0"><p class="hltext">Unsigned</p></span>
-                                        <span ng-switch-default><p>Signed</p><p class="doubleTime">{{person.signed | date:'MMMM dd, yyyy'}}</p><p>{{person.signed | date:'h:mm a'}}</p></span>
+                                        <span ng-switch-when="0"><span class="hltext">Unsigned</span></span>
+                                        <span ng-switch-default>Signed<span class="doubleTime">{{person.signed | date:'MMMM dd, yyyy'}}</span><span>{{person.signed | date:'h:mm a'}}</span></span>
                                     </div>
                                 </div>
                                 
                                 <div>
                                 	<div ng-switch on="person.column5" >
                                     	<p ng-switch-default="0"></p>
-                                        <span ng-switch-when="2"><p>Revoked</p><p class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</p></span>
-                                        <span ng-switch-when="1"><p>Resent</p><p class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</p></span>
+                                        <span ng-switch-when="2"><span>Revoked</span><span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</span></span>
+                                        <span ng-switch-when="1">Resent<span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</span><span>{{person.reminder | date:'h:mm a'}}</span></span>
                                     </div>
                                 </div>
                             </td>
@@ -199,4 +199,3 @@
          </div>
           
 </div>
-

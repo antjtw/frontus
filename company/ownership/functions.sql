@@ -164,6 +164,7 @@ END $$;
 CREATE TRIGGER create_grant INSTEAD OF INSERT on ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.create_grant();
 
 
+
 CREATE OR REPLACE FUNCTION ownership.delete_grant(key integer) RETURNS VOID AS
 $$
 BEGIN
@@ -218,4 +219,3 @@ LANGUAGE plpgsql;
 
 CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
 GRANT SELECT on ownership.user_tracker TO investor;
-

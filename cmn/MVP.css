@@ -52,7 +52,7 @@ label {
 }
 
 input.loginInput:focus, textarea:focus, select:focus {
-	outline-width:none;
+	outline-width: 0;
 	outline: none;
 	box-shadow:none;
 	border-color:#cccccc;
@@ -524,6 +524,9 @@ h2 {
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
 }
 
+.curPage {
+  background-color: oldlace;
+}
 .pageTurn {
 	margin: 20px 0 10px 0;
 	height: 24px;
@@ -537,6 +540,19 @@ h2 {
 	width: 65px;
 	height: 24px;
 	text-align: center;
+}
+
+.pageJump {
+    margin: 0px 0 5px 5px;
+}
+
+.pageJump li {
+    float:left;
+    display: inline;
+    margin: 0 10px 0 0;
+    padding: 1px 3px 0 3px;
+    text-align: center;
+    border: solid 1px dimgray;
 }
 
 .docPanel {
@@ -956,6 +972,7 @@ h2 {
   bottom: 120px;
   padding-top: 10px;
   background-color: #e0e0ff;
+}
 
 /* Clear fix */
 
@@ -977,4 +994,18 @@ h2 {
     *zoom: 1;
 }
 
+.draggable {
+    border: 4px solid red;
+    position:absolute;
+    background-color:lightgoldenrodyellow;
+    opacity: 0.5;
+    resize:both;
+    cursor: move;
+    width: auto;
+    height: auto;
+}
+
+.draggable > * {
+    margin-left: 20px;
+}
 

@@ -83,7 +83,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
 }
 
-function SocialCtrl($scope, $location) {  
+function SocialCtrl($scope, $location, SWBrijj) {  
   $scope.contactSave = function(){
      SWBrijj.proc("social_update", $scope.twitter, $scope.linkedin, $scope.google, $scope.dropbox, $scope.facebook).
         then(function(x) { alert("done: "+x); });
@@ -274,7 +274,7 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     };
 }
 
-function PhotoCtrl($scope) {
+function PhotoCtrl($scope, SWBrijj) {
     $scope.upload = function () {
         alert('heh');
     };

@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('LoginApp', ['ngResource', 'brijj']);
+var app = angular.module('LoginApp', ['brijj']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
@@ -44,8 +44,17 @@ function LoginCtrl($scope, $location, SWBrijj){
     $scope.loginClass = function() {
         return "button greenButton loginButton bodyText" + ($scope.loginDisabled() ? " adisabled" : "");
     }
+};
+
+<<<<<<< HEAD
+=======
+function LogoutCtrl($scope, SWBrijj) {
+  $scope.doLogout = function() {
+    SWBrijj.logout().then(function(x) { document.location.href='/login';}).except(function(x) { document.location.href='/login';});
+  }
 }
 
+>>>>>>> master
 //Controller for the home page
 function HomeCtrl($scope){
     $scope.user = function(){
@@ -55,7 +64,7 @@ function HomeCtrl($scope){
 }
 
 //Controller for the home page
-function ForgotCtrl($scope, $location) {
+function ForgotCtrl($scope, $location, SWBrijj) {
     $scope.username="";
     $scope.fed="";
     $scope.showReset = false;
@@ -68,7 +77,7 @@ function ForgotCtrl($scope, $location) {
        $location.path("sent");
        SWBrijj.forgot($scope.username).then(didForget).except(errorForget);
     }
-}
+};
 
 function SentCtrl() {
 }
@@ -79,3 +88,20 @@ function didForget(x) {
 function errorForget(x) {
   alert(x);
 }
+
+
+//this is used to assign the correct template and controller for each URL path
+
+app.config(function($routeProvider, $locationProvider){
+  $locationProvider.html5Mode(true).hashPrefix('');
+  // $locationProvider.html5Mode(false).hashPrefix('!');
+
+  $routeProvider.
+      when('/', {controller:LoginCtrl, templateUrl:'login.html'}).
+      when('/forgot', {controller:ForgotCtrl, templateUrl: 'forgot.html'}).
+      when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
+      when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
+      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
+     // when('/register', {controller:RegisterCtrl, templateUrl: 'u/register.html'}).
+      otherwise({redirectTo:'/'});
+});
