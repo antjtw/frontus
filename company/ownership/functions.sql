@@ -164,6 +164,7 @@ END $$;
 CREATE TRIGGER create_grant INSTEAD OF INSERT on ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.create_grant();
 
 
+
 CREATE OR REPLACE FUNCTION ownership.delete_grant(key integer) RETURNS VOID AS
 $$
 BEGIN
@@ -180,3 +181,41 @@ END $$;
 
 CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EACH ROW EXECUTE PROCEDURE ownership.delete_grant();
 
+-- Share and Audit
+
+CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+BEGIN
+    INSERT INTO ownership.audit (company, email) VALUES (NEW.company, NEW.email);
+  RETURN NEW;
+END $$;
+CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
+GRANT INSERT on ownership.company_audit TO investor;
+
+-- Share document, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
+language plpgsql as $$
+declare
+  template text = mail.get_mail_template('cap-share.html');
+  comp account.company_type;
+  sendtype document.activity_type;
+begin
+  select distinct company into comp from account.companies;
+  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
+  template = replace(template, '{{company}}', comp);
+  perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
+  insert into ownership.company_audit(company, email) values (comp, xemail);
+end $$;
+
+-- Get most recent view
+
+CREATE OR REPLACE FUNCTION ownership.get_company_views() RETURNS SETOF ownership.company_views AS $$
+BEGIN
+	RETURN QUERY SELECT company, max(whendone) as whendone, email FROM ownership.company_views GROUP BY email, company;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- Get login info for investors who have logged in
+
+CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
+GRANT SELECT on ownership.user_tracker TO investor;
