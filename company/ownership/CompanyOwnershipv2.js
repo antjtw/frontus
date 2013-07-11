@@ -413,10 +413,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
   $scope.activeTran = [];
   $scope.activeIssue = currentcolumn;
   $scope.activeInvestor = currenttran;
-<<<<<<< HEAD
-=======
-
->>>>>>> master
   // Get the all the issues that aren't the current issue for the drop downs
   var allowablekeys = angular.copy($scope.issuekeys);
   var index = allowablekeys.indexOf(currentcolumn);
@@ -443,10 +439,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
         else {
           tran.liquidpref = $scope.tf[1];
         }
-<<<<<<< HEAD
-        console.log(tran);
-=======
->>>>>>> master
         tran = switchval.typeswitch(tran);
   			$scope.activeTran.push(tran);
       }
@@ -458,10 +450,7 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     $scope.trans.push(newTran);
     $scope.activeTran.push(newTran);
   }
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 	$scope.$apply();
 };
 
@@ -636,25 +625,17 @@ $scope.saveIssue = function(issue) {
         angular.forEach($scope.rows, function(row) {
           row[issue.key] = {"u":null, "a":null};
         });
-<<<<<<< HEAD
 
         var allowablekeys = angular.copy($scope.issuekeys);
         var index = allowablekeys.indexOf(issue.issue);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
-=======
-        $scope.$apply();
->>>>>>> master
       });	
     }
   }
 };
 
 $scope.tranChangeU = function(value) {
-<<<<<<< HEAD
-  console.log("thing firing");
-=======
->>>>>>> master
   if ($scope.activeTran.length < 2) {
   $scope.activeTran[0]['units'] = value;
   };
