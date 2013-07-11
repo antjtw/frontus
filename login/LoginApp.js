@@ -16,11 +16,6 @@ app.config(function($routeProvider, $locationProvider){
       otherwise({redirectTo:'/'});
 });
 
-function LogoutCtrl($scope, SWBrijj) {
-        console.log("here");
-        SWBrijj.logout();
-        document.location.href = "/login/";
-    };
 
 //Controller for the Login Page
 function LoginCtrl($scope, $location, SWBrijj){
@@ -46,15 +41,12 @@ function LoginCtrl($scope, $location, SWBrijj){
     }
 };
 
-<<<<<<< HEAD
-=======
 function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     SWBrijj.logout().then(function(x) { document.location.href='/login';}).except(function(x) { document.location.href='/login';});
   }
 }
 
->>>>>>> master
 //Controller for the home page
 function HomeCtrl($scope){
     $scope.user = function(){
