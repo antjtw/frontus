@@ -92,8 +92,8 @@
           <td ng-repeat="key in issuekeys | orderBy:issueSort">
             <span ng-switch on="row.editable">
               <span ng-switch-default>
-              <input class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-              <input class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+              <input class="captablepair" maxlength="10" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+              <input class="captablepair" maxlength="10" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
               </span>
               <span ng-switch-when="0">
               <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
