@@ -379,12 +379,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           var docpanel = document.querySelector(".docPanel");
           var imgurl = docpanel.style.backgroundImage;
           docpanel.style.backgroundImage = imgurl;
-/*
+
           for(var i = 0;i<$scope.notes.length;i++) {
             document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
           }
           $scope.notes = [];
-          */
         }).
     except(function(x) {
           console.log(x.message); } );
