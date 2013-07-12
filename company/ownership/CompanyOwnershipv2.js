@@ -114,10 +114,33 @@ owner.service('sorting', function() {
   return 0;
   };
 
+  // Sorts the rows
   this.row = function(prop) {
     return function(a, b) {
         var i = 0
+        // Working for the earliest issue to the latest
         while (i < prop.length) {
+
+        // Filters out the unissued shares lines
+        if (a['nameeditable'] == 0) {
+          if (b['nameeditable'] == 0) {
+            if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
+               return 1;
+            if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
+              return -1;
+          }
+          return -1
+        }
+        if (b['nameeditable'] == 0) {
+          if (a['nameeditable'] == 0) {
+            if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
+               return -1;
+            if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
+              return 1;
+          }
+          return -1
+        }
+        // Ranks the adjacent rows and returns the order for the pair
         if (a[prop[i]]['u'] < b[prop[i]]['u'])
            return 1;
         if (a[prop[i]]['u'] > b[prop[i]]['u'])
