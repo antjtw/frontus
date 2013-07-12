@@ -967,6 +967,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   $scope.uniquerows = []
   $scope.freqtypes = [];
   $scope.issuekeys = []
+  $scope.possibleActions = ['vested', 'exercised']
 
   //Get the available range of frequency types
   SWBrijj.procm('ownership.get_freqtypes').then(function(results) {
@@ -1087,6 +1088,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   };
 
   $scope.saveGrant = function(grant) {
+    console.log(grant);
     if (grant.action == "" && isNaN(parseInt(grant.unit))) {
       if (grant.grant_id != null) {
         SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function(data) {
@@ -1116,7 +1118,8 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
         });
       }
       else {
-      return;
+        console.log(grant);
+        return;
     };
     }
     if (grant.action == "" || grant.action == undefined || isNaN(parseInt(grant.unit))) {

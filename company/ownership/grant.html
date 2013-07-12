@@ -64,7 +64,10 @@
                   <accordion-group heading="Grant Activity">
                   <ul>
                     <li ng-repeat="act in tran.activeAct">
-                      <p>Action<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.action"></input></p>
+                      <p>Action
+                        <select ng-init="act.action" ng-change="saveGrant(act)" ng-model="act.action" ng-options="i for i in possibleActions">
+                        </select>
+                      </p>
                       <p>Date <input ng-change="saveGrant(act)" type="text" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                       <p>Shares<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit"></input></p>
                     </li>
