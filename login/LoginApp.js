@@ -1,6 +1,21 @@
 //app for the program
 var app = angular.module('LoginApp', ['brijj']);
 
+//this is used to assign the correct template and controller for each URL path
+app.config(function($routeProvider, $locationProvider){
+  $locationProvider.html5Mode(true).hashPrefix('');
+  // $locationProvider.html5Mode(false).hashPrefix('!');
+
+  $routeProvider.
+      when('/', {controller:LoginCtrl, templateUrl:'login.html'}).
+      when('/forgot', {controller:ForgotCtrl, templateUrl: 'forgot.html'}).
+      when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
+      when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
+      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
+     // when('/register', {controller:RegisterCtrl, templateUrl: 'u/register.html'}).
+      otherwise({redirectTo:'/'});
+});
+
 
 
 //Controller for the Login Page
