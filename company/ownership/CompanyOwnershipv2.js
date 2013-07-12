@@ -505,7 +505,7 @@ $scope.saveIssue = function(issue) {
   }
 
   else if (issue['issue'] == "" && issue['key'] != null) {
-      $scope.dmodalUp();
+      $scope.dmodalUp(issue);
       return
   }
 
@@ -690,7 +690,7 @@ $scope.nameChangeRL = function(investor) {
 
 $scope.updateRow = function(investor) {
   if (investor.name == "" && investor.namekey != undefined) {
-    $scope.rmodalUp();
+    $scope.rmodalUp(investor);
     return
   }
   if (investor.name == "") {
@@ -719,6 +719,7 @@ $scope.updateRow = function(investor) {
 };
 
 $scope.revertPerson = function(investor) {
+  console.log(investor);
   angular.forEach($scope.rows, function(row) {
     if (row.namekey == investor) {
       row.name = row.namekey;
@@ -727,6 +728,7 @@ $scope.revertPerson = function(investor) {
 };
 
 $scope.deletePerson = function(investor) {
+  console.log(investor);
   angular.forEach($scope.trans, function(tran) {
     if (tran.investor == investor) {
       $scope.deleteTran(tran);
@@ -905,8 +907,9 @@ $scope.saveTran = function(transaction) {
 
   //Captable Delete Modal
 
-  $scope.dmodalUp = function () {
+  $scope.dmodalUp = function (issue) {
       $scope.capDelete = true;
+      $scope.missue = issue
       };
     
   $scope.dclose = function () {
@@ -916,8 +919,10 @@ $scope.saveTran = function(transaction) {
 
   //Captable row delete modal
 
-  $scope.rmodalUp = function () {
+  $scope.rmodalUp = function (investor) {
+      console.log(investor);
       $scope.rowDelete = true;
+      $scope.minvestor = investor.namekey;
       };
     
   $scope.rclose = function () {
