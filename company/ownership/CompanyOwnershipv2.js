@@ -933,6 +933,7 @@ $scope.saveTran = function(transaction) {
   $scope.dmodalUp = function (issue) {
       $scope.capDelete = true;
       $scope.missue = issue
+      console.log($scope.missue);
       };
     
   $scope.dclose = function () {
