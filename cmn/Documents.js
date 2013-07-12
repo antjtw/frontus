@@ -296,6 +296,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
     var ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+       var canvascount = 0;
 
       for(var nnum = 0; nnum<$scope.notes.length;nnum++) {
         var note = $scope.notes[nnum];
@@ -360,35 +361,55 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           var tt = notex.offsetTop - docpanel.offsetTop + se.offsetTop;
 
 
+          canvascount ++;
           var ctxxx = se.getContext('2d');
-          var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
-          var imgx = new Image();
+           var imgx = new Image();
+          imgx.onload = function() {
+            ctx.drawImage(imgx, ll, tt);
+            canvascount --;
+          }
           imgx.src = se.toDataURL("image/png");
+          // var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
           // ctx.putImageData(imgData,ll,tt);
-          ctx.drawImage(imgx, ll, tt);
         }
       }
 
 
+    var cvfin = function() {
+
+      // TODO: if the canvascount doesnt go to zero after a while, abort somehow
+      if (canvascount == 0) {
 
 
 
-    var z = canvas.toDataURL('image/tiff');
-    SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
-        then(function(x) {
-          var docpanel = document.querySelector(".docPanel");
-          var imgurl = docpanel.style.backgroundImage;
-          docpanel.style.backgroundImage = imgurl;
+        var z = canvas.toDataURL('image/tiff');
+        SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
+            then(function(x) {
+              var docpanel = document.querySelector(".docPanel");
+              var imgurl = docpanel.style.backgroundImage;
+              docpanel.style.backgroundImage = imgurl;
 
-          for(var i = 0;i<$scope.notes.length;i++) {
-            document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
-          }
-          $scope.notes = [];
-        }).
-    except(function(x) {
-          console.log(x.message); } );
-      $scope.$apply();
-    return;
+              for(var i = 0;i<$scope.notes.length;i++) {
+                document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+              }
+              $scope.notes = [];
+            }).
+            except(function(x) {
+              console.log(x.message); } );
+        $scope.$apply();
+        return;
+
+
+
+      } else {
+        window.setTimeout(cvfin, 50);
+      }
+
+    };
+
+    window.setTimeout(cvfin, 50);
+
+
     }
   // must set the src AFTER the onload function for IE9
     img.src=imgurl.substring(4,imgurl.length-1);
