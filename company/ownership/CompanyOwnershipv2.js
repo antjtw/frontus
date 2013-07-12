@@ -18,7 +18,7 @@ owner.service('calculate', function() {
   this.whatsleft = function(total, issue, rows) {
     var leftover = total
     angular.forEach(rows, function(row) {
-      if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseInt(row[issue.issue]['u']))) {
+      if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
         leftover = leftover - row[issue.issue]['u'];
       }
     });
@@ -26,8 +26,8 @@ owner.service('calculate', function() {
   };
 
   this.sum = function(current, additional) {
-    if (!isNaN(parseInt(additional))) {
-      return (current + parseInt(additional));
+    if (!isNaN(parseFloat(additional))) {
+      return (current + parseFloat(additional));
     }
     else {
       return current;
@@ -35,15 +35,15 @@ owner.service('calculate', function() {
   }
 
   this.debt = function(rows, issue, row) {
-    var mon = parseInt(issue.premoney);
-    if (isNaN(parseInt(mon))) {
+    var mon = parseFloat(issue.premoney);
+    if (isNaN(parseFloat(mon))) {
       return null
     }
     else {
       angular.forEach(rows, function(r) {
         if (r[issue.issue] != undefined) {
-          if (isNaN(parseInt(r[issue.issue]['u'])) && !isNaN(parseInt(r[issue.issue]['a']))) {
-            mon = mon + parseInt(r[issue.issue]['a']);
+          if (isNaN(parseFloat(r[issue.issue]['u'])) && !isNaN(parseFloat(r[issue.issue]['a']))) {
+            mon = mon + parseFloat(r[issue.issue]['a']);
           };
         };
       });
@@ -69,7 +69,7 @@ owner.service('switchval', function() {
     if (tran.optundersec != null) {
       tran.atype = 1;
     }
-    else if (!isNaN(parseInt(tran.amount)) && isNaN(parseInt(tran.units))) {
+    else if (!isNaN(parseFloat(tran.amount)) && isNaN(parseFloat(tran.units))) {
       tran.atype = 2;
     }
     else {
@@ -160,8 +160,8 @@ $rootScope.rowOrdering = function(row) {
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (key != "name") {
-        if (!isNaN(parseInt(row[key]['u'])) && String(key) != "$$hashKey") {
-          total = total + parseInt(row[key]['u']);
+        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
+          total = total + parseFloat(row[key]['u']);
         }
       }
     }
@@ -185,8 +185,8 @@ $rootScope.trantype = function(type, activetype) {
 $rootScope.totalGranted = function(issue, trans) {
   var granted = 0
   angular.forEach(trans, function(tran) {
-    if (tran.issue == issue && tran.type == "options" && !isNaN(parseInt(tran.units))) {
-      granted = granted + parseInt(tran.units);
+    if (tran.issue == issue && tran.type == "options" && !isNaN(parseFloat(tran.units))) {
+      granted = granted + parseFloat(tran.units);
     };
   });
   return granted;
@@ -196,8 +196,8 @@ $rootScope.totalGranted = function(issue, trans) {
 $rootScope.totalGrantAction = function(type, grants) {
   var total = 0
   angular.forEach(grants, function(grant) {
-    if (grant.action == type && !isNaN(parseInt(grant.unit))) {
-      total = total + parseInt(grant.unit);
+    if (grant.action == type && !isNaN(parseFloat(grant.unit))) {
+      total = total + parseFloat(grant.unit);
     };
   });
   return total;
@@ -208,13 +208,13 @@ $rootScope.totalTranAction = function(type, trans) {
   var total = 0
   angular.forEach(trans, function(tran) {
     if (type == "granted") {
-      if (!isNaN(parseInt(tran.units)) && parseInt(tran.units) > 0) {
-        total = total + parseInt(tran.units);
+      if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) > 0) {
+        total = total + parseFloat(tran.units);
       };
     }
     else if (type == "forfeited") {
-      if (!isNaN(parseInt(tran.units)) && parseInt(tran.units) < 0) {
-        total = total + parseInt(tran.units);
+      if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) < 0) {
+        total = total + parseFloat(tran.units);
       };
     };
   });
@@ -227,8 +227,8 @@ $rootScope.shareSum = function(row) {
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (key != "name") {
-        if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
-          total = total + parseInt(row[key]['u']);
+        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+          total = total + parseFloat(row[key]['u']);
         }
       }
     }
@@ -242,8 +242,8 @@ $rootScope.shareSum = function(row) {
       for (var key in row) {
         if (row.hasOwnProperty(key)) {
           if (key != "name") {
-            if (parseInt(row[key]['u']) % 1 == 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
-              total = total + parseInt(row[key]['u']);
+            if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+              total = total + parseFloat(row[key]['u']);
             }
           };
         };
@@ -279,8 +279,8 @@ $rootScope.shareSum = function(row) {
       angular.forEach(rows, function(row) {
       for (var key in row) {
           if (key == header) {
-            if (parseInt(row[key][type]) % 1 == 0 && String(key) != "$$hashKey") {
-            total = total + parseInt(row[key][type]);
+            if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
+            total = total + parseFloat(row[key][type]);
               }
           }
       };
@@ -379,7 +379,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
       angular.forEach($scope.rows, function(row) {
         angular.forEach($scope.issues, function(issue) {
           if (row[issue.issue] != undefined) {
-            if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
+            if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
               row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
             };
           };
@@ -387,7 +387,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
       });
 
       angular.forEach($scope.issues, function(issue) {
-        if (parseFloat(issue.totalauth) % 1 == 0) {
+        if (!isNaN(parseFloat(issue.totalauth))) {
           var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
           if (leftovers != 0) {
             var issuename = String(issue.issue)
@@ -580,7 +580,7 @@ $scope.saveIssue = function(issue) {
           }
         });
         if (keepgoing != false) {
-          if (parseInt(leftovers) % 1 == 0) {
+          if (!isNaN(parseFloat(leftovers))) {
             $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
             $scope.rows[($scope.rows.length)-1][issuename] = shares;
           };
@@ -599,7 +599,7 @@ $scope.saveIssue = function(issue) {
 
         angular.forEach($scope.rows, function(row) {
         if (row[issue.issue] != undefined) {
-          if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
+          if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
             row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
             };
           };
@@ -784,7 +784,7 @@ $scope.deleteTran = function(tran) {
       $scope.trans.splice(index, 1);
       angular.forEach($scope.rows, function(row) {
         if (row.name === tran['investor']) {
-          row[tran['issue']] = (parseInt(row[tran['issue']]) - parseInt(tran['units']))
+          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']))
           row[tran['issue']] = {"u":null, "a":null};
         };
       });
@@ -800,7 +800,7 @@ $scope.manualdeleteTran = function(tran) {
       $scope.activeTran.splice(index, 1);
       angular.forEach($scope.rows, function(row) { 
         if (row.name === tran['investor']) {
-          row[tran['issue']] = (parseInt(row[tran['issue']]) - parseInt(tran['units']))
+          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']))
           row[tran['issue']] = {"u":null, "a":null};
         };
       });
@@ -811,17 +811,17 @@ $scope.saveTran = function(transaction) {
   console.log("saving");
   console.log(transaction);
   var savingActive = $scope.activeTran
-  if (transaction == undefined || isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
+  if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
     console.log("transaction is undefined")
     return
   }
-  if (isNaN(parseInt(transaction.units)) && isNaN(parseInt(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
+  if (isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
     console.log("deleting transaction");
     console.log(transaction);
     $scope.deleteTran(transaction);
     return
   }
-  else if (transaction['issue'] == undefined || (parseInt(transaction['units']) % 1 != 0 && parseInt(transaction['amount'] % 1 != 0))) {
+  else if (transaction['issue'] == undefined || (isNaN(parseFloat(transaction['units'])) && isNaN(parseFloat(transaction['amount'])))) {
     console.log("incomplete transaction");
     return;
   }
@@ -830,7 +830,7 @@ $scope.saveTran = function(transaction) {
         if (transaction['tran_id'] == undefined) {
           transaction['tran_id'] = '';
         };
-        if (parseFloat(transaction['amount']) % 1 != 0) {
+        if (!isNaN(parseFloat(transaction['amount']))) {
         };
         if (transaction['partpref'] != null) {
           var partpref = $scope.strToBool(transaction['partpref']);
@@ -1036,7 +1036,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     angular.forEach($scope.trans, function(tran) {
         angular.forEach($scope.rows, function(row) {
           if (row.name == tran.investor) {
-            if (parseInt(tran.units) > 0) {
+            if (parseFloat(tran.units) > 0) {
               row["granted"] = calculate.sum(row["granted"], tran.units);
             }
             else {
@@ -1049,7 +1049,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     angular.forEach($scope.grants, function(grant) {
       angular.forEach($scope.rows, function(row) {
         if (row.name == grant.investor) {
-          if (parseInt(grant.unit) > 0) {
+          if (parseFloat(grant.unit) > 0) {
             if (row[grant.action] == undefined) {
               row[grant.action] = 0;
             };
@@ -1112,7 +1112,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
   $scope.saveGrant = function(grant) {
     console.log(grant);
-    if (grant.action == "" && isNaN(parseInt(grant.unit))) {
+    if (grant.action == "" && isNaN(parseFloat(grant.unit))) {
       if (grant.grant_id != null) {
         SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function(data) {
           console.log("deleted")
@@ -1145,14 +1145,14 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
         return;
     };
     }
-    if (grant.action == "" || grant.action == undefined || isNaN(parseInt(grant.unit))) {
+    if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
       return;
     };
     if (grant.grant_id == undefined) {
       grant.grant_id = "";
     }
     var d1 = grant['date'].toUTCString();
-    SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseInt(grant.unit)).then(function(data) {
+    SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function(data) {
       angular.forEach($scope.activeTran, function(tran) {
         if (tran.tran_id == grant.tran_id) {
           angular.forEach(tran.activeAct, function(act) {
@@ -1170,10 +1170,10 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       angular.forEach($scope.grants, function(grant) {
         if (grant.action == "exercised") {
           if (exercises[grant.tran_id] == undefined) {
-            exercises[grant.tran_id] = parseInt(grant.unit);
+            exercises[grant.tran_id] = parseFloat(grant.unit);
           }
           else {
-            exercises[grant.tran_id] = parseInt(exercises[grant.tran_id]) + parseInt(grant.unit);
+            exercises[grant.tran_id] = parseFloat(exercises[grant.tran_id]) + parseFloat(grant.unit);
           };
         };
       });
