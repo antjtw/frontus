@@ -1,0 +1,120 @@
+<!--Notification Bar-->
+<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
+
+<div class="editProfileFP row-fluid">
+  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+    <h1>{{name}}</h1>
+    <div class="row-fluid">
+      <div class="span5"> <!-- Photo -->
+        <form>
+          <div class="editProfilePhoto">
+            <img ng-src="/photo/user?id=company:{{company}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+          </div>
+        </form>
+      </div>
+      <div class="span7">
+        <p>
+            <input type="text" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
+        </p>
+        <p><button class="button subText greenButton" ng-click="adminModalOpen()">Add Admin</button></p>
+      </div>
+    </div>
+    <div class="row-fluid">
+    <section class="recipientInfo statusBlock">
+      <div><i class="icon-user icon-2x"></i><p class="subText">Admins</p></div>
+      <table class="tableView bodyText">
+        <tr class="subText">
+          <th class="button" colspan="2"><span class="title sortedDown">Name</span></th>
+        </tr>
+        <tbody ng-repeat="admin in admins">
+          <tr>
+          <td><img src="">{{admin.name}}</td>
+          <td class="button" ng-click="(opendetails(admin.noaction))"><i class="icon-cog"></i>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    </div>
+  </div>
+
+  <div class="sidebar span4">
+    <form>
+      <fieldset>
+        <p>
+          <input type="text" ng-model="company" name="company" disabled>
+          <span class="label">Website</span>
+        </p>
+        <p>
+          <textarea ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+          <span class="label">Address</span>
+        </p>
+      </fieldset>
+    </form>
+
+    <section class="documentInfo statusBlock">
+    <div>
+    <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
+    </div> 
+    <div class="activityBlock">
+      <table>
+        <tr ng-repeat="active in activity | orderBy:activityOrder">
+        <td><i class="{{active.icon}} icon"></i></td>
+        <td>
+            <table>
+              <tr><td>{{active.activity}} <a href="/company/documents/view?doc={{active.doc_id}}">{{active.docname}}</a></td></tr>
+                  <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+              </table>
+          </td>
+        </tr>
+      </table> 
+    </div>   
+    </section>
+  </div>
+</div>
+
+<div modal="pictureModal" close="pictureModalClose()" options="opts" ng-controller="FileDNDCtrl">
+  <div class="modalHeader">
+    <p class="subText">Profile Picture</p>
+  </div>
+  <div class="modalText">
+    <p>You can upload a JPG, GIF, or PNG file.</p>
+    <form class="form-inline">
+      <fieldset>
+        <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
+      </fieldset>
+    </form>
+
+    <div ng-show="files.length">
+        <div ng-repeat="file in files.slice(0)">
+            <span>{{file.webkitRelativePath || file.name}}</span>
+            (<span>{{fmtFileSize(file)}}</span>)
+        </div>
+    </div>
+  </div>
+
+  <div class="modalButtons">
+    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+  </div>
+</div>
+<div modal="adminModal" close="adminModalClose()" options="opts">
+  <div class="modalHeader">
+    <p class="subText">Add an Administrator</p>
+  </div>
+  <div class="modalText">
+    <form>
+      <fieldset>
+        <div class="row-fluid">
+          <label class="bodyText">Email</label>  
+          <input type="text" ng-model="newEmail" />
+        </div>
+        <div class="row-fluid">
+          <label class="bodyText">Full Name</label>  
+          <input type="text" ng-model="newName" />
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="modalButtons">
+    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+  </div>
+</div>

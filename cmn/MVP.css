@@ -52,7 +52,7 @@ label {
 }
 
 input.loginInput:focus, textarea:focus, select:focus {
-	outline-width:none;
+	outline-width: 0;
 	outline: none;
 	box-shadow:none;
 	border-color:#cccccc;
@@ -122,7 +122,7 @@ h2 {
 	padding-right:20px;
 }
 
-.bodyText {
+.bodyText, .bodyText input {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -423,7 +423,26 @@ h2 {
 
 .docLibrary {
 	width: 100%;
-	margin: 40px 0 0 0;
+}
+
+.docLibrary .column-label {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary .tablefooter {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.docLibrary input {
+	border: 0px;
+	padding: 0px;
+	width: 100px;
+}
+
+.docLibrary input:disabled {
+	background-color: white;
 }
 
 .searchBox {
@@ -435,7 +454,7 @@ h2 {
 }
 
 .tableView {
-	width:100%;
+	width:auto;
 	margin: 0 auto 0 auto;
 }
 
@@ -448,17 +467,17 @@ h2 {
 
 .tableView th {
 	width: 340px;
-	height: 27px;
+	height: 30px;
 	text-align: left;
-	padding: 0 0 0 20px;
+	padding: 0 0 0 10px;
 	position: relative;
 }
 
 .tableView td {
 	padding: 5px 40px 0 0;
 	width:250px;
-	height:55px;
-	padding: 0 0 0 20px;
+	height:35px;
+	padding: 0 0 0 10px;
 }
 
 .tableView td[class="button"] {
@@ -505,6 +524,9 @@ h2 {
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
 }
 
+.curPage {
+  background-color: oldlace;
+}
 .pageTurn {
 	margin: 20px 0 10px 0;
 	height: 24px;
@@ -520,16 +542,24 @@ h2 {
 	text-align: center;
 }
 
+.pageJump {
+    margin: 0px 0 5px 5px;
+}
+
+.pageJump li {
+    float:left;
+    display: inline;
+    margin: 0 10px 0 0;
+    padding: 1px 3px 0 3px;
+    text-align: center;
+    border: solid 1px dimgray;
+}
+
 .docPanel {
 	background-color: #FFFFFF;
 	width: 1024px;
 	height: 1306px;
 	overflow: auto;
-}
-
-.signature {
-	width: 60px;
-	height: 30px;
 }
 
 /* Document Status */
@@ -610,6 +640,27 @@ h2 {
 #socialMedia {
 	margin: 30px 0;
 }
+
+/* Captable */
+
+.capEditHeaders {
+	width: 200px !important;
+};
+
+.longRow td {
+	width: 150px !important;
+}
+
+.captablepair {
+	display: inline-block;
+	float: left;
+};
+
+/* Grants Table */
+
+.tableView tr.rowSelected {
+	background-color: #f0f0f0;
+};
 
 /* Buttons */
 
@@ -774,14 +825,20 @@ h2 {
 
 /* Dropdown */
 
-.dropdown-toggle {
+.menu_dropdown {
+    display: block;
+    margin: 0;
+    padding: 9px 12px 8px 12px;
+}
+
+.multi_dropdown {
     display: block;
     margin: 0;
     padding: 9px 12px 8px 12px;
     background-color: #0088cc;
 }
 
-.dropdown-menu {
+.multi_menu {
   position: absolute;
   background-color: #0088cc;
   color: white;
@@ -798,7 +855,7 @@ h2 {
   -moz-border-radius: 0;
 }
 
-.dropdown-menu li > a {
+.multi_menu li > a {
   display: block;
   padding: 3px 20px;
   clear: both;
@@ -910,6 +967,7 @@ h2 {
   bottom: 120px;
   padding-top: 10px;
   background-color: #e0e0ff;
+}
 
 /* Clear fix */
 
@@ -931,4 +989,18 @@ h2 {
     *zoom: 1;
 }
 
+.draggable {
+    border: 0px solid red;
+    position:absolute;
+    background-color:lightgoldenrodyellow;
+    opacity: 0.5;
+    resize:both;
+    cursor: move;
+    width: auto;
+    height: auto;
+}
+
+.draggable > * {
+    margin-left: 20px;
+}
 

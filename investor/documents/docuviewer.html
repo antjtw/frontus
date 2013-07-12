@@ -1,26 +1,9 @@
 <div class="container" data-ng-init="init()">
 
 	     <h1>
-         <a href="/investor/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{documents.docname}}
+         <a href="/investor/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docname}}
          </h1>
-
-         <div ng-switch on="signable" >
-             <span ng-switch-when="0"><p>Click below to sign this document</p>
-               <p>Sign here: <input type="checkbox" ng-model="signature"></p>
-               <button ng-click="submitSign(signature);">Send signature</button></span>
-             <span ng-switch-when="1">Thanks for the signature!</span>
-             <span ng-switch-default></span>
-         </div>
-         
-         <ul class="subText pageTurn cf">
-         	<li class="button" ng-click="previousPage(currentPage.pageNum)">Previous</li>
-            <li><input ng-model="currentPage.pageNum" ng-change="jumpPage(currentPage.pageNum)" style="width:20px;"></li>
-            <li class="button" ng-click="nextPage(currentPage.pageNum)">Next</li>
-         </ul>
-	     
-	     <div class="docPanel">
-         	<img ng-src="{{currentPage.src}}"></img>
-         </div>
+	      <doc-viewer doc-id="docId" invq="true"></doc-viewer>
           
 </div>
 

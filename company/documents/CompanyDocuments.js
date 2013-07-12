@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['ui.bootstrap', '$strap.directives']);
+var docviews = angular.module('documentviews', ['documents','ui.bootstrap', '$strap.directives','brijj']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -29,21 +29,21 @@ docviews.directive('indstatus', function() {
 	replace: true,
     transclude: true,
 	scope: { title:'@indstatus' },
-    template: '<p>{{title}}</p>',
+    template: '<p>{{title}}</p>'
   };
 });
 
 /* Controllers */
 
-var documentListController = function($scope) {
-	SWBrijj.tblm('document.docinfo').then(function(data) { 
-	console.log(data)
+var documentListController = function($scope,SWBrijj) {
+	SWBrijj.tblm('document.my_company_library').then(function(data) {
 	$scope.documents = data;
-	$scope.$apply();
 	});
 	
 	$scope.docOrder = 'docname';
-	
+  $scope.upModal = false;
+  $scope.shouldBeOpen = false;
+
 	$scope.setOrder = function(field) {
 		if ($scope.docOrder == field) {
 			$scope.docOrder = ('-' + field);
@@ -51,7 +51,7 @@ var documentListController = function($scope) {
 		else {
 			$scope.docOrder = field;
 		}
-	}
+	};
 
 	$scope.searchFilter = function (obj) {
         var re = new RegExp($scope.query, 'i');
@@ -110,15 +110,15 @@ var documentListController = function($scope) {
     };
 
     // init event handlers
-    function dragEnterLeave(evt) {
+    $scope.dragEnterLeave = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
         $scope.dropText = "Drop files here...";
         $scope.dropClass = "";
         $scope.$apply();
-    }
+    };
 
-    function dragOver(evt) {
+    $scope.dragOver = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
       console.log(evt.dataTransfer.types);
@@ -126,33 +126,43 @@ var documentListController = function($scope) {
         $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
         $scope.dropClass = ok ? 'over' : 'not-available';
         $scope.$apply();
-    }
+    };
 
-    function drop(evt) {
-        // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
-        evt.stopPropagation();
-        evt.preventDefault();
-        $scope.dropText = 'Drop more files here...';
-        $scope.dropClass = '';
-        $scope.$apply();
-        var files = evt.dataTransfer.files;
-        if (files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-                $scope.files.push(files[i])
-            }
+    $scope.drop = function (evt) {
+      // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
+      evt.stopPropagation();
+      evt.preventDefault();
+      $scope.dropText = 'Drop more files here...';
+      $scope.dropClass = '';
+      $scope.$apply();
+      var files = evt.dataTransfer.files;
+      if (files.length > 0) {
+        for (var i = 0; i < files.length; i++) {
+          $scope.files.push(files[i])
         }
-        $scope.$apply();
+      }
+      $scope.$apply();
 
       // might as well go ahead and upload ( no point in getting a click
       $scope.uploadFile();
-    }
+    };
 
-    var dropbox = angular.element(".dropbox")[0];
+    $scope.draginit = function(elm) {
+      var element = angular.element(".dropbox");
+//      var element = elm.find('.dropbox');
+      if (!element) return;
 
-    dropbox.addEventListener("dragenter", dragEnterLeave, false);
-    dropbox.addEventListener("dragleave", dragEnterLeave, false);
-    dropbox.addEventListener("dragover", dragOver, false);
-    dropbox.addEventListener("drop", drop, false);
+/*      element.on("dragenter", dragEnterLeave)
+          .on("dragleave",dragEnterLeave)
+          .on("dragover",dragOver)
+          .on("drop",drop);
+  */
+       element = element[0];
+       element.addEventListener("dragenter", $scope.dragEnterLeave, false);
+       element.addEventListener("dragleave", $scope.dragEnterLeave, false);
+       element.addEventListener("dragover", $scope.dragOver, false);
+       element.addEventListener("drop", $scope.drop, false);
+    };
 
     $scope.setFiles = function (element) {
         $scope.files = [];
@@ -167,7 +177,7 @@ var documentListController = function($scope) {
         SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
       }, cancel: function() { console.log('canceled'); }
       })
-    }
+    };
     $scope.uploadFile = function () {
         var fd = new FormData();
         $scope.progressVisible = true;
@@ -211,14 +221,14 @@ var documentListController = function($scope) {
     }	
 };
 
-function documentViewController($scope, $routeParams) {
+function documentViewController($scope, $routeParams, SWBrijj) {
   var docId = $routeParams.doc;
   $scope.currentDoc = docId;
+  $scope.invq = false;
 
   SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {
 	$scope.documents = data[0];
-	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.documents.docname + "."
-	$scope.$apply();
+	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.documents.docname + ".";
 	});
 	
   
@@ -234,17 +244,16 @@ function documentViewController($scope, $routeParams) {
 			$scope.doclength = data[0];
 			console.log($scope.doclength);
 			var width = 1024;
-			var scaling = (imageObj.height/imageObj.width)
-			var height = (1024 * scaling)
+			var scaling = (imageObj.height/imageObj.width);
+			var height = (1024 * scaling);
 			var n = $scope.doclength.get_doclength + 1;
 			console.log(n);
-			$scope.images = []
+			$scope.images = [];
 			for(var i=1; i<n; i++) {
 				$scope.images.push({"src": "", "pagenum": i});
-			};
+			}
 			$scope.images[0].src = imageObj.src;
-			$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum}
-			$scope.images;
+			$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum};
 			$scope.$apply();
 		});
       };
@@ -256,7 +265,7 @@ function documentViewController($scope, $routeParams) {
 		if ($scope.images[pageRequired-1].src == "") {
 			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
 		}
-		$scope.currentPage.src = ($scope.images[pageRequired-1].src)
+		$scope.currentPage.src = ($scope.images[pageRequired-1].src);
 		$scope.currentPage.pageNum = pageRequired;
 
 	};
@@ -267,17 +276,16 @@ function documentViewController($scope, $routeParams) {
 			if ($scope.images[pageRequired-1].src == "") {
 				$scope.images[pageRequired-1].src ='/photo/docpg?id=' +$scope.currentDoc+'&page='+pageRequired;
 			}
-			$scope.currentPage.src = ($scope.images[pageRequired-1].src)
+			$scope.currentPage.src = ($scope.images[pageRequired-1].src);
 			$scope.currentPage.pageNum = pageRequired;
 			}
 	};
 
-	$scope.jumpPage = function(value) {
-		var pageRequired = value;
+	$scope.jumpPage = function(pageRequired) {
 		if ($scope.images[pageRequired-1].src == "") {
 			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
 		}
-		$scope.currentPage.src = ($scope.images[pageRequired-1].src)
+		$scope.currentPage.src = ($scope.images[pageRequired-1].src);
 		$scope.currentPage.pageNum = pageRequired;
 
 	};
@@ -304,25 +312,25 @@ function documentViewController($scope, $routeParams) {
 		  };
 }
 
-function documentStatusController($scope, $routeParams) {
+function documentStatusController($scope, $routeParams, SWBrijj) {
   var docId = $routeParams.doc;
   
   SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {
 	$scope.document1 = data[0];
 	$scope.page_title = data[0].docname;
-	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + "."
+	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
 
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
-			for (var i = 0; i < $scope.activity.length; i++) {
-				if ($scope.activity[i].count == 1) {
+			for (var ik = 0; ik < $scope.activity.length; ik++) {
+				if ($scope.activity[ik].count == 1) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {
-							if ($scope.activity[i].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
-								if ($scope.activity[i].activity == $scope.activityDetail[j].activity) {
-										$scope.activity[i].namethem = $scope.activityDetail[j].sent_to;
+							if ($scope.activity[ik].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
+								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+										$scope.activity[ik].namethem = $scope.activityDetail[j].sent_to;
 									}
 							}
 					}
@@ -332,24 +340,22 @@ function documentStatusController($scope, $routeParams) {
 			$scope.activity.push({activity: "created", icon: "icon-star-empty", when_sent: $scope.document1.last_updated});
 			for (var i = 0; i < $scope.activity.length; i++) {
 			if ($scope.activity[i].activity == "shared") {
-				$scope.activity[i].activity = "shared with "
-				$scope.activity[i].icon = "icon-edit"
+				$scope.activity[i].activity = "shared with ";
+				$scope.activity[i].icon = "icon-edit";
 			}
 			else if ($scope.activity[i].activity == "viewed") {
-				$scope.activity[i].activity = "viewed by "
-				$scope.activity[i].icon = "icon-eye-open"
+				$scope.activity[i].activity = "viewed by ";
+				$scope.activity[i].icon = "icon-eye-open";
 			}
 			else if ($scope.activity[i].activity == "reminder") {
-				$scope.activity[i].activity = "reminded "
-				$scope.activity[i].icon = "icon-bullhorn"
+				$scope.activity[i].activity = "reminded ";
+				$scope.activity[i].icon = "icon-bullhorn";
 			}
 			else if ($scope.activity[i].activity == "signed") {
-				$scope.activity[i].activity = "signed by "
-				$scope.activity[i].icon = "icon-ok-circle"
+				$scope.activity[i].activity = "signed by ";
+				$scope.activity[i].icon = "icon-ok-circle";
 			}
 			}
-			$scope.$apply();
-
 
 			});
 		});
@@ -368,7 +374,7 @@ function documentStatusController($scope, $routeParams) {
 	  
 	  $scope.save = function() {
 		var newname = $scope.editableTitle;
-		$scope.page_title = newname
+		$scope.page_title = newname;
 		$scope.disableEditor();
 		SWBrijj.procm("document.title_change", parseInt(docId), newname).then(function(data) {
 			console.log(data);
@@ -385,8 +391,8 @@ function documentStatusController($scope, $routeParams) {
 		}
 		if ($scope.userStatus[i].event == "needsign") {
 			$scope.userStatus[i].event = "needs signing";
-		};
-	};
+		}
+	}
 	$scope.$apply();
 	});
 	
@@ -447,12 +453,12 @@ function documentStatusController($scope, $routeParams) {
 							name.signed = 0;	
 						}
 						if (data[5].loggedin != null) {
-							console.log(data[5])
-							name.column5 = 2
+							console.log(data[5]);
+							name.column5 = 2;
 							name.reminder = data[5].loggedin;
 						}
 						else if (data[4].loggedin != null) {
-							name.column5 = 1
+							name.column5 = 1;
 							name.reminder = data[4].loggedin;
 						}
 						else {
@@ -466,8 +472,8 @@ function documentStatusController($scope, $routeParams) {
 		});
 	};
 	
-		$scope.revoke = ""
-		$scope.reminder = ""
+		$scope.revoke = "";
+		$scope.reminder = "";
 		  
 		  $scope.modalUp = function () {
 			$scope.shouldBeOpen = true;
@@ -495,7 +501,7 @@ function documentStatusController($scope, $routeParams) {
 		
 		  $scope.revopts = {
 			backdropFade: true,
-			dialogFade:true,
+			dialogFade:true
 		  };
 		  
 		  $scope.remmodalUp = function(name) {
@@ -509,7 +515,7 @@ function documentStatusController($scope, $routeParams) {
 		
 		  $scope.remopts = {
 			backdropFade: true,
-			dialogFade:true,
+			dialogFade:true
 		  };
 			
 				
@@ -529,5 +535,3 @@ angular.module('documentviews').filter('fromNow', function() {
 			  return moment(date).fromNow();
 			}
 		  });
-		  
-		  
