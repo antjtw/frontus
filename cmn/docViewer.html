@@ -19,7 +19,7 @@
   </ul>
 
   <ul class="subText pageJump cf">
-    <li ng-class="{'curPage':page==currentPage}" style="cursor:pointer" ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
+    <li ng-class="{'curPage':page==currentPage, unsaved:unsaved(page)}" style="cursor:pointer" ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
   </ul>
 
   <div class="docPanel" back-img="/photo/docpg?id={{docId}}&investor={{invq}}&page={{currentPage}}" ></div>

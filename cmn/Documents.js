@@ -23,6 +23,8 @@ angular.module('draggable', []).
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
           document.querySelector('.docPanel').appendChild(elm[0]);
+          scope.page = scope.currentPage;
+          elm.page = scope.currentPage;
           scope.$parent.notes.push(elm);
           elm.css({position: 'absolute'});
         },
@@ -138,6 +140,13 @@ docs.filter('fromNow', function() {
 function DocumentViewController($scope, $compile, $document, SWBrijj) {
   $scope.currentPage = 1;
 
+  $scope.unsaved = function(page) {
+    var nn = $scope.notes;
+    for(var i = 0; i < nn.length; i++) {
+      if ( nn[i].scope().page == page) return true;
+    }
+    return false;
+  }
   $scope.init = function () {
     $scope.signable = "";
     $scope.when_signed = "";
@@ -302,6 +311,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         var note = $scope.notes[nnum];
         var ntype = note.scope().ntype;
         var notex = note[0];
+        if (note.scope().page != note.scope().currentPage) continue;
         if (ntype == 'text') {
           var annotext = note.scope().$$nextSibling.annotext;
           var se = notex.querySelector("textarea");
@@ -390,6 +400,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
               docpanel.style.backgroundImage = imgurl;
 
               for(var i = 0;i<$scope.notes.length;i++) {
+                if (note.scope().page != note.scope().currentPage) continue;
                 document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
               }
               $scope.notes = [];
