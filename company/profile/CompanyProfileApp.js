@@ -9,6 +9,7 @@ app.config(function($routeProvider, $locationProvider){
   $routeProvider.
       when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
       when('/people', {controller:PeopleCtrl, templateUrl:'people.html'}).
+      when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -139,6 +140,121 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
         $scope.sort = col;
       }
     }
+}
+
+function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
+  var userId = $routeParams.id;
+  var rowNumber;
+  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) { //TODO: NEW TBLM with where statement
+    $scope.user = x;
+  }).except(initFail);
+
+  SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
+    $scope.docs = x;
+    var i = 0;
+    angular.forEach($scope.docs, function(x) {
+      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+        SWBrijj.procm('document.document_status_by_investor', x['doc_id'], userId).then(function(z) {
+          $scope.docs[i].docname = y[0]["docname"];
+          $scope.docs[i].event = z[0]['event'];
+          $scope.docs[i].shown = false;
+          $scope.docs[i].button = "icon-plus";
+          if ($scope.docs[i].event == "revoked") {
+            $scope.docs[i].rstatus = 1;
+          };
+          if ($scope.docs[i].event == "needsign") {
+            $scope.docs[i].event = "needs signing";
+          };
+          i++;
+          $scope.$apply();
+        });
+      });
+    });
+    //console.log($scope.docs);
+  });
+
+  $scope.activity = [];
+  SWBrijj.procm('document.get_investor_activity', userId).then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      console.log(x);
+      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
+        if ($scope.activity[i].activity == "shared") {
+          $scope.activity[i].activity = "Shared ";
+          $scope.activity[i].icon = "icon-edit";
+        }
+        else if ($scope.activity[i].activity == "viewed") {
+          $scope.activity[i].activity = "Viewed ";
+          $scope.activity[i].icon = "icon-eye-open";
+        }
+        else if ($scope.activity[i].activity == "reminder") {
+          $scope.activity[i].activity = "Reminded  ";
+          $scope.activity[i].icon = "icon-bullhorn";
+        }
+        else if ($scope.activity[i].activity == "signed") {
+          $scope.activity[i].activity = "Signed ";
+          $scope.activity[i].icon = "icon-ok-circle";
+        }
+        i++;
+      });
+    });
+  });
+
+  $scope.activityOrder = function(card) {
+     if (card.activity == "created") {
+       return 0;
+     } else {
+        return -card.when_sent;
+     }
+  };
+
+  $scope.opendetails = function(selected) {
+    $scope.docs.forEach(function(doc) {     
+      if (selected == doc.doc_id)
+        if (doc.shown == true) {
+          doc.shown = false;
+          doc.button = "icon-plus";
+        } else {
+          SWBrijj.procm("document.get_I_docstatus", userId, parseInt(selected)).then(function(data) {
+            doc.whenshared = data[1].loggedin;
+            if (data[0].loggedin != null) {
+              doc.lastlogin = data[0].loggedin;
+            }
+            else {
+              doc.lastlogin = 0; 
+            }
+            if (data[2].loggedin != null) {
+              doc.lastviewed = data[2].loggedin;
+            }
+            else {
+              doc.lastviewed = 0;  
+            }
+            if (data[3].loggedin != null) {
+              doc.signed = data[3].loggedin;
+            }
+            else {
+              doc.signed = 0;  
+            }
+            if (data[5].loggedin != null) {
+              console.log(data[5])
+              doc.column5 = 2
+              doc.reminder = data[5].loggedin;
+            }
+            else if (data[4].loggedin != null) {
+              doc.column5 = 1
+              doc.reminder = data[4].loggedin;
+            }
+            else {
+              doc.column5 = 0; 
+            }
+            doc.button = "icon-minus";
+            doc.shown = true;
+            $scope.$apply();
+          });
+        }
+    });
+  };
 }
 
 app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope, SWBrijj) {

@@ -8,10 +8,10 @@ function NavCtrl($scope, SWBrijj) {
 	$scope.people = {visible: true, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
-		for (var i = 0; i < $scope.companies.length; i++) {		
-			if (companyURL == $scope.selected.company) {
-				document.location.href = '/company/profile';
-			}
+		if (companyURL == $scope.selected.company) {
+			document.location.href = '/company/profile';
+		}
+		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
 				$scope.selected = $scope.companies[i];
 				if (!$scope.selected.name) {
