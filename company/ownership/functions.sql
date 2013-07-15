@@ -183,30 +183,39 @@ CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EA
 -- Share and Audit
 
 CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+DECLARE
+  template text = mail.get_mail_template('cap-share.html');
+  domain varchar;
+  code varchar;
 BEGIN
+  	select value into domain from config.configuration where name='hostname';
 	perform name from account.user_table where email=NEW.email;
   	IF NOT FOUND THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
+  		code = mail.get_ticket();
+  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/register/people?code=' , code));
+  		update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
+  		INSERT INTO account.investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
+  	ELSE
+  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/captable/?' , NEW.company));
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
+	template = replace(template, '{{company}}', NEW.company);
+	perform mail.send_mail(NEW.email, concat(NEW.company, '''s captable has been shared with you!'), template);
   RETURN NEW;
 END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
 GRANT INSERT on ownership.company_audit TO investor;
 
 -- Share document, sends email and tracks action
-CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, xmessage character varying) returns void
 language plpgsql as $$
 declare
-  template text = mail.get_mail_template('cap-share.html');
   comp account.company_type;
   sendtype document.activity_type;
 begin
   select distinct company into comp from account.companies;
-  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
-  template = replace(template, '{{company}}', comp);
-  perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
-  insert into ownership.company_audit(company, email, sender) values (comp, xemail, current_user);
+  insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
 end $$;
 
 -- Get most recent view
