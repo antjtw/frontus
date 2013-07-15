@@ -419,8 +419,6 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     };
 
     window.setTimeout(cvfin, 50);
-
-
     }
   // must set the src AFTER the onload function for IE9
     img.src=imgurl.substring(4,imgurl.length-1);
