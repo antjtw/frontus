@@ -181,7 +181,7 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
         $scope.progressVisible = true;
         for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
         SWBrijj.uploadImage(fd).then(function(x) {
-          $route.reload(); $scope.$apply();
+          $route.reload();
           console.log(x);
           $rootScope.notification.show("green", "Your profile picture has been updated successfully.");
         }).except( function(x) { 
