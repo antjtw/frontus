@@ -297,6 +297,8 @@ $rootScope.shareSum = function(row) {
 
 var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
 
+  SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
+
   $scope.issuetypes = [];
   $scope.freqtypes = [];
   $scope.issuekeys = [];
@@ -986,6 +988,9 @@ $scope.saveTran = function(transaction) {
 
 // Grants page controller
 var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+
+  SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
+
 
   $scope.rows = []
   $scope.uniquerows = []
