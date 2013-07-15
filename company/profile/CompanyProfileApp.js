@@ -45,10 +45,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
       $route.reload();
-        $rootScope.notification.show("success", "An admin has been created successfully.");
+      $rootScope.notification.show("success", "An admin has been created successfully.");
     }).except(function(x) {
-        console.log(x);
-        $rootScope.notification.show("fail", "There was an error adding an admin.");
+      console.log(x);
+      $rootScope.notification.show("fail", "There was an error adding an admin.");
     });
   };
 
