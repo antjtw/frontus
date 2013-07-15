@@ -184,7 +184,11 @@ CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EA
 
 CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    INSERT INTO ownership.audit (company, email) VALUES (NEW.company, NEW.email);
+	perform name from account.user_table where email=NEW.email;
+  	IF NOT FOUND THEN
+  		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
+  	END IF;
+    INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
   RETURN NEW;
 END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
@@ -202,7 +206,7 @@ begin
   template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
   template = replace(template, '{{company}}', comp);
   perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
-  insert into ownership.company_audit(company, email) values (comp, xemail);
+  insert into ownership.company_audit(company, email, sender) values (comp, xemail, current_user);
 end $$;
 
 -- Get most recent view
