@@ -50,7 +50,7 @@
 		<div id="demoDiv" ng-controller='DemoController'>
 		  <div infinite-scroll='nextPage()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
 		    <div ng-repeat='item in items'>
-		      <!-- <span>{{item.company_name}} ( <a hg-href='http://{{item.company_domain}}'>{{item.company_domain}}</a> )</span>
+		      <!-- <span>{{item.company_name}} ( <a hg-href='https://{{item.company_domain}}'>{{item.company_domain}}</a> )</span>
 		      <span>{{item.name}} ( {{item.email}} )</span>
 		      <small>created {{item.created}}</small>
 		-->
@@ -110,7 +110,7 @@
 				app.directive("interested", function() {
 					return {
 						// scope: { item: '=' }
-						template: "<div><span>{{item.company_name}} ( <a hg_ref='http://{{item.company_domain}}' > {{item.company_domain}}</a> )</span>"+
+						template: "<div><span>{{item.company_name}} ( <a hg_ref='https://{{item.company_domain}}' > {{item.company_domain}}</a> )</span>"+
 						"<p><span>{{item.name}} ( {{item.email}} )</span><small>created {{item.created}}</small></div>"
 					}
 				});
