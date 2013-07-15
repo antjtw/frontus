@@ -31,7 +31,6 @@ app.run(function($rootScope) {
 });
 
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
-  window.SWBrijj = SWBrijj;
   
   SWBrijj.tblm('account.my_company').then(function(x) {
     $scope.company = x[0]["name"];
