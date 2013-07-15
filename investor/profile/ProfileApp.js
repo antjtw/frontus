@@ -24,20 +24,6 @@ app.controller("MainProfileController", function($scope, $location) {
       return p == x; };
 } );
 
-app.run(function($rootScope) {
-  $rootScope.notification = {};
-  $rootScope.notification.color = "success";
-  $rootScope.notification.visible = false;
-  $rootScope.notification.message = "Notification Message";
-
-  $rootScope.notification.show = function (color, message) {
-    $rootScope.notification.visible = true;
-    $rootScope.notification.color = color;
-    $rootScope.notification.message = message;
-    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
-  };
-});
-
 function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.pictureModalOpen = function () {
@@ -71,7 +57,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { 
           console.log("saved: "+x);
-          $route.reload(); $scope.$apply();
+          $route.reload();
           $rootScope.notification.show("success", "Your profile has been updated successfully.");
       }).except(function(x) {
           $rootScope.notification.show("fail", "There was an error updating your profile.");

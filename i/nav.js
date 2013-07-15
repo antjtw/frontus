@@ -1,4 +1,4 @@
-function NavCtrl($scope, SWBrijj) {
+function NavCtrl($scope, $rootScope, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$scope.selected = ['Company', 'example.com'];
@@ -60,4 +60,15 @@ function NavCtrl($scope, SWBrijj) {
 		$scope.select($scope.companies[0]['company']);
 	});
 
+  $rootScope.notification = {};
+  $rootScope.notification.color = "success";
+  $rootScope.notification.visible = false;
+  $rootScope.notification.message = "Notification Message";
+
+  $rootScope.notification.show = function (color, message) {
+    $rootScope.notification.visible = true;
+    $rootScope.notification.color = color;
+    $rootScope.notification.message = message;
+    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
+  };
 }
