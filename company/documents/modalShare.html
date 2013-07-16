@@ -1,0 +1,25 @@
+<div>
+
+  <div class="modalHeader">
+    <p class="subText">Share a Document</p>
+  </div>
+  <div class="modalText">
+
+    <div class="dropbox" ng-class="dropClass">
+      <span>{{dropText}}</span>
+    </div>
+
+    <div ng-show="files.length">
+      <div ng-repeat="file in files.slice(0)">
+        <span>{{file.webkitRelativePath || file.name}}</span>
+        (<span>{{fmtFileSize(file)}}</span>)
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modalButtons">
+    <input class="bodyText button uploadButton" type="button" ng-click="share()" value="Share" />
+  </div>
+
+</div>
