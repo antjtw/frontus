@@ -2,7 +2,8 @@
 
 /* App Module */
 
-var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj']);
+var owner = angular
+  .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj'])
 
 owner.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -299,6 +300,8 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
 
   SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
 
+  $scope.radioModel = "Middle";
+
   $scope.issuetypes = [];
   $scope.freqtypes = [];
   $scope.issuekeys = [];
@@ -344,7 +347,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
         $scope.trans[i].investorkey = $scope.trans[i].investor;
           if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
             $scope.uniquerows.push($scope.trans[i].investor);
-            $scope.rows.push({"name":$scope.trans[i].investor, "namekey":$scope.trans[i].investor, "editable":"yes"});
+            $scope.rows.push({"name":$scope.trans[i].investor, "namekey":$scope.trans[i].investor, "editable":"yes", "state":false});
           }
         angular.forEach($scope.issues, function(issue) {
           if ($scope.trans[i].issue == issue.issue) {
@@ -443,6 +446,15 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
   var index = allowablekeys.indexOf(currentcolumn);
   allowablekeys.splice(index, 1);
   $scope.allowKeys = allowablekeys;
+
+  angular.forEach($scope.rows, function(row) {
+    if (row.name == currenttran) {
+      row.state = true;
+    }
+    else {
+      row.state = false;
+    }
+  });
 
   var first = 0
   angular.forEach($scope.trans, function(tran) {
@@ -863,6 +875,8 @@ $scope.saveTran = function(transaction) {
             if (row.name == tran.investor) {
                 if (tran.investor == transaction.investor) {
                   if (tran.issue == transaction.issue) {
+                    var offset = tran.date.getTimezoneOffset();
+                    tran.date = tran.date.addMinutes(offset);
                     tran.key = tran.issue;
                     tran.tran_id=data[1][0];
                     transaction.datekey = d1

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="//f.fontdeck.com/s/css/Sk01QiUza5Fd1rTYpAE4MmxZXTo/DOMAIN_NAME/35219.css" type="text/css" />
 <!-- logo font -->
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
+<link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
 
 
  <script src="/lib/jquery/jquery-1.8.3.js"></script>

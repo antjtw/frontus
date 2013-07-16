@@ -56,7 +56,7 @@
   </div>
 
   <div class="row-fluid">
-    <div class="span9 docLibrary leftBlock" style="overflow:auto;">
+    <div class="span8 docLibrary leftBlock" style="overflow:auto;">
       <div class="headsection row-fluid">
         <h1>{{cinfo[0].name}}</h1>
 
@@ -71,14 +71,43 @@
       </div>
 
       <div class="row-fluid">
-        <div style="float:right">
-           <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Captable</button>
+        <div class="subnav-controls">
+          <div>
+            <div class="pull-left">
+              <div class="edittoggle btn-group">
+                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Left'"><span data-icon="&#xe001;" aria-hidden="true"></button>
+                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Middle'"><span data-icon="&#xe00e;" aria-hidden="true"></button>
+              </div>
+            </div>
+            <div class="pull-left">
+              <p class="pull-left">DILUTION</p>
+              <div class="pull-left onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                <label class="onoffswitch-label" for="myonoffswitch">
+                  <div class="onoffswitch-inner"></div>
+                  <div class="onoffswitch-switch"></div>
+                </label>
+              </div>
+            </div>
+            <div class="pull-left">
+              <div class="btn-group">
+                <button ng-click="modalUp()" class="btn btn-mini"><span data-icon="&#xe027;" aria-hidden="true"></button>
+                <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <!-- dropdown menu links -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="DivHelper"></div>
         </div>
       </div>
 
 
       <div class="row-fluid">
-       <table class="tableView bodyText">
+       <table class="captable tableView bodyText">
             <tr class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
@@ -87,8 +116,8 @@
               </th>
             </tr>
           <tr ng-repeat="row in rows">
-            <td><input disabled value="{{shareSum(row);}}"></input></td>
-            <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+            <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
+            <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
             <td>
               <span ng-switch on="row.nameeditable">
                 <span ng-switch-default>
@@ -98,11 +127,11 @@
                   <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
                 </span>
             </td>
-            <td ng-repeat="key in issuekeys | orderBy:issueSort">
+            <td ng-class="{tranSelected:row.state}" ng-repeat="key in issuekeys | orderBy:issueSort">
               <span ng-switch on="row.editable">
                 <span ng-switch-default>
-                <input class="captablepair" maxlength="10" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                <input class="captablepair" maxlength="10" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+                <input ng-class="{tranSelected:row.state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                <input ng-class="{tranSelected:row.state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
                 </span>
                 <span ng-switch-when="0">
                 <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
@@ -113,7 +142,7 @@
           </tr>
           <tr class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>
-            <td><input disabled value="100%"></input></td>
+            <td><input disabled value="100.00%"></input></td>
             <td></td>
             <td ng-repeat="one in issues">
               <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}"</input>
@@ -125,7 +154,7 @@
     </div>
 
 
-    <div class="span3">
+    <div class="span4 capright">
       <div class="row-fluid">
         <div ng-switch on="sideBar" >
           <span ng-switch-when="1">
@@ -187,27 +216,36 @@
           <span ng-switch-when="2">
             <div class="headsection row-fluid">
               <h2>{{activeInvestor}}</h2>
-              <p>Customize terms for this investor</p>
+              <p>Customize terms for this shareholder</p>
             </div>
-            <button ng-click="createTran();">Add</button>
-            <tabs>
-              <pane ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
-                <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                <p>Paid<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
-                <p>Shares<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
-                <button ng-click="manualdeleteTran(tran);">Delete</button>
-
+            <!-- <button ng-click="createTran();">Add</button> -->
+            <tabs class="trantabs">
+              <pane ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+                <div class="row-fluid trancore">
+                  <div>
+                    <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yy" bs-datepicker></p>
+                  </div>
+                  <div class="DivHelper"></div>
+                </div>
+                <div class="row-fluid trancore">
+                  <div>
+                    <p>Paid $<input maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
+                    <p>Shares<input maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
+                  </div>
+                  <div class="DivHelper"></div>
+                </div>
+                <!-- <button ng-click="manualdeleteTran(tran);">Delete</button> -->
                 <accordion close-others="true">
                   <accordion-group heading="Valuation">
-                    <p>Pre Money<input disabled pattern="[0-9]*(.[0-9]*)*" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.premoney"></input></p>
-                    <p>Post Money<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.postmoney"></input></p>
-                    <p>Price Per Share<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.ppshare"></input></p>
-                    <p>Total Authorized<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.totalauth"></input></p>
-                    <p>Liquidation Preference
+                    <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.premoney"></input></p>
+                    <p class="rightTitle"><span>Post Money</span><input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.postmoney"></input></p>
+                    <p class="rightTitle"><span>Price Per Share</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.ppshare"></input></p>
+                    <p class="rightTitle"><span>Total Authorized</span><input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.totalauth"></input></p>
+                    <p class="rightTitle"><span>Liquidation Preference</span>
                       <select ng-init="tranIssue.liquidpref" ng-change="saveTran(tran)" ng-model="tran.liquidpref" ng-options="i for i in tf">
                       </select>
                     </p>
-                    <p>Participating Preferred
+                    <p class="rightTitle"><span>Participating Preferred</span>
                       <select ng-init="tran.partpref" ng-change="saveTran(tran)" ng-model="tran.partpref" ng-options="i for i in tf">
                       </select>
                     </p>
@@ -220,7 +258,6 @@
                         </select>
                       </p>
                       <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                      <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
                       <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
                       <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                       <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
@@ -245,6 +282,7 @@
                     </span>
                 </accordion>
               </pane>
+              <pane heading="add"></pane>
             </tabs>
           </span>
 
