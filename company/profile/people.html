@@ -14,7 +14,7 @@
         <tr>
         <td><img src=""><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a> <span class="label" ng-show="person.role=='issuer'">ADMIN</span></td> 
         <td><img src="">{{person.email}}</td>
-        <td class="button" ng-click="(opendetails(person.noaction))"><i class="icon-cog"></i>
+        <td class="button"><i class="icon-cog" popover-animation="true" popover-placement="bottom" popover-html-unsafe="<i class='icon-trash'></i> {{person.email}}"></i>
         </tr>
       </tbody>
     </table>
