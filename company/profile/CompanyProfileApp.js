@@ -17,6 +17,10 @@ app.controller("MainProfileController", function($scope, $location) {
 
 } );
 
+function hidePopover() {
+  angular.element('.popover').hide();
+}
+
 function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   
   $scope.pictureModalOpen = function () {
@@ -37,6 +41,16 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.adminModal = false;
   };
 
+  $scope.revokeModalOpen = function (email) {
+    $scope.selectedToRevoke = email;
+    $scope.revokeModal = true;
+  };
+
+  $scope.revokeModalClose = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.revokeModal = false;
+  };
+
   $scope.opts = {
     backdropFade: true,
     dialogFade:true
@@ -51,6 +65,16 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       $rootScope.notification.show("fail", "There was an error adding an admin.");
     });
   };
+
+  $scope.revokeAdmin = function() {
+    SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function(x) {
+      $route.reload();
+      $rootScope.notification.show("success", "An admin has been revoked successfully.");
+    }).except(function(x) {
+      console.log(x);
+      $rootScope.notification.show("fail", "There was an error revoking an admin.");
+    });
+  }
 
   $scope.contactSave = function () {
     if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
@@ -113,6 +137,14 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
+
+  angular.element('body').click(function(x) {
+    if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
+      x.preventDefault();
+      return;
+    }
+    hidePopover();
+  });
 
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     $scope.people = x;

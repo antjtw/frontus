@@ -29,7 +29,7 @@
         <tbody ng-repeat="admin in admins">
           <tr>
           <td><img src=""><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
-          <td class="button" ng-click="(opendetails(admin.noaction))"><i class="icon-cog"></i>
+          <td class="button"><i ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
       </table>
@@ -116,5 +116,16 @@
   </div>
   <div class="modalButtons">
     <button class="button subText greyButton" ng-click="adminModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+  </div>
+</div>
+<div modal="revokeModal" close="revokeModalClose()" options="opts">
+  <div class="modalHeader">
+    <p class="subText">Remove an Administrator</p>
+  </div>
+  <div class="modalText">
+    <p>Do you want to remove this person as an administrator? {{selectedToRevoke}}</p>
+  </div>
+  <div class="modalButtons">
+    <button class="button subText greyButton" ng-click="revokeModalClose()">Cancel</button> <input class="button subText greenButton" type="button" ng-click="revokeAdmin(); revokeModalClose();" value="Remove" />
   </div>
 </div>
