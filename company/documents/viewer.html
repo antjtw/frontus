@@ -1,0 +1,76 @@
+<div class="container"> <!-- data-ng-init="init()" ng-controller="ModalShareCtrl" -->
+
+
+  <div modal="shouldBeOpen" close="close()" options="opts">
+                <div class="modalHeader">
+                    <p class="subText">Share Document</p>
+                </div>
+               	
+                <div class="modalText">
+                <form>
+                    <p>Add People</p>
+                    <input ng-model="sendeeEmail" type="email">
+                    <p>Message</p>
+                    <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
+                    <label>Needs Signing? : <input type="checkbox" ng-model="needsign"/>Yes</label>
+                </form>
+                  </div>
+                <div class="modalButtons">
+                    <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail, needsign)">Send</button>
+                </div>
+            </div>
+
+  <div style="float:right">
+    <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</button>
+    <div style="float:right;" class="dropdown clearfix" ng-class="{open: open}">
+      <a class="multi_dropdown dropdown-toggle" href="#" ng-click="open=!open"><span class="caret"></span></a>
+      <ul class="dropdown-menu multi_menu subText" role="menu" aria-labelledby="dropdownMenu">
+        <li><a tabindex="-1" href="#">Print Document</a></li>
+        <li><a tabindex="-1" href="#">Download Document</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <ul class="subText navPills cf">
+    <li class="selectedPill button">View</li>
+    <li class="button"><a href="/company/documents/status?doc={{documents.doc_id}}">Status</a></li>
+  </ul>
+
+  <h1>
+    <a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>{{docname}}
+  </h1>
+  <doc-viewer doc-id="docId" invq="false"></doc-viewer>
+
+  <h1>
+
+
+
+</div>
+<script>
+		var ModalShareCtrl = function ($scope) {
+		
+		  $scope.modalUp = function () {
+			$scope.shouldBeOpen = true;
+		  };
+		
+		  $scope.close = function () {
+			$scope.closeMsg = 'I was closed at: ' + new Date();
+			$scope.shouldBeOpen = false;
+		  };
+		
+		  $scope.opts = {
+			backdropFade: true,
+			dialogFade:true,
+    		dialogClass: 'modal shareModal'
+		  };
+		
+		};
+		
+			
+				
+		function failed() {
+				alert("failed")
+			}
+ </script>
+
+         

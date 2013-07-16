@@ -658,7 +658,7 @@ ul>li.curPage {
 
 .capEditHeaders {
 	width: 200px !important;
-};
+}
 
 .longRow td {
 	width: 150px !important;
@@ -667,13 +667,13 @@ ul>li.curPage {
 .captablepair {
 	display: inline-block;
 	float: left;
-};
+}
 
 /* Grants Table */
 
 .tableView tr.rowSelected {
 	background-color: #f0f0f0;
-};
+}
 
 /* Buttons */
 
@@ -1017,3 +1017,6 @@ ul>li.curPage {
     margin-left: 20px;
 }
 
+.dropbox {
+    margin:auto;
+}

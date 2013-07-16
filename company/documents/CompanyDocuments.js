@@ -8,9 +8,9 @@ docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
     
   $routeProvider.
-      when('/', {templateUrl: 'docuview.html',   controller: documentListController}).
-      when('/view', {templateUrl: 'docuviewer.html', controller: documentViewController}).
-	  when('/status', {templateUrl: 'docustatus.html', controller: documentStatusController}).
+      when('/', {templateUrl: 'list.html',   controller: documentListController}).
+      when('/view', {templateUrl: 'viewer.html', controller: CompanyDocumentViewController}).
+	    when('/status', {templateUrl: 'status.html', controller: documentStatusController}).
       otherwise({redirectTo: '/'});
 });
 
@@ -33,9 +33,21 @@ docviews.directive('indstatus', function() {
   };
 });
 
+
+docviews.directive('library', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, elm, attrs) {
+       scope.listScrolls = function() {
+         return elm[0].scrollHeight > elm[0].height;
+       }
+    }
+  }
+});
+
 /* Controllers */
 
-var documentListController = function($scope,SWBrijj) {
+var documentListController = function($scope, SWBrijj) {
 	SWBrijj.tblm('document.my_company_library').then(function(data) {
 	$scope.documents = data;
 	});
@@ -57,16 +69,6 @@ var documentListController = function($scope,SWBrijj) {
         var re = new RegExp($scope.query, 'i');
         return !$scope.query || re.test(obj.docname);
     };
-			
-	$scope.delete = function(docname) {
-	  SWBrijj.procm("document.delete_document", parseInt(docname.doc_id)).then(function(data) {
-		  console.log(data);
-		  $scope.documents.forEach(function(docu) {				  
-			if (docname === docu)
-				$scope.documents.splice($scope.documents.indexOf(docname),1);
-			});
-		});				  
-	};
 
 	$scope.open = function (doc) {
 			$scope.shouldBeOpen = true;
@@ -221,75 +223,20 @@ var documentListController = function($scope,SWBrijj) {
     }	
 };
 
-function documentViewController($scope, $routeParams, SWBrijj) {
-  var docId = $routeParams.doc;
-  $scope.currentDoc = docId;
+
+function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
+  $scope.docId = parseInt($routeParams.doc);
   $scope.invq = false;
+  $scope.library = "document.my_company_library";
+  $scope.pages = "document.my_company_doc_length";
 
-  SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {
-	$scope.documents = data[0];
-	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.documents.docname + ".";
-	});
-	
-  
-  
-  var imageObj = new Image();
-  imageObj.src = "/photo/docpg?id="+docId+"&page=1";
-  
-  $scope.doclength = 1;
-  
-  imageObj.onload = function() {
-	    SWBrijj.procm("document.get_doclength", parseInt(docId)).then(function(data) {
-			console.log(data);
-			$scope.doclength = data[0];
-			console.log($scope.doclength);
-			var width = 1024;
-			var scaling = (imageObj.height/imageObj.width);
-			var height = (1024 * scaling);
-			var n = $scope.doclength.get_doclength + 1;
-			console.log(n);
-			$scope.images = [];
-			for(var i=1; i<n; i++) {
-				$scope.images.push({"src": "", "pagenum": i});
-			}
-			$scope.images[0].src = imageObj.src;
-			$scope.currentPage = {"src": $scope.images[0].src, "pageNum": $scope.images[0].pagenum};
-			$scope.$apply();
-		});
-      };
+  $scope.init = function () {
+    SWBrijj.tblm("document.my_company_library", "doc_id", $scope.docId).then(function(data) {
+      $scope.document=data;
+    });
 
-	$scope.nextPage = function(value) {
-		console.log(value);
-		var pageRequired = parseInt(value) + 1;
-		console.log(pageRequired);
-		if ($scope.images[pageRequired-1].src == "") {
-			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
-		}
-		$scope.currentPage.src = ($scope.images[pageRequired-1].src);
-		$scope.currentPage.pageNum = pageRequired;
+  };
 
-	};
-
-	$scope.previousPage = function(value) {
-		var pageRequired = parseInt(value) - 1;
-		if (pageRequired > 0) {
-			if ($scope.images[pageRequired-1].src == "") {
-				$scope.images[pageRequired-1].src ='/photo/docpg?id=' +$scope.currentDoc+'&page='+pageRequired;
-			}
-			$scope.currentPage.src = ($scope.images[pageRequired-1].src);
-			$scope.currentPage.pageNum = pageRequired;
-			}
-	};
-
-	$scope.jumpPage = function(pageRequired) {
-		if ($scope.images[pageRequired-1].src == "") {
-			$scope.images[pageRequired-1].src ='/photo/docpg?id='+$scope.currentDoc+'&page=' +pageRequired;
-		}
-		$scope.currentPage.src = ($scope.images[pageRequired-1].src);
-		$scope.currentPage.pageNum = pageRequired;
-
-	};
-	
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", parseInt(docId), email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
@@ -311,6 +258,15 @@ function documentViewController($scope, $routeParams, SWBrijj) {
     		dialogClass: 'modal shareModal'
 		  };
 }
+
+
+
+
+
+
+
+
+
 
 function documentStatusController($scope, $routeParams, SWBrijj) {
   var docId = $routeParams.doc;
@@ -483,7 +439,7 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 			$scope.closeMsg = 'I was closed at: ' + new Date();
 			$scope.shouldBeOpen = false;
 		  };
-		
+
 		  $scope.opts = {
 			backdropFade: true,
 			dialogFade:true,

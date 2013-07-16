@@ -152,12 +152,12 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     $scope.when_signed = "";
     $scope.notes=[];
 
-    SWBrijj.tblm("document.my_investor_doc_length", "doc_id", $scope.docId).then(function(data) {
+    SWBrijj.tblm($scope.$parent.pages, "doc_id", $scope.docId).then(function(data) {
       $scope.docLength = data.page_count;
       // does scaling happen here?
       $scope.currentPage = 1;
     });
-    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
+    SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.signable = data["signature_status"] == 'signature requested';
       $scope.signed = data["when_signed"];
     });
