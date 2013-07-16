@@ -62,6 +62,7 @@ function NavCtrl($scope, $rootScope, SWBrijj) {
 
 	$rootScope.notification = {};
 	$rootScope.notification.color = "success";
+	$rootScope.notification.style = "notification " + $rootScope.notification.color;
 	$rootScope.notification.visible = false;
 	$rootScope.notification.message = "Notification Message";
 

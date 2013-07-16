@@ -58,9 +58,9 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         .then(function (x) { 
           console.log("saved: "+x);
           $route.reload();
-          $rootScope.notification.show("success", "Your profile has been updated successfully.");
+          $rootScope.notification.show("success", "Profile successfully updated");
       }).except(function(x) {
-          $rootScope.notification.show("fail", "There was an error updating your profile.");
+          $rootScope.notification.show("fail", "Something went wrong, please try again later.");
       });
   };
   //noinspection JSUnresolvedVariable
@@ -169,11 +169,11 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
         SWBrijj.uploadImage(fd).then(function(x) {
           $route.reload();
           console.log(x);
-          $rootScope.notification.show("green", "Your profile picture has been updated successfully.");
+          $rootScope.notification.show("green", "Profile photo successfully updated");
         }).except( function(x) { 
           $route.reload();
           console.log(x);
-          $rootScope.notification.show("fail", "There was an error updating your profile picture.");
+          $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
         });
         /*var xhr = new XMLHttpRequest()
         xhr.upload.addEventListener("progress", uploadProgress, false);

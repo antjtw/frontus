@@ -59,20 +59,20 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
       $route.reload();
-      $rootScope.notification.show("success", "An admin has been created successfully.");
+      $rootScope.notification.show("success", "Invitation sent");
     }).except(function(x) {
       console.log(x);
-      $rootScope.notification.show("fail", "There was an error adding an admin.");
+      $rootScope.notification.show("fail", "Something went wrong, please try again later.");
     });
   };
 
   $scope.revokeAdmin = function() {
     SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function(x) {
       $route.reload();
-      $rootScope.notification.show("success", "An admin has been revoked successfully.");
+      $rootScope.notification.show("success", "Privileges updated");
     }).except(function(x) {
       console.log(x);
-      $rootScope.notification.show("fail", "There was an error revoking an admin.");
+      $rootScope.notification.show("fail", "Something went wrong, please try again later.");
     });
   }
 
@@ -300,11 +300,11 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
         SWBrijj.uploadLogo(fd).then(function(x) {
           $route.reload(); $scope.$apply();
           console.log(x);
-          $rootScope.notification.show("green", "Your company logo has been updated successfully.");
+          $rootScope.notification.show("green", "Company logo successfully updated");
         }).except( function(x) { 
           $route.reload(); $scope.$apply();
           console.log(x);
-          $rootScope.notification.show("fail", "There was an error updating your company logo.");
+          $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
         });
     };
 
