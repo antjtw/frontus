@@ -77,7 +77,7 @@
     <p class="subText">Profile Picture</p>
   </div>
   <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG file.</p>
+    <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
@@ -93,7 +93,7 @@
   </div>
 
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+    <button class="button subText greyButton" ng-click="pictureModalClose()">Cancel</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
   </div>
 </div>
 <div modal="adminModal" close="adminModalClose()" options="opts">
@@ -123,7 +123,7 @@
     <p class="subText">Remove an Administrator</p>
   </div>
   <div class="modalText">
-    <p>Do you want to remove this person as an administrator? {{selectedToRevoke}}</p>
+    <p>Do you want to remove this person as an administrator?</p>
   </div>
   <div class="modalButtons">
     <button class="button subText greyButton" ng-click="revokeModalClose()">Cancel</button> <input class="button subText greenButton" type="button" ng-click="revokeAdmin(); revokeModalClose();" value="Remove" />
