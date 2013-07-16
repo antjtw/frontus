@@ -149,7 +149,10 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     $scope.people = x;
     $scope.sort = 'name';
-  }).except(initFail);
+  }).except(function(x) {
+    console.log(x);
+    initFail();
+  });
 
   $scope.sortBy = function(col) {
       if ($scope.sort == col) {
@@ -163,9 +166,14 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
   var rowNumber;
-  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) { //TODO: NEW TBLM with where statement
+  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+    if (!x.name) {
+      history.back();
+    }
     $scope.user = x;
-  }).except(initFail);
+  }).except(function(x) {
+    console.log(x);
+  });
 
   SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
     $scope.docs = x;
