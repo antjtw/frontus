@@ -171,8 +171,8 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       history.back();
     }
     $scope.user = x;
-  }).except(function(x) {
-    console.log(x);
+  }).except(function(err) {
+    history.back();
   });
 
   SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {

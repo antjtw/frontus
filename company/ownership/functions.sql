@@ -197,7 +197,7 @@ BEGIN
   		update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
   		INSERT INTO account.investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
   	ELSE
-  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/captable/?' , NEW.company));
+  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
 	template = replace(template, '{{company}}', NEW.company);
@@ -231,3 +231,5 @@ LANGUAGE plpgsql;
 
 CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
 GRANT SELECT on ownership.user_tracker TO investor;
+
+
