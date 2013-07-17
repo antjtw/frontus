@@ -1140,7 +1140,7 @@ h2 {
 /* ios button thingy */
 
 .onoffswitch {
-    position: relative; width: 90px;
+    position: relative; width: 70px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 
@@ -1160,15 +1160,14 @@ h2 {
 }
 
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    float: left; width: 50%; height: 24px; padding: 0; line-height: 24px;
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
 
 .onoffswitch-inner:before {
     content: "ON";
     padding-left: 10px;
-    background-color: #EEEEEE; color: #06B30B;
+    background-color: #EEEEEE; color: #15A085;
 }
 
 .onoffswitch-inner:after {
@@ -1182,7 +1181,7 @@ h2 {
     width: 24px; margin: 3px;
     background: #A1A1A1;
     border: 2px solid #999999; border-radius: 20px;
-    position: absolute; top: 0; bottom: 0; right: 56px;
+    position: absolute; top: 0; bottom: 0; right: 36px;
     -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
 }
