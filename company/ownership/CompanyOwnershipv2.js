@@ -1251,6 +1251,8 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
 var statusController = function($scope, SWBrijj) {
 
+  SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
+
   SWBrijj.tblm("ownership.company_audit").then(function(data) {
     $scope.userStatus = data;
     for (var i = 0; i < $scope.userStatus.length; i++) {
