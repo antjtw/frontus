@@ -37,3 +37,7 @@
     </div>
   </div>
 </div>
+
+<!--Notification Bar-->
+<div ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
+

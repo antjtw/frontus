@@ -56,3 +56,13 @@ BEGIN
 	RETURN QUERY SELECT * from ownership.my_company_issue where company = comp::account.company_type;
 END
 $$;
+
+--Allows an issuer to view the ownership activity of an investor in his company
+CREATE OR REPLACE FUNCTION ownership.get_investor_activity_feed(xemail account.email)
+ RETURNS SETOF ownership.company_activity_feed
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY SELECT * from ownership.company_activity_feed where email = xemail;
+END
+$$;

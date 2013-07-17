@@ -16,22 +16,7 @@ app.controller("MainController", function($scope, $location) {
 
 } );
 
-app.run(function($rootScope) {
-  $rootScope.notification = {};
-  $rootScope.notification.color = "success";
-  $rootScope.notification.visible = false;
-  $rootScope.notification.message = "Notification Message";
-
-  $rootScope.notification.show = function (color, message) {
-    $rootScope.notification.visible = true;
-    $rootScope.notification.color = color;
-    $rootScope.notification.message = message;
-    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
-  };
-});
-
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
-  window.SWBrijj = SWBrijj;
   
   SWBrijj.tblm('account.my_company').then(function(x) {
     $scope.company = x[0]["name"];

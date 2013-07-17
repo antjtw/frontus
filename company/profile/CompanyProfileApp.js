@@ -17,19 +17,9 @@ app.controller("MainProfileController", function($scope, $location) {
 
 } );
 
-app.run(function($rootScope) {
-  $rootScope.notification = {};
-  $rootScope.notification.color = "success";
-  $rootScope.notification.visible = false;
-  $rootScope.notification.message = "Notification Message";
-
-  $rootScope.notification.show = function (color, message) {
-    $rootScope.notification.visible = true;
-    $rootScope.notification.color = color;
-    $rootScope.notification.message = message;
-    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
-  };
-});
+function hidePopover() {
+  angular.element('.popover').hide();
+}
 
 function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   
@@ -51,6 +41,16 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.adminModal = false;
   };
 
+  $scope.revokeModalOpen = function (email) {
+    $scope.selectedToRevoke = email;
+    $scope.revokeModal = true;
+  };
+
+  $scope.revokeModalClose = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.revokeModal = false;
+  };
+
   $scope.opts = {
     backdropFade: true,
     dialogFade:true
@@ -59,12 +59,22 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
       $route.reload();
-        $rootScope.notification.show("success", "An admin has been created successfully.");
+      $rootScope.notification.show("success", "Invitation sent");
     }).except(function(x) {
-        console.log(x);
-        $rootScope.notification.show("fail", "There was an error adding an admin.");
+      console.log(x);
+      $rootScope.notification.show("fail", "Something went wrong, please try again later.");
     });
   };
+
+  $scope.revokeAdmin = function() {
+    SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function(x) {
+      $route.reload();
+      $rootScope.notification.show("success", "Privileges updated");
+    }).except(function(x) {
+      console.log(x);
+      $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+    });
+  }
 
   $scope.contactSave = function () {
     if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
@@ -128,10 +138,21 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
+  angular.element('body').click(function(x) {
+    if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
+      x.preventDefault();
+      return;
+    }
+    hidePopover();
+  });
+
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     $scope.people = x;
     $scope.sort = 'name';
-  }).except(initFail);
+  }).except(function(x) {
+    console.log(x);
+    initFail();
+  });
 
   $scope.sortBy = function(col) {
       if ($scope.sort == col) {
@@ -145,9 +166,14 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
   var rowNumber;
-  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) { //TODO: NEW TBLM with where statement
+  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+    if (!x.name) {
+      history.back();
+    }
     $scope.user = x;
-  }).except(initFail);
+  }).except(function(err) {
+    history.back();
+  });
 
   SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
     $scope.docs = x;
@@ -282,11 +308,11 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
         SWBrijj.uploadLogo(fd).then(function(x) {
           $route.reload(); $scope.$apply();
           console.log(x);
-          $rootScope.notification.show("green", "Your company logo has been updated successfully.");
+          $rootScope.notification.show("green", "Company logo successfully updated");
         }).except( function(x) { 
           $route.reload(); $scope.$apply();
           console.log(x);
-          $rootScope.notification.show("fail", "There was an error updating your company logo.");
+          $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
         });
     };
 

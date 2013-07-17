@@ -24,20 +24,6 @@ app.controller("MainProfileController", function($scope, $location) {
       return p == x; };
 } );
 
-app.run(function($rootScope) {
-  $rootScope.notification = {};
-  $rootScope.notification.color = "success";
-  $rootScope.notification.visible = false;
-  $rootScope.notification.message = "Notification Message";
-
-  $rootScope.notification.show = function (color, message) {
-    $rootScope.notification.visible = true;
-    $rootScope.notification.color = color;
-    $rootScope.notification.message = message;
-    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
-  };
-});
-
 function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.pictureModalOpen = function () {
@@ -71,10 +57,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
         .then(function (x) { 
           console.log("saved: "+x);
-          $route.reload(); $scope.$apply();
-          $rootScope.notification.show("success", "Your profile has been updated successfully.");
+          $route.reload();
+          $rootScope.notification.show("success", "Profile successfully updated");
       }).except(function(x) {
-          $rootScope.notification.show("fail", "There was an error updating your profile.");
+          $rootScope.notification.show("fail", "Something went wrong, please try again later.");
       });
   };
   //noinspection JSUnresolvedVariable
@@ -183,11 +169,11 @@ app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $roo
         SWBrijj.uploadImage(fd).then(function(x) {
           $route.reload();
           console.log(x);
-          $rootScope.notification.show("green", "Your profile picture has been updated successfully.");
+          $rootScope.notification.show("green", "Profile photo successfully updated");
         }).except( function(x) { 
           $route.reload();
           console.log(x);
-          $rootScope.notification.show("fail", "There was an error updating your profile picture.");
+          $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
         });
         /*var xhr = new XMLHttpRequest()
         xhr.upload.addEventListener("progress", uploadProgress, false);

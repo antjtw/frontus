@@ -1,5 +1,3 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
 
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
@@ -43,7 +41,7 @@
     <p class="subText">Profile Picture</p>
   </div>
   <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG file.</p>
+    <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
@@ -59,7 +57,7 @@
   </div>
 
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+    <button class="button subText greyButton" ng-click="pictureModalClose()">Cancel</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
   </div>
 </div>
 
@@ -113,12 +111,12 @@
      </div>
   </div>
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="passwordsModalClose()">Take Me Back</button>
+    <button class="button subText greyButton" ng-click="passwordsModalClose()">Cancel</button>
     <div
        data-step='3' data-intro='The button is disabled unless the new passwords match and fulfill the requirements for passwords'
        data-position='top'
        ><a ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }"
-      ng-click="changePassword(); passwordModalClose()">Save</a></div>
+      ng-click="changePassword(); passwordModalClose()">Change</a></div>
   </div>
 
   </fieldset>
