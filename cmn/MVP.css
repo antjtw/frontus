@@ -916,18 +916,8 @@ h2 {
 
 /* Captable */
 
-.edittoggle > .btn {
-	border-radius: 0px !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
-	color: #A6A6A6;
-	height: 30px;
-	width: 30px;
-	padding: 0 0 0 0;
-}
-
-.edittoggle > .btn.active {
-	color: #15A085;
+.capcontainer {
+	overflow: auto;
 }
 
 .tableView.captable  {
@@ -1032,6 +1022,68 @@ h2 {
 	background-color: #FFFFFF;
 	background-image: none;
 	border: 1px solid #E3E3E3;
+}
+
+/* Dropdown buttons */
+
+.edittoggle > .btn {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	color: #A6A6A6;
+	height: 30px;
+	width: 30px;
+	padding: 0 0 0 0;
+}
+
+.minidrop > .btn {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	height: 30px;
+	width: 20px;
+	padding: 0 0 0 0;
+}
+
+.minidrop > .btn > span {
+	margin-left: -3px;
+}
+
+.minidrop > .btn:first-child {
+	width: 30px;
+}
+
+.edittoggle > .btn.active {
+	color: #15A085;
+}
+
+.minidrop > ul {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	width: 150px;
+	min-width: 150px;
+}
+
+.minidrop > ul > li {
+	height: 20px;
+	width: 150px;
+}
+
+.minidrop > ul > li > a {
+	height: 20px;
+	padding: 0 20px 0 20px;
+}
+
+.namedtoggle {
+	height: 30px;
+}
+
+.namedtoggle > p {
+	margin-right: 10px;
+	line-height: 30px;
 }
 
 .button:hover {
