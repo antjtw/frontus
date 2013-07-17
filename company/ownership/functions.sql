@@ -227,9 +227,4 @@ END;
 $$
 LANGUAGE plpgsql;
 
--- Get login info for investors who have logged in
-
-CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
-GRANT SELECT on ownership.user_tracker TO investor;
-
 

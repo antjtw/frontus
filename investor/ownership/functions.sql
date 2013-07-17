@@ -2,21 +2,6 @@
 
 -- Function to track views
 
-CREATE OR REPLACE VIEW ownership.my_company_issue AS (SELECT * from ownership.issue where company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_issue to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_transaction AS (SELECT * from ownership.transaction where company in (SELECT distinct company from ownership.audit where email=current_user) and investor=current_user);
-GRANT SELECT ON ownership.my_company_transaction to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_othertran AS (select sum(units) as units from ownership.transaction where investor != current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_othertran to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_audit AS (SELECT * from ownership.audit where email=current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_audit to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_views AS (SELECT * from ownership.views where company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT INSERT ON ownership.my_company_views to INVESTOR;
-
 CREATE OR REPLACE FUNCTION ownership.mark_viewed(comp character varying)
  RETURNS boolean
  LANGUAGE plpgsql
