@@ -7,8 +7,8 @@ docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
     
   $routeProvider.
-      when('/', {templateUrl: 'docuview.html',   controller: InvestorDocumentListController}).
-      when('/view', {templateUrl: 'docuviewer.html', controller: InvestorDocumentViewController}).
+      when('/', {templateUrl: 'list.html',   controller: InvestorDocumentListController}).
+      when('/view', {templateUrl: 'viewer.html', controller: InvestorDocumentViewController}).
       otherwise({redirectTo: '/'});
 });
 
@@ -57,10 +57,13 @@ function InvestorDocumentListController($scope, SWBrijj) {
 
 function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
   $scope.docId = parseInt($routeParams.doc);
+  $scope.library = "document.my_investor_library";
+  $scope.pages = "document.my_investor_doc_length";
+  $scope.invq = true;
 
   $scope.init = function () {
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-      $scope.docname=data.docname;
+      $scope.document=data;
     });
 
   };

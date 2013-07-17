@@ -2,6 +2,7 @@
 
   <div modal="shouldBeOpen" close="close()" options="opts" modaldelete></div>
 	<div modal="upModal" close="upClose()" options="upopts" modalupload></div>
+  <div modal="shareModal" modalshare></div>
 
   <div class="row-fluid">
   	<br>
@@ -9,9 +10,9 @@
   	<a ng-click="upModal=true"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
   	<br>
     
-    <section class="docLibrary statusBlock">
-         <div>
-         <p class="searchBox">Search: <input ng-model="query"></p>
+    <section class="docLibrary statusBlock" library>
+         <div ng-show="listScrolls()">
+         <p class="searchBox" ng-show="listScrolls()">Search: <input ng-model="query"></p>
          </div>
             <table class="tableView bodyText">
               <tr class="subText">
@@ -21,10 +22,10 @@
                 <td><a href="/company/documents/view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
                 <!-- The four buttons for each row -->
-                <td class="button"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share  icon-large"></i></span></td>
+                  <td class="button" ng-click="askShare()"><span tooltip-placement="bottom" tooltip="Share">
+                  <i class="icon-share  icon-large"></i></span></td>
                 <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
                 <td class="button"><a href="/company/documents/status?doc={{doc.doc_id}}"><span tooltip-placement="bottom" tooltip="Status"><i class="icon-search icon-large"></i></span></a></td>
-                <td class="button"><a ng-click="open(doc)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-trash  icon-large"></i></span></a></td>
               </tr>
             </table>
     </section>

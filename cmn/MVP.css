@@ -797,8 +797,12 @@ h2 {
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
 }
 
-.curPage {
-  background-color: oldlace;
+ul>li.curPage {
+  border-color: navy;
+    font-weight: bold;
+}
+.unsaved {
+    background-color: lightcoral;
 }
 .pageTurn {
 	margin: 20px 0 10px 0;
@@ -931,7 +935,7 @@ h2 {
 .captablepair {
 	display: inline-block;
 	float: left;
-};
+}
 
 .tranSelected {
 	background-color: green;
@@ -1007,7 +1011,7 @@ h2 {
 
 .tableView tr.rowSelected {
 	background-color: #f0f0f0;
-};
+}
 
 /* Buttons */
 
@@ -1252,16 +1256,34 @@ h2 {
 
 .modalHeader {
 	display: block;
-	text-align: center;
-	padding: 0 0 20px 0;
-	margin: 50px 30px 0 30px;
-	border-bottom-width: thin;
-	border-bottom-style: solid;
-	border-color: #bdc3c7;
+	text-align: left;
+	padding: 20px 0px 20px 30px;
+	margin: 0px;
+    background-color: #21b289;
+    color: white;
+    vertical-align: middle;
+    font-size: 14px;
+    font-family: Helvetica;
+    font-weight: lighter;
 }
 
-.modalHeader p {
-	color: #000;
+.modalHeader > .close {
+    float: right;
+    padding-right: 20px;
+    color: #004733;
+    font-size: 20px;
+}
+
+.email-close {
+    color: darkgrey;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.email-text {
+    width: auto;
+    height: auto;
+    resize: none;
 }
 
 .modalText {
@@ -1288,9 +1310,9 @@ h2 {
 }
 
 .shareModal {
-	margin-left: -263px;
-	width: 527px;
-	height:423px;
+	margin-left: -380px;
+	width: 720px;
+	height:622px;
 }
 
 .shareModal .modalText {
@@ -1486,3 +1508,28 @@ h2 {
     margin-left: 20px;
 }
 
+.dropbox {
+    margin:auto;
+    width: 15em;
+    height: 3em;
+    border: 2px solid #DDD;
+    border-radius: 8px;
+    background-color: #FEFFEC;
+    text-align: center;
+    color: #BBB;
+    font-size: 2em;
+    font-family: Arial, sans-serif;
+}
+
+.dropbox span {
+margin-top: 0.9em;
+    display: block;
+}
+
+.dropbox.not-available {
+  background-color: #F88;
+}
+
+.dropbox.over {
+  background-color: #bfb;
+}

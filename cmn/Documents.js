@@ -23,6 +23,8 @@ angular.module('draggable', []).
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
           document.querySelector('.docPanel').appendChild(elm[0]);
+          scope.page = scope.currentPage;
+          elm.page = scope.currentPage;
           scope.$parent.notes.push(elm);
           elm.css({position: 'absolute'});
         },
@@ -84,28 +86,6 @@ angular.module('draggable', []).
 
 var docs = angular.module('documents', ['ui.bootstrap','brijj','draggable']);
 
-docs.directive('modaldelete', function() {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalDelete.html",
-    replace:true,
-    priority: 20
-  }
-});
-
-docs.directive('modalupload', function($timeout) {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalUpload.html",
-    link: function(scope, element, attrs) {
-      scope.$watch('upModal', function(val, oldVal) {
-          if (val) $timeout(function() {scope.draginit(element);} ) ;
-      }); },
-    replace:true,
-    priority: 20
-  }
-});
-
 docs.directive('backImg', function(){
   return {
     restrict: 'A',
@@ -138,17 +118,24 @@ docs.filter('fromNow', function() {
 function DocumentViewController($scope, $compile, $document, SWBrijj) {
   $scope.currentPage = 1;
 
+  $scope.unsaved = function(page) {
+    var nn = $scope.notes;
+    for(var i = 0; i < nn.length; i++) {
+      if ( nn[i].scope().page == page) return true;
+    }
+    return false;
+  }
   $scope.init = function () {
     $scope.signable = "";
     $scope.when_signed = "";
     $scope.notes=[];
 
-    SWBrijj.tblm("document.my_investor_doc_length", "doc_id", $scope.docId).then(function(data) {
+    SWBrijj.tblm($scope.$parent.pages, "doc_id", $scope.docId).then(function(data) {
       $scope.docLength = data.page_count;
       // does scaling happen here?
       $scope.currentPage = 1;
     });
-    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
+    SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.signable = data["signature_status"] == 'signature requested';
       $scope.signed = data["when_signed"];
     });
@@ -296,11 +283,13 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
     var ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+       var canvascount = 0;
 
       for(var nnum = 0; nnum<$scope.notes.length;nnum++) {
         var note = $scope.notes[nnum];
         var ntype = note.scope().ntype;
         var notex = note[0];
+        if (note.scope().page != note.scope().currentPage) continue;
         if (ntype == 'text') {
           var annotext = note.scope().$$nextSibling.annotext;
           var se = notex.querySelector("textarea");
@@ -360,35 +349,51 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           var tt = notex.offsetTop - docpanel.offsetTop + se.offsetTop;
 
 
+          canvascount ++;
           var ctxxx = se.getContext('2d');
-          var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
-          var imgx = new Image();
+           var imgx = new Image();
+          imgx.onload = function() {
+            ctx.drawImage(imgx, ll, tt);
+            canvascount --;
+          }
           imgx.src = se.toDataURL("image/png");
+          // var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
           // ctx.putImageData(imgData,ll,tt);
-          ctx.drawImage(imgx, ll, tt);
         }
       }
 
 
+    var cvfin = function() {
+
+      // TODO: if the canvascount doesnt go to zero after a while, abort somehow
+      if (canvascount == 0) {
+        var z = canvas.toDataURL('image/tiff');
+        SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
+            then(function(x) {
+              var docpanel = document.querySelector(".docPanel");
+              var imgurl = docpanel.style.backgroundImage;
+              docpanel.style.backgroundImage = imgurl;
+
+              for(var i = 0;i<$scope.notes.length;i++) {
+                if (note.scope().page != note.scope().currentPage) continue;
+                document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+              }
+              $scope.notes = [];
+            }).
+            except(function(x) {
+              console.log(x.message); } );
+        $scope.$apply();
+        return;
 
 
 
-    var z = canvas.toDataURL('image/tiff');
-    SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
-        then(function(x) {
-          var docpanel = document.querySelector(".docPanel");
-          var imgurl = docpanel.style.backgroundImage;
-          docpanel.style.backgroundImage = imgurl;
+      } else {
+        window.setTimeout(cvfin, 50);
+      }
 
-          for(var i = 0;i<$scope.notes.length;i++) {
-            document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
-          }
-          $scope.notes = [];
-        }).
-    except(function(x) {
-          console.log(x.message); } );
-      $scope.$apply();
-    return;
+    };
+
+    window.setTimeout(cvfin, 50);
     }
   // must set the src AFTER the onload function for IE9
     img.src=imgurl.substring(4,imgurl.length-1);

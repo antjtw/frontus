@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'logo';
-	src:url('sharewave.eot');
-	src:url('sharewave.eot?#iefix') format('embedded-opentype'),
-		url('sharewave.woff') format('woff'),
-		url('sharewave.ttf') format('truetype'),
-		url('sharewave.svg#sharewave') format('svg');
+	src:url('/cmn/fonts/logo/sharewave.eot');
+	src:url('/cmn/fonts/logo/sharewave.eot?#iefix') format('embedded-opentype'),
+		url('/cmn/fonts/logo/sharewave.woff') format('woff'),
+		url('/cmn/fonts/logo/sharewave.ttf') format('truetype'),
+		url('/cmn/fonts/logo/sharewave.svg#sharewave') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -28,7 +28,11 @@ you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
 .icon-sharewave {
+<<<<<<< HEAD
 	font-family: 'logo';
+=======
+	font-family: 'sharewave';
+>>>>>>> r0ml
 	speak: none;
 	font-style: normal;
 	font-weight: normal;

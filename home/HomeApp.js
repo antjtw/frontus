@@ -43,6 +43,7 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
 
   //TODO grab name from company_investors
   $scope.activity = [];
+ /*
   SWBrijj.procm('document.get_company_activity').then(function(data) {
     var i = 0;
     console.log(data);
@@ -89,7 +90,7 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
       i++;
     });
   });
-
+*/
   $scope.activityOrder = function(card) {
      if (card.activity == "created") {
        return 0;

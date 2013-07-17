@@ -199,7 +199,7 @@ declare
   sendtype document.activity_type;
 begin
   select distinct company into comp from account.companies;
-  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
+  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('https://use-an-entry-from-the-configuration-table-here/investor/captable/?' , comp));
   template = replace(template, '{{company}}', comp);
   perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
   insert into ownership.company_audit(company, email) values (comp, xemail);
