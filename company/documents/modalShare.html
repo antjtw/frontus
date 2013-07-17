@@ -1,25 +1,23 @@
 <div>
-
   <div class="modalHeader">
-    <p class="subText">Share a Document</p>
+    <span data-icon="&#xe004;" aria-hidden="true"></span>
+    <span data-icon="&#xe006;" aria-hidden="true"></span>
+    <span style="padding-left: 20px"/>Share a Document
+    <span ng-click="hide()" class="close" data-icon="&#xe00f" aria-hidden="true"></span>
   </div>
-  <div class="modalText">
 
-    <div class="dropbox" ng-class="dropClass">
-      <span>{{dropText}}</span>
+    <div class="modalText">
+      <email-to ng-model="recipients">This is a test</email-to>
+        <hr>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+        <hr>
+    </div>
+    <div class="modalButtons">
+      <button class="button subText greenButton" ng-click="share(messageText, sendeeEmail);">Send</button>
     </div>
 
-    <div ng-show="files.length">
-      <div ng-repeat="file in files.slice(0)">
-        <span>{{file.webkitRelativePath || file.name}}</span>
-        (<span>{{fmtFileSize(file)}}</span>)
-      </div>
-    </div>
-
-  </div>
-
-  <div class="modalButtons">
-    <input class="bodyText button uploadButton" type="button" ng-click="share()" value="Share" />
-  </div>
-
+    <ul ng-repeat="r in recipients">
+       <li>{{ r }}</li>
+    </ul>
 </div>
+

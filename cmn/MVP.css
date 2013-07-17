@@ -791,16 +791,34 @@ ul>li.curPage {
 
 .modalHeader {
 	display: block;
-	text-align: center;
-	padding: 0 0 20px 0;
-	margin: 50px 30px 0 30px;
-	border-bottom-width: thin;
-	border-bottom-style: solid;
-	border-color: #bdc3c7;
+	text-align: left;
+	padding: 20px 0px 20px 30px;
+	margin: 0px;
+    background-color: #21b289;
+    color: white;
+    vertical-align: middle;
+    font-size: 14px;
+    font-family: Helvetica;
+    font-weight: lighter;
 }
 
-.modalHeader p {
-	color: #000;
+.modalHeader > .close {
+    float: right;
+    padding-right: 20px;
+    color: #004733;
+    font-size: 20px;
+}
+
+.email-close {
+    color: darkgrey;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.email-text {
+    width: auto;
+    height: auto;
+    resize: none;
 }
 
 .modalText {
@@ -827,9 +845,9 @@ ul>li.curPage {
 }
 
 .shareModal {
-	margin-left: -263px;
-	width: 527px;
-	height:423px;
+	margin-left: -380px;
+	width: 720px;
+	height:622px;
 }
 
 .shareModal .modalText {
@@ -1042,4 +1060,3 @@ margin-top: 0.9em;
 .dropbox.over {
   background-color: #bfb;
 }
-

@@ -86,28 +86,6 @@ angular.module('draggable', []).
 
 var docs = angular.module('documents', ['ui.bootstrap','brijj','draggable']);
 
-docs.directive('modaldelete', function() {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalDelete.html",
-    replace:true,
-    priority: 20
-  }
-});
-
-docs.directive('modalupload', function($timeout) {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalUpload.html",
-    link: function(scope, element, attrs) {
-      scope.$watch('upModal', function(val, oldVal) {
-          if (val) $timeout(function() {scope.draginit(element);} ) ;
-      }); },
-    replace:true,
-    priority: 20
-  }
-});
-
 docs.directive('backImg', function(){
   return {
     restrict: 'A',
@@ -389,9 +367,6 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
       // TODO: if the canvascount doesnt go to zero after a while, abort somehow
       if (canvascount == 0) {
-
-
-
         var z = canvas.toDataURL('image/tiff');
         SWBrijj.uploadDataURL($scope.docId, $scope.currentPage, z).
             then(function(x) {

@@ -2,15 +2,14 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['documents','ui.bootstrap', '$strap.directives','brijj']);
+var docviews = angular.module('documentviews', ['documents','ui.bootstrap', '$strap.directives','brijj', 'email']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
-    
   $routeProvider.
-      when('/', {templateUrl: 'list.html',   controller: documentListController}).
+      when('/', {templateUrl: 'list.html',   controller: CompanyDocumentListController}).
       when('/view', {templateUrl: 'viewer.html', controller: CompanyDocumentViewController}).
-	    when('/status', {templateUrl: 'status.html', controller: documentStatusController}).
+	    when('/status', {templateUrl: 'status.html', controller: CompanyDocumentStatusController}).
       otherwise({redirectTo: '/'});
 });
 
@@ -24,16 +23,6 @@ docviews.directive('draggable', function() {
   };
 });
 
-docviews.directive('indstatus', function() {
-  return {
-	replace: true,
-    transclude: true,
-	scope: { title:'@indstatus' },
-    template: '<p>{{title}}</p>'
-  };
-});
-
-
 docviews.directive('library', function() {
   return {
     restrict: 'A',
@@ -45,184 +34,74 @@ docviews.directive('library', function() {
   }
 });
 
+docviews.directive('modaldelete', function() {
+  return {
+    restrict: 'EA',
+    templateUrl: "modalDelete.html",
+    replace:true,
+    priority: 20
+  }
+});
+
+docviews.directive('modalupload', function($timeout) {
+  return {
+    restrict: 'EA',
+    templateUrl: "modalUpload.html",
+    link: function(scope, element, attrs) {
+      scope.$watch('upModal', function(val, oldVal) {
+        if (val) $timeout(function() {scope.draginit(element);} ) ;
+      }); },
+    replace:true,
+    priority: 20
+  }
+});
+
+docviews.directive('modalshare', function($timeout, SWBrijj) {
+  return {
+    restrict: 'EA',
+    templateUrl: "modalShare.html",
+    scope: false,
+    link: function(scope, element, attrs) {
+      // initalized recipients can go here.
+      scope.nextRecip = "";
+      scope.share = function(one, two) {
+        SWBrijj.proc('document.share',scope.recipients, scope.messageText).then( function(data) {
+          alert(data); scope.hide(); });
+       };
+    },
+    replace:true,
+    priority: 20
+  }
+});
+
 /* Controllers */
 
-var documentListController = function($scope, SWBrijj) {
-	SWBrijj.tblm('document.my_company_library').then(function(data) {
-	$scope.documents = data;
-	});
+function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
+	SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
+  	$scope.documents = data;
+	}).except(function(err) { alert(err.message); });
 	
 	$scope.docOrder = 'docname';
-  $scope.upModal = false;
-  $scope.shouldBeOpen = false;
+  $scope.recipients = [];
 
-	$scope.setOrder = function(field) {
-		if ($scope.docOrder == field) {
-			$scope.docOrder = ('-' + field);
-		}
-		else {
-			$scope.docOrder = field;
-		}
-	};
+	$scope.setOrder = function(field) {	$scope.docOrder = ($scope.docOrder == field) ? '-' + field :  field; };
 
 	$scope.searchFilter = function (obj) {
-        var re = new RegExp($scope.query, 'i');
-        return !$scope.query || re.test(obj.docname);
-    };
+     var re = new RegExp($scope.query, 'i');
+     return !$scope.query || re.test(obj.docname);
+  };
 
-	$scope.open = function (doc) {
-			$scope.shouldBeOpen = true;
-			$scope.currentDoc = doc;
-			console.log(doc);
-		  };
-		
-	$scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-		
-	$scope.opts = {
-			backdropFade: true,
-			dialogFade:true
-		  };
-
-	$scope.upModalUp = function () {
-			$scope.upModal = true;
-		  };
-		
-	$scope.upClose = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.upModal = false;
-		  };
-		
-	$scope.upopts = {
-			backdropFade: true,
-			dialogFade:true,
-    		dialogClass: 'modal shareModal'
-		 };
-
-	$scope.dropText = 'Drop files here...';
-    $scope.files = [];
-
-    $scope.fmtFileSize = function (file) {
-        if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
-        else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
-        else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
-        else return file.size + " bytes";
-    };
-
-    // init event handlers
-    $scope.dragEnterLeave = function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        $scope.dropText = "Drop files here...";
-        $scope.dropClass = "";
-        $scope.$apply();
-    };
-
-    $scope.dragOver = function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-      console.log(evt.dataTransfer.types);
-        var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.some( function(x) { return x == 'Files'; } );
-        $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
-        $scope.dropClass = ok ? 'over' : 'not-available';
-        $scope.$apply();
-    };
-
-    $scope.drop = function (evt) {
-      // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
-      evt.stopPropagation();
-      evt.preventDefault();
-      $scope.dropText = 'Drop more files here...';
-      $scope.dropClass = '';
-      $scope.$apply();
-      var files = evt.dataTransfer.files;
-      if (files.length > 0) {
-        for (var i = 0; i < files.length; i++) {
-          $scope.files.push(files[i])
-        }
-      }
-      $scope.$apply();
-
-      // might as well go ahead and upload ( no point in getting a click
-      $scope.uploadFile();
-    };
-
-    $scope.draginit = function(elm) {
-      var element = angular.element(".dropbox");
-//      var element = elm.find('.dropbox');
-      if (!element) return;
-
-/*      element.on("dragenter", dragEnterLeave)
-          .on("dragleave",dragEnterLeave)
-          .on("dragover",dragOver)
-          .on("drop",drop);
-  */
-       element = element[0];
-       element.addEventListener("dragenter", $scope.dragEnterLeave, false);
-       element.addEventListener("dragleave", $scope.dragEnterLeave, false);
-       element.addEventListener("dragover", $scope.dragOver, false);
-       element.addEventListener("drop", $scope.drop, false);
-    };
-
-    $scope.setFiles = function (element) {
-        $scope.files = [];
-        for (var i = 0; i < element.files.length; i++) {
-            $scope.files.push(element.files[i]);
-        }
-        $scope.progressVisible = false;
-    };
-
-    $scope.uploadDropbox = function() {
-      Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
-        SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
-      }, cancel: function() { console.log('canceled'); }
-      })
-    };
-    $scope.uploadFile = function () {
-        var fd = new FormData();
-        $scope.progressVisible = true;
-        for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
-        SWBrijj.uploadFile(fd).then(function (x) {
-            console.log(x);
-        }).except(function (x) {
-            alert(x.message);
-        });
-        /*var xhr = new XMLHttpRequest()
-         xhr.upload.addEventListener("progress", uploadProgress, false);
-         xhr.addEventListener("load", uploadComplete, false);
-         xhr.addEventListener("error", uploadFailed, false);
-         xhr.addEventListener("abort", uploadCanceled, false);
-         xhr.open("POST", "/fileupload");
-         xhr.send(fd) */
-    };
-
-    function uploadProgress(evt) {
-        $scope.$apply(function () {
-            if (evt.lengthComputable) {
-                $scope.progress = Math.round(evt.loaded * 100 / evt.total)
-            } else {
-                $scope.progress = 'unable to compute'
-            }
-        })
-    }
-
-    function uploadComplete(evt) {
-        alert(evt.target.responseText)
-    }
-
-    function uploadFailed(evt) {
-        alert("There was an error attempting to upload the file.")
-    }
-
-    function uploadCanceled(evt) {
-        $scope.progressVisible = false;
-        $scope.$apply();
-        alert("The upload has been canceled by the user or the browser dropped the connection.")
-    }	
+  $scope.askShare = function() {
+    var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
+    $q.when(modalPromise).then(function(eel) {
+      // for some reason, at this point, the element has "200" inserted as a text node.
+      var el = eel[0];
+      // if (el.childNodes[0] == "200")
+      el.removeChild(el.childNodes[0]);
+      eel.modal('show');
+    });
+  };
 };
-
 
 function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
   $scope.docId = parseInt($routeParams.doc);
@@ -231,50 +110,28 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
   $scope.pages = "document.my_company_doc_length";
 
   $scope.init = function () {
-    SWBrijj.tblm("document.my_company_library", "doc_id", $scope.docId).then(function(data) {
+    SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'load_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
       $scope.document=data;
     });
 
   };
 
 	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", parseInt(docId), email, message, Boolean(sign)).then(function(data) {
+		 SWBrijj.procm("document.share_document", $scope.docId, email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
 		};
-
-	$scope.modalUp = function () {
-			$scope.shouldBeOpen = true;
-		  };
-		
-	$scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-		
-	$scope.opts = {
-			backdropFade: true,
-			dialogFade:true,
-    		dialogClass: 'modal shareModal'
-		  };
 }
 
 
+function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
+  var docId = parseInt($routeParams.doc);
+  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'load_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
+    $scope.document = data;
+  });
 
-
-
-
-
-
-
-
-function documentStatusController($scope, $routeParams, SWBrijj) {
-  var docId = $routeParams.doc;
-  
-  SWBrijj.procm("document.get_docdetail", parseInt(docId)).then(function(data) {
-	$scope.document1 = data[0];
-	$scope.page_title = data[0].docname;
-	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
+//	$scope.page_title = data[0].docname;
+// 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
 
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
@@ -315,8 +172,7 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 
 			});
 		});
-	});
-	
+
 	  $scope.editorEnabled = false;
 	  
 	  $scope.enableEditor = function() {
@@ -332,12 +188,12 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 		var newname = $scope.editableTitle;
 		$scope.page_title = newname;
 		$scope.disableEditor();
-		SWBrijj.procm("document.title_change", parseInt(docId), newname).then(function(data) {
+		SWBrijj.procm("document.title_change", docId, newname).then(function(data) {
 			console.log(data);
 		});
 	  };
 	
-  SWBrijj.procm("document.document_status", parseInt(docId)).then(function(data) {
+  SWBrijj.procm("document.document_status", docId).then(function(data) {
 	$scope.userStatus = data;
 	for (var i = 0; i < $scope.userStatus.length; i++) {
 		$scope.userStatus[i].shown = false;
@@ -363,19 +219,19 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 	};
 	
 	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", parseInt(docId), email, message, Boolean(sign)).then(function(data) {
+		 SWBrijj.procm("document.share_document", docId, email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
 		};
 	
 	$scope.remind = function(message, email) {
-		 SWBrijj.procm("document.remind_document", parseInt(docId), email, message).then(function(data) {
+		 SWBrijj.procm("document.remind_document", docId, email, message).then(function(data) {
 				console.log(data);
 			});
 	};
 	
 	$scope.revokeUser = function (email) {
-		SWBrijj.procm("document.document_revoke", parseInt(docId), email).then(function(data) {
+		SWBrijj.procm("document.document_revoke", docId, email).then(function(data) {
 				console.log(data);
 			});
 	};
@@ -388,7 +244,7 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 					name.button = "icon-plus";
 				}
 				else {
-					SWBrijj.procm("document.get_I_docstatus", name.sent_to, parseInt(docId)).then(function(data) {
+					SWBrijj.procm("document.get_I_docstatus", name.sent_to, docId).then(function(data) {
 						name.whenshared = data[1].loggedin;
 						if (data[0].loggedin != null) {
 							name.lastlogin = data[0].loggedin;
@@ -434,12 +290,12 @@ function documentStatusController($scope, $routeParams, SWBrijj) {
 		  $scope.modalUp = function () {
 			$scope.shouldBeOpen = true;
 		  };
-		
+/*
 		  $scope.close = function () {
 			$scope.closeMsg = 'I was closed at: ' + new Date();
 			$scope.shouldBeOpen = false;
 		  };
-
+  */
 		  $scope.opts = {
 			backdropFade: true,
 			dialogFade:true,

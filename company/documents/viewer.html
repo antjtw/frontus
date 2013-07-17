@@ -1,4 +1,4 @@
-<div class="container"> <!-- data-ng-init="init()" ng-controller="ModalShareCtrl" -->
+<div class="container">
 
 
   <div modal="shouldBeOpen" close="close()" options="opts">
@@ -41,36 +41,5 @@
   </h1>
   <doc-viewer doc-id="docId" invq="false"></doc-viewer>
 
-  <h1>
-
-
 
 </div>
-<script>
-		var ModalShareCtrl = function ($scope) {
-		
-		  $scope.modalUp = function () {
-			$scope.shouldBeOpen = true;
-		  };
-		
-		  $scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-		
-		  $scope.opts = {
-			backdropFade: true,
-			dialogFade:true,
-    		dialogClass: 'modal shareModal'
-		  };
-		
-		};
-		
-			
-				
-		function failed() {
-				alert("failed")
-			}
- </script>
-
-         

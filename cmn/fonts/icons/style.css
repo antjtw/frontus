@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'sharewave';
-	src:url('fonts/sharewave.eot');
-	src:url('fonts/sharewave.eot?#iefix') format('embedded-opentype'),
-		url('fonts/sharewave.woff') format('woff'),
-		url('fonts/sharewave.ttf') format('truetype'),
-		url('fonts/sharewave.svg#sharewave') format('svg');
+	src:url('/cmn/fonts/icons/sharewave.eot');
+	src:url('/cmn/fonts/icons/sharewave.eot?#iefix') format('embedded-opentype'),
+		url('/cmn/fonts/icons/sharewave.woff') format('woff'),
+		url('/cmn/fonts/icons/sharewave.ttf') format('truetype'),
+		url('/cmn/fonts/icons/sharewave.svg#sharewave') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
