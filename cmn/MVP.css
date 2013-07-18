@@ -128,7 +128,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 /* Fonts */
 
-p, input, button, select, textarea, a { 
+p, input, button, select, textarea, a, address { 
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -231,6 +231,7 @@ h2 {
 .spacer70 { height: 70px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer80 { height: 80px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer130 { height: 130px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 
 /* Error */
@@ -480,6 +481,7 @@ h2 {
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;
+	width: 100%;
 }
 
 .subnav-controls > div > div {
@@ -682,7 +684,7 @@ h2 {
 	color: #7f8c8d;	
 }
 
-/* Document Views */
+/* Table Designs for Doc Library and Captable (Should rename from docLibrary as it's not just docs) */
 
 .docLibrary {
 	width: 100%;
@@ -785,6 +787,12 @@ h2 {
 	color: #7f8c8d;
 }
 
+/* Document List */
+
+.doclib.tableView th {
+	width: 500px;
+}
+
 /* Document Viewer */
 
 .selectedPill {
@@ -834,8 +842,8 @@ ul>li.curPage {
 
 .docPanel {
 	background-color: #FFFFFF;
-	width: 1024px;
-	height: 1306px;
+	width: 750px;
+	height: 956px;
 	overflow: auto;
 }
 
