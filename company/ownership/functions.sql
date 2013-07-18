@@ -229,6 +229,6 @@ LANGUAGE plpgsql;
 
 CREATE TYPE ownership.activity_cluster as (count bigint, whendone date, activity varchar);
 CREATE OR REPLACE FUNCTION ownership.get_company_activity_cluster() RETURNS SETOF ownership.activity_cluster LANGUAGE plpgsql AS $$
-BEGIN RETURN QUERY SELECT count(whendone::date) AS count, whendone::date, activity FROM ownership.company_activity_feed GROUP BY whendone::date, activity;
+BEGIN RETURN QUERY select count(email) as count, whendone::date, activity from (select whendone::date, email, activity from ownership.company_activity_feed GROUP BY whendone::date, activity, email) b GROUP BY whendone::date, activity;
 END $$;
 

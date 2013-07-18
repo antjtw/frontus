@@ -1005,6 +1005,7 @@ ul>li.curPage {
 
 .rightTitle > input {
 	width:100px;
+	border: 0;
 }
 
 /* Grants Table */
