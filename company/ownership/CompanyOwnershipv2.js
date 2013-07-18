@@ -1287,6 +1287,38 @@ var statusController = function($scope, SWBrijj) {
     })
   });
 
+  SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
+    console.log(data);
+    $scope.activity = data;
+    $scope.activityOrder = $scope.activity.whendone;
+    SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
+      console.log(person);
+      $scope.activityDetail = person;
+      for (var ik = 0; ik < $scope.activity.length; ik++) {
+        if ($scope.activity[ik].count == 1) {
+          for (var j = 0; j < $scope.activityDetail.length; j++) {
+              if ($scope.activity[ik].whendone.getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
+                if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+                    $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                  }
+              }
+          }
+        }
+      }
+
+      $scope.activity.push({activity: "created", icon: "icon-star-empty"});
+      for (var i = 0; i < $scope.activity.length; i++) {
+        if ($scope.activity[i].activity == "shared") {
+          $scope.activity[i].activity = "Shared with ";
+          $scope.activity[i].icon = "icon-edit";
+        }
+        else if ($scope.activity[i].activity == "viewed") {
+          $scope.activity[i].activity = "Viewed by ";
+          $scope.activity[i].icon = "icon-eye-open";
+        }
+      }
+    });
+  });
 
 
   $scope.opendetails = function(selected) {

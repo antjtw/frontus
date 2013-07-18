@@ -222,9 +222,13 @@ end $$;
 
 CREATE OR REPLACE FUNCTION ownership.get_company_views() RETURNS SETOF ownership.company_views AS $$
 BEGIN
-	RETURN QUERY SELECT company, max(whendone) as whendone, email FROM ownership.company_views GROUP BY email, company;
+	RETURN QUERY SELECT company, max(whendone) as whendone, email, activity FROM ownership.company_views GROUP BY email, company, activity;
 END;
 $$
 LANGUAGE plpgsql;
 
+CREATE TYPE ownership.activity_cluster as (count bigint, whendone timestamp, activity varchar);
+CREATE OR REPLACE FUNCTION ownership.get_company_activity_cluster() RETURNS SETOF ownership.activity_cluster LANGUAGE plpgsql AS $$
+BEGIN RETURN QUERY SELECT count(whendone::date) AS count, whendone::date, activity FROM ownership.company_activity_feed GROUP BY whendone::date, activity;
+END $$;
 

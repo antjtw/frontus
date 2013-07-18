@@ -51,3 +51,7 @@ BEGIN
 	RETURN QUERY SELECT * from ownership.company_activity_feed where email = xemail;
 END
 $$;
+
+
+
+
