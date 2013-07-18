@@ -64,6 +64,13 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
   $scope.init = function () {
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
       $scope.document=data;
+      if ($scope.document.signature_deadline == null) {
+        $scope.needSign = false
+      }
+      else {
+        $scope.needSign = true
+      }
+      console.log($scope.needSign);
     });
 
   };

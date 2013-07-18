@@ -65,8 +65,11 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
       // initalized recipients can go here.
       scope.nextRecip = "";
       scope.share = function(one, two) {
-        SWBrijj.proc('document.share',scope.recipients, scope.messageText).then( function(data) {
-          alert(data); scope.hide(); });
+      	angular.forEach(scope.recipients, function(x) {
+      		SWBrijj.procm("document.share_document", scope.selectedDoc, x, scope.messageText, Boolean("f")).then(function(data) {
+				console.log(data);
+			});
+      	});
        };
     },
     replace:true,
@@ -82,7 +85,8 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	}).except(function(err) { alert(err.message); });
 	
 	$scope.docOrder = 'docname';
-  $scope.recipients = [];
+	$scope.selectedDoc = 0;
+  	$scope.recipients = [];
 
 	$scope.setOrder = function(field) {	$scope.docOrder = ($scope.docOrder == field) ? '-' + field :  field; };
 
@@ -91,7 +95,8 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
      return !$scope.query || re.test(obj.docname);
   };
 
-  $scope.askShare = function() {
+  $scope.askShare = function(docid) {
+  	$scope.selectedDoc = docid;
     var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
     $q.when(modalPromise).then(function(eel) {
       // for some reason, at this point, the element has "200" inserted as a text node.
