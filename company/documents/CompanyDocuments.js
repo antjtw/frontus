@@ -131,7 +131,7 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 
 function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
   var docId = parseInt($routeParams.doc);
-  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'load_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
+  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", docId).then(function(data) {
     $scope.document = data;
   });
 
@@ -139,44 +139,44 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 // 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
 
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
-	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
-		$scope.activity = data;
-		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
-			$scope.activityDetail = person;
-			for (var ik = 0; ik < $scope.activity.length; ik++) {
-				if ($scope.activity[ik].count == 1) {
-					for (var j = 0; j < $scope.activityDetail.length; j++) {
-							if ($scope.activity[ik].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
-								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-										$scope.activity[ik].namethem = $scope.activityDetail[j].sent_to;
-									}
-							}
-					}
-				}
-			}
+	// SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
+	// 	$scope.activity = data;
+	// 	SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
+	// 		$scope.activityDetail = person;
+	// 		for (var ik = 0; ik < $scope.activity.length; ik++) {
+	// 			if ($scope.activity[ik].count == 1) {
+	// 				for (var j = 0; j < $scope.activityDetail.length; j++) {
+	// 						if ($scope.activity[ik].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
+	// 							if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+	// 									$scope.activity[ik].namethem = $scope.activityDetail[j].sent_to;
+	// 								}
+	// 						}
+	// 				}
+	// 			}
+	// 		}
 
-			$scope.activity.push({activity: "created", icon: "icon-star-empty", when_sent: $scope.document1.last_updated});
-			for (var i = 0; i < $scope.activity.length; i++) {
-			if ($scope.activity[i].activity == "shared") {
-				$scope.activity[i].activity = "shared with ";
-				$scope.activity[i].icon = "icon-edit";
-			}
-			else if ($scope.activity[i].activity == "viewed") {
-				$scope.activity[i].activity = "viewed by ";
-				$scope.activity[i].icon = "icon-eye-open";
-			}
-			else if ($scope.activity[i].activity == "reminder") {
-				$scope.activity[i].activity = "reminded ";
-				$scope.activity[i].icon = "icon-bullhorn";
-			}
-			else if ($scope.activity[i].activity == "signed") {
-				$scope.activity[i].activity = "signed by ";
-				$scope.activity[i].icon = "icon-ok-circle";
-			}
-			}
+	// 		$scope.activity.push({activity: "created", icon: "icon-star-empty", when_sent: $scope.document1.last_updated});
+	// 		for (var i = 0; i < $scope.activity.length; i++) {
+	// 		if ($scope.activity[i].activity == "shared") {
+	// 			$scope.activity[i].activity = "shared with ";
+	// 			$scope.activity[i].icon = "icon-edit";
+	// 		}
+	// 		else if ($scope.activity[i].activity == "viewed") {
+	// 			$scope.activity[i].activity = "viewed by ";
+	// 			$scope.activity[i].icon = "icon-eye-open";
+	// 		}
+	// 		else if ($scope.activity[i].activity == "reminder") {
+	// 			$scope.activity[i].activity = "reminded ";
+	// 			$scope.activity[i].icon = "icon-bullhorn";
+	// 		}
+	// 		else if ($scope.activity[i].activity == "signed") {
+	// 			$scope.activity[i].activity = "signed by ";
+	// 			$scope.activity[i].icon = "icon-ok-circle";
+	// 		}
+	// 		}
 
-			});
-		});
+	// 		});
+	// 	});
 
 	  $scope.editorEnabled = false;
 	  
@@ -198,20 +198,20 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		});
 	  };
 	
-  SWBrijj.procm("document.document_status", docId).then(function(data) {
-	$scope.userStatus = data;
-	for (var i = 0; i < $scope.userStatus.length; i++) {
-		$scope.userStatus[i].shown = false;
-		$scope.userStatus[i].button = "icon-plus";
-		if ($scope.userStatus[i].event == "revoked") {
-			$scope.userStatus[i].rstatus = 1;
-		}
-		if ($scope.userStatus[i].event == "needsign") {
-			$scope.userStatus[i].event = "needs signing";
-		}
-	}
-	$scope.$apply();
-	});
+ //  SWBrijj.procm("document.document_status", docId).then(function(data) {
+	// $scope.userStatus = data;
+	// for (var i = 0; i < $scope.userStatus.length; i++) {
+	// 	$scope.userStatus[i].shown = false;
+	// 	$scope.userStatus[i].button = "icon-plus";
+	// 	if ($scope.userStatus[i].event == "revoked") {
+	// 		$scope.userStatus[i].rstatus = 1;
+	// 	}
+	// 	if ($scope.userStatus[i].event == "needsign") {
+	// 		$scope.userStatus[i].event = "needs signing";
+	// 	}
+	// }
+	// $scope.$apply();
+	// });
 	
 	
 	$scope.activityOrder = function(card) {

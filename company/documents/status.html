@@ -56,18 +56,19 @@
                 </div>
             </div>
 
-            <a href="/company/documents/"><i class="button icon-reply icon-2x" style="margin-right:40px;"></i></a>
-            <div ng-hide="editorEnabled">
-                <h1>{{page_title}}</h1>
-                <a href="#" ng-click="enableEditor()"><i class="button icon-pencil icon-2x"></i></a>
+           <div class="row-fluid">
+            <div class="headsection row-fluid">
+                <h1>{{document.docname}}</h1>
+
+                <div class="row-fluid">
+
+                  <ul class="bodyText maintabs">
+                    <li class="selectedtab">Status</li>
+                    <a href="/company/documents/view?doc={{document.doc_id}}"><li class="button">View</li></a>
+                   </ul>
+                </div>
             </div>
-            <div ng-show="editorEnabled">
-                <input ng-model="editableTitle" ng-show="editorEnabled"/>
-                <a href="#" ng-click="save()">Save</a>
-                or
-                <a href="#" ng-click="disableEditor()">cancel</a>.
-            </div>
-         </div>		
+          </div>	
          
          <div style="float:right">
              <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</button>
@@ -197,5 +198,5 @@
              </div>   
              </section>
          </div>
-          
+    </div>
 </div>
