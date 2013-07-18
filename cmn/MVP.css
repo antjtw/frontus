@@ -481,6 +481,7 @@ h2 {
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;
+	width: 100%;
 }
 
 .subnav-controls > div > div {
@@ -683,7 +684,7 @@ h2 {
 	color: #7f8c8d;	
 }
 
-/* Document Views */
+/* Table Designs for Doc Library and Captable (Should rename from docLibrary as it's not just docs) */
 
 .docLibrary {
 	width: 100%;
@@ -786,6 +787,12 @@ h2 {
 	color: #7f8c8d;
 }
 
+/* Document List */
+
+.doclib.tableView th {
+	width: 500px;
+}
+
 /* Document Viewer */
 
 .selectedPill {
@@ -835,8 +842,8 @@ ul>li.curPage {
 
 .docPanel {
 	background-color: #FFFFFF;
-	width: 1024px;
-	height: 1306px;
+	width: 750px;
+	height: 956px;
 	overflow: auto;
 }
 
