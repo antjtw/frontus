@@ -198,21 +198,20 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		});
 	  };
 	
- //  SWBrijj.procm("document.document_status", docId).then(function(data) {
-	// $scope.userStatus = data;
-	// for (var i = 0; i < $scope.userStatus.length; i++) {
-	// 	$scope.userStatus[i].shown = false;
-	// 	$scope.userStatus[i].button = "icon-plus";
-	// 	if ($scope.userStatus[i].event == "revoked") {
-	// 		$scope.userStatus[i].rstatus = 1;
-	// 	}
-	// 	if ($scope.userStatus[i].event == "needsign") {
-	// 		$scope.userStatus[i].event = "needs signing";
-	// 	}
-	// }
-	// $scope.$apply();
-	// });
-	
+  SWBrijj.procm("document.document_status", docId).then(function(data) {
+  	console.log(data);
+	$scope.userStatus = data;
+	for (var i = 0; i < $scope.userStatus.length; i++) {
+		$scope.userStatus[i].shown = false;
+		$scope.userStatus[i].button = "icon-plus";
+		if ($scope.userStatus[i].event == "revoked") {
+			$scope.userStatus[i].rstatus = 1;
+		}
+		if ($scope.userStatus[i].event == "needsign") {
+			$scope.userStatus[i].event = "needs signing";
+		}
+	}
+	});
 	
 	$scope.activityOrder = function(card) {
 	   if (card.activity == "created") {
