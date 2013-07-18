@@ -128,7 +128,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 /* Fonts */
 
-p, input, button, select, textarea, a { 
+p, input, button, select, textarea, a, address { 
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -231,6 +231,7 @@ h2 {
 .spacer70 { height: 70px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer80 { height: 80px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer130 { height: 130px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 
 /* Error */
