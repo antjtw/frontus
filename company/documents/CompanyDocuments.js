@@ -149,7 +149,11 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {
 							if (new Date($scope.activity[ik].event_time).getTime() == (new Date(($scope.activityDetail[j].event_time + '').substring(0, 15)).getTime())) {
 								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-										$scope.activity[ik].namethem = $scope.activityDetail[j].person;
+										if ($scope.activityDetail[j].name == '') {
+						                    $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+										} else {
+						                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
+						                }
 										$scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
 									}
 							}

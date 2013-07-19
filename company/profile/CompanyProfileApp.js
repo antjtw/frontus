@@ -92,37 +92,48 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   SWBrijj.tblm('account.company_issuers').then(function(x) {
-    console.log(x);
     $scope.admins = x;
   }).except(initFail);
 
   SWBrijj.tbl('account.my_company').then(function(x) { initPage($scope, x) }).except(initFail);
 
+  // $scope.activity = [];
+  // SWBrijj.procm('global.get_company_activity').then(function(data) {
+  //   var i = 0;
+  //   console.log('data', data);
+  //   angular.forEach(data, function(x) {
+  //     SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
+  //       console.log('y', y)
+  //       $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
+  //       if ($scope.activity[i].activity == "sent") {
+  //         $scope.activity[i].activity = "Shared ";
+  //         $scope.activity[i].icon = "icon-redo";
+  //       }
+  //       else if ($scope.activity[i].activity == "reminder") {
+  //         $scope.activity[i].activity = "Reminded ";
+  //         $scope.activity[i].icon = "icon-redo";
+  //       }
+  //       else if ($scope.activity[i].activity == "uploaded") {
+  //         $scope.activity[i].activity = "Uploaded ";
+  //         $scope.activity[i].icon = "icon-star";
+  //       }
+  //       i++;
+  //     });
+  //   });
+  // });
+
   $scope.activity = [];
-  SWBrijj.tblm('document.activity_feed').then(function(data) {
+  SWBrijj.procm('global.get_company_activity').then(function(data) {
     var i = 0;
+    console.log('data', data);
     angular.forEach(data, function(x) {
-      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
-        if ($scope.activity[i].activity == "shared") {
-          $scope.activity[i].activity = "Shared ";
-          $scope.activity[i].icon = "icon-edit";
-        }
-        else if ($scope.activity[i].activity == "viewed") {
-          $scope.activity[i].activity = "Viewed ";
-          $scope.activity[i].icon = "icon-eye-open";
-        }
-        else if ($scope.activity[i].activity == "reminder") {
-          $scope.activity[i].activity = "Reminded ";
-          $scope.activity[i].icon = "icon-bullhorn";
-        }
-        else if ($scope.activity[i].activity == "signed") {
-          $scope.activity[i].activity = "Signed ";
-          $scope.activity[i].icon = "icon-ok-circle";
-        }
-        i++;
-        $scope.$apply();
-      });
+      if (x.type == 'account') {
+
+      } else if (x.type == 'document') {
+
+      } else if (x.type == 'ownership') {
+        
+      }
     });
   });
 

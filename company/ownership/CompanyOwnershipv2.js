@@ -1288,17 +1288,19 @@ var statusController = function($scope, SWBrijj) {
   });
 
   SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    console.log(data);
     $scope.activity = data;
-    SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
-      console.log(person);
+    SWBrijj.tblm("ownership.company_activity_feed", ["email", "name", "activity", "whendone"]).then(function(person) {
       $scope.activityDetail = person;
       for (var ik = 0; ik < $scope.activity.length; ik++) {
         if ($scope.activity[ik].count == 1) {
           for (var j = 0; j < $scope.activityDetail.length; j++) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+                    if ($scope.activityDetail[j].name == '') {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                    } else {
+                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
+                    }
                     $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
                   }
               }
@@ -1333,7 +1335,7 @@ var statusController = function($scope, SWBrijj) {
   };
 
   $scope.opendetails = function(selected) {
-   $scope.userStatus.forEach(function(name) {     
+   $scope.userStatus.forEach(function(name) {
     if (selected == name.email)
       if (name.shown == true) {
         name.shown = false;
