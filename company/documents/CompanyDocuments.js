@@ -141,6 +141,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
+		console.log(data);
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
@@ -149,6 +150,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 							if (new Date($scope.activity[ik].event_time).getTime() == (new Date(($scope.activityDetail[j].event_time + '').substring(0, 15)).getTime())) {
 								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
 										$scope.activity[ik].namethem = $scope.activityDetail[j].person;
+										$scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
 									}
 							}
 					}
@@ -157,22 +159,22 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 
 			$scope.shared_dates = [];
 			for (var i = 0; i < $scope.activity.length; i++) {
-				if ($scope.activity[i].activity == "sent") {
+				if ($scope.activity[i].activity == "received") {
 					$scope.activity[i].activity = "Shared with ";
 					$scope.activity[i].icon = "icon-redo";
-          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+          			$scope.shared_dates.push(new Date($scope.activity[i].event_time));					
 				}
 				else if ($scope.activity[i].activity == "viewed") {
-					$scope.activity[i].activity = "viewed by ";
+					$scope.activity[i].activity = "Viewed by ";
 					$scope.activity[i].icon = "icon-view";
 				}
 				else if ($scope.activity[i].activity == "reminder") {
-					$scope.activity[i].activity = "reminded ";
+					$scope.activity[i].activity = "Reminded ";
 					$scope.activity[i].icon = "icon-redo";
-          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+          			$scope.shared_dates.push(new Date($scope.activity[i].event_time));					
 				}
 				else if ($scope.activity[i].activity == "signed") {
-					$scope.activity[i].activity = "signed by ";
+					$scope.activity[i].activity = "Signed by ";
 					$scope.activity[i].icon = "icon-pen";
 				}
 				else if ($scope.activity[i].activity == "uploaded") {

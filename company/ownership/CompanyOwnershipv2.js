@@ -1299,6 +1299,7 @@ var statusController = function($scope, SWBrijj) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                    $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
                   }
               }
           }
@@ -1311,7 +1312,7 @@ var statusController = function($scope, SWBrijj) {
         if ($scope.activity[i].activity == "shared") {
           $scope.activity[i].activity = "Shared with ";
           $scope.activity[i].icon = 'icon-redo';
-          $scope.shared_dates.push(new Date(($scope.activity[i].whendone + '').substring(0, 15)));
+          $scope.shared_dates.push(new Date($scope.activity[i].whendone));
         }
         else if ($scope.activity[i].activity == "viewed") {
           $scope.activity[i].activity = "Viewed by ";
