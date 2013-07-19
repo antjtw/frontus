@@ -1296,7 +1296,7 @@ var statusController = function($scope, SWBrijj) {
       for (var ik = 0; ik < $scope.activity.length; ik++) {
         if ($scope.activity[ik].count == 1) {
           for (var j = 0; j < $scope.activityDetail.length; j++) {
-              if ($scope.activity[ik].whendone.getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
+              if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
                   }
@@ -1321,10 +1321,6 @@ var statusController = function($scope, SWBrijj) {
       $scope.lastsent = new Date(Math.max.apply(null,$scope.dates)).getTime();
     });
   });
-
-  $scope.lastsent = function() {
-      return Math.max.apply( Math, [12,3,15] );
-  };  
 
   $scope.activityOrder = function(card) {
      if (card.activity == "Created") {
