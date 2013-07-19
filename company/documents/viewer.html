@@ -35,13 +35,18 @@
   </div>
 
   <div class="row-fluid">
-    <div class="span3">
+    <div class="span3 docVersiontab">
       <ul>
-        <li>Will be list of documents shared</li>
+        <li>
+          <span ng-click="getOriginal();">Original</span>
+        </li>
+        <li ng-repeat="doc in docversions">
+          <span ng-click="pickInvestor(doc);">{{doc.investor}}</span>
+        </li>
       </ul>
     </div>
     <div class="span9">
-      <doc-viewer doc-id="docId" invq="false"></doc-viewer>
+      <doc-viewer doc-id="docId" invq="invq"></doc-viewer>
     </div>
 
   </div>

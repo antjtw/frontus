@@ -2,18 +2,20 @@
                 
 <div class="row-fluid">
 
-	<br>
+	<div class="headsection row-fluid">
+      <h1>Documents</h1>
+  </div>
 	
-	<h1 style="float:left;">Documents</h1>
-	
-	<a class="button subText blueButton" style="float:right;">Add Document</a>
-
-	<br>
+	 <div class="row-fluid">
+        <div class="subnav-controls">
+          <div>
+            <p class="searchBox">Search: <input ng-model="query"></p>
+          </div>
+          <div class="DivHelper"></div>
+        </div>
+      </div>
     
     <section class="docLibrary statusBlock">
-         <div>
-         <p class="searchBox">Search: <input ng-model="query"></p>
-         </div>
             <table class="tableView bodyText">
               <tr class="subText">
                 <th class="button" ng-click="setOrder('docname')" style="width:40%;"><span class="title sortedDown">Name</span></th>		

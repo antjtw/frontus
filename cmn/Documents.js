@@ -103,7 +103,7 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq' },
+    scope: { docId: '=docId', invq:'=invq', needSign:'=needSign' },
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
