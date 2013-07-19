@@ -169,44 +169,59 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 // 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
 
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
-	// SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
-	// 	$scope.activity = data;
-	// 	SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
-	// 		$scope.activityDetail = person;
-	// 		for (var ik = 0; ik < $scope.activity.length; ik++) {
-	// 			if ($scope.activity[ik].count == 1) {
-	// 				for (var j = 0; j < $scope.activityDetail.length; j++) {
-	// 						if ($scope.activity[ik].when_sent.getTime() == $scope.activityDetail[j].when_sent.getTime()) {
-	// 							if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-	// 									$scope.activity[ik].namethem = $scope.activityDetail[j].sent_to;
-	// 								}
-	// 						}
-	// 				}
-	// 			}
-	// 		}
+	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
+		$scope.activity = data;
+		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
+			$scope.activityDetail = person;
+			for (var ik = 0; ik < $scope.activity.length; ik++) {
+				if ($scope.activity[ik].count == 1) {
+					for (var j = 0; j < $scope.activityDetail.length; j++) {
+							if (new Date($scope.activity[ik].event_time).getTime() == (new Date(($scope.activityDetail[j].event_time + '').substring(0, 15)).getTime())) {
+								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+										$scope.activity[ik].namethem = $scope.activityDetail[j].person;
+									}
+							}
+					}
+				}
+			}
 
-	// 		$scope.activity.push({activity: "created", icon: "icon-star-empty", when_sent: $scope.document1.last_updated});
-	// 		for (var i = 0; i < $scope.activity.length; i++) {
-	// 		if ($scope.activity[i].activity == "shared") {
-	// 			$scope.activity[i].activity = "shared with ";
-	// 			$scope.activity[i].icon = "icon-edit";
-	// 		}
-	// 		else if ($scope.activity[i].activity == "viewed") {
-	// 			$scope.activity[i].activity = "viewed by ";
-	// 			$scope.activity[i].icon = "icon-eye-open";
-	// 		}
-	// 		else if ($scope.activity[i].activity == "reminder") {
-	// 			$scope.activity[i].activity = "reminded ";
-	// 			$scope.activity[i].icon = "icon-bullhorn";
-	// 		}
-	// 		else if ($scope.activity[i].activity == "signed") {
-	// 			$scope.activity[i].activity = "signed by ";
-	// 			$scope.activity[i].icon = "icon-ok-circle";
-	// 		}
-	// 		}
+			$scope.shared_dates = [];
+			for (var i = 0; i < $scope.activity.length; i++) {
+				if ($scope.activity[i].activity == "sent") {
+					$scope.activity[i].activity = "Shared with ";
+					$scope.activity[i].icon = "icon-redo";
+          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+				}
+				else if ($scope.activity[i].activity == "viewed") {
+					$scope.activity[i].activity = "viewed by ";
+					$scope.activity[i].icon = "icon-view";
+				}
+				else if ($scope.activity[i].activity == "reminder") {
+					$scope.activity[i].activity = "reminded ";
+					$scope.activity[i].icon = "icon-redo";
+          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+				}
+				else if ($scope.activity[i].activity == "signed") {
+					$scope.activity[i].activity = "signed by ";
+					$scope.activity[i].icon = "icon-pen";
+				}
+				else if ($scope.activity[i].activity == "uploaded") {
+					$scope.activity[i].activity = "Uploaded by ";
+					$scope.activity[i].icon = "icon-star";
+				}
+			}
+      		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+			});
+		});
 
-	// 		});
-	// 	});
+		$scope.activityOrder = function(card) {
+		   if (card.activity == "Created") {
+			   return 0
+		   }
+		   else {
+		   		return -card.event_time
+		   }
+		};
 
 	  $scope.editorEnabled = false;
 	  
@@ -229,7 +244,6 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	  };
 	
   SWBrijj.procm("document.document_status", docId).then(function(data) {
-  	console.log(data);
 	$scope.userStatus = data;
 	for (var i = 0; i < $scope.userStatus.length; i++) {
 		$scope.userStatus[i].shown = false;
@@ -242,15 +256,6 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		}
 	}
 	});
-	
-	$scope.activityOrder = function(card) {
-	   if (card.activity == "created") {
-		   return 0
-	   }
-	   else {
-	   		return -card.when_sent
-	   }
-	};
 	
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", docId, email, message, Boolean(sign)).then(function(data) {
@@ -271,7 +276,9 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	};
 	
 	$scope.opendetails = function(selected) {
-		 $scope.userStatus.forEach(function(name) {		  
+		 $scope.userStatus.forEach(function(name) {		 
+		 console.log(name); 
+		 console.log($scope.person);
 			if (selected == name.sent_to)
 				if (name.shown == true) {
 					name.shown = false;
@@ -279,6 +286,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 				}
 				else {
 					SWBrijj.procm("document.get_I_docstatus", name.sent_to, docId).then(function(data) {
+						console.log(data);
 						name.whenshared = data[1].loggedin;
 						if (data[0].loggedin != null) {
 							name.lastlogin = data[0].loggedin;
@@ -298,21 +306,20 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 						else {
 							name.signed = 0;	
 						}
-						if (data[5].loggedin != null) {
-							console.log(data[5]);
-							name.column5 = 2;
-							name.reminder = data[5].loggedin;
-						}
-						else if (data[4].loggedin != null) {
-							name.column5 = 1;
-							name.reminder = data[4].loggedin;
-						}
-						else {
-							name.column5 = 0;	
-						}
+						// if (data[5].loggedin != null) {
+						// 	console.log(data[5]);
+						// 	name.column5 = 2;
+						// 	name.reminder = data[5].loggedin;
+						// }
+						// else if (data[4].loggedin != null) {
+						// 	name.column5 = 1;
+						// 	name.reminder = data[4].loggedin;
+						// }
+						// else {
+						// 	name.column5 = 0;	
+						// }
 						name.button = "icon-minus";
 						name.shown = true;
-						$scope.$apply();
 					});
 				}
 		});

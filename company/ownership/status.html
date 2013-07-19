@@ -96,7 +96,7 @@
              <div class="activityBlock">
              <table>
              <tr ng-repeat="active in activity | orderBy:activityOrder">
-             	<td><i class="{{active.icon}} icon"></i></td>
+             	<td><i class="{{active.icon}}"></i></td>
              	<td>
                 	<table>
                 		<tr><td>{{active.activity}} <ng-pluralize count="active.count" when="{'0': '', '1': '{{active.namethem}}', 'other': '{{active.count}} people'}"></ng-pluralize></td></tr>
