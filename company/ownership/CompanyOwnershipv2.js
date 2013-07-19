@@ -1305,20 +1305,20 @@ var statusController = function($scope, SWBrijj) {
         }
       }
 
-      $scope.activity.push({activity: "Created", icon: "icon-star-empty"});
-      $scope.dates = [];
+      $scope.activity.push({activity: "Created", icon: "icon-star"});
+      $scope.shared_dates = [];
       for (var i = 0; i < $scope.activity.length; i++) {
         if ($scope.activity[i].activity == "shared") {
           $scope.activity[i].activity = "Shared with ";
-          $scope.activity[i].icon = "icon-edit";
-          $scope.dates.push(new Date(($scope.activity[i].whendone + '').substring(0, 15)));
+          $scope.activity[i].icon = 'icon-redo';
+          $scope.shared_dates.push(new Date(($scope.activity[i].whendone + '').substring(0, 15)));
         }
         else if ($scope.activity[i].activity == "viewed") {
           $scope.activity[i].activity = "Viewed by ";
-          $scope.activity[i].icon = "icon-eye-open";
+          $scope.activity[i].icon = 'icon-view';
         }
       }
-      $scope.lastsent = new Date(Math.max.apply(null,$scope.dates)).getTime();
+      $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
     });
   });
 

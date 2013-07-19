@@ -28,11 +28,7 @@ you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
 .icon-sharewave {
-<<<<<<< HEAD
 	font-family: 'logo';
-=======
-	font-family: 'sharewave';
->>>>>>> r0ml
 	speak: none;
 	font-style: normal;
 	font-weight: normal;

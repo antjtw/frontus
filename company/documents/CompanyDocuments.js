@@ -141,10 +141,8 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
-		console.log(data);
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
-			console.log(person);
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
 				if ($scope.activity[ik].count == 1) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {
@@ -157,29 +155,32 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 				}
 			}
 
+			$scope.shared_dates = [];
 			for (var i = 0; i < $scope.activity.length; i++) {
-			if ($scope.activity[i].activity == "sent") {
-				$scope.activity[i].activity = "Shared with ";
-				$scope.activity[i].icon = "icon-edit";
+				if ($scope.activity[i].activity == "sent") {
+					$scope.activity[i].activity = "Shared with ";
+					$scope.activity[i].icon = "icon-redo";
+          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+				}
+				else if ($scope.activity[i].activity == "viewed") {
+					$scope.activity[i].activity = "viewed by ";
+					$scope.activity[i].icon = "icon-view";
+				}
+				else if ($scope.activity[i].activity == "reminder") {
+					$scope.activity[i].activity = "reminded ";
+					$scope.activity[i].icon = "icon-redo";
+          			$scope.shared_dates.push(new Date(($scope.activity[i].event_time + '').substring(0, 15)));					
+				}
+				else if ($scope.activity[i].activity == "signed") {
+					$scope.activity[i].activity = "signed by ";
+					$scope.activity[i].icon = "icon-pen";
+				}
+				else if ($scope.activity[i].activity == "uploaded") {
+					$scope.activity[i].activity = "Uploaded by ";
+					$scope.activity[i].icon = "icon-star";
+				}
 			}
-			else if ($scope.activity[i].activity == "viewed") {
-				$scope.activity[i].activity = "viewed by ";
-				$scope.activity[i].icon = "icon-eye-open";
-			}
-			else if ($scope.activity[i].activity == "reminder") {
-				$scope.activity[i].activity = "reminded ";
-				$scope.activity[i].icon = "icon-bullhorn";
-			}
-			else if ($scope.activity[i].activity == "signed") {
-				$scope.activity[i].activity = "signed by ";
-				$scope.activity[i].icon = "icon-ok-circle";
-			}
-			else if ($scope.activity[i].activity == "uploaded") {
-				$scope.activity[i].activity = "Uploaded by ";
-				$scope.activity[i].icon = "icon-star-empty";
-			}
-			}
-
+      		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
 			});
 		});
 
@@ -245,7 +246,9 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	};
 	
 	$scope.opendetails = function(selected) {
-		 $scope.userStatus.forEach(function(name) {		  
+		 $scope.userStatus.forEach(function(name) {		 
+		 console.log(name); 
+		 console.log($scope.person);
 			if (selected == name.sent_to)
 				if (name.shown == true) {
 					name.shown = false;
@@ -253,6 +256,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 				}
 				else {
 					SWBrijj.procm("document.get_I_docstatus", name.sent_to, docId).then(function(data) {
+						console.log(data);
 						name.whenshared = data[1].loggedin;
 						if (data[0].loggedin != null) {
 							name.lastlogin = data[0].loggedin;
@@ -272,21 +276,20 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 						else {
 							name.signed = 0;	
 						}
-						if (data[5].loggedin != null) {
-							console.log(data[5]);
-							name.column5 = 2;
-							name.reminder = data[5].loggedin;
-						}
-						else if (data[4].loggedin != null) {
-							name.column5 = 1;
-							name.reminder = data[4].loggedin;
-						}
-						else {
-							name.column5 = 0;	
-						}
+						// if (data[5].loggedin != null) {
+						// 	console.log(data[5]);
+						// 	name.column5 = 2;
+						// 	name.reminder = data[5].loggedin;
+						// }
+						// else if (data[4].loggedin != null) {
+						// 	name.column5 = 1;
+						// 	name.reminder = data[4].loggedin;
+						// }
+						// else {
+						// 	name.column5 = 0;	
+						// }
 						name.button = "icon-minus";
 						name.shown = true;
-						$scope.$apply();
 					});
 				}
 		});
