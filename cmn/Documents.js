@@ -103,7 +103,7 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq' },
+    scope: { docId: '=docId', invq:'=invq', needsign:'=needsign', countersign:'=countersign'},
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
@@ -262,6 +262,24 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
      });
      }
      */
+  }
+
+  $scope.rejectSign = function(sig) {
+    SWBrijj.procm("document.reject_sign_document", $scope.docId).then(function(data) {
+       window.location.reload();
+    }).except(function(x) { alert(x.message); });
+  }
+
+  $scope.acceptSign = function(sig) {
+    $scope.finalized = true;
+  }
+
+  $scope.finalizeSigns = function(event) {
+    $scope.saveNotes(event);
+    SWBrijj.procm("document.finalize_document", $scope.docId).then(function(data) {
+      $scope.finalized = false;
+      $scope.signed = true;
+    }).except(function(x) { alert(x.message); });
   }
 
   $scope.clearNotes = function(event) {

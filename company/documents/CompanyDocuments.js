@@ -65,8 +65,10 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
       // initalized recipients can go here.
       scope.nextRecip = "";
       scope.share = function(one, two) {
+      	console.log(scope.signeeded);
+      	var sigdate = scope.signaturedate.toUTCString();
       	angular.forEach(scope.recipients, function(x) {
-      		SWBrijj.procm("document.share_document", scope.selectedDoc, x, scope.messageText, Boolean("f")).then(function(data) {
+      		SWBrijj.procm("document.share_document", scope.selectedDoc, x, scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
 				console.log(data);
 			});
       	});
@@ -87,6 +89,7 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	$scope.docOrder = 'docname';
 	$scope.selectedDoc = 0;
   	$scope.recipients = [];
+  	$scope.signaturedate = Date.today();
 
 	$scope.setOrder = function(field) {	$scope.docOrder = ($scope.docOrder == field) ? '-' + field :  field; };
 
@@ -109,23 +112,59 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 };
 
 function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
-  $scope.docId = parseInt($routeParams.doc);
+  var docKey = parseInt($routeParams.doc);
+  $scope.docId = docKey;
   $scope.invq = false;
+  $scope.countersign = true;
   $scope.library = "document.my_company_library";
   $scope.pages = "document.my_company_doc_length";
+  $scope.docversions = []
 
   $scope.init = function () {
-    SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'load_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
-      $scope.document=data;
-    });
 
   };
+
+  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
+      $scope.document=data;
+
+    });
+
+  SWBrijj.procm("document.we_shared_doc", parseInt(docKey)).then(function(stuff) {
+    	$scope.otherdocs = stuff;
+
+    	angular.forEach($scope.otherdocs, function(doc) {
+    		console.log(doc);
+		  	if (doc.signature_deadline != null) {
+		  		if (doc.when_signed == null) {
+		  			doc.countersign = false;
+		  		}
+
+		  		else {
+		  			doc.countersign = true;
+		  		}
+		  		$scope.docversions.push(doc);
+		  	}
+		});
+    });
+
 
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", $scope.docId, email, message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
 		};
+
+	$scope.pickInvestor = function(doc) {
+		$scope.invq = true;
+		$scope.docId = doc.doc_id;
+		$scope.countersign = doc.countersign;
+	};
+
+	$scope.getOriginal = function() {
+		$scope.invq = false;
+		$scope.docId = docKey;
+		$scope.countersign = true;
+	}
 }
 
 
