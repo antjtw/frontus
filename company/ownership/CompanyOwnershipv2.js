@@ -1267,6 +1267,9 @@ var statusController = function($scope, SWBrijj) {
     };
     SWBrijj.procm("ownership.get_company_views").then(function(views) {
       angular.forEach($scope.userStatus, function(person) {
+        SWBrijj.proc('account.get_investor_name', person.email).then(function(name) {
+            person.name = name[1][0];
+        });
         angular.forEach(views, function(view) {
           if (view.email == person.email) {
             person.viewed = "viewed";
@@ -1288,10 +1291,8 @@ var statusController = function($scope, SWBrijj) {
   });
 
   SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    console.log(data);
     $scope.activity = data;
     SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
-      console.log(person);
       $scope.activityDetail = person;
       for (var ik = 0; ik < $scope.activity.length; ik++) {
         if ($scope.activity[ik].count == 1) {
@@ -1299,6 +1300,7 @@ var statusController = function($scope, SWBrijj) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                    $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
                   }
               }
           }
@@ -1311,7 +1313,7 @@ var statusController = function($scope, SWBrijj) {
         if ($scope.activity[i].activity == "shared") {
           $scope.activity[i].activity = "Shared with ";
           $scope.activity[i].icon = 'icon-redo';
-          $scope.shared_dates.push(new Date(($scope.activity[i].whendone + '').substring(0, 15)));
+          $scope.shared_dates.push(new Date($scope.activity[i].whendone));
         }
         else if ($scope.activity[i].activity == "viewed") {
           $scope.activity[i].activity = "Viewed by ";
@@ -1319,6 +1321,23 @@ var statusController = function($scope, SWBrijj) {
         }
       }
       $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+
+      // angular.forEach($scope.activityDetail, function(x) { //Get names for each person
+      //   SWBrijj.proc('account.get_investor_name', x.email).then(function(name) {
+      //     x.name = name[1][0];
+      //     console.log(x.name);
+      //     $scope.$apply();
+      //   });
+      // });
+
+      angular.forEach($scope.activity, function(x) { //Replace emails with names
+        if (x.namethem != null) {
+          SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+            x.namethem = name[1][0];
+          });
+        }
+      });
+
     });
   });
 
@@ -1332,7 +1351,7 @@ var statusController = function($scope, SWBrijj) {
   };
 
   $scope.opendetails = function(selected) {
-   $scope.userStatus.forEach(function(name) {     
+   $scope.userStatus.forEach(function(name) {
     if (selected == name.email)
       if (name.shown == true) {
         name.shown = false;
