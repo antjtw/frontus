@@ -141,9 +141,10 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
-
+		console.log('data', data);
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
+			console.log(person);
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
 				if ($scope.activity[ik].count == 1) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {

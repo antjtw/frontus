@@ -123,18 +123,51 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   // });
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_company_activity').then(function(data) {
+  SWBrijj.procm('global.get_activity_cluster').then(function(data) {
     var i = 0;
-    console.log('data', data);
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-
+        x.link = "/company/ownership/people";
+        if (x.activity == "addadmin") {
+          x.activity = "Added ";
+          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeadmin") {
+          x.activity = "Removed ";
+          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.icon = "icon-circle-minus";
+        } else if (x.activity == "addinvestor") {
+          x.activity = "Added ";
+          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeinvestor") {
+          x.activity = "Removed ";
+          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.icon = "icon-circle-minus";
+        }
       } else if (x.type == 'document') {
-
+        x.link = "/company/documents/status?doc=" + x.doc_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+          x.target = res["docname"];
+        }); 
+        if (x.activity == "uploaded") {
+          x.activity = "Uploaded ";
+          x.icon = "icon-star";
+        } else if (x.activity == "sent") {
+          x.activity = "Shared ";
+          x.icon = "icon-redo";
+        }
       } else if (x.type == 'ownership') {
-        
+        x.link = "/company/ownership/";
+        x.target = "Ownership table";
+        if (x.activity == "shared") {
+          x.activity = "Shared ";
+          x.icon = "icon-redo";
+        }
       }
     });
+    console.log('data', data);
+    $scope.activity = data;
   });
 
   $scope.activityOrder = function(card) {
