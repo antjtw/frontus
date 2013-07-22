@@ -3,9 +3,9 @@ function NavCtrl($scope, $rootScope, SWBrijj) {
 	$scope.companies = [];
 	$scope.selected = ['Company', 'example.com'];
 
-	$scope.ownership = {visible: true, adminlink: '/company/ownership/', investorlink: '/investor/ownership', link: ''};
-	$scope.documents = {visible: true, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
-	$scope.people = {visible: true, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
+	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
+	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
+	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
 		if (companyURL == $scope.selected.company) {
@@ -25,18 +25,23 @@ function NavCtrl($scope, $rootScope, SWBrijj) {
 					$scope.documents.visible = true;
 					$scope.people.visible = true;
 				} else {
-					$scope.ownership.link = $scope.ownership.investorlink;
+					$scope.ownership.link = $scope.ownership.investorlink + $scope.selected.company;
 					$scope.documents.link = $scope.documents.investorlink;
 					$scope.people.link = $scope.people.investorlink;
 					$scope.ownership.visible = false;
 					$scope.documents.visible = false;
 					$scope.people.visible = false;
-					// SWBrijj.tblm('ownership.my_company_audit', ['email']).then(function(x) {
-						//TODO
-					// });
-					SWBrijj.tblm('document.my_investor_shares', ['sent_to']).then(function(x) {
+					SWBrijj.tblm('ownership.my_company_audit', ['company', 'activity']).then(function(x) {
 						for (var i = 0; i < x.length; i++) {
-							if (x[i]['sent_to'] == $scope.selected.email) {
+							if (x[i].company == $scope.selected.company && x[i].activity == "shared") {
+								$scope.ownership.visible = true;
+								break;
+							}
+						}
+					});
+					SWBrijj.tblm('document.my_investor_library', ['company']).then(function(x) {
+						for (var i = 0; i < x.length; i++) {
+							if (x[i].company == $scope.selected.company) {
 								$scope.documents.visible = true;
 								break;
 							}

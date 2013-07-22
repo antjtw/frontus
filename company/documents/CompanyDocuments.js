@@ -186,7 +186,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
       		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
       		angular.forEach($scope.activity, function(x) { //Replace emails with names
 		        if (x.namethem != null) {
-		          SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+		          SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
 		            x.namethem = name[1][0];
 		          });
 		        }
@@ -228,7 +228,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	$scope.userStatus = data;
 
 	angular.forEach($scope.userStatus, function(person) {
-		SWBrijj.proc('account.get_investor_name', person.sent_to).then(function(name) {
+		SWBrijj.proc('account.get_investor_name', person.sent_to, false).then(function(name) {
             person.name = name[1][0];
         });
 		person.shown = false;
