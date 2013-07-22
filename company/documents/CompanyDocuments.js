@@ -141,7 +141,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
 		$scope.activity = data;
-		console.log(data);
+
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
@@ -149,11 +149,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {
 							if (new Date($scope.activity[ik].event_time).getTime() == (new Date(($scope.activityDetail[j].event_time + '').substring(0, 15)).getTime())) {
 								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-										if ($scope.activityDetail[j].name == '') {
-						                    $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-										} else {
-						                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
-						                }
+										$scope.activity[ik].namethem = $scope.activityDetail[j].person;
 										$scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
 									}
 							}
@@ -187,6 +183,14 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 				}
 			}
       		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+      		angular.forEach($scope.activity, function(x) { //Replace emails with names
+		        if (x.namethem != null) {
+		          SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+		            x.namethem = name[1][0];
+		          });
+		        }
+	     	});
+
 			});
 		});
 
@@ -221,17 +225,21 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	
   SWBrijj.procm("document.document_status", docId).then(function(data) {
 	$scope.userStatus = data;
-	for (var i = 0; i < $scope.userStatus.length; i++) {
-		$scope.userStatus[i].shown = false;
-		$scope.userStatus[i].button = "icon-plus";
-		if ($scope.userStatus[i].event == "revoked") {
-			$scope.userStatus[i].rstatus = 1;
+
+	angular.forEach($scope.userStatus, function(person) {
+		SWBrijj.proc('account.get_investor_name', person.sent_to).then(function(name) {
+            person.name = name[1][0];
+        });
+		person.shown = false;
+		person.button = "icon-plus";
+		if (person.event == "revoked") {
+			person.rstatus = 1;
 		}
-		if ($scope.userStatus[i].event == "needsign") {
-			$scope.userStatus[i].event = "needs signing";
+		if (person.event == "needsign") {
+			person.event = "needs signing";
 		}
-	}
 	});
+  });
 	
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", docId, email, message, Boolean(sign)).then(function(data) {
@@ -252,9 +260,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	};
 	
 	$scope.opendetails = function(selected) {
-		 $scope.userStatus.forEach(function(name) {		 
-		 console.log(name); 
-		 console.log($scope.person);
+		 $scope.userStatus.forEach(function(name) {
 			if (selected == name.sent_to)
 				if (name.shown == true) {
 					name.shown = false;

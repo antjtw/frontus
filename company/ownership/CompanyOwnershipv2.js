@@ -1267,6 +1267,10 @@ var statusController = function($scope, SWBrijj) {
     };
     SWBrijj.procm("ownership.get_company_views").then(function(views) {
       angular.forEach($scope.userStatus, function(person) {
+        console.log(person);
+        SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+            x.namethem = name[1][0];
+        });
         angular.forEach(views, function(view) {
           if (view.email == person.email) {
             person.viewed = "viewed";
@@ -1289,18 +1293,14 @@ var statusController = function($scope, SWBrijj) {
 
   SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
     $scope.activity = data;
-    SWBrijj.tblm("ownership.company_activity_feed", ["email", "name", "activity", "whendone"]).then(function(person) {
+    SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
       $scope.activityDetail = person;
       for (var ik = 0; ik < $scope.activity.length; ik++) {
         if ($scope.activity[ik].count == 1) {
           for (var j = 0; j < $scope.activityDetail.length; j++) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-                    if ($scope.activityDetail[j].name == '') {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                    } else {
-                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
-                    }
                     $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
                   }
               }
@@ -1322,6 +1322,23 @@ var statusController = function($scope, SWBrijj) {
         }
       }
       $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+
+      // angular.forEach($scope.activityDetail, function(x) { //Get names for each person
+      //   SWBrijj.proc('account.get_investor_name', x.email).then(function(name) {
+      //     x.name = name[1][0];
+      //     console.log(x.name);
+      //     $scope.$apply();
+      //   });
+      // });
+
+      angular.forEach($scope.activity, function(x) { //Replace emails with names
+        if (x.namethem != null) {
+          SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+            x.namethem = name[1][0];
+          });
+        }
+      });
+
     });
   });
 
