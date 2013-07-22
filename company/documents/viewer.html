@@ -22,7 +22,7 @@
 
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1>Documents</h1>
+        <h1>{{document.docname}}</h1>
 
         <div class="row-fluid">
 
@@ -35,7 +35,7 @@
   </div>
 
   <div class="row-fluid">
-    <div class="span3 docVersiontab">
+    <div class="span3 docVersiontab leftBlock">
       <ul>
         <li>
           <span ng-click="getOriginal();">Original</span>
@@ -45,8 +45,8 @@
         </li>
       </ul>
     </div>
-    <div class="span9">
-      <doc-viewer doc-id="docId" invq="invq"></doc-viewer>
+    <div class="span9 companyDocViewer">
+        <doc-viewer doc-id="docId" invq="invq" needsign="false" countersign="countersign"></doc-viewer>
     </div>
 
   </div>

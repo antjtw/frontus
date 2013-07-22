@@ -492,7 +492,6 @@ h2 {
 /* Left Block for split pages */
 
 .leftBlock {
-	border-right: 1px solid #E3E3E3;
 }
 
 /* Login */
@@ -811,6 +810,10 @@ h2 {
 	list-style-type: none;
 }
 
+.companyDocViewer {
+	border-left: 1px solid #E3E3E3;
+}
+
 ul>li.curPage {
   border-color: navy;
     font-weight: bold;
@@ -818,17 +821,22 @@ ul>li.curPage {
 .unsaved {
     background-color: lightcoral;
 }
-.pageTurn {
-	margin: 20px 0 10px 0;
-	height: 24px;
+
+.annotation-control > .tools > button {
+	background: none;
+	border: none;
+	font-size: 20px;
 }
 
-.pageTurn li {
+.pageTurn {
+	height: 24px;
+	margin: 0 auto 0 auto;
+}
+
+.pageTurn > ul > li {
 	float:left;
 	display: inline;
-	margin: 0 10px 0 0;
-	padding: 3px 0 0 0;
-	width: 65px;
+	margin: 0 5px 0 0;
 	height: 24px;
 	text-align: center;
 }
@@ -846,10 +854,27 @@ ul>li.curPage {
     border: solid 1px dimgray;
 }
 
+.docHolder {
+	padding: 20px 0 20px 0;
+	background-color: #F1F1F1;
+}
+
+.docViewerControls {
+	height: 82px;
+	white-space: nowrap;
+}
+
+.docViewerControls > div {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: normal;
+	width: 100%;
+}
+
 .docPanel {
-	background-color: #FFFFFF;
-	width: 750px;
+	width: 700px;
 	height: 956px;
+	margin: 0 auto 0 auto;
 	overflow: auto;
 }
 

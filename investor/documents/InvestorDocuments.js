@@ -59,18 +59,18 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
   $scope.docId = parseInt($routeParams.doc);
   $scope.library = "document.my_investor_library";
   $scope.pages = "document.my_investor_doc_length";
-  $scope.invq = true;
 
   $scope.init = function () {
-    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
+    $scope.invq = true;
+    $scope.countersign = true;
+    SWBrijj.procm("document.get_investor_document", parseInt($scope.docId)).then(function(data) {
       $scope.document=data;
       if ($scope.document.signature_deadline == null) {
-        $scope.needSign = false
+        $scope.needsign = false
       }
       else {
-        $scope.needSign = true
+        $scope.needsign = true
       }
-      console.log($scope.needSign);
     });
 
   };

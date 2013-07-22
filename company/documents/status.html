@@ -70,32 +70,22 @@
             </div>
           </div>	
          
-         <div style="float:right">
-             <button class="button subText blueButton" style="float:left;" ng-click="modalUp()">Share Document</button>
-             <div style="float:right;" class="dropdown clearfix" ng-class="{open: open}">
-                <a class="multi-dropdown dropdown-toggle" href="#" ng-click="open=!open"><span class="caret"></span></a>
-                <ul class="dropdown-menu multi_menu subText" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a tabindex="-1" href="#">Print Document</a></li>
-                    <li><a tabindex="-1" href="#">Download Document</a></li>
-                </ul>
-            </div>
-        </div>
-         
-         <ul class="subText navPills cf">
-         	<li class="button"><a href="/company/documents/view?doc={{document1.doc_id}}">View</a></li>
-         	<li class="selectedPill button">Status</li>
-         </ul>
-         
         
          <div class="row-fluid">
          
              <div class="span8">
-                 <section class="recipientInfo statusBlock">
-                 <div>
-                 <i class="icon-user icon-2x"></i><p class="subText">Recipient Status</p>
-                 </div>
-                 <table class="tableView bodyText">
-                      <tr class="subText">
+
+                <div class="row-fluid">
+                    <div class="subnav-controls">
+                      <div>
+                        <h2>Shareholder Status</h2>
+                      </div>
+                      <div class="DivHelper"></div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                 <table class="docLibrary tableView bodyText">
+                      <tr class="column-label">
                         <th class="button"><span class="title sortedDown">Name</span></th><th colspan="2" class="button"><span class="title">Status</span></th>
                       </tr>
                       	<tbody ng-repeat="person in userStatus">
@@ -154,50 +144,34 @@
                         </tr>
                         </tbody>
                     </table>      
-                 </section>
+                </div>
              </div>
          
-  		 <div class="span4">
-             <section class="documentInfo statusBlock">
-             <div>
-             <i class="icon-info-sign icon-2x"></i><p class="subText">Document Information</p>
-             </div>
-             <ul>
-                <li>Last Sent: {{lastsent | date:"MMMM d, y"}}</li>
-                <li>
-                    <ul>
-                        <li>{{document1.last_updated | date:"short"}}</li>
-                        <li>Last Edited</li>
-                    </ul>
-                </li>
-                <li>
-                    <ul>
-                        <li>{{document1.last_updated | date:"short"}}</li>
-                        <li>Deadline</li>
-                    </ul>
-                </li>
-             </ul>        
-             </section>
-             
-             <section class="documentInfo statusBlock">
-             <div>
-             <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
-             </div> 
-             <div class="activityBlock">
-             <table>
-             <tr ng-repeat="active in activity | orderBy:activityOrder">
-             	<!-- <td><span data-icon="{{active.icon}}" aria-hidden="true"></span></td> -->
-                <td><i class="{{active.icon}}"></i></td>
-             	<td>
-                	<table>
-                		<tr><td>{{active.activity}} <ng-pluralize count="active.count" when="{'0': '', '1': '{{active.namethem}}', 'other': '{{active.count}} people'}"></ng-pluralize></td></tr>
-                        <tr><td>{{active.event_time | date:"MMMM d, y"}}</td></tr>
-                    </table>
-                </td>
-             </tr>
-             </table> 
+  		 <div class="span3 offset1"> 
+
+             <div class="row-fluid">
+                <div class="subnav-controls">
+                  <div>
+                    <h2>Activity Feed</h2>
+                  </div>
+                  <div class="DivHelper"></div>
+                </div>
+            </div>  
+
+             <div class="row-fluid">
+                 <table>
+                 <tr ng-repeat="active in activity | orderBy:activityOrder">
+                 	<!-- <td><span data-icon="{{active.icon}}" aria-hidden="true"></span></td> -->
+                    <td><i class="{{active.icon}}"></i></td>
+                 	<td>
+                    	<table>
+                    		<tr><td>{{active.activity}} <ng-pluralize count="active.count" when="{'0': '', '1': '{{active.namethem}}', 'other': '{{active.count}} people'}"></ng-pluralize></td></tr>
+                            <tr><td>{{active.event_time | date:"MMMM d, y"}}</td></tr>
+                        </table>
+                    </td>
+                 </tr>
+                 </table> 
              </div>   
-             </section>
          </div>
     </div>
 </div>
