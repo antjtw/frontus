@@ -1,4 +1,4 @@
-function NavCtrl($scope, $rootScope, SWBrijj) {
+function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$scope.selected = ['Company', 'example.com'];
@@ -9,7 +9,7 @@ function NavCtrl($scope, $rootScope, SWBrijj) {
 
 	$scope.select = function(companyURL) {
 		if (companyURL == $scope.selected.company) {
-			document.location.href = '/company/profile';
+			$route.reload();
 		}
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
