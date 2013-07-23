@@ -1267,7 +1267,7 @@ var statusController = function($scope, SWBrijj) {
     };
     SWBrijj.procm("ownership.get_company_views").then(function(views) {
       angular.forEach($scope.userStatus, function(person) {
-        SWBrijj.proc('account.get_investor_name', person.email).then(function(name) {
+        SWBrijj.proc('account.get_investor_name', person.email, false).then(function(name) {
             person.name = name[1][0];
         });
         angular.forEach(views, function(view) {
@@ -1332,7 +1332,7 @@ var statusController = function($scope, SWBrijj) {
 
       angular.forEach($scope.activity, function(x) { //Replace emails with names
         if (x.namethem != null) {
-          SWBrijj.proc('account.get_investor_name', x.namethem).then(function(name) {
+          SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
             x.namethem = name[1][0];
           });
         }
