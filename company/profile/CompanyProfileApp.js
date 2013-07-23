@@ -171,11 +171,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   });
 
   $scope.activityOrder = function(card) {
-     if (card.activity == "created") {
-       return 0;
-     } else {
-        return -card.when_sent;
-     }
+        return -card.time;
   };
 
 }
