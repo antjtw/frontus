@@ -58,7 +58,7 @@
 
            <div class="row-fluid">
             <div class="headsection row-fluid">
-                <h1>{{document.docname}}</h1>
+                <h1><a href="/company/documents/"><i class="button icon-reply icon-2x"></i></a>{{document.docname}}</h1>
 
                 <div class="row-fluid">
 
@@ -86,12 +86,15 @@
                 <div class="row-fluid">
                  <table class="docLibrary tableView bodyText">
                       <tr class="column-label">
-                        <th class="button"><span class="title sortedDown">Name</span></th><th colspan="2" class="button"><span class="title">Status</span></th>
+                        <th class="button"><span>Shareholder</span></th>
+                        <th class="button"><span>Email</span></th>
+                        <th colspan="2" class="button"><span>Status</span></th>
                       </tr>
                       	<tbody ng-repeat="person in userStatus">
                         <tr>
-                        <td><img src=""><p>{{person.name}}</p><p>{{person.sent_to}}</p></td>
-               			<td>{{person.event}}</td>
+                        <td>{{person.name}}</td>
+                        <td>{{person.sent_to}}</td>
+               			    <td>{{person.event}}</td>
                         <td class="button" ng-click="(opendetails(person.sent_to))"><i class="{{person.button}}"></i></td>
                         </tr>
                         <tr ng-Show="person.shown" class="personButtons">

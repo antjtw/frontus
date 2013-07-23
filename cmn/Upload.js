@@ -5,7 +5,7 @@ var upload = angular.module('upload', ['ui.bootstrap','ui.utils', 'brijj']);
 
 
 
-  $scope.dropText = 'Drop files here...';
+$scope.dropText = 'Drop files here...';
 $scope.files = [];
 
 $scope.fmtFileSize = function (file) {

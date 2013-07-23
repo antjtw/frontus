@@ -9,7 +9,7 @@ owner.config(function($routeProvider, $locationProvider) {
     
   $routeProvider.
       when('/:company', {templateUrl: 'companycaptable.html',   controller: captableController}).
-      when('/grant', {templateUrl: 'grant.html', controller: grantController}).
+      when('/:company/grant', {templateUrl: 'grant.html', controller: grantController}).
       otherwise({redirectTo: '/'});
 });
 

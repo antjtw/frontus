@@ -22,12 +22,12 @@
 
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1>{{document.docname}}</h1>
+        <h1><a href="/company/documents/"><i class="button icon-reply icon-2x"></i></a>{{document.docname}}</h1>
 
         <div class="row-fluid">
 
           <ul class="bodyText maintabs">
-            <a href="/company/documents/status?doc={{docId}}"><li class="button">Status</li></a>
+            <a href="/company/documents/status?doc={{docKey}}"><li class="button">Status</li></a>
             <li class="selectedtab">View</li>
            </ul>
         </div>
@@ -46,7 +46,7 @@
       </ul>
     </div>
     <div class="span9 companyDocViewer">
-        <doc-viewer doc-id="docId" invq="invq" needsign="false" countersign="countersign"></doc-viewer>
+        <doc-viewer doc-id="docId" invq="invq" needsign="false" countersign="countersign" finalized="finalized"></doc-viewer>
     </div>
 
   </div>

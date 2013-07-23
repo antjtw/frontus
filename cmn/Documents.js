@@ -103,7 +103,7 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq', needsign:'=needsign', countersign:'=countersign'},
+    scope: { docId: '=docId', invq:'=invq', finalized:'=finalized', needsign:'=needsign', countersign:'=countersign'},
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
@@ -159,8 +159,17 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     alert("make me smaller");
   }
 
-  $scope.nextPage = function(value) { $scope.currentPage = value+1; };
-  $scope.previousPage = function(value) { $scope.currentPage = value-1; };
+  $scope.nextPage = function(value) { 
+    if ($scope.currentPage < $scope.docLength) {
+      $scope.currentPage = value+1; 
+    }
+  };
+  $scope.previousPage = function(value) { 
+    if ($scope.currentPage > 1) {
+      $scope.currentPage = value-1; 
+    };
+  };
+  
   $scope.jumpPage = function(value) {
     $scope.currentPage = value; };
 
