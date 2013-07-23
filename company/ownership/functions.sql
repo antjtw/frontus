@@ -214,6 +214,10 @@ declare
   comp account.company_type;
   sendtype document.activity_type;
 begin
+  perform distinct company from account.company_investors where email = xemail;
+	IF NOT found THEN
+	  INSERT INTO account.invested_companies (email, company) VALUES (xemail, (SELECT DISTINCT company FROM account.companies));
+	END IF;
   select distinct company into comp from account.companies;
   insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
 end $$;

@@ -1,7 +1,7 @@
 function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
-	$scope.selected = ['Company', 'example.com'];
+	$rootScope.selected = ['Company', 'example.com'];
 
 	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
 	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
@@ -11,9 +11,9 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
-				$scope.selected = $scope.companies[i];
-				if (!$scope.selected.name) {
-					$scope.selected.name = $scope.selected.company;
+				$rootScope.selected = $scope.companies[i];
+				if (!$rootScope.selected.name) {
+					$rootScope.selected.name = $rootScope.selected.company;
 				}
 				if ($scope.companies[i].isAdmin) {
 					$scope.ownership.link = $scope.ownership.adminlink;
@@ -23,7 +23,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 					$scope.documents.visible = true;
 					$scope.people.visible = true;
 				} else {
-					$scope.ownership.link = $scope.ownership.investorlink + $scope.selected.company;
+					$scope.ownership.link = $scope.ownership.investorlink + $rootScope.selected.company;
 					$scope.documents.link = $scope.documents.investorlink;
 					$scope.people.link = $scope.people.investorlink;
 					$scope.ownership.visible = false;
@@ -31,7 +31,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 					$scope.people.visible = false;
 					SWBrijj.tblm('ownership.my_company_audit', ['company', 'activity']).then(function(x) {
 						for (var i = 0; i < x.length; i++) {
-							if (x[i].company == $scope.selected.company && x[i].activity == "shared") {
+							if (x[i].company == $rootScope.selected.company && x[i].activity == "shared") {
 								$scope.ownership.visible = true;
 								break;
 							}
@@ -39,7 +39,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 					});
 					SWBrijj.tblm('document.my_investor_library', ['company']).then(function(x) {
 						for (var i = 0; i < x.length; i++) {
-							if (x[i].company == $scope.selected.company) {
+							if (x[i].company == $rootScope.selected.company) {
 								$scope.documents.visible = true;
 								break;
 							}

@@ -33,13 +33,9 @@ docviews.filter('fromNow', function() {
 
 /* Controllers */
 
-function InvestorDocumentListController($scope, SWBrijj, $routeParams) {
+function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScope) {
 
-  var company = $routeParams.company;
-  console.log(company);
-  if (String(company) == "") {
-    document.location.href = "/investor/profile";
-  };
+  var company = $rootScope.selected.company;
   $scope.currentCompany = company;
 
 	SWBrijj.procm("document.get_company_investor_library", company).then(function(data) {
