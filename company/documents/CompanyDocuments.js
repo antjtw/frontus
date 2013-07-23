@@ -183,7 +183,6 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		console.log('data', data);
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
-			console.log(person);
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
 				if ($scope.activity[ik].count == 1) {
 					for (var j = 0; j < $scope.activityDetail.length; j++) {
@@ -235,7 +234,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		});
 
 		$scope.activityOrder = function(card) {
-		   if (card.activity == "Created") {
+		   if (card.activity == "Uploaded") {
 			   return 0
 		   }
 		   else {

@@ -8,9 +8,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
-		if (companyURL == $scope.selected.company) {
-			$route.reload();
-		}
+		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
 				$scope.selected = $scope.companies[i];
@@ -62,8 +60,23 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 		for (var i = 0; i < x.length; i++) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
-		$scope.select($scope.companies[0]['company']);
+		if (readCookie("selectedCompany") != null) {
+			$scope.select(readCookie("selectedCompany"));
+		} else {
+			$scope.select($scope.companies[0]['company']);		
+		}
 	});
+
+	function readCookie(name) {
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0;i < ca.length;i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+		return null;
+	}
 
 	$rootScope.notification = {};
 	$rootScope.notification.color = "success";
