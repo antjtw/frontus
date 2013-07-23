@@ -23,7 +23,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 					$scope.documents.visible = true;
 					$scope.people.visible = true;
 				} else {
-					$scope.ownership.link = $scope.ownership.investorlink + $rootScope.selected.company;
+					$scope.ownership.link = $scope.ownership.investorlink;
 					$scope.documents.link = $scope.documents.investorlink;
 					$scope.people.link = $scope.people.investorlink;
 					$scope.ownership.visible = false;
@@ -63,7 +63,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 		if (readCookie("selectedCompany") != null) {
 			$scope.select(readCookie("selectedCompany"));
 		} else {
-			$scope.select($scope.companies[0]['company']);		
+			$scope.select($scope.companies[0]['company']);	
 		}
 	});
 

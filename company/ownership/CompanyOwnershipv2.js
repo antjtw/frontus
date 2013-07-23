@@ -1320,7 +1320,12 @@ var statusController = function($scope, SWBrijj) {
           $scope.activity[i].icon = 'icon-view';
         }
       }
-      $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+      if ($scope.shared_dates.length == 0) {
+        $scope.lastsent = "never sent";
+      }
+      else {
+        $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
+      };
 
       // angular.forEach($scope.activityDetail, function(x) { //Get names for each person
       //   SWBrijj.proc('account.get_investor_name', x.email).then(function(name) {
