@@ -250,6 +250,10 @@ $rootScope.shareSum = function(row) {
     return (percentage + ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * (100 - totalpercentage)));
     };
 
+  $rootScope.myPercentage = function(everyone) {
+    return (100 - everyone);
+    };
+
   $rootScope.colTotal = function(header, rows, type) {
       var total = 0;
       angular.forEach(rows, function(row) {
@@ -291,7 +295,8 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
   $scope.investorOrder = "name";
 
   SWBrijj.procm('ownership.mark_viewed', company).then(function(x) {
-    console.log(x);
+    $scope.fullview = Boolean(x[0].mark_viewed);
+    console.log($scope.fullview);
   });
   
 	SWBrijj.procm('ownership.get_my_issues', company).then(function(data) {
@@ -382,11 +387,12 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
     $scope.issuekeys= sorting.issuekeys($scope.issuekeys, $scope.issues);
     $scope.rows.sort(sorting.row($scope.issuekeys));
 
-    var values = {"name":"", "editable":"0"}
-    angular.forEach($scope.issuekeys, function(key) {
-      values[key] = {"u":null, "a":null};
+    SWBrijj.procm('ownership.get_everyone_else', company).then(function(x) {
+      $scope.everyone = {}
+      $scope.everyone.percentage = x[0].get_everyone_else;
     });
-    $scope.rows.push(values);
+
+    var values = {"name":"Other Shareholders", "editable":"0"}
     
 		});
 	});
@@ -467,7 +473,6 @@ $scope.getActiveIssue = function(issue) {
   // Set Freq Value for Angularjs Select
   var index = $scope.freqtypes.indexOf(issue.vestfreq);
   $scope.activeIssue.vestfreq = $scope.freqtypes[index];
-	$scope.$apply();
 };
 
 
@@ -493,7 +498,10 @@ $scope.getActiveInvestor = function(investor) {
 
 
 // Grants page controller
-var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope) {
+
+  var company = $rootScope.selected.company;
+  $scope.currentCompany = company;
 
   $scope.rows = []
   $scope.uniquerows = []
@@ -507,7 +515,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   });
 
   // Initialisation. Get the transactions and the grants
-  SWBrijj.tblm('ownership.company_options').then(function(data) {
+  SWBrijj.procm('ownership.get_my_options', company).then(function(data) {
 
     // Pivot from transactions to the rows of the table
     $scope.trans = data;
@@ -602,9 +610,5 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     };
   };
 
-
-};
-
-var statusController = function($scope) {
 
 };

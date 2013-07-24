@@ -3,7 +3,7 @@
 -- Function to track views
 
 CREATE OR REPLACE FUNCTION ownership.mark_viewed(comp character varying)
- RETURNS boolean
+ RETURNS SETOF boolean
  LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -14,9 +14,8 @@ BEGIN
 	PERFORM distinct company from ownership.my_company_audit where email = current_user and company = comp;
 	IF FOUND THEN
 		INSERT INTO ownership.my_company_views (email, company) VALUES (current_user, comp::account.company_type);
-		RETURN true;
 	END IF;
-	RETURN false;
+	RETURN QUERY SELECT fullview from ownership.my_company_audit where email = current_user and company = comp;
 END
 $$;
 
@@ -69,8 +68,10 @@ try:
   allowed = r[0]['company']
   if allowed == comp:
     z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
-    r = plpy.execute(z,[comp])
-    return r[0]['smush_rows']
+    totalunits = plpy.execute(z,[comp])[0]['smush_rows']
+    j = plpy.prepare("SELECT SUM(units) from ownership.my_company_transaction where company=$1", ['text'])
+    myunits = plpy.execute(j,[comp])[0]['sum']
+    return (100 - ((myunits/totalunits)*100))
   else:
     return 0
 except:
@@ -81,6 +82,17 @@ CREATE or REPLACE FUNCTION mail.get_ticket() returns varchar language plpythonu 
 import random
 import string
 return ''.join(random.choice(string.ascii_uppercase+string.digits) for x in range(16))
+$$;
+
+
+-- Grants
+CREATE OR REPLACE FUNCTION ownership.get_my_options(comp character varying)
+ RETURNS SETOF ownership.my_company_options
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY SELECT * from ownership.my_company_options where company = comp::account.company_type;
+END
 $$;
 
 

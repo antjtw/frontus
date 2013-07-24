@@ -5,6 +5,7 @@ html,
 body {
   height: 100% !important;
   background-color:#FFFFFF;
+  overflow-x: hidden;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -1018,8 +1019,12 @@ ul>li.curPage {
 	float: left;
 }
 
+td.tranSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
+
 .tranSelected {
-	background-color: green;
+	background-color: transparent;
 }
 
 .capright {
@@ -1091,8 +1096,12 @@ ul>li.curPage {
 
 /* Grants Table */
 
-.tableView tr.rowSelected {
-	background-color: #f0f0f0;
+tr.rowSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
+
+.rowSelected > td {
+	background-color: transparent;
 }
 
 /* Buttons */
