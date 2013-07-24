@@ -367,7 +367,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		});
 
 		$scope.activityOrder = function(card) {
-		   if (card.activity == "Uploaded") {
+		   if (card.activity == "Uploaded by ") {
 			   return 0
 		   }
 		   else {

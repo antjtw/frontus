@@ -7,6 +7,10 @@ CREATE OR REPLACE FUNCTION ownership.mark_viewed(comp character varying)
  LANGUAGE plpgsql
 AS $$
 BEGIN
+	perform distinct company from account.invested_companies where verified = TRUE;
+	IF NOT found THEN
+		UPDATE account.invested_companies SET verified = TRUE WHERE email = current_user;
+	END IF;
 	PERFORM distinct company from ownership.my_company_audit where email = current_user and company = comp;
 	IF FOUND THEN
 		INSERT INTO ownership.my_company_views (email, company) VALUES (current_user, comp::account.company_type);

@@ -207,19 +207,16 @@ END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
 GRANT INSERT on ownership.company_audit TO investor;
 
--- Share document, sends email and tracks action
+-- Share captable, sends email and tracks action
 CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, xmessage character varying) returns void
 language plpgsql as $$
 declare
   comp account.company_type;
   sendtype document.activity_type;
 begin
-  perform distinct company from account.company_investors where email = xemail;
-	IF NOT found THEN
-	  INSERT INTO account.invested_companies (email, company) VALUES (xemail, (SELECT DISTINCT company FROM account.companies));
-	END IF;
   select distinct company into comp from account.companies;
   insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
+  perform distinct company from account.company_investors where email = xemail;
 end $$;
 
 -- Get most recent view
