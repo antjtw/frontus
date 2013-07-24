@@ -523,7 +523,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     tran.datekey = tran['date'].toUTCString();
     if ($scope.uniquerows.indexOf(tran.investor) == -1) {
       $scope.uniquerows.push(tran.investor);
-      $scope.rows.push({"state":true, "name":tran.investor, "namekey":tran.investor, "editable":"yes", "granted":null, "forfeited":null, "issue":tran.issue});
+      $scope.rows.push({"state":false, "name":tran.investor, "namekey":tran.investor, "editable":"yes", "granted":null, "forfeited":null, "issue":tran.issue});
       }
     });
 
@@ -605,7 +605,6 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           activeAct.push($scope.grants[j]);
         };
       };
-      activeAct.push({"unit":null, "tran_id":$scope.activeTran[i].tran_id, "date":(Date.today()), "action":null, "investor":$scope.activeTran[i].investor, "issue":$scope.activeTran[i].issue});
       $scope.activeTran[i].activeAct = activeAct;
     };
   };

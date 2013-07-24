@@ -49,10 +49,13 @@
     </div>
 
 
-    <div class="span3">
+    <div class="span4">
       <div ng-switch on="sideBar" >
         <span ng-switch-when="1">
-          <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
+          <div class="headsection row-fluid">
+              <h2>{{activeInvestor}}</h2>
+              <p>Terms from the ownership table</p>
+          </div>
           <tabset>
             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'mediumDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
@@ -60,17 +63,17 @@
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
                     <p>Underlying Security
-                      <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
+                      <select disabled ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
                       <option></option>
                       </select>
                     </p>
-                    <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
+                    <p>Price<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
                     <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
-                    <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
-                    <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
-                    <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                    <p>Term (months)<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
+                    <p>Vesting Cliff %<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
+                    <p>Vesting Cliff Date<input disabled ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                     <p>Post Cliff Frequency
-                      <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
+                      <select disabled ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                       </select>
                     </p>
                   </accordion-group>

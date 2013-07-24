@@ -57,7 +57,7 @@ $$;
 
 CREATE or REPLACE FUNCTION ownership.smush_rows(comp character varying) returns SETOF double precision language plpgsql SECURITY DEFINER as $$
 BEGIN
-	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp;	
+	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp and units != 'NaN';	
 END;
 $$;
 
@@ -94,7 +94,5 @@ BEGIN
 	RETURN QUERY SELECT * from ownership.my_company_options where company = comp::account.company_type;
 END
 $$;
-
-
 
 

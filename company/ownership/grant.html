@@ -77,8 +77,8 @@
               <h2>{{activeInvestor}}</h2>
               <p>Terms from the ownership table</p>
           </div>
-          <tabs>
-            <pane ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
+          <tabset>
+            <tab ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
               <accordion close-others="true">
@@ -111,8 +111,8 @@
                   </ul>
                   </accordion-group>
               </accordion>
-            </pane>
-          </tabs>
+            </tab>
+          </tabset>
         </span>
 
         <span ng-switch-when="2">

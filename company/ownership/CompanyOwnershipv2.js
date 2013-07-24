@@ -818,6 +818,15 @@ $scope.createTrantab = function() {
       });
     $scope.trans.push(newTran);
     $scope.activeTran.push(newTran);
+    for (var i = 0; i < $scope.activeTran.length; i++) {
+      console.log($scope.activeTran[i]);
+      if (i + 1 == $scope.activeTran.length) {
+        $scope.activeTran[i].active = true;
+      }
+      else {
+        $scope.activeTran[i].active = false;
+      }
+    };
   }
   $scope.tabAddTime = true;
 }
