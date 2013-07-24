@@ -479,7 +479,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
         else {
           tran.liquidpref = $scope.tf[1];
         }
-        console.log(tran);
         tran = switchval.typeswitch(tran);
         $scope.activeTran.push(tran);
       }
@@ -498,6 +497,7 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     $scope.trans.push(anewTran);
     $scope.activeTran.push(anewTran);
   }
+  $scope.tabAddTime = false;
   $scope.$apply();
 };
 
@@ -706,7 +706,7 @@ $scope.getActiveInvestor = function(investor) {
         row[key].state = false;
     });
   });
-  
+
   if (investor.name == "") {
     var values = {"name":"", "editable":"0"}
     angular.forEach($scope.issuekeys, function(key) {
@@ -807,6 +807,21 @@ $scope.createTran = function() {
   $scope.activeTran.push(newTran);
 }
 
+$scope.createTrantab = function() {
+  if ($scope.tabAddTime) {
+    var newTran = {}
+    newTran = {"new":"yes", "atype":0, "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "key":"undefined"};
+    angular.forEach($scope.issues, function(issue) {
+        if (issue.issue == $scope.activeIssue) {
+          newTran = $scope.tranInherit(newTran, issue);
+        }
+      });
+    $scope.trans.push(newTran);
+    $scope.activeTran.push(newTran);
+  }
+  $scope.tabAddTime = true;
+}
+
 $scope.deleteTran = function(tran) {
     var d1 = tran['date'].toUTCString();
     SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function(data) { 
@@ -838,8 +853,6 @@ $scope.manualdeleteTran = function(tran) {
 }
 
 $scope.saveTran = function(transaction) {
-  console.log("saving");
-  console.log(transaction);
   var savingActive = $scope.activeTran
   if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
     console.log("transaction is undefined")
