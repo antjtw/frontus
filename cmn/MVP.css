@@ -130,9 +130,15 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 p, input, button, select, textarea, a, address { 
 	font-family: 'FS Elliot Web Regular', sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 18px;
 	color: #7f8c8d;
+}
+
+p strong {
+	font-family: 'FS Elliot Web Light', sans-serif;
+	font-weight: normal;
+
 }
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{ 
@@ -149,13 +155,14 @@ h1 {
 
 h2 {
 	font-family: 'FS Elliot Web Light', sans-serif !important;
-	font-size: 20px !important;
+	font-size: 24px !important;
 	line-height:21px;
 	font-weight: normal !important;
 	color: #1e2d3d;	
 }
 
-.menuProfileText {
+/*Review this*/
+/*.menuProfileText {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 11px;
 	line-height: 16px;
@@ -169,7 +176,7 @@ h2 {
 	line-height: 16px;
 	color: #8d8d8d;
 	padding-right:20px;
-}
+}*/
 
 .bodyText, .bodyText input, .bodyText a {
 	font-family: 'FS Elliot Web Regular', sans-serif;
@@ -203,10 +210,6 @@ h2 {
 	line-height:20px;	
 }
 
-.copyright {
-	color:#7f8c8d;
-}
-
 .compulsoryStar {
 	color: #F00;	
 }
@@ -230,7 +233,10 @@ h2 {
 .spacer60 { height: 60px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer70 { height: 70px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer80 { height: 80px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer90 { height: 90px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer110 { height: 110px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer120 { height: 120px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer130 { height: 130px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 
@@ -437,6 +443,10 @@ h2 {
     border-top :0px !important;
     border-bottom: 4px solid black;
 }
+
+
+
+
 
 /* Head Section */
 
@@ -935,27 +945,60 @@ ul>li.curPage {
   height: 112px;
 }
 
-.footerLinks {
-	float: left;
+.footerLinks ul {
+
 	list-style-type:none;
 	min-height: 20px;
 	margin: 10px 0;
-	padding: 0;
+	padding: 3px 0px;
 }
 
 .footerLinks li {
 	display: inline;
-	margin-right: 20px;
+	padding: 0px 7px;
+	border-right: 1px solid #f1f1f1;
+
+}
+
+.footerLinks li a {
+	color: #f1f1f1;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+
+.footerLinks li:last-child {
+	border-right: 0px;
 }
 
 .footerBar {
 	height: 112px;
-	background-color: #34495E;
+	background-color: #1e2d3d;
 }
 
 #socialMedia {
 	margin: 30px 0;
 }
+
+
+#copyrightBar {
+	border-top: solid 1px #34495e;
+	padding-top: 20px;
+
+}
+
+.copyright {
+	color: #8d8d8d;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+}
+
+
+
+
 
 /* Captable */
 
@@ -1572,4 +1615,137 @@ margin-top: 0.9em;
 
 .dropbox.over {
   background-color: #bfb;
+}
+/* Homepage */
+
+.home #hero{
+	background: url(/img/top-image-1920-2.jpg) no-repeat center;
+	background-size:cover;
+   	height: 800px;
+}
+
+.home h1 {
+	color: white;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	font-size: 42px;
+	font-weight: normal;	
+
+}
+
+.home h2 {
+	color: #1e2d3d;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	font-size: 24px;
+	font-weight: normal;
+}
+
+.home h3 {
+	color: white;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 18px;	
+
+}
+
+.home p {
+	color: #666666;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.home .paginator {
+	position:absolute;
+    bottom:0px;
+    left:50%;
+}
+
+.home .btn-mini {
+	color: #666666;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	border: 0px;
+	
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.home .btn-mini strong {
+	color: #1e2d3d;
+}
+
+
+.home .btn-mini:hover {
+	color: #1e2d3d;
+	background-color: #f1f1f1;
+	padding-bottom: 10px;
+}
+
+
+
+.home .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled], .btn-mini:active {
+	color: #666666;
+	background-color: #f1f1f1;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	padding-bottom: 10px;
+}
+
+.home .btn-success {
+
+	color: #666666;
+	background-color: #f1f1f1;
+
+}
+
+.home .even {
+	background-color: #f1f1f1;
+}
+
+.home .button {
+	width: 222px;
+	height: 60px;
+	text-transform:capitalize;	
+	border: 0;
+	font-size: 14px;
+}
+
+.home input {
+
+ 	width: 300px;
+ 	height: 30px;
+ 	border-radius: 0px;
+}
+
+.carousel-control.left{
+	background: url(/img/orange-left.png) no-repeat !important;
+}
+
+.carousel-control.right{
+	background: url(/img/orange-right.png) no-repeat !important;
+}
+
+
+.carousel-linked-nav,
+.item img {
+  display: block; 
+  margin: 0 auto;
+}
+
+.carousel-linked-nav {
+  width: 120px;
+  margin-bottom: 20px;   
+}
+
+
+/* Team Page */
+.social a {
+	text-decoration: none;
+}
+
+.team {
+	border-bottom: solid 1px black;
 }
