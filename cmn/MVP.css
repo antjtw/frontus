@@ -1794,7 +1794,7 @@ margin-top: 0.9em;
 
 /* Marketing Pages */
 
-.static p, a {
+.static p, .static a {
 	font-size: 14px;
 }
 
