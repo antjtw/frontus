@@ -1,27 +1,26 @@
-<div class="span12 pagination-centered gateway">
-  <img src="/img/logo-144x24.png">
-  <div class="text-error">{{fed}}</div>
-  <form id="login" class="center" ng-submit="doForgot()">
-    <fieldset>
-      <label class="resetLabel headline2">Reset Your Password</label> 
-      <input required class="loginInput FI" placeholder="Email" tabindex="1"
-             autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username"
-             data-step='1'
-             data-intro="Enter your email address and press enter.
-             An email will be sent with instructions
-             for resetting your password"
-             data-position='left'
-        />
-      <a id="cancelButton" class="subText button" ng-href=".">Cancel</a>
-      <button ng-disabled="forgotDisabled()" ng-click="doForgot()" ng-class="forgotClass()"
-              data-step='2'
-              data-intro="Instead of pressing enter,
-              you can click this button
-              to send the email for resetting your password"
-              data-position='left'
-              tabindex="3">Reset Password</button>
-      <br>
-    </fieldset>
-  </form>
-</div>
+<div class="row-fluid">
+  <div class="span5 offset4 gateway text-center">
+    <div>
+      <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
+      <p class="tagline">the best way to manage your shareholders<p>
+    </div>
+    <div class="spacer40"></div> 
+   
+     <div class="span9 offset1 text-center line"></div>
+    <h2>Forgot Password?</h2>
+    <p>Enter your email adress and we'll send you instructions.</p>
+       <div class="text-error">{{fed}}</div>
+    <form id="login" class="text-center inputs" ng-submit="doForgot()">
+      <fieldset>
+        <input required class="loginInput FI" placeholder="Email Address" tabindex="1"
+               autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username" />
+        <div class="spacer30"></div>                  
+        <button ng-disabled="forgotDisabled()" ng-click="doForgot()" ng-class="forgotClass()"
+                tabindex="3">Send Instructions</button>
 
+        <a id="cancelButton" class="button text-center" ng-href=".">Return to Login</a>        
+        <br>
+      </fieldset>
+    </form>
+  </div>
+</div>
