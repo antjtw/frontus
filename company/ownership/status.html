@@ -46,8 +46,8 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
-                <td><img src=""><p>{{person.name}}</p></td>
-                <td><p>{{person.email}}</p></td>
+                <td>{{person.name}}</td>
+                <td>{{person.email}}</td>
        			    <td>{{person.fullview}}</td>
        		     	<td>{{person.viewed}}</td>
                 <td class="button" ng-click="(opendetails(person.email))"><i class="{{person.button}}"></i></td>

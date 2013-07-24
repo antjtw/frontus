@@ -220,8 +220,8 @@
               <p>Customize terms for this shareholder</p>
             </div>
             <!-- <button ng-click="createTran();">Add</button> -->
-            <tabs class="trantabs">
-              <pane ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+            <tabset class="trantabs">
+              <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                 <div class="row-fluid trancore">
                   <div>
                     <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yy" bs-datepicker></p>
@@ -282,9 +282,9 @@
                       </accordion-group>
                     </span>
                 </accordion>
-              </pane>
-              <pane heading="add"></pane>
-            </tabs>
+              </tab>
+              <tab heading="add"></tab>
+            </tabset>
           </span>
 
           <span ng-switch-when="3">

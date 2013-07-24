@@ -56,6 +56,33 @@ BEGIN
 END
 $$;
 
+CREATE or REPLACE FUNCTION ownership.smush_rows(comp character varying) returns SETOF double precision language plpgsql SECURITY DEFINER as $$
+BEGIN
+	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp;	
+END;
+$$;
+
+CREATE or REPLACE FUNCTION ownership.get_everyone_else(comp character varying) returns double precision language plpythonu as $$
+z = plpy.prepare("select * from account.invested_companies where company=$1", ['text'])
+r = plpy.execute(z,[comp])
+try:
+  allowed = r[0]['company']
+  if allowed == comp:
+    z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
+    r = plpy.execute(z,[comp])
+    return r[0]['smush_rows']
+  else:
+    return 0
+except:
+  return 0
+$$;
+
+CREATE or REPLACE FUNCTION mail.get_ticket() returns varchar language plpythonu as $$
+import random
+import string
+return ''.join(random.choice(string.ascii_uppercase+string.digits) for x in range(16))
+$$;
+
 
 
 

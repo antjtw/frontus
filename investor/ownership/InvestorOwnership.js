@@ -8,8 +8,8 @@ owner.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
     
   $routeProvider.
-      when('/:company', {templateUrl: 'companycaptable.html',   controller: captableController}).
-      when('/:company/grant', {templateUrl: 'grant.html', controller: grantController}).
+      when('/', {templateUrl: 'companycaptable.html',   controller: captableController}).
+      when('/grant', {templateUrl: 'grant.html', controller: grantController}).
       otherwise({redirectTo: '/'});
 });
 
@@ -271,12 +271,9 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams) {
+var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope) {
 
-  var company = $routeParams.company;
-  if (String(company) == "") {
-    document.location.href = "/investor/profile";
-  };
+  var company = $rootScope.selected.company;
   $scope.currentCompany = company;
   console.log(company);
 
@@ -439,7 +436,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
       }
 		}
 	});
-	$scope.$apply();
 };
 
 $scope.getActiveIssue = function(issue) {
@@ -485,7 +481,6 @@ $scope.getActiveInvestor = function(investor) {
     $scope.rows.push(values);
   }
   $scope.activeInvestorName = investor.name;
-  $scope.$apply();
 };
 
 
