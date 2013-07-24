@@ -66,23 +66,7 @@ try:
   if allowed == comp:
     z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
     r = plpy.execute(z,[comp])
-    return r[0]['sum']
-  else:
-    return 0
-except:
-  return 0
-$$;
-
-CREATE or REPLACE FUNCTION ownership.get_everyone_else(comp character varying) returns text language plpythonu as $$
-z = plpy.prepare("select * from account.invested_companies where company=$1", ['text'])
-r = plpy.execute(z,[comp])
-try:
-  allowed = r[0]['company']
-  if allowed == comp:
-    return "here"
-    z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
-    r = plpy.execute(z,[comp])
-    return r[0]['sum']
+    return r[0]['smush_rows']
   else:
     return 0
 except:
