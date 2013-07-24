@@ -130,7 +130,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 p, input, button, select, textarea, a, address { 
 	font-family: 'FS Elliot Web Regular', sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 18px;
 	color: #7f8c8d;
 }
