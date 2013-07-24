@@ -130,7 +130,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 p, input, button, select, textarea, a, address { 
 	font-family: 'FS Elliot Web Regular', sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 18px;
 	color: #7f8c8d;
 }
@@ -276,7 +276,6 @@ h2 {
 }
 
 .logo {
-	margin-left: 15px;
 	line-height: 40px;
 	color: #F78D1E;
 }
@@ -506,22 +505,23 @@ h2 {
 
 /* Login */
 
-.pagination-centered.gateway {
+.gateway {
 	margin-left:0px;
 	margin-top:140px;
+	background-color: #e3e3e3;
+	padding-top: 45px;
+	padding-bottom: 0px;
 }
 
-#login {
-	width:500px;
-	padding-top:10px;
-	margin-top:10px;
+form.inputs {
+	padding-top: 20px;
 }
+
 
 #forgotLink {
 	font-size: 12px;
 	text-decoration: underline;
 	line-height:5px;
-	margin-left:45px;	
 }
 
 .loginLabel {
@@ -530,12 +530,12 @@ h2 {
 }
 
 #login .loginInput {
-	width:337px;
+	width:286px;
 	padding-top:7px;
 	padding-bottom:7px;
 	border-radius:0px;
-	margin-left:74px;
 	background-color:#f1f1f1;
+	border: 0px;
 }
 
 #login_password {
@@ -543,32 +543,55 @@ h2 {
 }
 
 #forgotButton {
-/*
-    margin-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    */
+    font-size: 12px;
 	margin-top:10px;
-    margin-left:80px;
-	width:200px;
     display: block;
-	float:left;
+    color: #3498DB;
 }
 
-.loginButton {
-	float:right;
-	margin-top:15px;
-	margin-bottom:15px;
-	width:144px;
-	height:34px;
+#forgotButton:hover {
+    color: #2980B9;
 }
+
+
+.button.greenButton.loginButton {
+	width:300px;
+	height:30px;
+	border-radius:0px;
+	border: 0px;
+}
+
+.button.greenButton.loginButton:hover {
+	background-color: #15A085;
+}
+
 
 .textalert.loginErrorBox {
-	margin-left:0px;
-	margin-top:20px;
-	width:311px;
-	padding-left:20px;
-	padding-right:20px;
+	width:300px;
+	background-color: #a6a6a6;
+	border-radius: 0px;
+	margin: auto;
+	float:none;
+}
+
+.gateway .logo {
+  font-size: 42px;
+  color: #1e2d3d;
+  line-height: 44px
+}
+
+.gateway p.tagline {
+	font-size: 14px;
+  color: #1e2d3d;
+}
+
+.lognreg {
+	background-color: #1E2D3D;
+}
+
+
+.line{
+	border-top: 1px solid #a6a6a6;
 }
 
 /* Password Reset */
@@ -580,11 +603,13 @@ h2 {
 }
 
 #cancelButton {
-	margin-top:25px;
-	margin-left:220px;
+    font-size: 12px;
+	margin-top:10px;
     display: block;
-	float:left;
+    color: #3498DB;
 }
+
+
 
 .resetLabel {
 	text-align:left;
@@ -909,17 +934,16 @@ h2 {
 	min-height: 20px;
 	margin: 10px 0;
 	padding: 3px 0px;
+	color: #8d8d8d;
 }
 
 .footerLinks li {
 	display: inline;
-	padding: 0px 7px;
-	border-right: 1px solid #f1f1f1;
-
+	padding: 0px 8px;
 }
 
 .footerLinks li a {
-	color: #f1f1f1;
+	color: #8d8d8d;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	font-weight: normal;
@@ -1605,11 +1629,47 @@ h2 {
 
 
 /* Team Page */
-.social a {
+.static .social a {
 	text-decoration: none;
+	color: #8d8d8d;
+}
+
+.static .social a:hover {
+	color: #666666;
 }
 
 .team {
 	border-bottom: solid 1px black;
+}
+
+/* Press Page */
+.static .caption p{
+	font-size: 10px;
+}
+
+/* Marketing Pages */
+
+.static p, a{
+	font-size: 14px;
+}
+
+
+.static p.title {
+	color: #34495E;
 
 }
+.static a {
+	color: #3498DB;
+	text-decoration: none;
+
+}
+
+.static a:hover {
+	color: #2980B9
+}
+
+
+.static a .accordian-toggle {
+	color: black;
+}
+
