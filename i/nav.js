@@ -8,7 +8,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
-		document.cookie = "selectedCompany="+companyURL + "; path=/";
+		document.cookie = "selectedCompany="+companyURL + ";";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
 				$rootScope.selected = $scope.companies[i];
@@ -60,8 +60,9 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 		for (var i = 0; i < x.length; i++) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
-		if (readCookie("selectedCompany") != null) {
-			$scope.select(readCookie("selectedCompany"));
+		var cookie = readCookie("selectedCompany");
+		if (cookie != null) {
+			$scope.select(cookie);
 		} else {
 			$scope.select($scope.companies[0]['company']);		
 		}
