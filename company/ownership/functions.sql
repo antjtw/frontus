@@ -189,13 +189,13 @@ DECLARE
   code varchar;
 BEGIN
   	select value into domain from config.configuration where name='hostname';
-	perform name from account.user_table where email=NEW.email;
-  	IF NOT FOUND THEN
+  	IF NOT account.is_in_user_table(NEW.email) THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
   		code = mail.get_ticket();
   		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/register/people?code=' , code));
-  		update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
-  		INSERT INTO account.investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
+  		-- update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
+    	INSERT INTO account.tracking_invitation (email, when_invitation_sent) VALUES (NEW.email, localtimestamp);
+  		INSERT INTO account.my_investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
   	ELSE
   		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;
