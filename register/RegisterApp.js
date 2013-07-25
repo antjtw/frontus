@@ -13,10 +13,7 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 
-function CompanyCtrl($scope, $location, SWBrijj){
-};
-
-function PeopleCtrl($scope, $location, $routeParams, SWBrijj){
+function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     $scope.code = $routeParams.code;
     SWBrijj.getInvitation($scope.code).then(function(x) {
       initPage($scope, x);
@@ -26,8 +23,26 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj){
     });
 
     $scope.doActivate = function() {
-      SWBrijj.doActivate($scope.email, $scope.code, $scope.password, false).then(function(x) {
+      SWBrijj.doCompanyActivate($scope.email, $scope.code, $scope.password, false).then(function(x) {
         alert('OK');
+        document.location.href="/login";
+      });
+    }  
+};
+
+function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
+    $scope.code = $routeParams.code;
+    SWBrijj.getInvitation($scope.code).then(function(x) {
+      initPage($scope, x);
+      if ($scope.activated) {
+        document.location.href="/login";
+      }
+    });
+
+    $scope.doActivate = function() {
+      SWBrijj.doActivate($scope.email, $scope.name, $scope.code, $scope.password, false).then(function(x) {
+        alert('OK');
+        document.location.href="/login";
       });
     }
 };
