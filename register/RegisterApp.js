@@ -16,6 +16,7 @@ app.config(function($routeProvider, $locationProvider){
 function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     $scope.code = $routeParams.code;
     SWBrijj.getInvitation($scope.code).then(function(x) {
+      console.log(x);
       initPage($scope, x);
       if ($scope.activated) {
         document.location.href="/login";
