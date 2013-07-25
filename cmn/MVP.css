@@ -506,6 +506,14 @@ h2 {
 	padding-bottom: 0px;
 }
 
+.register {
+	background-color: #1e2d3d;
+}
+
+.register p {
+	padding-top: 25px;
+}
+
 form.inputs {
 	padding-top: 20px;
 }
@@ -582,7 +590,29 @@ form.inputs {
 	background-color: #1E2D3D;
 }
 
+.lognreg p strong{
+	font-family: 'FS Elliot Web Bold', sans-serif;;
+}
 
+.lognreg .caption {
+	padding-top: 10px;
+	font-size: 8px;
+	text-transform:uppercase;
+}
+
+.lognreg .caption a{
+	font-size: 8px;
+	text-transform:uppercase;
+	text-decoration: none;
+}
+
+.lognreg .teaser {
+	font-size: 14px;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	color: #c7c7c7;
+	display:inline;
+
+}
 .line{
 	border-top: 1px solid #a6a6a6;
 }
@@ -1805,6 +1835,7 @@ margin-top: 0.9em;
 }
 
 /* Marketing Pages */
+
 
 .static p, .static a {
 	font-size: 14px;
