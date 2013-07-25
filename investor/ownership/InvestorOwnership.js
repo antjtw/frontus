@@ -110,6 +110,12 @@ owner.service('sorting', function() {
      return -1;
   if (a.date > b.date)
     return 1;
+  if (a.date = b.date) {
+    if (a.created < b.created)
+      return -1;
+    if (a.created > b.created)
+      return 1;
+  }
   return 0;
   };
 
