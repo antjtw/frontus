@@ -3,7 +3,7 @@
 -- Function to track views
 
 CREATE OR REPLACE FUNCTION ownership.mark_viewed(comp character varying)
- RETURNS boolean
+ RETURNS SETOF boolean
  LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -14,9 +14,8 @@ BEGIN
 	PERFORM distinct company from ownership.my_company_audit where email = current_user and company = comp;
 	IF FOUND THEN
 		INSERT INTO ownership.my_company_views (email, company) VALUES (current_user, comp::account.company_type);
-		RETURN true;
 	END IF;
-	RETURN false;
+	RETURN QUERY SELECT fullview from ownership.my_company_audit where email = current_user and company = comp;
 END
 $$;
 
@@ -58,8 +57,17 @@ $$;
 
 CREATE or REPLACE FUNCTION ownership.smush_rows(comp character varying) returns SETOF double precision language plpgsql SECURITY DEFINER as $$
 BEGIN
-	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp;	
+	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp and units != 'NaN';	
 END;
+$$;
+
+CREATE or REPLACE FUNCTION ownership.debt_percentage(comp character varying) returns double precision language plpythonu SECURITY DEFINER as $$
+z = plpy.prepare("SELECT core.total, core.issue, premoney from (SELECT SUM(amount) as total, issue from ownership.transaction where company = $1 and type = 'debt' GROUP BY issue) core, ownership.issue i where i.issue = core.issue", ['text'])
+debtissued = plpy.execute(z,[comp])
+sum = 0
+for debt in debtissued:
+  sum += debt['total']/(debt['total']+debt['premoney'])
+return (sum*100)
 $$;
 
 CREATE or REPLACE FUNCTION ownership.get_everyone_else(comp character varying) returns double precision language plpythonu as $$
@@ -69,8 +77,12 @@ try:
   allowed = r[0]['company']
   if allowed == comp:
     z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
-    r = plpy.execute(z,[comp])
-    return r[0]['smush_rows']
+    totalunits = plpy.execute(z,[comp])[0]['smush_rows']
+    j = plpy.prepare("SELECT SUM(units) from ownership.my_company_transaction where company=$1", ['text'])
+    myunits = plpy.execute(j,[comp])[0]['sum']
+    z = plpy.prepare("select * from ownership.debt_percentage($1)", ['text'])
+    debt = plpy.execute(z,[comp])[0]['debt_percentage']
+    return (100 - ((myunits/totalunits)*(100-debt)))
   else:
     return 0
 except:
@@ -84,5 +96,14 @@ return ''.join(random.choice(string.ascii_uppercase+string.digits) for x in rang
 $$;
 
 
+-- Grants
+CREATE OR REPLACE FUNCTION ownership.get_my_options(comp character varying)
+ RETURNS SETOF ownership.my_company_options
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY SELECT * from ownership.my_company_options where company = comp::account.company_type;
+END
+$$;
 
 

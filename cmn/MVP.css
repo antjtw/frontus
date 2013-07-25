@@ -5,6 +5,7 @@ html,
 body {
   height: 100% !important;
   background-color:#FFFFFF;
+  overflow-x: hidden;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -68,13 +69,6 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 .modal-backdrop {
 	background-color: #FFF;
-}
-
-.modal {
-	margin-left: -180px;
-	width: 360px;
-	background-color: #e3e3e3;
-	border: 0;
 }
 
 [class^="icon-"], [class*=" icon-"]{
@@ -275,7 +269,6 @@ h2 {
 }
 
 .logo {
-	margin-left: 15px;
 	line-height: 40px;
 	color: #F78D1E;
 }
@@ -505,22 +498,31 @@ h2 {
 
 /* Login */
 
-.pagination-centered.gateway {
+.gateway {
 	margin-left:0px;
 	margin-top:140px;
+	background-color: #e3e3e3;
+	padding-top: 45px;
+	padding-bottom: 0px;
 }
 
-#login {
-	width:500px;
-	padding-top:10px;
-	margin-top:10px;
+.register {
+	background-color: #1e2d3d;
 }
+
+.register p {
+	padding-top: 25px;
+}
+
+form.inputs {
+	padding-top: 20px;
+}
+
 
 #forgotLink {
 	font-size: 12px;
 	text-decoration: underline;
 	line-height:5px;
-	margin-left:45px;	
 }
 
 .loginLabel {
@@ -529,12 +531,12 @@ h2 {
 }
 
 #login .loginInput {
-	width:337px;
+	width:286px;
 	padding-top:7px;
 	padding-bottom:7px;
 	border-radius:0px;
-	margin-left:74px;
 	background-color:#f1f1f1;
+	border: 0px;
 }
 
 #login_password {
@@ -542,32 +544,77 @@ h2 {
 }
 
 #forgotButton {
-/*
-    margin-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    */
+    font-size: 12px;
 	margin-top:10px;
-    margin-left:80px;
-	width:200px;
     display: block;
-	float:left;
+    color: #3498DB;
 }
 
-.loginButton {
-	float:right;
-	margin-top:15px;
-	margin-bottom:15px;
-	width:144px;
-	height:34px;
+#forgotButton:hover {
+    color: #2980B9;
 }
+
+
+.button.greenButton.loginButton {
+	width:300px;
+	height:30px;
+	border-radius:0px;
+	border: 0px;
+}
+
+.button.greenButton.loginButton:hover {
+	background-color: #15A085;
+}
+
 
 .textalert.loginErrorBox {
-	margin-left:0px;
-	margin-top:20px;
-	width:311px;
-	padding-left:20px;
-	padding-right:20px;
+	width:300px;
+	background-color: #a6a6a6;
+	border-radius: 0px;
+	margin: auto;
+	float:none;
+}
+
+.gateway .logo {
+  font-size: 42px;
+  color: #1e2d3d;
+  line-height: 44px
+}
+
+.gateway p.tagline {
+	font-size: 14px;
+  color: #1e2d3d;
+}
+
+.lognreg {
+	background-color: #1E2D3D;
+}
+
+.lognreg p strong{
+	font-family: 'FS Elliot Web Bold', sans-serif;;
+}
+
+.lognreg .caption {
+	padding-top: 10px;
+	font-size: 8px;
+	text-transform:uppercase;
+}
+
+.lognreg .caption a{
+	font-size: 8px;
+	text-transform:uppercase;
+	text-decoration: none;
+}
+
+.lognreg .teaser {
+	font-size: 14px;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	color: #c7c7c7;
+	display:inline;
+
+}
+.line{
+	border-top: 1px solid #a6a6a6;
 }
 
 /* Password Reset */
@@ -579,11 +626,13 @@ h2 {
 }
 
 #cancelButton {
-	margin-top:25px;
-	margin-left:220px;
+    font-size: 12px;
+	margin-top:10px;
     display: block;
-	float:left;
+    color: #3498DB;
 }
+
+
 
 .resetLabel {
 	text-align:left;
@@ -950,17 +999,16 @@ ul>li.curPage {
 	min-height: 20px;
 	margin: 10px 0;
 	padding: 3px 0px;
+	color: #8d8d8d;
 }
 
 .footerLinks li {
 	display: inline;
-	padding: 0px 7px;
-	border-right: 1px solid #f1f1f1;
-
+	padding: 0px 8px;
 }
 
 .footerLinks li a {
-	color: #f1f1f1;
+	color: #8d8d8d;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	font-weight: normal;
@@ -1018,8 +1066,12 @@ ul>li.curPage {
 	float: left;
 }
 
+td.tranSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
+
 .tranSelected {
-	background-color: green;
+	background-color: transparent;
 }
 
 .capright {
@@ -1091,8 +1143,12 @@ ul>li.curPage {
 
 /* Grants Table */
 
-.tableView tr.rowSelected {
-	background-color: #f0f0f0;
+tr.rowSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
+
+.rowSelected > td {
+	background-color: transparent;
 }
 
 /* Buttons */
@@ -1336,6 +1392,13 @@ ul>li.curPage {
 
 /* Modal CSS */
 
+.modal {
+	margin-left: -180px;
+	width: 360px;
+	background-color: #FFFFFF;
+	border: 0;
+}
+
 .modalHeader {
 	display: block;
 	text-align: left;
@@ -1356,6 +1419,18 @@ ul>li.curPage {
     font-size: 20px;
 }
 
+.modal .emailSection {
+	min-height: 40px;
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.multiEmail > input {
+	border: 0;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
 .email-close {
     color: darkgrey;
     font-size: 16px;
@@ -1370,7 +1445,7 @@ ul>li.curPage {
 
 .modalText {
 	padding: 10px 0 0 0;
-	margin: 30px 0 70px 0;
+	margin: 5px 0 20px 0;
 	display: block;
 	text-align: center;
 }
@@ -1741,10 +1816,48 @@ margin-top: 0.9em;
 
 
 /* Team Page */
-.social a {
+.static .social a {
 	text-decoration: none;
+	color: #8d8d8d;
+}
+
+.static .social a:hover {
+	color: #666666;
 }
 
 .team {
 	border-bottom: solid 1px black;
 }
+
+/* Press Page */
+.static .caption p {
+	font-size: 10px;
+}
+
+/* Marketing Pages */
+
+
+.static p, .static a {
+	font-size: 14px;
+}
+
+
+.static p.title {
+	color: #34495E;
+
+}
+.static a {
+	color: #3498DB;
+	text-decoration: none;
+
+}
+
+.static a:hover {
+	color: #2980B9
+}
+
+
+.static a .accordian-toggle {
+	color: black;
+}
+

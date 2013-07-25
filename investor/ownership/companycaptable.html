@@ -15,24 +15,45 @@
       </div>
 
       <div class="row-fluid">
+        <div class="subnav-controls">
+        </div>
+      </div>
+
+      <div class="row-fluid">
           <table class="tableView bodyText">
             <tr class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
               <th ng-repeat="one in issues">
-                <input class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)'}" ng-model="one.issue"></input>
+                <p class="capEditHeaders" ng-click="getActiveIssue(one)">{{one.issue}}</p>
               </th>
             </tr>
-          <tr ng-repeat="row in rows">
-            <td><input disabled value="{{shareSum(row);}}"></input></td>
-            <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
-            <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
-            <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
-                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
-            </td>
-          </tr>
-          <tr class='tablefooter'>
+            <tr ng-show="fullview" ng-repeat="row in rows">
+              <td><input disabled value="{{shareSum(row);}}"></input></td>
+              <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+              <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+              <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+              </td>
+            </tr>
+            <tr ng-hide="fullview" ng-repeat="row in rows">
+              <td><input disabled value="{{shareSum(row);}}"></input></td>
+              <td><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></input></td>
+              <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+              <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+              </td>
+            </tr>
+            <tr ng-hide="fullview">
+              <td><input disabled></input></td>
+              <td><input disabled value="{{everyone.percentage  | number:3}}%"></input></td>
+              <td>Other Investors</td>
+              <td ng-repeat="key in issuekeys">
+              </td>
+            </tr>
+          <tr ng-show="fullview" class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>
             <td><input disabled value="100%"></input></td>
             <td></td>

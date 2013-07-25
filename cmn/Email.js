@@ -54,11 +54,11 @@ email.directive("emailTo", function() {
       console.log(scope);
     },
     scope: false,
-    template: '<div><span>To: </span><span ng-repeat="recip in recipients">'+
+    template: '<div class="multiEmail"><span>To: </span><span ng-repeat="recip in recipients">'+
         '<span index="{{$index}}" replace ui-keypress="{enter: \'replacex()\'}" contenteditable readonly>{{ recip }}</span>'+
         '<span ng-click="remove({{$index}})" class="email-close" data-icon="&#xe00f" aria-hidden="true"></span>'+
         ', </span>'+
-        '<input ng-model="nextRecip" ng-on-blur="addRecip(nextRecip)" ui-keypress="{enter: \'addRecip(nextRecip)\'}" type="email"/></span></div>',
+        '<input ng-model="nextRecip" ng-on-blur="addRecip(nextRecip)" ui-keypress="{enter: \'addRecip(nextRecip)\'}" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="0"/></span></div>',
     controller: ["$scope","$element", function EmailToController($scope,$element) {
     $scope.remove = function(x) {
       // slice doesn't seem to work here

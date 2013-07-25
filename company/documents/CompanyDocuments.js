@@ -82,6 +82,13 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 /* Controllers */
 
 function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
+	$scope.vInvestors = []
+	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			$scope.vInvestors.push(data[i].email);
+		}
+	});
+
 	SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
   	$scope.documents = data;
 	}).except(function(err) { alert(err.message); });

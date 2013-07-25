@@ -72,7 +72,7 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
     $scope.countersign = false;
     SWBrijj.procm("document.get_investor_document", parseInt($scope.docId)).then(function(data) {
       $scope.document=data;
-      if ($scope.document.signature_deadline == null && $scope.document.signature_deadline != null) {
+      if ($scope.document[0].signature_deadline != null && $scope.document[0].when_signed == null) {
         $scope.needsign = true;
       }
       else {
