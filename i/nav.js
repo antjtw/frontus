@@ -8,7 +8,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
-		document.cookie = "selectedCompany="+companyURL + ";";
+		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
 				$rootScope.selected = $scope.companies[i];
