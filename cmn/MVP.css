@@ -71,13 +71,6 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 	background-color: #FFF;
 }
 
-.modal {
-	margin-left: -180px;
-	width: 360px;
-	background-color: #e3e3e3;
-	border: 0;
-}
-
 [class^="icon-"], [class*=" icon-"]{
     background:none;
 }
@@ -1369,6 +1362,13 @@ tr.rowSelected {
 
 /* Modal CSS */
 
+.modal {
+	margin-left: -180px;
+	width: 360px;
+	background-color: #FFFFFF;
+	border: 0;
+}
+
 .modalHeader {
 	display: block;
 	text-align: left;
@@ -1389,6 +1389,18 @@ tr.rowSelected {
     font-size: 20px;
 }
 
+.modal .emailSection {
+	min-height: 40px;
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.multiEmail > input {
+	border: 0;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
 .email-close {
     color: darkgrey;
     font-size: 16px;
@@ -1403,7 +1415,7 @@ tr.rowSelected {
 
 .modalText {
 	padding: 10px 0 0 0;
-	margin: 30px 0 70px 0;
+	margin: 5px 0 20px 0;
 	display: block;
 	text-align: center;
 }

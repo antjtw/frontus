@@ -7,19 +7,17 @@
   </div>
 
     <div class="modalText">
-      <email-to ng-model="recipients">This is a test</email-to>
-      <p>Signature Required? <input ng-model="signeeded" type="checkbox"></p>
-      <p ng-show="signeeded">Date <input type="text" ng-model="signaturedate" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-        <hr>
+      <div class="emailSection">
+        <email-to ng-model="recipients">This is a test</email-to>
+        <p>Signature Required? <input ng-model="signeeded" type="checkbox"></p>
+        <p ng-show="signeeded">Date <input type="text" ng-model="signaturedate" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+      </div>
+      <div class="messageSection">
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
-        <hr>
+      </div>
     </div>
     <div class="modalButtons">
       <button class="button subText greenButton" ng-click="share(messageText, sendeeEmail); hide();">Send</button>
     </div>
-
-    <ul ng-repeat="r in recipients"> 
-       <li>{{ r }}</li>
-    </ul>
 </div>
 
