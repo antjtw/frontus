@@ -1861,3 +1861,17 @@ margin-top: 0.9em;
 	color: black;
 }
 
+
+/* Survey */
+
+#ss-form {
+	color: #666666;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#entry_0{
+	color: orange;
+	border-radius: 0px;	
+}
