@@ -1,15 +1,15 @@
 <div class="container">
 
   <div class="row-fluid">
-    <div class="span8 docLibrary statusBlock" style="overflow:auto;">
+    <div class="span8 docLibrary statusBlock">
       <div class="headsection row-fluid">
         <h1>{{cinfo[0].name}}</h1>
 
         <div class="row-fluid">
 
           <ul class="bodyText maintabs">
-            <a href="/company/ownership/ownership"><li class="button">Ownership</li></a>
-            <li class="selectedtab button">Grants</li>
+            <a href="/company/ownership/"><li class="button">Ownership</li></a>
+            <li class="selectedtab">Grants</li>
             <a href="/company/ownership/status"><li class="button">Status</li></a>
            </ul>
         </div>
@@ -25,9 +25,9 @@
               </div>
             </div>
             <div class="pull-left">
-              <div class="btn-group">
-                <button ng-click="modalUp()" class="btn btn-mini"><span data-icon="&#xe027;" aria-hidden="true"></button>
-                <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+              <div class="minidrop btn-group">
+                <button ng-click="modalUp()" class="btn"><span data-icon="&#xe027;" aria-hidden="true"></button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -76,9 +76,9 @@
           <div class="headsection row-fluid">
               <h2>{{activeInvestor}}</h2>
               <p>Terms from the ownership table</p>
-            </div>
-          <tabs>
-            <pane ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
+          </div>
+          <tabset>
+            <tab ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
               <accordion close-others="true">
@@ -111,8 +111,8 @@
                   </ul>
                   </accordion-group>
               </accordion>
-            </pane>
-          </tabs>
+            </tab>
+          </tabset>
         </span>
 
         <span ng-switch-when="2">

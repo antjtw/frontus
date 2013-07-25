@@ -8,7 +8,7 @@ owner.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
     
   $routeProvider.
-      when('/:company', {templateUrl: 'companycaptable.html',   controller: captableController}).
+      when('/', {templateUrl: 'companycaptable.html',   controller: captableController}).
       when('/grant', {templateUrl: 'grant.html', controller: grantController}).
       otherwise({redirectTo: '/'});
 });
@@ -250,6 +250,10 @@ $rootScope.shareSum = function(row) {
     return (percentage + ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * (100 - totalpercentage)));
     };
 
+  $rootScope.myPercentage = function(everyone) {
+    return (100 - everyone);
+    };
+
   $rootScope.colTotal = function(header, rows, type) {
       var total = 0;
       angular.forEach(rows, function(row) {
@@ -271,12 +275,9 @@ $rootScope.shareSum = function(row) {
 
 });
 
-var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams) {
+var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope) {
 
-  var company = $routeParams.company;
-  if (String(company) == "") {
-    document.location.href = "/investor/profile";
-  };
+  var company = $rootScope.selected.company;
   $scope.currentCompany = company;
   console.log(company);
 
@@ -294,7 +295,8 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
   $scope.investorOrder = "name";
 
   SWBrijj.procm('ownership.mark_viewed', company).then(function(x) {
-    console.log(x);
+    $scope.fullview = Boolean(x[0].mark_viewed);
+    console.log($scope.fullview);
   });
   
 	SWBrijj.procm('ownership.get_my_issues', company).then(function(data) {
@@ -385,11 +387,12 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
     $scope.issuekeys= sorting.issuekeys($scope.issuekeys, $scope.issues);
     $scope.rows.sort(sorting.row($scope.issuekeys));
 
-    var values = {"name":"", "editable":"0"}
-    angular.forEach($scope.issuekeys, function(key) {
-      values[key] = {"u":null, "a":null};
+    SWBrijj.procm('ownership.get_everyone_else', company).then(function(x) {
+      $scope.everyone = {}
+      $scope.everyone.percentage = x[0].get_everyone_else;
     });
-    $scope.rows.push(values);
+
+    var values = {"name":"Other Shareholders", "editable":"0"}
     
 		});
 	});
@@ -439,7 +442,6 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
       }
 		}
 	});
-	$scope.$apply();
 };
 
 $scope.getActiveIssue = function(issue) {
@@ -471,7 +473,6 @@ $scope.getActiveIssue = function(issue) {
   // Set Freq Value for Angularjs Select
   var index = $scope.freqtypes.indexOf(issue.vestfreq);
   $scope.activeIssue.vestfreq = $scope.freqtypes[index];
-	$scope.$apply();
 };
 
 
@@ -485,7 +486,6 @@ $scope.getActiveInvestor = function(investor) {
     $scope.rows.push(values);
   }
   $scope.activeInvestorName = investor.name;
-  $scope.$apply();
 };
 
 
@@ -498,7 +498,10 @@ $scope.getActiveInvestor = function(investor) {
 
 
 // Grants page controller
-var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+var grantController = function($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope) {
+
+  var company = $rootScope.selected.company;
+  $scope.currentCompany = company;
 
   $scope.rows = []
   $scope.uniquerows = []
@@ -512,7 +515,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   });
 
   // Initialisation. Get the transactions and the grants
-  SWBrijj.tblm('ownership.company_options').then(function(data) {
+  SWBrijj.procm('ownership.get_my_options', company).then(function(data) {
 
     // Pivot from transactions to the rows of the table
     $scope.trans = data;
@@ -520,7 +523,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     tran.datekey = tran['date'].toUTCString();
     if ($scope.uniquerows.indexOf(tran.investor) == -1) {
       $scope.uniquerows.push(tran.investor);
-      $scope.rows.push({"state":true, "name":tran.investor, "namekey":tran.investor, "editable":"yes", "granted":null, "forfeited":null, "issue":tran.issue});
+      $scope.rows.push({"state":false, "name":tran.investor, "namekey":tran.investor, "editable":"yes", "granted":null, "forfeited":null, "issue":tran.issue});
       }
     });
 
@@ -602,14 +605,9 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           activeAct.push($scope.grants[j]);
         };
       };
-      activeAct.push({"unit":null, "tran_id":$scope.activeTran[i].tran_id, "date":(Date.today()), "action":null, "investor":$scope.activeTran[i].investor, "issue":$scope.activeTran[i].issue});
       $scope.activeTran[i].activeAct = activeAct;
     };
   };
 
-
-};
-
-var statusController = function($scope) {
 
 };

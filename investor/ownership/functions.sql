@@ -2,32 +2,20 @@
 
 -- Function to track views
 
-CREATE OR REPLACE VIEW ownership.my_company_issue AS (SELECT * from ownership.issue where company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_issue to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_transaction AS (SELECT * from ownership.transaction where company in (SELECT distinct company from ownership.audit where email=current_user) and investor=current_user);
-GRANT SELECT ON ownership.my_company_transaction to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_othertran AS (select sum(units) as units from ownership.transaction where investor != current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_othertran to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_audit AS (SELECT * from ownership.audit where email=current_user and company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT SELECT ON ownership.my_company_audit to INVESTOR;
-
-CREATE OR REPLACE VIEW ownership.my_company_views AS (SELECT * from ownership.views where company in (SELECT distinct company from ownership.audit where email=current_user));
-GRANT INSERT ON ownership.my_company_views to INVESTOR;
-
 CREATE OR REPLACE FUNCTION ownership.mark_viewed(comp character varying)
- RETURNS boolean
+ RETURNS SETOF boolean
  LANGUAGE plpgsql
 AS $$
 BEGIN
+	perform distinct company from account.invested_companies where verified = TRUE;
+	IF NOT found THEN
+		UPDATE account.invested_companies SET verified = TRUE WHERE email = current_user;
+	END IF;
 	PERFORM distinct company from ownership.my_company_audit where email = current_user and company = comp;
 	IF FOUND THEN
 		INSERT INTO ownership.my_company_views (email, company) VALUES (current_user, comp::account.company_type);
-		RETURN true;
 	END IF;
-	RETURN false;
+	RETURN QUERY SELECT fullview from ownership.my_company_audit where email = current_user and company = comp;
 END
 $$;
 
@@ -56,3 +44,55 @@ BEGIN
 	RETURN QUERY SELECT * from ownership.my_company_issue where company = comp::account.company_type;
 END
 $$;
+
+--Allows an issuer to view the ownership activity of an investor in his company
+CREATE OR REPLACE FUNCTION ownership.get_investor_activity_feed(xemail account.email)
+ RETURNS SETOF ownership.company_activity_feed
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY SELECT * from ownership.company_activity_feed where email = xemail;
+END
+$$;
+
+CREATE or REPLACE FUNCTION ownership.smush_rows(comp character varying) returns SETOF double precision language plpgsql SECURITY DEFINER as $$
+BEGIN
+	RETURN QUERY SELECT SUM(UNITS) from ownership.transaction where company = comp and units != 'NaN';	
+END;
+$$;
+
+CREATE or REPLACE FUNCTION ownership.get_everyone_else(comp character varying) returns double precision language plpythonu as $$
+z = plpy.prepare("select * from account.invested_companies where company=$1", ['text'])
+r = plpy.execute(z,[comp])
+try:
+  allowed = r[0]['company']
+  if allowed == comp:
+    z = plpy.prepare("select * from ownership.smush_rows($1)", ['text'])
+    totalunits = plpy.execute(z,[comp])[0]['smush_rows']
+    j = plpy.prepare("SELECT SUM(units) from ownership.my_company_transaction where company=$1", ['text'])
+    myunits = plpy.execute(j,[comp])[0]['sum']
+    return (100 - ((myunits/totalunits)*100))
+  else:
+    return 0
+except:
+  return 0
+$$;
+
+CREATE or REPLACE FUNCTION mail.get_ticket() returns varchar language plpythonu as $$
+import random
+import string
+return ''.join(random.choice(string.ascii_uppercase+string.digits) for x in range(16))
+$$;
+
+
+-- Grants
+CREATE OR REPLACE FUNCTION ownership.get_my_options(comp character varying)
+ RETURNS SETOF ownership.my_company_options
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY SELECT * from ownership.my_company_options where company = comp::account.company_type;
+END
+$$;
+
+

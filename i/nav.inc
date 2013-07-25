@@ -11,6 +11,7 @@
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
+              <li ng-show="selected.isAdmin"><a class="menuProfileText button" href="/company/profile">MY COMPANY</a></li>
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
@@ -37,3 +38,7 @@
     </div>
   </div>
 </div>
+
+<!--Notification Bar-->
+<div ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
+

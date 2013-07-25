@@ -7,9 +7,9 @@ docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
     
   $routeProvider.
-      when('/', {templateUrl: 'docuview.html',   controller: InvestorDocumentListController}).
-      when('/view', {templateUrl: 'docuviewer.html', controller: InvestorDocumentViewController}).
-      otherwise({redirectTo: '/'});
+      when('/', {templateUrl: 'list.html',   controller: InvestorDocumentListController}).
+      when('/:id', {templateUrl: 'viewer.html', controller: InvestorDocumentViewController}).
+      otherwise({redirectTo: '/:company'});
 });
 
 /*docviews.directive('draggable', function() {
@@ -33,10 +33,17 @@ docviews.filter('fromNow', function() {
 
 /* Controllers */
 
-function InvestorDocumentListController($scope, SWBrijj) {
-	SWBrijj.tblm("document.my_investor_library").then(function(data) {
+function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScope) {
+
+  var company = $rootScope.selected.company;
+  $scope.currentCompany = company;
+
+	SWBrijj.procm("document.get_company_investor_library", company).then(function(data) {
 	$scope.documents = data;
-	});
+	}).except(function(data) {
+    console.log('reloading');
+    location.reload();
+  });
 	
 	$scope.docOrder = 'docname';
 	
@@ -56,11 +63,21 @@ function InvestorDocumentListController($scope, SWBrijj) {
 }
 
 function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
-  $scope.docId = parseInt($routeParams.doc);
+  $scope.docId = parseInt($routeParams.id);
+  $scope.library = "document.my_investor_library";
+  $scope.pages = "document.my_investor_doc_length";
 
   $scope.init = function () {
-    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-      $scope.docname=data.docname;
+    $scope.invq = true;
+    $scope.countersign = false;
+    SWBrijj.procm("document.get_investor_document", parseInt($scope.docId)).then(function(data) {
+      $scope.document=data;
+      if ($scope.document[0].signature_deadline != null && $scope.document[0].when_signed == null) {
+        $scope.needsign = true;
+      }
+      else {
+        $scope.needsign = false;
+      }
     });
 
   };

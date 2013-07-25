@@ -5,55 +5,28 @@
 
 	<!--{{/i/head.inc}}-->
     <link type="text/css" rel="stylesheet" href="/lib/datepicker/bootstrap-datepicker.css">
+    <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
+    <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
     <script src="/lib/moment.min.js"></script>
     <script src="/lib/angular/angular-strap.js"></script>
     <script src="/lib/datepicker/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
             data-app-key="cg7umgovyixtqhi"></script>
-  <script src="/cmn/Documents.js"></script>
-  <script src="CompanyDocuments.js"></script>
-
-    <style>
-      .dropbox {
-        width: 15em;
-        height: 3em;
-        border: 2px solid #DDD;
-        border-radius: 8px;
-        background-color: #FEFFEC;
-        text-align: center;
-        color: #BBB;
-        font-size: 2em;
-        font-family: Arial, sans-serif;
-      }
-      .dropbox span {
-        margin-top: 0.9em;
-        display: block;
-      }
-      .dropbox.not-available {
-        background-color: #F88;
-      }
-      .dropbox.over {
-        background-color: #bfb;
-      }
-
-    </style>
-    
+    <script type="text/javascript" src="/lib/datejs/build/date.js"></script>
+    <script src="/cmn/Documents.js"></script>
+    <script src="/cmn/Email.js"></script>
+    <script src="CompanyDocuments.js"></script>
 </head>
 
 <body>
 	<div class="wrap">
 
      <!--{{/i/nav.inc}}-->
-            
-            <div ng-view></div>
-            
-            
+
+    <div ng-view></div>
 	  <div class="minimumGap"></div>
       <div class="push"></div>   
 	</div>
-     
       <!--{{/i/foot.inc}}-->
-	
-
 	</body>
 </html>

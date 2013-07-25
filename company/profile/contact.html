@@ -1,5 +1,3 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
 
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
@@ -29,7 +27,7 @@
         <tbody ng-repeat="admin in admins">
           <tr>
           <td><img src=""><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
-          <td class="button" ng-click="(opendetails(admin.noaction))"><i class="icon-cog"></i>
+          <td class="button"><i ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
       </table>
@@ -61,8 +59,8 @@
         <td><i class="{{active.icon}} icon"></i></td>
         <td>
             <table>
-              <tr><td>{{active.activity}} <a href="/company/documents/view?doc={{active.doc_id}}">{{active.docname}}</a></td></tr>
-                  <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+              <tr><td>{{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
+                  <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
               </table>
           </td>
         </tr>
@@ -77,7 +75,7 @@
     <p class="subText">Profile Picture</p>
   </div>
   <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG file.</p>
+    <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
@@ -93,7 +91,7 @@
   </div>
 
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+    <button class="button subText greyButton" ng-click="pictureModalClose()">Cancel</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
   </div>
 </div>
 <div modal="adminModal" close="adminModalClose()" options="opts">
@@ -115,6 +113,17 @@
     </form>
   </div>
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+    <button class="button subText greyButton" ng-click="adminModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+  </div>
+</div>
+<div modal="revokeModal" close="revokeModalClose()" options="opts">
+  <div class="modalHeader">
+    <p class="subText">Remove an Administrator</p>
+  </div>
+  <div class="modalText">
+    <p>Do you want to remove this person as an administrator?</p>
+  </div>
+  <div class="modalButtons">
+    <button class="button subText greyButton" ng-click="revokeModalClose()">Cancel</button> <input class="button subText greenButton" type="button" ng-click="revokeAdmin(); revokeModalClose();" value="Remove" />
   </div>
 </div>

@@ -183,38 +183,53 @@ CREATE TRIGGER delete_grant INSTEAD OF DELETE ON ownership.company_grants FOR EA
 -- Share and Audit
 
 CREATE OR REPLACE FUNCTION ownership.share_captable() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+DECLARE
+  template text = mail.get_mail_template('cap-share.html');
+  domain varchar;
+  code varchar;
 BEGIN
-    INSERT INTO ownership.audit (company, email) VALUES (NEW.company, NEW.email);
+  	select value into domain from config.configuration where name='hostname';
+	perform name from account.user_table where email=NEW.email;
+  	IF NOT FOUND THEN
+  		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
+  		code = mail.get_ticket();
+  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/register/people?code=' , code));
+  		update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
+  		INSERT INTO account.investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
+  	ELSE
+  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
+  	END IF;
+    INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
+	template = replace(template, '{{company}}', NEW.company);
+	perform mail.send_mail(NEW.email, concat(NEW.company, '''s captable has been shared with you!'), template);
   RETURN NEW;
 END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
 GRANT INSERT on ownership.company_audit TO investor;
 
--- Share document, sends email and tracks action
-CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, message character varying) returns void
+-- Share captable, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, xmessage character varying) returns void
 language plpgsql as $$
 declare
-  template text = mail.get_mail_template('cap-share.html');
   comp account.company_type;
   sendtype document.activity_type;
 begin
   select distinct company into comp from account.companies;
-  template = replace(replace(template,'{{message}}', message), '{{link}}', concat('http://localhost:4040/investor/captable/?' , comp));
-  template = replace(template, '{{company}}', comp);
-  perform mail.send_mail(xemail, concat(comp, 's captable has been shared with you!'), template);
-  insert into ownership.company_audit(company, email) values (comp, xemail);
+  insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
+  perform distinct company from account.company_investors where email = xemail;
 end $$;
 
 -- Get most recent view
 
 CREATE OR REPLACE FUNCTION ownership.get_company_views() RETURNS SETOF ownership.company_views AS $$
 BEGIN
-	RETURN QUERY SELECT company, max(whendone) as whendone, email FROM ownership.company_views GROUP BY email, company;
+	RETURN QUERY SELECT company, max(whendone) as whendone, email, activity FROM ownership.company_views GROUP BY email, company, activity;
 END;
 $$
 LANGUAGE plpgsql;
 
--- Get login info for investors who have logged in
+CREATE TYPE ownership.activity_cluster as (count bigint, whendone date, activity varchar);
+CREATE OR REPLACE FUNCTION ownership.get_company_activity_cluster() RETURNS SETOF ownership.activity_cluster LANGUAGE plpgsql AS $$
+BEGIN RETURN QUERY select count(email) as count, whendone::date, activity from (select whendone::date, email, activity from ownership.company_activity_feed GROUP BY whendone::date, activity, email) b GROUP BY whendone::date, activity;
+END $$;
 
-CREATE or REPLACE VIEW ownership.user_tracker AS select max(login_time) as logintime, email from account.user_log where email in (select email from ownership.company_views) GROUP BY email;
-GRANT SELECT on ownership.user_tracker TO investor;

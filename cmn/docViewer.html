@@ -1,26 +1,50 @@
 <div ng-init="init()">
 
-  <div class="annotation-control">
-  <div ng-hide="signed">
-    <button ng-click="clearNotes($event)">Clear annotations</button>
-    <span style="width:20px"></span>
-    <button ng-click="newCheck($event)">Attach checkbox</button>
-    <button ng-click="newBox($event)">Attach textbox</button>
-    <button ng-click="newPad($event)">Attach canvas</button>
-    <button ng-click="saveNotes($event)">Save annotations</button>
-    <button ng-show="signable" ng-click="submitSign();">Sign</button>
+  <div class="row-fluid docViewerControls">
+    <div>
+      <div class="annotation-control span4">
+        <div class="tools" ng-hide="signed || !invq || !needsign || countersign">
+          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></button>
+          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></button>
+          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></button>
+        </div>
+        <div class="tools" ng-hide="!finalized">
+          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></button>
+          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></button>
+          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></button>
+        </div>
+      </div>
+
+      <div class="span4">
+        <div class="pageTurn">
+          <ul>
+            <li class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></li>
+            <li><input ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
+            <li>/ {{docLength}}</li>
+            <li class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="span4">
+        <div ng-hide="signed || !invq || !needsign || countersign">
+          <button ng-click="saveNotes($event)">Save</button>
+          <button ng-click="clearNotes($event)">Clear</button>
+          <button ng-show="signable" ng-click="submitSign();">Submit</button>
+        </div>
+        <div ng-hide="signed || !invq || needsign || !countersign || finalized">
+          <button ng-click="rejectSign();">Reject</button>
+          <button ng-click="acceptSign();">Confirm</button>
+        </div>
+        <div ng-hide="!finalized">
+          <button ng-click="finalizeSigns($event);">Finalize</button>
+        </div>
+      </div>
+    </div>
+    <div class="DivHelper"></div>
   </div>
+
+  <div class="row-fluid docHolder">
+    <div class="docPanel" back-img="/photo/docpg?id={{docId}}&investor={{invq}}&page={{currentPage}}" ></div>
   </div>
-
-  <ul class="subText pageTurn cf">
-    <li class="button" ng-show="currentPage>1" ng-click="previousPage(currentPage)">Previous</li>
-    <li><input ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
-    <li class="button" ng-show="currentPage<docLength" ng-click="nextPage(currentPage)">Next</li>
-  </ul>
-
-  <ul class="subText pageJump cf">
-    <li ng-class="{'curPage':page==currentPage}" style="cursor:pointer" ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
-  </ul>
-
-  <div class="docPanel" back-img="/photo/docpg?id={{docId}}&investor={{invq}}&page={{currentPage}}" ></div>
 </div>

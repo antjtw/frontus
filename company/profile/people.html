@@ -1,5 +1,3 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
 
 <div class="editProfileFP row-fluid">
   <h1>People</h1>
@@ -14,7 +12,7 @@
         <tr>
         <td><img src=""><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a> <span class="label" ng-show="person.role=='issuer'">ADMIN</span></td> 
         <td><img src="">{{person.email}}</td>
-        <td class="button" ng-click="(opendetails(person.noaction))"><i class="icon-cog"></i>
+        <td class="button"><i class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke all access"></i>
         </tr>
       </tbody>
     </table>

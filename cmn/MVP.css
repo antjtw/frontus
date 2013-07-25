@@ -5,6 +5,7 @@ html,
 body {
   height: 100% !important;
   background-color:#FFFFFF;
+  overflow-x: hidden;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -68,13 +69,6 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 
 .modal-backdrop {
 	background-color: #FFF;
-}
-
-.modal {
-	margin-left: -180px;
-	width: 360px;
-	background-color: #e3e3e3;
-	border: 0;
 }
 
 [class^="icon-"], [class*=" icon-"]{
@@ -161,8 +155,7 @@ h2 {
 	color: #1e2d3d;	
 }
 
-/*Review this*/
-/*.menuProfileText {
+.menuProfileText {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 11px;
 	line-height: 16px;
@@ -176,7 +169,7 @@ h2 {
 	line-height: 16px;
 	color: #8d8d8d;
 	padding-right:20px;
-}*/
+}
 
 .bodyText, .bodyText input, .bodyText a {
 	font-family: 'FS Elliot Web Regular', sans-serif;
@@ -490,6 +483,7 @@ h2 {
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;
+	width: 100%;
 }
 
 .subnav-controls > div > div {
@@ -500,7 +494,6 @@ h2 {
 /* Left Block for split pages */
 
 .leftBlock {
-	border-right: 1px solid #E3E3E3;
 }
 
 /* Login */
@@ -718,7 +711,7 @@ form.inputs {
 	color: #7f8c8d;	
 }
 
-/* Document Views */
+/* Table Designs for Doc Library and Captable (Should rename from docLibrary as it's not just docs) */
 
 .docLibrary {
 	width: 100%;
@@ -778,7 +771,7 @@ form.inputs {
 }
 
 .tableView {
-	width:auto;
+	width:100%;
 	margin: 0 auto 0 auto;
 }
 
@@ -821,6 +814,12 @@ form.inputs {
 	color: #7f8c8d;
 }
 
+/* Document List */
+
+.doclib.tableView th {
+	width: 500px;
+}
+
 /* Document Viewer */
 
 .selectedPill {
@@ -833,20 +832,39 @@ form.inputs {
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
 }
 
-.curPage {
-  background-color: oldlace;
-}
-.pageTurn {
-	margin: 20px 0 10px 0;
-	height: 24px;
+.docVersiontab > ul > li {
+	margin-top: 20px;
+	height: 30px;
+	list-style-type: none;
 }
 
-.pageTurn li {
+.companyDocViewer {
+	border-left: 1px solid #E3E3E3;
+}
+
+ul>li.curPage {
+  border-color: navy;
+    font-weight: bold;
+}
+.unsaved {
+    background-color: lightcoral;
+}
+
+.annotation-control > .tools > button {
+	background: none;
+	border: none;
+	font-size: 20px;
+}
+
+.pageTurn {
+	height: 24px;
+	margin: 0 auto 0 auto;
+}
+
+.pageTurn > ul > li {
 	float:left;
 	display: inline;
-	margin: 0 10px 0 0;
-	padding: 3px 0 0 0;
-	width: 65px;
+	margin: 0 5px 0 0;
 	height: 24px;
 	text-align: center;
 }
@@ -864,10 +882,27 @@ form.inputs {
     border: solid 1px dimgray;
 }
 
+.docHolder {
+	padding: 20px 0 20px 0;
+	background-color: #F1F1F1;
+}
+
+.docViewerControls {
+	height: 82px;
+	white-space: nowrap;
+}
+
+.docViewerControls > div {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: normal;
+	width: 100%;
+}
+
 .docPanel {
-	background-color: #FFFFFF;
-	width: 1024px;
-	height: 1306px;
+	width: 700px;
+	height: 956px;
+	margin: 0 auto 0 auto;
 	overflow: auto;
 }
 
@@ -984,18 +1019,8 @@ form.inputs {
 
 /* Captable */
 
-.edittoggle > .btn {
-	border-radius: 0px !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
-	color: #A6A6A6;
-	height: 30px;
-	width: 30px;
-	padding: 0 0 0 0;
-}
-
-.edittoggle > .btn.active {
-	color: #15A085;
+.capcontainer {
+	overflow: auto;
 }
 
 .tableView.captable  {
@@ -1009,10 +1034,14 @@ form.inputs {
 .captablepair {
 	display: inline-block;
 	float: left;
-};
+}
+
+td.tranSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
 
 .tranSelected {
-	background-color: green;
+	background-color: transparent;
 }
 
 .capright {
@@ -1079,13 +1108,18 @@ form.inputs {
 
 .rightTitle > input {
 	width:100px;
+	border: 0;
 }
 
 /* Grants Table */
 
-.tableView tr.rowSelected {
-	background-color: #f0f0f0;
-};
+tr.rowSelected {
+	background-color: rgba(26, 188, 150, 0.1);
+}
+
+.rowSelected > td {
+	background-color: transparent;
+}
 
 /* Buttons */
 
@@ -1100,6 +1134,68 @@ form.inputs {
 	background-color: #FFFFFF;
 	background-image: none;
 	border: 1px solid #E3E3E3;
+}
+
+/* Dropdown buttons */
+
+.edittoggle > .btn {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	color: #A6A6A6;
+	height: 30px;
+	width: 30px;
+	padding: 0 0 0 0;
+}
+
+.minidrop > .btn {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	height: 30px;
+	width: 20px;
+	padding: 0 0 0 0;
+}
+
+.minidrop > .btn > span {
+	margin-left: -3px;
+}
+
+.minidrop > .btn:first-child {
+	width: 30px;
+}
+
+.edittoggle > .btn.active {
+	color: #15A085;
+}
+
+.minidrop > ul {
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	width: 150px;
+	min-width: 150px;
+}
+
+.minidrop > ul > li {
+	height: 20px;
+	width: 150px;
+}
+
+.minidrop > ul > li > a {
+	height: 20px;
+	padding: 0 20px 0 20px;
+}
+
+.namedtoggle {
+	height: 30px;
+}
+
+.namedtoggle > p {
+	margin-right: 10px;
+	line-height: 30px;
 }
 
 .button:hover {
@@ -1266,23 +1362,60 @@ form.inputs {
 
 /* Modal CSS */
 
-.modalHeader {
-	display: block;
-	text-align: center;
-	padding: 0 0 20px 0;
-	margin: 50px 30px 0 30px;
-	border-bottom-width: thin;
-	border-bottom-style: solid;
-	border-color: #bdc3c7;
+.modal {
+	margin-left: -180px;
+	width: 360px;
+	background-color: #FFFFFF;
+	border: 0;
 }
 
-.modalHeader p {
-	color: #000;
+.modalHeader {
+	display: block;
+	text-align: left;
+	padding: 20px 0px 20px 30px;
+	margin: 0px;
+    background-color: #21b289;
+    color: white;
+    vertical-align: middle;
+    font-size: 14px;
+    font-family: Helvetica;
+    font-weight: lighter;
+}
+
+.modalHeader > .close {
+    float: right;
+    padding-right: 20px;
+    color: #004733;
+    font-size: 20px;
+}
+
+.modal .emailSection {
+	min-height: 40px;
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.multiEmail > input {
+	border: 0;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+.email-close {
+    color: darkgrey;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.email-text {
+    width: auto;
+    height: auto;
+    resize: none;
 }
 
 .modalText {
 	padding: 10px 0 0 0;
-	margin: 30px 0 70px 0;
+	margin: 5px 0 20px 0;
 	display: block;
 	text-align: center;
 }
@@ -1304,9 +1437,9 @@ form.inputs {
 }
 
 .shareModal {
-	margin-left: -263px;
-	width: 527px;
-	height:423px;
+	margin-left: -380px;
+	width: 720px;
+	height:622px;
 }
 
 .shareModal .modalText {
@@ -1502,7 +1635,31 @@ form.inputs {
     margin-left: 20px;
 }
 
+.dropbox {
+    margin:auto;
+    width: 15em;
+    height: 3em;
+    border: 2px solid #DDD;
+    border-radius: 8px;
+    background-color: #FEFFEC;
+    text-align: center;
+    color: #BBB;
+    font-size: 2em;
+    font-family: Arial, sans-serif;
+}
 
+.dropbox span {
+margin-top: 0.9em;
+    display: block;
+}
+
+.dropbox.not-available {
+  background-color: #F88;
+}
+
+.dropbox.over {
+  background-color: #bfb;
+}
 /* Homepage */
 
 .home #hero{
@@ -1643,13 +1800,14 @@ form.inputs {
 }
 
 /* Press Page */
-.static .caption p{
+.static .caption p {
 	font-size: 10px;
 }
 
 /* Marketing Pages */
 
-.static p, .static a{
+
+.static p, .static a {
 	font-size: 14px;
 }
 
