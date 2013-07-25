@@ -61,6 +61,15 @@ BEGIN
 END;
 $$;
 
+CREATE or REPLACE FUNCTION ownership.debt_percentage(comp character varying) returns double precision language plpythonu SECURITY DEFINER as $$
+z = plpy.prepare("SELECT core.total, core.issue, premoney from (SELECT SUM(amount) as total, issue from ownership.transaction where company = $1 and type = 'debt' GROUP BY issue) core, ownership.issue i where i.issue = core.issue", ['text'])
+debtissued = plpy.execute(z,[comp])
+sum = 0
+for debt in debtissued:
+  sum += debt['total']/(debt['total']+debt['premoney'])
+return (sum*100)
+$$;
+
 CREATE or REPLACE FUNCTION ownership.get_everyone_else(comp character varying) returns double precision language plpythonu as $$
 z = plpy.prepare("select * from account.invested_companies where company=$1", ['text'])
 r = plpy.execute(z,[comp])
@@ -71,7 +80,9 @@ try:
     totalunits = plpy.execute(z,[comp])[0]['smush_rows']
     j = plpy.prepare("SELECT SUM(units) from ownership.my_company_transaction where company=$1", ['text'])
     myunits = plpy.execute(j,[comp])[0]['sum']
-    return (100 - ((myunits/totalunits)*100))
+    z = plpy.prepare("select * from ownership.debt_percentage($1)", ['text'])
+    debt = plpy.execute(z,[comp])[0]['debt_percentage']
+    return (100 - ((myunits/totalunits)*(100-debt)))
   else:
     return 0
 except:

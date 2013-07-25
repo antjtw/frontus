@@ -43,7 +43,7 @@ owner.service('calculate', function() {
     else {
       angular.forEach(rows, function(r) {
         if (r[issue.issue] != undefined) {
-          if (isNaN(parseFloat(r[issue.issue]['u'])) && !isNaN(parseFloat(r[issue.issue]['a']))) {
+          if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 )&& !isNaN(parseFloat(r[issue.issue]['a']))) {
             mon = mon + parseFloat(r[issue.issue]['a']);
           };
         };
@@ -922,6 +922,7 @@ $scope.saveTran = function(transaction) {
                     tempamount = calculate.sum(tempamount, tran.amount);
                     row[tran.issue]['u'] = tempunits;
                     row[tran.issue]['a'] = tempamount;
+                    row[tran.issue]['x'] = 0;
                   }
                 }
               }
@@ -935,14 +936,16 @@ $scope.saveTran = function(transaction) {
                 });
               }
             });
-            
-            if (row[transaction.issue]['x'] != undefined) {
-              angular.forEach($scope.issues, function(issue) {
-                if (issue.issue == transaction.issue) {
-                  row[transaction.issue]['x'] = calculate.debt($scope.rows, issue, row);
+          });
+
+          angular.forEach($scope.rows, function(row) {
+            angular.forEach($scope.issues, function(issue) {
+              if (row[issue.issue] != undefined) {
+                if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0)&& !isNaN(parseFloat(row[issue.issue]['a']))) {
+                  row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                 };
-              });
-            }
+              };
+            });
           });
         });
       };
