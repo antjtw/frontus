@@ -6,7 +6,7 @@
       <div class="span5"> <!-- Photo -->
         <form>
           <div class="editProfilePhoto">
-            <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+            <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:250px; height:250px;'>
           </div>
         </form>
       </div>
@@ -93,8 +93,8 @@
         <td><i class="{{active.icon}} icon"></i></td>
         <td>
             <table>
-              <tr><td>{{active.activity}} <a href="/company/documents/view?doc={{active.doc_id}}">{{active.docname}}</a></td></tr>
-                  <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+              <tr><td>{{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
+                  <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
               </table>
           </td>
         </tr>
