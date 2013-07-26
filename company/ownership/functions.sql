@@ -90,7 +90,7 @@ GRANT SELECT ON ownership.transaction_tran_id_seq to investor;
 
 CREATE OR REPLACE FUNCTION ownership.update_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount, date=NEW.date, type=NEW.type, premoney=NEW.premoney, postmoney=NEW.postmoney, ppshare=NEW.ppshare, totalauth=NEW.totalauth, partpref=NEW.partpref, liquidpref=NEW.liquidpref, price=NEW.price, optundersec=NEW.optundersec, terms=NEW.terms, vestingbegins=NEW.vestingbegins, vestcliff=NEW.vestcliff, vestfreq=NEW.vestfreq, debtundersec=NEW.debtundersec, interestrate=NEW.interestrate, valcap=NEW.valcap, discount=NEW.discount, term=NEW.term where tran_id=OLD.tran_id and company=OLD.company;
+    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, email=NEW.email, amount=NEW.amount, date=NEW.date, type=NEW.type, premoney=NEW.premoney, postmoney=NEW.postmoney, ppshare=NEW.ppshare, totalauth=NEW.totalauth, partpref=NEW.partpref, liquidpref=NEW.liquidpref, price=NEW.price, optundersec=NEW.optundersec, terms=NEW.terms, vestingbegins=NEW.vestingbegins, vestcliff=NEW.vestcliff, vestfreq=NEW.vestfreq, debtundersec=NEW.debtundersec, interestrate=NEW.interestrate, valcap=NEW.valcap, discount=NEW.discount, term=NEW.term where tran_id=OLD.tran_id and company=OLD.company;
     RETURN NEW;
 END $$;
 
@@ -192,12 +192,12 @@ BEGIN
   	IF NOT account.is_in_user_table(NEW.email) THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
   		code = mail.get_ticket();
-  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/register/people?code=' , code));
+  		template = replace(template, '{{link}}', concat('http://', domain, '/register/people?code=' , code));
   		-- update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
     	INSERT INTO account.tracking_invitation (email, when_invitation_sent) VALUES (NEW.email, localtimestamp);
   		INSERT INTO account.my_investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
   	ELSE
-  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
+  		template = replace(template, '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
 	template = replace(template, '{{company}}', NEW.company);
@@ -208,15 +208,14 @@ CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR E
 GRANT INSERT on ownership.company_audit TO investor;
 
 -- Share captable, sends email and tracks action
-CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, xmessage character varying) returns void
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, inv character varying) returns void
 language plpgsql as $$
 declare
   comp account.company_type;
-  sendtype document.activity_type;
 begin
   select distinct company into comp from account.companies;
-  insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
-  perform distinct company from account.company_investors where email = xemail;
+  insert into ownership.company_audit(company, email, sender) values (comp, xemail, current_user);
+  update ownership.company_transaction SET email=xemail where investor=inv;
 end $$;
 
 -- Get most recent view
