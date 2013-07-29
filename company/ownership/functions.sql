@@ -190,7 +190,7 @@ DECLARE
   fullname text;
 BEGIN
   	select value into domain from config.configuration where name='hostname';
-    select name into fullname from account.user_table where email=NEW.email;
+    select name into fullname from account.user_table where email=NEW.sender;
   	IF NOT account.is_in_user_table(NEW.email) THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
   		code = mail.get_ticket();

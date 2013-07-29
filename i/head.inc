@@ -7,7 +7,7 @@
 <!-- Fonts -->
 <link type="text/css" rel="stylesheet" href="/lib/fontawesome/css/font-awesome.css">
 <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Arvo|Dosis:700">
-<link rel="stylesheet" href="//f.fontdeck.com/s/css/Sk01QiUza5Fd1rTYpAE4MmxZXTo/DOMAIN_NAME/35219.css" type="text/css" />
+<link rel="stylesheet" href="//f.fontdeck.com/s/css/Sk01QiUza5Fd1rTYpAE4MmxZXTo/sharewave.com/35219.css" type="text/css" />
 <!-- logo font -->
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
