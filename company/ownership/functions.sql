@@ -205,6 +205,10 @@ BEGIN
 	template = replace(template, '{{company}}', NEW.company);
   template = replace(template, '{{inviter}}', fullname);
 	perform mail.send_mail(NEW.email, concat(NEW.company, '''s captable has been shared with you!'), template);
+    perform distinct company from account.company_investors where email = xemail;
+    IF NOT found THEN
+      INSERT INTO account.invested_companies (email, company) VALUES (xemail, (SELECT DISTINCT company FROM account.companies));
+    END IF;
   RETURN NEW;
 END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
