@@ -187,8 +187,10 @@ DECLARE
   template text = mail.get_mail_template('cap-share.html');
   domain varchar;
   code varchar;
+  fullname text;
 BEGIN
   	select value into domain from config.configuration where name='hostname';
+    select name into fullname from account.user_table where email=NEW.email;
   	IF NOT account.is_in_user_table(NEW.email) THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
   		code = mail.get_ticket();
@@ -201,6 +203,7 @@ BEGIN
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
 	template = replace(template, '{{company}}', NEW.company);
+  template = replace(template, '{{inviter}}', fullname);
 	perform mail.send_mail(NEW.email, concat(NEW.company, '''s captable has been shared with you!'), template);
   RETURN NEW;
 END $$;
