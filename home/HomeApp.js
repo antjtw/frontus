@@ -4,7 +4,6 @@ var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', '
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
-  // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
       when('/', {controller:InvestorCtrl, templateUrl:'investor.html'}).
@@ -18,9 +17,9 @@ app.controller("MainController", function($scope, $location) {
 
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
   
-  SWBrijj.tblm('account.my_company').then(function(x) {
-    $scope.company = x[0]["name"];
-  });
+  // SWBrijj.tblm('account.my_company').then(function(x) {
+  //   $scope.company = x[0]["name"];
+  // });
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
@@ -34,19 +33,19 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
         x.link = "/company/ownership/people";
         if (x.activity == "addadmin") {
           x.activity = " added ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeadmin") {
           x.activity = " removed ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
           x.icon = "icon-circle-minus";
         } else if (x.activity == "addinvestor") {
           x.activity = " added ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = (x.count > 1) ? x.count + "investors": "an investor";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeinvestor") {
           x.activity = " removed ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = (x.count > 1) ? x.count + "investors": "an investor";
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
@@ -87,7 +86,62 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
 }
 
 function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
-  $scope.company = $routeParams.company;
+  //$scope.company = $routeParams.company;
+  $scope.company = $rootScope.selected.name;
+
+  $scope.activity = [];
+  SWBrijj.procm('global.get_investor_home').then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      x.name = "You ";
+      if (x.type == 'account') {
+        x.link = "/company/ownership/people";
+        if (x.activity == "addadmin") {
+          x.activity = " added an ";
+          x.target = "administrator";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeadmin") {
+          x.activity = " removed an ";
+          x.target = "administrator";
+          x.icon = "icon-circle-minus";
+        } else if (x.activity == "addinvestor") {
+          x.activity = " added an ";
+          x.target = "an investor";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeinvestor") {
+          x.activity = " removed an ";
+          x.target = "an investor";
+          x.icon = "icon-circle-minus";
+        }
+      } else
+      if (x.type == 'document') {
+        x.link = "/investor/documents/" + x.doc_id;
+        SWBrijj.tblm('document.my_investor_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+          x.target = res["docname"];
+        }); 
+        if (x.activity == "uploaded") {
+          x.activity = " uploaded ";
+          x.icon = "icon-star";
+        } else if (x.activity == "received") {
+          x.activity = " received ";
+          x.icon = "icon-redo";
+        }
+      } else if (x.type == 'ownership') {
+        x.link = "/investor/ownership/";
+        x.target = "Ownership table";
+        if (x.activity == "shared") {
+          x.activity = " received ";
+          x.icon = "icon-redo";
+        }
+      }
+    });
+    $scope.activity = data;
+    console.log(data);
+  });
+
+  $scope.activityOrder = function(card) {
+        return -card.time;
+  };
 }
 
 function HomeCtrl($scope, $route) {
