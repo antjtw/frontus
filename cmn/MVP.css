@@ -1071,6 +1071,11 @@ ul>li.curPage {
 	float: left;
 }
 
+p.captablepair {
+	width: 60px;
+	margin: 0 0 0 0;
+}
+
 td.tranSelected {
 	background-color: rgba(26, 188, 150, 0.1);
 }
@@ -1154,6 +1159,16 @@ tr.rowSelected {
 
 .rowSelected > td {
 	background-color: transparent;
+}
+
+/* Dynamic shifting of spans */
+
+.leftFullTableBlock {
+	width: 1024px !important;
+}
+
+.rightNoTableBlock {
+	display:none !important; 
 }
 
 /* Buttons */

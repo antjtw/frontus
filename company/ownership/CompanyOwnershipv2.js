@@ -1119,7 +1119,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   $scope.uniquerows = []
   $scope.freqtypes = [];
   $scope.issuekeys = []
-  $scope.possibleActions = ['vested', 'exercised']
+  $scope.possibleActions = ['vested', 'exercised', 'forfeited']
 
   //Get the available range of frequency types
   SWBrijj.procm('ownership.get_freqtypes').then(function(results) {

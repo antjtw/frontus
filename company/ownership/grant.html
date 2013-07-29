@@ -67,7 +67,7 @@
               <p>Terms from the ownership table</p>
           </div>
           <tabset>
-            <tab ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
+            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
               <accordion close-others="true">
