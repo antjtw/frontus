@@ -253,6 +253,10 @@ h2 {
 	height:70px;
 }
 
+#navBarLoggedOut {
+	height:40px;
+}
+
 .navbounder {
 	width: 1024px;
 	margin: 0 auto 0 auto;

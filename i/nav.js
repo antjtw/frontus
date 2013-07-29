@@ -1,13 +1,15 @@
 function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
-	$rootScope.selected = ['Company', 'example.com'];
+	$rootScope.selected = ['', ''];
+	$scope.nav = 'navBarLoggedOut';
 
 	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
 	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
+		$scope.nav = 'navBar';
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
@@ -71,6 +73,9 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 		} else {
 			$scope.select($scope.companies[0]['company']);	
 		}
+	}).except(function(ignore) {
+		$scope.nav = 'navBarLoggedOut';
+		console.log('Not logged in');
 	});
 
 	function readCookie(name) {
