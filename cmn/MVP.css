@@ -1,17 +1,18 @@
 @charset "UTF-8";
 /* CSS Document */
 
-html,
-body {
+html, body {
   height: 100% !important;
   background-color:#FFFFFF;
-  overflow-x: hidden;
   /* The html and body elements cannot have any padding or margin. */
 }
 
 body {
-	overflow-y: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;	
 }
+
+
 
 .wrap {
 	min-height: 100%;
@@ -1412,6 +1413,12 @@ tr.rowSelected {
     font-weight: lighter;
 }
 
+.modalHeader p {
+	color: #FFFFFF;
+	display: inline;
+	font-size: 14px;
+}
+
 .modalHeader > .close {
     float: right;
     padding-right: 20px;
@@ -1474,6 +1481,53 @@ tr.rowSelected {
 
 .shareModal .modalText {
 	margin-bottom: 20px;
+}
+
+.capshareModal {
+	margin-left: -250px;
+	width:499px;
+	height:433px;
+}
+
+.capshareModal ul {
+	height:300px;
+	margin: 0;
+	overflow: auto;
+	list-style: none;
+}
+
+.capshareModal ul > li:first-child {
+	text-transform: uppercase;
+}
+
+.capshareModal ul li {
+	text-align: left;
+	height:40px;
+	line-height: 40px;
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.capshareModal ul li > span {
+	display: inline-block;
+	width:150px;
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.capshareModal ul li > input:first-child {
+	margin: 0 0 0 20px;
+}
+
+.capshareModal ul li > input {
+	border: 0;
+}
+
+.capshareModal ul li > input.content {
+	background-color: #F1F1F1;
+}
+
+.capshareModal ul li > input.error {
+	border: 1px solid #F78D1E;
 }
 
 /* Dropdown */
@@ -1861,3 +1915,17 @@ margin-top: 0.9em;
 	color: black;
 }
 
+
+/* Survey */
+
+#ss-form {
+	color: #666666;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#entry_0{
+	color: orange;
+	border-radius: 0px;	
+}
