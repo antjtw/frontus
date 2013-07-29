@@ -219,52 +219,63 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     $scope.docs = x;
     var i = 0;
     angular.forEach($scope.docs, function(x) {
-      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-        SWBrijj.procm('document.document_status_by_investor', x['doc_id'], userId).then(function(z) {
-          $scope.docs[i].docname = y[0]["docname"];
-          $scope.docs[i].event = z[0]['event'];
-          $scope.docs[i].shown = false;
-          $scope.docs[i].button = "icon-plus";
-          if ($scope.docs[i].event == "revoked") {
-            $scope.docs[i].rstatus = 1;
-          };
-          if ($scope.docs[i].event == "needsign") {
-            $scope.docs[i].event = "needs signing";
-          };
-          i++;
-          $scope.$apply();
-        });
-      });
-    });
-    //console.log($scope.docs);
-  });
-
-  $scope.activity = [];
-  SWBrijj.procm('document.get_investor_activity', userId).then(function(data) {
-    var i = 0;
-    angular.forEach(data, function(x) {
-      console.log(x);
-      SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
-        if ($scope.activity[i].activity == "shared") {
-          $scope.activity[i].activity = "Shared ";
-          $scope.activity[i].icon = "icon-edit";
-        }
-        else if ($scope.activity[i].activity == "viewed") {
-          $scope.activity[i].activity = "Viewed ";
-          $scope.activity[i].icon = "icon-eye-open";
-        }
-        else if ($scope.activity[i].activity == "reminder") {
-          $scope.activity[i].activity = "Reminded  ";
-          $scope.activity[i].icon = "icon-bullhorn";
-        }
-        else if ($scope.activity[i].activity == "signed") {
-          $scope.activity[i].activity = "Signed ";
-          $scope.activity[i].icon = "icon-ok-circle";
-        }
+      SWBrijj.procm('document.document_status_by_investor', userId, x['doc_id']).then(function(z) {
+        $scope.docs[i].event = z[0]['event'];
+        $scope.docs[i].shown = false;
+        $scope.docs[i].button = "icon-plus";
+        if ($scope.docs[i].event == "needsign") {
+          $scope.docs[i].event = "needs signing";
+        };
         i++;
       });
     });
+  });
+
+  $scope.activity = [];
+  SWBrijj.procm('global.get_investor_activity_cluster', userId).then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      if (x.type == 'account') {
+        x.link = "/company/ownership/people";
+        if (x.activity == "addadmin") {
+          x.activity = "Added ";
+          x.target = " as an administrator.";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeadmin") {
+          x.activity = "Removed ";
+          x.target = "as an administrator";
+          x.icon = "icon-circle-minus";
+        } else if (x.activity == "addinvestor") {
+          x.activity = "Added ";
+          x.target = + "as an investor";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeinvestor") {
+          x.activity = "Removed ";
+          x.target = "as an investor";
+          x.icon = "icon-circle-minus";
+        }
+      } else if (x.type == 'document') {
+        x.link = "/company/documents/status?doc=" + x.doc_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+          x.target = res["docname"];
+        }); 
+        if (x.activity == "viewed") {
+          x.activity = "Viewed ";
+          x.icon = "icon-star";
+        } else if (x.activity == "received") {
+          x.activity = "Received ";
+          x.icon = "icon-redo";
+        }
+      } else if (x.type == 'ownership') {
+        x.link = "/company/ownership/";
+        x.target = "Ownership table";
+        if (x.activity == "shared") {
+          x.activity = "Received ";
+          x.icon = "icon-redo";
+        }
+      }
+    });
+    $scope.activity = data;
   });
 
   $scope.activityOrder = function(card) {
@@ -283,6 +294,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           doc.button = "icon-plus";
         } else {
           SWBrijj.procm("document.get_I_docstatus", userId, parseInt(selected)).then(function(data) {
+            console.log(data);
             doc.whenshared = data[1].loggedin;
             if (data[0].loggedin != null) {
               doc.lastlogin = data[0].loggedin;
@@ -302,21 +314,8 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
             else {
               doc.signed = 0;  
             }
-            if (data[5].loggedin != null) {
-              console.log(data[5])
-              doc.column5 = 2
-              doc.reminder = data[5].loggedin;
-            }
-            else if (data[4].loggedin != null) {
-              doc.column5 = 1
-              doc.reminder = data[4].loggedin;
-            }
-            else {
-              doc.column5 = 0; 
-            }
             doc.button = "icon-minus";
             doc.shown = true;
-            $scope.$apply();
           });
         }
     });

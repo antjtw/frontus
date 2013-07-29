@@ -13,6 +13,10 @@
           <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></button>
           <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></button>
         </div>
+
+          <ul class="subText pageJump cf">
+            <li ng-class="{'curPage':page==currentPage, unsaved:unsaved(page)}" style="cursor:pointer" ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
+          </ul>
       </div>
 
       <div class="span4">

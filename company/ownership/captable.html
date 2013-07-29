@@ -1,21 +1,30 @@
 <div class="container">
 
-  <div modal="capShare" close="close()" options="opts">
+  <div modal="capShare" close="close()" options="shareopts">
     <div class="modalHeader">
-        <p class="subText">Share Document</p>
+        <span data-icon="&#xe027;" aria-hidden="true">
+        <p>Share Ownership Table</p>
     </div>
     
-    <div class="modalText">
-    <form>
-        <p>Add People</p>
-        <input ng-model="sendeeEmail" type="email">
-        <p>Message</p>
-        <textarea style="resize: none;" rows="4" cols="40" ng-model="messageText"></textarea>
-        <br>
+    <div>
+      <form>
+          <ul>
+            <li>
+              <input disabled class="checkbox" type="checkbox"></input>
+              <span>Name</span>
+              <span>Email</span>
+            </li>
+            <li ng-repeat="row in rows | filter:activeInvestor">
+              <input class="checkbox" ng-model="row.send" type="checkbox"></input>
+              <span>{{row.name}}</span>
+              <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}" ng-disabled="row.emailkey" ng-model="row.email"></input>
+            </li>
+          </ul>
+      </form>
     </div>
-    </form>
     <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="close(); share(messageText, sendeeEmail);">Send</button>
+        <button class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
+
     </div>
   </div>
 
@@ -91,14 +100,7 @@
             </div>
             <div class="pull-left">
               <div class="minidrop btn-group">
-                <button ng-click="modalUp()" class="btn"><span data-icon="&#xe027;" aria-hidden="true"></button>
-                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <!-- dropdown menu links -->
-                  <li><a>resend</a></li>
-                </ul>
+                <button ng-click="modalUp();" class="btn"><span data-icon="&#xe027;" aria-hidden="true"></button>
               </div>
             </div>
           </div>
@@ -290,7 +292,10 @@
           <span ng-switch-when="3">
             <div class="headsection row-fluid">
               <h2>{{activeInvestorName}}</h2>
-              <p>Edit this investor's information</p>
+              <p>Info on this shareholder</p>
+            </div>
+            <div>
+              <p>{{activeInvestorEmail}}</p>
             </div>
           </span>
           <span ng-switch-default>

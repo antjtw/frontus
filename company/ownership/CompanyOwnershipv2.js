@@ -15,6 +15,28 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+owner.directive('popOver', function ($compile) {
+        return {
+            restrict: "A",
+            transclude: true,
+            template: "<span ng-transclude></span>",
+            link: function (scope, element, attrs) {
+                var popOverContent;
+                var html = "<a href='/company/profile/view?id={{email}}'><span data-icon='&#xe00a;' aria-hidden='true'></a><a ng-click='modalUp(email);'><span data-icon='&#xe02e;' aria-hidden='true'></a>";
+                popOverContent = $compile(html)(scope);                    
+                var options = {
+                    content: popOverContent,
+                    placement: "bottom",
+                    html: true,
+                };
+                $(element).popover(options);
+            },
+            scope: {
+                email: '=',
+            }
+        };
+    });
+
 owner.service('calculate', function() {
   this.whatsleft = function(total, issue, rows) {
     var leftover = total
@@ -43,7 +65,7 @@ owner.service('calculate', function() {
     else {
       angular.forEach(rows, function(r) {
         if (r[issue.issue] != undefined) {
-          if (isNaN(parseFloat(r[issue.issue]['u'])) && !isNaN(parseFloat(r[issue.issue]['a']))) {
+          if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 )&& !isNaN(parseFloat(r[issue.issue]['a']))) {
             mon = mon + parseFloat(r[issue.issue]['a']);
           };
         };
@@ -112,6 +134,12 @@ owner.service('sorting', function() {
      return -1;
   if (a.date > b.date)
     return 1;
+  if (a.date = b.date) {
+    if (a.created < b.created)
+      return -1;
+    if (a.created > b.created)
+      return 1;
+  }
   return 0;
   };
 
@@ -227,7 +255,7 @@ $rootScope.shareSum = function(row) {
   var total = 0
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
-      if (key != "name") {
+      if (row[key] != null) {
         if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
           total = total + parseFloat(row[key]['u']);
         }
@@ -242,7 +270,7 @@ $rootScope.shareSum = function(row) {
     angular.forEach(rows, function(row) {
       for (var key in row) {
         if (row.hasOwnProperty(key)) {
-          if (key != "name") {
+          if (row[key] != null) {
             if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
               total = total + parseFloat(row[key]['u']);
             }
@@ -296,6 +324,10 @@ $rootScope.shareSum = function(row) {
 
 });
 
+function hidePopover() {
+  angular.element('.popover').hide();
+}
+
 var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
 
   SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
@@ -347,7 +379,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
         $scope.trans[i].investorkey = $scope.trans[i].investor;
           if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
             $scope.uniquerows.push($scope.trans[i].investor);
-            $scope.rows.push({"name":$scope.trans[i].investor, "namekey":$scope.trans[i].investor, "editable":"yes"});
+            $scope.rows.push({"name":$scope.trans[i].investor, "namekey":$scope.trans[i].investor, "email":$scope.trans[i].email, "emailkey":$scope.trans[i].email, "editable":"yes"});
           }
         angular.forEach($scope.issues, function(issue) {
           if ($scope.trans[i].issue == issue.issue) {
@@ -715,6 +747,7 @@ $scope.getActiveInvestor = function(investor) {
     $scope.rows.push(values);
   }
   $scope.activeInvestorName = investor.name;
+  $scope.activeInvestorEmail = investor.email;
   $scope.activeInvestorNameKey = investor.name;
   $scope.$apply();
 };
@@ -922,6 +955,7 @@ $scope.saveTran = function(transaction) {
                     tempamount = calculate.sum(tempamount, tran.amount);
                     row[tran.issue]['u'] = tempunits;
                     row[tran.issue]['a'] = tempamount;
+                    row[tran.issue]['x'] = 0;
                   }
                 }
               }
@@ -935,14 +969,16 @@ $scope.saveTran = function(transaction) {
                 });
               }
             });
-            
-            if (row[transaction.issue]['x'] != undefined) {
-              angular.forEach($scope.issues, function(issue) {
-                if (issue.issue == transaction.issue) {
-                  row[transaction.issue]['x'] = calculate.debt($scope.rows, issue, row);
+          });
+
+          angular.forEach($scope.rows, function(row) {
+            angular.forEach($scope.issues, function(issue) {
+              if (row[issue.issue] != undefined) {
+                if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0)&& !isNaN(parseFloat(row[issue.issue]['a']))) {
+                  row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                 };
-              });
-            }
+              };
+            });
           });
         });
       };
@@ -1019,15 +1055,50 @@ $scope.saveTran = function(transaction) {
       $scope.closeMsg = 'I was closed at: ' + new Date();
       $scope.capShare = false;
       };
+
+   $scope.shareopts = {
+      backdropFade: true,
+      dialogFade:true,
+      dialogClass: 'capshareModal modal'
+      };
     
   $scope.opts = {
       backdropFade: true,
       dialogFade:true
       };
 
-  $scope.share = function (message, email) {
-    SWBrijj.procm("ownership.share_captable", email, message).then(function(data) {
-      console.log(data);
+  $scope.activeInvestor = function(person){
+    if (person.name.length > 0) {
+      return true
+    }
+    else {
+      return false
+    };
+  };
+
+  $scope.emailCheck = function(bool, person){
+    if (bool) {
+      if (person) {
+        return false;
+      }
+      else {
+        return true;
+      };
+    }
+    else {
+      return false;
+    };
+  };
+
+  $scope.sendInvites = function () {
+    angular.forEach($scope.rows, function(row) {
+      if (row.send == true) {
+        SWBrijj.procm("ownership.share_captable", row.email, row.name).then(function(data) {
+          console.log(data);
+          row.send = false;
+          row.emailkey = row.email;
+        });
+      }
     });
   };
 };
@@ -1296,12 +1367,14 @@ var statusController = function($scope, SWBrijj) {
     $scope.userStatus = data;
     for (var i = 0; i < $scope.userStatus.length; i++) {
       $scope.userStatus[i].shown = false;
-      $scope.userStatus[i].button = "icon-plus";
       $scope.userStatus[i].viewed = "unviewed";
       $scope.userStatus[i].viewflag = 0;
       $scope.userStatus[i].lastlogin = 0;
       if ($scope.userStatus[i].fullview == false) {
         $scope.userStatus[i].fullview = "personal";
+      }
+      else {
+        $scope.userStatus[i].fullview = "full";
       }
     };
     SWBrijj.procm("ownership.get_company_views").then(function(views) {
@@ -1399,13 +1472,46 @@ var statusController = function($scope, SWBrijj) {
     if (selected == name.email)
       if (name.shown == true) {
         name.shown = false;
-        name.button = "icon-plus";
       }
       else {
-        name.button = "icon-minus";
         name.shown = true;
       }
     });
   };
+
+  $scope.changeVisibility = function(person) {
+    console.log(person);
+    if (person.fullview == 'full') {
+      person.fullview = true;
+    }
+    else {
+      person.fullview = false;
+    }
+    SWBrijj.proc('ownership.update_investor_captable', person.email, person.fullview).then(function(data) {
+      if (person.fullview == true) {
+        person.fullview = "full";
+      }
+      else {
+        person.fullview = "personal";
+      };
+    });
+  };
+
+  // Modal for changing access type
+  $scope.modalUp = function (person) {
+      $scope.capAccess = true;
+      $scope.selectedI = person
+      };
+    
+  $scope.close = function () {
+      $scope.closeMsg = 'I was closed at: ' + new Date();
+      $scope.capAccess = false;
+      };
+
+   $scope.shareopts = {
+      backdropFade: true,
+      dialogFade:true,
+      dialogClass: 'modal'
+      };
 
 };

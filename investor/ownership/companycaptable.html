@@ -50,6 +50,8 @@
               <td><input disabled></input></td>
               <td><input disabled value="{{everyone.percentage  | number:3}}%"></input></td>
               <td>Other Investors</td>
+              <td ng-repeat="key in issuekeys">
+              </td>
             </tr>
           <tr ng-show="fullview" class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>

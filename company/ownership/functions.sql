@@ -90,7 +90,7 @@ GRANT SELECT ON ownership.transaction_tran_id_seq to investor;
 
 CREATE OR REPLACE FUNCTION ownership.update_transaction() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
 BEGIN
-    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, amount=NEW.amount, date=NEW.date, type=NEW.type, premoney=NEW.premoney, postmoney=NEW.postmoney, ppshare=NEW.ppshare, totalauth=NEW.totalauth, partpref=NEW.partpref, liquidpref=NEW.liquidpref, price=NEW.price, optundersec=NEW.optundersec, terms=NEW.terms, vestingbegins=NEW.vestingbegins, vestcliff=NEW.vestcliff, vestfreq=NEW.vestfreq, debtundersec=NEW.debtundersec, interestrate=NEW.interestrate, valcap=NEW.valcap, discount=NEW.discount, term=NEW.term where tran_id=OLD.tran_id and company=OLD.company;
+    UPDATE ownership.transaction SET units=NEW.units, issue=NEW.issue, investor=NEW.investor, email=NEW.email, amount=NEW.amount, date=NEW.date, type=NEW.type, premoney=NEW.premoney, postmoney=NEW.postmoney, ppshare=NEW.ppshare, totalauth=NEW.totalauth, partpref=NEW.partpref, liquidpref=NEW.liquidpref, price=NEW.price, optundersec=NEW.optundersec, terms=NEW.terms, vestingbegins=NEW.vestingbegins, vestcliff=NEW.vestcliff, vestfreq=NEW.vestfreq, debtundersec=NEW.debtundersec, interestrate=NEW.interestrate, valcap=NEW.valcap, discount=NEW.discount, term=NEW.term where tran_id=OLD.tran_id and company=OLD.company;
     RETURN NEW;
 END $$;
 
@@ -189,15 +189,15 @@ DECLARE
   code varchar;
 BEGIN
   	select value into domain from config.configuration where name='hostname';
-	perform name from account.user_table where email=NEW.email;
-  	IF NOT FOUND THEN
+  	IF NOT account.is_in_user_table(NEW.email) THEN
   		PERFORM account.create_investor(NEW.email, NEW.email, NEW.company, NEW.sender);
   		code = mail.get_ticket();
-  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/register/people?code=' , code));
-  		update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
-  		INSERT INTO account.investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
+  		template = replace(template, '{{link}}', concat('http://', domain, '/register/people?code=' , code));
+  		-- update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
+    	INSERT INTO account.tracking_invitation (email, when_invitation_sent) VALUES (NEW.email, localtimestamp);
+  		INSERT INTO account.my_investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
   	ELSE
-  		template = replace(replace(template,'{{message}}', NEW.message), '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
+  		template = replace(template, '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
 	template = replace(template, '{{company}}', NEW.company);
@@ -208,15 +208,14 @@ CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR E
 GRANT INSERT on ownership.company_audit TO investor;
 
 -- Share captable, sends email and tracks action
-CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, xmessage character varying) returns void
+CREATE or REPLACE FUNCTION ownership.share_captable(xemail character varying, inv character varying) returns void
 language plpgsql as $$
 declare
   comp account.company_type;
-  sendtype document.activity_type;
 begin
   select distinct company into comp from account.companies;
-  insert into ownership.company_audit(company, email, sender, message) values (comp, xemail, current_user, xmessage);
-  perform distinct company from account.company_investors where email = xemail;
+  insert into ownership.company_audit(company, email, sender) values (comp, xemail, current_user);
+  update ownership.company_transaction SET email=xemail where investor=inv;
 end $$;
 
 -- Get most recent view
@@ -232,4 +231,26 @@ CREATE TYPE ownership.activity_cluster as (count bigint, whendone date, activity
 CREATE OR REPLACE FUNCTION ownership.get_company_activity_cluster() RETURNS SETOF ownership.activity_cluster LANGUAGE plpgsql AS $$
 BEGIN RETURN QUERY select count(email) as count, whendone::date, activity from (select whendone::date, email, activity from ownership.company_activity_feed GROUP BY whendone::date, activity, email) b GROUP BY whendone::date, activity;
 END $$;
+
+
+-- Change the access level of an investor
+
+-- Share captable, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.update_investor_captable(xemail character varying, viewlevel boolean) returns void
+language plpgsql as $$
+declare
+  comp account.company_type;
+begin
+  select distinct company into comp from account.companies;
+  update ownership.company_audit SET fullview=viewlevel where email=xemail and company=comp;
+end $$;
+
+CREATE OR REPLACE FUNCTION ownership.update_captable_sharing() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+DECLARE
+BEGIN
+  UPDATE ownership.audit SET fullview=NEW.fullview where email=OLD.email and company=OLD.company;
+  RETURN NEW;
+END $$;
+CREATE TRIGGER update_captable_sharing INSTEAD OF UPDATE ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.update_captable_sharing();
+GRANT UPDATE on ownership.company_audit TO investor;
 

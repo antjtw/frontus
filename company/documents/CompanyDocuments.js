@@ -82,7 +82,13 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 /* Controllers */
 
 function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
-	$scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+	$scope.vInvestors = []
+	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			$scope.vInvestors.push(data[i].email);
+		}
+	});
+
 	SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
   	$scope.documents = data;
 	}).except(function(err) { alert(err.message); });

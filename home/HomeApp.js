@@ -4,7 +4,6 @@ var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', '
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
-  // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
       when('/', {controller:InvestorCtrl, templateUrl:'investor.html'}).
@@ -18,76 +17,131 @@ app.controller("MainController", function($scope, $location) {
 
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
   
-  SWBrijj.tblm('account.my_company').then(function(x) {
-    $scope.company = x[0]["name"];
-  });
+  // SWBrijj.tblm('account.my_company').then(function(x) {
+  //   $scope.company = x[0]["name"];
+  // });
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
   }).except(initFail);
 
-  //TODO grab name from company_investors
   $scope.activity = [];
- /*
-  SWBrijj.procm('document.get_company_activity').then(function(data) {
+  SWBrijj.procm('global.get_company_home').then(function(data) {
     var i = 0;
-    console.log(data);
     angular.forEach(data, function(x) {
-      if (x['doc_id'] > 0) { //Activity is a document activity
-        SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-          $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], name: y[0]['docname'], link: '/company/documents/view?doc=' + x['doc_id']});
-          if ($scope.activity[i].activity == "shared") {
-            $scope.activity[i].activity = x['sender'] + " shared ";
-            $scope.activity[i].icon = "icon-edit";
-          }
-          else if ($scope.activity[i].activity == "viewed") {
-            $scope.activity[i].activity = x['sent_to'] + " viewed ";
-            $scope.activity[i].icon = "icon-eye-open";
-          }
-          else if ($scope.activity[i].activity == "reminder") {
-            $scope.activity[i].activity = x['sender'] + " reminded " ;
-            $scope.activity[i].icon = "icon-bullhorn";
-          }
-          else if ($scope.activity[i].activity == "signed") {
-            $scope.activity[i].activity = x['sent_to'] + " signed ";
-            $scope.activity[i].icon = "icon-ok-circle";
-          }
-        });
-      } else { //Activity is a profile activity
-        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], name: x['sender'], link: '/company/profile'});
-        if ($scope.activity[i].activity == "addinvestor") {
-          $scope.activity[i].activity = x['sent_to'] + " was added as a shareholder ";
-          $scope.activity[i].icon = "icon-plus-sign";
+      if (x.type == 'account') {
+        x.link = "/company/ownership/people";
+        if (x.activity == "addadmin") {
+          x.activity = " added ";
+          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeadmin") {
+          x.activity = " removed ";
+          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
+          x.icon = "icon-circle-minus";
+        } else if (x.activity == "addinvestor") {
+          x.activity = " added ";
+          x.target = (x.count > 1) ? x.count + "investors": "an investor";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeinvestor") {
+          x.activity = " removed ";
+          x.target = (x.count > 1) ? x.count + "investors": "an investor";
+          x.icon = "icon-circle-minus";
         }
-        else if ($scope.activity[i].activity == "removeinvestor") {
-          $scope.activity[i].activity = x['sent_to'] + " was removed as a shareholder ";
-          $scope.activity[i].icon = "icon-minus-sign";
+      } else if (x.type == 'document') {
+        x.link = "/company/documents/status?doc=" + x.doc_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+          x.target = res["docname"];
+        }); 
+        if (x.activity == "uploaded") {
+          x.activity = " uploaded ";
+          x.icon = "icon-star";
+        } else if (x.activity == "sent") {
+          x.activity = " shared ";
+          x.icon = "icon-redo";
         }
-        else if ($scope.activity[i].activity == "addadmin") {
-          $scope.activity[i].activity = x['sent_to'] + " was added as an admin " ;
-          $scope.activity[i].icon = "icon-plus-sign";
-        }
-        else if ($scope.activity[i].activity == "removeadmin") {
-          $scope.activity[i].activity = x['sent_to'] + " was removed as an admin ";
-          $scope.activity[i].icon = "icon-minus-sign";
+      } else if (x.type == 'ownership') {
+        x.link = "/company/ownership/";
+        x.target = "Ownership table";
+        if (x.activity == "shared") {
+          x.activity = " shared ";
+          x.icon = "icon-redo";
         }
       }
-      i++;
     });
+    $scope.activity = data;
+    angular.forEach($scope.activity, function(x) { //Replace emails with names
+        if (x.email != null) {
+          SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {
+            x.name = name[1][0];
+          });
+        }
+    });
+    console.log(data);
   });
-*/
-  $scope.activityOrder = function(card) {
-     if (card.activity == "created") {
-       return 0;
-     } else {
-        return -card.when_sent;
-     }
-  };
 
+  $scope.activityOrder = function(card) {
+        return -card.time;
+  };
 }
 
 function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
-  $scope.company = $routeParams.company;
+  //$scope.company = $routeParams.company;
+  $scope.company = $rootScope.selected.name;
+
+  $scope.activity = [];
+  SWBrijj.procm('global.get_investor_home').then(function(data) {
+    var i = 0;
+    angular.forEach(data, function(x) {
+      x.name = "You ";
+      if (x.type == 'account') {
+        x.link = "/company/ownership/people";
+        if (x.activity == "addadmin") {
+          x.activity = " added an ";
+          x.target = "administrator";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeadmin") {
+          x.activity = " removed an ";
+          x.target = "administrator";
+          x.icon = "icon-circle-minus";
+        } else if (x.activity == "addinvestor") {
+          x.activity = " added an ";
+          x.target = "an investor";
+          x.icon = "icon-circle-plus";
+        } else if (x.activity == "removeinvestor") {
+          x.activity = " removed an ";
+          x.target = "an investor";
+          x.icon = "icon-circle-minus";
+        }
+      } else
+      if (x.type == 'document') {
+        x.link = "/investor/documents/" + x.doc_id;
+        SWBrijj.tblm('document.my_investor_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+          x.target = res["docname"];
+        }); 
+        if (x.activity == "uploaded") {
+          x.activity = " uploaded ";
+          x.icon = "icon-star";
+        } else if (x.activity == "received") {
+          x.activity = " received ";
+          x.icon = "icon-redo";
+        }
+      } else if (x.type == 'ownership') {
+        x.link = "/investor/ownership/";
+        x.target = "Ownership table";
+        if (x.activity == "shared") {
+          x.activity = " received ";
+          x.icon = "icon-redo";
+        }
+      }
+    });
+    $scope.activity = data;
+    console.log(data);
+  });
+
+  $scope.activityOrder = function(card) {
+        return -card.time;
+  };
 }
 
 function HomeCtrl($scope, $route) {
