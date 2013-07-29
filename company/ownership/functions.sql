@@ -232,3 +232,25 @@ CREATE OR REPLACE FUNCTION ownership.get_company_activity_cluster() RETURNS SETO
 BEGIN RETURN QUERY select count(email) as count, whendone::date, activity from (select whendone::date, email, activity from ownership.company_activity_feed GROUP BY whendone::date, activity, email) b GROUP BY whendone::date, activity;
 END $$;
 
+
+-- Change the access level of an investor
+
+-- Share captable, sends email and tracks action
+CREATE or REPLACE FUNCTION ownership.update_investor_captable(xemail character varying, viewlevel boolean) returns void
+language plpgsql as $$
+declare
+  comp account.company_type;
+begin
+  select distinct company into comp from account.companies;
+  update ownership.company_audit SET fullview=viewlevel where email=xemail and company=comp;
+end $$;
+
+CREATE OR REPLACE FUNCTION ownership.update_captable_sharing() returns TRIGGER language plpgsql SECURITY DEFINER AS $$
+DECLARE
+BEGIN
+  UPDATE ownership.audit SET fullview=NEW.fullview where email=OLD.email and company=OLD.company;
+  RETURN NEW;
+END $$;
+CREATE TRIGGER update_captable_sharing INSTEAD OF UPDATE ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.update_captable_sharing();
+GRANT UPDATE on ownership.company_audit TO investor;
+

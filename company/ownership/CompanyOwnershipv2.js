@@ -15,6 +15,28 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+owner.directive('popOver', function ($compile) {
+        return {
+            restrict: "A",
+            transclude: true,
+            template: "<span ng-transclude></span>",
+            link: function (scope, element, attrs) {
+                var popOverContent;
+                var html = "<a href='/company/profile/view?id={{email}}'><span data-icon='&#xe00a;' aria-hidden='true'></a><a ng-click='modalUp(email);'><span data-icon='&#xe02e;' aria-hidden='true'></a>";
+                popOverContent = $compile(html)(scope);                    
+                var options = {
+                    content: popOverContent,
+                    placement: "bottom",
+                    html: true,
+                };
+                $(element).popover(options);
+            },
+            scope: {
+                email: '=',
+            }
+        };
+    });
+
 owner.service('calculate', function() {
   this.whatsleft = function(total, issue, rows) {
     var leftover = total
@@ -1351,6 +1373,9 @@ var statusController = function($scope, SWBrijj) {
       if ($scope.userStatus[i].fullview == false) {
         $scope.userStatus[i].fullview = "personal";
       }
+      else {
+        $scope.userStatus[i].fullview = "full";
+      }
     };
     SWBrijj.procm("ownership.get_company_views").then(function(views) {
       angular.forEach($scope.userStatus, function(person) {
@@ -1454,7 +1479,25 @@ var statusController = function($scope, SWBrijj) {
     });
   };
 
-  // Captable Sharing Modal
+  $scope.changeVisibility = function(person) {
+    console.log(person);
+    if (person.fullview == 'full') {
+      person.fullview = true;
+    }
+    else {
+      person.fullview = false;
+    }
+    SWBrijj.proc('ownership.update_investor_captable', person.email, person.fullview).then(function(data) {
+      if (person.fullview == true) {
+        person.fullview = "full";
+      }
+      else {
+        person.fullview = "personal";
+      };
+    });
+  };
+
+  // Modal for changing access type
   $scope.modalUp = function (person) {
       $scope.capAccess = true;
       $scope.selectedI = person

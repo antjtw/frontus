@@ -14,7 +14,7 @@
     </div>
     </form>
     <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="close();">Change</button>
+        <button class="button subText greenButton" ng-click="changeVisibility(selectedI); close();">Change</button>
     </div>
   </div>
 
@@ -65,11 +65,11 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
-                <td ng-click='modalUp(person.email);'>{{person.name}}</td>
+                <td ng-click='modalUp(person);'>{{person.name}}</td>
                 <td ng-click="(opendetails(person.email))">{{person.email}}</td>
        			    <td ng-click="(opendetails(person.email))">{{person.fullview}}</td>
        		     	<td ng-click="(opendetails(person.email))">{{person.viewed}}</td>
-                <td class="button"><span popover-placement="bottom" popover-html-unsafe="<a href='/company/profile/view?id={{person.email}}'><span data-icon='&#xe00a;' aria-hidden='true'></a><a><span data-icon='&#xe02e;' aria-hidden='true'></a>" data-icon="&#xe011;" aria-hidden="true"></td>
+                <td class="button"><span pop-over email="person.email" data-icon="&#xe011;" aria-hidden="true"></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
                     <td colspan="2">
