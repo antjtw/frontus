@@ -42,10 +42,10 @@
             <td>
               <input disabled style="width:180px;" ng-model="row.name"></input>
             </td>
-            <td>{{row.granted}}</td>
-            <td>{{row.vested}}</td>
-            <td>{{row.forfeited}}</td>
-            <td>{{row.exercised}}</td>
+            <td>{{row.granted | number:2}}</td>
+            <td>{{row.vested | number:2}}</td>
+            <td>{{row.forfeited | number:2}}</td>
+            <td>{{row.exercised | number:2}}</td>
           </tr>
           <tr class='tablefooter'>
             <td></td>

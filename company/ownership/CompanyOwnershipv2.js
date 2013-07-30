@@ -73,6 +73,41 @@ owner.service('calculate', function() {
     };
     return ((parseFloat(row[issue.issue]['a'])/parseFloat(mon)) * 100)
   };
+
+  this.vested = function(rows, trans) {
+    var vesting = {}
+    angular.forEach(trans, function(tran) {
+      if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && tran.vestingbegins != null) {
+        if (Date.compare(Date.today(), tran.vestingbegins) > -1) {
+          if (!isNaN(parseFloat(vesting[tran.investor]))) {
+            vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff/100));
+          }
+          else {
+            vesting[tran.investor] = (tran.units * (tran.vestcliff/100));
+          }
+          var cycleDate = angular.copy(tran.date);
+          var remainingterm = angular.copy(tran.terms);
+          while (Date.compare(tran.vestingbegins, cycleDate) > -1) {
+            remainingterm = remainingterm - 1
+            cycleDate.addMonths(1);
+          }
+          remainingterm = remainingterm + 1
+          var monthlyperc = (100-tran.vestcliff)/(remainingterm);
+          while (Date.compare(Date.today(), cycleDate) > -1) {
+            vesting[tran.investor] = vesting[tran.investor] + monthlyperc;
+            cycleDate.addMonths(1);
+          }
+        }
+      } 
+    });
+    angular.forEach(rows, function(row) {
+      if (!isNaN(vesting[row.name])) {
+        row.vested = vesting[row.name];
+      }
+    });
+    console.log(rows);
+    return rows
+  };
 });
 
 owner.service('switchval', function() {
@@ -332,7 +367,7 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
 
   SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
 
-  $scope.radioModel = "Middle";
+  $scope.radioModel = "Edit";
 
   $scope.issuetypes = [];
   $scope.freqtypes = [];
@@ -372,6 +407,19 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
     // Pivot shenanigans
     SWBrijj.tblm('ownership.company_transaction').then(function(trans) {
       $scope.trans = trans
+
+      SWBrijj.tblm('ownership.company_grants').then(function(data) {
+
+        $scope.grants = data;
+
+        angular.forEach($scope.grants, function(grant) {
+          angular.forEach($scope.trans, function(tran) {
+            if (grant.tran_id == tran.tran_id) {
+              grant.investor = tran.investor;
+            }
+          });
+        });
+
       for(var i = 0, l = $scope.trans.length; i < l; i++) {
         $scope.trans[i].atype = switchval.tran($scope.trans[i].type);
         $scope.trans[i].key = $scope.trans[i].issue;
@@ -457,9 +505,10 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
       values[key] = {"u":null, "a":null};
     });
     $scope.rows.push(values);
-    
-    });
+
+    });   
   });
+});
 
 $scope.findValue = function(row, header) {
   angular.forEach($scope.rows, function(picked) {
@@ -971,6 +1020,25 @@ $scope.saveTran = function(transaction) {
             });
           });
 
+          if (transaction.type == "options" && transaction.amount > 0) {
+            var modGrant = {"unit":null, "tran_id":transaction.tran_id, "date":(Date.today()), "action":"exercised", "investor":transaction.investor, "issue":transaction.issue}
+            modGrant.amount = transaction.amount;
+            modGrant.unit = (transaction.amount / transaction.price);
+            angular.forEach($scope.grants, function(grant) {
+              if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
+                if (grant.date.toUTCString() == Date.today().toUTCString()) {
+                  modGrant.grant_id = grant.grant_id;
+                }
+                else {
+                  modGrant.amount = modGrant.amount - grant.amount;
+                  modGrant.unit = modGrant.unit - grant.unit;
+                }
+              }
+            });
+            $scope.saveGrant(modGrant);
+            $scope.grants.push(modGrant);
+          }
+
           angular.forEach($scope.rows, function(row) {
             angular.forEach($scope.issues, function(issue) {
               if (row[issue.issue] != undefined) {
@@ -984,6 +1052,43 @@ $scope.saveTran = function(transaction) {
       };
       console.log("done saving");
 };
+
+ $scope.saveGrant = function(grant) {
+    console.log(grant);
+    if (grant.action == "" && isNaN(parseFloat(grant.unit))) {
+      if (grant.grant_id != null) {
+        SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function(data) {
+          var index = $scope.grants.indexOf(grant);
+          $scope.grants.splice(index, 1);
+          });
+      }
+      else {
+        console.log(grant);
+        return;
+    };
+    }
+    if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
+      return;
+    };
+    if (grant.grant_id == undefined) {
+      grant.grant_id = "";
+    }
+    var d1 = grant['date'].toUTCString();
+    SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function(data) {
+      angular.forEach($scope.activeTran, function(tran) {
+        if (tran.tran_id == grant.tran_id) {
+          angular.forEach(tran.activeAct, function(act) {
+            if (act.grant_id == "") {
+              act.grant_id = data[1][0];
+              grant.grant_id = data[1][0];
+              $scope.grants.push(grant);
+            }
+          });
+        };
+      });
+
+    });
+  };
 
   $scope.strToBool = function(string){
     switch(String(string).toLowerCase()){
@@ -1015,6 +1120,15 @@ $scope.saveTran = function(transaction) {
     tran.term = issue.term;
     return tran
   };
+
+  $scope.toggleView = function() {
+    if ($scope.radioModel == "View") {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
 
 
@@ -1119,7 +1233,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   $scope.uniquerows = []
   $scope.freqtypes = [];
   $scope.issuekeys = []
-  $scope.possibleActions = ['vested', 'exercised', 'forfeited']
+  $scope.possibleActions = ['exercised', 'forfeited']
 
   //Get the available range of frequency types
   SWBrijj.procm('ownership.get_freqtypes').then(function(results) {
@@ -1128,6 +1242,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       });
   });
 
+  //Get the company issues
   SWBrijj.tblm('ownership.company_issue').then(function(data) {
     $scope.issues = data;
     for(var i = 0, l = $scope.issues.length; i < l; i++) {
@@ -1175,6 +1290,10 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
         });
       });
 
+    //Calculate the total vested for each row
+    $scope.rows = calculate.vested($scope.rows, $scope.trans);
+
+    //Calculate the total exercised for each row
     angular.forEach($scope.grants, function(grant) {
       angular.forEach($scope.rows, function(row) {
         if (row.name == grant.investor) {
@@ -1259,7 +1378,6 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           });
 
           angular.forEach($scope.rows, function(row) {
-            row['vested'] = null;
             row['exercised'] = null;
             angular.forEach($scope.grants, function(grant) {
               if (row.name == grant.investor) {
@@ -1311,7 +1429,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       angular.forEach(exercises, function(value, key) {
         angular.forEach($scope.trans, function(tran) {
           if (tran.tran_id == key) {
-            tran.amount = value;
+            tran.amount = value * tran.price;
             $scope.saveTran(tran);
           }
         });

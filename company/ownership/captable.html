@@ -64,8 +64,8 @@
     </div>
   </div>
 
-  <div class="row-fluid">
-    <div class="span8 docLibrary leftBlock leftFullTableBlock">
+  <div class="row-fluid leftTabWindow">
+    <div ng-class="{leftFullTableBlock:toggleView()}" class="span8 docLibrary leftBlock">
       <div class="headsection row-fluid">
         <h1>{{cinfo[0].name}}</h1>
 
@@ -84,14 +84,14 @@
           <div>
             <div class="pull-left">
               <div class="edittoggle btn-group">
-                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Left'"><span data-icon="&#xe001;" aria-hidden="true"></button>
-                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Middle'"><span data-icon="&#xe00e;" aria-hidden="true"></button>
+                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'View'"><span data-icon="&#xe001;" aria-hidden="true"></button>
+                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Edit'"><span data-icon="&#xe00e;" aria-hidden="true"></button>
               </div>
             </div>
             <div class="pull-left namedtoggle">
               <p class="pull-left">DILUTION</p>
               <div class="pull-left onoffswitch">
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                <input type="checkbox" ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
                 <label class="onoffswitch-label" for="myonoffswitch">
                   <div class="onoffswitch-inner"></div>
                   <div class="onoffswitch-switch"></div>
@@ -156,8 +156,7 @@
       </div>
     </div>
 
-
-    <div class="span4 capright rightTableBlock">
+    <div ng-class="{rightNoTableBlock:toggleView()}" class="span4 capright">
       <div class="row-fluid">
         <div ng-switch on="sideBar" >
           <span ng-switch-when="1">
