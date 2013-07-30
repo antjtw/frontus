@@ -1,13 +1,28 @@
 <div class="row-fluid">
-  <div class="span12 pagination-centered gateway">
-    <div><img class="center loginLogo" src="/img/logo-144x24.png"></div>
-    <p></p>
-    <form id="login" class="center" ng-submit="doActivate()">
+  <div class="span5 offset1 gateway text-center">
+    <div>
+      <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
+      <p class="tagline">the best way to manage your shareholders<p>
+    </div>
+    <div class="spacer40"></div> 
+   
+    <div class="span9 offset1 text-center line"></div>
+    <div class="spacer10"></div> <br> 
+    <p>Welcome [company name]. <br>To begin, create a password to accompany  your <br> email  address:   <strong>firstname.lastname@company.com</strong></p>
+
+    <form id="login" class="text-center inputs" ng-submit="doActivate()">
       <fieldset>
         <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
+        <div class="spacer30"></div>    
       <button type="submit" class="button greenButton loginButton bodyText">Register</button>
+          <p class="caption">By registering, you agree to our<a href="/privacy"> Terms of Use and Privacy Policy</a></p>
         <br>
       </fieldset>
     </form>
   </div>
-</div>  
+  <div class="span5 gateway register">
+    <p><img src="/img/reg-graphic-holding.png"> <span class="teaser">Understand your company&apos;s equity</span></p>
+   <p> <img src="/img/reg-graphic-audit.png"> <span class="teaser">Simplify shareholder communication</span></p>
+   <p> <img src="/img/reg-graphic-copies.png"> <span class="teaser">Keep an audit trail of all your data</span></p>
+  </div>
+</div>

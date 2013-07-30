@@ -142,7 +142,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 
 h1 {
-	font-family: 'FS Elliot Web Light', sans-serif !important;
+	font-family: 'FS Elliot Web Thin', sans-serif !important;
 	font-size: 36px !important;
 	font-weight: normal !important;	
 	color: #1e2d3d;
@@ -568,10 +568,11 @@ form.inputs {
 	height:30px;
 	border-radius:0px;
 	border: 0px;
+	background-color: #1ABC96;
 }
 
 .button.greenButton.loginButton:hover {
-	background-color: #15A085;
+	background-color: #1CCAA1;
 }
 
 
@@ -1285,12 +1286,16 @@ tr.rowSelected {
 }
 
 .button.greenButton {
-	color:#ffffff;
-	background-color:#1abc96;
 	width: 143px;
 	height: 37px;
 	text-align:center;
 	padding: 0 0 0 0;
+	color:#ffffff;
+	background-color: #1ABC96;
+}
+
+.button.greenButton:hover {
+	background-color: #1ccaa1;
 }
 
 .button.greyButton {
@@ -1787,8 +1792,9 @@ margin-top: 0.9em;
 
 .home h1 {
 	color: white;
-	font-family: 'FS Elliot Web Light', sans-serif;
+	font-family: 'FS Elliot Web Thin', sans-serif;
 	font-size: 42px;
+	line-height: 45px;
 	font-weight: normal;	
 
 }
@@ -1802,11 +1808,11 @@ margin-top: 0.9em;
 
 .home h3 {
 	color: white;
-	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-family: 'FS Elliot Web Light', sans-serif;
 	font-size: 18px;
 	font-weight: normal;
 	line-height: 18px;	
-
+	letter-spacing: 1px;
 }
 
 .home p {
@@ -1872,6 +1878,10 @@ margin-top: 0.9em;
 	text-transform:capitalize;	
 	border: 0;
 	font-size: 14px;
+	background-color: #1ABC96;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	letter-spacing: 1px;
+
 }
 
 .home input {
@@ -1879,6 +1889,43 @@ margin-top: 0.9em;
  	width: 300px;
  	height: 30px;
  	border-radius: 0px;
+ 	border: 0px;
+ 	outline: none !important;
+ 	-webkit-box-shadow: none !important;
+ 	-box-shadow: none !important;
+}
+
+.home input:focus:invalid {
+	color: #666666;
+}
+
+/* Set submit button */
+
+.home form .button, .home form.ng-valid .button[disabled] {
+  display: none;
+}
+
+.home form.ng-valid .button[disabled] {
+  cursor:default;
+}
+
+.home form.ng-invalid .button[disabled] {
+  	display: inline-block;
+  	background-color: #1ABC96; 
+  	color: #FFFFFF; 
+  	opacity: 0.5;
+}
+
+.home form.ng-valid .button {
+	display: inline-block;
+  	background-color: #1ABC96;
+}
+
+.home form.ng-valid .button:hover {
+  	background-color: #1CCAA1;
+}
+.carousel-indicators {
+	display: none;
 }
 
 .carousel-control.left{
@@ -1887,6 +1934,11 @@ margin-top: 0.9em;
 
 .carousel-control.right{
 	background: url(/img/orange-right.png) no-repeat !important;
+}
+.carousel-control {
+	border: 0;
+	font-weight: 0;
+	font-size: 1px;
 }
 
 
@@ -1901,6 +1953,11 @@ margin-top: 0.9em;
   margin-bottom: 20px;   
 }
 
+.carousel-inner {
+	border: 1px solid #E3E3E3;
+	width: 85%;
+	margin: auto;
+}
 
 /* Team Page */
 .static .social a {
