@@ -28,6 +28,25 @@
     </div>
   </div>
 
+  <div modal="capMulti" close="mclose()" options="opts">
+    <div class="modalHeader">
+        <p class="subText">Is this a new transaction?</p>
+    </div>
+    
+    <div class="modalText">
+    <form>
+        <p>You've changed a row by {{changedNum}} with more than one transaction. Is this a new transaction or an update of an old one?</p>
+        <br>
+        <select ng-model="pickTran" ng-options="i.datekey for i in activeTran"></select>
+    </div>
+    </form>
+    <div class="modalButtons">
+        <button class="button subText greenButton" ng-click="mclose(); mComplete(pickTran, changedNum);">Complete</button>
+        <button class="button subText greyButton" ng-click="mclose(); mReset();">Undo</button>
+
+    </div>
+  </div>
+
   <div modal="capDelete" close="dclose()" options="opts">
     <div class="modalHeader">
         <p class="subText">Delete?</p>
@@ -67,7 +86,7 @@
   <div class="row-fluid leftTabWindow">
     <div ng-class="{leftFullTableBlock:toggleView()}" class="span8 docLibrary leftBlock">
       <div class="headsection row-fluid">
-        <h1>{{cinfo[0].name}}</h1>
+        <h1>{{company}}</h1>
 
         <div class="row-fluid">
 
@@ -133,12 +152,12 @@
             <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
               <span ng-switch on="row.editable">
                 <span ng-switch-default>
-                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
                 </span>
                 <span ng-switch-when="0">
-                <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran[0])'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
+                <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
                 </span>
               </span>
             </td>
