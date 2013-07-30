@@ -1,15 +1,51 @@
-function NavCtrl($scope, $rootScope, $route, SWBrijj) {
+function NavCtrl($scope, $rootScope, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
-	$rootScope.selected = ['', ''];
+	$rootScope.selected = [];
+
 	$scope.nav = 'navBarLoggedOut';
+	var singleBarPages = ["/", "/team.html", "/careers.html", "/press.html", "/privacy.html"];
+	$scope.showBothBars = false;
+	$scope.isLoggedIn = false;
+
+	function changeNav(){
+		var URL = document.location.href;
+		var host = document.location.host;
+		var path = URL.substring(URL.indexOf(host)).replace(host, "");
+		if (singleBarPages.indexOf(path) > -1) {
+			$scope.nav = 'navBarLoggedOut';
+			$scope.showBothBars = false;
+		} else {
+			$scope.nav = 'navBar';
+			$scope.showBothBars = true;
+		}
+
+		if ($scope.isLoggedIn) {
+			if ($rootScope.selected.isAdmin) {
+				$scope.logoLink = '/home/company';
+			} else {
+				$scope.logoLink = '/home';
+			}
+		}
+	}
+
+	$scope.isCollapsed = true;
+	$scope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
+
+	$scope.doLogin = function() {
+      SWBrijj.login($scope.username, $scope.password).then(function(x) {
+		document.location.href = x;
+		console.log("redirecting to: " + x);
+      }).except(function(x) {
+      	console.log('login error');
+      });
+    }
 
 	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
 	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$scope.select = function(companyURL) {
-		$scope.nav = 'navBar';
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
@@ -50,6 +86,7 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 				}
 			}
 		}
+		changeNav();
 	}
 
 	function isAdmin(companyObj) {
@@ -60,14 +97,16 @@ function NavCtrl($scope, $rootScope, $route, SWBrijj) {
 
 	var cookie = readCookie("selectedCompany");
 	if (cookie != null) {
+		$scope.isLoggedIn = true;
 		$scope.select(cookie);
 	} 
 
 	SWBrijj.procm('account.nav_companies').then(function(x) {
+		$scope.isLoggedIn = true;
 		for (var i = 0; i < x.length; i++) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
-		
+
 		if (cookie != null) {
 			$scope.select(cookie);
 		} else {

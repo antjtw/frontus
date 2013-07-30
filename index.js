@@ -1,11 +1,14 @@
-angular.module('index', ['ui.bootstrap']);
 
-
+var app = angular.module('index', ['ngResource', 'ui.bootstrap', 'brijj']);
 
 function CollapseLoginCtrl($scope) {
   $scope.isCollapsed = true;
-}
 
+} );
+
+function HomeCtrl($scope) {
+  $scope.ok = 1;
+}
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';
@@ -21,6 +24,7 @@ function CarouselCtrl($scope) {
      "text": "Keep record of who's viewed and exported your data"}
     ];        
 }
+
 
 function Ctrl($scope) {
 }
