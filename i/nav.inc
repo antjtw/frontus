@@ -1,10 +1,35 @@
 <script src="/i/nav.js"></script>
+
 <div ng-controller="NavCtrl">
+  <!-- <img src="/img/white-down.png" id="nextPage" class="paginator"> -->
+  <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
+    <div class="well well-large">
+      <div class="row-fluid">
+        <div class="span8 offset2 text-center" >
+          <div id="Login-form" >
+            <form>
+              <fieldset>
+                <input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">                
+                <button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button><br>
+
+                <a href="#">Forgotten Password</a>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        <div class="span2 text-right" >
+          <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
+        </div>
+      </div>  
+    </div> 
+  </div>
+  <!-- <a ng-click="isCollapsed = !isCollapsed">Login</a> -->
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
       <div class="navbounder">
         <ul class="nav pull-left nav-logo">
-          <li><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></li>
+          <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>
         <ul class="nav pull-right">
           <li class="dropdown" ng-show="selected.company">
@@ -16,17 +41,12 @@
             </ul>
           <li>
           <li class="dropdown" ng-hide="selected.company">
-            <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">LOGIN<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
-              <li ng-show="selected.isAdmin"><a class="menuProfileText button" href="/company/profile">MY COMPANY</a></li>
-              <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
-            </ul>
+            <a class="menuProfileText" href="#" ng-click="isCollapsed = !isCollapsed">LOGIN</a>
           <li>
         </ul>
       </div>
     </div>
-    <div class="bottomnav navbar row-fluid" ng-show="selected.company">
+    <div style="display:none" class="bottomnav navbar row-fluid" ng-show="showBothBars">
       <div class="navbounder">
         <ul class="menuHeaderText nav">
           <li class="dropdown">
@@ -45,8 +65,7 @@
       </div>
     </div>
   </div>
+
+  <!--Notification Bar-->
+  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
 </div>
-
-<!--Notification Bar-->
-<div ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
-

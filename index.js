@@ -1,10 +1,4 @@
-angular.module('index', ['ui.bootstrap']);
-
-
-function CollapseLoginCtrl($scope) {
-  $scope.isCollapsed = true;
-}
-
+angular.module('index', ['ui.bootstrap', 'brijj']);
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';
