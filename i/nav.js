@@ -1,4 +1,4 @@
-function NavCtrl($scope, $rootScope, $route, SWBrijj) {
+function NavCtrl($scope, $rootScope, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$rootScope.selected = [];

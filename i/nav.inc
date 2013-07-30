@@ -65,7 +65,7 @@
       </div>
     </div>
   </div>
-
-  <!--Notification Bar-->
-  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
 </div>
+
+<!--Notification Bar-->
+<div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>

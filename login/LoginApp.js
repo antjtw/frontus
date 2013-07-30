@@ -44,7 +44,11 @@ function LoginCtrl($scope, $location, SWBrijj){
 function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
-    SWBrijj.logout().then(function(x) { document.location.href='/login';}).except(function(x) { document.location.href='/login';});
+    SWBrijj.logout().then(function(x) {
+      document.location.href='/index.html?logout=1';
+    }).except(function(x) {
+      document.location.href='/login';
+    });
   }
 }
 

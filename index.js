@@ -1,4 +1,21 @@
-angular.module('index', ['ui.bootstrap', 'brijj']);
+
+var app = angular.module('index', ['ngResource', 'ui.bootstrap', 'brijj']);
+
+app.config(function($routeProvider, $locationProvider){
+  $locationProvider.html5Mode(true).hashPrefix('');
+
+  $routeProvider.
+      when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
+      otherwise({redirectTo:'/'});
+});
+
+app.controller("MainController", function($scope, $location) {
+
+} );
+
+function HomeCtrl($scope) {
+  $scope.ok = 1;
+}
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';
@@ -14,3 +31,4 @@ function CarouselCtrl($scope) {
      "text": "Keep record of who's viewed and exported your data"}
     ];        
 }
+
