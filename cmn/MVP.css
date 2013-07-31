@@ -130,6 +130,10 @@ p, input, button, select, textarea, a, address {
 	color: #7f8c8d;
 }
 
+a:hover {
+	text-decoration: none;
+}
+
 p strong {
 	font-family: 'FS Elliot Web Light', sans-serif;
 	font-weight: normal;
@@ -1034,11 +1038,6 @@ ul>li.curPage {
 	background-color: #1e2d3d;
 }
 
-#socialMedia {
-	margin: 30px 0;
-}
-
-
 #copyrightBar {
 	border-top: solid 1px #34495e;
 	padding-top: 20px;
@@ -1314,6 +1313,41 @@ tr.rowSelected {
 	height: 37px;
 	text-align:center;
 	padding: 10px 25px 10px 25px;
+}
+.home .button.socialbtn {
+	width: 140px;
+	height: 60px;
+	text-align:center;
+	padding: 0 0 0 0;
+	margin: 7px;
+	color:#ffffff;
+
+}
+
+.home .button.socialbtn > span:first-child {
+	display: inline-block;
+	margin: 0 6px 0 0;
+	font-size: 28px;
+	display: inline-block;
+    vertical-align:middle;
+}
+
+.home .button.socialbtn > span:last-child {
+	font-size: 14px;
+	display: inline-block;
+    vertical-align:middle;
+}
+
+.button.socialbtn.twitter{
+	background-color: #2ba9e1;	
+}
+
+.button.socialbtn.linkedin{
+	background-color: #006699;	
+}
+
+.button.socialbtn.fb{
+	background-color: #00549e;	
 }
 
 .saveButton {
