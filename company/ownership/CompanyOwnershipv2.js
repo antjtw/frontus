@@ -969,6 +969,7 @@ $scope.deleteTran = function(tran) {
           row[tran['issue']] = {"u":null, "a":null, "ukey":null, "akey":null};
         };
       });
+
   });
 }
 

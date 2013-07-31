@@ -4,12 +4,12 @@
 html, body {
   height: 100% !important;
   background-color:#FFFFFF;
-  overflow-x: hidden;
   /* The html and body elements cannot have any padding or margin. */
 }
 
 body {
-  overflow-y: scroll;	
+  overflow-y: scroll;
+  overflow-x: hidden;	
 }
 
 
