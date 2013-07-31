@@ -59,10 +59,17 @@ owner.service('calculate', function() {
 
   // Simple summation checking that the added value is a number.
   this.sum = function(current, additional) {
+    console.log("ingredients")
+    console.log(additional);
+    if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
+      current = 0;
+    }
     if (!isNaN(parseFloat(additional))) {
+      console.log("added")
       return (current + parseFloat(additional));
     }
     else {
+      console.log("returned current")
       return current;
     }
   }
