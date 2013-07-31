@@ -41,7 +41,7 @@
             </ul>
           <li>
           <li class="dropdown" ng-hide="selected.company">
-            <a class="menuProfileText" href="#" ng-click="isCollapsed = !isCollapsed">LOGIN</a>
+            <a class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed">LOGIN</a>
           <li>
         </ul>
       </div>
