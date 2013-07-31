@@ -41,7 +41,7 @@
     </div>
     </form>
     <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="mclose(); mComplete(pickTran, changedNum);">Complete</button>
+        <button class="button subText greenButton" ng-click="mclose(); mComplete(pickTran, changedNum, changedType);">Complete</button>
         <button class="button subText greyButton" ng-click="mclose(); mReset();">Undo</button>
 
     </div>
@@ -180,9 +180,9 @@
         <div ng-switch on="sideBar" >
           <span ng-switch-when="1">
             <div class="headsection row-fluid">
+              <h2><input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.issue"></input></h2>
+              <h2><input ng-change="saveIssue(activeIssue)" type="text" ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker></h2>
             </div>
-            <p>Name <input ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.issue"></input></p>
-            <p>Date <input ng-change="saveIssue(activeIssue)" type="text" ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
             <accordion close-others="true">
               <accordion-group heading="Valuation">
@@ -250,8 +250,8 @@
                 </div>
                 <div class="row-fluid trancore">
                   <div>
-                    <p>Paid $<input maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
-                    <p>Shares<input maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
+                    <p>Paid $<input ng-class="{'content':!tran.amount}" maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
+                    <p>Shares<input ng-class="{'content':!tran.units}" maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
                   </div>
                   <div class="DivHelper"></div>
                 </div>
@@ -260,7 +260,7 @@
                   <accordion-group heading="Valuation">
                     <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.premoney"></input></p>
                     <p class="rightTitle"><span>Post Money</span><input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.postmoney"></input></p>
-                    <p class="rightTitle"><span>Price Per Share</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.ppshare"></input></p>
+                    <p class="rightTitle"><span>Price Per Share</span><input ng-class="{'content':!tran.ppshare}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.ppshare"></input></p>
                     <p class="rightTitle"><span>Total Authorized</span><input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.totalauth"></input></p>
                     <p class="rightTitle"><span>Liquidation Preference</span>
                       <select ng-init="tranIssue.liquidpref" ng-change="saveTran(tran)" ng-model="tran.liquidpref" ng-options="i for i in tf">
@@ -278,10 +278,10 @@
                         <option></option>
                         </select>
                       </p>
-                      <p class="rightTitle"><span>Price</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                      <p class="rightTitle"><span>Term (months)</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
-                      <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p class="rightTitle"><span>Vesting Cliff</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
+                      <p class="rightTitle"><span>Price</span><inputng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
+                      <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
+                      <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                      <p class="rightTitle"><span>Vesting Cliff</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
                       <p class="rightTitle"><span>Post Cliff Frequency</span>
                         <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                         </select>
@@ -295,10 +295,10 @@
                           <option></option>
                           </select>
                         </p>
-                        <p class="rightTitle"><span>Interest Rate</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.interestrate"></input></p>
-                        <p class="rightTitle"><span>Valuation Cap</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.valcap"></input></p>
-                        <p class="rightTitle"><span>Discount</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.discount"></input></p>
-                        <p class="rightTitle"><span>Term</span><input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.term"></input></p>
+                        <p class="rightTitle"><span>Interest Rate</span><input ng-class="{'content':!tran.interestrate}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.interestrate"></input></p>
+                        <p class="rightTitle"><span>Valuation Cap</span><input ng-class="{'content':!tran.valcap}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.valcap"></input></p>
+                        <p class="rightTitle"><span>Discount</span><input ng-class="{'content':!tran.discount}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.discount"></input></p>
+                        <p class="rightTitle"><span>Term</span><input ng-class="{'content':!tran.term}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.term"></input></p>
                       </accordion-group>
                     </span>
                 </accordion>

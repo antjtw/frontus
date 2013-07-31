@@ -1159,6 +1159,10 @@ td.tranSelected {
 	border: 0;
 }
 
+input.content {
+	background-color: #F1F1F1;
+}
+
 /* Grants Table */
 
 tr.rowSelected {
@@ -1592,10 +1596,6 @@ tr.rowSelected {
 
 .capshareModal ul li > input {
 	border: 0;
-}
-
-.capshareModal ul li > input.content {
-	background-color: #F1F1F1;
 }
 
 .capshareModal ul li > input.error {
