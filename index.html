@@ -3,6 +3,7 @@
 	<head>
 		<title>Sharewave Home</title>
 		<!--{{/i/head.inc}}-->		
+		<!--{{/i/nav.inc}}-->	
 <!-- 
 		Put in the scroller on the hero to be relative to the image and not to th bottom of the screen
 		Hook up the invite
@@ -29,31 +30,6 @@
 		<div class="wrap home">
 			<div id="hero">
 				<img src="/img/white-down.png" id="nextPage" class="paginator">
-				<div ng-controller="CollapseLoginCtrl">
-					<div collapse="isCollapsed">
-						<div class="well well-large">
-							<div class="row-fluid">
-								<div class="span8 offset2 text-center" >
-									 <div id="Login-form" >
-										<form>
-											<fieldset>
-												<input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username">
-												<input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">								
-												<button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" tabindex="3">Login</button><br>
-
-												<a href="#">Forgotten Password</a>
-											</fieldset>
-										</form>
-									</div>
-								</div>
-								<div class="span2 text-right" >
-									<a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
-								</div>
-							</div>	
-						</div> 
-					</div>
-					<a ng-click="isCollapsed = !isCollapsed">Login</a>
-				</div>
 				<div class="row-fluid">
 					<div class="span10 offset1"> 
 						<div class="spacer80"></div>

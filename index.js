@@ -1,8 +1,5 @@
 angular.module('index', ['ui.bootstrap']);
 
-function CollapseLoginCtrl($scope) {
-  $scope.isCollapsed = true;
-}
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';
@@ -18,12 +15,6 @@ function CarouselCtrl($scope) {
      "text": "Keep record of who's viewed and exported your data"}
     ];        
 }
-
-function Ctrl($scope) {
-
-
-}
-
 
 function test($scope) {
 
