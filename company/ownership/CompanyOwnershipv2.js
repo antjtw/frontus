@@ -996,14 +996,21 @@ $scope.saveTran = function(transaction) {
     angular.forEach($scope.rows, function(row) {
       if (row.name == transaction[0].investor) {
         console.log(row[transaction[0].issue]);
-        if (row[transaction[0].issue]['u'] != row[transaction[0].issue]['ukey'] || row[transaction[0].issue]['a'] != row[transaction[0].issue]['akey']) {
-          var changed = (row[transaction[0].issue]['u'] - row[transaction[0].issue]['ukey'])
-          $scope.mmodalUp(changed);
-        }
-        else {
-          return;
-        }
-      }
+        if (!isNaN(parseFloat(row[transaction[0].issue]['u']))) {
+          if (parseFloat(row[transaction[0].issue]['u']) != parseFloat(row[transaction[0].issue]['ukey'])) {
+            var changed = (parseFloat(row[transaction[0].issue]['u']) - parseFloat(row[transaction[0].issue]['ukey']));
+            $scope.mmodalUp(changed, "u");
+            return;
+          };
+        };
+        if (!isNaN(parseFloat(row[transaction[0].issue]['a']))) {
+          if (parseFloat(row[transaction[0].issue]['a']) != parseFloat(row[transaction[0].issue]['akey'])) {
+            var changed = (parseFloat(row[transaction[0].issue]['a']) - parseFloat(row[transaction[0].issue]['akey']));
+            $scope.mmodalUp(changed, "a");
+            return
+          };
+        };
+      };
     })
     return;
   }
@@ -1034,6 +1041,11 @@ $scope.saveTran = function(transaction) {
   else {
         if (transaction.type == "options" && transaction.units < 0) {
           transaction.units = transaction.unitskey;
+          console.log("!!!Need a Notification for negative option transaction!!!");
+        }
+        else if (transaction.amount < 0) {
+          transaction.amount = transaction.amountkey;
+          console.log("!!!Need a Notification for negative amount transaction!!!");
         }
         var d1 = transaction['date'].toUTCString();
         if (transaction['tran_id'] == undefined) {
@@ -1239,8 +1251,9 @@ $scope.saveTran = function(transaction) {
 
   //Adding to a row with more than one transaction modal
 
-  $scope.mmodalUp = function (number) {
+  $scope.mmodalUp = function (number, type) {
       $scope.changedNum = number;
+      $scope.changedType = type
       $scope.capMulti = true;
       };
     
@@ -1249,9 +1262,14 @@ $scope.saveTran = function(transaction) {
       $scope.capMulti = false;
       };
 
-  $scope.mComplete = function(picked, number) {
+  $scope.mComplete = function(picked, number, type) {
     if (picked == undefined) {
-      var newTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeTran[0].investor, "investorkey":$scope.activeTran[0].investor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeTran[0].issue), "units":number, "paid":null, "unitskey":number, "paidkey":null, "key":undefined};
+      if (type == "u") {
+        var newTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeTran[0].investor, "investorkey":$scope.activeTran[0].investor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeTran[0].issue), "units":number, "paid":null, "unitskey":number, "paidkey":null, "key":undefined};
+      }
+      else {
+         var newTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeTran[0].investor, "investorkey":$scope.activeTran[0].investor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeTran[0].issue), "units":null, "paid":number, "unitskey":null, "paidkey":number, "key":undefined};       
+      }
       angular.forEach($scope.issues, function(issue) {
         if (issue.issue == $scope.activeIssue) {
           newTran = $scope.tranInherit(newTran, issue);
@@ -1270,7 +1288,12 @@ $scope.saveTran = function(transaction) {
       };
     }
     else {
-      picked.units = picked.units + number;
+      if (type == "u") {
+        picked.units = picked.units + number;
+      }
+      else {
+        picked.amount = picked.amount + number;
+      }
       var newTran = picked;
     }
     $scope.saveTran(newTran);
