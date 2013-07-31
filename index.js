@@ -1,4 +1,4 @@
-angular.module('index', ['ui.bootstrap']);
+angular.module('index', ['ui.bootstrap', 'brijj']);
 
 
 function CarouselCtrl($scope) {
