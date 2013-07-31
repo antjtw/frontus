@@ -4,7 +4,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	$rootScope.selected = [];
 
 	$scope.nav = 'navBarLoggedOut';
-	var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/"];
+	var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
 	$scope.showBothBars = false;
 	$scope.isLoggedIn = false;
 

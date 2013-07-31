@@ -45,9 +45,7 @@ function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     SWBrijj.logout().then(function(x) {
-      document.location.href='/index.html?logout=1';
-    }).except(function(x) {
-      document.location.href='/login';
+      document.location.href='/?logout=1';
     });
   }
 }
@@ -86,19 +84,3 @@ function errorForget(x) {
   alert(x);
 }
 
-
-//this is used to assign the correct template and controller for each URL path
-
-app.config(function($routeProvider, $locationProvider){
-  $locationProvider.html5Mode(true).hashPrefix('');
-  // $locationProvider.html5Mode(false).hashPrefix('!');
-
-  $routeProvider.
-      when('/', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/forgot', {controller:ForgotCtrl, templateUrl: 'forgot.html'}).
-      when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
-      when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
-      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
-     // when('/register', {controller:RegisterCtrl, templateUrl: 'u/register.html'}).
-      otherwise({redirectTo:'/'});
-});
