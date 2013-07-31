@@ -991,6 +991,10 @@ $scope.manualdeleteTran = function(tran) {
 
 $scope.saveTran = function(transaction) {
 
+  //Fix the dates to take into account timezone differences.
+  var offset = transaction.date.getTimezoneOffset();
+  transaction.date = transaction.date.addMinutes(offset);
+
   //Triggers the multi modal if more than one transaction exists
   if (transaction.length > 1) {
     angular.forEach($scope.rows, function(row) {
@@ -1110,7 +1114,7 @@ $scope.saveTran = function(transaction) {
             });
           });
 
-          if (transaction.type == "options" && transaction.amount > 0) {
+          if (transaction.type == "options" && transaction.amount != 0) {
             var modGrant = {"unit":null, "tran_id":transaction.tran_id, "date":(Date.today()), "action":"exercised", "investor":transaction.investor, "issue":transaction.issue}
             modGrant.amount = transaction.amount;
             modGrant.unit = (transaction.amount / transaction.price);
