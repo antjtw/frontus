@@ -15,6 +15,8 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+
+// Popover directive. Not yet fully usable as it strips out the ng-click.
 owner.directive('popOver', function ($compile) {
         return {
             restrict: "A",
@@ -41,7 +43,10 @@ function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
+// Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
 owner.service('calculate', function() {
+
+  // The remainder calculated for outstanding units rows.
   this.whatsleft = function(total, issue, rows) {
     var leftover = total
     angular.forEach(rows, function(row) {
@@ -52,6 +57,7 @@ owner.service('calculate', function() {
     return leftover
   };
 
+  // Simple summation checking that the added value is a number.
   this.sum = function(current, additional) {
     if (!isNaN(parseFloat(additional))) {
       return (current + parseFloat(additional));
@@ -61,6 +67,7 @@ owner.service('calculate', function() {
     }
   }
 
+  // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
   this.debt = function(rows, issue, row) {
     var mon = parseFloat(issue.premoney);
     if (isNaN(parseFloat(mon))) {
@@ -78,6 +85,7 @@ owner.service('calculate', function() {
     return ((parseFloat(row[issue.issue]['a'])/parseFloat(mon)) * 100)
   };
 
+  // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array. Buggy.
   this.vested = function(rows, trans) {
     var vesting = {}
     angular.forEach(trans, function(tran) {
