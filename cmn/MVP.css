@@ -2014,6 +2014,9 @@ margin-top: 0.9em;
 
 /* Marketing Pages */
 
+.static {
+	padding-top: 65px;
+}
 
 .static p, .static a {
 	font-size: 14px;
