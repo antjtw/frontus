@@ -881,9 +881,10 @@ $scope.nameChangeRL = function(investor) {
   $scope.activeInvestorName = investor.name;
 };
 
-$scope.deletePerson = function(name) {
+$scope.deletePersonButton = function(name) {
   angular.forEach($scope.rows, function(row) {
     if (row.name == name) {
+      console.log('here');
       $scope.rmodalUp(row);
     }
   })
@@ -929,7 +930,7 @@ $scope.revertPerson = function(investor) {
 };
 
 $scope.deletePerson = function(investor) {
-  console.log(investor);
+  $scope.sideBar = "x"
   angular.forEach($scope.trans, function(tran) {
     if (tran.investor == investor) {
       $scope.deleteTran(tran);
@@ -1239,17 +1240,21 @@ $scope.saveTran = function(transaction) {
     return tran
   };
 
+  // Toggles editable to view
   $scope.toggleView = function() {
     if ($scope.radioModel == "View") {
+      $scope.captablestate = 1
       return true;
     }
     else {
+      $scope.captablestate = 0
       return false;
     }
   };
 
   $scope.dilution = function() {
     $scope.dilutedRows = []
+    $scope.captablestate = 2
   }
 
 
@@ -1363,14 +1368,6 @@ $scope.saveTran = function(transaction) {
       dialogFade:true
       };
 
-  $scope.activeInvestor = function(person){
-    if (person.name.length > 0) {
-      return true
-    }
-    else {
-      return false
-    };
-  };
 
   $scope.emailCheck = function(bool, person){
     if (bool) {

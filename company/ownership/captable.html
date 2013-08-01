@@ -14,7 +14,7 @@
               <span>Name</span>
               <span>Email</span>
             </li>
-            <li ng-repeat="row in rows | filter:activeInvestor">
+            <li ng-repeat="row in rows">
               <input class="checkbox" ng-model="row.send" type="checkbox"></input>
               <span>{{row.name}}</span>
               <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}" ng-disabled="row.emailkey" ng-model="row.email"></input>
@@ -130,8 +130,7 @@
 
       <div class="row-fluid capcontainer">
        <table class="captable tableView bodyText">
-        <span ng-switch on="captablestate">
-          <span ng-switch-default>
+          <span ng-hide="false">
             <tr class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
@@ -139,7 +138,8 @@
                 <input placeholder="new security name" class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
               </th>
             </tr>
-            <tr ng-repeat="row in rows">
+            <!-- Editable rows -->
+            <tr ng-hide="toggleView();" ng-repeat="row in rows">
               <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
               <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
               <td>
@@ -150,22 +150,32 @@
                   <span ng-switch-when="0">
                     <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
                   </span>
+                </span>
               </td>
               <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                 <span ng-switch on="row.editable">
                   <span ng-switch-default>
-                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+                    <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                    <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
                   </span>
                   <span ng-switch-when="0">
-                  <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                  <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
+                    <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                    <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
                   </span>
                 </span>
               </td>
             </tr>
+            <!-- Un-editable view -->
+            <tr ng-show="toggleView();" ng-repeat="row in rows">
+              <td><input disabled value="{{shareSum(row);}}"></input></td>
+              <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+              <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+              <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+              </td>
+            </tr>
           </span>
-        </span>
           <tr class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>
             <td><input disabled value="100.00%"></input></td>
@@ -240,7 +250,7 @@
 
           <span ng-switch-when="2">
             <div class="headsection row-fluid">
-              <h2>{{activeInvestor}}<span data-icon="&#xe00c;" aria-hidden="true"></h2>
+              <h2>{{activeInvestor}}<span data-icon="&#xe00c;" ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></h2>
               <p>Customize terms for this shareholder</p>
             </div>
             <!-- <button ng-click="createTran();">Add</button> -->
@@ -248,7 +258,7 @@
               <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                 <div class="row-fluid trancore">
                   <div>
-                    <p>Date <input ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yy" bs-datepicker></p>
+                    <p>Date <input ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                   </div>
                   <div class="DivHelper"></div>
                 </div>
@@ -282,10 +292,10 @@
                         <option></option>
                         </select>
                       </p>
-                      <p class="rightTitle"><span>Price</span><inputng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
+                      <p class="rightTitle"><span>Price</span><input ng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
                       <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
                       <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p class="rightTitle"><span>Vesting Cliff</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
+                      <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
                       <p class="rightTitle"><span>Post Cliff Frequency</span>
                         <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                         </select>
