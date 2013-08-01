@@ -675,7 +675,6 @@ $scope.getActiveIssue = function(issue) {
   // Set Freq Value for Angularjs Select
   var index = $scope.freqtypes.indexOf(issue.vestfreq);
   $scope.activeIssue.vestfreq = $scope.freqtypes[index];
-  $scope.$apply();
 };
 
 $scope.saveIssue = function(issue) {
@@ -1254,6 +1253,12 @@ $scope.saveTran = function(transaction) {
 
   // Toggles sidebar back and forth
   $scope.toggleSide = function() {
+    if ($scope.sideToggle == true) {
+      return true
+    }
+    else {
+      return false
+    }
   };
 
   $scope.dilution = function() {

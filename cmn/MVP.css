@@ -1110,6 +1110,11 @@ td.tranSelected {
 	-o-transition: all 2s; /* Opera */
 }
 
+.span4.capright > button {
+	position:relative;
+	left:-56px;
+}
+
 .capright .headsection {
 	padding-left: 20px;
 }
@@ -1203,7 +1208,6 @@ tr.rowSelected {
 .rightNoTableBlock {
     margin-right:-350px;
     width:0;
-    overflow:hidden;
 }
 
 /* Buttons */
