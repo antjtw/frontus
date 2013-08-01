@@ -1252,6 +1252,10 @@ $scope.saveTran = function(transaction) {
     }
   };
 
+  // Toggles sidebar back and forth
+  $scope.toggleSide = function() {
+  };
+
   $scope.dilution = function() {
     $scope.dilutedRows = []
     $scope.captablestate = 2
