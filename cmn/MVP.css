@@ -838,7 +838,7 @@ form.inputs {
 
 .tableView th {
 	background-color: #FFFFFF;
-	width: 340px;
+	width: 200px;
 	text-align: left;
 	padding: 0 0 0 10px;
 	margin: 0 0 0 0;
@@ -1075,6 +1075,7 @@ ul>li.curPage {
 
 .tableView.captable  {
 	background: url("/img/stripe-pattern.png") repeat;
+	table-layout: fixed;
 };
 
 .longRow td {
@@ -1173,6 +1174,10 @@ td.tranSelected {
 
 input.content {
 	background-color: #F1F1F1;
+}
+
+.staticHeaders {
+	width: 190px;
 }
 
 /* Grants Table */
