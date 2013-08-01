@@ -5,13 +5,13 @@
     <div class="well well-large">
       <div class="row-fluid">
         <div class="span8 offset2 text-center" >
-          <div id="Login-form" >
+          <div id="Login-form" class="navlogin" >
             <form>
               <fieldset>
-                <input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">                
-                <button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
-               <br>  <a href="#" >Forgotten Password</a>
+                <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
+                <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
+               <br>  <a href="/login/forgot" >Forgotten Password</a>
                
               </fieldset>
             </form>

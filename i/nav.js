@@ -140,4 +140,13 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 		$rootScope.notification.message = message;
 		setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
 	};
+
+	$scope.fieldCheck = function() {
+      if ($scope.username && $scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };
 }

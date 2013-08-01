@@ -37,6 +37,5 @@ function CarouselCtrl($scope) {
 }
 
 function test($scope) {
-
-$scope.toggle = true;
+  $scope.toggle = true;
 }
