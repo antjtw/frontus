@@ -273,7 +273,14 @@
                 <div class="row-fluid trancore">
                   <div>
                     <p>Paid $<input ng-class="{'content':!tran.amount}" maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount"></input></p>
+                    <p ng-hide="tran.forfeited">Shares<input ng-class="{'content':!tran.units}" maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
+                  </div>
+                  <div class="DivHelper"></div>
+                </div>
+                <div ng-show="tran.forfeited" class="row-fluid trancore">
+                  <div>
                     <p>Shares<input ng-class="{'content':!tran.units}" maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.units"></input></p>
+                    <p>Forfeit<input ng-class="{'content':!tran.units}" maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></input></p>
                   </div>
                   <div class="DivHelper"></div>
                 </div>
