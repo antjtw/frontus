@@ -8,6 +8,6 @@ app.config(function($routeProvider, $locationProvider){
       otherwise({redirectTo:'/'});
 });
 
-function AccordionDemoCtrl($scope) {
+function AccordionCtrl($scope) {
   $scope.oneAtATime = true;
 }

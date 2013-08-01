@@ -1,7 +1,6 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
-  <!-- <img src="/img/white-down.png" id="nextPage" class="paginator"> -->
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="row-fluid">
@@ -11,9 +10,9 @@
               <fieldset>
                 <input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
                 <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">                
-                <button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button><br>
-
-                <a href="#">Forgotten Password</a>
+                <button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
+               <br>  <a href="#" >Forgotten Password</a>
+               
               </fieldset>
             </form>
           </div>
@@ -24,14 +23,13 @@
       </div>  
     </div> 
   </div>
-  <!-- <a ng-click="isCollapsed = !isCollapsed">Login</a> -->
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
       <div class="navbounder">
         <ul class="nav pull-left nav-logo">
           <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>
-        <ul class="nav pull-right">
+        <ul class="nav pull-right nav-item">
           <li class="dropdown" ng-show="selected.company">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">

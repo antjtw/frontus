@@ -1,5 +1,5 @@
-
 var app = angular.module('index', ['ui.bootstrap', 'brijj']);
+
 
 
 app.config(function($routeProvider, $locationProvider){
@@ -34,4 +34,9 @@ function CarouselCtrl($scope) {
     "headline": "Status",
      "text": "Keep record of who's viewed and exported your data"}
     ];        
+}
+
+function test($scope) {
+
+$scope.toggle = true;
 }
