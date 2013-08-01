@@ -1,4 +1,4 @@
-angular.module('index', ['ui.bootstrap', 'brijj']);
+var app = angular.module('index', ['ui.bootstrap', 'brijj']);
 
 
 
