@@ -1606,6 +1606,8 @@ tr.rowSelected {
 
 .capshareModal ul li > span {
 	display: inline-block;
+	white-space: nowrap;
+	overflow-x: hidden;
 	width:150px;
 	margin-left: 10px;
 	font-size: 12px;
