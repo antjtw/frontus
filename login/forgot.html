@@ -9,8 +9,8 @@
      <div class="span9 offset1 text-center line"></div>
     <h2>Forgot Password?</h2>
     <p>Enter your email adress and we'll send you instructions.</p>
-       <div class="text-error">{{fed}}</div>
-    <form id="login" class="text-center inputs" ng-submit="doForgot()">
+    <div class="text-error">{{fed}}</div>
+    <form id="login" class="text-center inputs">
       <fieldset>
         <input required class="loginInput FI" placeholder="Email Address" tabindex="1"
                autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username" />
@@ -18,7 +18,7 @@
         <button ng-disabled="forgotDisabled()" ng-click="doForgot()" ng-class="forgotClass()"
                 tabindex="3">Send Instructions</button>
 
-        <a id="cancelButton" class="button text-center" ng-href=".">Return to Login</a>        
+        <a id="cancelButton" class="button text-center" ng-href=".">Return to Login</a>
         <br>
       </fieldset>
     </form>

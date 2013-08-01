@@ -12,7 +12,7 @@ app.config(function($routeProvider, $locationProvider){
       when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
       when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
-     // when('/register', {controller:RegisterCtrl, templateUrl: 'u/register.html'}).
+      when('/reset', {controller: ResetCtrl, templateUrl: 'reset.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -69,18 +69,29 @@ function ForgotCtrl($scope, $location, SWBrijj) {
     $scope.forgotClass = function() {
          return "button greenButton loginButton bodyText" + ($scope.forgotDisabled() ? " adisabled" : ""); }
     $scope.doForgot = function() {
-       $location.path("sent");
-       SWBrijj.forgot($scope.username).then(didForget).except(errorForget);
+      $scope.forgotDisabled = function() { return true; }
+      SWBrijj.forgot($scope.username).then(function(x) {
+        $location.path("sent");
+      }).except(function(x) { 
+        $scope.fed = "There was an error. Please try again later."
+      });
     }
 };
 
-function SentCtrl() {
+function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
+  $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; }
+  $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); }
+  $scope.doReset = function() {
+    $scope.resetDisabled = function() { return true; }
+    SWBrijj.resetPassword($scope.password, $routeParams.code).then(function(x) {
+      document.location.href="/login";
+    }).except(function(x) { 
+      console.log(x);
+      $scope.fed = "There was an error. Please try again later."
+    });
+  }
 }
 
-function didForget(x) {
-}
- 
-function errorForget(x) {
-  alert(x);
+function SentCtrl() {
 }
 
