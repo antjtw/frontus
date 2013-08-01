@@ -130,6 +130,8 @@
 
       <div class="row-fluid capcontainer">
        <table class="captable tableView bodyText">
+        <span ng-switch on="captablestate">
+          <span ng-switch-default>
             <tr class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
@@ -137,31 +139,33 @@
                 <input placeholder="new security name" class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
               </th>
             </tr>
-          <tr ng-repeat="row in rows">
-            <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
-            <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
-            <td>
-              <span ng-switch on="row.nameeditable">
-                <span ng-switch-default>
-                  <input placeholder="NAME" style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
+            <tr ng-repeat="row in rows">
+              <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
+              <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+              <td>
+                <span ng-switch on="row.nameeditable">
+                  <span ng-switch-default>
+                    <input placeholder="NAME" style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
+                  </span>
+                  <span ng-switch-when="0">
+                    <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
+                  </span>
+              </td>
+              <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                <span ng-switch on="row.editable">
+                  <span ng-switch-default>
+                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+                  </span>
+                  <span ng-switch-when="0">
+                  <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                  <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
+                  </span>
                 </span>
-                <span ng-switch-when="0">
-                  <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
-                </span>
-            </td>
-            <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
-              <span ng-switch on="row.editable">
-                <span ng-switch-default>
-                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
-                </span>
-                <span ng-switch-when="0">
-                <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
-                </span>
-              </span>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </span>
+        </span>
           <tr class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>
             <td><input disabled value="100.00%"></input></td>
@@ -244,7 +248,7 @@
               <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                 <div class="row-fluid trancore">
                   <div>
-                    <p>Date <input ng-change="saveTran(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yy" bs-datepicker></p>
+                    <p>Date <input ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yy" bs-datepicker></p>
                   </div>
                   <div class="DivHelper"></div>
                 </div>

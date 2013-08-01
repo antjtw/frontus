@@ -413,6 +413,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
   // Set the view toggles to their defaults
   $scope.radioModel = "Edit";
   $scope.dilutionSwitch = true;
+  $scope.captablestate = 0;
 
   // Variables for the select boxes to limit the selections to the available database types
   $scope.issuetypes = [];
@@ -1009,6 +1010,13 @@ $scope.manualdeleteTran = function(tran) {
   });
 }
 
+$scope.saveTranDate = function(transaction) {
+  //Fix the dates to take into account timezone differences.
+  var offset = transaction.date.getTimezoneOffset();
+  transaction.date = transaction.date.addMinutes(offset);
+  $scope.saveTran(transaction);
+}
+
 $scope.saveTran = function(transaction) {
 
   //Triggers the multi modal if more than one transaction exists
@@ -1040,10 +1048,6 @@ $scope.saveTran = function(transaction) {
     transaction = transaction[0];
    }
   }
-
-  //Fix the dates to take into account timezone differences.
-  var offset = transaction.date.getTimezoneOffset();
-  transaction.date = transaction.date.addMinutes(offset);
 
   // Bail out if insufficient data has been added for the transaction
   if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
@@ -1106,8 +1110,7 @@ $scope.saveTran = function(transaction) {
             if (row.name == tran.investor) {
                 if (tran.investor == transaction.investor) {
                   if (tran.issue == transaction.issue) {
-                    var offset = tran.date.getTimezoneOffset();
-                    tran.date = tran.date.addMinutes(offset);
+                    tran.date = transaction.date;
                     tran.key = tran.issue;
                     tran.unitskey = tran.units;
                     tran.paidkey = tran.paid;
