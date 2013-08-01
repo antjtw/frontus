@@ -16,9 +16,20 @@ app.config(function($routeProvider, $locationProvider){
     });
 
 function IndexCtrl($scope, $rootScope, $route, $routeParams) {
-    if ($routeParams.logout == 1) {
-        $rootScope.notification.show('success', 'You have successfully logged out');     
-    }
+  if ($routeParams.logout == 1) {
+    $rootScope.notification.show('success', 'You have successfully logged out');     
+  }
+
+  $scope.toggle = true;
+
+  $scope.companyRequest = function() {
+    SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function(x) {
+      console.log(x);
+    }).except(function(x) {
+      console.log(x);
+    });
+  }
+
 }
 
 function CarouselCtrl($scope) {
@@ -34,9 +45,4 @@ function CarouselCtrl($scope) {
     "headline": "Status",
      "text": "Keep record of who's viewed and exported your data"}
     ];        
-}
-
-function test($scope) {
-
-$scope.toggle = true;
 }
