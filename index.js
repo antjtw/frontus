@@ -15,9 +15,11 @@ app.config(function($routeProvider, $locationProvider){
         });
     });
 
-function IndexCtrl($scope, $rootScope, $route, $routeParams) {
+function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
   if ($routeParams.logout == 1) {
-    $rootScope.notification.show('success', 'You have successfully logged out');     
+    $rootScope.notification.show('success', 'You have successfully logged out', function() {
+      // document.location.href='/';
+    });
   }
 
   $scope.toggle = true;

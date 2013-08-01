@@ -16,6 +16,9 @@ app.controller("MainProfileController", function($scope, $location) {
 
 function AdminCtrl($scope, $routeParams, SWBrijj, $rootScope){
     $scope.createCompany = function() {
+      if (!$scope.domain) {
+        $scope.domain = '';
+      }
       SWBrijj.procm('account.create_company', $scope.email, $scope.name, $scope.domain, $scope.companyName).then(function(x) {
         $rootScope.notification.show("success", "Company created");
       }).except(function(x) {
