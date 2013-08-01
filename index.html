@@ -150,7 +150,7 @@
 				<div class="spacer120"></div>
 				<div class="row-fluid">
 					<div class="span10 offset1 text-center">
-						 <div ng-controller="test" id="CompanyRegister-form">
+						 <div id="CompanyRegister-form">
 						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
 								<h2>Request Invitation</h2>
 								<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>					
@@ -162,7 +162,7 @@
 										<input type="text" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" required><br>
 										<div class="spacer40"></div>
 										<button class="button" disabled>Request Invitation</button>
-										<button class="button greenButton" id="submitInvite" ng-click="toggle = !toggle">Request Invitation</button>
+										<button class="button greenButton" id="submitInvite" ng-click="toggle = !toggle; companyRequest();">Request Invitation</button>
 									</fieldset>
 								</form>
 							</div>
