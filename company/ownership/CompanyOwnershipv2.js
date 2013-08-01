@@ -59,17 +59,13 @@ owner.service('calculate', function() {
 
   // Simple summation checking that the added value is a number.
   this.sum = function(current, additional) {
-    console.log("ingredients")
-    console.log(additional);
     if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
       current = 0;
     }
     if (!isNaN(parseFloat(additional))) {
-      console.log("added")
       return (current + parseFloat(additional));
     }
     else {
-      console.log("returned current")
       return current;
     }
   }
@@ -409,16 +405,21 @@ function hidePopover() {
   angular.element('.popover').hide();
 }
 
-var captableController = function($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate, switchval, sorting) {
 
-  SWBrijj.tblm('account.my_company').then(function(x) { $scope.cinfo = x });
+  var company = $rootScope.selected.company;
+  $scope.currentCompany = company;
 
+  // Set the view toggles to their defaults
   $scope.radioModel = "Edit";
+  $scope.dilutionSwitch = true;
 
+  // Variables for the select boxes to limit the selections to the available database types
   $scope.issuetypes = [];
   $scope.freqtypes = [];
-  $scope.issuekeys = [];
   $scope.tf = ["yes", "no"]
+
+  // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
   SWBrijj.procm('ownership.get_issuetypes').then(function(results) {
     angular.forEach(results, function(result) {
         $scope.issuetypes.push(result['get_issuetypes']);
@@ -429,18 +430,22 @@ var captableController = function($scope, $parse, SWBrijj, calculate, switchval,
         $scope.freqtypes.push(result['get_freqtypes']);
       });
   });
+
+  // Empty variables for issues
+  $scope.issuekeys = [];
   $scope.issues = []
+
+  // Sorting variables
   $scope.issueSort = 'date';
   $scope.rowSort = '-name';
+
+  // Empty variables for the rows and transactions
   $scope.rows = []
   $scope.uniquerows = []
   $scope.activeTran = []
 
   $scope.investorOrder = "name";
   
-  SWBrijj.tblm('account.companies').then(function(comp) {
-    $scope.company = comp[0]['company'];
-  });
   SWBrijj.tblm('ownership.company_issue').then(function(data) {
     $scope.issues = data;
     for(var i = 0, l = $scope.issues.length; i < l; i++) {
@@ -875,6 +880,14 @@ $scope.nameChangeRL = function(investor) {
   $scope.activeInvestorName = investor.name;
 };
 
+$scope.deletePerson = function(name) {
+  angular.forEach($scope.rows, function(row) {
+    if (row.name == name) {
+      $scope.rmodalUp(row);
+    }
+  })
+}
+
 $scope.updateRow = function(investor) {
   if (investor.name == "" && investor.namekey != undefined) {
     $scope.rmodalUp(investor);
@@ -998,10 +1011,6 @@ $scope.manualdeleteTran = function(tran) {
 
 $scope.saveTran = function(transaction) {
 
-  //Fix the dates to take into account timezone differences.
-  var offset = transaction.date.getTimezoneOffset();
-  transaction.date = transaction.date.addMinutes(offset);
-
   //Triggers the multi modal if more than one transaction exists
   if (transaction.length > 1) {
     angular.forEach($scope.rows, function(row) {
@@ -1031,6 +1040,11 @@ $scope.saveTran = function(transaction) {
     transaction = transaction[0];
    }
   }
+
+  //Fix the dates to take into account timezone differences.
+  var offset = transaction.date.getTimezoneOffset();
+  transaction.date = transaction.date.addMinutes(offset);
+
   // Bail out if insufficient data has been added for the transaction
   if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
     console.log("transaction is undefined")
@@ -1229,6 +1243,10 @@ $scope.saveTran = function(transaction) {
     else {
       return false;
     }
+  };
+
+  $scope.dilution = function() {
+    $scope.dilutedRows = []
   }
 
 
