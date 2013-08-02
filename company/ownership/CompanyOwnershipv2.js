@@ -1448,6 +1448,12 @@ $scope.saveTran = function(transaction) {
     };
   };
 
+  $scope.turnOnShares = function() {
+    angular.forEach($scope.rows, function(row) {
+      row.send = $scope.selectAll;
+    });
+  };
+
   $scope.sendInvites = function () {
     angular.forEach($scope.rows, function(row) {
       if (row.send == true) {
