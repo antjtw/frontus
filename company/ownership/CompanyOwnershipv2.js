@@ -1267,6 +1267,16 @@ $scope.saveTran = function(transaction) {
     }
   };
 
+  // Toggles editable to view
+  $scope.toggleDilution = function() {
+    if ($scope.dilutionSwitch) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
+
   // Toggles sidebar back and forth
   $scope.toggleSide = function() {
     if ($scope.sideToggle == true) {
@@ -1279,7 +1289,19 @@ $scope.saveTran = function(transaction) {
 
   $scope.dilution = function() {
     $scope.dilutedRows = []
-    $scope.captablestate = 2
+    angular.forEach($scope.rows, function(row) {
+      if (row.name != undefined) {
+        var something = null;
+        var temprow = {"name":row.name, "email":row.email};
+        angular.forEach($scope.issuekeys, function(issue) {
+          if (row[issue].a > 0) {
+            temprow[issue] = row[issue];
+          }
+        });
+        $scope.dilutedRows.push(temprow);
+      };
+    })
+    console.log($scope.dilutedRows)
   }
 
 

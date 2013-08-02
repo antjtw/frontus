@@ -132,6 +132,7 @@
       <div class="row-fluid capcontainer">
        <table class="captable tableView bodyText">
           <span ng-hide="false">
+            <!-- Editable headers -->
             <tr ng-hide="toggleView();" class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
@@ -139,6 +140,7 @@
                 <input placeholder="new security name" class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
               </th>
             </tr>
+            <!-- Uneditable headers -->
             <tr ng-show="toggleView();" class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
@@ -174,9 +176,19 @@
               </td>
             </tr>
             <!-- Un-editable view -->
-            <tr ng-show="toggleView();" ng-repeat="row in rows">
+            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows">
               <td><input disabled value="{{shareSum(row);}}"></input></td>
               <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+              <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+              <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+              </td>
+            </tr>
+            <!-- Un-editable diluted view -->
+            <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
+              <td><input disabled value="{{shareSum(row);}}"></input></td>
+              <td><input disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></input></td>
               <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
               <td ng-repeat="key in issuekeys | orderBy:issueSort">
                   <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
