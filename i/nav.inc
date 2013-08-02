@@ -11,14 +11,11 @@
                 <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
                 <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
                 <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
-               <br>  <a href="/login/forgot" >Forgotten Password</a>
-               
+                <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
+                <br><a href="/login/forgot" >Forgotten Password</a>             
               </fieldset>
             </form>
           </div>
-        </div>
-        <div class="span2 text-right close" >
-          <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
         </div>
       </div>  
     </div> 

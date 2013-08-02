@@ -440,8 +440,16 @@ h2 {
     border-bottom: 4px solid black;
 }
 
-.close [data-icon]{
-	font-weight: 20px;
+#Login-form a [data-icon]{
+	font-size: 20px;
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: 20px;
+	color: #C7C7C7;
+}
+
+#Login-form a:hover [data-icon] {
+	color: #A6A6A6;
 }
 
 
@@ -2152,3 +2160,5 @@ margin-top: 0.9em;
 .jobs .accordion-inner {
 	border: none;
 }
+
+

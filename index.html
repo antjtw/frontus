@@ -160,11 +160,14 @@
 								<div class="spacer30"></div>					
 								<form name="myForm">
 									<fieldset>
-										<input type="email" class="loginInput" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email" required ><br>
-										<input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" required><br>
-										<input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" required><br>
+										<input type="email" class="loginInput" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email"  ><br>
+										<input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" ><br>
+										<input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" ><br>
 										<div class="spacer40"></div>
-										<button class="button greenButton" id="submitInvite" ng-click="toggle = !toggle; companyRequest();" ng-disabled="fieldCheck()" >Request Invitation</button>
+										<button type="submit" class="button greenButton" id="submitInvite" ng-disabled="fieldCheck()" ng-click="toggle = !toggle; companyRequest();" >Request Invitation</button>
+
+
+								
 									</fieldset>
 								</form>
 							</div>
