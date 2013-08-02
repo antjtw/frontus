@@ -38,12 +38,11 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			document.location.href = x;
 			console.log("redirecting to: " + x);
       	} else {
-      		console.log('incorrect creds');
       		$rootScope.notification.show('fail', 'Invalid username/password combination');
       		$scope.password = "";
       	}
       }).except(function(x) {
-      	console.log('login error');
+      	console.log('Login error');
       });
     }
 
