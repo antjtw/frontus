@@ -830,6 +830,24 @@ form.inputs {
 	width: 100px;
 }
 
+/* Placeholder text color */
+.docLibrary input::-webkit-input-placeholder {
+   color: #C7C7C7;
+}
+
+.docLibrary input:-moz-placeholder { /* Firefox 18- */
+   color: #C7C7C7;  
+}
+
+.docLibrary input::-moz-placeholder {  /* Firefox 19+ */
+   color: #C7C7C7;  
+}
+
+.docLibrary input:-ms-input-placeholder {  
+   color: #C7C7C7;  
+}
+
+
 .docLibrary input:disabled {
 	background: none;
 }
