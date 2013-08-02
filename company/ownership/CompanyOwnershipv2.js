@@ -1390,7 +1390,7 @@ $scope.saveTran = function(transaction) {
   $scope.sendInvites = function () {
     angular.forEach($scope.rows, function(row) {
       if (row.send == true) {
-        SWBrijj.procm("ownership.share_captable", row.email, row.name).then(function(data) {
+        SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function(data) {
           console.log(data);
           row.send = false;
           row.emailkey = row.email;

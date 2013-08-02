@@ -33,7 +33,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	$scope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
 	$scope.doLogin = function() {
-      SWBrijj.login($scope.username, $scope.password).then(function(x) {
+      SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
 		document.location.href = x;
 		console.log("redirecting to: " + x);
       }).except(function(x) {
@@ -45,7 +45,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
-	$scope.select = function(companyURL) {
+	$rootScope.select = function(companyURL) {
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
@@ -98,7 +98,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	var cookie = readCookie("selectedCompany");
 	if (cookie != null) {
 		$scope.isLoggedIn = true;
-		$scope.select(cookie);
+		$rootScope.select(cookie);
 	} 
 
 	SWBrijj.procm('account.nav_companies').then(function(x) {
@@ -108,9 +108,9 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 		}
 
 		if (cookie != null) {
-			$scope.select(cookie);
+			$rootScope.select(cookie);
 		} else {
-			$scope.select($scope.companies[0]['company']);	
+			$rootScope.select($scope.companies[0]['company']);	
 		}
 	}).except(function(ignore) {
 		$scope.nav = 'navBarLoggedOut';

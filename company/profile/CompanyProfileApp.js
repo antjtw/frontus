@@ -81,8 +81,9 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       $rootScope.notification.show("fail", "Please enter a company name more than 2 letters in length");
       return;
     } 
-    SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video).then(function (x) { 
+    SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video, $scope.company).then(function (x) { 
         console.log("saved: "+x);
+        $rootScope.select($scope.company);
         $route.reload();
         $rootScope.notification.show("success", "Your company profile has been updated successfully.");
     }).except(function(x) {
