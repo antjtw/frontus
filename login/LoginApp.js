@@ -19,6 +19,7 @@ app.config(function($routeProvider, $locationProvider){
 
 //Controller for the Login Page
 function LoginCtrl($scope, $location, SWBrijj){
+    document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     $scope.username = "";
     $scope.password = "";
     $scope.showError = false;
@@ -80,7 +81,7 @@ function ForgotCtrl($scope, $location, SWBrijj) {
     $scope.doForgot = function() {
       $scope.forgotDisabled = function() { return true; }
       SWBrijj.forgot($scope.username).then(function(x) {
-        $location.path("sent");
+        $location.path("/sent");
       }).except(function(x) { 
         $scope.fed = "There was an error. Please try again later."
       });
@@ -103,4 +104,3 @@ function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
 
 function SentCtrl() {
 }
-

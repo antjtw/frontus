@@ -134,11 +134,15 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	$rootScope.notification.visible = false;
 	$rootScope.notification.message = "Notification Message";
 
-	$rootScope.notification.show = function (color, message) {
+	$rootScope.notification.show = function (color, message, callback) {
 		$rootScope.notification.visible = true;
 		$rootScope.notification.color = color;
 		$rootScope.notification.message = message;
-		setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
+		setTimeout(function() { 
+			$rootScope.notification.visible = false; 
+			$rootScope.$apply();
+			if (callback) { callback(); }
+		}, 5000);
 	};
 
 	$scope.fieldCheck = function() {

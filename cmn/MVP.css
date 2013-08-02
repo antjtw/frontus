@@ -898,7 +898,7 @@ form.inputs {
 
 .tableView th {
 	background-color: #FFFFFF;
-	width: 340px;
+	width: 200px;
 	text-align: left;
 	padding: 0 0 0 10px;
 	margin: 0 0 0 0;
@@ -1135,6 +1135,7 @@ ul>li.curPage {
 
 .tableView.captable  {
 	background: url("/img/stripe-pattern.png") repeat;
+	table-layout: fixed;
 };
 
 .longRow td {
@@ -1167,6 +1168,11 @@ td.tranSelected {
 	-moz-transition:all 2s; /* Firefox 4 */; 
 	-webkit-transition: all 2s; /* Safari and Chrome */
 	-o-transition: all 2s; /* Opera */
+}
+
+.span4.capright > button {
+	position:relative;
+	left:-56px;
 }
 
 .capright .headsection {
@@ -1235,6 +1241,10 @@ input.content {
 	background-color: #F1F1F1;
 }
 
+.staticHeaders {
+	width: 190px;
+}
+
 /* Grants Table */
 
 tr.rowSelected {
@@ -1258,7 +1268,6 @@ tr.rowSelected {
 .rightNoTableBlock {
     margin-right:-350px;
     width:0;
-    overflow:hidden;
 }
 
 /* Buttons */
@@ -1635,7 +1644,7 @@ tr.rowSelected {
 .capshareModal {
 	margin-left: -250px;
 	width:499px;
-	height:433px;
+	height:463px;
 }
 
 .capshareModal ul {
@@ -1658,6 +1667,8 @@ tr.rowSelected {
 
 .capshareModal ul li > span {
 	display: inline-block;
+	white-space: nowrap;
+	overflow-x: hidden;
 	width:150px;
 	margin-left: 10px;
 	font-size: 12px;
