@@ -17,7 +17,7 @@
             </form>
           </div>
         </div>
-        <div class="span2 text-right" >
+        <div class="span2 text-right close" >
           <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
         </div>
       </div>  

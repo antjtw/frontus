@@ -440,7 +440,9 @@ h2 {
     border-bottom: 4px solid black;
 }
 
-
+.close [data-icon]{
+	font-weight: 20px;
+}
 
 
 
