@@ -21,7 +21,7 @@
 	<div class="row-fluid">      
      <div class="span8 recipientInfo docLibrary statusBlock">
         <div class="headsection row-fluid">
-            <h1>{{cinfo[0].name}}</h1>
+            <h1>{{selected.name}}</h1>
 
             <div class="row-fluid">
 
@@ -33,27 +33,16 @@
             </div>
           </div>
 
-            <div class="row-fluid">
-                <div class="subnav-controls">
-                  <div>
-                    <div class="pull-left">
-                      <h2>Shareholder Status</h2>
-                    </div>
-                    <div class="pull-left">
-                      <div class="minidrop btn-group">
-                        <button class="btn"><span data-icon="&#xe027;" aria-hidden="true"></button>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                          <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                          <!-- dropdown menu links -->
-                        </ul>
-                      </div>
-                    </div>
-                    </div>
-                  <div class="DivHelper"></div>
+          <div class="row-fluid">
+            <div class="subnav-controls">
+              <div>
+                <div class="pull-left">
+                  <h2>Shareholder Status</h2>
                 </div>
               </div>
+              <div class="DivHelper"></div>
+            </div>
+          </div>
         
         <div class="row-fluid">
          <table class="tableView bodyText">
@@ -65,11 +54,11 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
-                <td ng-click='modalUp(person);'>{{person.name}}</td>
+                <td ng-click="(opendetails(person.email))">{{person.name}}</td>
                 <td ng-click="(opendetails(person.email))">{{person.email}}</td>
        			    <td ng-click="(opendetails(person.email))">{{person.fullview}}</td>
        		     	<td ng-click="(opendetails(person.email))">{{person.viewed}}</td>
-                <td class="button"><span pop-over email="person.email" data-icon="&#xe011;" aria-hidden="true"></td>
+                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
                     <td colspan="2">

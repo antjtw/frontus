@@ -3,7 +3,7 @@
   <div class="row-fluid">
     <div class="span8 docLibrary statusBlock">
       <div class="headsection row-fluid">
-        <h1>{{cinfo[0].name}}</h1>
+        <h1>{{selected.name}}</h1>
 
         <div class="row-fluid">
 
@@ -17,15 +17,6 @@
 
       <div class="row-fluid">
         <div class="subnav-controls">
-          <div>
-            <div class="pull-left">
-              <div class="edittoggle btn-group">
-                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Left'"><span data-icon="&#xe001;" aria-hidden="true"></button>
-                <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Middle'"><span data-icon="&#xe00e;" aria-hidden="true"></button>
-              </div>
-            </div>
-          </div>
-          <div class="DivHelper"></div>
         </div>
       </div>
 
@@ -42,10 +33,10 @@
             <td>
               <input disabled style="width:180px;" ng-model="row.name"></input>
             </td>
-            <td>{{row.granted}}</td>
-            <td>{{row.vested}}</td>
-            <td>{{row.forfeited}}</td>
-            <td>{{row.exercised}}</td>
+            <td>{{row.granted | number:2}}</td>
+            <td>{{row.vested | number:2}}</td>
+            <td>{{row.forfeited | number:2}}</td>
+            <td>{{row.exercised | number:2}}</td>
           </tr>
           <tr class='tablefooter'>
             <td></td>
@@ -67,7 +58,7 @@
               <p>Terms from the ownership table</p>
           </div>
           <tabset>
-            <tab ng-repeat="tran in activeTran" heading="{{tran.datekey | date:'mediumDate'}}" active="tran.active">
+            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
               <accordion close-others="true">

@@ -68,7 +68,7 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
       	console.log(scope.signeeded);
       	var sigdate = scope.signaturedate.toUTCString();
       	angular.forEach(scope.recipients, function(x) {
-      		SWBrijj.procm("document.share_document", scope.selectedDoc, x, scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
+      		SWBrijj.procm("document.share_document", scope.selectedDoc, x.toLowerCase(), scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
 				console.log(data);
 			});
       	});
@@ -290,7 +290,7 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 
 
 	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", $scope.docId, email, message, Boolean(sign)).then(function(data) {
+		 SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
 		};
@@ -424,19 +424,19 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
   });
 	
 	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", docId, email, message, Boolean(sign)).then(function(data) {
+		 SWBrijj.procm("document.share_document", docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
 		};
 	
 	$scope.remind = function(message, email) {
-		 SWBrijj.procm("document.remind_document", docId, email, message).then(function(data) {
+		 SWBrijj.procm("document.remind_document", docId, email.toLowerCase(), message).then(function(data) {
 				console.log(data);
 			});
 	};
 	
 	$scope.revokeUser = function (email) {
-		SWBrijj.procm("document.document_revoke", docId, email).then(function(data) {
+		SWBrijj.procm("document.document_revoke", docId, email.toLowerCase()).then(function(data) {
 				console.log(data);
 			});
 	};

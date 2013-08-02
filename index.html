@@ -3,15 +3,14 @@
 	<head>
 		<title>Sharewave Home</title>
 		<!--{{/i/head.inc}}-->		
+		<!--{{/i/nav.inc}}-->	
 <!-- 
-		Position the H1, H2 on the hero
 		Put in the scroller on the hero to be relative to the image and not to th bottom of the screen
-		Put in nav bar
-		Hook up the invite and login
+		Hook up the invite
 		Fix carousel next & back
 		Add carret to the buttons on carousel
  -->
-		<script src="index.js"></script>
+ 		<script src="index.js"></script>
 		<script>
 			$(document).ready(function(){
 			  $( "#inviteButton" ).click(function() {
@@ -28,35 +27,10 @@
 	</head>
 
 	<body>
-		<div class="wrap home">
-
+		<div class="wrap home" ng-controller="IndexCtrl">
+			<span ng-view=""></span>
 			<div id="hero">
 				<img src="/img/white-down.png" id="nextPage" class="paginator">
-				<div ng-controller="CollapseLoginCtrl">
-					<div collapse="isCollapsed">
-						<div class="well well-large">
-							<div class="row-fluid">
-								<div class="span8 offset2 text-center" >
-									 <div id="Login-form" >
-										<form>
-											<fieldset>
-												<input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username">
-												<input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">								
-												<button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" tabindex="3">Login</button><br>
-
-												<a href="#">Forgotten Password</a>
-											</fieldset>
-										</form>
-									</div>
-								</div>
-								<div class="span2 text-right" >
-									<a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
-								</div>
-							</div>	
-						</div> 
-					</div>
-					<a ng-click="isCollapsed = !isCollapsed">Login</a>
-				</div>
 				<div class="row-fluid">
 					<div class="span10 offset1"> 
 						<div class="spacer80"></div>
@@ -177,26 +151,42 @@
 				<div class="row-fluid">
 					<div class="span10 offset1 text-center">
 						 <div id="CompanyRegister-form">
-							<h2>Request Invitation</h2>
-							<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>
-							<div class="spacer30"></div>
-							<form>
-								<fieldset>
-									<input type="text" name="email" placeholder="EMAIL ADDRESS"><br>
-									<input type="text" name="fullname" placeholder="FULL NAME"><br>
-									<input type="text" name="companyname" placeholder="COMPANY NAME"><br>
-									<div class="spacer40"></div>
-									<button class="button greenButton" id="submitInvite" type="submit">Request Invitation</button>
-								</fieldset>
-							</form>
+						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
+								<h2>Request Invitation</h2>
+								<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>					
+								<div class="spacer30"></div>					
+								<form name="myForm">
+									<fieldset>
+										<input type="email" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email" required ><br>
+										<input type="text" name="fullname" placeholder="FULL NAME" ng-model="user.name" required><br>
+										<input type="text" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" required><br>
+										<div class="spacer40"></div>
+										<button class="button" disabled>Request Invitation</button>
+										<button class="button greenButton" id="submitInvite" ng-click="toggle = !toggle; companyRequest();">Request Invitation</button>
+									</fieldset>
+								</form>
+							</div>
+							<div class="box off" ng-hide="toggle" ng-animate="'box'">
+								<h2>Thanks for signing up to use Sharewave!</h2>
+								<p>We appreciate your interest, and we're excited to get you on board as soon as possible.</p>
+								<div class="spacer30"></div>
+								<p>Spread the word for your fellow entrepreneurs:</p>
+								<a href="http://www.twitter.com" target="_blank">
+									<button class="button socialbtn twitter" type="button"><span data-icon="&#xe035;" aria-hidden="true"></span><span>Share</span></button>
+								</a>
+								<a href="http://www.facebook.com" target="_blank">
+									<button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>	
+								</a>
+								<a href="http://www.linkedin.com" target="_blank">
+									<button class="button socialbtn linkedin" type="button"><span data-icon="&#xe036;" aria-hidden="true"></span><span>Share</span></button>
+								</a>
+								<div class="spacer110"></div>
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="spacer90"></div>
-			</div>
-
-	        	         	            
-
+			</div>	         	            
 	    	<div class="push"></div>   
 		</div>
 	    <!--{{/i/foot.inc}}-->

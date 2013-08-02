@@ -24,8 +24,8 @@
             <tr class="column-label">
               <th colspan="2">Ownership</th>
               <th><span class="longrow">Shareholder</span></th>
-              <th ng-repeat="one in issues">
-                <p class="capEditHeaders" ng-click="getActiveIssue(one)">{{one.issue}}</p>
+              <th class="capEditHeaders" ng-repeat="one in issues" ng-click="getActiveIssue(one)">
+                {{one.issue}}
               </th>
             </tr>
             <tr ng-show="fullview" ng-repeat="row in rows">
