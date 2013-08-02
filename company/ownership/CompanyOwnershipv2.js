@@ -1734,7 +1734,7 @@ var statusController = function($scope, SWBrijj) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                    $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
+                    $scope.activity[ik].event_time = $scope.activityDetail[j].whendone;
                   }
               }
           }
@@ -1785,7 +1785,7 @@ var statusController = function($scope, SWBrijj) {
        return 0
      }
      else {
-        return -card.whendone
+        return -card.event_time
      }
   };
 
