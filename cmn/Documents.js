@@ -16,10 +16,13 @@ angular.module('draggable', []).
         replace: true,
         transclude: true,
         scope: true,
-        template: "<div>" +
+        template: '<div>' +
             '<span style="display:inline-block" ng-transclude></span>' +
-            '<ul style="float:right; display:inline-block; list-style-type:none; cursor:pointer"><li ng-click="closeMe($event)" style="line-height:14px"><i class="icon-remove-sign"></i></li><li ng-click="biggerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-up"></i></li><li ng-click="smallerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-down"></i></li></ul>' +
-            "</div>",
+            '<ul style="float:right; display:inline-block; list-style-type:none; cursor:pointer">'+
+            '<li ng-click="closeMe($event)" style="line-height:14px"><i class="icon-remove-sign"></i></li>'+
+            '<li ng-click="biggerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-up"></i></li>'+
+            '<li ng-click="smallerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-down"></i></li></ul>' +
+            '</div>',
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
           document.querySelector('.docPanel').appendChild(elm[0]);
@@ -125,15 +128,23 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     }
     return false;
   }
+  $scope.isAnnotated = function(page) {
+    return (!$scope.unsaved(page)) && $scope.annotated[page-1];
+  }
+
   $scope.init = function () {
     $scope.signable = "";
     $scope.when_signed = "";
     $scope.notes=[];
 
-    SWBrijj.tblm($scope.$parent.pages, "doc_id", $scope.docId).then(function(data) {
-      $scope.docLength = data.page_count;
+    SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+      $scope.docLength = data.length;
       // does scaling happen here?
       $scope.currentPage = 1;
+      $scope.annotated = new Array(data.length);
+      for(var i=0;i<data.length;i++) {
+        $scope.annotated[data[i].page-1] = data[i].annotated;
+      }
     });
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.signable = data["signature_status"] == 'signature requested';
@@ -239,6 +250,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     canvas.addEventListener('mouseup', function() {
       this.down = false;
     }, 0);
+    canvas.strokes = new Array;
     canvas.addEventListener('mousemove', function(e) {
       this.style.cursor = 'pointer';
       if(this.down) {
@@ -247,6 +259,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           moveTo(this.X, this.Y);
           lineTo(e.offsetX , e.offsetY );
           strokeStyle = this.color;
+          canvas.strokes.push(this.color, this.x, this.Y, e.offsetX, e.offsetY);
           stroke();
         }
         this.X = e.offsetX ;
@@ -298,6 +311,31 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     docpanel.style.backgroundImage = imgurl;
     });
   };
+
+  $scope.getNoteData = function() {
+    var noteData = [];
+    for(var i = 0;i<$scope.notes.length;i++) {
+      var n = $scope.notes[i];
+      var pos = [n.page, n.width(), n.height(), n[0].style.left, n[0].style.top];
+      var typ = n.scope().ntype;
+      var val = new Array;
+      noteData.push( [pos, typ, val])
+      if (typ == 'text')  val.push(n[0].querySelector("textarea").value);
+      else if (typ == 'canvas') {
+        var se = n[0].querySelector("canvas");
+        val.push(se.strokes);
+      }
+    }
+    return noteData;
+  }
+
+  $scope.saveNoteData = function() {
+    var nd = $scope.getNoteData();
+    console.log(nd);
+    SWBrijj.saveNoteData($scope.docId, nd).then(function(data) {
+      console.log(data);
+    });
+  }
 
   $scope.saveNotes = function(event) {
     var canvas = document.createElement('canvas');
@@ -400,12 +438,15 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
               var docpanel = document.querySelector(".docPanel");
               var imgurl = docpanel.style.backgroundImage;
               docpanel.style.backgroundImage = imgurl;
-
+              var keepnotes = [];
               for(var i = 0;i<$scope.notes.length;i++) {
-                if (note.scope().page != note.scope().currentPage) continue;
-                document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+                if ($scope.notes[i].page != $scope.currentPage) {
+                  keepnotes.push($scope.notes[i]);
+                } else {
+                  document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+                }
               }
-              $scope.notes = [];
+              $scope.notes = keepnotes;
             }).
             except(function(x) {
               console.log(x.message); } );

@@ -880,6 +880,10 @@ ul>li.curPage {
 .unsaved {
     background-color: lightcoral;
 }
+.annotated {
+    background-color: lavender;
+}
+
 
 .annotation-control > .tools > button {
 	background: none;
@@ -1056,7 +1060,7 @@ ul>li.curPage {
 
 .tableView.captable  {
 	background: url("/img/stripe-pattern.png") repeat;
-};
+}
 
 .longRow td {
 	width: 150px !important;

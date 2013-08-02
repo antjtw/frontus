@@ -65,7 +65,7 @@ function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScop
 function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
   $scope.docId = parseInt($routeParams.id);
   $scope.library = "document.my_investor_library";
-  $scope.pages = "document.my_investor_doc_length";
+  $scope.pages = "document.my_investor_codex";
 
   $scope.init = function () {
     $scope.invq = true;
