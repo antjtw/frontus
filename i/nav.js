@@ -30,7 +30,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	}
 
 	$scope.isCollapsed = true;
-	$scope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
+	$rootScope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
 	$scope.doLogin = function() {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
@@ -105,7 +105,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	if (cookie != null) {
 		$scope.isLoggedIn = true;
 		$rootScope.select(cookie);
-	} 
+	}
 
 	SWBrijj.procm('account.nav_companies').then(function(x) {
 		$scope.isLoggedIn = true;
@@ -113,7 +113,8 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
 
-		if (cookie != null) {
+		var cookie = readCookie("selectedCompany");
+		if (cookie != null && !$rootScope.selected) {
 			$rootScope.select(cookie);
 		} else {
 			$rootScope.select($scope.companies[0]['company']);	
@@ -121,6 +122,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	}).except(function(ignore) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
+		$rootScope.showLogin = true;
 	});
 
 	function readCookie(name) {
