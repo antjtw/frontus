@@ -441,6 +441,23 @@ h2 {
 }
 
 
+/* Notifications */
+
+.notification {
+	position: fixed;
+	width: 100%;
+	text-align: center;
+	height: 50px;
+	z-index: 1000;
+}
+
+.notication.success {
+
+}
+
+.notication.fail {
+
+}
 
 
 
@@ -1193,6 +1210,12 @@ tr.rowSelected {
 
 .rowSelected > td {
 	background-color: transparent;
+}
+
+/* Status */
+
+.statusPop .popover .popover-content > form {
+	margin: 0 0 0 0;
 }
 
 /* Dynamic shifting of spans */

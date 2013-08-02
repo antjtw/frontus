@@ -1082,11 +1082,11 @@ $scope.saveTran = function(transaction) {
   else {
         if (transaction.type == "options" && transaction.units < 0) {
           transaction.units = transaction.unitskey;
-          console.log("!!!Need a Notification for negative option transaction!!!");
+          $rootScope.notification.show("fail", "Cannot have a negative number of shares");
         }
         else if (transaction.amount < 0) {
           transaction.amount = transaction.amountkey;
-          console.log("!!!Need a Notification for negative amount transaction!!!");
+          $rootScope.notification.show("fail", "Cannot have a negative amount for options");
         }
         var d1 = transaction['date'].toUTCString();
         if (transaction['tran_id'] == undefined) {
