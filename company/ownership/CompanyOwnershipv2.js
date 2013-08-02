@@ -15,6 +15,18 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+owner.filter('shareList', function() {
+  return function(rows) {
+    var returnrows = []
+    angular.forEach(rows, function(row) {
+      if (row.emailkey == null && row.name != "") {
+        returnrows.push(row);
+      }
+    })
+    return returnrows;
+  };
+});
+
 
 // Popover directive. Not yet fully usable as it strips out the ng-click.
 owner.directive('popOver', function ($compile) {

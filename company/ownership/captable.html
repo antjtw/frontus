@@ -14,7 +14,7 @@
               <span>Name</span>
               <span>Email</span>
             </li>
-            <li ng-repeat="row in rows">
+            <li ng-repeat="row in rows | shareList">
               <input class="checkbox" ng-model="row.send" type="checkbox"></input>
               <span class="capshareNames">{{row.name}}</span>
               <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}" ng-disabled="row.emailkey" ng-model="row.email"></input>
