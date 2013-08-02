@@ -16,11 +16,21 @@ app.config(function($routeProvider, $locationProvider){
     });
 
 function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
+  $scope.user = {}
   if ($routeParams.logout == 1) {
     $rootScope.notification.show('success', 'You have successfully logged out', function() {
       // $location.search('logout', null); $scope.$apply();
     });
   }
+
+  $scope.fieldCheck = function() {
+    if ($scope.user.email && $scope.user.name && $scope.user.company) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  };
 
   $scope.toggle = true;
 
@@ -31,6 +41,8 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
       console.log(x);
     });
   }
+
+
 
 }
 

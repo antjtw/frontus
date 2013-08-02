@@ -1,7 +1,7 @@
 <div class="row-fluid">
   <div class="span5 offset4 gateway text-center">
     <div>
-      <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
+      <a href="/"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a>
       <p class="tagline">the best way to manage your shareholders<p>
     </div>
     <div class="spacer30"></div> 
@@ -14,11 +14,11 @@
     <form id="login" class="text-center inputs" ng-submit="doLogin()">
       <fieldset>
         <input placeholder="USERNAME" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username"
-               type="email" ng-model="username"/>
+               type="text" ng-model="username"/>
         <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"
                type="password" ng-model="password" />
         <div class="spacer30"></div>             
-        <button type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" tabindex="3">Log in</button>  
+        <button type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" tabindex="3">Log in</button>  
   	    <a id="forgotButton" class="button text-center" ng-href="forgot">Forgot Password?</a>
   	  
         <br>
