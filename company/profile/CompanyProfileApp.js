@@ -77,17 +77,22 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   }
 
   $scope.contactSave = function () {
-    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
-      $rootScope.notification.show("fail", "Please enter a company name more than 2 letters in length");
+    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
+      $rootScope.notification.show("fail", "Please enter a valid company and domain name");
+      $scope.name = $scope.namekey;
+      $scope.company = $scope.companykey;
       return;
-    } 
+    }
     SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video, $scope.company).then(function (x) { 
         console.log("saved: "+x);
         $rootScope.select($scope.company);
-        $route.reload();
         $rootScope.notification.show("success", "Your company profile has been updated successfully.");
+        $scope.namekey = $scope.name;
+        $scope.companykey = $scope.company;
     }).except(function(x) {
         console.log(x);
+        $scope.namekey = $scope.name;
+        $scope.companykey = $scope.company;
         $rootScope.notification.show("fail", "There was an error updating your company profile.");
     });
   };
@@ -96,7 +101,11 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.admins = x;
   }).except(initFail);
 
-  SWBrijj.tbl('account.my_company').then(function(x) { initPage($scope, x) }).except(initFail);
+  SWBrijj.tbl('account.my_company').then(function(x) { 
+    initPage($scope, x);
+    $scope.namekey = $scope.name;
+    $scope.companykey = $scope.company;
+  }).except(initFail);
 
   // $scope.activity = [];
   // SWBrijj.procm('global.get_company_activity').then(function(data) {
@@ -386,6 +395,7 @@ function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames
   var z = x[row]; // the values
+
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
 }
