@@ -697,6 +697,14 @@ form.inputs {
   	opacity: 0.5;
 }
 
+#CompanyRegister-form .greenButton:disabled, #CompanyRegister-form .greenButton:disabled:hover {
+	background-color: #1ABC96; 
+  	color: #FFFFFF; 
+  	opacity: 0.5;
+	cursor:default;
+
+}
+
 
 .line{
 	border-top: 1px solid #a6a6a6;

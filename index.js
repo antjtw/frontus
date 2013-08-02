@@ -32,6 +32,15 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
     });
   }
 
+  $scope.fieldCheck = function() {
+    if ($scope.username && $scope.password) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  };
+
 }
 
 function CarouselCtrl($scope) {
