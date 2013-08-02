@@ -1457,7 +1457,7 @@ $scope.saveTran = function(transaction) {
   $scope.sendInvites = function () {
     angular.forEach($scope.rows, function(row) {
       if (row.send == true) {
-        SWBrijj.procm("ownership.share_captable", row.email, row.name).then(function(data) {
+        SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function(data) {
           console.log(data);
           row.send = false;
           row.emailkey = row.email;
@@ -1780,7 +1780,7 @@ var statusController = function($scope, SWBrijj) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                    $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
+                    $scope.activity[ik].event_time = $scope.activityDetail[j].whendone;
                   }
               }
           }
@@ -1831,7 +1831,7 @@ var statusController = function($scope, SWBrijj) {
        return 0
      }
      else {
-        return -card.whendone
+        return -card.event_time
      }
   };
 

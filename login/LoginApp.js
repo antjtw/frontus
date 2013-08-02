@@ -24,13 +24,16 @@ function LoginCtrl($scope, $location, SWBrijj){
     $scope.password = "";
     $scope.showError = false;
     $scope.doLogin = function() {
-      SWBrijj.login($scope.username, $scope.password).then(function(x) { 
-         if(x) {
+      SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
+      if(x) {
 			document.location.href = x;
 			console.log("redirecting to: "+x);
-		}
-         else $scope.showError = true;
-      });
+		  }
+         else {
+          $scope.showError = true;
+          $scope.password = "";
+        }
+    });
     }
     
     // could also add that the password is not long enough?
@@ -71,7 +74,7 @@ function ForgotCtrl($scope, $location, SWBrijj) {
          return "button greenButton loginButton bodyText" + ($scope.forgotDisabled() ? " adisabled" : ""); }
     $scope.doForgot = function() {
       $scope.forgotDisabled = function() { return true; }
-      SWBrijj.forgot($scope.username).then(function(x) {
+      SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         $location.path("/sent");
       }).except(function(x) { 
         $scope.fed = "There was an error. Please try again later."

@@ -24,7 +24,7 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     });
 
     $scope.doActivate = function() {
-      SWBrijj.doCompanyActivate($scope.email, $scope.code, $scope.password, false).then(function(x) {
+      SWBrijj.doCompanyActivate($scope.email.toLowerCase(), $scope.code, $scope.password, false).then(function(x) {
         alert('OK');
         document.location.href="/login";
       });
@@ -41,7 +41,7 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     });
 
     $scope.doActivate = function() {
-      SWBrijj.doActivate($scope.email, $scope.name, $scope.code, $scope.password, false).then(function(x) {
+      SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(x) {
         alert('OK');
         document.location.href="/login";
       });
