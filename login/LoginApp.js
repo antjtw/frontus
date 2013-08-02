@@ -25,12 +25,15 @@ function LoginCtrl($scope, $location, SWBrijj){
     $scope.showError = false;
     $scope.doLogin = function() {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
-         if(x) {
+      if(x) {
 			document.location.href = x;
 			console.log("redirecting to: "+x);
-		}
-         else $scope.showError = true;
-      });
+		  }
+         else {
+          $scope.showError = true;
+          $scope.password = "";
+        }
+    });
     }
     
     // could also add that the password is not long enough?

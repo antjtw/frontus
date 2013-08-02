@@ -68,7 +68,7 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
       	console.log(scope.signeeded);
       	var sigdate = scope.signaturedate.toUTCString();
       	angular.forEach(scope.recipients, function(x) {
-      		SWBrijj.procm("document.share_document", scope.selectedDoc, x, scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
+      		SWBrijj.procm("document.share_document", scope.selectedDoc, x.toLowerCase(), scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
 				console.log(data);
 			});
       	});

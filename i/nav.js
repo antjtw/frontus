@@ -34,8 +34,14 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 
 	$scope.doLogin = function() {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
-		document.location.href = x;
-		console.log("redirecting to: " + x);
+      	if (x) {
+			document.location.href = x;
+			console.log("redirecting to: " + x);
+      	} else {
+      		console.log('incorrect creds');
+      		$rootScope.notification.show('fail', 'Invalid username/password combination');
+      		$scope.password = "";
+      	}
       }).except(function(x) {
       	console.log('login error');
       });
