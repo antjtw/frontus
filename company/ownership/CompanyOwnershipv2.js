@@ -1262,6 +1262,7 @@ $scope.saveTran = function(transaction) {
       return true;
     }
     else {
+      $scope.dilutionSwitch = true;
       $scope.captablestate = 0
       return false;
     }
@@ -1287,6 +1288,8 @@ $scope.saveTran = function(transaction) {
     }
   };
 
+
+  // Generates the diluted rows
   $scope.dilution = function() {
     $scope.dilutedRows = []
     angular.forEach($scope.rows, function(row) {
@@ -1296,9 +1299,12 @@ $scope.saveTran = function(transaction) {
         angular.forEach($scope.issuekeys, function(issue) {
           if (row[issue].a > 0) {
             temprow[issue] = row[issue];
+            something = true;
           }
         });
-        $scope.dilutedRows.push(temprow);
+        if (something) {
+          $scope.dilutedRows.push(temprow);
+        };
       };
     })
     console.log($scope.dilutedRows)
