@@ -468,6 +468,10 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
           angular.forEach($scope.trans, function(tran) {
             if (grant.tran_id == tran.tran_id) {
               grant.investor = tran.investor;
+              if (grant.action == "forfeited") {
+                console.log("here");
+                tran.forfeited = grant.unit;
+              }
             }
           });
         });
@@ -498,16 +502,24 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
               if (tran.issue in row) {
                 row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
                 row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
-                row[tran.issue]["ukey"] = calculate.sum(row[tran.issue]["ukey"], tran.units);
-                row[tran.issue]["akey"] = calculate.sum(row[tran.issue]["akey"], tran.amount);
+                row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                row[tran.issue]["akey"] = row[tran.issue]["a"];
+                if (!isNaN(parseFloat(tran.forfeited))) {
+                  row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                  row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                }
               }
               else {
-              row[tran.issue] = {}
-              row[tran.issue]["u"] = tran.units;
-              row[tran.issue]["a"] = tran.amount;
-              row[tran.issue]["ukey"] = tran.units;
-              row[tran.issue]["akey"] = tran.amount;
-              row[tran.issue]["state"] = false;
+                row[tran.issue] = {}
+                row[tran.issue]["u"] = tran.units;
+                row[tran.issue]["a"] = tran.amount;
+                row[tran.issue]["ukey"] = tran.units;
+                row[tran.issue]["akey"] = tran.amount;
+                row[tran.issue]["state"] = false;
+                if (!isNaN(parseFloat(tran.forfeited))) {
+                  row[tran.issue]["u"] = (-tran.forfeited);
+                  row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                }
               };
             }
             else {
@@ -675,7 +687,6 @@ $scope.getActiveIssue = function(issue) {
   // Set Freq Value for Angularjs Select
   var index = $scope.freqtypes.indexOf(issue.vestfreq);
   $scope.activeIssue.vestfreq = $scope.freqtypes[index];
-  $scope.$apply();
 };
 
 $scope.saveIssue = function(issue) {
@@ -1123,6 +1134,10 @@ $scope.saveTran = function(transaction) {
                     row[tran.issue]['a'] = tempamount;
                     row[tran.issue]['ukey'] = tempunits;
                     row[tran.issue]['akey'] = tempamount;
+                    if (!isNaN(parseFloat(tran.forfeited))) {
+                      row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                      row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                    }
                     row[tran.issue]['x'] = 0;
                   }
                 }
@@ -1254,6 +1269,12 @@ $scope.saveTran = function(transaction) {
 
   // Toggles sidebar back and forth
   $scope.toggleSide = function() {
+    if ($scope.sideToggle == true) {
+      return true
+    }
+    else {
+      return false
+    }
   };
 
   $scope.dilution = function() {
@@ -1468,9 +1489,6 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
             if (parseFloat(tran.units) > 0) {
               row["granted"] = calculate.sum(row["granted"], tran.units);
             }
-            else {
-              row["forfeited"] = calculate.sum(row["forfeited"], tran.units);
-            }
           };
         });
       });
@@ -1636,6 +1654,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       angular.forEach($scope.rows, function(row) {
         row['vested'] = null;
         row['exercised'] = null;
+        row['forfeited'] = null;
         angular.forEach($scope.grants, function(grant) {
           if (row.name == grant.investor) {
             row[grant.action] = calculate.sum(row[grant.action], grant.unit)
