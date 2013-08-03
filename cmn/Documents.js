@@ -149,6 +149,28 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.signable = data["signature_status"] == 'signature requested';
       $scope.signed = data["when_signed"];
+      if (data['annotations']) {
+        // restoreNotes
+        var annots = eval(data['annotations']);
+        var sticky;
+        for(var i = 0;i<annots.length;i++) {
+          var annot = annots[i];
+          if (annot[1] == 'check') {
+            sticky = $scope.newCheckX(annot[0][0]);
+          } else if (annot[1] == 'text') {
+            sticky = $scope.newBoxX(annot[0][0],annot[2][0]);
+          }
+          $scope.notes.push(sticky);
+          sticky.css({
+            top:  annot[0][4],
+            left: annot[0][3]
+          });
+
+        }
+      } // json struct
+
+
+
     });
   };
 
@@ -192,11 +214,14 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     for (var i=start; step>0 ? i<stop : i>stop; i+=step) result.push(i);
     return result;
   };
-
   $scope.newBox = function(event) {
-    var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable" >'+
-        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: hidden; height: 20px;"/></div>')($scope);
+    var aa = $scope.newBoxX($scope.currentPage,'');
     aa.scope().initdrag(event);
+  }
+
+  $scope.newBoxX = function(page, val) {
+    var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable" >'+
+        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: hidden; height: 20px;"/></div>')($scope);
     aa.scope().ntype='text';
     bb = aa[0].querySelector("textarea");
 /*    window.setInterval( function() {
@@ -214,15 +239,23 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         bb.style.width = (bb.scrollWidth - pad) +"px";
       }
     }, 0);
+    aa.scope().page = page;
+    aa.find('textarea').scope().annotext = val;
+    return aa;
   };
 
   $scope.newCheck = function(event) {
-    var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable">'+
+    var aa = $scope.newCheckX($scope.currentPage);
+    aa.scope().initdrag(event);
+  };
+  $scope.newCheckX = function(page) {
+    var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable">'+
         '<i class="button icon-ok icon-2x" background-color:white"></i>' +
         '</div>')($scope);
-    aa.scope().initdrag(event);
     aa.scope().ntype='check'
-  };
+    aa.scope().page = page;
+    return aa;
+  }
 
   $scope.newPad = function(event) {
     var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable">'+
@@ -319,12 +352,13 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       var pos = [n.page, n.width(), n.height(), n[0].style.left, n[0].style.top];
       var typ = n.scope().ntype;
       var val = new Array;
-      noteData.push( [pos, typ, val])
+      var ndx = [pos, typ, val];
       if (typ == 'text')  val.push(n[0].querySelector("textarea").value);
       else if (typ == 'canvas') {
         var se = n[0].querySelector("canvas");
         val.push(se.strokes);
       }
+      noteData.push(ndx);
     }
     return noteData;
   }
@@ -332,7 +366,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   $scope.saveNoteData = function() {
     var nd = $scope.getNoteData();
     console.log(nd);
-    SWBrijj.saveNoteData($scope.docId, nd).then(function(data) {
+    SWBrijj.saveNoteData($scope.docId, JSON.stringify(nd)).then(function(data) {
       console.log(data);
     });
   }

@@ -17,23 +17,17 @@ body {
 .wrap {
 	min-height: 100%;
 	height: auto !important;
-	height: 100%;
-	margin-top: 0;
-	margin-right: auto;
-	margin-bottom: -112px;
-	margin-left: auto;
+	/*height: 100%; */
+    margin: 0 auto -112px;
 }
 
 /* includes the 50 pixels from the nav bar */
 .wrap-nav {
   min-height: 100%;
   height: auto !important;
-  height: 100%;
-  margin-top: 0;
-  margin-right: auto;
-  margin-bottom: -162px;
-  margin-left: auto;
-  background-color:#FFFFFF;
+  /* height: 100%; */
+    margin: 0 auto -162px;
+    background-color:#FFFFFF;
 }
 
 /* Bootstrap overrides */
@@ -47,10 +41,10 @@ label {
 }
 
 .center {
-    *display:inline; /* ie 7 */
+    /* display:inline; */ /* ie 7 */
     display:inline-block;
     text-align:left;
-    zoom:1; /* ie7 junk */
+    /* zoom:1; */ /* ie7 junk */
 }
 
 input.loginInput:focus, textarea:focus, select:focus {
@@ -60,7 +54,7 @@ input.loginInput:focus, textarea:focus, select:focus {
 	color:black;
  }
  
-input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:focus {
+input.loginInput:focus, textarea:focus, select:focus {
 	outline: none;
 	box-shadow:none;
 	border-color:#cccccc;
@@ -76,7 +70,7 @@ input.loginInput:focus:invalid:focus, textarea:focus:invalid:focus, select:focus
 }
 
 .open .caret{
-    border-top :0px !important;
+    border-top :0 !important;
     border-bottom: 4px solid black;
 } 
 
@@ -87,12 +81,12 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 /* Accordians */
 
 .accordion-group {
-	border-left: 0px;
-	border-right: 0px;
-	border-top: 0px;
-	border-radius: 0px;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
+	border-left: 0;
+	border-right: 0;
+	border-top: 0;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
 }
 
 .accordion-heading {
@@ -268,7 +262,7 @@ h2 {
 .topnav {
 	height: 40px;
 	width: 100%;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	background-color: #1E2D3D;
 }
 
@@ -365,7 +359,7 @@ h2 {
 
 .bottomnav {
 	height: 30px;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	background-color: #FFFFFF;
 	border-bottom: 1px solid #E3E3E3;
 }
@@ -436,7 +430,7 @@ h2 {
 }
 
 .open .fauxcaret{
-    border-top :0px !important;
+    border-top :0 !important;
     border-bottom: 4px solid black;
 }
 
@@ -524,11 +518,11 @@ h2 {
 /* Login */
 
 .gateway {
-	margin-left:0px;
+	margin-left:0;
 	margin-top:140px;
 	background-color: #e3e3e3;
 	padding-top: 45px;
-	padding-bottom: 0px;
+	padding-bottom: 0;
 }
 
 .register {
@@ -558,9 +552,9 @@ form.inputs {
 #Login-form .loginInput , #Login-form .loginInput:focus{
 	width:210px;	
 	height: 30px;
-	border-radius:0px;
+	border-radius:0;
 	background-color:#ffffff;
-	border: 0px;
+	border: 0;
 	box-shadow: none;
 	padding: 0 0 0 10px;
 	margin: 10px 20px 10px 0;
@@ -581,7 +575,7 @@ form.inputs {
 }
 
 #login_password {
-	margin-bottom: 0px;	
+	margin-bottom: 0;
 }
 
 #forgotButton {
@@ -599,8 +593,8 @@ form.inputs {
 #Login-form .button.greenButton {
 	width:140px;
 	height:30px;
-	border-radius:0px;
-	border: 0px;
+	border-radius:0;
+	border: 0;
 	background-color: #1ABC96;
 }
 
@@ -612,7 +606,7 @@ form.inputs {
 .textalert.loginErrorBox {
 	width:300px;
 	background-color: #a6a6a6;
-	border-radius: 0px;
+	border-radius: 0;
 	margin: auto;
 	float:none;
 }
@@ -699,25 +693,23 @@ form.inputs {
 .sideButtons {
 	list-style-type: none;
 	width:100%;
-	margin-left:0px; 
+	margin-left:0;
 }
 
 .navTabs {
 	padding-top:8px;
 	padding-left:40px;
 	padding-bottom:8px;
-	border-top-width: 1px;
-	border-top-style: solid;
-	border-color: #bdc3c7;
-	color: #34495E;
+    border-color: #bdc3c7;
+    border-top: 1px solid;
+    color: #34495E;
 	cursor:pointer;
 	
 }
 
 .bottomTab {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-color: #bdc3c7;
+    border-color: #bdc3c7;
+    border-bottom: 1px solid;
 }
 
 .selected {
@@ -732,21 +724,18 @@ form.inputs {
 }
 
 #detailsEdit {
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-right-color: #BDC3C7;
-	padding-right:20px;
+    border-right: 1px solid #BDC3C7;
+    padding-right:20px;
 	
 }
 
 .span10.coreEdit {
 	height:100%;
-	margin-left:0px;
+	margin-left:0;
 	padding-left:20px;
 	padding-top:20px;
-	border-left-width: 1px;
-	border-left-style: solid;
-	border-color: #bdc3c7;
+    border-color: #bdc3c7;
+    border-left: 1px solid;
 }
 
 #passwordEdit {
@@ -764,14 +753,7 @@ form.inputs {
 .editProfilePhoto {
 	height:250px;
 	width:250px;
-	border-top-width: thin;
-	border-right-width: thin;
-	border-bottom-width: thin;
-	border-left-width: thin;
-	border-top-style: solid;
-	border-right-style: solid;
-	border-bottom-style: solid;
-	border-left-style: solid;	
+    border: thin solid;
 }
 
 .formBounder {
@@ -825,8 +807,8 @@ form.inputs {
 }
 
 .docLibrary input {
-	border: 0px;
-	padding: 0px;
+	border: 0;
+	padding: 0;
 	width: 100px;
 }
 
@@ -866,9 +848,7 @@ form.inputs {
 }
 
 .tableView tr {
-	border-bottom-width: thin;
-	border-bottom-style: solid;
-	border-bottom-color: #f1f1f1;
+    border-bottom: thin solid #f1f1f1;
 }
 
 .tableView th {
@@ -882,7 +862,7 @@ form.inputs {
 
 .tableView td {
 	background-color: #FFFFFF;
-	padding: 5px 40px 0 0;
+	/* padding: 5px 40px 0 0; */
 	height:35px;
 	padding: 0 0 0 10px;
 }
@@ -933,9 +913,16 @@ form.inputs {
 }
 
 ul>li.curPage {
-  border-color: navy;
-    font-weight: bold;
+   border-color: navy;
+   font-weight: bold;
+   color: darkorchid;
+   background-color: lightcyan;
 }
+
+.curPage.unsaved {
+  background-color: lightseagreen;
+}
+
 .unsaved {
     background-color: lightcoral;
 }
@@ -964,7 +951,7 @@ ul>li.curPage {
 }
 
 .pageJump {
-    margin: 0px 0 5px 5px;
+    margin: 0 0 5px 5px;
 }
 
 .pageJump li {
@@ -1044,8 +1031,8 @@ ul>li.curPage {
 }
 
 .doubleTime {
-	margin-bottom: 0px;
-	padding-bottom: 0px;
+	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
 /* Footer */
@@ -1062,13 +1049,13 @@ ul>li.curPage {
 	list-style-type:none;
 	min-height: 20px;
 	margin: 10px 0;
-	padding: 3px 0px;
+	padding: 3px 0;
 	color: #8d8d8d;
 }
 
 .footerLinks li {
 	display: inline;
-	padding: 0px 8px;
+	padding: 0 8px;
 }
 
 .footerLinks li a {
@@ -1081,7 +1068,7 @@ ul>li.curPage {
 
 
 .footerLinks li:last-child {
-	border-right: 0px;
+	border-right: 0;
 }
 
 .footerBar {
@@ -1265,17 +1252,16 @@ tr.rowSelected {
 }
 
 .btn {
-	background-color: #FFFFFF;
-	background-image: none;
-	border: 1px solid #E3E3E3;
+    background: #FFFFFF none;
+    border: 1px solid #E3E3E3;
 }
 
 /* Dropdown buttons */
 
 .edittoggle > .btn {
-	border-radius: 0px !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
 	color: #A6A6A6;
 	height: 30px;
 	width: 30px;
@@ -1283,9 +1269,9 @@ tr.rowSelected {
 }
 
 .minidrop > .btn {
-	border-radius: 0px !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
 	height: 30px;
 	width: 20px;
 	padding: 0 0 0 0;
@@ -1304,9 +1290,9 @@ tr.rowSelected {
 }
 
 .minidrop > ul {
-	border-radius: 0px !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
 	margin: 0 0 0 0;
 	padding: 0 0 0 0;
 	width: 150px;
@@ -1423,10 +1409,7 @@ tr.rowSelected {
 .saveButton {
 	background-color: #3498db;
 	color:#ffffff;
-	padding-top: 10px;
-	padding-right: 60px;
-	padding-bottom: 10px;
-	padding-left: 60px;	
+    padding: 10px 60px;
 }
 
 .saveButton:hover {
@@ -1437,36 +1420,24 @@ tr.rowSelected {
 .chooseButton {
 	background-color: #ffffff;
 	color:#333333;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
-	margin-right:10px;
+    padding: 10px 20px;
+    margin-right:10px;
 	border: 1px solid #bdc3c7;
 }
 
 .uploadButton {
 	background-color: #3498db;
 	color:#ffffff;
-	padding-top: 10px;
-	padding-right: 100px;
-	padding-bottom: 10px;
-	padding-left: 100px;
-	border: 1px solid #bdc3c7;
+    padding: 10px 100px;
+    border: 1px solid #bdc3c7;
 }
 
 .authButton {
   background-color: #38a344;
   color:#ffffff;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-botton: 10px;
-  display: inline-block;
+    padding: 10px;
+    margin: 10px auto;
+    display: inline-block;
 }
 
 .authButton:hover {
@@ -1528,7 +1499,7 @@ tr.rowSelected {
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px; 
+    right: 0;
 }
 
 
@@ -1545,13 +1516,13 @@ tr.rowSelected {
 .modalHeader {
 	display: block;
 	text-align: left;
-	padding: 20px 0px 20px 30px;
-	margin: 0px;
+	padding: 20px 0 20px 30px;
+	margin: 0;
     background-color: #21b289;
     color: white;
     vertical-align: middle;
     font-size: 14px;
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
     font-weight: lighter;
 }
 
@@ -1840,12 +1811,13 @@ tr.rowSelected {
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
  */
-.cf {
+/*.cf {
     *zoom: 1;
 }
+*/
 
 .draggable {
-    border: 0px solid red;
+    border: 0 solid red;
     position:absolute;
     background-color:lightgoldenrodyellow;
     opacity: 0.5;
@@ -1926,7 +1898,7 @@ margin-top: 0.9em;
 
 .home .paginator {
 	position:absolute;
-    bottom:0px;
+    bottom:0;
     left:50%;
 }
 
@@ -1935,7 +1907,7 @@ margin-top: 0.9em;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
 	font-weight: normal;
-	border: 0px;
+	border: 0;
 	
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -1990,11 +1962,11 @@ margin-top: 0.9em;
 
  	width: 300px;
  	height: 30px;
- 	border-radius: 0px;
- 	border: 0px;
+ 	border-radius: 0;
+ 	border: 0;
  	outline: none !important;
  	-webkit-box-shadow: none !important;
- 	-box-shadow: none !important;
+ 	box-shadow: none !important;
 }
 
 .home input:focus:invalid {
@@ -2039,7 +2011,7 @@ margin-top: 0.9em;
 }
 .carousel-control {
 	border: 0;
-	font-weight: 0;
+	font-weight: 100;
 	font-size: 1px;
 }
 
@@ -2126,7 +2098,7 @@ margin-top: 0.9em;
 
 #entry_0{
 	color: orange;
-	border-radius: 0px;	
+	border-radius: 0;
 }
 
 /* Jobs */
@@ -2136,15 +2108,13 @@ margin-top: 0.9em;
 }
 
 .jobs .accordion-group.ng-scope .accordion-heading .accordion-toggle{
-	background-image:url('/img/accordion-arrow-down.png');
-	background-repeat:no-repeat;
-	background-position: right center
+	/* background-image:url('/img/accordion-arrow-down.png'); */
+    background: no-repeat right center;
 }
 
 .jobs .accordion-group.ng-scope.active .accordion-heading .accordion-toggle {
-	background-image:url('/img/accordion-arrow-up.png');
-	background-repeat:no-repeat;
-	background-position: right center
+	/* background-image:url('/img/accordion-arrow-up.png'); */
+    background: no-repeat right center;
 
 }
 

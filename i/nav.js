@@ -116,7 +116,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 		if (cookie != null && !$rootScope.selected) {
 			$rootScope.select(cookie);
 		} else {
-			$rootScope.select($scope.companies[0]['company']);	
+			if ($scope.companies.length > 0) $rootScope.select($scope.companies[0]['company']);
 		}
 	}).except(function(ignore) {
 		$scope.nav = 'navBarLoggedOut';
