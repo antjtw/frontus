@@ -277,6 +277,7 @@ h2 {
 	line-height: 40px;
 	color: #F78D1E;
 	font-size: 20px;
+	font-weight: normal;
 }
 
 .topnav .nav  > li > a, .topnav .nav.nav-item  > li > a {
@@ -460,12 +461,12 @@ h2 {
 	z-index: 1000;
 }
 
-.notication.success {
+.notification.success {
 
 }
 
-.notication.fail {
-
+.notification.fail {
+	
 }
 
 #Login-form a:hover [data-icon] {

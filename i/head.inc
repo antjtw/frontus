@@ -6,10 +6,19 @@
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
 <!-- Fonts -->
 <link type="text/css" rel="stylesheet" href="/lib/fontawesome/css/font-awesome.css">
-<link rel="stylesheet" href="//f.fontdeck.com/s/css/Oj+Nln32FcMtkXgEzqsJznLXgf0/sharewave.com/35219.css" type="text/css" />
-<link rel="stylesheet" href="//f.fontdeck.com/s/css/Oj+Nln32FcMtkXgEzqsJznLXgf0/testing.sharewave.com/35219.css" type="text/css" />
+<script type="text/javascript">
+WebFontConfig = { fontdeck: { id: '35219' } };
 
-<link rel="stylesheet" href="//f.fontdeck.com/s/css/Oj+Nln32FcMtkXgEzqsJznLXgf0/localhost/35219.css" type="text/css" />
+(function() {
+  var wf = document.createElement('script');
+  wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+  '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+  wf.type = 'text/javascript';
+  wf.async = 'true';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(wf, s);
+})();
+</script>
 <!-- logo font -->
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
