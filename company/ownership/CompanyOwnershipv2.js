@@ -432,6 +432,8 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
   $scope.freqtypes = [];
   $scope.tf = ["yes", "no"]
 
+  $scope.extraPeople = [{"email":""}];
+
   // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
   SWBrijj.procm('ownership.get_issuetypes').then(function(results) {
     angular.forEach(results, function(result) {
@@ -1433,6 +1435,18 @@ $scope.saveTran = function(transaction) {
       dialogFade:true
       };
 
+  $scope.addRemove = function () {
+    var add = 0
+    angular.forEach($scope.extraPeople, function(people) {
+      if (people.email) {
+        add = add + 1
+      }
+    });
+    if (add == $scope.extraPeople.length) {
+      $scope.extraPeople.push({"email":""});
+    }
+  };
+
 
   $scope.emailCheck = function(bool, person){
     if (bool) {
@@ -1464,6 +1478,17 @@ $scope.saveTran = function(transaction) {
         });
       }
     });
+    angular.forEach($scope.extraPeople, function(people) {
+      if (people.email) {
+        SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function(data) {
+          SWBrijj.proc('ownership.update_investor_captable', people.email, true).then(function(data) {
+            console.log("success");
+          });
+        });
+      };
+    });
+    extraPeople = [];
+    extraPeople.push({'email':""});
   };
 };
 

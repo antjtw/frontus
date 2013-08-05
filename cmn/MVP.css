@@ -1708,8 +1708,8 @@ tr.rowSelected {
 	height:463px;
 }
 
-.capshareModal ul {
-	height:300px;
+.capshareModal ul{
+	height:205px;
 	margin: 0;
 	overflow: auto;
 	list-style: none;

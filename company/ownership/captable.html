@@ -20,6 +20,11 @@
               <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}" ng-disabled="row.emailkey" ng-model="row.email"></input>
             </li>
           </ul>
+          <ul class="extrasAdd">
+            <li ng-repeat="person in extraPeople">
+              <input ng-change="addRemove();" ng-model="person.email" placeholder="ADD NON SHAREHOLDER"></input>
+            </li>
+          </ul>
           <p>All shareholders will only see their personal holdings and a summary row containing everyone else, you can change this by visiting a specific shareholder's profile</p>
       </form>
     </div>
