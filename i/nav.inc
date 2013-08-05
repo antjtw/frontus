@@ -1,6 +1,7 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
+  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="row-fluid">
@@ -27,7 +28,7 @@
           <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>
         <ul class="nav pull-right nav-item">
-          <li class="dropdown" ng-show="selected.company">
+          <li style="display: none;" class="dropdown" ng-show="selected.company">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
@@ -36,7 +37,7 @@
             </ul>
           <li>
           <li class="dropdown" ng-hide="selected.company">
-            <a class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed">LOGIN</a>
+            <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>
       </div>
@@ -60,7 +61,5 @@
       </div>
     </div>
   </div>
-  <!--Notification Bar-->
-  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
 </div>
 

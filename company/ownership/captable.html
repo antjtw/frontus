@@ -10,11 +10,11 @@
       <form>
           <ul>
             <li>
-              <input disabled class="checkbox" type="checkbox"></input>
+              <input ng-model="selectAll" ng-change="turnOnShares();" class="checkbox" type="checkbox"></input>
               <span>Name</span>
               <span>Email</span>
             </li>
-            <li ng-repeat="row in rows">
+            <li ng-repeat="row in rows | shareList">
               <input class="checkbox" ng-model="row.send" type="checkbox"></input>
               <span class="capshareNames">{{row.name}}</span>
               <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}" ng-disabled="row.emailkey" ng-model="row.email"></input>
@@ -111,7 +111,7 @@
             <div class="pull-left namedtoggle">
               <p class="pull-left">DILUTION</p>
               <div class="pull-left onoffswitch">
-                <input type="checkbox" ng-change="dilution();" ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();" ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
                 <label class="onoffswitch-label" for="myonoffswitch">
                   <div class="onoffswitch-inner"></div>
                   <div class="onoffswitch-switch"></div>
@@ -131,66 +131,87 @@
 
       <div class="row-fluid capcontainer">
        <table class="captable tableView bodyText">
-          <span ng-hide="false">
-            <tr ng-hide="toggleView();" class="column-label">
-              <th colspan="2">Ownership</th>
-              <th><span class="longrow">Shareholder</span></th>
-              <th ng-repeat="one in issues">
-                <input placeholder="new security name" class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
-              </th>
-            </tr>
-            <tr ng-show="toggleView();" class="column-label">
-              <th colspan="2">Ownership</th>
-              <th><span class="longrow">Shareholder</span></th>
-              <th class="staticHeaders" ng-repeat="one in issues" ng-click="getActiveIssue(one)">
-                <span>{{one.issue}}</span>
-              </th>
-            </tr>
-            <!-- Editable rows -->
-            <tr ng-hide="toggleView();" ng-repeat="row in rows">
-              <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
-              <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
-              <td>
-                <span ng-switch on="row.nameeditable">
-                  <span ng-switch-default>
-                    <input placeholder="NAME" style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
-                  </span>
-                  <span ng-switch-when="0">
-                    <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
-                  </span>
+          <!-- Editable headers -->
+          <tr ng-hide="toggleView();" class="column-label">
+            <th colspan="2">Ownership</th>
+            <th><span class="longrow">Shareholder</span></th>
+            <th ng-repeat="one in issues">
+              <input placeholder="new security name" class="capEditHeaders" ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue"></input>
+            </th>
+          </tr>
+          <!-- Uneditable headers -->
+          <tr ng-show="toggleView();" class="column-label">
+            <th colspan="2">Ownership</th>
+            <th><span class="longrow">Shareholder</span></th>
+            <th class="staticHeaders" ng-repeat="one in issues" ng-click="getActiveIssue(one)">
+              <span>{{one.issue}}</span>
+            </th>
+          </tr>
+          <!-- Editable rows -->
+          <tr ng-hide="toggleView();" ng-repeat="row in rows">
+            <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></input></td>
+            <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+            <td>
+              <span ng-switch on="row.nameeditable">
+                <span ng-switch-default>
+                  <input placeholder="NAME" style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
                 </span>
-              </td>
-              <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
-                <span ng-switch on="row.editable">
-                  <span ng-switch-default>
-                    <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                    <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
-                  </span>
-                  <span ng-switch-when="0">
-                    <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
-                    <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
-                  </span>
+                <span ng-switch-when="0">
+                  <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)" ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"></input>
                 </span>
-              </td>
-            </tr>
-            <!-- Un-editable view -->
-            <tr ng-show="toggleView();" ng-repeat="row in rows">
-              <td><input disabled value="{{shareSum(row);}}"></input></td>
-              <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
-              <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
-              <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
-                  <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
-              </td>
-            </tr>
-          </span>
-          <tr class='tablefooter'>
+              </span>
+            </td>
+            <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
+              <span ng-switch on="row.editable">
+                <span ng-switch-default>
+                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                  <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>
+                </span>
+                <span ng-switch-when="0">
+                  <input disabled class="captablepair" placeholder="units" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'></input>
+                  <input disabled class="captablepair" placeholder="paid" ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}" ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'></input>  
+                </span>
+              </span>
+            </td>
+          </tr>
+          <!-- Un-editable view -->
+          <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows">
+            <td><input disabled value="{{shareSum(row);}}"></input></td>
+            <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+            <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+            <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+            </td>
+          </tr>
+          <!-- Un-editable diluted view -->
+          <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
+            <td><input disabled value="{{shareSum(row);}}"></input></td>
+            <td><input disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></input></td>
+            <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+            <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
+                <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+            </td>
+          </tr>
+          <!-- Undiluted footer -->
+          <tr ng-show="toggleDilution();" class='tablefooter'>
             <td><input disabled value="{{totalShares(rows);}}"></input></td>
             <td><input disabled value="100.00%"></input></td>
             <td></td>
             <td ng-repeat="one in issues">
               <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}"</input>
               <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}"</input>
+            </td>
+          </tr>
+          <!-- Diluted footer -->
+          <tr ng-hide="toggleDilution();" class='tablefooter'>
+            <td><input disabled value="{{totalShares(dilutedRows);}}"></input></td>
+            <td><input disabled value="100.00%"></input></td>
+            <td></td>
+            <td ng-repeat="one in issues">
+              <input class="captablepair" disabled value="{{colTotal(one.issue, dilutedRows, 'u');}}"</input>
+              <input class="captablepair" disabled value="{{colTotal(one.issue, dilutedRows, 'a');}}"</input>
             </td>
           </tr>
         </table>

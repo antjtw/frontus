@@ -448,8 +448,27 @@ h2 {
 	color: #C7C7C7;
 }
 
+
 #Login-form a:hover [data-icon] {
 	color: #A6A6A6;
+}
+
+/* Notifications */
+
+.notification {
+	position: fixed;
+	width: 100%;
+	text-align: center;
+	height: 50px;
+	z-index: 1000;
+}
+
+.notication.success {
+
+}
+
+.notication.fail {
+
 }
 
 
@@ -889,6 +908,24 @@ form.inputs {
 	width: 100px;
 }
 
+/* Placeholder text color */
+.docLibrary input::-webkit-input-placeholder {
+   color: #C7C7C7;
+}
+
+.docLibrary input:-moz-placeholder { /* Firefox 18- */
+   color: #C7C7C7;  
+}
+
+.docLibrary input::-moz-placeholder {  /* Firefox 19+ */
+   color: #C7C7C7;  
+}
+
+.docLibrary input:-ms-input-placeholder {  
+   color: #C7C7C7;  
+}
+
+
 .docLibrary input:disabled {
 	background: none;
 }
@@ -1269,6 +1306,12 @@ tr.rowSelected {
 
 .rowSelected > td {
 	background-color: transparent;
+}
+
+/* Status */
+
+.statusPop .popover .popover-content > form {
+	margin: 0 0 0 0;
 }
 
 /* Dynamic shifting of spans */

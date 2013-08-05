@@ -15,6 +15,18 @@ owner.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+owner.filter('shareList', function() {
+  return function(rows) {
+    var returnrows = []
+    angular.forEach(rows, function(row) {
+      if (row.emailkey == null && row.name != "") {
+        returnrows.push(row);
+      }
+    })
+    return returnrows;
+  };
+});
+
 
 // Popover directive. Not yet fully usable as it strips out the ng-click.
 owner.directive('popOver', function ($compile) {
@@ -1082,11 +1094,11 @@ $scope.saveTran = function(transaction) {
   else {
         if (transaction.type == "options" && transaction.units < 0) {
           transaction.units = transaction.unitskey;
-          console.log("!!!Need a Notification for negative option transaction!!!");
+          $rootScope.notification.show("fail", "Cannot have a negative number of shares");
         }
         else if (transaction.amount < 0) {
           transaction.amount = transaction.amountkey;
-          console.log("!!!Need a Notification for negative amount transaction!!!");
+          $rootScope.notification.show("fail", "Cannot have a negative amount for options");
         }
         var d1 = transaction['date'].toUTCString();
         if (transaction['tran_id'] == undefined) {
@@ -1262,7 +1274,18 @@ $scope.saveTran = function(transaction) {
       return true;
     }
     else {
+      $scope.dilutionSwitch = true;
       $scope.captablestate = 0
+      return false;
+    }
+  };
+
+  // Toggles editable to view
+  $scope.toggleDilution = function() {
+    if ($scope.dilutionSwitch) {
+      return true;
+    }
+    else {
       return false;
     }
   };
@@ -1277,9 +1300,26 @@ $scope.saveTran = function(transaction) {
     }
   };
 
+
+  // Generates the diluted rows
   $scope.dilution = function() {
     $scope.dilutedRows = []
-    $scope.captablestate = 2
+    angular.forEach($scope.rows, function(row) {
+      if (row.name != undefined) {
+        var something = null;
+        var temprow = {"name":row.name, "email":row.email};
+        angular.forEach($scope.issuekeys, function(issue) {
+          if (row[issue].a > 0) {
+            temprow[issue] = row[issue];
+            something = true;
+          }
+        });
+        if (something) {
+          $scope.dilutedRows.push(temprow);
+        };
+      };
+    })
+    console.log($scope.dilutedRows)
   }
 
 
@@ -1408,10 +1448,16 @@ $scope.saveTran = function(transaction) {
     };
   };
 
+  $scope.turnOnShares = function() {
+    angular.forEach($scope.rows, function(row) {
+      row.send = $scope.selectAll;
+    });
+  };
+
   $scope.sendInvites = function () {
     angular.forEach($scope.rows, function(row) {
       if (row.send == true) {
-        SWBrijj.procm("ownership.share_captable", row.email, row.name).then(function(data) {
+        SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function(data) {
           console.log(data);
           row.send = false;
           row.emailkey = row.email;
@@ -1734,7 +1780,7 @@ var statusController = function($scope, SWBrijj) {
               if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                 if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                    $scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
+                    $scope.activity[ik].event_time = $scope.activityDetail[j].whendone;
                   }
               }
           }
@@ -1785,7 +1831,7 @@ var statusController = function($scope, SWBrijj) {
        return 0
      }
      else {
-        return -card.whendone
+        return -card.event_time
      }
   };
 

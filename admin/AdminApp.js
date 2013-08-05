@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('AdminApp', ['brijj']);
+var app = angular.module('AdminApp', ['ui.bootstrap', 'ui.event','brijj']);
 
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
