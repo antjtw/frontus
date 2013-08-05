@@ -28,7 +28,16 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
         alert('OK');
         document.location.href="/login";
       });
-    }  
+    };  
+
+    $scope.fieldCheck = function() {
+      if ($scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };    
 };
 
 function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
@@ -48,6 +57,14 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
       });
     }
 
+    $scope.fieldCheck = function() {
+      if ($scope.name && $scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };
 };
 
 function initPage($scope, x, row) {

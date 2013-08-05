@@ -1,15 +1,18 @@
 <!DOCTYPE HTML>
 <html ng-app="index">
 	<head>
-		<title>Sharewave Home</title>
+		<title>Sharewave</title>
 		<!--{{/i/head.inc}}-->		
 		<!--{{/i/nav.inc}}-->	
+      	<!--{{/i/public.inc}}-->
 <!-- 
 		Put in the scroller on the hero to be relative to the image and not to th bottom of the screen
 		Hook up the invite
 		Fix carousel next & back
 		Add carret to the buttons on carousel
- -->
+ -->	
+
+
  		<script src="index.js"></script>
 		<script>
 			$(document).ready(function(){
@@ -157,12 +160,14 @@
 								<div class="spacer30"></div>					
 								<form name="myForm">
 									<fieldset>
-										<input type="email" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email" required ><br>
-										<input type="text" name="fullname" placeholder="FULL NAME" ng-model="user.name" required><br>
-										<input type="text" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" required><br>
+										<input type="email" class="loginInput" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email"  ><br>
+										<input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" ><br>
+										<input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" ><br>
 										<div class="spacer40"></div>
-										<button class="button" disabled>Request Invitation</button>
-										<button class="button greenButton" id="submitInvite" ng-click="toggle = !toggle; companyRequest();">Request Invitation</button>
+										<button type="submit" class="button greenButton" id="submitInvite" ng-disabled="fieldCheck()" ng-click="toggle = !toggle; companyRequest();" >Request Invitation</button>
+
+
+								
 									</fieldset>
 								</form>
 							</div>
@@ -170,14 +175,14 @@
 								<h2>Thanks for signing up to use Sharewave!</h2>
 								<p>We appreciate your interest, and we're excited to get you on board as soon as possible.</p>
 								<div class="spacer30"></div>
-								<p>Spread the word for your fellow entrepreneurs:</p>
-								<a href="http://www.twitter.com" target="_blank">
+								<p>Spread the word to your fellow entrepreneurs:</p>
+								<a href="https://twitter.com/intent/tweet?text=Check%20out%20Sharewave%2C%20the%20best%20way%20for%20private%20companies%20to%20manage%20their%20shareholders&via=sharewaveteam&url=http://bit.ly/shwvtw&original_referer=http://sharewave.com/" target="_blank">
 									<button class="button socialbtn twitter" type="button"><span data-icon="&#xe035;" aria-hidden="true"></span><span>Share</span></button>
 								</a>
-								<a href="http://www.facebook.com" target="_blank">
+								<a href="https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb" target="_blank">
 									<button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>	
 								</a>
-								<a href="http://www.linkedin.com" target="_blank">
+								<a href="http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+The+best+way+to+manage+your+shareholders&source=Sharewave&summary=Spend%20more%20time%20running%20your%20business%20and%20less%20time%20on%20it%27s%20administration%2C%20no%20matter%20if%20you%20have%20one%20investor%20or%20one%20thousand." target="_blank">
 									<button class="button socialbtn linkedin" type="button"><span data-icon="&#xe036;" aria-hidden="true"></span><span>Share</span></button>
 								</a>
 								<div class="spacer110"></div>

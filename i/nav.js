@@ -150,4 +150,13 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			if (callback) { callback(); }
 		}, 5000);
 	};
+
+	$scope.fieldCheck = function() {
+      if ($scope.username && $scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };
 }

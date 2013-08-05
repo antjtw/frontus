@@ -40,6 +40,15 @@ function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
         }
     });
     }
+
+    $scope.fieldCheck = function() {
+      if ($scope.username && $scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };
     
     // could also add that the password is not long enough?
     $scope.loginDisabled = function() {
