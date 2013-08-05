@@ -13,7 +13,8 @@
                 <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
                 <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
                 <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
-                <br><a href="/login/forgot" >Forgotten Password</a>             
+                <br>
+                <span class="forgotLog"><a href="/login/forgot" >Forgotten Password</a></span>             
               </fieldset>
             </form>
           </div>

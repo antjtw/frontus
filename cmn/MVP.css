@@ -377,7 +377,7 @@ h2 {
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	box-shadow: none;
-	-webkit-box-shadow: none;
+	-webkit-box-shadow: nowellne;
 	-moz-box-shadow: none;
 	padding: 0 0 0 0;
 	margin-top: 0;
@@ -736,6 +736,12 @@ form.inputs {
 
 .line{
 	border-top: 1px solid #a6a6a6;
+}
+
+.forgotLog {
+	display: inline-block;
+	float: right;
+	margin-right: 16.7%;
 }
 
 /* Password Reset */
@@ -2041,10 +2047,23 @@ margin-top: 0.9em;
 }
 
 .home .btn-success {
-
+	position: relative;
+	display: block;
 	color: #666666;
 	background-color: #f1f1f1;
+}
 
+.home .btn-success:before {
+	content: " "; 
+	position: absolute;
+	top:-10px;
+	right: 78px;
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	
+	border-bottom: 10px solid #f1f1f1;
 }
 
 .home .even {
