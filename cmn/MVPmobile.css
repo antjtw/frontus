@@ -54,24 +54,22 @@
 		min-height: 0px;
 	}
 
-	.mobileEdge {
-		padding: 0 5% 0 5%;
-	}
-
-	.mobileEdge > div > div {
-		min-height: 0px !important;
-	}
-
-	.mobileEdge > div > div > img {
-		width: 40%;
-	}
-
 	.home #register{
 		width: 80%;
 		padding: 0 10% 0 10%;
 	}
 
 	.home input {
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
 		width: 100%;
+	}
+
+	.row-fluid.iconMobile > div:first-child {
+		width:40%
+	}
+
+	.row-fluid.iconMobile > div:last-child {
+		width:60%
 	}
 }
