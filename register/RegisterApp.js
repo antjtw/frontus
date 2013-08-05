@@ -47,6 +47,7 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
         document.location.href="/login";
       });
     }
+
 };
 
 function initPage($scope, x, row) {
