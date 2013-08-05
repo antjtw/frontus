@@ -25,8 +25,14 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
 
     $scope.doActivate = function() {
       SWBrijj.doCompanyActivate($scope.email.toLowerCase(), $scope.code, $scope.password, false).then(function(x) {
-        alert('OK');
-        document.location.href="/login";
+        SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
+          if(x) {
+            document.location.href = x;
+            console.log("redirecting to: "+x);
+          } else {
+            document.location.href = '/login';
+          }
+        });
       });
     };  
 
@@ -51,14 +57,20 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     });
 
     $scope.doActivate = function() {
-      SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(x) {
-        alert('OK');
-        document.location.href="/login";
+      SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(y) {
+        SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
+          if(x) {
+            document.location.href = x;
+            console.log("redirecting to: "+x);
+          } else {
+            document.location.href = '/login';
+          }
+        });
       });
     }
 
     $scope.fieldCheck = function() {
-      if ($scope.name && $scope.password) {
+      if ($scope.name && $scope.password && $scope.name.length > 1) {
         return false;
       }
       else {
