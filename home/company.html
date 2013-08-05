@@ -10,15 +10,17 @@
         <td>
             <table>
               <tr><td><a href="/company/profile/view?id={{active.email}}">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-                  <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
+              <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
               </table>
           </td>
         </tr>
       </table>
+      <div style="display: none;" ng-show="noActivity">There is no activity yet.</div>
     </div>
   </div>
 
   <div class="sidebar span4">
-    <h2>Notifications</h2>
+    <h2>Needs Attention</h2>
+    <div style="display: none;" ng-show="notifications.length != 0">Nothing here yet.</div>
   </div>
 </div>

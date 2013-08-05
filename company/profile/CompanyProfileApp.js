@@ -182,8 +182,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         }
       }
     });
-    console.log('data', data);
     $scope.activity = data;
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
@@ -292,6 +294,9 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {

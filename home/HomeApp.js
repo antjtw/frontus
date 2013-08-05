@@ -16,10 +16,10 @@ app.controller("MainController", function($scope, $location) {
 } );
 
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
-  
-  // SWBrijj.tblm('account.my_company').then(function(x) {
-  //   $scope.company = x[0]["name"];
-  // });
+
+  SWBrijj.tblm('account.my_company', ['name']).then(function(x) {
+    $scope.company = x[0]["name"];
+  });
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
@@ -77,7 +77,9 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
           });
         }
     });
-    console.log(data);
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
@@ -136,7 +138,9 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
-    console.log(data);
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
