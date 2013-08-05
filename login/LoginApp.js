@@ -77,6 +77,7 @@ function ForgotCtrl($scope, $location, SWBrijj) {
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         $location.path("/sent");
       }).except(function(x) { 
+        console.log(x);
         $scope.fed = "There was an error. Please try again later."
       });
     }
