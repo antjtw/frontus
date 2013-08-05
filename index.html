@@ -74,13 +74,13 @@
 						<div class="span10 offset1"> 
 							<div class="row-fluid">
 								<div class="span4 text-center">
-									<p>They get information on their time</p>
+									<p>Shareholders get info<br>on their time</p>
 								</div>
 								<div class="span4 text-center">
-									<p>Your time is focused on your business</p>
+									<p>Your time is focused<br>on your business</p>
 								</div>
 								<div class="span4 text-center">
-									<p>A complete audit trail tracks everything </p>
+									<p>A complete audit trail<br>tracks everything </p>
 								</div>
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 				<div class="spacer100"></div>
 			</div>
 
-			<div class="spacer130 hidden-phone"></div>
+			<div class="spacer110 hidden-phone"></div>
 			<div class="spacer70 visible-phone"></div>
 			<div class="container">			
 				<div class="row-fluid">
@@ -119,13 +119,11 @@
 						      <img ng-src="{{slide.image}}" style="margin:auto;">
 						    </slide>
 						  </carousel>
-						  <div class="row-fluid">
-							<div class="span8 offset2">						    
+							<div class="carouseltabs">						    
 								<div class="span4 text-center slideOptions" ng-repeat="slide in slides">
 							          <a class="btn btn-mini" ng-class="{'btn-info': !slide.active, 'btn-success': slide.active}" ng-disabled="slide.active" ng-click="slide.active = true"><strong>{{slide.headline}}</strong><br>{{slide.text}}</a>          
 							    </div>
 							</div>
-						  </div>
 						</div>
 					</div>
 				</div>
@@ -214,7 +212,7 @@
 					<div class="span10 offset1 text-center">
 						 <div id="CompanyRegister-form">
 						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
-								<h2>Request Invitation</h2>
+								<h2>Request Invite</h2>
 								<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>					
 								<div class="spacer30"></div>					
 								<form name="myForm">

@@ -146,16 +146,16 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 h1 {
 	font-family: 'FS Elliot Web Thin', sans-serif !important;
-	font-size: 36px !important;
-	font-weight: normal !important;	
+	font-size: 36px;
+	font-weight: normal;	
 	color: #1e2d3d;
 }
 
 h2 {
 	font-family: 'FS Elliot Web Light', sans-serif !important;
-	font-size: 24px !important;
+	font-size: 24px;
 	line-height:21px;
-	font-weight: normal !important;
+	font-weight: normal;
 	color: #1e2d3d;	
 }
 
@@ -466,7 +466,7 @@ h2 {
 }
 
 .notification.fail {
-	
+
 }
 
 #Login-form a:hover [data-icon] {
@@ -743,6 +743,10 @@ form.inputs {
 	display: inline-block;
 	float: right;
 	margin-right: 16.7%;
+}
+
+.forgotLog > a {
+	color: #0088cc;
 }
 
 /* Password Reset */
@@ -2005,6 +2009,7 @@ margin-top: 0.9em;
 	color: #666666;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
+	line-height: 22px;
 	font-weight: normal;
 }
 
@@ -2020,6 +2025,10 @@ margin-top: 0.9em;
 	font-size: 14px;
 	font-weight: normal;
 	border: 0px;
+	text-shadow: none;
+	-webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
 	
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -2052,6 +2061,7 @@ margin-top: 0.9em;
 	display: block;
 	color: #666666;
 	background-color: #f1f1f1;
+	opacity: 1;
 }
 
 .home .btn-success:before {
@@ -2133,6 +2143,11 @@ margin-top: 0.9em;
 	border: 1px solid #E3E3E3;
 	width: 85%;
 	margin: auto;
+}
+
+.carouseltabs {
+	width:85%; 
+	margin:auto;
 }
 
 /* Team Page */
