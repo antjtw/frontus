@@ -1,6 +1,7 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
+  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="row-fluid">
@@ -63,7 +64,5 @@
       </div>
     </div>
   </div>
-  <!--Notification Bar-->
-  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
 </div>
 

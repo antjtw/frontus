@@ -54,11 +54,11 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
-                <td ng-click='modalUp(person);'>{{person.name}}</td>
+                <td ng-click="(opendetails(person.email))">{{person.name}}</td>
                 <td ng-click="(opendetails(person.email))">{{person.email}}</td>
        			    <td ng-click="(opendetails(person.email))">{{person.fullview}}</td>
        		     	<td ng-click="(opendetails(person.email))">{{person.viewed}}</td>
-                <td class="button"><span pop-over email="person.email" data-icon="&#xe011;" aria-hidden="true"></td>
+                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
                     <td colspan="2">
