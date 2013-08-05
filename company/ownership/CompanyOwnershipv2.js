@@ -1478,17 +1478,19 @@ $scope.saveTran = function(transaction) {
         });
       }
     });
-    angular.forEach($scope.extraPeople, function(people) {
-      if (people.email) {
-        SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function(data) {
-          SWBrijj.proc('ownership.update_investor_captable', people.email, true).then(function(data) {
-            console.log("success");
+    if ($scope.extraPeople.length > 0) {
+      angular.forEach($scope.extraPeople, function(people) {
+        if (people.email) {
+          SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function(data) {
+            SWBrijj.proc('ownership.update_investor_captable', people.email, true).then(function(data) {
+              console.log("success");
+            });
           });
-        });
-      };
-    });
-    extraPeople = [];
-    extraPeople.push({'email':""});
+        };
+      });
+      $scope.extraPeople = [];
+      $scope.extraPeople.push({'email':""});
+    }
   };
 };
 

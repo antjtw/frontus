@@ -2013,6 +2013,28 @@ margin-top: 0.9em;
 	font-weight: normal;
 }
 
+.home .videoRow {
+	text-align: center;
+	padding: 15px 0 15px 0;
+}
+
+.home .videoRow > h2 {
+	margin-left: 10px;
+	display: inline;
+}
+
+.home .videoRow .arrow-right {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 10px;
+	width: 0; 
+	height: 0; 
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	
+	border-left: 30px solid #1ABC96;
+}
+
 .home .paginator {
 	position:absolute;
     bottom:0px;
@@ -2087,10 +2109,19 @@ margin-top: 0.9em;
 	text-transform:capitalize;	
 	border: 0;
 	font-size: 14px;
-	background-color: #1ABC96;
 	font-family: 'FS Elliot Web Light', sans-serif;
 	letter-spacing: 1px;
 
+}
+
+.home .button.greenButton {
+	background-color: #1ABC96;
+}
+
+.home .button.blueButton {
+	margin-left: 15px;
+	background-color:#3498db;
+	width: 180px;
 }
 
 .home input {
@@ -2217,7 +2248,7 @@ margin-top: 0.9em;
 /* Jobs */
 
 .jobs .accordion-heading .accordion-toggle {
-	padding: 0 0 0 10px;
+	padding: 0 0 0 0;
 }
 
 .jobs .accordion-group.ng-scope .accordion-heading .accordion-toggle{

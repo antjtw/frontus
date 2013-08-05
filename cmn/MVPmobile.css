@@ -12,6 +12,10 @@
 		padding : 0;
 	}
 
+	.minimumGap {
+	min-height:50px;
+	}
+
 	/* Home page Styling */
 	.navbounder {
 
@@ -71,5 +75,13 @@
 
 	.row-fluid.iconMobile > div:last-child {
 		width:60%
+	}
+
+	/* Team Page Styling */
+
+	.container.static {
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		padding: 20px 20px 0 20px;
 	}
 }
