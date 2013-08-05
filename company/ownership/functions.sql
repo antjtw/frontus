@@ -202,9 +202,9 @@ BEGIN
   		template = replace(template, '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;
     INSERT INTO ownership.audit (company, email, sender) VALUES (NEW.company, NEW.email, NEW.sender);
-	template = replace(template, '{{company}}', NEW.company);
+	template = replace(template, '{{company}}', (SELECT name FROM account.company_table WHERE company = NEW.company));
   template = replace(template, '{{inviter}}', fullname);
-	perform mail.send_mail(NEW.email, concat(NEW.company, '''s captable has been shared with you!'), template);
+	perform mail.send_mail(NEW.email, concat(NEW.company, '''s cap table has been shared with you!'), template);
   RETURN NEW;
 END $$;
 CREATE TRIGGER share_captable INSTEAD OF INSERT ON ownership.company_audit FOR EACH ROW EXECUTE PROCEDURE ownership.share_captable();
