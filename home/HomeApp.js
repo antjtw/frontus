@@ -30,7 +30,7 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = " added ";
           x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
@@ -95,7 +95,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     angular.forEach(data, function(x) {
       x.name = "You ";
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = " added an ";
           x.target = "administrator";

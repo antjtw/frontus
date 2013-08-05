@@ -16,7 +16,7 @@ app.config(function($routeProvider, $locationProvider){
     });
 
 function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
-  if ($routeParams.logout == 1) {
+  if ($routeParams.logout) {
     $rootScope.notification.show('success', 'You have successfully logged out', function() {
       // $location.search('logout', null); $scope.$apply();
     });

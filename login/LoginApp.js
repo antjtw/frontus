@@ -18,11 +18,16 @@ app.config(function($routeProvider, $locationProvider){
 
 
 //Controller for the Login Page
-function LoginCtrl($scope, $location, SWBrijj){
+function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     $scope.username = "";
     $scope.password = "";
-    $scope.showError = false;
+    if ($routeParams.error) {
+      $scope.showError = true;
+      $scope.username = $routeParams.error;
+    } else {
+      $scope.showError = false;
+    }
     $scope.doLogin = function() {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
       if(x) {
@@ -49,7 +54,7 @@ function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     SWBrijj.logout().then(function(x) {
-      document.location.href='/?logout=1';
+      document.location.href='/?logout';
     });
   }
 }
@@ -78,7 +83,8 @@ function ForgotCtrl($scope, $location, SWBrijj) {
         $location.path("/sent");
       }).except(function(x) { 
         console.log(x);
-        $scope.fed = "There was an error. Please try again later."
+        // $scope.fed = "There was an error. Please try again later."
+        $location.path("/sent");
       });
     }
 };

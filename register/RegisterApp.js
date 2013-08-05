@@ -35,6 +35,7 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     $scope.code = $routeParams.code;
     SWBrijj.getInvitation($scope.code).then(function(x) {
       initPage($scope, x);
+      console.log(x);
       if ($scope.activated) {
         document.location.href="/login";
       }
