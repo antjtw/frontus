@@ -197,7 +197,7 @@ BEGIN
   		template = replace(template, '{{link}}', concat('http://', domain, '/register/people?code=' , code));
   		-- update account.tracking set when_invitation_sent = localtimestamp where email=NEW.email;
     	INSERT INTO account.tracking_invitation (email, when_invitation_sent) VALUES (NEW.email, localtimestamp);
-  		INSERT INTO account.my_investor_invitation (email, inviter, company, code, role) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor');
+  		INSERT INTO account.my_investor_invitation (email, inviter, company, code, role, redirect) VALUES (NEW.email, NEW.sender, NEW.company, code, 'investor', '/investor/ownership/');
   	ELSE
   		template = replace(template, '{{link}}', concat('http://', domain, '/investor/ownership/' , NEW.company));
   	END IF;

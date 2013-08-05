@@ -28,7 +28,6 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
         SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
           if(x) {
             document.location.href = x;
-            console.log("redirecting to: "+x);
           } else {
             document.location.href = '/login';
           }
@@ -52,18 +51,21 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
       initPage($scope, x);
       console.log(x);
       if ($scope.activated) {
-        document.location.href="/login";
+        if ($scope.redirect) {
+          document.location.href = $scope.redirect;
+        } else {
+          document.location.href="/login";
+        }
       }
     });
 
     $scope.doActivate = function() {
       SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(y) {
         SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
-          if(x) {
-            document.location.href = x;
-            console.log("redirecting to: "+x);
+          if ($scope.redirect) {
+            document.location.href = $scope.redirect;
           } else {
-            document.location.href = '/login';
+            document.location.href = x;
           }
         });
       });
