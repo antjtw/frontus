@@ -3,6 +3,7 @@
 
 html, body {
   height: 100% !important;
+  width: 100%;
   background-color:#FFFFFF;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -10,15 +11,6 @@ html, body {
 body {
   overflow-y: scroll;	
   overflow-x: hidden;
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5){
-	html,
-	body {
-	    width:100%;
-	    overflow-x:hidden;
-  }
-
 }
 
 
