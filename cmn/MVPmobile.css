@@ -42,6 +42,11 @@
 		width: 100%;
 	}
 
+	.videoRow > img {
+		height: 80%;
+		width: 80%;
+	}
+
 	.videoRow > h2 {
 		font-size: 18px;
 	}
