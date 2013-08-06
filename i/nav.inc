@@ -4,19 +4,21 @@
   <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
-      <div class="row-fluid">
-        <div class="span8 offset2 text-center" >
-          <div id="Login-form" class="navlogin" >
-            <form>
-              <fieldset>
-                <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
-                <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
-                <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
-                <br>
-                <span class="forgotLog"><a href="/login/forgot" >Forgotten Password</a></span>             
-              </fieldset>
-            </form>
+      <div class="container">
+        <div class="row-fluid">
+          <div class="span12 text-center" >
+            <div id="Login-form" class="navlogin" >
+              <form>
+                <fieldset>
+                  <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                  <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
+                  <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
+                  <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
+                  <br>
+                  <span class="forgotLog"><a href="/login/forgot" >Forgot Password?</a></span>             
+                </fieldset>
+              </form>
+            </div>
           </div>
         </div>
       </div>  

@@ -2174,6 +2174,7 @@ margin-top: 0.9em;
 	
 	padding-top: 10px;
 	padding-bottom: 10px;
+	height: 84px;
 }
 
 .home .btn-mini strong {
@@ -2204,6 +2205,7 @@ margin-top: 0.9em;
 	color: #8D8D8D;
 	background-color: #f1f1f1;
 	opacity: 1;
+	height: 84px;
 }
 
 .home .btn-success:before {
