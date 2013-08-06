@@ -13,7 +13,9 @@
      	 </div>
        <div class="row-fluid" id="copyrightBar">
         <a href="/privacy"><span class="copyright pull-left">LEGAL INFORMATION</span></a>
-       	<span class="copyright pull-right">COPYRIGHT 2013 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
+       	<span class="copyright pull-right hidden-phone">COPYRIGHT 2013 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
+        <br class="visible-phone">
+        <span class="copyright pull-left visible-phone">COPYRIGHT 2013 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
        </div>
     </footer>
   </div>
