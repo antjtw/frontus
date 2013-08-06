@@ -22,7 +22,7 @@ function hidePopover() {
 }
 
 function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
-  
+
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
   };
