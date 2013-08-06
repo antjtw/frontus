@@ -5,8 +5,7 @@
 		<meta id="viewport" name="viewport" content ="width=device-width, initial-scale=1.0"/>
 
 		<!--{{/i/head.inc}}-->	
-		<link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">	
-		<!--{{/i/nav.inc}}-->	
+		<link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">		
       	<meta name="description" content="The best way to manage your shareholders">
 <!-- 
 		Put in the scroller on the hero to be relative to the image and not to th bottom of the screen
@@ -33,6 +32,8 @@
 	</head>
 
 	<body>
+		<!--{{/i/google.inc}}-->
+		<!--{{/i/nav.inc}}-->
 		<div class="wrap home" ng-controller="IndexCtrl">
 
 			<div class="videoModal" modal="video" close="close()" options="opts">			    
@@ -65,9 +66,9 @@
 
  			<div class="row-fluid">
  				<div class="videoRow">
- 					<img ng-click="modalUp();" src="/img/ike.png">
- 					<h2 ng-click="modalUp();">Watch the Video</h2>
- 					<span ng-click="modalUp();" class="arrow-right"></span>
+ 					<img onClick="dataLayer.push({'eventCategory' : 'homepage', 'eventAction' : 'video', 'eventLabel': 'play'});" ng-click="modalUp();" src="/img/ike.png">
+ 					<h2 onClick="dataLayer.push({'eventCategory' : 'homepage', 'eventAction' : 'video', 'eventLabel': 'play'});" ng-click="modalUp();">Watch the Video</h2>
+ 					<span onClick="dataLayer.push({'eventCategory' : 'homepage', 'eventAction' : 'video', 'eventLabel': 'play'});" ng-click="modalUp();" class="arrow-right"></span>
  				</div>
  			</div>
 
