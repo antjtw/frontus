@@ -16,18 +16,19 @@ angular.module('draggable', []).
         replace: true,
         transclude: true,
         scope: true,
-        template: '<div>' +
+        template: '<div class="sticky">' +
+            '<ul>'+
+            '<li ng-click="dragMe($event)"><span data-icon="&#xe043;"</span></li>'+
+            '<li ng-show="growable" ng-click="biggerMe($event)"><span data-icon="&#xe041;" aria-hidden="true"/></li>'+
+            '<li ng-show="growable" ng-click="smallerMe($event)"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
+            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li></ul>'+
             '<span style="display:inline-block" ng-transclude></span>' +
-            '<ul style="float:right; display:inline-block; list-style-type:none; cursor:pointer">'+
-            '<li ng-click="closeMe($event)" style="line-height:14px"><i class="icon-remove-sign"></i></li>'+
-            '<li ng-click="biggerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-up"></i></li>'+
-            '<li ng-click="smallerMe(element,$event)" style="line-height:14px"><i class="icon-font"></i><i class="icon-arrow-down"></i></li></ul>' +
             '</div>',
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
           document.querySelector('.docPanel').appendChild(elm[0]);
-          scope.page = scope.currentPage;
-          elm.page = scope.currentPage;
+          scope.page = scope.restoredPage || scope.currentPage;
+          elm.page = scope.page;
           scope.$parent.notes.push(elm);
           elm.css({position: 'absolute'});
         },
@@ -40,15 +41,20 @@ angular.module('draggable', []).
                  // $element.prepend(clone);
                });
       */
+               var dragicon = $element.find("ul>li:first-child");
+
+               /* This is the drag - code -- its been moved to work on the drag widget */
                $scope.mousedown = function ($event) {
-                 if ($event.target.tagName == 'DIV') {
+                 // if ($event.target.tagName == 'DIV') {
                    $scope.initdrag($event);
                    return false;
-                 } else {
-                   return true;
-                 }
+                 // } else {
+                 //   return true;
+                 // }
                };
-               $element.bind('mousedown', $scope.mousedown);
+
+               dragicon.bind('mousedown', $scope.mousedown);
+
                $scope.mousemove = function ($event) {
                  var dx = $event.clientX - $scope.initialMouseX;
                  var dy = $event.clientY - $scope.initialMouseY;
@@ -62,6 +68,7 @@ angular.module('draggable', []).
                $scope.mouseup = function () {
                  $document.unbind('mousemove', $scope.mousemove);
                  $document.unbind('mouseup', $scope.mouseup);
+                 return false;
                };
 
                $scope.initdrag = function(ev) {
@@ -74,7 +81,21 @@ angular.module('draggable', []).
                  $scope.mousemove(ev);
                  $document.bind('mousemove', $scope.mousemove);
                  $document.bind('mouseup', $scope.mouseup);
-               }
+               };
+
+               $scope.biggerMe = function (ev) {
+                 var elem = $element.find('textarea');
+                 var fs = elem.css('font-size');
+                 elem.css( 'font-size', parseInt(fs.substr(0, fs.length-2)) + 2);
+                 $scope.fixBox(elem[0]);
+               };
+
+               $scope.smallerMe = function (ev) {
+                 var elem = $element.find('textarea');
+                 var fs = elem.css('font-size');
+                 elem.css( 'font-size', parseInt(fs.substr(0, fs.length-2)) - 2);
+               };
+
 
              }]
       };
@@ -158,9 +179,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           if (annot[1] == 'check') {
             sticky = $scope.newCheckX(annot[0][0]);
           } else if (annot[1] == 'text') {
-            sticky = $scope.newBoxX(annot[0][0],annot[2][0]);
+            sticky = $scope.newBoxX(annot[0][0],annot[2][0], annot[3]);
+          } else if (annot[1] == 'canvas') {
+            sticky = $scope.newPadX(annot[0][0], annot[2][0]);
           }
-          $scope.notes.push(sticky);
+          // the notes were pushed in the newXXX function
           sticky.css({
             top:  annot[0][4],
             left: annot[0][3]
@@ -186,14 +209,6 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     }
   };
 
-  $scope.biggerMe = function (elem, ev) {
-    alert("make me bigger");
-  };
-
-  $scope.smallerMe = function (elem, ev) {
-    alert("make me smaller");
-  };
-
   $scope.nextPage = function(value) { 
     if ($scope.currentPage < $scope.docLength) {
       $scope.currentPage = value+1; 
@@ -217,33 +232,40 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     return result;
   };
   $scope.newBox = function (event) {
-    var aa = $scope.newBoxX($scope.currentPage, '');
+    var aa = $scope.newBoxX($scope.currentPage, '', null);
     aa.scope().initdrag(event);
   };
 
-  $scope.newBoxX = function(page, val) {
+  $scope.fixBox = function(bb) {
+    var pad;
+    if (bb.clientHeight < bb.scrollHeight) {
+      pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb,'padding-bottom');
+      bb.style.height = (bb.scrollHeight - pad) + "px";
+    }
+    if (bb.clientWidth < bb.scrollWidth) {
+      pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb,'padding-right');
+      bb.style.width = (bb.scrollWidth - pad) +"px";
+    }
+  }
+  $scope.newBoxX = function(page, val, style) {
+    $scope.restoredPage = page;
     var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable" >'+
-        '<textarea ng-model="annotext" class="row-fluid" type="textarea" style="white-space: nowrap; overflow: hidden; height: 20px;"/></div>')($scope);
+        '<textarea ng-model="annotext" class="row-fluid"/></div>')($scope);
     aa.scope().ntype='text';
+    aa.scope().growable = true; // for the growable icons
     var bb = aa[0].querySelector("textarea");
 /*    window.setInterval( function() {
        if (bb.clientHeight < bb.scrollHeight) bb.style.height = (bb.scrollHeight+5) +"px";
        if (bb.clientWidth < bb.scrollWidth) bb.style.width = (bb.scrollWidth + 5) +"px";
     }, 300);
     */
-    bb.addEventListener('input', function(e) {
-      var pad;
-      if (bb.clientHeight < bb.scrollHeight) {
-        pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb,'padding-bottom');
-        bb.style.height = (bb.scrollHeight - pad) + "px";
-      }
-      if (bb.clientWidth < bb.scrollWidth) {
-        pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb,'padding-right');
-        bb.style.width = (bb.scrollWidth - pad) +"px";
-      }
-    }, false);
-    aa.scope().page = page;
-    aa.find('textarea').scope().annotext = val;
+    bb.addEventListener('input', function(e) { $scope.fixbox(bb); });
+    var ta = aa.find('textarea');
+    ta.scope().annotext = val;
+    ta.width( ta.width() );
+    if (style) {
+      aa.find('textarea').css('fontSize',style[0]);
+    }
     return aa;
   };
 
@@ -252,26 +274,55 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     aa.scope().initdrag(event);
   };
   $scope.newCheckX = function (page) {
+    $scope.restoredPage = page;
     var aa = $compile('<div draggable ng-show="currentPage==' + page + '"	 class="row-fluid draggable">' +
-        '<i class="button icon-ok icon-2x" style="background-color:white"></i>' +
+        '<span class="check-annotation" data-icon="&#xe023;"></i>' +
         '</div>')($scope);
     aa.scope().ntype = 'check';
-    aa.scope().page = page;
+    return aa;
+  };
+  $scope.newDate = function(event) {
+    var d = new Date();
+    var fmtdat = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
+    var aa = $scope.newBoxX($scope.currentPage, fmtdat);
+    aa.scope().initdrag(event);
     return aa;
   };
 
-  $scope.newPad = function(event) {
-    var aa = $compile('<div draggable ng-show="currentPage=='+$scope.currentPage+'"	 class="row-fluid draggable">'+
-        '<canvas style="background-color:white"></canvas></div>')($scope);
+  $scope.newPad = function (event) {
+    var aa = $scope.newPadX($scope.currentPage, []);
     aa.scope().initdrag(event);
+  };
+  $scope.newPadX = function(page,lines) {
+    $scope.restoredPage = page;
+    var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable">'+
+        '<canvas style="background-color:white"></canvas></div>')($scope);
     aa.scope().ntype='canvas';
+    aa.css({resize: 'both',overflow:'hidden'});
 
-
+    aa[0].addEventListener('mouseup', function(e) {
+      if (e.target.tagName == 'DIV') {
+        console.log('resizing?');
+        console.log(e);
+        aa.find('canvas')[0].width = ( aa.width() - 8);
+        aa.find('canvas')[0].height = (aa.height() - 28);
+      }
+    });
+    aa[0].addEventListener('mousemove', function(e) {
+      if (e.target.tagName == 'DIV') {
+        console.log('resizing?');
+        console.log(e);
+      }
+    });
+    aa[0].addEventListener('mousedown',function(e) {
+      console.log('resizing?');
+      console.log(e);
+    });
 
     var canvas = aa[0].querySelector('canvas');
     var ctx = canvas.getContext('2d');
     ctx.lineCap = 'round';
-    this.color='blue';
+    ctx.color = 'blue';
     ctx.lineWidth = 2;
     ctx.fillStyle = 'white';
     ctx.setAlpha(0);
@@ -283,26 +334,37 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       this.X = e.offsetX ;
       this.Y = e.offsetY ;
     }, false);
-    canvas.addEventListener('mouseup', function() {
-      this.down = false;
-    }, false);
+    canvas.addEventListener('mouseover', function(e) { this.down = false; });
+    canvas.addEventListener('mouseout', function(e) { this.down = false; });
+    canvas.addEventListener('mouseup', function() { this.down = false; });
+
     canvas.strokes = [];
     canvas.addEventListener('mousemove', function(e) {
-      this.style.cursor = 'pointer';
       if(this.down) {
         with(ctx) {
           beginPath();
           moveTo(this.X, this.Y);
           lineTo(e.offsetX , e.offsetY );
           strokeStyle = this.color;
-          canvas.strokes.push(this.color, this.x, this.Y, e.offsetX, e.offsetY);
+          canvas.strokes.push([this.color, this.X, this.Y, e.offsetX, e.offsetY]);
           stroke();
         }
         this.X = e.offsetX ;
         this.Y = e.offsetY ;
       }
-    }, false);
-
+    }, true); // cancel bubble
+    for(var i=0;i<lines.length;i++) {
+      var line = lines[i];
+      with(ctx) {
+        beginPath();
+        moveTo(line[1],line[2]);
+        lineTo(line[3],line[4]);
+        strokeStyle = line[0];
+        canvas.strokes.push(line);
+        stroke();
+      }
+    }
+    return aa;
   };
 
   $scope.submitSign = function (sig) {
@@ -361,9 +423,12 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       var pos = [n.page, n.width(), n.height(), n[0].style.left, n[0].style.top];
       var typ = n.scope().ntype;
       var val = [];
-      var ndx = [pos, typ, val];
-      if (typ == 'text')  val.push(n[0].querySelector("textarea").value);
-      else if (typ == 'canvas') {
+      var style = [];
+      var ndx = [pos, typ, val, style];
+      if (typ == 'text')  {
+        val.push(n[0].querySelector("textarea").value);
+        style.push(n.find('textarea').css('fontSize'));
+      } else if (typ == 'canvas') {
         var se = n[0].querySelector("canvas");
         val.push(se.strokes);
       }
@@ -465,6 +530,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           imgx.src = se.toDataURL("image/png");
           // var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
           // ctx.putImageData(imgData,ll,tt);
+        } else if (ntype == 'date') {
+           alert('date not yet implemented');
         }
       }
 

@@ -1819,16 +1819,75 @@ tr.rowSelected {
 .draggable {
     border: 0 solid red;
     position:absolute;
-    background-color:lightgoldenrodyellow;
-    opacity: 0.5;
-    resize:both;
-    cursor: move;
+    background-color: rgb(162,226,209);
+    opacity: 0.7;
+    cursor: default;
     width: auto;
     height: auto;
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    user-select: none;
+    /*resize: both;
+    overflow: hidden;
+      */
 }
 
-.draggable > * {
-    margin-left: 20px;
+.draggable li > span {
+    color: rgb(31,176,130);
+}
+
+.draggable ul {
+    display:block;
+    margin: 0;
+    list-style-type:none;
+    cursor:pointer
+}
+
+.draggable li {
+    float: left;
+    display:inline-block;
+    padding-top: 2px;
+    padding-left: 1px;
+}
+
+.draggable ul > li:first-child {
+    cursor: move;
+    padding-left: 4px;
+}
+
+.draggable ul > li:last-child {
+    float: right;
+    padding-right: 4px;
+}
+.draggable > span {
+    margin-left: 4px;
+    margin-right: 4px;
+    /* Don't know why -- but this needs to be -5px instead of 4px */
+    margin-bottom: 4px;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+.draggable .check-annotation {
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.draggable span > canvas {
+    box-sizing: border-box;
+    margin-bottom: -4px;
+    cursor: crosshair;
+}
+
+.draggable span > textarea {
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 20px;
+    line-height: normal;
 }
 
 .dropbox {

@@ -4,14 +4,16 @@
     <div>
       <div class="annotation-control span4">
         <div class="tools" ng-hide="signed || !invq || !needsign || countersign">
-          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></button>
-          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></button>
-          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></button>
+          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"/></button>
+          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"/></button>
+          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"/></button>
+          <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"/></button>
         </div>
         <div class="tools" ng-hide="!finalized">
-          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></button>
-          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></button>
-          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></button>
+          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"/></button>
+          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"/></button>
+          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"/></button>
+          <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"/></button>
         </div>
 
           <ul class="subText pageJump cf">
@@ -23,10 +25,10 @@
       <div class="span4">
         <div class="pageTurn">
           <ul>
-            <li class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></li>
+            <li class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"/></li>
             <li><input ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
             <li>/ {{docLength}}</li>
-            <li class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></li>
+            <li class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"/></li>
           </ul>
         </div>
       </div>
