@@ -6,8 +6,19 @@
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
 <!-- Fonts -->
 <link type="text/css" rel="stylesheet" href="/lib/fontawesome/css/font-awesome.css">
-<script src="/lib/fontdeck/fd.js"></script>
+<script type="text/javascript">
+WebFontConfig = { fontdeck: { id: '35219' } };
 
+(function() {
+  var wf = document.createElement('script');
+  wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+  '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+  wf.type = 'text/javascript';
+  wf.async = 'true';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(wf, s);
+})();
+</script>
 <!-- logo font -->
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">

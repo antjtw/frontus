@@ -16,10 +16,6 @@ app.controller("MainController", function($scope, $location) {
 } );
 
 function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
-  
-  // SWBrijj.tblm('account.my_company').then(function(x) {
-  //   $scope.company = x[0]["name"];
-  // });
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
@@ -30,7 +26,7 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = " added ";
           x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
@@ -77,7 +73,9 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
           });
         }
     });
-    console.log(data);
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
@@ -95,7 +93,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     angular.forEach(data, function(x) {
       x.name = "You ";
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = " added an ";
           x.target = "administrator";
@@ -136,7 +134,9 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
-    console.log(data);
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {

@@ -39,7 +39,10 @@ function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScop
   $scope.currentCompany = company;
 
 	SWBrijj.procm("document.get_company_investor_library", company).then(function(data) {
-	$scope.documents = data;
+    $scope.documents = data;
+    if ($scope.documents.length == 0) {
+      $scope.noDocs = true;
+    }
 	}).except(function(data) {
     console.log('reloading');
     location.reload();

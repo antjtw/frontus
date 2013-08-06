@@ -18,11 +18,16 @@ app.config(function($routeProvider, $locationProvider){
 
 
 //Controller for the Login Page
-function LoginCtrl($scope, $location, SWBrijj){
+function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     $scope.username = "";
     $scope.password = "";
-    $scope.showError = false;
+    if ($routeParams.error) {
+      $scope.showError = true;
+      $scope.username = $routeParams.error;
+    } else {
+      $scope.showError = false;
+    }
     $scope.doLogin = function() {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
       if(x) {
@@ -35,6 +40,15 @@ function LoginCtrl($scope, $location, SWBrijj){
         }
     });
     }
+
+    $scope.fieldCheck = function() {
+      if ($scope.username && $scope.password) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    };
     
     // could also add that the password is not long enough?
     $scope.loginDisabled = function() {
@@ -49,7 +63,7 @@ function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     SWBrijj.logout().then(function(x) {
-      document.location.href='/?logout=1';
+      document.location.href='/?logout';
     });
   }
 }
@@ -77,7 +91,9 @@ function ForgotCtrl($scope, $location, SWBrijj) {
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         $location.path("/sent");
       }).except(function(x) { 
-        $scope.fed = "There was an error. Please try again later."
+        console.log(x);
+        // $scope.fed = "There was an error. Please try again later."
+        $location.path("/sent");
       });
     }
 };

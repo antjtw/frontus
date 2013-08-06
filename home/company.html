@@ -1,24 +1,30 @@
-
+<div class="headsection row-fluid">
+  <h1>{{name}}</h1>
+</div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1 ng-bind="company">Home</h1>
     <div class="row-fluid">
-      <div><p class="subText">Activity Feed</p></div>
-      <table>
-        <tr ng-repeat="active in activity | orderBy:activityOrder">
-        <td><i class="{{active.icon}} icon"></i></td>
-        <td>
-            <table>
-              <tr><td><a href="/company/profile/view?id={{active.email}}">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-                  <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
+      <div><h2>Activity Feed</h2></div>
+      <div class="activityBlock">
+
+        <table>
+          <tr ng-repeat="active in activity | orderBy:activityOrder">
+          <td class="activity"><i class="{{active.icon}} icon"></i></td>
+          <td class="item">
+              <table>
+                <tr><td><a href="/company/profile/view?id={{active.email}}">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
+                <tr><td class="time">{{active.time | date:"MMMM d, y"}}</td></tr>
               </table>
-          </td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+        </table>
+        <div style="display: none;" ng-show="noActivity">There is no activity yet.</div>
+      </div>
     </div>
   </div>
 
   <div class="sidebar span4">
-    <h2>Notifications</h2>
+    <h2>Needs Attention</h2>
+    <div style="display: none;" ng-show="notifications.length != 0">Nothing here yet.</div>
   </div>
 </div>

@@ -4,22 +4,22 @@
   <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
-      <div class="row-fluid">
-        <div class="span8 offset2 text-center" >
-          <div id="Login-form" >
-            <form>
-              <fieldset>
-                <input type="email" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">                
-                <button class="button subText greenButton" id="submitLogin" type="submit" ng-disabled="forgotLogin()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
-               <br>  <a href="#" >Forgotten Password</a>
-               
-              </fieldset>
-            </form>
+      <div class="container">
+        <div class="row-fluid">
+          <div class="span12 text-center" >
+            <div id="Login-form" class="navlogin" >
+              <form>
+                <fieldset>
+                  <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                  <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
+                  <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
+                  <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
+                  <br>
+                  <span class="forgotLog"><a href="/login/forgot" >Forgot Password?</a></span>             
+                </fieldset>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="span2 text-right" >
-          <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
         </div>
       </div>  
     </div> 
@@ -39,7 +39,7 @@
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
-          <li class="dropdown" ng-hide="selected.company">
+          <li class="dropdown hidden-phone" ng-hide="selected.company">
             <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>
