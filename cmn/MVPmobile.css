@@ -43,8 +43,8 @@
 	}
 
 	.videoRow > img {
-		height: 80%;
-		width: 80%;
+		height: 70px;
+		width: auto;
 	}
 
 	.videoRow > h2 {
