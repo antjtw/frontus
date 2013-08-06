@@ -71,6 +71,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.namekey = $scope.name;
   }).except(initFail);
 
+
+
 }
 
 function SocialCtrl($scope, $location, SWBrijj) {  
