@@ -169,7 +169,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.activityOrder = function(card) {
         return -card.time;
   };
-  
+
   $scope.uploadFile = function() {
       $scope.photoURL = "/img/image-loader-140.png";
       var fd = new FormData();
@@ -243,17 +243,21 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         i++;
       });
     });
+    if ($scope.docs.length == 0) {
+      $scope.noDocs = true;
+    }
   });
 
   $scope.activity = [];
   SWBrijj.procm('global.get_investor_activity_cluster', userId).then(function(data) {
+    console.log(data);
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
         x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = "Added ";
-          x.target = " as an administrator.";
+          x.target = "as an administrator.";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeadmin") {
           x.activity = "Removed ";
@@ -261,7 +265,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         } else if (x.activity == "addinvestor") {
           x.activity = "Added ";
-          x.target = + "as an investor";
+          x.target = "as an investor";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeinvestor") {
           x.activity = "Removed ";
@@ -293,14 +297,11 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
+    console.log($scope.activity);
   });
 
   $scope.activityOrder = function(card) {
-     if (card.activity == "created") {
-       return 0;
-     } else {
-        return -card.when_sent;
-     }
+    return -card.time;
   };
 
   $scope.opendetails = function(selected) {
