@@ -58,7 +58,6 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-      $route.reload();
       $rootScope.notification.show("success", "Invitation sent");
     }).except(function(x) {
       console.log(x);
@@ -68,7 +67,6 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.revokeAdmin = function() {
     SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function(x) {
-      $route.reload();
       $rootScope.notification.show("success", "Privileges updated");
     }).except(function(x) {
       console.log(x);
@@ -77,24 +75,27 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   }
 
   $scope.contactSave = function () {
-    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
-      $rootScope.notification.show("fail", "Please enter a valid company and domain name");
-      $scope.name = $scope.namekey;
-      $scope.company = $scope.companykey;
-      return;
+    if ($scope.detectChanges != $scope.name + $scope.address + $scope.company) {
+      $scope.detectChanges = $scope.name + $scope.address + $scope.company;
+      if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
+        $rootScope.notification.show("fail", "Please enter a valid company and domain name");
+        $scope.name = $scope.namekey;
+        $scope.company = $scope.companykey;
+        return;
+      }
+      SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) { 
+          console.log("saved: "+x);
+          $rootScope.select($scope.company);
+          $rootScope.notification.show("success", "Your company profile has been updated successfully.");
+          $scope.namekey = $scope.name;
+          $scope.companykey = $scope.company;
+      }).except(function(x) {
+          console.log(x);
+          $scope.namekey = $scope.name;
+          $scope.companykey = $scope.company;
+          $rootScope.notification.show("fail", "There was an error updating your company profile.");
+      });
     }
-    SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video, $scope.company).then(function (x) { 
-        console.log("saved: "+x);
-        $rootScope.select($scope.company);
-        $rootScope.notification.show("success", "Your company profile has been updated successfully.");
-        $scope.namekey = $scope.name;
-        $scope.companykey = $scope.company;
-    }).except(function(x) {
-        console.log(x);
-        $scope.namekey = $scope.name;
-        $scope.companykey = $scope.company;
-        $rootScope.notification.show("fail", "There was an error updating your company profile.");
-    });
   };
 
   SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(x) {
@@ -111,32 +112,9 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     initPage($scope, x);
     $scope.namekey = $scope.name;
     $scope.companykey = $scope.company;
+    $scope.detectChanges = $scope.name + $scope.address + $scope.company;
+    $scope.photoURL = '/photo/user?id=company:' + $scope.company;
   }).except(initFail);
-
-  // $scope.activity = [];
-  // SWBrijj.procm('global.get_company_activity').then(function(data) {
-  //   var i = 0;
-  //   console.log('data', data);
-  //   angular.forEach(data, function(x) {
-  //     SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-  //       console.log('y', y)
-  //       $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], docname: y[0]['docname'], doc_id: x['doc_id']});
-  //       if ($scope.activity[i].activity == "sent") {
-  //         $scope.activity[i].activity = "Shared ";
-  //         $scope.activity[i].icon = "icon-redo";
-  //       }
-  //       else if ($scope.activity[i].activity == "reminder") {
-  //         $scope.activity[i].activity = "Reminded ";
-  //         $scope.activity[i].icon = "icon-redo";
-  //       }
-  //       else if ($scope.activity[i].activity == "uploaded") {
-  //         $scope.activity[i].activity = "Uploaded ";
-  //         $scope.activity[i].icon = "icon-star";
-  //       }
-  //       i++;
-  //     });
-  //   });
-  // });
 
   $scope.activity = [];
   SWBrijj.procm('global.get_activity_cluster').then(function(data) {
@@ -192,6 +170,24 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         return -card.time;
   };
 
+  $scope.uploadFile = function() {
+      $scope.photoURL = "/img/image-loader-140.png";
+      var fd = new FormData();
+      for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+      SWBrijj.uploadLogo(fd).then(function(x) {
+        $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+        console.log(x);
+        $rootScope.notification.show("green", "Company logo successfully updated");
+      }).except( function(x) { 
+        console.log(x);
+        $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
+      });
+  };
+
+  $scope.setFiles = function(element) {
+    $scope.files = [];
+    for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
+  };
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
@@ -247,17 +243,21 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         i++;
       });
     });
+    if ($scope.docs.length == 0) {
+      $scope.noDocs = true;
+    }
   });
 
   $scope.activity = [];
   SWBrijj.procm('global.get_investor_activity_cluster', userId).then(function(data) {
+    console.log(data);
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
         x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = "Added ";
-          x.target = " as an administrator.";
+          x.target = "as an administrator.";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeadmin") {
           x.activity = "Removed ";
@@ -265,7 +265,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         } else if (x.activity == "addinvestor") {
           x.activity = "Added ";
-          x.target = + "as an investor";
+          x.target = "as an investor";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeinvestor") {
           x.activity = "Removed ";
@@ -297,14 +297,11 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
+    console.log($scope.activity);
   });
 
   $scope.activityOrder = function(card) {
-     if (card.activity == "created") {
-       return 0;
-     } else {
-        return -card.when_sent;
-     }
+    return -card.time;
   };
 
   $scope.opendetails = function(selected) {
@@ -342,65 +339,6 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     });
   };
 }
-
-app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope, SWBrijj) {
-    var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
-    $scope.dropText = 'Drop files here...';
-    $scope.files = [];
-    
-    $scope.fmtFileSize = function (file) {
-        if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
-        else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
-        else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
-        else return file.size + " bytes";
-    };
-
-    $scope.setFiles = function(element) {
-        $scope.files = [];
-        for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
-        $scope.progressVisible = false;
-    };
-
-    $scope.uploadFile = function() {
-        var fd = new FormData();
-        $scope.progressVisible = true;
-        for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
-        SWBrijj.uploadLogo(fd).then(function(x) {
-          $route.reload(); $scope.$apply();
-          console.log(x);
-          $rootScope.notification.show("green", "Company logo successfully updated");
-        }).except( function(x) { 
-          $route.reload(); $scope.$apply();
-          console.log(x);
-          $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
-        });
-    };
-
-    function uploadProgress(evt) {
-        $scope.$apply(function(){
-            if (evt.lengthComputable) {
-                $scope.progress = Math.round(evt.loaded * 100 / evt.total)
-            } else {
-                $scope.progress = 'unable to compute'
-            }
-        })
-    }
-
-    function uploadComplete(evt) {
-        alert(evt.target.responseText)
-    }
-
-    function uploadFailed(evt) {
-        alert("There was an error attempting to upload the file.")
-    }
-
-    function uploadCanceled(evt) {
-        $scope.progressVisible = false;
-        $scope.$apply();
-        alert("The upload has been canceled by the user or the browser dropped the connection.")
-    }
-}
-);
 
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;

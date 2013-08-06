@@ -8,7 +8,7 @@
       <div class="span3"> <!-- Photo -->
         <form>
           <div class="viewProfilePhoto">
-            <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:250px; height:250px;'>
+            <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:140px; height:140px;'>
           </div>
         </form>
       </div>
@@ -68,6 +68,7 @@
         </tr>
         </tbody>
       </table>
+      <div style="display: none;" ng-show="noDocs">There are no documents shared with this person.</div>
     </section>
     </div>
   </div>

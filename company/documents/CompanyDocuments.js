@@ -90,7 +90,10 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	});
 
 	SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
-  	$scope.documents = data;
+  		$scope.documents = data;
+		if ($scope.documents.length == 0) {
+			$scope.noDocs = true;
+		}
 	}).except(function(err) { alert(err.message); });
 	
 	$scope.docOrder = 'docname';

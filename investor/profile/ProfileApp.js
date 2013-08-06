@@ -50,13 +50,14 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
-    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
-      $rootScope.notification.show("fail", "Please enter a name more than 1 letter in length");
-      $scope.name = $scope.namekey;
-      return;
-    } 
-      SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
-        .then(function (x) { 
+    if ($scope.detectChanges != $scope.name + $scope.street) {
+      $scope.detectChanges = $scope.name + $scope.street;
+      if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
+        $rootScope.notification.show("fail", "Please enter a name more than 1 letter in length");
+        $scope.name = $scope.namekey;
+        return;
+      }
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) { 
           console.log("saved: "+x);
           $rootScope.notification.show("success", "Profile successfully updated");
           $scope.namekey = $scope.name;
@@ -64,15 +65,35 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
           $scope.namekey = $scope.name;
           $rootScope.notification.show("fail", "Something went wrong, please try again later.");
       });
-  };
-  //noinspection JSUnresolvedVariable
+    }
+  }
+
   SWBrijj.tbl('account.profile').then(function(x) { 
     initPage($scope, x);
+    $scope.photoURL = '/photo/user?id=' + $scope.email;
     $scope.namekey = $scope.name;
+    $scope.detectChanges = $scope.name + $scope.street;
   }).except(initFail);
 
+  $scope.uploadFile = function() {
+    $scope.photoURL = "/img/image-loader-140.png";
+    var fd = new FormData();
+    $scope.progressVisible = true;
+    for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+    SWBrijj.uploadImage(fd).then(function(x) {
+      console.log(x);
+      $scope.photoURL = '/photo/user?id=' + $scope.email;
+      $rootScope.notification.show("green", "Profile photo successfully updated");
+    }).except( function(x) { 
+      console.log(x);
+      $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
+    });
+  };
 
-
+  $scope.setFiles = function(element) {
+    $scope.files = [];
+    for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
+  };
 }
 
 function SocialCtrl($scope, $location, SWBrijj) {  
@@ -131,11 +152,9 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.changePassword = function() {
         SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) { 
-              $route.reload(); $scope.$apply();
               $rootScope.notification.show("success", "Your password has been updated successfully.");
               console.log("changed successfully");
             } else { 
-              $route.reload(); $scope.$apply();
               $rootScope.notification.show("fail", "There was an error updating your password.");
               console.log("Oops.  Change failed");
             }
@@ -150,72 +169,6 @@ function PhotoCtrl($scope, SWBrijj) {
     
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
 }
-
-app.controller("FileDNDCtrl", function($scope, $element, $route, $location, $rootScope, SWBrijj) {
-    var dropbox = $element[0].querySelector(".dropbox"); // $element seems to be an array of elements
-    $scope.dropText = 'Drop files here...';
-    $scope.files = [];
-    
-    $scope.fmtFileSize = function (file) {
-        if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
-        else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
-        else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
-        else return file.size + " bytes";
-    };
-
-    $scope.setFiles = function(element) {
-        $scope.files = [];
-        for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
-        $scope.progressVisible = false;
-    };
-
-    $scope.uploadFile = function() {
-        var fd = new FormData();
-        $scope.progressVisible = true;
-        for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
-        SWBrijj.uploadImage(fd).then(function(x) {
-          $route.reload();
-          console.log(x);
-          $rootScope.notification.show("green", "Profile photo successfully updated");
-        }).except( function(x) { 
-          $route.reload();
-          console.log(x);
-          $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
-        });
-        /*var xhr = new XMLHttpRequest()
-        xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", uploadComplete, false);
-        xhr.addEventListener("error", uploadFailed, false);
-        xhr.addEventListener("abort", uploadCanceled, false);
-        xhr.open("POST", "/fileupload");
-        xhr.send(fd) */
-    };
-
-    function uploadProgress(evt) {
-        $scope.$apply(function(){
-            if (evt.lengthComputable) {
-                $scope.progress = Math.round(evt.loaded * 100 / evt.total)
-            } else {
-                $scope.progress = 'unable to compute'
-            }
-        })
-    }
-
-    function uploadComplete(evt) {
-        alert(evt.target.responseText)
-    }
-
-    function uploadFailed(evt) {
-        alert("There was an error attempting to upload the file.")
-    }
-
-    function uploadCanceled(evt) {
-        $scope.progressVisible = false;
-        $scope.$apply();
-        alert("The upload has been canceled by the user or the browser dropped the connection.")
-    }
-}
-);
 
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
