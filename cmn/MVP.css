@@ -1165,10 +1165,10 @@ ul>li.curPage {
 }
 
 .activityBlock td {
-	line-height: 12px;
+	line-height: 8px;
 	font-size: 12px;
 	font-family: 'FS Elliot Web Regular', sans-serif;
-
+	padding-bottom: 5px;
 }
 
 .activityBlock td i {
@@ -1195,7 +1195,7 @@ ul>li.curPage {
 
 .activityBlock a {
 	color: #3498db;
-	line-height: 12px;
+	line-height: 8px;
 }
 
 .activityBlock a:hover {

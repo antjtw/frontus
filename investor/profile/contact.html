@@ -64,7 +64,7 @@
 
 <div modal="passwordModal" close="passwordModalClose()" options="opts" ng-controller="PasswordCtrl">
   <div class="modalHeader">
-    <p class="subText">Change Password</p>
+    <span data-icon="&#xe026;" aria-hidden="true">Change Password
   </div>
   <div class="modalText">
     <form name="passwordChange" class="editPasswordBlock">
@@ -112,13 +112,8 @@
      </div>
   </div>
   <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="passwordsModalClose()">Cancel</button>
-    <div
-       data-step='3' data-intro='The button is disabled unless the new passwords match and fulfill the requirements for passwords'
-       data-position='top'
-       ><a ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }"
-      ng-click="changePassword(); passwordModalClose()">Change</a></div>
-  </div>
+    <button class="button subText blueButton" ng-click="passwordsModalClose()">Take Me Back!</button>
+    <button class="button subText greenButton" ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button>
 
   </fieldset>
   </form>
