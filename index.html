@@ -19,7 +19,7 @@
 			$(document).ready(function(){
 			  $( "#inviteButton" ).click(function() {
 			    $('html, body').animate({
-			      scrollTop: $( "#CompanyRegister-form" ).offset().top}, 600);
+			      scrollTop: $( "#CompanyRegister-form" ).offset().top - 20}, 600);
 			  });
 
 			  $( "#nextPage" ).click(function() {
@@ -65,7 +65,7 @@
 
 			<div id="comms" class="even hidden-phone">
 				<div class="spacer110"></div>
-				<div class="row-fluid">
+				<div class="row-fluid pad">
 					<div class="span10 offset1 text-center" >
 						<h2>Communication Made Easy</h2>
 						<p>Sharewave makes it easy to deliver company information to <br> your shareholders, employees, board and customers.
@@ -99,10 +99,10 @@
 
 			<div class="even visible-phone">
 				<div class="spacer110"></div>
-				<div class="row-fluid">
+				<div class="row-fluid pad">
 					<div class="span10 offset1 text-center" >
 						<h2>Communication Made Easy</h2>
-						<p>Sharewave makes it easy to deliver company information to <br> your shareholders, employees, board and customers so your ime is focused on your business
+						<p>Sharewave makes it easy to deliver company information to <br class="hidden-phone"> your shareholders, employees, board and customers so your ime is focused on your business
 						</p>
 						<div class="spacer40"></div>
 						<img src="/img/graphic-communication-mobile.png">
@@ -118,7 +118,9 @@
 			<div class="container">			
 				<div class="row-fluid">
 					<div class="span10 offset1 text-center">
-						<h2>Understand Your Equity</h2><p>You shouldn't need an MBA to make sense of your company&apos;s capital structure. <br> Our cap table is simple enough for a quick review of your ownership, yet flexible enough for more complex deals.</p> 
+						<div class="pad">
+							<h2>Understand Your Equity</h2><p>You shouldn't need an MBA to make sense of your company&apos;s capital structure. <br class="hidden-phone"> Our cap table is simple enough for a quick review of your ownership, yet flexible enough for more complex deals.</p> 
+						</div>
 						<div class="spacer40"></div>
 						<div ng-controller="CarouselCtrl">
 						  <carousel interval="myInterval">
@@ -149,26 +151,12 @@
 									<div class="spacer50 hidden-phone"></div>	
 									<h2>E-Signature</h2>
 							        <p class="lead">Stop chasing down signatures with our legally-binding <br class="hidden-phone">
-							        	e-signature technology. Send, review and sign <br  class="hidden-phone">documents from anywhere.</p>
+							        	e-signature technology. Send, review and sign <br class="hidden-phone">documents from anywhere.</p>
 								</div>	
 							</div>					
 						</div>
 					</div>		
 					<div class="spacer120"></div>	
-				</div>
-			</div>
-
-			<div class="even visible-phone">
-				<div class="container">
-					<div class="spacer60"></div>	
-					<div class="row-fluid iconMobile">
-						<div class="pull-left"><img class="featurette-image pull-left" src="/img/graphic-esign.png"></div>
-						<div class="pull-right" style="width:60%;">
-							<h2>E-Signature</h2>
-					        <p class="lead">Stop chasing down signatures with our legally-binding e-signature technology. Send, review and sign documents from anywhere.</p>
-						</div>	
-					</div>	
-					<div class="spacer40"></div>				
 				</div>
 			</div>
 
@@ -191,15 +179,29 @@
 				<div class="spacer120"></div>
 			</div>
 
+			<div class="even visible-phone">
+				<div class="container">
+					<div class="spacer60"></div>	
+					<div class="row-fluid iconMobile pad">
+						<div class="pull-left"><img class="featurette-image pull-left" src="/img/graphic-esign.png"></div>
+						<div class="pull-right">
+							<h2>E-Signature</h2>
+					        <p class="lead">Stop chasing down signatures with our legally-binding e-signature technology. Send, review and sign documents from anywhere.</p>
+						</div>	
+					</div>	
+					<div class="spacer40"></div>				
+				</div>
+			</div>
+
 			<div class="container visible-phone">
 				<div class="spacer60"></div>
 				<div class="row-fluid">
 					<div class="span10 offset1">
-						<div class="row-fluid iconMobile">
-							<div class="pull-right">
+						<div class="row-fluid iconMobile pad">
+							<div class="pull-left">
 								<img class="featurette-image pull-right" src="/img/graphic-permission.png">
 							</div>	
-							<div class="pull-left">
+							<div class="pull-right">
 								<div class="spacer20 hidden-phone"></div>
 								<h2>Permissioning</h2>
 		    					<p class="lead">Not all shareholders deserve the same view of your information. We make it easy to control access, from documents to rows on a table.
@@ -235,8 +237,10 @@
 									</fieldset>
 								</form>
 							</div>
+
 							<div class="box off" ng-hide="toggle" ng-animate="'box'">
 								<h2>Thanks for signing up to use Sharewave!</h2>
+								<div class="spacer10"></div>
 								<p>We appreciate your interest, and we're excited to get you on board as soon as possible.</p>
 								<div class="spacer30"></div>
 								<p>Spread the word to your fellow entrepreneurs:</p>
