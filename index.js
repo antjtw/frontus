@@ -42,6 +42,21 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
     });
   }
 
+  $scope.opts = {
+    backdropFade: true,
+    dialogFade:true,
+    dialogClass: 'videoModal modal'
+  };
+
+  $scope.modalUp = function () {
+    $scope.video = true;
+  };
+    
+  $scope.close = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.video = false;
+  };
+
 
 
 }

@@ -32,6 +32,13 @@
 
 	<body>
 		<div class="wrap home" ng-controller="IndexCtrl">
+
+			<div class="videoModal" modal="video" close="close()" options="opts">			    
+			    <div>
+			    	<iframe class="videoIframe" src="http://player.vimeo.com/video/60776538" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+			    </div>
+			</div>
+
 			<span ng-view=""></span>
 			<div id="hero">
 <!-- 				<img src="/img/white-down.png" id="nextPage" class="paginator">
@@ -56,9 +63,9 @@
 
  			<div class="row-fluid">
  				<div class="videoRow">
- 					<img src="/img/ike.png">
- 					<h2>Watch the Video</h2>
- 					<span class="arrow-right"></span>
+ 					<img ng-click="modalUp();" src="/img/ike.png">
+ 					<h2 ng-click="modalUp();">Watch the Video</h2>
+ 					<span ng-click="modalUp();" class="arrow-right"></span>
  				</div>
  			</div>
 

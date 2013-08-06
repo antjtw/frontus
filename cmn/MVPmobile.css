@@ -99,11 +99,38 @@
 		-moz-box-sizing:border-box;
 		padding: 20px 20px 0 20px;
 	}
+
+	.videoModal.modal {
+		height: 200px;
+	}
+
+	.videoIframe {
+		height: 200px;
+	}
 }
 
 @media (max-width: 480px) {
 
 	.home h1 {
 		font-size: 34px;
+	}
+
+	.videoModal.modal {
+		height: 100px;
+	}
+
+	.videoIframe {
+		height: 100px;
+	}
+}
+
+@media (max-width: 320px) {
+
+	.videoModal.modal {
+		height: 80px;
+	}
+
+	.videoIframe {
+		height: 80px;
 	}
 }
