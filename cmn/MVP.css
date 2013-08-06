@@ -1742,6 +1742,7 @@ tr.rowSelected {
 	width: 360px;
 	background-color: #FFFFFF;
 	border: 0;
+	border-radius: 0px;
 }
 
 .modalHeader {
@@ -1782,6 +1783,13 @@ tr.rowSelected {
 	border-bottom: 1px solid #E3E3E3;
 }
 
+.modal label {
+	display: inline;
+	text-transform: uppercase;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 10px;	
+}
+
 .multiEmail > input {
 	border: 0;
 	box-shadow: none;
@@ -1807,6 +1815,15 @@ tr.rowSelected {
 	display: block;
 	text-align: center;
 }
+
+.modalCopy {
+	padding: 10px 0 0 20px;
+	margin: 5px 0 20px 0;
+	display: block;
+	text-align: left;
+
+}
+
 
 .modalButtons {
 	display: block;
