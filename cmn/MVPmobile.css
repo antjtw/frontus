@@ -25,6 +25,8 @@
 
 	/* Home page Styling */
 	.navbounder {
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
 		padding: 0 10% 0 10%;
 	}
 
