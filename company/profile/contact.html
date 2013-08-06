@@ -7,7 +7,7 @@
       <div class="span3"> <!-- Photo -->
         <form>
           <div class="editProfilePhoto">
-            <img ng-src="/photo/user?id=company:{{company}}" style='width:140px; height:140px;' ng-click="pictureModalOpen()">
+            <img ng-src="{{photoURL}}" style='width:140px; height:140px;' ng-click="pictureModalOpen()">
           </div>
         </form>
       </div>
@@ -76,7 +76,7 @@
   </div>
 </div>
 
-<div modal="pictureModal" close="pictureModalClose()" options="opts" ng-controller="FileDNDCtrl">
+<div modal="pictureModal" close="pictureModalClose()" options="opts">
   <div class="modalHeader">
     <p class="subText">Profile Picture</p>
   </div>
@@ -87,13 +87,6 @@
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
       </fieldset>
     </form>
-
-    <div ng-show="files.length">
-        <div ng-repeat="file in files.slice(0)">
-            <span>{{file.webkitRelativePath || file.name}}</span>
-            (<span>{{fmtFileSize(file)}}</span>)
-        </div>
-    </div>
   </div>
 
   <div class="modalButtons">
