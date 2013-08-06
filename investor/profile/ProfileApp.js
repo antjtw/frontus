@@ -50,13 +50,14 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
-    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
-      $rootScope.notification.show("fail", "Please enter a name more than 1 letter in length");
-      $scope.name = $scope.namekey;
-      return;
-    } 
-      SWBrijj.proc("account.contact_update", $scope.name, $scope.street, $scope.city, $scope.state, $scope.postalcode, $scope.country)
-        .then(function (x) { 
+    if ($scope.detectChanges != $scope.name + $scope.street) {
+      $scope.detectChanges = $scope.name + $scope.street;
+      if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
+        $rootScope.notification.show("fail", "Please enter a name more than 1 letter in length");
+        $scope.name = $scope.namekey;
+        return;
+      }
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) { 
           console.log("saved: "+x);
           $rootScope.notification.show("success", "Profile successfully updated");
           $scope.namekey = $scope.name;
@@ -64,14 +65,16 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
           $scope.namekey = $scope.name;
           $rootScope.notification.show("fail", "Something went wrong, please try again later.");
       });
-  };
+    }
+  }
+  
   //noinspection JSUnresolvedVariable
   SWBrijj.tbl('account.profile').then(function(x) { 
     initPage($scope, x);
     $scope.namekey = $scope.name;
+    $scope.detectChanges = $scope.name + $scope.street;
   }).except(initFail);
-
-}
+};
 
 function SocialCtrl($scope, $location, SWBrijj) {  
   $scope.contactSave = function(){
