@@ -126,7 +126,7 @@ p, input, button, select, textarea, a, address {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
-	color: #7f8c8d;
+	color: #8D8D8D;
 }
 
 a:hover {
@@ -458,6 +458,7 @@ h2 {
 }
 
 /* Notifications */
+
 
 .notification {
 	position: fixed;
@@ -2113,7 +2114,7 @@ margin-top: 0.9em;
 }
 
 .home p {
-	color: #666666;
+	color: #8D8D8D;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
 	line-height: 22px;
@@ -2149,7 +2150,7 @@ margin-top: 0.9em;
 }
 
 .home .btn-mini {
-	color: #666666;
+	color: #8D8D8D;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
 	font-weight: normal;
@@ -2169,7 +2170,7 @@ margin-top: 0.9em;
 
 
 .home .btn-mini:hover {
-	color: #1e2d3d;
+	color: #8D8D8D;
 	background-color: #f1f1f1;
 	padding-bottom: 10px;
 }
@@ -2177,7 +2178,7 @@ margin-top: 0.9em;
 
 
 .home .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled], .btn-mini:active {
-	color: #666666;
+	color: #8D8D8D;
 	background-color: #f1f1f1;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
@@ -2188,7 +2189,7 @@ margin-top: 0.9em;
 .home .btn-success {
 	position: relative;
 	display: block;
-	color: #666666;
+	color: #8D8D8D;
 	background-color: #f1f1f1;
 	opacity: 1;
 }
@@ -2310,6 +2311,13 @@ margin-top: 0.9em;
 	font-size: 10px;
 }
 
+address {
+	font-size: 14px;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-weight: normal;
+
+}
+
 /* Marketing Pages */
 
 .static {
@@ -2318,6 +2326,7 @@ margin-top: 0.9em;
 
 .static p, .static a {
 	font-size: 14px;
+	line-height: 21px;
 }
 
 
@@ -2340,6 +2349,13 @@ margin-top: 0.9em;
 	color: black;
 }
 
+.static img.award {
+	padding-top: 30px;
+}
+
+.static h2.name {
+	margin: 0 0 5px 0;
+}
 
 /* Survey */
 
@@ -2378,5 +2394,28 @@ margin-top: 0.9em;
 	border: none;
 }
 
+.jobs p.subtext {
+	color: #34495E;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	margin-bottom: 0;
+}
+
+.jobs p {
+	line-height: 24px;
+}
+
+.jobs .mail a {
+	color: #3498DB;
+	text-decoration: none;
+
+}
+
+.jobs .mail a:hover {
+	color: #2980B9
+}
 
 
