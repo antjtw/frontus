@@ -1,25 +1,27 @@
 
+<div class="headsection row-fluid">
+  <h1>{{user.name}}</h1>
+</div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1>{{user.name}}</h1>
     <div class="row-fluid">
-      <div class="span5"> <!-- Photo -->
+      <div class="span3"> <!-- Photo -->
         <form>
-          <div class="editProfilePhoto">
+          <div class="viewProfilePhoto">
             <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:250px; height:250px;'>
           </div>
         </form>
       </div>
       <div class="span7">
         <p>
-            <input type="text" ng-model="user.name" disabled>
-            <span class="label">Name</span>
+            <input ng-class="{'content':!user.name}" class="name" type="text" ng-model="user.name" disabled>
+            <label>Name</label>
         </p>
       </div>
     </div>
     <div class="row-fluid">
     <section class="recipientInfo statusBlock">
-      <div><i class="icon-user icon-2x"></i><p class="subText">Document Status</p></div>
+      <div><p class="title">Document Status</p></div>
       <table class="tableView bodyText">
         <tr class="subText">
           <th class="button"><span class="title sortedDown">Name</span></th>
@@ -74,18 +76,18 @@
       <fieldset>
         <p>
           <input type="text" ng-model="user.email" disabled>
-          <span class="label">Email</span>
+          <label>Email</label>
         </p>
         <p>
-          <textarea ng-model="user.street" rows="3" disabled></textarea>
-          <span class="label">Address</span>
+          <textarea ng-class="{'content':!user.street}"  ng-model="user.street" rows="3" disabled></textarea>
+          <label>Address</label>
         </p>
       </fieldset>
     </form>
 
     <section class="documentInfo statusBlock">
     <div>
-    <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
+    <p class="title">Activity Feed</p>
     </div> 
     <div class="activityBlock">
       <table>
