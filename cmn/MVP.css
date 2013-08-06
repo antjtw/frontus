@@ -753,7 +753,7 @@ form.inputs {
 .forgotLog {
 	display: inline-block;
 	float: right;
-	margin-right: 16.7%;
+	margin-right: 240px;
 }
 
 .forgotLog > a {
