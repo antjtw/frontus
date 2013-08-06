@@ -57,7 +57,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.create_admin = function() {
-    SWBrijj.proc('account.create_admin', $scope.newEmail, $scope.newName).then(function(x) {
+    SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
       $route.reload();
       $rootScope.notification.show("success", "Invitation sent");
     }).except(function(x) {
@@ -97,8 +97,14 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     });
   };
 
-  SWBrijj.tblm('account.company_issuers').then(function(x) {
+  SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(x) {
     $scope.admins = x;
+    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+      angular.forEach($scope.admins, function(admin) {
+        if (admin.email == me[0].email)
+          admin.hideLock = true;
+      });
+    });
   }).except(initFail);
 
   SWBrijj.tbl('account.my_company').then(function(x) { 
@@ -137,7 +143,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = "Added ";
           x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
@@ -176,8 +182,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         }
       }
     });
-    console.log('data', data);
     $scope.activity = data;
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
@@ -246,7 +254,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/ownership/people";
+        x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
           x.activity = "Added ";
           x.target = " as an administrator.";
@@ -286,6 +294,9 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
+    if ($scope.activity.length == 0) {
+      $scope.noActivity = true;
+    }
   });
 
   $scope.activityOrder = function(card) {
