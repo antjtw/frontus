@@ -77,24 +77,27 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   }
 
   $scope.contactSave = function () {
-    if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
-      $rootScope.notification.show("fail", "Please enter a valid company and domain name");
-      $scope.name = $scope.namekey;
-      $scope.company = $scope.companykey;
-      return;
+    if ($scope.detectChanges != $scope.name + $scope.address + $scope.company) {
+      $scope.detectChanges = $scope.name + $scope.address + $scope.company;
+      if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
+        $rootScope.notification.show("fail", "Please enter a valid company and domain name");
+        $scope.name = $scope.namekey;
+        $scope.company = $scope.companykey;
+        return;
+      }
+      SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) { 
+          console.log("saved: "+x);
+          $rootScope.select($scope.company);
+          $rootScope.notification.show("success", "Your company profile has been updated successfully.");
+          $scope.namekey = $scope.name;
+          $scope.companykey = $scope.company;
+      }).except(function(x) {
+          console.log(x);
+          $scope.namekey = $scope.name;
+          $scope.companykey = $scope.company;
+          $rootScope.notification.show("fail", "There was an error updating your company profile.");
+      });
     }
-    SWBrijj.proc("account.company_update", $scope.name, $scope.overview, $scope.state, $scope.address, $scope.video, $scope.company).then(function (x) { 
-        console.log("saved: "+x);
-        $rootScope.select($scope.company);
-        $rootScope.notification.show("success", "Your company profile has been updated successfully.");
-        $scope.namekey = $scope.name;
-        $scope.companykey = $scope.company;
-    }).except(function(x) {
-        console.log(x);
-        $scope.namekey = $scope.name;
-        $scope.companykey = $scope.company;
-        $rootScope.notification.show("fail", "There was an error updating your company profile.");
-    });
   };
 
   SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(x) {
@@ -111,6 +114,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     initPage($scope, x);
     $scope.namekey = $scope.name;
     $scope.companykey = $scope.company;
+    $scope.detectChanges = $scope.name + $scope.address + $scope.company;
   }).except(initFail);
 
   // $scope.activity = [];
