@@ -1,19 +1,22 @@
 
+<div class="headsection row-fluid">
+  <h1>My Profile</h1>
+</div>
 <div class="editProfileFP row-fluid">
+
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1>My Profile</h1>
     <div class="row-fluid">
-      <div class="span5"> <!-- Photo -->
+      <div class="span3"> <!-- Photo -->
         <form>
           <div class="editProfilePhoto">
-            <img ng-src="/photo/user?id={{email}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+            <img ng-src="/photo/user?id={{email}}" style='width:140px; height:140px;' ng-click="pictureModalOpen()">
           </div>
         </form>
       </div>
-      <div class="span7">
+      <div class="span5">
         <p>
-            <input type="text" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
-            <span class="label">Name</span>
+            <input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
+            <label>Name</label>
         </p>
         <p><button class="button subText greenButton" ng-click="passwordModalOpen()">Change Password</button></p>
       </div>
@@ -23,14 +26,12 @@
   <div class="sidebar span4">
     <form>
       <fieldset>
-        <p>
-          <input type="text" ng-model="email" name="email" disabled>
-          <span class="label">Email</span>
-        </p>
-        <p>
-          <textarea ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-          <span class="label">Address</span>
-        </p>
+         <input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
+         <label>Email</label>
+
+          <textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>         
+          <label>Address</label>
+       
       </fieldset>
     </form>
   </div>

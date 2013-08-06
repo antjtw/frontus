@@ -146,16 +146,16 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 h1 {
 	font-family: 'FS Elliot Web Thin', sans-serif !important;
-	font-size: 36px !important;
-	font-weight: normal !important;	
+	font-size: 36px;
+	font-weight: normal;	
 	color: #1e2d3d;
 }
 
 h2 {
 	font-family: 'FS Elliot Web Light', sans-serif !important;
-	font-size: 24px !important;
+	font-size: 24px;
 	line-height:21px;
-	font-weight: normal !important;
+	font-weight: normal;
 	color: #1e2d3d;	
 }
 
@@ -277,6 +277,7 @@ h2 {
 	line-height: 40px;
 	color: #F78D1E;
 	font-size: 20px;
+	font-weight: normal;
 }
 
 .topnav .nav  > li > a, .topnav .nav.nav-item  > li > a {
@@ -450,6 +451,12 @@ h2 {
 	padding-left: 20px;
 	color: #C7C7C7;
 }
+
+
+#Login-form a:hover [data-icon] {
+	color: #A6A6A6;
+}
+
 /* Notifications */
 
 .notification {
@@ -458,18 +465,33 @@ h2 {
 	text-align: center;
 	height: 50px;
 	z-index: 1000;
+	color: #FFF;
+	padding-top:55px;
+    font-size: 24px;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	opacity: 0.90;	
 }
 
-.notication.success {
+.notification.success {
+<<<<<<< HEAD
 
 }
 
-.notication.fail {
+.notification.fail {
 
 }
 
 #Login-form a:hover [data-icon] {
 	color: #A6A6A6;
+=======
+	background-color: #1CCAA1;
+	border-bottom: 2px solid #1ABC96;
+}
+
+.notification.fail {
+	background-color: #F78D1E;
+	border-bottom: 2px solid #EC701D;
+>>>>>>> dexter-static
 }
 
 
@@ -744,6 +766,10 @@ form.inputs {
 	margin-right: 16.7%;
 }
 
+.forgotLog > a {
+	color: #0088cc;
+}
+
 /* Password Reset */
 
 #forgot {
@@ -817,9 +843,6 @@ form.inputs {
 }
 
 #detailsEdit {
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-right-color: #BDC3C7;
 	padding-right:20px;
 	
 }
@@ -846,17 +869,68 @@ form.inputs {
 	margin-top:-8px;
 }
 
+.viewProfilePhoto {
+	height:136px;
+	width:136px;
+	border: none;
+	overflow:hidden;
+}
+
 .editProfilePhoto {
-	height:250px;
-	width:250px;
-	border-top-width: thin;
-	border-right-width: thin;
-	border-bottom-width: thin;
-	border-left-width: thin;
-	border-top-style: solid;
-	border-right-style: solid;
-	border-bottom-style: solid;
-	border-left-style: solid;	
+	height:136px;
+	width:136px;
+	border: none;
+	overflow:hidden;
+}
+
+.editProfilePhoto:hover{
+	border: 4px solid #1ABC96;
+	height:136px;
+	width:136px;	
+	margin: -4px;
+
+}
+
+.editProfileFP input, .editProfileFP textarea {
+	padding: 0;
+	border: 0;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	margin: 0;
+	color: #666666;
+}
+
+.editProfileFP input.name, .editProfileFP textarea.name {
+	font-size: 18px;
+ 	-webkit-box-shadow: none !important;
+ 	-box-shadow: none !important;	
+}
+
+.editProfileFP label {
+	color: #A6A6A6;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	text-shadow: none;
+	background-color: #FFF;
+	text-transform: uppercase;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	font-size: 10px;
+	margin-bottom: 20px;
+}
+
+.editProfileFP .sidebar {
+	padding: 0px;
+}
+
+.editProfileFP p.title {
+	font-size: 14px;
+	color: #34495E;
+}
+
+.editProfileFP th {
+	border-top: 1px solid #f1f1f1;
 }
 
 .formBounder {
@@ -1093,8 +1167,50 @@ ul>li.curPage {
 }
 
 .activityBlock > table {
-	margin: 20px 10px 10px 20px;
+	margin: 20px 10px 10px 0px;
 	overflow:auto;
+}
+
+.activityBlock tbody {
+	vertical-align: top;
+}
+
+.activityBlock td {
+	line-height: 12px;
+	font-size: 12px;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+
+}
+
+.activityBlock td i {
+	color: #666666;
+}
+
+.activityBlock td.activity {
+	font-size: 12px;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	color: #666666;
+}
+
+.activityBlock td.time {
+	font-size: 10px;
+	font-family: 'FS Elliot Web Regular', sans-serif;
+	color: #a6a6a6;
+	text-transform: uppercase;
+}
+
+.activityBlock td.item {
+	padding-bottom: 15px;
+
+}
+
+.activityBlock a {
+	color: #3498db;
+	line-height: 12px;
+}
+
+.activityBlock a:hover {
+	color: #2980B9;
 }
 
 .recipientInfo {
@@ -1298,8 +1414,15 @@ td.tranSelected {
 	border: 0;
 }
 
-input.content {
+input.content, textarea.content {
 	background-color: #F1F1F1;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+}
+
+textarea {
+    resize: none;
 }
 
 .staticHeaders {
@@ -2004,7 +2127,30 @@ margin-top: 0.9em;
 	color: #666666;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 14px;
+	line-height: 22px;
 	font-weight: normal;
+}
+
+.home .videoRow {
+	text-align: center;
+	padding: 15px 0 15px 0;
+}
+
+.home .videoRow > h2 {
+	margin-left: 10px;
+	display: inline;
+}
+
+.home .videoRow .arrow-right {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 10px;
+	width: 0; 
+	height: 0; 
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	
+	border-left: 30px solid #1ABC96;
 }
 
 .home .paginator {
@@ -2019,6 +2165,10 @@ margin-top: 0.9em;
 	font-size: 14px;
 	font-weight: normal;
 	border: 0px;
+	text-shadow: none;
+	-webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
 	
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -2051,6 +2201,7 @@ margin-top: 0.9em;
 	display: block;
 	color: #666666;
 	background-color: #f1f1f1;
+	opacity: 1;
 }
 
 .home .btn-success:before {
@@ -2076,10 +2227,19 @@ margin-top: 0.9em;
 	text-transform:capitalize;	
 	border: 0;
 	font-size: 14px;
-	background-color: #1ABC96;
 	font-family: 'FS Elliot Web Light', sans-serif;
 	letter-spacing: 1px;
 
+}
+
+.home .button.greenButton {
+	background-color: #1ABC96;
+}
+
+.home .button.blueButton {
+	margin-left: 15px;
+	background-color:#3498db;
+	width: 180px;
 }
 
 .home input {
@@ -2132,6 +2292,11 @@ margin-top: 0.9em;
 	border: 1px solid #E3E3E3;
 	width: 85%;
 	margin: auto;
+}
+
+.carouseltabs {
+	width:85%; 
+	margin:auto;
 }
 
 /* Team Page */
@@ -2201,7 +2366,7 @@ margin-top: 0.9em;
 /* Jobs */
 
 .jobs .accordion-heading .accordion-toggle {
-	padding: 0 0 0 10px;
+	padding: 0 0 0 0;
 }
 
 .jobs .accordion-group.ng-scope .accordion-heading .accordion-toggle{
@@ -2224,5 +2389,6 @@ margin-top: 0.9em;
 .jobs .accordion-inner {
 	border: none;
 }
+
 
 

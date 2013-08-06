@@ -37,7 +37,7 @@
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
-          <li class="dropdown" ng-hide="selected.company">
+          <li class="dropdown hidden-phone" ng-hide="selected.company">
             <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>

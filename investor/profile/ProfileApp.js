@@ -67,14 +67,13 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       });
     }
   }
-  
   //noinspection JSUnresolvedVariable
   SWBrijj.tbl('account.profile').then(function(x) { 
     initPage($scope, x);
     $scope.namekey = $scope.name;
     $scope.detectChanges = $scope.name + $scope.street;
   }).except(initFail);
-};
+}
 
 function SocialCtrl($scope, $location, SWBrijj) {  
   $scope.contactSave = function(){
