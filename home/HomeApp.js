@@ -12,10 +12,12 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 app.controller("MainController", function($scope, $location) {
+});
 
-} );
-
-function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
+function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+  if ($routeParams.msg == "resetPassword") {
+    $rootScope.notification.show("success", "You have successfully changed your password.");
+  }
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
@@ -84,6 +86,9 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
 }
 
 function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+  if ($routeParams.msg == "resetPassword") {
+    $rootScope.notification.show("success", "You have successfully changed your password.");
+  }
   //$scope.company = $routeParams.company;
   $scope.company = $rootScope.selected.name;
 

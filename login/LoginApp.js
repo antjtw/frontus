@@ -101,10 +101,24 @@ function ForgotCtrl($scope, $location, SWBrijj) {
 function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
   $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; }
   $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); }
+  
+  SWBrijj.resetFillout($routeParams.code).then(function(x) {
+    if (x[1][1]) { // Check if code is already used
+      document.location.href="/login";
+    }
+    $scope.email = x[1][0];
+  });
+
   $scope.doReset = function() {
     $scope.resetDisabled = function() { return true; }
-    SWBrijj.resetPassword($scope.password, $routeParams.code).then(function(x) {
-      document.location.href="/login";
+    SWBrijj.resetPassword($scope.password, $routeParams.code).then(function(y) {
+      SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
+        if(x) {
+          document.location.href = x + "?msg=resetPassword";
+        } else {
+          document.location.href = '/login';
+        } 
+      });
     }).except(function(x) { 
       console.log(x);
       $scope.fed = "There was an error. Please try again later."
