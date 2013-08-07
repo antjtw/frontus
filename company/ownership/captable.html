@@ -43,7 +43,9 @@
     <form>
         <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
         <br>
-        <select ng-model="pickTran" ng-options="i for i in dateoptions();"></select>
+        <select ng-model="pickTran" ng-options="i.date for i in dateoptions();">
+            <option value="">New Transaction</option>
+        </select>
     </form>
     </div>
     <div class="modalButtons">
