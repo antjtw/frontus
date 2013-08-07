@@ -79,11 +79,12 @@
        <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
      </div>
   </div>
-  <div class="modalButtons">
-    <button class="button subText blueButton" ng-click="passwordModalClose()">Take Me Back!</button>
-<!--     <button class="button subText greenButton" ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button> -->
-<a ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }"
-      ng-click="changePassword(); passwordModalClose()">Change</a>
+  <div class="modalButtons two">
+    <div class="left"><button class="button subText blueButton left" ng-click="passwordModalClose()">Cancel</button></div>
+    <div class="right">
+        <button class="button subText greenButton " ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button> </div>
+<!--<a ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }"-->
+      <!--ng-click="changePassword(); passwordModalClose()">Change</a>-->
   </fieldset>
   </form>
   </div>

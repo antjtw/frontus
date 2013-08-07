@@ -1553,7 +1553,7 @@ tr.rowSelected {
 
 .button.blueButton {
 	color:#ffffff;
-	background-color:#3498db;
+	background-color:#34495E;
 	width: 143px;
 	height: 37px;
 	text-align:center;
@@ -1752,7 +1752,7 @@ tr.rowSelected {
 .modalHeader {
 	display: block;
 	text-align: left;
-	padding: 16px 0px 16px 30px;
+    padding: 16px 0px 16px 22px;
 	margin: 0px;
     background-color: #21b289;
     color: white;
@@ -1846,8 +1846,8 @@ tr.rowSelected {
 }
 
 .modalCopy {
-	padding: 15px 0 0px 0px;
-	margin: 5px 0px 20px 0px;
+	padding: 15px 0 0 0;
+	margin: 5px 0 20px 0;
 	display: block;
 	text-align: left;
 
@@ -1856,13 +1856,33 @@ tr.rowSelected {
 
 .modalButtons {
 	display: block;
-	text-align: center;
 	padding: 0 0 20px 0;
 }
 
 .modalButtons button {
 	padding: 0 !important;
 }
+
+.modalButtons.two {
+    display: block;
+}
+
+.modalButtons .left {
+    display: inline-block;
+}
+
+.modalButtons .right {
+    display: inline-block;
+    float:right;
+    margin-right: 20px;
+}
+
+.modalButtons .button.left {
+    text-align: center;
+    margin-left: 20px;
+}
+
+
 
 /* Modal Specialized */
 
