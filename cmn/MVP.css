@@ -1792,6 +1792,32 @@ tr.rowSelected {
 	text-transform: uppercase;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 10px;	
+	padding: 15px 0px 15px 20px;
+}
+.modal input {
+	
+	border: 0;
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+ 	-box-shadow: none !important;	
+	margin: 0 20px 0 0;
+	color: #666666;
+	width: 160px;
+	float: right;
+
+}
+
+.modalCopy .field {
+	border-bottom: 1px solid #E3E3E3;
+	padding: 6px 0 6px 0;
+}
+
+.editProfileFP input.name, .editProfileFP textarea.name {
+	font-size: 18px;
+ 	-webkit-box-shadow: none !important;
+ 	-box-shadow: none !important;	
+}
 }
 
 .multiEmail > input {
@@ -1821,8 +1847,8 @@ tr.rowSelected {
 }
 
 .modalCopy {
-	padding: 10px 0 0 20px;
-	margin: 5px 0 20px 0;
+	padding: 15px 0 0px 0px;
+	margin: 5px 0px 20px 0px;
 	display: block;
 	text-align: left;
 
