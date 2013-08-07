@@ -17,12 +17,12 @@ owner.config(function($routeProvider, $locationProvider) {
 
 owner.filter('shareList', function() {
   return function(rows) {
-    var returnrows = []
+    var returnrows = [];
     angular.forEach(rows, function(row) {
       if (row.emailkey == null && row.name != "") {
         returnrows.push(row);
       }
-    })
+    });
     return returnrows;
   };
 });
@@ -60,7 +60,7 @@ owner.service('calculate', function() {
 
   // The remainder calculated for outstanding units rows.
   this.whatsleft = function(total, issue, rows) {
-    var leftover = total
+    var leftover = total;
     angular.forEach(rows, function(row) {
       if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
         leftover = leftover - row[issue.issue]['u'];
@@ -70,17 +70,17 @@ owner.service('calculate', function() {
   };
 
   // Simple summation checking that the added value is a number.
-  this.sum = function(current, additional) {
-    if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
-      current = 0;
-    }
-    if (!isNaN(parseFloat(additional))) {
-      return (current + parseFloat(additional));
-    }
-    else {
-      return current;
-    }
-  }
+  this.sum = function (current, additional) {
+      if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
+          current = 0;
+      }
+      if (!isNaN(parseFloat(additional))) {
+          return (current + parseFloat(additional));
+      }
+      else {
+          return current;
+      }
+  };
 
   // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
   this.debt = function(rows, issue, row) {
@@ -93,16 +93,16 @@ owner.service('calculate', function() {
         if (r[issue.issue] != undefined) {
           if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 )&& !isNaN(parseFloat(r[issue.issue]['a']))) {
             mon = mon + parseFloat(r[issue.issue]['a']);
-          };
-        };
+          }
+        }
       });
-    };
+    }
     return ((parseFloat(row[issue.issue]['a'])/parseFloat(mon)) * 100)
   };
 
   // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array. Buggy.
   this.vested = function(rows, trans) {
-    var vesting = {}
+    var vesting = {};
     angular.forEach(trans, function(tran) {
       if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && tran.vestingbegins != null) {
         if (Date.compare(Date.today(), tran.vestingbegins) > -1) {
@@ -115,12 +115,12 @@ owner.service('calculate', function() {
           var cycleDate = angular.copy(tran.date);
           var remainingterm = angular.copy(tran.terms);
           while (Date.compare(tran.vestingbegins, cycleDate) > -1) {
-            remainingterm = remainingterm - 1
+            remainingterm = remainingterm - 1;
             cycleDate.addMonths(1);
           }
-          remainingterm = remainingterm + 1
+          remainingterm = remainingterm + 1;
           var monthlyperc = (100-tran.vestcliff)/(remainingterm);
-          var x = 1
+          var x = 1;
           if (tran.vestfreq == "monthly") {
             x = 1
           }
@@ -207,12 +207,12 @@ owner.service('switchval', function() {
 owner.service('sorting', function() {
 
   this.issuekeys = function(keys, issues) {
-    var sorted = []
+    var sorted = [];
     angular.forEach(issues, function(issue) {
       angular.forEach(keys, function(key) {
         if (issue.issue == key) {
           sorted.push(key);
-        };
+        }
       });
     });
     return sorted;
@@ -235,7 +235,7 @@ owner.service('sorting', function() {
   // Sorts the rows
   this.row = function(prop) {
     return function(a, b) {
-        var i = 0
+        var i = 0;
         // Working for the earliest issue to the latest
         while (i < prop.length) {
 
@@ -274,7 +274,7 @@ owner.service('sorting', function() {
 owner.run(function($rootScope) {
 
 $rootScope.rowOrdering = function(row) {
-  var total = 0
+  var total = 0;
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (key != "name") {
@@ -301,47 +301,47 @@ $rootScope.trantype = function(type, activetype) {
 
 //Calculates total grants in each issue
 $rootScope.totalGranted = function(issue, trans) {
-  var granted = 0
+  var granted = 0;
   angular.forEach(trans, function(tran) {
     if (tran.issue == issue && tran.type == "options" && !isNaN(parseFloat(tran.units))) {
       granted = granted + parseFloat(tran.units);
-    };
+    }
   });
   return granted;
 };
 
 //Calculates total grant actions in grant table
 $rootScope.totalGrantAction = function(type, grants) {
-  var total = 0
+  var total = 0;
   angular.forEach(grants, function(grant) {
     if (grant.action == type && !isNaN(parseFloat(grant.unit))) {
       total = total + parseFloat(grant.unit);
-    };
+    }
   });
   return total;
 };
 
 //Calculates total granted to and forfeited in grant table
 $rootScope.totalTranAction = function(type, trans) {
-  var total = 0
+  var total = 0;
   angular.forEach(trans, function(tran) {
     if (type == "granted") {
       if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) > 0) {
         total = total + parseFloat(tran.units);
-      };
+      }
     }
     else if (type == "forfeited") {
       if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) < 0) {
         total = total + parseFloat(tran.units);
-      };
-    };
+      }
+    }
   });
   return total;
 };
 
 /* Calculates the Total Shares owned by an investor across all rounds */
 $rootScope.shareSum = function(row) {
-  var total = 0
+  var total = 0;
   for (var key in row) {
     if (row.hasOwnProperty(key)) {
       if (row[key] != null) {
@@ -363,32 +363,32 @@ $rootScope.shareSum = function(row) {
             if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
               total = total + parseFloat(row[key]['u']);
             }
-          };
-        };
-      };
+          }
+        }
+      }
     });
     return total;
   };
 
   $rootScope.sharePercentage = function(row, rows, issuekeys) {
-    var percentage = 0
-    var totalpercentage = 0
+    var percentage = 0;
+    var totalpercentage = 0;
     for(var i = 0, l = issuekeys.length; i < l; i++) {
       if (row[issuekeys[i]] != undefined) {
         if (row[issuekeys[i]]['x'] != undefined) {
           percentage = percentage + row[issuekeys[i]]['x'];
-        };
+        }
       }
-    };
+    }
     for(var j = 0, a = rows.length; j < a; j++) {
       for(var i = 0, l = issuekeys.length; i < l; i++) {
         if (rows[j][issuekeys[i]] != undefined) {
           if (rows[j][issuekeys[i]]['x'] != undefined) {
             totalpercentage = totalpercentage + rows[j][issuekeys[i]]['x'];
-          };
+          }
         }
-      };
-    };
+      }
+    }
     return (percentage + ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * (100 - totalpercentage)));
     };
 
@@ -401,7 +401,7 @@ $rootScope.shareSum = function(row) {
             total = total + parseFloat(row[key][type]);
               }
           }
-      };
+      }
     });
       return total;
     };
@@ -430,7 +430,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
   // Variables for the select boxes to limit the selections to the available database types
   $scope.issuetypes = [];
   $scope.freqtypes = [];
-  $scope.tf = ["yes", "no"]
+  $scope.tf = ["yes", "no"];
 
   $scope.extraPeople = [{"email":""}];
 
@@ -448,16 +448,16 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
 
   // Empty variables for issues
   $scope.issuekeys = [];
-  $scope.issues = []
+  $scope.issues = [];
 
   // Sorting variables
   $scope.issueSort = 'date';
   $scope.rowSort = '-name';
 
   // Empty variables for the rows and transactions
-  $scope.rows = []
-  $scope.uniquerows = []
-  $scope.activeTran = []
+  $scope.rows = [];
+  $scope.uniquerows = [];
+  $scope.activeTran = [];
 
   $scope.investorOrder = "name";
   
@@ -467,12 +467,12 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
         $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
         $scope.issues[i].key = $scope.issues[i].issue;
         $scope.issuekeys.push($scope.issues[i].key);
-      };
-      $scope.issues.push({"name":"", "date":Date(2100, 1, 1)})
+      }
+      $scope.issues.push({"name":"", "date":Date(2100, 1, 1)});
 
     // Pivot shenanigans
     SWBrijj.tblm('ownership.company_transaction').then(function(trans) {
-      $scope.trans = trans
+      $scope.trans = trans;
 
       SWBrijj.tblm('ownership.company_grants').then(function(data) {
 
@@ -506,9 +506,9 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
             $scope.trans[i].totalauth = issue.totalauth;
             $scope.trans[i].premoney = issue.premoney;
             $scope.trans[i].postmoney = issue.postmoney;
-          };
+          }
         });
-      };
+      }
 
       angular.forEach($scope.trans, function(tran) {
         angular.forEach($scope.rows, function(row) {
@@ -524,7 +524,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
                 }
               }
               else {
-                row[tran.issue] = {}
+                row[tran.issue] = {};
                 row[tran.issue]["u"] = tran.units;
                 row[tran.issue]["a"] = tran.amount;
                 row[tran.issue]["ukey"] = tran.units;
@@ -534,7 +534,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
                   row[tran.issue]["u"] = (-tran.forfeited);
                   row[tran.issue]["ukey"] = row[tran.issue]["u"];
                 }
-              };
+              }
             }
             else {
               if (tran.issue in row) {
@@ -542,7 +542,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
               else {
                 row[tran.issue] = {"u":null, "a":null, "ukey":null, "akey":null};
               }
-            };
+            }
           });
       });
 
@@ -551,8 +551,8 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
           if (row[issue.issue] != undefined) {
             if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
               row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-            };
-          };
+            }
+          }
         });
       });
 
@@ -560,7 +560,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
         if (!isNaN(parseFloat(issue.totalauth))) {
           var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
           if (leftovers != 0) {
-            var issuename = String(issue.issue)
+            var issuename = String(issue.issue);
             var shares = {"u":leftovers, "a":null, "ukey":leftovers, "akey":null};
             $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
             $scope.rows[($scope.rows.length)-1][issuename] = shares;
@@ -575,7 +575,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
           }
           else {
             row[issuekey] = {"u":null, "a":null, "ukey":null, "akey":null};
-          };
+          }
         });
       });
 
@@ -584,7 +584,7 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
     $scope.issuekeys= sorting.issuekeys($scope.issuekeys, $scope.issues);
     $scope.rows.sort(sorting.row($scope.issuekeys));
 
-    var values = {"name":"", "editable":"0"}
+    var values = {"name":"", "editable":"0"};
     angular.forEach($scope.issuekeys, function(key) {
       values[key] = {"u":null, "a":null, "ukey":null, "akey":null};
     });
@@ -598,7 +598,7 @@ $scope.findValue = function(row, header) {
   angular.forEach($scope.rows, function(picked) {
     if (picked==row) {
       return $scope.rows[header];
-    };
+    }
   });
 };
 
@@ -624,12 +624,12 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     });
   });
 
-  var first = 0
+  var first = 0;
   angular.forEach($scope.trans, function(tran) {
     if (tran.investor == currenttran) {
       if (tran.issue == currentcolumn){
         if (first == 0) {
-          tran['active'] = true
+          tran['active'] = true;
           first = first + 1
         }
         if (String(tran['partpref']) == "true") {
@@ -650,7 +650,7 @@ $scope.getActiveTransaction = function(currenttran, currentcolumn) {
     }
   });
   if ($scope.activeTran.length < 1) {
-    var anewTran = {}
+    var anewTran = {};
     anewTran = {"active":true, "atype":0, "new":"yes", "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "unitskey":null, "paidkey":null, "key":undefined};
     angular.forEach($scope.issues, function(issue) {
       if (issue.issue == $scope.activeIssue) {
@@ -708,7 +708,7 @@ $scope.saveIssue = function(issue) {
   angular.forEach($scope.issues, function(coreissue) {
     if(issue.issue == coreissue.issue && issue['$$hashKey'] != coreissue['$$hashKey']) {
       issue.issue = issue.issue + " (1)";
-    };
+    }
   });
   if (issue['issue'] == null && issue['key'] == null) {
     return
@@ -746,10 +746,10 @@ $scope.saveIssue = function(issue) {
             row[issue['issue']] = row[issue.key];
             delete row[issue.key];
           });
-        };
+        }
         var keepgoing = true;
         var deleterow = -1;
-        var issuename = String(issue.issue)
+        var issuename = String(issue.issue);
         var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
         var shares = {"u":leftovers, "ukey":leftovers, "x":null};
         angular.forEach($scope.rows, function(row) {
@@ -770,17 +770,17 @@ $scope.saveIssue = function(issue) {
           if (!isNaN(parseFloat(leftovers))) {
             $scope.rows.push({"name":issuename+" (unissued)", "editable":0, "nameeditable":0});
             $scope.rows[($scope.rows.length)-1][issuename] = shares;
-          };
+          }
         }
         if (deleterow > -1) {
           $scope.rows.splice(deleterow, 1);
-        };
+        }
         angular.forEach($scope.trans, function(tran) {
           if (tran.issue == issue.key) {
             tran = $scope.tranInherit(tran, issue);
             if (tran.tran_id != undefined) {
               $scope.saveTran(tran);
-            };
+            }
           }
         });
 
@@ -788,8 +788,8 @@ $scope.saveIssue = function(issue) {
         if (row[issue.issue] != undefined) {
           if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
             row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-            };
-          };
+            }
+          }
         });
 
         var index = $scope.issuekeys.indexOf(issue.key);
@@ -803,7 +803,7 @@ $scope.saveIssue = function(issue) {
       var expire = null;
       SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function(data) { 
         issue.key=issue['issue'];
-        $scope.issues.push({name:""})
+        $scope.issues.push({name:""});
         $scope.issuekeys.push(issue.key);
         angular.forEach($scope.rows, function(row) {
           row[issue.key] = {"u":null, "a":null};
@@ -853,13 +853,13 @@ $scope.tranChangeU = function(value) {
   console.log("thing firing");
   if ($scope.activeTran.length < 2) {
   $scope.activeTran[0]['units'] = value;
-  };
+  }
 };
 
 $scope.tranChangeA = function(value) {
   if ($scope.activeTran.length < 2) {
   $scope.activeTran[0]['amount'] = value;
-  };
+  }
 };
 
 $scope.getActiveInvestor = function(investor) {
@@ -872,7 +872,7 @@ $scope.getActiveInvestor = function(investor) {
   });
 
   if (investor.name == "") {
-    var values = {"name":"", "editable":"0"}
+    var values = {"name":"", "editable":"0"};
     angular.forEach($scope.issuekeys, function(key) {
       values[key] = {"u":null, "a":null, "ukey":null, "akey":null};
     });
@@ -913,7 +913,7 @@ $scope.deletePersonButton = function(name) {
       $scope.rmodalUp(row);
     }
   })
-}
+};
 
 $scope.updateRow = function(investor) {
   if (investor.name == "" && investor.namekey != undefined) {
@@ -928,7 +928,7 @@ $scope.updateRow = function(investor) {
   angular.forEach($scope.rows, function(row) {
     if(investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
       investor.name = investor.name + " (1)";
-    };
+    }
   });
   if (investor.name != investor.namekey) {
     var index = $scope.rows.indexOf(investor);
@@ -936,11 +936,11 @@ $scope.updateRow = function(investor) {
       if (tran.investor == investor.namekey) {
         tran.investor = investor.name;
         $scope.saveTran(tran);
-      };
+      }
   });
   if (investor.name) {
     $scope.rows[index].namekey = investor.name
-    };
+    }
   }
   $scope.$apply();
 };
@@ -955,7 +955,7 @@ $scope.revertPerson = function(investor) {
 };
 
 $scope.deletePerson = function(investor) {
-  $scope.sideBar = "x"
+  $scope.sideBar = "x";
   angular.forEach($scope.trans, function(tran) {
     if (tran.investor == investor) {
       $scope.deleteTran(tran);
@@ -970,7 +970,7 @@ $scope.deletePerson = function(investor) {
 };
 
 $scope.createTran = function() {
-  var newTran = {}
+  var newTran = {};
   newTran = {"new":"yes", "atype":0, "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "unitskey":null, "paidkey":null, "key":"undefined"};
   angular.forEach($scope.issues, function(issue) {
       if (issue.issue == $scope.activeIssue) {
@@ -979,11 +979,11 @@ $scope.createTran = function() {
     });
   $scope.trans.push(newTran);
   $scope.activeTran.push(newTran);
-}
+};
 
 $scope.createTrantab = function() {
   if ($scope.tabAddTime) {
-    var newTran = {}
+    var newTran = {};
     newTran = {"new":"yes", "atype":0, "investor":$scope.activeInvestor, "investorkey":$scope.activeInvestor, "company":$scope.company, "date":(Date.today()), "datekey":(Date.today()), "issue":($scope.activeIssue), "units":null, "paid":null, "unitskey":null, "paidkey":null, "key":"undefined"};
     angular.forEach($scope.issues, function(issue) {
         if (issue.issue == $scope.activeIssue) {
@@ -1000,10 +1000,10 @@ $scope.createTrantab = function() {
       else {
         $scope.activeTran[i].active = false;
       }
-    };
+    }
   }
   $scope.tabAddTime = true;
-}
+};
 
 $scope.deleteTran = function(tran) {
     var d1 = tran['date'].toUTCString();
@@ -1012,13 +1012,13 @@ $scope.deleteTran = function(tran) {
       $scope.trans.splice(index, 1);
       angular.forEach($scope.rows, function(row) {
         if (row.name === tran['investor']) {
-          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']))
+          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']));
           row[tran['issue']] = {"u":null, "a":null, "ukey":null, "akey":null};
-        };
+        }
       });
 
   });
-}
+};
 
 $scope.manualdeleteTran = function(tran) {
     var d1 = tran['date'].toUTCString();
@@ -1029,19 +1029,19 @@ $scope.manualdeleteTran = function(tran) {
       $scope.activeTran.splice(index, 1);
       angular.forEach($scope.rows, function(row) { 
         if (row.name === tran['investor']) {
-          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']))
+          row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']));
           row[tran['issue']] = {"u":null, "a":null, "ukey":null, "akey":null};
-        };
+        }
       });
   });
-}
+};
 
 $scope.saveTranDate = function(transaction) {
   //Fix the dates to take into account timezone differences.
   var offset = transaction.date.getTimezoneOffset();
   transaction.date = transaction.date.addMinutes(offset);
   $scope.saveTran(transaction);
-}
+};
 
 $scope.saveTran = function(transaction) {
 
@@ -1055,17 +1055,17 @@ $scope.saveTran = function(transaction) {
             var changed = (parseFloat(row[transaction[0].issue]['u']) - parseFloat(row[transaction[0].issue]['ukey']));
             $scope.mmodalUp(changed, "u");
             return;
-          };
-        };
+          }
+        }
         if (!isNaN(parseFloat(row[transaction[0].issue]['a']))) {
           if (parseFloat(row[transaction[0].issue]['a']) != parseFloat(row[transaction[0].issue]['akey'])) {
             var changed = (parseFloat(row[transaction[0].issue]['a']) - parseFloat(row[transaction[0].issue]['akey']));
             $scope.mmodalUp(changed, "a");
             return
-          };
-        };
-      };
-    })
+          }
+        }
+      }
+    });
     return;
   }
   // Moves on to the main saving process
@@ -1077,7 +1077,7 @@ $scope.saveTran = function(transaction) {
 
   // Bail out if insufficient data has been added for the transaction
   if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
-    console.log("transaction is undefined")
+    console.log("transaction is undefined");
     return;
   }
   // Delete the transaction if an existing transaction has had all its information removed
@@ -1105,15 +1105,15 @@ $scope.saveTran = function(transaction) {
         var d1 = transaction['date'].toUTCString();
         if (transaction['tran_id'] == undefined) {
           transaction['tran_id'] = '';
-        };
+        }
         if (!isNaN(parseFloat(transaction['amount']))) {
-        };
+        }
         if (transaction['partpref'] != null) {
           var partpref = $scope.strToBool(transaction['partpref']);
-        };
+        }
         if (transaction['liquidpref'] != null) {
           var liquidpref = $scope.strToBool(transaction['liquidpref']);
-        };
+        }
         if (transaction['vestingbegins'] == undefined) {
           var vestcliffdate = null
         }
@@ -1127,10 +1127,10 @@ $scope.saveTran = function(transaction) {
           transaction = switchval.typeswitch(transaction);
           if (transaction.units >= 0) {
             var tempunits = 0;
-          };
+          }
           if (transaction.amount >= 0) {
             var tempamount = 0;
-          };
+          }
           angular.forEach($scope.rows, function(row) {
             angular.forEach($scope.trans, function(tran) {
             if (row.name == tran.investor) {
@@ -1141,7 +1141,7 @@ $scope.saveTran = function(transaction) {
                     tran.unitskey = tran.units;
                     tran.paidkey = tran.paid;
                     tran.tran_id=data[1][0];
-                    transaction.datekey = d1
+                    transaction.datekey = d1;
                     tempunits = calculate.sum(tempunits, tran.units);
                     tempamount = calculate.sum(tempamount, tran.amount);
                     row[tran.issue]['u'] = tempunits;
@@ -1169,7 +1169,7 @@ $scope.saveTran = function(transaction) {
           });
 
           if (transaction.type == "options" && transaction.amount != 0) {
-            var modGrant = {"unit":null, "tran_id":transaction.tran_id, "date":(Date.today()), "action":"exercised", "investor":transaction.investor, "issue":transaction.issue}
+            var modGrant = {"unit":null, "tran_id":transaction.tran_id, "date":(Date.today()), "action":"exercised", "investor":transaction.investor, "issue":transaction.issue};
             modGrant.amount = transaction.amount;
             modGrant.unit = (transaction.amount / transaction.price);
             angular.forEach($scope.grants, function(grant) {
@@ -1192,12 +1192,12 @@ $scope.saveTran = function(transaction) {
               if (row[issue.issue] != undefined) {
                 if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0)&& !isNaN(parseFloat(row[issue.issue]['a']))) {
                   row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-                };
-              };
+                }
+              }
             });
           });
         });
-      };
+      }
       console.log("done saving");
 };
 
@@ -1213,11 +1213,11 @@ $scope.saveTran = function(transaction) {
       else {
         console.log(grant);
         return;
-    };
+    }
     }
     if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
       return;
-    };
+    }
     if (grant.grant_id == undefined) {
       grant.grant_id = "";
     }
@@ -1232,7 +1232,7 @@ $scope.saveTran = function(transaction) {
               $scope.grants.push(grant);
             }
           });
-        };
+        }
       });
 
     });
@@ -1272,40 +1272,30 @@ $scope.saveTran = function(transaction) {
   // Toggles editable to view
   $scope.toggleView = function() {
     if ($scope.radioModel == "View") {
-      $scope.captablestate = 1
+      $scope.captablestate = 1;
       return true;
     }
     else {
       $scope.dilutionSwitch = true;
-      $scope.captablestate = 0
+      $scope.captablestate = 0;
       return false;
     }
   };
 
   // Toggles editable to view
   $scope.toggleDilution = function() {
-    if ($scope.dilutionSwitch) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return $scope.dilutionSwitch;
   };
 
   // Toggles sidebar back and forth
   $scope.toggleSide = function() {
-    if ($scope.sideToggle == true) {
-      return true
-    }
-    else {
-      return false
-    }
+    return $scope.sideToggle == true;
   };
 
 
   // Generates the diluted rows
   $scope.dilution = function() {
-    $scope.dilutedRows = []
+    $scope.dilutedRows = [];
     angular.forEach($scope.rows, function(row) {
       if (row.name != undefined) {
         var something = null;
@@ -1318,11 +1308,11 @@ $scope.saveTran = function(transaction) {
         });
         if (something) {
           $scope.dilutedRows.push(temprow);
-        };
-      };
-    })
+        }
+      }
+    });
     console.log($scope.dilutedRows)
-  }
+  };
 
 
 
@@ -1330,7 +1320,7 @@ $scope.saveTran = function(transaction) {
 
   $scope.dmodalUp = function (issue) {
       $scope.capDelete = true;
-      $scope.missue = issue
+      $scope.missue = issue;
       console.log($scope.missue);
       };
     
@@ -1357,7 +1347,7 @@ $scope.saveTran = function(transaction) {
 
   $scope.mmodalUp = function (number, type) {
       $scope.changedNum = number;
-      $scope.changedType = type
+      $scope.changedType = type;
       $scope.capMulti = true;
       };
     
@@ -1389,7 +1379,7 @@ $scope.saveTran = function(transaction) {
         else {
           $scope.activeTran[i].active = false;
         }
-      };
+      }
     }
     else {
       if (type == "u") {
@@ -1402,16 +1392,16 @@ $scope.saveTran = function(transaction) {
     }
     $scope.saveTran(newTran);
     return;
-  }
+  };
 
   $scope.mReset = function() {
     angular.forEach($scope.rows, function(row) {
       if (row.name == $scope.activeTran[0].investor) {
         row[$scope.activeTran[0].issue]['u'] = row[$scope.activeTran[0].issue]['ukey'];
         row[$scope.activeTran[0].issue]['a'] = row[$scope.activeTran[0].issue]['akey'];
-      };
+      }
     });
-  }
+  };
 
 
   // Captable Sharing Modal
@@ -1436,7 +1426,7 @@ $scope.saveTran = function(transaction) {
       };
 
   $scope.addRemove = function () {
-    var add = 0
+    var add = 0;
     angular.forEach($scope.extraPeople, function(people) {
       if (people.email) {
         add = add + 1
@@ -1450,16 +1440,11 @@ $scope.saveTran = function(transaction) {
 
   $scope.emailCheck = function(bool, person){
     if (bool) {
-      if (person) {
-        return false;
-      }
-      else {
-        return true;
-      };
+      return !person;
     }
     else {
       return false;
-    };
+    }
   };
 
   $scope.turnOnShares = function() {
@@ -1486,7 +1471,7 @@ $scope.saveTran = function(transaction) {
               console.log("success");
             });
           });
-        };
+        }
       });
       $scope.extraPeople = [];
       $scope.extraPeople.push({'email':""});
@@ -1508,11 +1493,11 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
   });
 
 
-  $scope.rows = []
-  $scope.uniquerows = []
+  $scope.rows = [];
+  $scope.uniquerows = [];
   $scope.freqtypes = [];
-  $scope.issuekeys = []
-  $scope.possibleActions = ['exercised', 'forfeited']
+  $scope.issuekeys = [];
+  $scope.possibleActions = ['exercised', 'forfeited'];
 
   //Get the available range of frequency types
   SWBrijj.procm('ownership.get_freqtypes').then(function(results) {
@@ -1526,7 +1511,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     $scope.issues = data;
     for(var i = 0, l = $scope.issues.length; i < l; i++) {
         $scope.issuekeys.push($scope.issues[i].issue);
-      };
+      }
   });
 
   // Initialisation. Get the transactions and the grants
@@ -1562,7 +1547,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
             if (parseFloat(tran.units) > 0) {
               row["granted"] = calculate.sum(row["granted"], tran.units);
             }
-          };
+          }
         });
       });
 
@@ -1576,10 +1561,10 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           if (parseFloat(grant.unit) > 0) {
             if (row[grant.action] == undefined) {
               row[grant.action] = 0;
-            };
+            }
             row[grant.action] = calculate.sum(row[grant.action], grant.unit);
-          };
-        };
+          }
+        }
       });
     });
 
@@ -1594,11 +1579,11 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     $scope.activeInvestor = currenttran;
 
 
-    var first = 0
+    var first = 0;
     for(var i = 0, l = $scope.trans.length; i < l; i++) {
       if ($scope.trans[i].investor == currenttran) {
         if (first == 0) {
-          $scope.trans[i].active = true
+          $scope.trans[i].active = true;
           first = first + 1
         }
         $scope.trans[i] = switchval.typeswitch($scope.trans[i]);
@@ -1610,7 +1595,7 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
         $scope.activeTran.push($scope.trans[i]);
       }
-    };
+    }
 
     angular.forEach($scope.rows, function(row) {
       if (row.name == currenttran) {
@@ -1623,15 +1608,15 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
     //Pair the correct grants with the selected rows transactions
     for(var i = 0, l = $scope.activeTran.length; i < l; i++) {
-      var activeAct = []
+      var activeAct = [];
       for(var j = 0, a = $scope.grants.length; j < a; j++) {
         if ($scope.activeTran[i].tran_id == $scope.grants[j].tran_id) {
           activeAct.push($scope.grants[j]);
-        };
-      };
+        }
+      }
       activeAct.push({"unit":null, "tran_id":$scope.activeTran[i].tran_id, "date":(Date.today()), "action":null, "investor":$scope.activeTran[i].investor, "issue":$scope.activeTran[i].issue});
       $scope.activeTran[i].activeAct = activeAct;
-    };
+    }
   };
 
   $scope.saveGrant = function(grant) {
@@ -1639,15 +1624,15 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
     if (isNaN(parseFloat(grant.unit))) {
       if (grant.grant_id != null) {
         SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function(data) {
-          console.log("deleted")
+          console.log("deleted");
           var index = $scope.grants.indexOf(grant);
           $scope.grants.splice(index, 1);
           angular.forEach($scope.activeTran, function(tran) {
-            var activeAct = []
+            var activeAct = [];
             angular.forEach($scope.grants, function(grant) {
               if (tran.tran_id == grant.tran_id) {
                 activeAct.push(grant);
-              };
+              }
             });
             activeAct.push({"unit":null, "tran_id":tran.tran_id, "date":(Date.today()), "action":null, "investor":tran.investor, "issue":tran.issue});
             tran.activeAct = activeAct;
@@ -1666,11 +1651,11 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
       else {
         console.log(grant);
         return;
-    };
+    }
     }
     if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
       return;
-    };
+    }
     if (grant.grant_id == undefined) {
       grant.grant_id = "";
     }
@@ -1685,11 +1670,11 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
               $scope.grants.push(grant);
             }
           });
-        };
+        }
       });
 
       // Calculate the total exercised for each transaction from the grant list
-      var exercises = {}
+      var exercises = {};
       angular.forEach($scope.grants, function(grant) {
         if (grant.action == "exercised") {
           if (exercises[grant.tran_id] == undefined) {
@@ -1697,8 +1682,8 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
           }
           else {
             exercises[grant.tran_id] = parseFloat(exercises[grant.tran_id]) + parseFloat(grant.unit);
-          };
-        };
+          }
+        }
       });
 
       // Get the correct transaction and save the new amount value
@@ -1713,11 +1698,11 @@ var grantController = function($scope, $parse, SWBrijj, calculate, switchval, so
 
       // Update the activeTran list and push a new blank grant
       angular.forEach($scope.activeTran, function(tran) {
-        var activeAct = []
+        var activeAct = [];
         angular.forEach($scope.grants, function(grant) {
           if (tran.tran_id == grant.tran_id) {
             activeAct.push(grant);
-          };
+          }
         });
         activeAct.push({"unit":null, "tran_id":tran.tran_id, "date":(Date.today()), "action":null, "investor":tran.investor, "issue":tran.issue});
         tran.activeAct = activeAct;
@@ -1785,7 +1770,7 @@ var statusController = function($scope, SWBrijj) {
           }
         });
       });
-    })
+    });
     SWBrijj.tblm("ownership.user_tracker").then(function(logins) {
       angular.forEach($scope.userStatus, function(person) {
         angular.forEach(logins, function(login) {
@@ -1832,7 +1817,7 @@ var statusController = function($scope, SWBrijj) {
       }
       else {
         $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
-      };
+      }
 
       // angular.forEach($scope.activityDetail, function(x) { //Get names for each person
       //   SWBrijj.proc('account.get_investor_name', x.email).then(function(name) {
@@ -1888,7 +1873,7 @@ var statusController = function($scope, SWBrijj) {
       }
       else {
         person.fullview = "personal";
-      };
+      }
     });
   };
 

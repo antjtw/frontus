@@ -80,9 +80,8 @@
      </div>
   </div>
   <div class="modalButtons">
-    <button class="button subText blueButton" ng-click="passwordModalClose()">Take Me Back!</button>
-<!--     <button class="button subText greenButton" ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button> -->
-<button ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button>
+    <div class="left"><button class="button subText blueButton" ng-click="passwordModalClose()">Take Me Back!</button></div>
+    <div class="right"><button ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button></div>
   </fieldset>
   </form>
   </div>
