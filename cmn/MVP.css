@@ -1749,6 +1749,11 @@ tr.rowSelected {
 	border-radius: 0px;
 }
 
+.modal.narrowModal {
+    width: 340px;
+}
+
+
 .modalHeader {
 	display: block;
 	text-align: left;
@@ -1795,7 +1800,7 @@ tr.rowSelected {
 	padding: 15px 0px 15px 20px;
 }
 .modal input {
-	
+
 	border: 0;
 	box-shadow: none !important;
 	-webkit-box-shadow: none !important;
@@ -1812,6 +1817,13 @@ tr.rowSelected {
 	border-bottom: 1px solid #E3E3E3;
 	padding: 6px 0 6px 0;
 }
+
+.modalButtons button:disabled{
+    background-color: #1ABC96;
+    color: #FFFFFF;
+    opacity: 0.5;
+}
+
 
 .editProfileFP input.name, .editProfileFP textarea.name {
 	font-size: 18px;
@@ -1865,6 +1877,10 @@ tr.rowSelected {
 
 .modalButtons.two {
     display: block;
+}
+
+.modalButtons.one {
+    text-align: center;
 }
 
 .modalButtons .left {
