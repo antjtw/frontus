@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-warning, .icon-view, .icon-arrow-down, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-doc2, .icon-doc-download, .icon-doc-upload, .icon-doc, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-delete2, .icon-delete3, .icon-cog, .icon-pie, .icon-circle-down, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-download, .icon-circle-upload, .icon-circle-delete, .icon-cicle-minus, .icon-untitled, .icon-magnify, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-check, .icon-email, .icon-calendar, .icon-key, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-lock, .icon-unlocked {
+.icon-warning, .icon-view, .icon-arrow-down, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-doc2, .icon-doc-download, .icon-doc-upload, .icon-doc, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-delete2, .icon-delete3, .icon-cog, .icon-pie, .icon-circle-down, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-download, .icon-circle-upload, .icon-circle-delete, .icon-circle-minus, .icon-untitled, .icon-magnify, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-check, .icon-email, .icon-calendar, .icon-key, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-lock, .icon-unlocked {
 	font-family: 'sharewave';
 	speak: none;
 	font-style: normal;
@@ -121,7 +121,7 @@ you can use the generic selector below, but it's slower:
 .icon-circle-delete:before {
 	content: "\e01b";
 }
-.icon-cicle-minus:before {
+.icon-circle-minus:before {
 	content: "\e01c";
 }
 .icon-untitled:before {
