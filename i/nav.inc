@@ -26,7 +26,7 @@
   </div>
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
-      <div class="navbounder">
+      <div ng-class="{navbounder:!showLogin, navpadding:showLogin}">
         <ul class="nav pull-left nav-logo">
           <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>

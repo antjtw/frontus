@@ -41,12 +41,12 @@ owner.directive('popOver', function ($compile) {
                 var options = {
                     content: popOverContent,
                     placement: "bottom",
-                    html: true,
+                    html: true
                 };
                 $(element).popover(options);
             },
             scope: {
-                email: '=',
+                email: '='
             }
         };
     });
