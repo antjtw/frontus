@@ -41,6 +41,15 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.adminModal = false;
   };
 
+    $scope.fieldCheck = function() {
+        if ($scope.newEmail) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    };
+
   $scope.revokeModalOpen = function (email) {
     $scope.selectedToRevoke = email;
     $scope.revokeModal = true;
@@ -50,6 +59,12 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.revokeModal = false;
   };
+
+   $scope.narrowopts = {
+        backdropFade: true,
+        dialogFade:true,
+        dialogClass: 'narrowModal modal'
+   };
 
   $scope.opts = {
     backdropFade: true,
