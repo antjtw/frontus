@@ -156,7 +156,7 @@
             <!-- Editable headers -->
             <tr ng-hide="toggleView();" class="column-label">
                 <th colspan="2">Ownership</th>
-                <th><span class="longrow">Shareholder</span></th>
+                <th class="longrow">Shareholder</th>
                 <th ng-repeat="one in issues">
                     <input placeholder="new security name" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one)'}" ng-model="one.issue">

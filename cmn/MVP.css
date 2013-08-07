@@ -529,7 +529,7 @@ h2 {
 	white-space: nowrap;
 }
 
-.subnav-controls > div {
+.subnav-controls > div:first-child {
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;
@@ -962,7 +962,7 @@ form.inputs {
 	font-family: 'FS Elliot Web Bold', sans-serif;
 	text-transform: uppercase;
 	color: #1E2D3D;
-	width: 200px;
+	width: 140px;
 }
 
 .docLibrary .capsums-col {
@@ -986,7 +986,7 @@ form.inputs {
 .docLibrary input {
 	border: 0px;
 	padding: 0px;
-	width: 100px;
+	width: 70px;
 }
 
 /* Placeholder text color */
@@ -1032,12 +1032,22 @@ form.inputs {
 
 .tableView th {
 	background-color: #FFFFFF;
-	width: 200px;
+	width: 140px;
 	text-align: left;
 	padding: 0 0 0 10px;
 	margin: 0 0 0 0;
 	position: relative;
 	font-weight: normal;
+}
+
+.tableView th.longrow {
+    background-color: #FFFFFF;
+    width: 180px;
+    text-align: left;
+    padding: 0 0 0 10px;
+    margin: 0 0 0 0;
+    position: relative;
+    font-weight: normal;
 }
 
 .tableView td {
