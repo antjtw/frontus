@@ -1340,7 +1340,9 @@ td.tranSelected {
 .span4.capright {
 	float: right;
 	margin-left: 0;
-	width: 34.1796875%;
+    margin-top: -28px;
+	width: 350px;
+    min-height: 500px;
 	transition: all 2s;
 	-moz-transition:all 2s; /* Firefox 4 */; 
 	-webkit-transition: all 2s; /* Safari and Chrome */
@@ -1348,8 +1350,18 @@ td.tranSelected {
 }
 
 .span4.capright > button {
-	position:relative;
-	left:-56px;
+    top: 330px;
+    position:relative;
+
+    left: -68px;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    border-radius: 0;
+    border: none;
+    background-color: #E3E3E3;
+    width: 108px;
 }
 
 .capright .headsection {
