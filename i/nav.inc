@@ -1,7 +1,7 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
-  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
+  <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible" ng-click="notification.visible = false" ng-bind="notification.message"></div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="container">
@@ -31,7 +31,7 @@
           <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>
         <ul class="nav pull-right nav-item">
-          <li style="display: none;" class="dropdown" ng-show="selected.company">
+          <li style="display: none;" class="dropdown" ng-show="isLoggedIn">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
@@ -39,7 +39,7 @@
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
-          <li class="dropdown hidden-phone" ng-hide="selected.company">
+          <li class="dropdown hidden-phone" ng-hide="isLoggedIn">
             <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>
