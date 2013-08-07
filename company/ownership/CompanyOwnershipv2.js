@@ -1018,8 +1018,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.trans.splice(index, 1);
             angular.forEach($scope.rows, function (row) {
                 if (row.name === tran['investor']) {
-                    row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']));
-                    row[tran['issue']] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    if (!isNaN(tran.units)) {
+                        row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
+                        row[tran.issue]['ukey'] = row[tran.issue]['u']
+                    }
+                    if (!isNaN(tran.amount)) {
+                        row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
+                        row[tran.issue]['akey'] = row[tran.issue]['a']
+                    }
                 }
             });
 
@@ -1035,8 +1041,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.activeTran.splice(index, 1);
             angular.forEach($scope.rows, function (row) {
                 if (row.name === tran['investor']) {
-                    row[tran['issue']] = (parseFloat(row[tran['issue']]) - parseFloat(tran['units']));
-                    row[tran['issue']] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    if (!isNaN(tran.units)) {
+                        row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
+                        row[tran.issue]['ukey'] = row[tran.issue]['u']
+                    }
+                    if (!isNaN(tran.amount)) {
+                        row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
+                        row[tran.issue]['akey'] = row[tran.issue]['a']
+                    }
                 }
             });
         });
