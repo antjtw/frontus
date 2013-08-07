@@ -383,7 +383,7 @@ h2 {
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	box-shadow: none;
-	-webkit-box-shadow: nowellne;
+	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	padding: 0 0 0 0;
 	margin-top: 0;
@@ -1313,7 +1313,7 @@ ul>li.curPage {
 .tableView.captable  {
 	background: url("/img/stripe-pattern.png") repeat;
 	table-layout: fixed;
-};
+}
 
 .longRow td {
 	width: 150px !important;
@@ -1817,7 +1817,6 @@ tr.rowSelected {
 	font-size: 18px;
  	-webkit-box-shadow: none !important;
  	-box-shadow: none !important;	
-}
 }
 
 .multiEmail > input {
