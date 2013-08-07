@@ -217,6 +217,13 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
   SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
     $scope.people = x;
+    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+      angular.forEach($scope.people, function(person) {
+        if (person.email == me[0].email)
+          person.hideLock = true;
+      });
+    });
+    console.log(x);
     $scope.sort = 'name';
   }).except(function(x) {
     console.log(x);

@@ -27,7 +27,7 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
       SWBrijj.doCompanyActivate($scope.email.toLowerCase(), $scope.code, $scope.password, false).then(function(x) {
         SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
           if(x) {
-            document.location.href = x;
+            document.location.href = x + "?msg=first";
           } else {
             document.location.href = '/login';
           }
@@ -65,7 +65,7 @@ function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
           if ($scope.redirect) {
             document.location.href = $scope.redirect;
           } else {
-            document.location.href = x;
+            document.location.href = x + "?msg=first";;
           }
         });
       });
