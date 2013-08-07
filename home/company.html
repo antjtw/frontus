@@ -1,12 +1,31 @@
 <div class="headsection row-fluid">
   <h1>{{name}}</h1>
 </div>
+<div class="hero-unit" ng-show="onboarding">
+  <div>
+    <h2>Welcome to Sharewave!</h2>
+    <p>Here's what you need to know to get started:</p>
+  </div>
+  <div class="row-fluid">
+    <div class="span4">
+      <h2>Ownership Table</h2>
+      <p>Keep track of your company's equity, debt, options, and grants. Share with anyone and monitor their interactions.</p>
+    </div>
+    <div class="span4">
+      <h2>Documents</h2>
+      <p>Upload, share, and gather signatures on your documents. Our audit trail keeps a record of all activity along the way.</p>
+    </div>
+    <div class="span4">
+      <h2>People</h2>
+      <p>A list of everyone you've invited to view information. Manage access and see their history with your data.</p>
+    </div>
+  </div>
+</div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
     <div class="row-fluid">
       <div><h2>Activity Feed</h2></div>
       <div class="activityBlock">
-
         <table>
           <tr ng-repeat="active in activity | orderBy:activityOrder">
           <td class="activity"><i class="{{active.icon}} icon"></i></td>

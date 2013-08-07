@@ -15,8 +15,12 @@ app.controller("MainController", function($scope, $location) {
 });
 
 function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
-  if ($routeParams.msg == "resetPassword") {
-    $rootScope.notification.show("success", "You have successfully changed your password.");
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    } else if ($routeParams.msg == "first") {
+      $scope.onboarding = true;
+    }
   }
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
@@ -86,8 +90,12 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
 }
 
 function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
-  if ($routeParams.msg == "resetPassword") {
-    $rootScope.notification.show("success", "You have successfully changed your password.");
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    } else if ($routeParams.msg == "first") {
+      $rootScope.notification.show("success", "Welcome to Sharewave!");
+    }
   }
   //$scope.company = $routeParams.company;
   $scope.company = $rootScope.selected.name;
