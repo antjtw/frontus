@@ -495,6 +495,8 @@ var captableController = function($scope, $rootScope, $parse, SWBrijj, calculate
         $scope.trans[i].key = $scope.trans[i].issue;
         $scope.trans[i].unitskey = $scope.trans[i].units;
         $scope.trans[i].paidkey = $scope.trans[i].paid;
+        var offset = $scope.trans[i].date.getTimezoneOffset();
+        $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
         $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
         $scope.trans[i].investorkey = $scope.trans[i].investor;
           if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
@@ -1074,7 +1076,6 @@ $scope.saveTran = function(transaction) {
     transaction = transaction[0];
    }
   }
-
   // Bail out if insufficient data has been added for the transaction
   if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
     console.log("transaction is undefined");
@@ -1134,8 +1135,7 @@ $scope.saveTran = function(transaction) {
           angular.forEach($scope.rows, function(row) {
             angular.forEach($scope.trans, function(tran) {
             if (row.name == tran.investor) {
-                if (tran.investor == transaction.investor) {
-                  if (tran.issue == transaction.issue) {
+                if (tran.tran_id == transaction.tran_id) {
                     tran.date = transaction.date;
                     tran.key = tran.issue;
                     tran.unitskey = tran.units;
@@ -1154,7 +1154,6 @@ $scope.saveTran = function(transaction) {
                     }
                     row[tran.issue]['x'] = 0;
                   }
-                }
               }
               if (row.name == tran.issue+" (unissued)") {
                 angular.forEach($scope.issues, function(issue) {
@@ -1355,6 +1354,16 @@ $scope.saveTran = function(transaction) {
       $scope.closeMsg = 'I was closed at: ' + new Date();
       $scope.capMulti = false;
       };
+
+  $scope.dateoptions = function() {
+      var options = [];
+      options.push("New Transaction");
+      angular.forEach($scope.activeTran, function(row) {
+          options.push(row.date);
+      });
+
+      return options;
+  }
 
   $scope.mComplete = function(picked, number, type) {
     if (picked == undefined) {
