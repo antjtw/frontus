@@ -64,24 +64,25 @@
 
 <div modal="passwordModal" close="passwordModalClose()" options="opts" ng-controller="PasswordCtrl">
   <div class="modalHeader">
-    <span data-icon="&#xe026;" aria-hidden="true"></span>Change Password<span class="close" data-icon="&#xe00f;" aria-hidden="true"></span>
+    <span data-icon="&#xe026;" aria-hidden="true"></span>Change Password
+    <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="passwordModalClose()"></span>
   </div>
   <div class="modalCopy">
     <form name="passwordChange" class="editPasswordBlock">
     <div class="passwordChangeSuccess bodyText invisible" ng-show="passwordChanged">
     <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
      <fieldset>
-       <div class="row-fluid">
+       <div class="row-fluid field">
          <label>Current Password</label>           
-         <input type="password" name="currentPassword" ng-model="currentPassword"/>
+         <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
        </div>
-       <div class="row-fluid">
+       <div class="row-fluid field">
       <label>New Password</label>          
-      <input type="password" name="newPassword" ng-model="newPassword"/>
+      <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
       </div>
-     <div class="row-fluid">
+     <div class="row-fluid field">
        <label>Confirm Password</label>  
-       <input type="password" name="passwordconfirm" ng-model="passwordConfirm"/>
+       <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
      </div>
   </div>
   <div class="modalButtons">
