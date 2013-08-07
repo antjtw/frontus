@@ -1343,8 +1343,9 @@ td.tranSelected {
     margin-top: -28px;
 	width: 350px;
     min-height: 500px;
+    border-left: 1px solid #E3E3E3;
 	transition: all 2s;
-	-moz-transition:all 2s; /* Firefox 4 */; 
+	-moz-transition:all 2s; /* Firefox 4 */;
 	-webkit-transition: all 2s; /* Safari and Chrome */
 	-o-transition: all 2s; /* Opera */
 }
@@ -1362,6 +1363,10 @@ td.tranSelected {
     border: none;
     background-color: #E3E3E3;
     width: 108px;
+}
+
+.capright .headsection.tabbed {
+    border: none;
 }
 
 .capright .headsection {
@@ -1408,10 +1413,13 @@ td.tranSelected {
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
 	border-top: 2px solid #1ABC96;
-	border-left: 0;
 	border-radius: 0;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
+}
+
+.nav-tabs > li:first-child > a, .nav-tabs > li:first-child > a:hover, .nav-tabs > li:first-child > a:focus {
+    border-left: 0;
 }
 
 .rightTitle > span {
