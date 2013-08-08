@@ -222,7 +222,7 @@
                 </td>
             </tr>
             <!-- Un-editable view -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows">
+            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | viewList">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
