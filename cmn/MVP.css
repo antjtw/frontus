@@ -1350,6 +1350,22 @@ ul>li.curPage {
 	overflow: auto;
 }
 
+.descriptionRow {
+    height: 20px;
+    color: #C7C7C7;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.descriptionRow td {
+    height: 20px;
+}
+
+.descriptionRow span {
+    display: inline-block;
+    width: 68px;
+}
+
 .tableView.captable  {
 	background: url("/img/stripe-pattern.png") repeat;
 	table-layout: fixed;

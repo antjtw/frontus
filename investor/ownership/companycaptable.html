@@ -28,9 +28,19 @@
                 {{one.issue}}
               </th>
             </tr>
+            <!-- Descriptive row viewable from all modes -->
+              <tr class="descriptionRow">
+                  <td>Shares</td>
+                  <td>%</td>
+                  <td></td>
+                  <td ng-repeat="one in issues">
+                      <span>UNITS</span>
+                      <span>PAID</span>
+                  </td>
+              </tr>
             <tr ng-show="fullview" ng-repeat="row in rows">
-              <td><input disabled value="{{shareSum(row);}}"></input></td>
-              <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></input></td>
+              <td><input disabled value="{{shareSum(row);}}"></td>
+              <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
               <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
               <td ng-repeat="key in issuekeys | orderBy:issueSort">
                   <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
@@ -38,8 +48,8 @@
               </td>
             </tr>
             <tr ng-hide="fullview" ng-repeat="row in rows">
-              <td><input disabled value="{{shareSum(row);}}"></input></td>
-              <td><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></input></td>
+              <td><input disabled value="{{shareSum(row);}}"></td>
+              <td><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
               <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
               <td ng-repeat="key in issuekeys | orderBy:issueSort">
                   <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
@@ -47,19 +57,19 @@
               </td>
             </tr>
             <tr ng-hide="fullview">
-              <td><input disabled></input></td>
-              <td><input disabled value="{{everyone.percentage  | number:3}}%"></input></td>
+              <td><input disabled></td>
+              <td><input disabled value="{{everyone.percentage  | number:3}}%"></td>
               <td>Other Investors</td>
               <td ng-repeat="key in issuekeys">
               </td>
             </tr>
           <tr ng-show="fullview" class='tablefooter'>
-            <td><input disabled value="{{totalShares(rows);}}"></input></td>
-            <td><input disabled value="100%"></input></td>
+            <td><input disabled value="{{totalShares(rows);}}"></td>
+            <td><input disabled value="100%"></td>
             <td></td>
             <td ng-repeat="one in issues">
-              <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}"</input>
-              <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}"</input>
+              <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}">
+              <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}">
             </td>
           </tr>
         </table>
@@ -70,15 +80,15 @@
     <div class="span3">
       <div ng-switch on="sideBar" >
         <span ng-switch-when="1">
-          <p>Name <input disabled ng-model="activeIssue.issue"></input></p>
+          <p>Name <input disabled ng-model="activeIssue.issue"></p>
           <p>Date <input disabled type="text" ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
 
           <accordion close-others="true">
             <accordion-group heading="Valuation">
-              <p>Pre Money<input disabled pattern="[0-9]*(.[0-9]*)*" ng-model="activeIssue.premoney"></input></p>
-              <p>Post Money<input disabled ng-model="activeIssue.postmoney"></input></p>
-              <p>Price Per Share<input disabled ng-model="activeIssue.ppshare"></input></p>
-              <p>Total Authorized<input disabled ng-model="activeIssue.totalauth"></input></p>
+              <p>Pre Money<input disabled pattern="[0-9]*(.[0-9]*)*" ng-model="activeIssue.premoney"></p>
+              <p>Post Money<input disabled ng-model="activeIssue.postmoney"></p>
+              <p>Price Per Share<input disabled ng-model="activeIssue.ppshare"></p>
+              <p>Total Authorized<input disabled ng-model="activeIssue.totalauth"></p>
               <p>Liquidation Preference
                 <select ng-init="activeIssue.liquidpref" ng-model="activeIssue.liquidpref" ng-options="i for i in tf">
                 </select>
@@ -95,11 +105,11 @@
                   <option></option>
                   </select>
                 </p>
-                <p>Price<input disabled ng-model="activeIssue.price"></input></p>
-                <p>Granted <input disabled value="{{totalGranted(activeIssue.issue, trans);}}"></input></p>
-                <p>Term (months)<input disabled ng-model="activeIssue.terms"></input></p>
+                <p>Price<input disabled ng-model="activeIssue.price"></p>
+                <p>Granted <input disabled value="{{totalGranted(activeIssue.issue, trans);}}"></p>
+                <p>Term (months)<input disabled ng-model="activeIssue.terms"></p>
                 <p>Vesting Cliff Date<input disabled type="text" ng-model="activeIssue.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                <p>Vesting Cliff %<input disabled ng-model="activeIssue.vestcliff"></input></p>
+                <p>Vesting Cliff %<input disabled ng-model="activeIssue.vestcliff"></p>
                 <p>Post Cliff Frequency
                   <select ng-init="activeIssue.vestfreq" ng-model="activeIssue.vestfreq" ng-options="i for i in freqtypes">
                   </select>
@@ -113,10 +123,10 @@
                   <option></option>
                   </select>
                 </p>
-                <p>Interest Rate<input disabled ng-model="activeIssue.interestrate"></input></p>
-                <p>Valuation Cap<input disabled ng-model="activeIssue.valcap"></input></p>
-                <p>Discount<input disabled ng-model="activeIssue.discount"></input></p>
-                <p>Term<input disabled ng-model="activeIssue.term"></input></p>
+                <p>Interest Rate<input disabled ng-model="activeIssue.interestrate"></p>
+                <p>Valuation Cap<input disabled ng-model="activeIssue.valcap"></p>
+                <p>Discount<input disabled ng-model="activeIssue.discount"></p>
+                <p>Term<input disabled ng-model="activeIssue.term"></p>
               </accordion-group>
             </span>
           </accordion>
@@ -124,19 +134,19 @@
 
 
         <span ng-switch-when="2">
-          <p>Investor Name <input disabled ng-model="activeInvestor"></input></p>
+          <p>Investor Name <input disabled ng-model="activeInvestor"></p>
           <tabset class="trantabs">
             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'mediumDate'}}" active="tran.active">
               <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-              <p>Paid<input disabled ng-model="tran.amount"></input></p>
-              <p>Shares<input disabled ng-model="tran.units"></input></p>
+              <p>Paid<input disabled ng-model="tran.amount"></p>
+              <p>Shares<input disabled ng-model="tran.units"></p>
 
               <accordion close-others="true">
                 <accordion-group heading="Valuation">
-                  <p>Pre Money<input disabled pattern="[0-9]*(.[0-9]*)*" disabled ng-model="tran.premoney"></input></p>
-                  <p>Post Money<input disabled disabled ng-model="tran.postmoney"></input></p>
-                  <p>Price Per Share<input disabled ng-model="tran.ppshare"></input></p>
-                  <p>Total Authorized<input disabled disabled ng-model="tran.totalauth"></input></p>
+                  <p>Pre Money<input disabled pattern="[0-9]*(.[0-9]*)*" disabled ng-model="tran.premoney"></p>
+                  <p>Post Money<input disabled disabled ng-model="tran.postmoney"></p>
+                  <p>Price Per Share<input disabled ng-model="tran.ppshare"></p>
+                  <p>Total Authorized<input disabled disabled ng-model="tran.totalauth"></p>
                   <p>Liquidation Preference
                     <select ng-init="tranIssue.liquidpref" disabled ng-model="tran.liquidpref" ng-options="i for i in tf">
                     </select>
@@ -153,11 +163,11 @@
                       <option></option>
                       </select>
                     </p>
-                    <p>Price<input disabled ng-model="tran.price"></input></p>
-                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
-                    <p>Term (months)<input disabled ng-model="tran.terms"></input></p>
+                    <p>Price<input disabled ng-model="tran.price"></p>
+                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></p>
+                    <p>Term (months)<input disabled ng-model="tran.terms"></p>
                     <p>Vesting Cliff Date<input disabled type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                    <p>Vesting Cliff %<input disabled ng-model="tran.vestcliff"></input></p>
+                    <p>Vesting Cliff %<input disabled ng-model="tran.vestcliff"></p>
                     <p>Post Cliff Frequency
                       <select ng-init="tran.vestfreq" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                       </select>
@@ -171,10 +181,10 @@
                         <option></option>
                         </select>
                       </p>
-                      <p>Interest Rate<input disabled ng-model="tran.interestrate"></input></p>
-                      <p>Valuation Cap<input disabled ng-model="tran.valcap"></input></p>
-                      <p>Discount<input disabled ng-model="tran.discount"></input></p>
-                      <p>Term<input disabled ng-model="tran.term"></input></p>
+                      <p>Interest Rate<input disabled ng-model="tran.interestrate"></p>
+                      <p>Valuation Cap<input disabled ng-model="tran.valcap"></p>
+                      <p>Discount<input disabled ng-model="tran.discount"></p>
+                      <p>Term<input disabled ng-model="tran.term"></p>
                     </accordion-group>
                   </span>
               </accordion>
@@ -183,7 +193,7 @@
         </span>
 
         <span ng-switch-when="3">
-          <p>Investor Email <input disabled ng-model="activeInvestorName"></input></p>
+          <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
         </span>
         <span ng-switch-default>
           <p>Welcome To Your Captable</p>
