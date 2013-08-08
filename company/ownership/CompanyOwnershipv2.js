@@ -564,6 +564,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
                 angular.forEach($scope.issues, function (issue) {
                     if (!isNaN(parseFloat(issue.totalauth))) {
+                        console.log(issue.totalauth);
                         var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
                         if (leftovers != 0) {
                             var issuename = String(issue.issue);
@@ -764,7 +765,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         if (keepgoing) {
                             if (row.name == oldissue + " (unissued)") {
                                 keepgoing = false;
-                                if (issue.totalauth > 0 || issue.totalauth < 0) {
+                                if (!isNaN(parseFloat(issue.totalauth))) {
                                     row[issuename] = shares;
                                     row['name'] = issue.issue + " (unissued)";
                                 }
@@ -775,7 +776,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         }
                     });
                     if (keepgoing != false) {
-                        if (!isNaN(parseFloat(leftovers))) {
+                        if (!isNaN(parseFloat(issue.totalauth)) && !isNaN(parseFloat(leftovers))) {
                             $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
                             $scope.rows[($scope.rows.length) - 1][issuename] = shares;
                         }
@@ -1094,6 +1095,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 transaction = transaction[0];
             }
         }
+        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null) {
+          console.log("there are letters")
+          transaction.units = transaction.unitskey;
+        };
+        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null) {
+            console.log("there are letters")
+            transaction.amount = transaction.paidkey;
+        };
         // Bail out if insufficient data has been added for the transaction
         if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
             console.log("transaction is undefined");
