@@ -2034,7 +2034,7 @@ tr.rowSelected {
 }
 
 .capshareModal ul li > input {
-    margin: 10px 0 10px 10px;
+    margin: 10px 0 9px 10px;
 }
 
 .capshareModal ul li > input[type='checkbox']:first-child {
