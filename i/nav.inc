@@ -48,10 +48,10 @@
     <div style="display:none" class="bottomnav navbar row-fluid" ng-show="showBothBars">
       <div class="navbounder">
         <ul class="menuHeaderText nav">
-          <li class="dropdown">
+          <li ng-class="{dropdown: companies.length > 1}">
             <a class="menu_dropdown dropdown-toggle" href="#" ng-bind="selected.name"></a>
-            <b class="fauxcaret"></b>
-            <ul class="dropdown-menu">
+            <b class="fauxcaret" ng-show="companies.length > 1"></b>
+            <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="button" ng-repeat="company in companies">
                 <a class="button" ng-click="select('{{company.company}}')">{{company.name}}</a>
               </li>
