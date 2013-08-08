@@ -87,6 +87,9 @@
       <fieldset>
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
       </fieldset>
+      <div ng-show="files.length">
+        <span>{{files[0].name}}</span>
+      </div>
     </form>
   </div>
 

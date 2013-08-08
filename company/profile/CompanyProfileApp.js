@@ -28,6 +28,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.pictureModalClose = function () {
+    $scope.files = [];
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.pictureModal = false;
   };
@@ -189,13 +190,17 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       }).except( function(x) { 
         console.log(x);
         $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
+        $scope.photoURL = '/photo/user?id=company:' + $scope.company;
       });
   };
 
   $scope.setFiles = function(element) {
     $scope.files = [];
-    for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
-  };
+    for (var i = 0; i < element.files.length; i++) { 
+      $scope.files.push(element.files[i]);
+      $scope.$apply();
+    }
+  }
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
