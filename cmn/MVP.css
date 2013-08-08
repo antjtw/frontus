@@ -926,7 +926,20 @@ form.inputs {
 	height:136px;
 	width:136px;	
 	margin: -4px;
+    position: relative;
+    cursor: pointer;
 
+}
+
+.editProfilePhoto:hover:before {
+    content:'EDIT';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 3px 12px 3px 12px;
+    background-color: #1ABC96;
+    color: #FFFFFF;
+    font-size: 11px;
 }
 
 .editProfileFP input, .editProfileFP textarea {
@@ -1754,16 +1767,14 @@ tr.rowSelected {
 	background-color: #00549e;	
 }
 
-.saveButton {
+.button.saveButton {
 	background-color: #3498db;
 	color:#ffffff;
-	padding-top: 10px;
-	padding-right: 60px;
-	padding-bottom: 10px;
-	padding-left: 60px;	
+    width: 143px;
+    height: 37px;
 }
 
-.saveButton:hover {
+.button.saveButton:hover {
 	background-color: #2980B9;
 	color:#ffffff;
 }
@@ -1966,6 +1977,12 @@ tr.rowSelected {
 }
 
 .modalButtons button:disabled{
+    background-color: #1ABC96;
+    color: #FFFFFF;
+    opacity: 0.5;
+}
+
+.modalButtons button:hover:disabled{
     background-color: #1ABC96;
     color: #FFFFFF;
     opacity: 0.5;
