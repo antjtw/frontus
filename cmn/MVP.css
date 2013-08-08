@@ -571,6 +571,18 @@ h2 {
 	margin-right: 20px;
 }
 
+.subnav-controls input {
+    border: 0;
+    border-radius: 0;
+    background-color: #F1F1F1;
+    height: 16px;
+}
+
+.subnav-controls .search-icon {
+    display: inline-block;
+    font-size: 18px;
+}
+
 
 /* Left Block for split pages */
 
@@ -973,7 +985,7 @@ form.inputs {
 	color: #7f8c8d;	
 }
 
-/* Table Designs for Doc Library and Captable (Should rename from docLibrary as it's not just docs) */
+/* Table Designs for Doc Library and Captable (This is horrendous naming as docLibrary is not just for docs) */
 
 .docLibrary {
 	width: 100%;
@@ -1567,6 +1579,12 @@ tr.rowSelected {
 
 .rightNoTableBlock {
     margin-right:-349px;
+}
+
+/* Company People */
+
+.tableView.people-table th {
+    width: 470px;
 }
 
 /* Buttons */

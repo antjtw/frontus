@@ -2,16 +2,23 @@
 <div class="headsection row-fluid">
   <h1>People</h1>
 </div>
-<div class="editProfileFP row-fluid">
-  <section class="recipientInfo statusBlock">
-    <div class="input-append">
-      <span class="add-on" data-icon="&#xe01e;" aria-hidden="true"></span>
-      <input type="text" ng-model="filterText">
-    </div>
-    <table class="tableView bodyText">
-      <tr class="subText">
-        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
-        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">Email</th>
+<div class="row-fluid">
+  <section class="statusBlock">
+      <div class="row-fluid">
+          <div class="subnav-controls">
+              <div>
+                  <div class="pull-left">
+                      <span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
+                      <input type="text" ng-model="filterText">
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
+      </div>
+    <table class="docLibrary tableView bodyText people-table">
+      <tr class="column-label">
+        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
+        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">EMAIL ADDRESS</span></th>
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
