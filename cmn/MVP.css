@@ -458,6 +458,12 @@ h2 {
 	background-color: #F1F1F1;
 }
 
+.bottomnav .nav > li > a:hover.no-hover {
+    background-color: #FFFFFF;
+    color: #777777;
+    cursor: default;
+}
+
 .dropdown .fauxcaret {
   display: inline;
   float: right;
