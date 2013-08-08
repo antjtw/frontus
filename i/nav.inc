@@ -15,7 +15,7 @@
                   <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
                   <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
                   <br>
-                  <span class="forgotLog"><a href="/login/forgot" >Forgot Password?</a></span>             
+                  <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span>             
                 </fieldset>
               </form>
             </div>

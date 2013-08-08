@@ -110,7 +110,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 
 		if (x.length > 0) {
 			var cookie = readCookie("selectedCompany");
-			if (cookie != null && !$rootScope.selected) {
+			if (cookie != null) {
 				$rootScope.select(cookie);
 			} else {
 				$rootScope.select($scope.companies[0]['company']);	
