@@ -28,6 +28,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.pictureModalClose = function () {
+    $scope.files = [];
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.pictureModal = false;
   };
@@ -37,6 +38,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.adminModalClose = function () {
+    $scope.newEmail = "";
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.adminModal = false;
   };
@@ -74,6 +76,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.create_admin = function() {
     SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
       $rootScope.notification.show("success", "Invitation sent");
+      $scope.get_issuers();
     }).except(function(x) {
       console.log(x);
       $rootScope.notification.show("fail", "Something went wrong, please try again later.");
@@ -83,6 +86,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   $scope.revokeAdmin = function() {
     SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function(x) {
       $rootScope.notification.show("success", "Privileges updated");
+      $scope.get_issuers();
     }).except(function(x) {
       console.log(x);
       $rootScope.notification.show("fail", "Something went wrong, please try again later.");
@@ -113,15 +117,19 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     }
   };
 
-  SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(x) {
-    $scope.admins = x;
-    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
-      angular.forEach($scope.admins, function(admin) {
-        if (admin.email == me[0].email)
-          admin.hideLock = true;
+  $scope.get_issuers = function () {
+    SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(x) {
+      $scope.admins = x;
+      SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+        angular.forEach($scope.admins, function(admin) {
+          if (admin.email == me[0].email)
+            admin.hideLock = true;
+        });
       });
-    });
-  }).except(initFail);
+    }).except(initFail);
+  }
+  
+  $scope.get_issuers();
 
   SWBrijj.tbl('account.my_company').then(function(x) { 
     initPage($scope, x);
@@ -179,6 +187,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
+    console.log($scope.activity);
   });
 
   $scope.activityOrder = function(card) {
@@ -196,13 +205,17 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       }).except( function(x) { 
         console.log(x);
         $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
+        $scope.photoURL = '/photo/user?id=company:' + $scope.company;
       });
   };
 
   $scope.setFiles = function(element) {
     $scope.files = [];
-    for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
-  };
+    for (var i = 0; i < element.files.length; i++) { 
+      $scope.files.push(element.files[i]);
+      $scope.$apply();
+    }
+  }
 }
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
