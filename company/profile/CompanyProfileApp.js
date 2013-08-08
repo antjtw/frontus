@@ -37,6 +37,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.adminModalClose = function () {
+    $scope.newEmail = "";
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.adminModal = false;
   };
