@@ -443,6 +443,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.issuetypes = [];
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
+    $scope.liquidpref = ['None','1X','2X', '3X'];
 
     $scope.extraPeople = [
         {"email": ""}
@@ -657,12 +658,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     else {
                         tran.partpref = $scope.tf[1];
                     }
-                    if (String(tran['liquidpref']) == "true") {
-                        tran.liquidpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.liquidpref = $scope.tf[1];
-                    }
                     tran = switchval.typeswitch(tran);
                     $scope.activeTran.push(tran);
                 }
@@ -708,12 +703,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         else {
             $scope.activeIssue.partpref = $scope.tf[1];
         }
-        if (String($scope.activeIssue.liquidpref) == "true") {
-            $scope.activeIssue.liquidpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.liquidpref = $scope.tf[1];
-        }
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
         }
@@ -747,19 +736,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     var partpref = $scope.strToBool(issue['partpref']);
                 }
                 ;
-                if (issue['liquidpref'] != null) {
-                    var liquidpref = $scope.strToBool(issue['liquidpref']);
-                }
-                ;
-
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
-
                 else {
                     var vestcliffdate = (issue['vestingbegins']).toUTCString();
                 }
-                SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
                     issue = switchval.typeswitch(issue);
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
@@ -1159,9 +1142,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             if (transaction['partpref'] != null) {
                 var partpref = $scope.strToBool(transaction['partpref']);
             }
-            if (transaction['liquidpref'] != null) {
-                var liquidpref = $scope.strToBool(transaction['liquidpref']);
-            }
             if (transaction['vestingbegins'] == undefined) {
                 var vestcliffdate = null
             }
@@ -1171,7 +1151,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             }
             transaction = switchval.typeswitch(transaction);
             transaction.type = switchval.typereverse(transaction.atype);
-            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
                 transaction = switchval.typeswitch(transaction);
                 if (transaction.units >= 0) {
                     var tempunits = 0;
@@ -1795,7 +1775,7 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             var vestcliffdate = (transaction['vestingbegins']).toUTCString();
         }
         var d1 = transaction['date'].toUTCString();
-        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), Boolean(transaction.liquidpref), transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
 
         });
     };

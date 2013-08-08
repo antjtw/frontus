@@ -301,7 +301,7 @@
                     <p class="rightTitle"><span>Liquidation Preference</span>
                         <select ng-disabled="toggleView();" ng-init="activeIssue.liquidpref"
                                 ng-change="saveIssue(activeIssue)" ng-model="activeIssue.liquidpref"
-                                ng-options="i for i in tf">
+                                ng-options="i for i in liquidpref">
                         </select>
                     </p>
 
@@ -437,7 +437,7 @@
                             <p class="rightTitle"><span>Liquidation Preference</span>
                                 <select ng-disabled="toggleView();" ng-init="tranIssue.liquidpref"
                                         ng-change="saveTran(tran)" ng-model="tran.liquidpref"
-                                        ng-options="i for i in tf">
+                                        ng-options="i for i in liquidpref">
                                 </select>
                             </p>
 
