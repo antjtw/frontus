@@ -1528,6 +1528,23 @@ tr.rowSelected {
 
 /* Status */
 
+.tableView td.status-bubbles {
+   background-color: #F1F1F1;
+   text-align: center;
+   padding: 0 10px 0 10px;
+   height: 119px;
+}
+
+.tableView td.status-bubbles > div {
+    width: 120px;
+    margin: 0 48px 0 48px;
+}
+
+.tableView td.status-bubbles > div > span, .tableView td.status-bubbles > div > div> span {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
 .statusPop .popover .popover-content > form {
 	margin: 0 0 0 0;
 }
