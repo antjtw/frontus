@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div modal="capMulti" close="mclose()" options="opts">
+<div modal="capMulti" close="mclose(); mReset();" options="opts">
     <div class="modalHeader">
         <p class="subText">Is this a new transaction?</p>
     </div>
@@ -46,7 +46,7 @@
         <form>
             <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
             <br>
-            <select ng-model="pickTran" ng-options="i.date for i in dateoptions();">
+            <select ng-model="pickTran" ng-options="i.date as i.date | date:'mediumDate' for i in dateoptions();">
                 <option value="">New Transaction</option>
             </select>
         </form>

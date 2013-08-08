@@ -1882,6 +1882,10 @@ tr.rowSelected {
 
 }
 
+.modal input[type='checkbox']{
+    width: 30px;
+}
+
 .modalCopy .field {
 	border-bottom: 1px solid #E3E3E3;
 	padding: 6px 0 6px 0;
@@ -1985,6 +1989,10 @@ tr.rowSelected {
 	margin-bottom: 20px;
 }
 
+.capshareModal input, .capshareModal span {
+    float: left;
+}
+
 .capshareModal {
 	margin-left: -250px;
 	width:499px;
@@ -1992,10 +2000,17 @@ tr.rowSelected {
 }
 
 .capshareModal ul{
-	height:205px;
 	margin: 0;
 	overflow: auto;
 	list-style: none;
+}
+
+.capshareModal ul:first-child {
+    height:205px;
+}
+
+.capshareModal ul.extrasAdd {
+    height: 82px;
 }
 
 .capshareModal ul > li:first-child {
@@ -2018,8 +2033,12 @@ tr.rowSelected {
 	font-size: 12px;
 }
 
-.capshareModal ul li > input:first-child {
-	margin: 0 0 0 20px;
+.capshareModal ul li > input {
+    margin: 10px 0 10px 10px;
+}
+
+.capshareModal ul li > input[type='checkbox']:first-child {
+	margin: 13px 0 13px 20px;
 }
 
 .capshareModal ul li > input {
