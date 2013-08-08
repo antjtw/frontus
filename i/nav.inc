@@ -1,7 +1,7 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
-  <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible" ng-click="notification.visible = false" ng-bind="notification.message"></div>
+  <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible" ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="container">
