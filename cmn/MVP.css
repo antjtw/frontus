@@ -545,9 +545,9 @@ h2 {
 
 .row-fluid .leftBlock {
 	width: 674px;
-	transition:width 2s;
-	-moz-transition:width 2s;
-	-webkit-transition:width 2s; /* Safari */
+	transition:width 0.25s;
+	-moz-transition:width 0.25s;
+	-webkit-transition:width 0.25s; /* Safari */
 }
 
 /* Login */
@@ -1354,10 +1354,10 @@ td.tranSelected {
 	width: 350px;
     min-height: 500px;
     border-left: 1px solid #E3E3E3;
-	transition: all 2s;
-	-moz-transition:all 2s; /* Firefox 4 */;
-	-webkit-transition: all 2s; /* Safari and Chrome */
-	-o-transition: all 2s; /* Opera */
+	transition: all 0.25s;
+	-moz-transition:all 0.25s; /* Firefox 4 */;
+	-webkit-transition: all 0.25s; /* Safari and Chrome */
+	-o-transition: all 0.25s; /* Opera */
 }
 
 .span4.capright > button {
@@ -1482,12 +1482,11 @@ tr.rowSelected {
 }
 
 .leftFullTableBlock {
-	width: 1024px !important;
+	width: 1023px !important;
 }
 
 .rightNoTableBlock {
-    margin-right:-350px;
-    width:0;
+    margin-right:-349px;
 }
 
 /* Buttons */

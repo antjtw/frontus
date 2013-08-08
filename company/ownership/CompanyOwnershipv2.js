@@ -461,7 +461,9 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.uniquerows = [];
     $scope.activeTran = [];
 
+    // Initialize a few visible variables
     $scope.investorOrder = "name";
+    $scope.sideToggleName = "Hide"
 
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
         $scope.issues = data;
@@ -1312,7 +1314,15 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     // Toggles sidebar back and forth
     $scope.toggleSide = function () {
-        return $scope.sideToggle == true;
+        if ($scope.sideToggle) {
+          $scope.sideToggleName = "Show"
+          return true
+        }
+        else {
+          $scope.sideToggleName = "Hide"
+          return false
+        };
+
     };
 
 

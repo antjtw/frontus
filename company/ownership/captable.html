@@ -256,7 +256,7 @@
 </div>
 
 <div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright">
-    <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>Hide</button>
+    <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}</button>
     <div class="row-fluid">
         <div ng-switch on="sideBar">
           <span ng-switch-when="1">
