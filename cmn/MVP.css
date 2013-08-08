@@ -1396,7 +1396,6 @@ td.tranSelected {
 .span4.capright {
 	float: right;
 	margin-left: 0;
-    margin-top: -28px;
 	width: 350px;
     min-height: 500px;
     border-left: 1px solid #E3E3E3;
@@ -1404,6 +1403,10 @@ td.tranSelected {
 	-moz-transition:all 0.25s; /* Firefox 4 */;
 	-webkit-transition: all 0.25s; /* Safari and Chrome */
 	-o-transition: all 0.25s; /* Opera */
+}
+
+.span4.capright.button-offset {
+    margin-top: -28px;
 }
 
 .span4.capright > button {
@@ -1507,7 +1510,6 @@ textarea {
 }
 
 .staticHeaders {
-	width: 190px;
 }
 
 /* Grants Table */
@@ -1518,6 +1520,10 @@ tr.rowSelected {
 
 .rowSelected > td {
 	background-color: transparent;
+}
+
+.grant-list {
+    list-style: none;
 }
 
 /* Status */
