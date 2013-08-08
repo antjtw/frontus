@@ -57,9 +57,9 @@
               </li>
             </ul>
           <li>
-          <li ng-show="ownership.visible"><a class="button" href="{{ownership.link}}">Ownership</a></li>
-          <li ng-show="documents.visible"><a class="button" href="{{documents.link}}">Documents</a></li>
-          <li ng-show="people.visible"><a class="button" href="{{people.link}}">People</a></li>
+          <li ng-show="ownership.visible" ng-class="{active: path.indexOf('/ownership') != -1}"><a class="button" href="{{ownership.link}}">Ownership</a></li>
+          <li ng-show="documents.visible" ng-class="{active: path.indexOf('/documents') != -1}"><a class="button" href="{{documents.link}}">Documents</a></li>
+          <li ng-show="people.visible" ng-class="{active: path.indexOf('/profile/people') != -1}"><a class="button" href="{{people.link}}">People</a></li>
         </ul>
       </div>
     </div>
