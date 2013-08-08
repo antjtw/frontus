@@ -997,7 +997,7 @@ form.inputs {
 .docLibrary .tablefooter {
 	height: 70px;
 	background-color: #F1F1F1;
-	border-bottom: 1px solid gray;
+	border-bottom: 1px solid #E3E3E3;
 }
 
 .docLibrary .tablefooter input:disabled {
