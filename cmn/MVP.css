@@ -1341,6 +1341,11 @@ ul>li.curPage {
 
 /* Captable */
 
+.capGuide {
+    display: block;
+    padding: 10px 0 0 20px;
+}
+
 .capcontainer {
 	overflow: auto;
 }
@@ -1458,15 +1463,20 @@ td.tranSelected {
 }
 
 .rightTitle > span {
-	display: inline-block;
-	width:100px;
-	margin-right: 50px;
-	text-transform: uppercase;
+    display: inline-block;
+    width: 160px;
+    margin-right: 40px;
+    text-transform: uppercase;
 }
 
 .rightTitle > input {
 	width:100px;
 	border: 0;
+}
+
+.rightTitle > select {
+    width: 100px;
+    height: 25px;
 }
 
 input.content, textarea.content {

@@ -1024,10 +1024,18 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     if (!isNaN(tran.units)) {
                         row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
                         row[tran.issue]['ukey'] = row[tran.issue]['u']
+                        if (row[tran.issue]['u'] == 0) {
+                            row[tran.issue]['u'] = null
+                            row[tran.issue]['ukey'] = null
+                        }
                     }
                     if (!isNaN(tran.amount)) {
                         row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
                         row[tran.issue]['akey'] = row[tran.issue]['a']
+                        if (row[tran.issue]['a'] == 0) {
+                            row[tran.issue]['a'] = null
+                            row[tran.issue]['akey'] = null
+                        }
                     }
                 }
             });
@@ -1095,11 +1103,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 transaction = transaction[0];
             }
         }
-        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null) {
+        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
           console.log("there are letters")
           transaction.units = transaction.unitskey;
         };
-        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null) {
+        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };

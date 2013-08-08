@@ -433,7 +433,7 @@
                         </accordion-group>
                   <span ng-show="trantype('options', tran.atype);">
                     <accordion-group heading="Options">
-                        <p>Underlying Security
+                        <p class="rightTitle"><span>Underlying Security</span>
                             <select ng-disabled="toggleView();" ng-init="tran.optundersec" ng-change="saveTran(tran)"
                                     ng-model="tran.optundersec" ng-options="i for i in allowKeys">
                                 <option></option>
@@ -514,10 +514,14 @@
                 <p>{{activeInvestorEmail}}</p>
             </div>
           </span>
-          <span ng-switch-default>
-            <div class="headsection row-fluid">
-            </div>
-            <p>Welcome To Your Captable</p>
+          <span class="capGuide" ng-switch-default>
+            <h2>Understand your Ownership</h2>
+
+            <p>Enter your securities, shareholders and their holdings directly into our responsive table.
+                We'll calculate the totals on your behalf, and any additional terms that you add will
+                influence your non-diluted view and financial modeling (coming soon).</p>
+
+            <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
           </span>
         </div>
     </div>
