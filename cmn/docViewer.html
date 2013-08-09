@@ -38,6 +38,7 @@
           <button ng-click="saveNoteData()">Store</button>
           <button ng-click="saveNotes($event)">Save</button>
           <button ng-click="clearNotes($event)">Clear</button>
+          <button ng-click="clearAllNotes($event)">Clear All Pages</button>
           <button ng-show="signable" ng-click="submitSign();">Submit</button>
         </div>
         <div ng-hide="signed || !invq || needsign || !countersign || finalized">

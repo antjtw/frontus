@@ -2126,6 +2126,8 @@ tr.rowSelected {
     overflow: hidden;
     height: 20px;
     line-height: normal;
+    resize: both;
+    overflow: hidden;
 }
 
 .dropbox {
