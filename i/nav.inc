@@ -24,11 +24,12 @@
       </div>  
     </div> 
   </div>
+
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
       <div ng-class="{navbounder:!showLogin, navpadding:showLogin}">
         <ul class="nav pull-left nav-logo">
-          <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
+          <li><a href="/" ng-href="{{logoLink}}"><img src="/img/logo.png"/></a></li>
         </ul>
         <ul class="nav pull-right nav-item">
           <li style="display: none;" class="dropdown" ng-show="isLoggedIn">
