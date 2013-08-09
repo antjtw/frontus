@@ -1789,6 +1789,10 @@ var statusController = function ($scope, SWBrijj) {
         $scope.cinfo = x
     });
 
+    SWBrijj.tblm('ownership.lastupdated').then(function (time) {
+        $scope.lastupdated = time[0].last_edited
+    });
+
     SWBrijj.tblm("ownership.company_audit").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
@@ -1849,7 +1853,6 @@ var statusController = function ($scope, SWBrijj) {
             $scope.activity.push({activity: "Created", icon: "icon-star"});
             $scope.shared_dates = [];
             for (var i = 0; i < $scope.activity.length; i++) {
-                console.log($scope.activity[i].event_time);
                 if ($scope.activity[i].activity == "shared") {
                     $scope.activity[i].activity = "Shared with ";
                     $scope.activity[i].icon = 'icon-redo';
@@ -1859,12 +1862,6 @@ var statusController = function ($scope, SWBrijj) {
                     $scope.activity[i].activity = "Viewed by ";
                     $scope.activity[i].icon = 'icon-view';
                 }
-            }
-            if ($scope.shared_dates.length == 0) {
-                $scope.lastsent = "never sent";
-            }
-            else {
-                $scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
             }
 
             angular.forEach($scope.activity, function(x) { //Replace emails with names

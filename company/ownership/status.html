@@ -52,6 +52,9 @@
                 <th>Visibility</th>
                 <th colspan="2">Status</th>
               </tr>
+              <tr>
+                  <td ng-show="!userStatus[0]" colspan="5">You haven't shared the captable with anyone yet!</td>
+              </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
                 <td ng-click="(opendetails(person.email))">{{person.name}}</td>
@@ -93,7 +96,7 @@
                 <p class="subText">Information</p>
             </div>
             <ul>
-                <li>Last Sent: {{lastsent | date:"MMMM d, y"}}</li>
+                <li>Last Edited: {{lastupdated | date:"mediumDate"}}</li>
             </ul>  
         </div>
          
