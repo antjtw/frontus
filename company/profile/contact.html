@@ -51,11 +51,12 @@
         </p>
       </fieldset>
     </form>
-
+    
+    <div>
+      <p class="title">Activity Feed</p>
+    </div> 
     <section class="documentInfo statusBlock">
-      <div>
-        <p class="title">Activity Feed</p>
-      </div> 
+      
       <div class="activityBlock">
         <table>
           <tr ng-repeat="active in activity | orderBy:activityOrder" >
@@ -76,56 +77,68 @@
   </div>
 </div>
 
-<div modal="pictureModal" close="pictureModalClose()" options="opts">
-  <div class="modalHeader">
-    <p class="subText">Profile Picture</p>
-  </div>
+<div modal="pictureModal" close="pictureModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe00b;" aria-hidden="true"></span>Update company logo
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
+    </div>
+
   <div class="modalText">
     <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
         <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
       </fieldset>
+      <div ng-show="files.length">
+        <span>{{files[0].name}}</span>
+      </div>
     </form>
   </div>
+  <div class="modalButtons two">
+      <div class="left"><button class="button subText blueButton left" ng-click="pictureModalClose()">Cancel</button></div>
+      <div class="right"><button value="Upload" class="button subText greenButton"  ng-click="uploadFile(); pictureModalClose();">Upload</button></div>
 
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Cancel</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+
+    <!--<input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />-->
   </div>
 </div>
-<div modal="adminModal" close="adminModalClose()" options="opts">
-  <div class="modalHeader">
-    <p class="subText">Add an Administrator</p>
-  </div>
-  <div class="modalText">
+
+<div modal="adminModal" close="adminModalClose()" options="narrowopts">
+   <div class="modalHeader">
+        <span data-icon="&#xe026;" aria-hidden="true"></span>Add administrator
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
+    </div>
+
+   <div class="modalCopy">
     <form>
       <fieldset>
-        <div class="row-fluid">
+        <div class="row-fluid field">
           <label>Email</label>  
-          <input type="text" ng-model="newEmail" />
+          <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
         </div>
-<<<<<<< HEAD
-=======
-        <div class="row-fluid">
-          <label>Full Name</label>  
-          <input type="text" ng-model="newName" />
-        </div>
->>>>>>> dexter-static
       </fieldset>
     </form>
   </div>
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="adminModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+
+
+  <div class="modalButtons two">
+      <div class="left"><button class="button subText blueButton left" ng-click="adminModalClose()">Cancel</button></div>
+      <div class="right"><button class="button subText greenButton" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button></div>
+      <!--<input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Send" />-->
   </div>
 </div>
-<div modal="revokeModal" close="revokeModalClose()" options="opts">
-  <div class="modalHeader">
-    <p class="subText">Remove an Administrator</p>
-  </div>
+
+<div modal="revokeModal" close="revokeModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe026;" aria-hidden="true"></span>Remove admin
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="revokeModalClose()"></span>
+    </div>
+
   <div class="modalText">
     <p>Do you want to remove this person as an administrator?</p>
   </div>
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="revokeModalClose()">Cancel</button> <input class="button subText greenButton" type="button" ng-click="revokeAdmin(); revokeModalClose();" value="Remove" />
+    <div class="modalButtons two">
+        <div class="left"><button class="button subText blueButton left" ng-click="revokeModalClose()">Cancel</button></div>
+        <div class="right"><button class="button subText greenButton" ng-click="revokeAdmin(); revokeModalClose();">Remove</button></div>
   </div>
 </div>

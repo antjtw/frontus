@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="row-fluid">
-    <div class="span8 docLibrary statusBlock">
+    <div class="span8 docLibrary leftBlock">
       <div class="headsection row-fluid">
         <h1>{{selected.name}}</h1>
 
@@ -50,37 +50,42 @@
     </div>
 
 
-    <div class="span4">
-      <div ng-switch on="sideBar" >
+    <div class="span4 capright">
+      <div ng-switch on="sideBar">
         <span ng-switch-when="1">
-          <div class="headsection row-fluid">
+          <div class="headsection tabbed row-fluid">
               <h2>{{activeInvestor}}</h2>
               <p>Terms from the ownership table</p>
           </div>
-          <tabset>
+          <tabset class="trantabs">
             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
-              <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-
+                <div class="row-fluid trancore">
+                    <div>
+                        <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                        </p>
+                    </div>
+                    <div class="DivHelper"></div>
+                </div>
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
-                    <p>Underlying Security
+                    <p class="rightTitle"><span>Underlying Security</span>
                       <select ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in tran.allowKeys">
                       <option></option>
                       </select>
                     </p>
-                    <p>Price<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
-                    <p>Term (months)<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
-                    <p>Vesting Cliff %<input ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
-                    <p>Vesting Cliff Date<input ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                    <p>Post Cliff Frequency
+                    <p class="rightTitle"><span>Price</span><input ng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
+                    <p class="rightTitle"><span>Granted</span><input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
+                    <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
+                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
+                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                    <p class="rightTitle"><span>Post Cliff Frequency</span>
                       <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                       </select>
                     </p>
                   </accordion-group>
                   <accordion-group heading="Grant Activity">
                   <ul>
-                    <li ng-repeat="act in tran.activeAct">
+                    <li class="grant-list" ng-repeat="act in tran.activeAct">
                       <p>Action
                         <select ng-init="act.action" ng-change="saveGrant(act)" ng-model="act.action" ng-options="i for i in possibleActions">
                         </select>
@@ -98,9 +103,18 @@
         <span ng-switch-when="2">
           <p>Investor Email <input disabled ng-model="activeInvestorName"></input></p>
         </span>
-        <span ng-switch-default>
-          <p>Welcome To Your Grants Section</p>
-        </span>
+        <span class="capGuide" ng-switch-default>
+            <h2>Manage your Grants</h2>
+
+            <p>Grant information is derived from the ownership table, but allows for more control such as
+                exercising or forfeiting shares. Any transaction in the ownership table that's not been fully
+                paid for, and has an underlying stock class, will be considered a grant and display in this view.
+            </p>
+
+            <p>Actions taken here on any transaction will also be reflected in your ownership table,
+                as both are simply views on your shareholder transactions.
+            </p>
+          </span>
       </div>
     </div>
   </div>

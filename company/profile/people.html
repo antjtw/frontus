@@ -2,13 +2,23 @@
 <div class="headsection row-fluid">
   <h1>People</h1>
 </div>
-<div class="editProfileFP row-fluid">
-  <section class="recipientInfo statusBlock">
-    <input type="text" ng-model="filterText"> 
-    <table class="tableView bodyText">
-      <tr class="subText">
-        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
-        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">Email</th>
+<div class="row-fluid">
+  <section class="statusBlock">
+      <div class="row-fluid">
+          <div class="subnav-controls">
+              <div>
+                  <div class="pull-left">
+                      <span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
+                      <input type="text" ng-model="filterText">
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
+      </div>
+    <table class="docLibrary tableView bodyText people-table">
+      <tr class="column-label">
+        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
+        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">EMAIL ADDRESS</span></th>
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
@@ -16,7 +26,7 @@
           <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
         </td> 
         <td><img src="">{{person.email}}</td>
-        <td class="button"><i class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke all access"></i>
+        <td class="button"><i ng-hide="person.hideLock" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke all access"></i>
         </tr>
       </tbody>
     </table>

@@ -68,7 +68,7 @@
         </tr>
         </tbody>
       </table>
-      <div style="display: none;" ng-show="noDocs">There are no documents shared with this person.</div>
+      <div style="display: none;" ng-show="noDocs">You've not shared any documents with this person.</div>
     </section>
     </div>
   </div>
@@ -86,10 +86,10 @@
       </fieldset>
     </form>
 
-    <section class="documentInfo statusBlock">
     <div>
-    <p class="title">Activity Feed</p>
+      <p class="title">Activity Feed</p>
     </div> 
+    <section class="documentInfo statusBlock">
     <div class="activityBlock">
       <table>
         <tr ng-repeat="active in activity | orderBy:activityOrder">

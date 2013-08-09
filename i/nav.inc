@@ -1,7 +1,7 @@
 <script src="/i/nav.js"></script>
 
 <div ng-controller="NavCtrl">
-  <div style="display: none;" ng-class="notification.style" ng-show="notification.visible">{{notification.message}}</div>
+  <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible" ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
   <div style="display:none;" ng-show="loaded" collapse="isCollapsed">
     <div class="well well-large">
       <div class="container">
@@ -15,7 +15,7 @@
                   <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
                   <a ng-click="isCollapsed = !isCollapsed"><span data-icon="&#xe00f;" aria-hidden="true"></a>
                   <br>
-                  <span class="forgotLog"><a href="/login/forgot" >Forgot Password?</a></span>             
+                  <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span>             
                 </fieldset>
               </form>
             </div>
@@ -26,12 +26,12 @@
   </div>
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
-      <div class="navbounder">
+      <div ng-class="{navbounder:!showLogin, navpadding:showLogin}">
         <ul class="nav pull-left nav-logo">
           <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
         </ul>
         <ul class="nav pull-right nav-item">
-          <li style="display: none;" class="dropdown" ng-show="selected.company">
+          <li style="display: none;" class="dropdown" ng-show="isLoggedIn">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
@@ -39,7 +39,7 @@
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
-          <li class="dropdown hidden-phone" ng-hide="selected.company">
+          <li class="dropdown hidden-phone" ng-hide="isLoggedIn">
             <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>
@@ -48,18 +48,18 @@
     <div style="display:none" class="bottomnav navbar row-fluid" ng-show="showBothBars">
       <div class="navbounder">
         <ul class="menuHeaderText nav">
-          <li class="dropdown">
-            <a class="menu_dropdown dropdown-toggle" href="#" ng-bind="selected.name"></a>
-            <b class="fauxcaret"></b>
-            <ul class="dropdown-menu">
+          <li ng-class="{dropdown: companies.length > 1}">
+            <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}" ng-href="{{{true: '#', false: ''}[companies.length > 1]}}" ng-bind="selected.name"></a>
+            <b class="fauxcaret" ng-show="companies.length > 1"></b>
+            <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="button" ng-repeat="company in companies">
                 <a class="button" ng-click="select('{{company.company}}')">{{company.name}}</a>
               </li>
             </ul>
           <li>
-          <li ng-show="ownership.visible"><a class="button" href="{{ownership.link}}">Ownership</a></li>
-          <li ng-show="documents.visible"><a class="button" href="{{documents.link}}">Documents</a></li>
-          <li ng-show="people.visible"><a class="button" href="{{people.link}}">People</a></li>
+          <li ng-show="ownership.visible" ng-class="{active: path.indexOf('/ownership') != -1}"><a class="button" href="{{ownership.link}}">Ownership</a></li>
+          <li ng-show="documents.visible" ng-class="{active: path.indexOf('/documents') != -1}"><a class="button" href="{{documents.link}}">Documents</a></li>
+          <li ng-show="people.visible" ng-class="{active: path.indexOf('/profile/people') != -1}"><a class="button" href="{{people.link}}">People</a></li>
         </ul>
       </div>
     </div>

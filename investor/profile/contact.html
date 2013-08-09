@@ -46,8 +46,11 @@
     <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
-        <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
+        <input class="bodyText button uploadButton" type="file" onchange="angular.element(this).scope().setFiles(this);" />
       </fieldset>
+      <div ng-show="files.length">
+        <span>{{files[0].name}}</span>
+      </div>
     </form>
   </div>
 
@@ -58,31 +61,30 @@
 
 <div modal="passwordModal" close="passwordModalClose()" options="opts" ng-controller="PasswordCtrl">
   <div class="modalHeader">
-    <span data-icon="&#xe026;" aria-hidden="true"></span>Change Password<span class="close" data-icon="&#xe00f;" aria-hidden="true"></span>
+    <span data-icon="&#xe026;" aria-hidden="true"></span>Change Password
+    <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="passwordModalClose()"></span>
   </div>
   <div class="modalCopy">
     <form name="passwordChange" class="editPasswordBlock">
     <div class="passwordChangeSuccess bodyText invisible" ng-show="passwordChanged">
     <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
      <fieldset>
-       <div class="row-fluid">
+       <div class="row-fluid field">
          <label>Current Password</label>           
-         <input type="password" name="currentPassword" ng-model="currentPassword"/>
+         <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
        </div>
-       <div class="row-fluid">
+       <div class="row-fluid field">
       <label>New Password</label>          
-      <input type="password" name="newPassword" ng-model="newPassword"/>
+      <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
       </div>
-     <div class="row-fluid">
+     <div class="row-fluid field">
        <label>Confirm Password</label>  
-       <input type="password" name="passwordconfirm" ng-model="passwordConfirm"/>
+       <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
      </div>
   </div>
   <div class="modalButtons">
-    <button class="button subText blueButton" ng-click="passwordModalClose()">Take Me Back!</button>
-<!--     <button class="button subText greenButton" ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button> -->
-<a ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }"
-      ng-click="changePassword(); passwordModalClose()">Change</a>
+    <div class="left"><button class="button subText blueButton left" ng-click="passwordModalClose()">Take Me Back!</button></div>
+    <div class="right"><button ng-disabled="validPasswordNot()" ng-class="{saveButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button></div>
   </fieldset>
   </form>
   </div>

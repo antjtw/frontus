@@ -34,13 +34,13 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
 
   $scope.toggle = true;
 
-  $scope.companyRequest = function() {
-    SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function(x) {
-      console.log(x);
-    }).except(function(x) {
-      console.log(x);
-    });
-  }
+  $scope.companyRequest = function () {
+      SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function (x) {
+          console.log(x);
+      }).except(function (x) {
+              console.log(x);
+          });
+  };
 
   $scope.opts = {
     backdropFade: true,

@@ -7,21 +7,18 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
 	$scope.showBothBars = false;
 	$scope.isLoggedIn = false;
+	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
 
 	function changeNav(){
-		var URL = document.location.href;
-		var host = document.location.host;
-		var path = URL.substring(URL.indexOf(host)).replace(host, "");
-		if (singleBarPages.indexOf(path) > -1) {
+		if (singleBarPages.indexOf($rootScope.path) > -1) {
 			$scope.nav = 'navBarLoggedOut';
 			$scope.showBothBars = false;
 		} else {
 			$scope.nav = 'navBar';
 			$scope.showBothBars = true;
 		}
-
 		if ($scope.isLoggedIn) {
-			if ($rootScope.selected.isAdmin) {
+			if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
 				$scope.logoLink = '/home/company';
 			} else {
 				$scope.logoLink = '/home';
@@ -111,12 +108,15 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
 
-		var cookie = readCookie("selectedCompany");
-		if (cookie != null && !$rootScope.selected) {
-			$rootScope.select(cookie);
-		} else {
-			if ($scope.companies.length > 0) $rootScope.select($scope.companies[0]['company']);
+		if (x.length > 0) {
+			var cookie = readCookie("selectedCompany");
+			if (cookie != null) {
+				$rootScope.select(cookie);
+			} else {
+				$rootScope.select($scope.companies[0]['company']);	
+			}	
 		}
+		
 	}).except(function(ignore) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
@@ -135,20 +135,18 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	}
 
 	$rootScope.notification = {};
-	$rootScope.notification.color = "success";
-	$rootScope.notification.style = "notification " + $rootScope.notification.color;
 	$rootScope.notification.visible = false;
-	$rootScope.notification.message = "Notification Message";
 
 	$rootScope.notification.show = function (color, message, callback) {
 		$rootScope.notification.visible = true;
 		$rootScope.notification.color = color;
+		$rootScope.notification.style = "notification " + $rootScope.notification.color;
 		$rootScope.notification.message = message;
 		setTimeout(function() { 
 			$rootScope.notification.visible = false; 
 			$rootScope.$apply();
 			if (callback) { callback(); }
-		}, 5000);
+		}, 3000);
 	};
 
 	$scope.fieldCheck = function() {

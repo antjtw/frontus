@@ -12,14 +12,29 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 app.controller("MainController", function($scope, $location) {
+});
 
-} );
-
-function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
+function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    } else if ($routeParams.msg == "first") {
+      $rootScope.notification.show("success", "Welcome to Sharewave!");
+    }
+  }
 
   SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
      $scope.name = x[0]['name'];
   }).except(initFail);
+
+  SWBrijj.tblm('account.onboarding').then(function(x) { 
+    $scope.onboarding = x[0].show_onboarding;
+  }).except(initFail);
+
+  $scope.close = function() {
+    $scope.onboarding = false;
+    SWBrijj.procm('account.onboarding_update', false);
+  }
 
   $scope.activity = [];
   SWBrijj.procm('global.get_company_home').then(function(data) {
@@ -84,6 +99,13 @@ function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
 }
 
 function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    } else if ($routeParams.msg == "first") {
+      $rootScope.notification.show("success", "Welcome to Sharewave!");
+    }
+  }
   //$scope.company = $routeParams.company;
   $scope.company = $rootScope.selected.name;
 

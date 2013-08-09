@@ -30,7 +30,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.pictureModal = true;
   };
 
-  $scope.pictureModalClose = function () {
+  $scope.pictureModalClose = function () {      
+    $scope.files = [];
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.pictureModal = false;
   };
@@ -82,18 +83,22 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
     SWBrijj.uploadImage(fd).then(function(x) {
       console.log(x);
-      $scope.photoURL = '/photo/user?id=' + $scope.email;
       $rootScope.notification.show("green", "Profile photo successfully updated");
+      $scope.photoURL = '/photo/user?id=' + $scope.email;
     }).except( function(x) { 
       console.log(x);
       $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
+      $scope.photoURL = '/photo/user?id=' + $scope.email;
     });
   };
 
   $scope.setFiles = function(element) {
     $scope.files = [];
-    for (var i = 0; i < element.files.length; i++) { $scope.files.push(element.files[i]); }
-  };
+    for (var i = 0; i < element.files.length; i++) { 
+      $scope.files.push(element.files[i]);
+      $scope.$apply();
+    }
+  }
 }
 
 function SocialCtrl($scope, $location, SWBrijj) {  
@@ -133,8 +138,10 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.passwordConfirm="";
     
     $scope.validPasswordNot = function() { 
-        return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
-    
+        return !($scope.currentPassword && $scope.passwordMatches());
+        // return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
+    }
+
     $scope.regexPassword = function() {
         var newP = $scope.newPassword;
     	if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}/)) return "";
@@ -145,8 +152,8 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     	else return "Must contain at least one lowercase letter, one uppercase letter, and one digit";
     };
     
-    $scope.passwordMatchesNot = function() {
-        return $scope.passwordConfirm != $scope.newPassword ; 
+    $scope.passwordMatches = function() {
+        return $scope.passwordConfirm && $scope.newPassword && $scope.passwordConfirm == $scope.newPassword ; 
     };
     
     $scope.changePassword = function() {
