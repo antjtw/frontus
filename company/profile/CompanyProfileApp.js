@@ -124,6 +124,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         angular.forEach($scope.admins, function(admin) {
           if (admin.email == me[0].email)
             admin.hideLock = true;
+          if (admin.name == null)
+            admin.name = admin.email;
         });
       });
     }).except(initFail);

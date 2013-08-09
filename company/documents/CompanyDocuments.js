@@ -368,7 +368,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
       		angular.forEach($scope.activity, function(x) { //Replace emails with names
 		        if (x.namethem != null) {
 		          SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
-		            x.namethem = name[1][0];
+		            	x.namethem = name[1][0];
 		          });
 		        }
 	     	});

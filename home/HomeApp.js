@@ -37,7 +37,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   }
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_company_home').then(function(data) {
+  SWBrijj.tblm('global.company_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
@@ -81,13 +81,13 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
-    angular.forEach($scope.activity, function(x) { //Replace emails with names
-        if (x.email != null) {
-          SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {
-            x.name = name[1][0];
-          });
-        }
-    });
+    // angular.forEach($scope.activity, function(x) { //Replace emails with names
+    //     if (x.email != null) {
+    //       SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {
+    //         x.name = name[1][0];
+    //       });
+    //     }
+    // });
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }

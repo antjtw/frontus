@@ -420,8 +420,7 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
             $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
             $scope.issues[i].key = $scope.issues[i].issue;
             $scope.issuekeys.push($scope.issues[i].key);
-        }
-        ;
+        };
 
         // Pivot shenanigans
         SWBrijj.procm('ownership.get_my_transactions', company).then(function (trans) {
@@ -517,7 +516,7 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
             var values = {"name": "Other Shareholders", "editable": "0"}
 
         });
-    });
+    }).except(initFail);
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -748,6 +747,8 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         }
         ;
     };
-
-
 };
+
+function initFail(x) {
+    document.location.href='/login';
+}
