@@ -19,8 +19,9 @@ function AdminCtrl($scope, $routeParams, SWBrijj, $rootScope){
       if (!$scope.domain) {
         $scope.domain = '';
       }
-      SWBrijj.procm('account.create_company', $scope.email, $scope.name, $scope.domain, $scope.companyName).then(function(x) {
+      SWBrijj.procm('account.create_company', $scope.email.toLowerCase(), $scope.name, $scope.domain, $scope.companyName).then(function(x) {
         $rootScope.notification.show("success", "Company created");
+        $scope.email = $scope.name = $scope.domain = $scope.companyName = "";
       }).except(function(x) {
         console.log(x);
         $rootScope.notification.show("fail", "Error " + x.message);

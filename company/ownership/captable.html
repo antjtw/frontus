@@ -27,8 +27,9 @@
                     <input ng-change="addRemove();" ng-model="person.email" placeholder="ADD NON SHAREHOLDER">
                 </li>
             </ul>
-            <p>All shareholders will only see their personal holdings and a summary row containing everyone else, you
-                can change this by visiting a specific shareholder's profile</p>
+            <p>Shareholders only see their personal holdings by default, change this by visiting their profile
+                to grant full access. Sharing with non-shareholders grants full-access.
+            </p>
         </form>
     </div>
     <div class="modalButtons">
@@ -37,7 +38,7 @@
     </div>
 </div>
 
-<div modal="capMulti" close="mclose()" options="opts">
+<div modal="capMulti" close="mclose(); mReset();" options="opts">
     <div class="modalHeader">
         <p class="subText">Is this a new transaction?</p>
     </div>
@@ -46,7 +47,7 @@
         <form>
             <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
             <br>
-            <select ng-model="pickTran" ng-options="i.date for i in dateoptions();">
+            <select ng-model="pickTran" ng-options="i.date as i.date | date:'mediumDate' for i in dateoptions();">
                 <option value="">New Transaction</option>
             </select>
         </form>
@@ -126,7 +127,7 @@
                                 data-icon="&#xe00e;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div class="pull-left namedtoggle">
+                <div ng-show="toggleView();" class="pull-left namedtoggle">
                     <p class="pull-left">DILUTION</p>
 
                     <div class="pull-left onoffswitch">
@@ -170,6 +171,17 @@
                     <span>{{one.issue}}</span>
                 </th>
             </tr>
+
+            <!-- Descriptive row viewable from all modes -->
+            <tr class="descriptionRow">
+                <td>Shares</td>
+                <td>%</td>
+                <td></td>
+                <td ng-repeat="one in issues">
+                    <span>UNITS</span>
+                    <span>PAID</span>
+                </td>
+            </tr>
             <!-- Editable rows -->
             <tr ng-hide="toggleView();" ng-repeat="row in rows">
                 <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></td>
@@ -210,7 +222,7 @@
                 </td>
             </tr>
             <!-- Un-editable view -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows">
+            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | viewList">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
@@ -255,272 +267,312 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright">
-    <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}</button>
-    <div class="row-fluid">
-        <div ng-switch on="sideBar">
-          <span ng-switch-when="1">
-            <div class="headsection row-fluid">
-                <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                           ng-model="activeIssue.issue"></h2>
+<div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+<button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
+</button>
+        <div class="row-fluid">
+            <div ng-switch on="sideBar">
+            <span ng-switch-when="1">
+                        <div class="headsection row-fluid">
+                            <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                       ng-model="activeIssue.issue"></h2>
 
-                <h2><input ng-disabled="toggleView();" ng-change="saveIssue(activeIssue)" type="text"
-                           ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker></h2>
-            </div>
-
-            <accordion close-others="true">
-                <accordion-group heading="Valuation">
-                    <p>Pre Money<input ng-disabled="toggleView();" pattern="[0-9]*(.[0-9]*)*"
-                                       ui-event="{blur : 'saveIssue(activeIssue)'}" ng-model="activeIssue.premoney"></p>
-
-                    <p>Post Money<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                        ng-model="activeIssue.postmoney"></p>
-
-                    <p>Price Per Share<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                             ng-model="activeIssue.ppshare"></p>
-
-                    <p>Total Authorized<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                              ng-model="activeIssue.totalauth"></p>
-
-                    <p>Liquidation Preference
-                        <select ng-disabled="toggleView();" ng-init="activeIssue.liquidpref"
-                                ng-change="saveIssue(activeIssue)" ng-model="activeIssue.liquidpref"
-                                ng-options="i for i in tf">
-                        </select>
-                    </p>
-
-                    <p>Participating Preferred
-                        <select ng-disabled="toggleView();" ng-init="activeIssue.partpref"
-                                ng-change="saveIssue(activeIssue)" ng-model="activeIssue.partpref"
-                                ng-options="i for i in tf">
-                        </select>
-                    </p>
-                </accordion-group>
-              <span ng-show="trantype('options', activeIssue.atype);">
-                <accordion-group heading="Options">
-                    <p>Underlying Security
-                        <select ng-disabled="toggleView();" ng-init="activeIssue.optundersec"
-                                ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec"
-                                ng-options="i for i in allowKeys">
-                            <option></option>
-                        </select>
-                    </p>
-                    <p>Price<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                   ng-model="activeIssue.price"></p>
-
-                    <p>Granted <input disabled value="{{totalGranted(activeIssue.issue, trans);}}"></p>
-
-                    <p>Term (months)<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                           ng-model="activeIssue.terms"></p>
-
-                    <p>Vesting Cliff Date<input ng-disabled="toggleView();" ng-change="saveIssue(activeIssue)"
-                                                type="text" ng-model="activeIssue.vestingbegins"
-                                                data-date-format="mm/dd/yyyy" bs-datepicker></p>
-
-                    <p>Vesting Cliff %<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                             ng-model="activeIssue.vestcliff"></p>
-
-                    <p>Post Cliff Frequency
-                        <select ng-disabled="toggleView();" ng-init="activeIssue.vestfreq"
-                                ng-change="saveIssue(activeIssue)" ng-model="activeIssue.vestfreq"
-                                ng-options="i for i in freqtypes">
-                        </select>
-                    </p>
-                </accordion-group>
-              </span>
-              <span ng-show="trantype('debt', activeIssue.atype);">
-                <accordion-group heading="Debt">
-                    <p>Underlying Security
-                        <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)"
-                                ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
-                            <option></option>
-                        </select>
-                    </p>
-                    <p>Interest Rate<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                           ng-model="activeIssue.interestrate"></p>
-
-                    <p>Valuation Cap<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                           ng-model="activeIssue.valcap"></p>
-
-                    <p>Discount<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                      ng-model="activeIssue.discount"></p>
-
-                    <p>Term<input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                  ng-model="activeIssue.term"></p>
-                </accordion-group>
-              </span>
-            </accordion>
-          </span>
-
-
-          <span ng-switch-when="2">
-            <div class="tabbed headsection row-fluid">
-                <h2>{{activeInvestor}}<span ng-disabled="toggleView();" data-icon="&#xe00c;"
-                                            ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
-                </h2>
-
-                <p>Customize terms for this shareholder</p>
-            </div>
-            <!-- <button ng-click="createTran();">Add</button> -->
-            <tabset class="trantabs">
-                <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
-                    <div class="row-fluid trancore">
-                        <div>
-                            <p>Date <input ng-disabled="toggleView();" ng-change="saveTranDate(tran)" type="text"
-                                           ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
-                            </p>
-                            <span data-icon="&#xe00c;"
-                                  ng-click="manualdeleteTran(tran);" aria-hidden="true"></span>
+                            <p>Customize terms for this issue</p>
                         </div>
-                        <div class="DivHelper"></div>
-                    </div>
-                    <div class="row-fluid trancore">
-                        <div>
-                            <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
-                                            maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
-                            </p>
-
-                            <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
-                                                                     ng-class="{'content':!tran.units}" maxlength="18"
-                                                                     class="signless"
-                                                                     ui-event="{blur : 'saveTran(tran)'}"
-                                                                     ng-model="tran.units"></p>
+                        <div class="row-fluid trancore">
+                            <div>
+                                <p>Date <input ng-disabled="toggleView();" ng-change="saveIssue(activeIssue)" type="text"
+                                               ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                </p>
+                            </div>
+                            <div class="DivHelper"></div>
                         </div>
-                        <div class="DivHelper"></div>
-                    </div>
-                    <div ng-show="tran.forfeited" class="row-fluid trancore">
-                        <div>
-                            <p>Shares<input ng-disabled="toggleView();" ng-class="{'content':!tran.units}"
-                                            maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
-                                            ng-model="tran.units"></p>
+                        <accordion close-others="true">
+                            <accordion-group heading="Valuation">
+                                <p class="rightTitle"><span>Pre Money</span><input ng-disabled="toggleView();"
+                                                                                   pattern="[0-9]*(.[0-9]*)*"
+                                                                                   ng-class="{'content':!activeIssue.premoney}"
+                                                                                   ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                   ng-model="activeIssue.premoney"></p>
 
-                            <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
-                                             ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></p>
+                                <p class="rightTitle"><span>Post Money</span><input ng-disabled="toggleView();"
+                                                                                    ng-class="{'content':!activeIssue.postmoney}"
+                                                                                    ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                    ng-model="activeIssue.postmoney"></p>
+
+                                <p class="rightTitle"><span>Price Per Share</span><input ng-disabled="toggleView();"
+                                                                                         ng-class="{'content':!activeIssue.ppshare}"
+                                                                                         ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
+                                                                                         ng-model="activeIssue.ppshare"></p>
+
+                                <p class="rightTitle"><span>Total Authorized</span><input ng-disabled="toggleView();"
+                                                                                          ng-class="{'content':!activeIssue.totalauth}"
+                                                                                          ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                          ng-model="activeIssue.totalauth"></p>
+
+                                <p class="rightTitle"><span>Liquidation Preference</span>
+                                    <select ng-disabled="toggleView();" ng-init="activeIssue.liquidpref"
+                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.liquidpref"
+                                            ng-options="i for i in liquidpref">
+                                    </select>
+                                </p>
+
+                                <p class="rightTitle"><span>Participating Preferred</span>
+                                    <select ng-disabled="toggleView();" ng-init="activeIssue.partpref"
+                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.partpref"
+                                            ng-options="i for i in tf">
+                                    </select>
+                                </p>
+                            </accordion-group>
+                          <span ng-show="trantype('options', activeIssue.atype);">
+                            <accordion-group heading="Options">
+                                <p class="rightTitle"><span>Underlying Security</span>
+                                    <select ng-disabled="toggleView();" ng-init="activeIssue.optundersec"
+                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec"
+                                            ng-options="i for i in allowKeys">
+                                        <option></option>
+                                    </select>
+                                </p>
+                                <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
+                                                                               ng-class="{'content':!activeIssue.price}"
+                                                                               ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                               ng-model="activeIssue.price"></p>
+
+                                <p class="rightTitle"><span>Granted</span><input disabled
+                                                                                 value="{{totalGranted(activeIssue.issue, trans);}}">
+                                </p>
+
+                                <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                       ng-class="{'content':!activeIssue.terms}"
+                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                       ng-model="activeIssue.terms"></p>
+
+                                <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
+                                                                                            ng-class="{'content':!activeIssue.vestingbegins}"
+                                                                                            ng-change="saveIssue(activeIssue)"
+                                                                                            type="text"
+                                                                                            ng-model="activeIssue.vestingbegins"
+                                                                                            data-date-format="mm/dd/yyyy"
+                                                                                            bs-datepicker></p>
+
+                                <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                         ng-class="{'content':!activeIssue.vestcliff}"
+                                                                                         ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                         ng-model="activeIssue.vestcliff"></p>
+
+                                <p class="rightTitle"><span>Post Cliff Frequency</span>
+                                    <select ng-disabled="toggleView();" ng-init="activeIssue.vestfreq"
+                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.vestfreq"
+                                            ng-options="i for i in freqtypes">
+                                    </select>
+                                </p>
+                            </accordion-group>
+                          </span>
+                          <span ng-show="trantype('debt', activeIssue.atype);">
+                            <accordion-group heading="Debt">
+                                <p class="rightTitle"><span>Underlying Security</span>
+                                    <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)"
+                                            ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
+                                        <option></option>
+                                    </select>
+                                </p>
+                                <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                       ng-class="{'content':!activeIssue.interestrate}"
+                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                       ng-model="activeIssue.interestrate"></p>
+
+                                <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                       ng-class="{'content':!activeIssue.valcap}"
+                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                       ng-model="activeIssue.valcap"></p>
+
+                                <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
+                                                                                  ng-class="{'content':!activeIssue.discount}"
+                                                                                  ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                                  ng-model="activeIssue.discount"></p>
+
+                                <p class="rightTitle"><span>Term</span><input ng-disabled="toggleView();"
+                                                                              ng-class="{'content':!activeIssue.term}"
+                                                                              ui-event="{blur : 'saveIssue(activeIssue)'}"
+                                                                              ng-model="activeIssue.term"></p>
+                            </accordion-group>
+                          </span>
+                        </accordion>
+                      </span>
+
+
+                      <span ng-switch-when="2">
+                        <div class="tabbed headsection row-fluid">
+                            <h2>{{activeInvestor}}<span ng-disabled="toggleView();" data-icon="&#xe00c;"
+                                                        ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
+                            </h2>
+
+                            <p>Customize terms for this shareholder</p>
                         </div>
-                        <div class="DivHelper"></div>
-                    </div>
-                    <accordion close-others="true">
-                        <accordion-group heading="Valuation">
-                            <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
-                                                                               ui-event="{blur : 'saveTran(tran)'}"
-                                                                               ng-model="tran.premoney"></p>
+                        <!-- <button ng-click="createTran();">Add</button> -->
+                        <tabset class="trantabs">
+                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+                                <div class="row-fluid trancore">
+                                    <div>
+                                        <p>Date <input ng-disabled="toggleView();" ng-change="saveTranDate(tran)" type="text"
+                                                       ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        </p>
+                                        <span data-icon="&#xe00c;"
+                                              ng-click="manualdeleteTran(tran);" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="DivHelper"></div>
+                                </div>
+                                <div class="row-fluid trancore">
+                                    <div>
+                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
+                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
+                                        </p>
 
-                            <p class="rightTitle"><span>Post Money</span><input disabled
-                                                                                ui-event="{blur : 'saveTran(tran)'}"
-                                                                                ng-model="tran.postmoney"></p>
-
-                            <p class="rightTitle"><span>Price Per Share</span><input ng-disabled="toggleView();"
-                                                                                     ng-class="{'content':!tran.ppshare}"
-                                                                                     ui-event="{blur : 'saveTran(tran)'}"
-                                                                                     ng-model="tran.ppshare"></p>
-
-                            <p class="rightTitle"><span>Total Authorized</span><input disabled
-                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                      ng-model="tran.totalauth"></p>
-
-                            <p class="rightTitle"><span>Liquidation Preference</span>
-                                <select ng-disabled="toggleView();" ng-init="tranIssue.liquidpref"
-                                        ng-change="saveTran(tran)" ng-model="tran.liquidpref"
-                                        ng-options="i for i in tf">
-                                </select>
-                            </p>
-
-                            <p class="rightTitle"><span>Participating Preferred</span>
-                                <select ng-disabled="toggleView();" ng-init="tran.partpref" ng-change="saveTran(tran)"
-                                        ng-model="tran.partpref" ng-options="i for i in tf">
-                                </select>
-                            </p>
-                        </accordion-group>
-                  <span ng-show="trantype('options', tran.atype);">
-                    <accordion-group heading="Options">
-                        <p>Underlying Security
-                            <select ng-disabled="toggleView();" ng-init="tran.optundersec" ng-change="saveTran(tran)"
-                                    ng-model="tran.optundersec" ng-options="i for i in allowKeys">
-                                <option></option>
-                            </select>
-                        </p>
-                        <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
-                                                                       ng-class="{'content':!tran.price}"
-                                                                       ui-event="{blur : 'saveTran(tran)'}"
-                                                                       ng-model="tran.price"></p>
-
-                        <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
-                                                                               ng-class="{'content':!tran.terms}"
-                                                                               ui-event="{blur : 'saveTran(tran)'}"
-                                                                               ng-model="tran.terms"></p>
-
-                        <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                    ng-class="{'content':!tran.vestingbegins}"
-                                                                                    ng-change="saveTran(tran)"
-                                                                                    type="text"
-                                                                                    ng-model="tran.vestingbegins"
-                                                                                    data-date-format="mm/dd/yyyy"
-                                                                                    bs-datepicker></p>
-
-                        <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
-                                                                                 ng-class="{'content':!tran.vestcliff}"
+                                        <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
+                                                                                 ng-class="{'content':!tran.units}" maxlength="18"
+                                                                                 class="signless"
                                                                                  ui-event="{blur : 'saveTran(tran)'}"
-                                                                                 ng-model="tran.vestcliff"></p>
+                                                                                 ng-model="tran.units"></p>
+                                    </div>
+                                    <div class="DivHelper"></div>
+                                </div>
+                                <div ng-show="tran.forfeited" class="row-fluid trancore">
+                                    <div>
+                                        <p>Shares<input ng-disabled="toggleView();" ng-class="{'content':!tran.units}"
+                                                        maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
+                                                        ng-model="tran.units"></p>
 
-                        <p class="rightTitle"><span>Post Cliff Frequency</span>
-                            <select ng-disabled="toggleView();" ng-init="tran.vestfreq" ng-change="saveTran(tran)"
-                                    ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
-                            </select>
-                        </p>
-                    </accordion-group>
-                  </span>
-                  <span ng-show="trantype('debt', tran.atype);">
-                      <accordion-group heading="Debt">
-                          <p class="rightTitle"><span>Underlying Security</span>
-                              <select ng-disabled="toggleView();" ng-init="tran.debtundersec" ng-change="saveTran(tran)"
-                                      ng-model="tran.debtundersec" ng-options="i for i in allowKeys">
-                                  <option></option>
-                              </select>
-                          </p>
-                          <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                 ng-class="{'content':!tran.interestrate}"
-                                                                                 ui-event="{blur : 'saveTran(tran)'}"
-                                                                                 ng-model="tran.interestrate"></p>
+                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></p>
+                                    </div>
+                                    <div class="DivHelper"></div>
+                                </div>
+                                <accordion close-others="true">
+                                    <accordion-group heading="Valuation">
+                                        <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.premoney"></p>
 
-                          <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                 ng-class="{'content':!tran.valcap}"
-                                                                                 ui-event="{blur : 'saveTran(tran)'}"
-                                                                                 ng-model="tran.valcap"></p>
+                                        <p class="rightTitle"><span>Post Money</span><input disabled
+                                                                                            ui-event="{blur : 'saveTran(tran)'}"
+                                                                                            ng-model="tran.postmoney"></p>
 
-                          <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
-                                                                            ng-class="{'content':!tran.discount}"
-                                                                            ui-event="{blur : 'saveTran(tran)'}"
-                                                                            ng-model="tran.discount"></p>
+                                        <p class="rightTitle"><span>Price Per Share</span><input ng-disabled="toggleView();"
+                                                                                                 ng-class="{'content':!tran.ppshare}"
+                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                 ng-model="tran.ppshare"></p>
 
-                          <p class="rightTitle"><span>Term</span><input ng-disabled="toggleView();"
-                                                                        ng-class="{'content':!tran.term}"
-                                                                        ui-event="{blur : 'saveTran(tran)'}"
-                                                                        ng-model="tran.term"></p>
-                      </accordion-group>
-                    </span>
-                    </accordion>
-                </tab>
-                <tab select="createTrantab();" heading="add"></tab>
-            </tabset>
-          </span>
+                                        <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                                  ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                  ng-model="tran.totalauth"></p>
 
-          <span ng-switch-when="3">
-            <div class="headsection row-fluid">
-                <h2>{{activeInvestorName}}</h2>
+                                        <p class="rightTitle"><span>Liquidation Preference</span>
+                                            <select ng-disabled="toggleView();" ng-init="tranIssue.liquidpref"
+                                                    ng-change="saveTran(tran)" ng-model="tran.liquidpref"
+                                                    ng-options="i for i in liquidpref">
+                                            </select>
+                                        </p>
 
-                <p>Info on this shareholder</p>
+                                        <p class="rightTitle"><span>Participating Preferred</span>
+                                            <select ng-disabled="toggleView();" ng-init="tran.partpref" ng-change="saveTran(tran)"
+                                                    ng-model="tran.partpref" ng-options="i for i in tf">
+                                            </select>
+                                        </p>
+                                    </accordion-group>
+                              <span ng-show="trantype('options', tran.atype);">
+                                <accordion-group heading="Options">
+                                    <p class="rightTitle"><span>Underlying Security</span>
+                                        <select ng-disabled="toggleView();" ng-init="tran.optundersec" ng-change="saveTran(tran)"
+                                                ng-model="tran.optundersec" ng-options="i for i in allowKeys">
+                                            <option></option>
+                                        </select>
+                                    </p>
+                                    <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
+                                                                                   ng-class="{'content':!tran.price}"
+                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                   ng-model="tran.price"></p>
+
+                                    <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                           ng-class="{'content':!tran.terms}"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.terms"></p>
+
+                                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
+                                                                                                ng-class="{'content':!tran.vestingbegins}"
+                                                                                                ng-change="saveTran(tran)"
+                                                                                                type="text"
+                                                                                                ng-model="tran.vestingbegins"
+                                                                                                data-date-format="mm/dd/yyyy"
+                                                                                                bs-datepicker></p>
+
+                                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                             ng-class="{'content':!tran.vestcliff}"
+                                                                                             ui-event="{blur : 'saveTran(tran)'}"
+                                                                                             ng-model="tran.vestcliff"></p>
+
+                                    <p class="rightTitle"><span>Post Cliff Frequency</span>
+                                        <select ng-disabled="toggleView();" ng-init="tran.vestfreq" ng-change="saveTran(tran)"
+                                                ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
+                                        </select>
+                                    </p>
+                                </accordion-group>
+                              </span>
+                              <span ng-show="trantype('debt', tran.atype);">
+                                  <accordion-group heading="Debt">
+                                      <p class="rightTitle"><span>Underlying Security</span>
+                                          <select ng-disabled="toggleView();" ng-init="tran.debtundersec" ng-change="saveTran(tran)"
+                                                  ng-model="tran.debtundersec" ng-options="i for i in allowKeys">
+                                              <option></option>
+                                          </select>
+                                      </p>
+                                      <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                             ng-class="{'content':!tran.interestrate}"
+                                                                                             ui-event="{blur : 'saveTran(tran)'}"
+                                                                                             ng-model="tran.interestrate"></p>
+
+                                      <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                             ng-class="{'content':!tran.valcap}"
+                                                                                             ui-event="{blur : 'saveTran(tran)'}"
+                                                                                             ng-model="tran.valcap"></p>
+
+                                      <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
+                                                                                        ng-class="{'content':!tran.discount}"
+                                                                                        ui-event="{blur : 'saveTran(tran)'}"
+                                                                                        ng-model="tran.discount"></p>
+
+                                      <p class="rightTitle"><span>Term</span><input ng-disabled="toggleView();"
+                                                                                    ng-class="{'content':!tran.term}"
+                                                                                    ui-event="{blur : 'saveTran(tran)'}"
+                                                                                    ng-model="tran.term"></p>
+                                  </accordion-group>
+                                </span>
+                                </accordion>
+                            </tab>
+                            <tab select="createTrantab();" heading="add"></tab>
+                        </tabset>
+                      </span>
+
+                      <span ng-switch-when="3">
+                        <div class="headsection row-fluid">
+                            <h2>{{activeInvestorName}}</h2>
+
+                            <p>Info on this shareholder</p>
+                        </div>
+                        <span class="capGuide">
+                            <p>{{activeInvestorEmail}}</p>
+                        </span>
+                      </span>
+                      <span class="capGuide" ng-switch-default>
+                        <h2>Understand your Ownership</h2>
+
+                        <p>Enter your securities, shareholders and their holdings directly into our responsive table.
+                            We'll calculate the totals on your behalf, and any additional terms that you add will
+                            influence your non-diluted view and financial modeling (coming soon).</p>
+
+                        <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                      </span>
             </div>
-            <div>
-                <p>{{activeInvestorEmail}}</p>
-            </div>
-          </span>
-          <span ng-switch-default>
-            <div class="headsection row-fluid">
-            </div>
-            <p>Welcome To Your Captable</p>
-          </span>
         </div>
-    </div>
 </div>
 </div>
 </div>

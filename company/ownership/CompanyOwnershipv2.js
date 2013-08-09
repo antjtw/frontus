@@ -27,6 +27,18 @@ owner.filter('shareList', function () {
     };
 });
 
+owner.filter('viewList', function () {
+    return function (rows) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.name != "") {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
 
 // Popover directive. Not yet fully usable as it strips out the ng-click.
 owner.directive('popOver', function ($compile) {
@@ -431,6 +443,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.issuetypes = [];
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
+    $scope.liquidpref = ['None','1X','2X', '3X'];
 
     $scope.extraPeople = [
         {"email": ""}
@@ -645,12 +658,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     else {
                         tran.partpref = $scope.tf[1];
                     }
-                    if (String(tran['liquidpref']) == "true") {
-                        tran.liquidpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.liquidpref = $scope.tf[1];
-                    }
                     tran = switchval.typeswitch(tran);
                     $scope.activeTran.push(tran);
                 }
@@ -696,18 +703,23 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         else {
             $scope.activeIssue.partpref = $scope.tf[1];
         }
-        if (String($scope.activeIssue.liquidpref) == "true") {
-            $scope.activeIssue.liquidpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.liquidpref = $scope.tf[1];
-        }
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
         }
         // Set Freq Value for Angularjs Select
         var index = $scope.freqtypes.indexOf(issue.vestfreq);
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
+    };
+
+    $scope.saveIssueCheck = function (issue, field) {
+        console.log(field);
+        angular.forEach($scope.trans, function(tran) {
+            if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
+                $scope.issueModalUp();
+                return
+            }
+        });
+        $scope.saveIssue(issue);
     };
 
     $scope.saveIssue = function (issue) {
@@ -735,19 +747,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     var partpref = $scope.strToBool(issue['partpref']);
                 }
                 ;
-                if (issue['liquidpref'] != null) {
-                    var liquidpref = $scope.strToBool(issue['liquidpref']);
-                }
-                ;
-
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
-
                 else {
                     var vestcliffdate = (issue['vestingbegins']).toUTCString();
                 }
-                SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_issue', issue['key'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
                     issue = switchval.typeswitch(issue);
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
@@ -1024,10 +1030,18 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     if (!isNaN(tran.units)) {
                         row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
                         row[tran.issue]['ukey'] = row[tran.issue]['u']
+                        if (row[tran.issue]['u'] == 0) {
+                            row[tran.issue]['u'] = null
+                            row[tran.issue]['ukey'] = null
+                        }
                     }
                     if (!isNaN(tran.amount)) {
                         row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
                         row[tran.issue]['akey'] = row[tran.issue]['a']
+                        if (row[tran.issue]['a'] == 0) {
+                            row[tran.issue]['a'] = null
+                            row[tran.issue]['akey'] = null
+                        }
                     }
                 }
             });
@@ -1095,11 +1109,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 transaction = transaction[0];
             }
         }
-        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null) {
+        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
           console.log("there are letters")
           transaction.units = transaction.unitskey;
         };
-        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null) {
+        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };
@@ -1139,9 +1153,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             if (transaction['partpref'] != null) {
                 var partpref = $scope.strToBool(transaction['partpref']);
             }
-            if (transaction['liquidpref'] != null) {
-                var liquidpref = $scope.strToBool(transaction['liquidpref']);
-            }
             if (transaction['vestingbegins'] == undefined) {
                 var vestcliffdate = null
             }
@@ -1151,7 +1162,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             }
             transaction = switchval.typeswitch(transaction);
             transaction.type = switchval.typereverse(transaction.atype);
-            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
                 transaction = switchval.typeswitch(transaction);
                 if (transaction.units >= 0) {
                     var tempunits = 0;
@@ -1506,7 +1517,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
-                    console.log(data);
+                    $rootScope.notification.show("success", "Ownership Table share request sent");
                     row.send = false;
                     row.emailkey = row.email;
                 });
@@ -1775,7 +1786,7 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             var vestcliffdate = (transaction['vestingbegins']).toUTCString();
         }
         var d1 = transaction['date'].toUTCString();
-        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), Boolean(transaction.liquidpref), transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+        SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
 
         });
     };
@@ -1787,6 +1798,10 @@ var statusController = function ($scope, SWBrijj) {
 
     SWBrijj.tblm('account.my_company').then(function (x) {
         $scope.cinfo = x
+    });
+
+    SWBrijj.tblm('ownership.lastupdated').then(function (time) {
+        $scope.lastupdated = time[0].last_edited
     });
 
     SWBrijj.tblm("ownership.company_audit").then(function (data) {
@@ -1829,9 +1844,9 @@ var statusController = function ($scope, SWBrijj) {
         })
     });
 
-    SWBrijj.procm("ownership.get_company_activity_cluster").then(function (data) {
+    SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
         $scope.activity = data;
-        SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function (person) {
+        SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
             $scope.activityDetail = person;
             for (var ik = 0; ik < $scope.activity.length; ik++) {
                 if ($scope.activity[ik].count == 1) {
@@ -1839,7 +1854,7 @@ var statusController = function ($scope, SWBrijj) {
                         if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                             if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
                                 $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                                $scope.activity[ik].event_time = $scope.activityDetail[j].whendone;
+                                $scope.activity[ik].whendone = $scope.activityDetail[j].whendone;
                             }
                         }
                     }
@@ -1859,24 +1874,10 @@ var statusController = function ($scope, SWBrijj) {
                     $scope.activity[i].icon = 'icon-view';
                 }
             }
-            if ($scope.shared_dates.length == 0) {
-                $scope.lastsent = "never sent";
-            }
-            else {
-                $scope.lastsent = new Date(Math.max.apply(null, $scope.shared_dates)).getTime();
-            }
 
-            // angular.forEach($scope.activityDetail, function(x) { //Get names for each person
-            //   SWBrijj.proc('account.get_investor_name', x.email).then(function(name) {
-            //     x.name = name[1][0];
-            //     console.log(x.name);
-            //     $scope.$apply();
-            //   });
-            // });
-
-            angular.forEach($scope.activity, function (x) { //Replace emails with names
+            angular.forEach($scope.activity, function(x) { //Replace emails with names
                 if (x.namethem != null) {
-                    SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function (name) {
+                    SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
                         x.namethem = name[1][0];
                     });
                 }
@@ -1885,17 +1886,17 @@ var statusController = function ($scope, SWBrijj) {
         });
     });
 
-    $scope.activityOrder = function (card) {
+    $scope.activityOrder = function(card) {
         if (card.activity == "Created") {
-            return 0
+            return 0;
         }
         else {
-            return -card.event_time
+            return -card.whendone;
         }
     };
 
-    $scope.opendetails = function (selected) {
-        $scope.userStatus.forEach(function (name) {
+    $scope.opendetails = function(selected) {
+        $scope.userStatus.forEach(function(name) {
             if (selected == name.email)
                 if (name.shown == true) {
                     name.shown = false;

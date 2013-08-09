@@ -52,6 +52,9 @@
                 <th>Visibility</th>
                 <th colspan="2">Status</th>
               </tr>
+              <tr>
+                  <td ng-show="!userStatus[0]" colspan="5">You haven't shared the captable with anyone yet!</td>
+              </tr>
               	<tbody ng-repeat="person in userStatus">
                 <tr>
                 <td ng-click="(opendetails(person.email))">{{person.name}}</td>
@@ -61,20 +64,20 @@
                 <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
-                    <td colspan="2">
-                        <div><p>Delivered</p><p class="doubleTime">{{person.whendone | date:'MMMM dd, yyyy'}}</p><p>{{person.whendone | date:'h:mm a'}}</p></div>
+                    <td class="status-bubbles" colspan="5">
+                        <div><span data-icon="&#xe024;" aria-hidden="true"></span><p class="doubleTime">Delivered</p><p class="doubleTime">{{person.whendone | date:'MMMM dd, yyyy'}}</p><p>{{person.whendone | date:'h:mm a'}}</p></div>
                         
                         <div>
                             <div ng-switch on="person.lastlogin" >
-                                <span ng-switch-when="0"><p class="hltext">Never Logged In</p></span>
-                                <span ng-switch-default><p>Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
+                                <span ng-switch-when="0"><span data-icon="&#xe026;" aria-hidden="true"></span><p class="hltext">Never Logged In</p></span>
+                                <span ng-switch-default><span data-icon="&#xe026;" aria-hidden="true"></span><p class="doubleTime">Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
                             </div>
                         </div>
                        
                         <div>
                             <div ng-switch on="person.viewflag" >
-                                <span ng-switch-when="0"><p class="hltext">Unviewed</p></span>
-                                <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{person.whenviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.whenviewed | date:'h:mm a'}}</p></span>
+                                <span ng-switch-when="0"><span data-icon="&#xe001;" aria-hidden="true"></span><p class="hltext">Unviewed</p></span>
+                                <span ng-switch-default><span data-icon="&#xe001;" aria-hidden="true"></span><p class="doubleTime">Viewed</p><p class="doubleTime">{{person.whenviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.whenviewed | date:'h:mm a'}}</p></span>
                             </div>
                         </div>
                     </td>
@@ -93,7 +96,7 @@
                 <p class="subText">Information</p>
             </div>
             <ul>
-                <li>Last Sent: {{lastsent | date:"MMMM d, y"}}</li>
+                <li>Last Edited: {{lastupdated | date:"mediumDate"}}</li>
             </ul>  
         </div>
          
