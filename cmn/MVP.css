@@ -4,6 +4,8 @@
 html, body {
   height: 100% !important;
   width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
   background-color:#FFFFFF;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -588,6 +590,7 @@ h2 {
 /* Left Block for split pages */
 
 .row-fluid .span8.leftBlock {
+    float: left;
 	width: 674px;
 	transition:width 0.25s;
 	-moz-transition:width 0.25s;
