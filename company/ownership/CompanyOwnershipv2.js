@@ -711,6 +711,17 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
     };
 
+    $scope.saveIssueCheck = function (issue, field) {
+        console.log(field);
+        angular.forEach($scope.trans, function(tran) {
+            if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
+                $scope.issueModalUp();
+                return
+            }
+        });
+        $scope.saveIssue(issue);
+    };
+
     $scope.saveIssue = function (issue) {
         console.log("saving issue");
         angular.forEach($scope.issues, function (coreissue) {
