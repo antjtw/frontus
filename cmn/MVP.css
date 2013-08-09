@@ -587,7 +587,7 @@ h2 {
 
 /* Left Block for split pages */
 
-.row-fluid .leftBlock {
+.row-fluid .span8.leftBlock {
 	width: 674px;
 	transition:width 0.25s;
 	-moz-transition:width 0.25s;
