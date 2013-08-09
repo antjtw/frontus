@@ -46,7 +46,7 @@ body {
 }
 
 label {
-	cursor: default;
+	cursor: default;cursor: default;
 }
 
 .center {
@@ -2425,6 +2425,8 @@ margin-top: 0.9em;
 .home .videoRow {
 	text-align: center;
 	padding: 15px 0 15px 0;
+    cursor: pointer;
+
 }
 
 .home .videoRow > h2 {
@@ -2548,6 +2550,8 @@ margin-top: 0.9em;
 .home input:focus:invalid {
 	color: #666666;
 }
+
+
 
 /* Set submit button */
 
