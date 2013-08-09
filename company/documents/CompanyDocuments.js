@@ -72,6 +72,9 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 				console.log(data);
 			});
       	});
+	/*        SWBrijj.proc('document.share',scope.docId, scope.recipients, scope.messageText).then( function(data) {
+          alert(data); scope.hide(); });
+	*/
        };
     },
     replace:true,

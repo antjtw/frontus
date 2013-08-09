@@ -114,7 +114,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 				$rootScope.select(cookie);
 			} else {
 				$rootScope.select($scope.companies[0]['company']);	
-			}	
+			}
 		}
 		
 	}).except(function(ignore) {
