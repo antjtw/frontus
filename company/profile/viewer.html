@@ -23,10 +23,12 @@
     <section class="recipientInfo statusBlock">
       <div><p class="title">Document Status</p></div>
       <table class="tableView bodyText">
-        <tr class="subText">
+
+        <tr class="subText" ng-hide="noDocs">
           <th class="button"><span class="title sortedDown">Name</span></th>
           <th colspan="2" class="button"><span class="title">Status</span></th>
         </tr>
+
         <tbody ng-repeat="doc in docs">
           <tr>
           <td><img src="">{{doc.docname}}</td>
