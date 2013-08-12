@@ -301,7 +301,7 @@
                         </div>
                         <div class="row-fluid trancore">
                             <div>
-                                <p>Date <input ng-disabled="toggleView();" ng-change="saveIssueCheck(activeIssue, \'date\')" type="text"
+                                <p>Date <input ng-disabled="toggleView();" ng-change="saveIssueCheckDate(activeIssue, 'date')" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
                             </div>
@@ -332,14 +332,14 @@
 
                                 <p class="rightTitle"><span>Liquidation Preference</span>
                                     <select ng-disabled="toggleView();" ng-init="activeIssue.liquidpref"
-                                            ng-change="saveIssueCheck(activeIssue, \'liquidpref\')" ng-model="activeIssue.liquidpref"
+                                            ng-change="saveIssueCheck(activeIssue, 'liquidpref')" ng-model="activeIssue.liquidpref"
                                             ng-options="i for i in liquidpref">
                                     </select>
                                 </p>
 
                                 <p class="rightTitle"><span>Participating Preferred</span>
                                     <select ng-disabled="toggleView();" ng-init="activeIssue.partpref"
-                                            ng-change="saveIssueCheck(activeIssue, \'partpref\')" ng-model="activeIssue.partpref"
+                                            ng-change="saveIssueCheck(activeIssue, 'partpref')" ng-model="activeIssue.partpref"
                                             ng-options="i for i in tf">
                                     </select>
                                 </p>
@@ -348,7 +348,7 @@
                             <accordion-group heading="Options">
                                 <p class="rightTitle"><span>Underlying Security</span>
                                     <select ng-disabled="toggleView();" ng-init="activeIssue.optundersec"
-                                            ng-change="saveIssueCheck(activeIssue, \'optundersec\')" ng-model="activeIssue.optundersec"
+                                            ng-change="saveIssueCheck(activeIssue, 'optundersec')" ng-model="activeIssue.optundersec"
                                             ng-options="i for i in allowKeys">
                                         <option></option>
                                     </select>
@@ -369,7 +369,7 @@
 
                                 <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
                                                                                             ng-class="{'content':!activeIssue.vestingbegins}"
-                                                                                            ng-change="saveIssueCheck(activeIssue, \'vestingbegins\')"
+                                                                                            ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
                                                                                             type="text"
                                                                                             ng-model="activeIssue.vestingbegins"
                                                                                             data-date-format="mm/dd/yyyy"
@@ -382,7 +382,7 @@
 
                                 <p class="rightTitle"><span>Post Cliff Frequency</span>
                                     <select ng-disabled="toggleView();" ng-init="activeIssue.vestfreq"
-                                            ng-change="saveIssueCheck(activeIssue, \'vestfreq\')" ng-model="activeIssue.vestfreq"
+                                            ng-change="saveIssueCheck(activeIssue, 'vestfreq')" ng-model="activeIssue.vestfreq"
                                             ng-options="i for i in freqtypes">
                                     </select>
                                 </p>
@@ -391,7 +391,7 @@
                           <span ng-show="trantype('debt', activeIssue.atype);">
                             <accordion-group heading="Debt">
                                 <p class="rightTitle"><span>Underlying Security</span>
-                                    <select ng-init="activeIssue.debtundersec" ng-change="saveIssueCheck(activeIssue, \'debtundersec\')"
+                                    <select ng-init="activeIssue.debtundersec" ng-change="saveIssueCheck(activeIssue, 'debtundersec')"
                                             ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
                                         <option></option>
                                     </select>

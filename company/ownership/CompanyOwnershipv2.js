@@ -712,6 +712,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
     };
 
+    $scope.saveIssueCheckDate = function (issue) {
+        //Fix the dates to take into account timezone differences.
+        var offset = issue.date.getTimezoneOffset();
+        issue.date = issue.date.addMinutes(offset);
+        $scope.saveIssueCheck(issue, 'date');
+    };
+
     $scope.saveIssueCheck = function (issue, field) {
         var x = false;
         angular.forEach($scope.trans, function(tran) {
