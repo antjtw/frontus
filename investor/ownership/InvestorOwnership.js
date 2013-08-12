@@ -490,18 +490,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                 });
             });
 
-            angular.forEach($scope.issues, function (issue) {
-                if (parseFloat(issue.totalauth) % 1 == 0) {
-                    var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
-                    if (leftovers != 0) {
-                        var issuename = String(issue.issue)
-                        var shares = {"u": leftovers, "a": null};
-                        $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                        $scope.rows[($scope.rows.length) - 1][issuename] = shares
-                    }
-                }
-            });
-
 
             angular.forEach($scope.rows, function (row) {
                 angular.forEach($scope.issuekeys, function (issuekey) {

@@ -81,6 +81,10 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 	background-color: transparent;
 }
 
+input:focus, textarea:focus {
+    background-color: #E3E3E3;
+}
+
 /* Accordians */
 
 .accordion-group {
@@ -1430,7 +1434,6 @@ td.tranSelected {
 }
 
 .tranSelected {
-    background-color: #E3E3E3;
 }
 
 td.tranViewSelected {

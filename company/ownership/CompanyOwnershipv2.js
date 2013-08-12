@@ -493,8 +493,12 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         if (grant.tran_id == tran.tran_id) {
                             grant.investor = tran.investor;
                             if (grant.action == "forfeited") {
-                                console.log("here");
-                                tran.forfeited = grant.unit;
+                                if (tran.forfeited) {
+                                    tran.forfeited = tran.forfeited + grant.unit;
+                                }
+                                else {
+                                    tran.forfeited = grant.unit;
+                                }
                             }
                         }
                     });
