@@ -135,6 +135,7 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.files = [];
 
 	$scope.fmtFileSize = function (file) {
+	  if (file == null) return;
 	  if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
 	  else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
 	  else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
@@ -196,11 +197,12 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	//   element.addEventListener("dragover", $scope.dragOver, false);
 	//   element.addEventListener("drop", $scope.drop, false);
 	// };
-
+	
+	$scope.files = [];
 	$scope.setFiles = function (element) {
-	  $scope.files = [];
 	  for (var i = 0; i < element.files.length; i++) {
 	    $scope.files.push(element.files[i]);
+      	$scope.$apply();
 	  }
 	  $scope.progressVisible = false;
 	};
@@ -219,7 +221,8 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	    });
 	  }, cancel: function() { 
 	  	console.log('canceled');
-		$scope.progressVisible = false;
+	  	$rootScope.notification.show("fail", "There was an error uploading your document.");
+	  	$scope.progressVisible = false;
 	  	}
 	  })
 	};
@@ -237,6 +240,8 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 		$scope.loadDocuments();
 		$rootScope.notification.show("success", "Your document has been uploaded.");
 	  }).except(function (x) {
+	  	$rootScope.notification.show("fail", "There was an error uploading your document.");
+	  	$scope.progressVisible = false;
 	  	alert(x.message);
 	  });
 	  /*var xhr = new XMLHttpRequest()
