@@ -173,7 +173,7 @@
 
 
     <div class="row-fluid capcontainer">
-        <table class="captable tableView bodyText">
+        <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
             <!-- Editable headers -->
             <tr ng-hide="toggleView();" class="column-label">
                 <th colspan="2">Ownership</th>
@@ -246,7 +246,7 @@
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
 
                     <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>

@@ -1036,7 +1036,8 @@ form.inputs {
 .docLibrary input {
 	border: 0px;
 	padding: 0px;
-	width: 70px;
+    margin-right: 5px;
+	width: 60px;
 }
 
 /* Placeholder text color */
@@ -1099,6 +1100,7 @@ form.inputs {
 }
 
 .tableView td {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 	background-color: #FFFFFF;
 	/* padding: 5px 40px 0 0; */
 	height:35px;
@@ -1405,6 +1407,10 @@ ul>li.curPage {
 	table-layout: fixed;
 }
 
+.tableView.captable.viewcaptable {
+    background: white;
+}
+
 .longRow td {
 	width: 150px !important;
 }
@@ -1420,11 +1426,19 @@ p.captablepair {
 }
 
 td.tranSelected {
-	background-color: rgba(26, 188, 150, 0.1);
+	border: 2px solid #E3E3E3;
 }
 
 .tranSelected {
-	background-color: transparent;
+    background-color: #E3E3E3;
+}
+
+td.tranViewSelected {
+    background-color: rgba(26, 188, 150, 0.1);
+}
+
+.tranViewSelected {
+    background-color: rgba(26, 188, 150, 0.1);
 }
 
 .span4.capright {

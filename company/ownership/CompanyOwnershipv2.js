@@ -653,7 +653,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.activeTran.push(anewTran);
         }
         $scope.tabAddTime = false;
-        $scope.$apply();
     };
 
     $scope.getActiveIssue = function (issue) {
