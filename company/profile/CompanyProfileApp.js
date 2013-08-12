@@ -236,6 +236,8 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
       angular.forEach($scope.people, function(person) {
         if (person.email == me[0].email)
           person.hideLock = true;
+        if (person.name == null) 
+          person.name = person.email;
       });
     });
     console.log(x);
@@ -339,6 +341,23 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
   $scope.activityOrder = function(card) {
     return -card.time;
+  };
+
+  SWBrijj.tblm('ownership.company_audit', ['email', 'fullview'], 'email', userId).then(function(x) {
+    $scope.fullview = (x.fullview) ? 'full':'personal';
+    console.log($scope.fullview);
+  }).except(function() {
+    $scope.fullview = false;
+  });
+
+  $scope.changeVisibility = function () {
+    var visibility = false;
+    if ($scope.fullview == 'full') {
+      visibility = true;
+    }
+    SWBrijj.proc('ownership.update_investor_captable', userId, visibility).then(function (data) {
+      $rootScope.notification.show("success", "Successfully changed cap table visibility")
+    });
   };
 
   $scope.opendetails = function(selected) {

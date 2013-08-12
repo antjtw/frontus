@@ -1899,21 +1899,11 @@ var statusController = function ($scope, SWBrijj) {
     };
 
     $scope.changeVisibility = function (person) {
-        console.log(person);
+        var visibility = false;
         if (person.fullview == 'full') {
-            person.fullview = true;
+          visibility = true;
         }
-        else {
-            person.fullview = false;
-        }
-        SWBrijj.proc('ownership.update_investor_captable', person.email, person.fullview).then(function (data) {
-            if (person.fullview == true) {
-                person.fullview = "full";
-            }
-            else {
-                person.fullview = "personal";
-            }
-        });
+        SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) { });
     };
 
     // Modal for changing access type
