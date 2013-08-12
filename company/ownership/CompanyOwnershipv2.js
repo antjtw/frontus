@@ -728,11 +728,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
     $scope.saveIssue = function (issue, item) {
         console.log("saving issue");
-        angular.forEach($scope.issues, function (coreissue) {
-            if (issue.issue == coreissue.issue && issue['$$hashKey'] != coreissue['$$hashKey']) {
-                issue.issue = issue.issue + " (1)";
-            }
-        });
         if (issue['issue'] == null && issue['key'] == null) {
             return
         }
