@@ -68,7 +68,7 @@
         </tr>
         </tbody>
       </table>
-      <div style="display: none;" ng-show="noDocs">You've not shared any documents with this person.</div>
+      <div class="noFeed" ng-show="noDocs">You've not shared any documents with this person.</div>
     </section>
     </div>
   </div>
@@ -89,8 +89,10 @@
     <div>
       <p class="title">Activity Feed</p>
     </div> 
-    <section class="documentInfo statusBlock">
-    <div class="activityBlock">
+    <section class="statusFeed">
+        <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+
+        <div class="activityBlock">
       <table>
         <tr ng-repeat="active in activity | orderBy:activityOrder">
         <td><i class="{{active.icon}} icon"></i></td>
@@ -102,7 +104,7 @@
           </td>
         </tr>
       </table> 
-      <div style="display: none;" ng-show="noActivity">There is no activity yet.</div>
+
     </div>
     </section>
   </div>

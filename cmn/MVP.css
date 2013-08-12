@@ -1283,6 +1283,13 @@ ul>li.curPage {
 	color: #2980B9;
 }
 
+.noFeed {
+    line-height: 8px;
+    font-size: 12px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    padding: 10px 0 5px 0;
+}
+
 .recipientInfo {
 	width: 663px;
 }
@@ -1593,6 +1600,13 @@ tr.rowSelected {
 
 .statusPop .popover .popover-content > form {
 	margin: 0 0 0 0;
+}
+
+.statusFeed {
+    height: 265px;
+    width: 330px;
+    margin: 0 0 20px 0;
+    overflow:auto;
 }
 
 /* Dynamic shifting of spans */
