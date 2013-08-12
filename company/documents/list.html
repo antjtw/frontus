@@ -30,10 +30,17 @@
                 <td><a href="/company/documents/view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
                 <!-- The four buttons for each row -->
-                  <td class="button" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share">
-                  <i class="icon-share  icon-large"></i></span></td>
+                <td class="button" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share  icon-large"></i></span></td>
                 <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
                 <td class="button"><a href="/company/documents/status?doc={{doc.doc_id}}"><span tooltip-placement="bottom" tooltip="Status"><i class="icon-search icon-large"></i></span></a></td>
+              </tr>
+
+              <!-- The template for showing files that are currently uploading -->
+              <tr ng-show="progressVisible">
+                <td>{{uploading.docname}}</td>
+                <td><span class="uploadingText">Uploading Document...</td>
+                <!-- Replace button with progressbar -->
+                <td colspan="3"><img class="pull-right" src="http://www.xiconeditor.com/image/icons/loading.gif"></td>
               </tr>
             </table>
             <div style="display: none;" ng-show="noDocs">You have no documents.</div>
