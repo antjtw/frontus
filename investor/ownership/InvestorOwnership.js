@@ -427,6 +427,16 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         SWBrijj.procm('ownership.get_my_transactions', company).then(function (trans) {
             console.log(trans);
             $scope.trans = trans
+
+            SWBrijj.procm('ownership.get_my_options', company).then(function (grants) {
+                console.log(grants.length)
+                if (grants.length == 0) {
+                    $scope.grantsview = 0;
+                }
+                else {
+                    $scope.grantsview = 1;
+                }
+            });
             for (var i = 0, l = $scope.trans.length; i < l; i++) {
                 if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                     $scope.uniquerows.push($scope.trans[i].investor);
@@ -660,7 +670,7 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         });
 
         // Get the full set of company grants
-        SWBrijj.tblm('ownership.company_grants').then(function (data) {
+        SWBrijj.procm('ownership.get_my_option_grants', company).then(function (data) {
 
             $scope.grants = data;
 
@@ -676,30 +686,27 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             angular.forEach($scope.trans, function (tran) {
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == tran.investor) {
-                        if (parseInt(tran.units) > 0) {
+                        if (parseFloat(tran.units) > 0) {
                             row["granted"] = calculate.sum(row["granted"], tran.units);
                         }
-                        else {
-                            row["forfeited"] = calculate.sum(row["forfeited"], tran.units);
-                        }
                     }
-                    ;
                 });
             });
 
+            //Calculate the total vested for each row
+            $scope.rows = calculate.vested($scope.rows, $scope.trans);
+
+            //Calculate the total exercised for each row
             angular.forEach($scope.grants, function (grant) {
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == grant.investor) {
-                        if (parseInt(grant.unit) > 0) {
+                        if (parseFloat(grant.unit) > 0) {
                             if (row[grant.action] == undefined) {
                                 row[grant.action] = 0;
                             }
-                            ;
                             row[grant.action] = calculate.sum(row[grant.action], grant.unit);
                         }
-                        ;
                     }
-                    ;
                 });
             });
 

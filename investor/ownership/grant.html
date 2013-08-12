@@ -80,9 +80,9 @@
                   <accordion-group heading="Grant Activity">
                   <ul>
                     <li ng-repeat="act in tran.activeAct">
-                      <p>Action<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.action"></input></p>
-                      <p>Date <input ng-change="saveGrant(act)" type="text" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p>Shares<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit"></input></p>
+                      <p>Action<input disabled ng-model="act.action"></input></p>
+                      <p>Date <input disabled type="text" ng-model="act.date"></p>
+                      <p>Shares<input disabled ng-model="act.unit"></input></p>
                     </li>
                   </ul>
                   </accordion-group>
@@ -94,9 +94,12 @@
         <span ng-switch-when="2">
           <p>Investor Email <input disabled ng-model="activeInvestorName"></input></p>
         </span>
-        <span ng-switch-default>
-          <p>Welcome To Your Grants Section</p>
-        </span>
+        <span class="capGuide" ng-switch-default>
+                <h2>View your Grants</h2>
+
+                <p>The information to the left contains the sum total of your company grants, including
+                    vesting progress and any actions taken. Click on your name to reveal additional detail.</p>
+              </span>
       </div>
     </div>
   </div>

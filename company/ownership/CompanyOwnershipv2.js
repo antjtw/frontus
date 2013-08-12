@@ -39,30 +39,6 @@ owner.filter('viewList', function () {
     };
 });
 
-
-// Popover directive. Not yet fully usable as it strips out the ng-click.
-owner.directive('popOver', function ($compile) {
-    return {
-        restrict: "A",
-        transclude: true,
-        template: "<span ng-transclude></span>",
-        link: function (scope, element, attrs) {
-            var popOverContent;
-            var html = "<a href='/company/profile/view?id={{email}}'><span data-icon='&#xe00a;' aria-hidden='true'></a><a ng-click='modalUp(email);'><span data-icon='&#xe02e;' aria-hidden='true'></a>";
-            popOverContent = $compile(html)(scope);
-            var options = {
-                content: popOverContent,
-                placement: "bottom",
-                html: true
-            };
-            $(element).popover(options);
-        },
-        scope: {
-            email: '='
-        }
-    };
-});
-
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
