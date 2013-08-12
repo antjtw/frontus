@@ -683,6 +683,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.getActiveIssue = function (issue) {
         $scope.sideBar = 1;
         $scope.activeIssue = issue;
+        $scope.issueRevert = angular.copy(issue);
 
         angular.forEach($scope.rows, function (row) {
             angular.forEach($scope.issuekeys, function (key) {
@@ -712,17 +713,20 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.saveIssueCheck = function (issue, field) {
-        console.log(field);
+        var x = false;
         angular.forEach($scope.trans, function(tran) {
             if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                $scope.issueModalUp();
-                return
+                $scope.imodalUp(issue, field);
+                x = true;
             }
         });
-        $scope.saveIssue(issue);
+        if (x == false) {
+            $scope.saveIssue(issue, field);
+        }
     };
 
-    $scope.saveIssue = function (issue) {
+    /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
+    $scope.saveIssue = function (issue, item) {
         console.log("saving issue");
         angular.forEach($scope.issues, function (coreissue) {
             if (issue.issue == coreissue.issue && issue['$$hashKey'] != coreissue['$$hashKey']) {
@@ -792,7 +796,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     }
                     angular.forEach($scope.trans, function (tran) {
                         if (tran.issue == issue.key) {
-                            tran = $scope.tranInherit(tran, issue);
+                            tran[item] = issue[item];
                             if (tran.tran_id != undefined) {
                                 $scope.saveTran(tran);
                             }
@@ -1392,6 +1396,28 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.rclose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.rowDelete = false;
+    };
+
+    //modal for updating issue fields that have different underlying values
+
+    $scope.imodalUp = function (issue, field) {
+        $scope.issueModal = true;
+        $scope.changedIssue = issue;
+        $scope.changedIssueField = field
+    };
+
+    $scope.iclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.issueModal = false;
+    };
+
+    $scope.irevert = function (issue) {
+        angular.forEach($scope.issues, function(coreIssue) {
+           if (coreIssue.issue == issue.issue) {
+               coreIssue = $scope.issueRevert;
+               $scope.activeIssue = coreIssue;
+           }
+        });
     };
 
 

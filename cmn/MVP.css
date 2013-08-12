@@ -1903,6 +1903,11 @@ tr.rowSelected {
 	border-radius: 0px;
 }
 
+/* Override the transition from top */
+.modal.fade {
+    top: 10%;
+}
+
 .modal.narrowModal {
     width: 340px;
 }
