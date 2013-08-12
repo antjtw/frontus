@@ -15,6 +15,7 @@ owner.config(function ($routeProvider, $locationProvider) {
         otherwise({redirectTo: '/'});
 });
 
+// Returns the list of rows that have not yet had shares
 owner.filter('shareList', function () {
     return function (rows) {
         var returnrows = [];
@@ -27,7 +28,8 @@ owner.filter('shareList', function () {
     };
 });
 
-owner.filter('viewList', function () {
+// Returns the issues that have real values for the captable view
+owner.filter('rowviewList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
@@ -39,6 +41,21 @@ owner.filter('viewList', function () {
     };
 });
 
+// Returns the rows that have real values for the captable view
+owner.filter('issueviewList', function () {
+    return function (issue) {
+        var returnissues = [];
+        angular.forEach(issue, function (iss) {
+            if (iss.key) {
+                returnissues.push(iss);
+            }
+        });
+        return returnissues;
+    };
+});
+
+
+// IE8 Shiv for checking for an array
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }

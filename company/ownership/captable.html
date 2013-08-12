@@ -187,7 +187,7 @@
             <tr ng-show="toggleView();" class="column-label">
                 <th colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th class="staticHeaders" ng-repeat="one in issues" ng-click="getActiveIssue(one)">
+                <th class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
                     <span>{{one.issue}}</span>
                 </th>
             </tr>
@@ -197,7 +197,7 @@
                 <td>Shares</td>
                 <td>%</td>
                 <td></td>
-                <td ng-repeat="one in issues">
+                <td ng-repeat="one in issues | issueviewList">
                     <span>UNITS</span>
                     <span>PAID</span>
                 </td>
@@ -242,7 +242,7 @@
                 </td>
             </tr>
             <!-- Un-editable view -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | viewList">
+            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
