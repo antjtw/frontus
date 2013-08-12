@@ -773,7 +773,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         if (keepgoing) {
                             if (row.name == oldissue + " (unissued)") {
                                 keepgoing = false;
-                                if (!isNaN(parseFloat(issue.totalauth))) {
+                                if (!isNaN(parseFloat(issue.totalauth)) && leftovers != 0) {
                                     row[issuename] = shares;
                                     row['name'] = issue.issue + " (unissued)";
                                 }
@@ -784,7 +784,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         }
                     });
                     if (keepgoing != false) {
-                        if (!isNaN(parseFloat(issue.totalauth)) && !isNaN(parseFloat(leftovers))) {
+                        if (!isNaN(parseFloat(issue.totalauth)) && !isNaN(parseFloat(leftovers)) && leftovers != 0) {
                             $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
                             $scope.rows[($scope.rows.length) - 1][issuename] = shares;
                         }
@@ -867,7 +867,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.tranChangeU = function (value) {
-        console.log("thing firing");
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0]['units'] = value;
         }
@@ -926,7 +925,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.deletePersonButton = function (name) {
         angular.forEach($scope.rows, function (row) {
             if (row.name == name) {
-                console.log('here');
                 $scope.rmodalUp(row);
             }
         })
@@ -963,7 +961,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.revertPerson = function (investor) {
-        console.log(investor);
         angular.forEach($scope.rows, function (row) {
             if (row.namekey == investor) {
                 row.name = row.namekey;
@@ -1010,7 +1007,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.trans.push(newTran);
             $scope.activeTran.push(newTran);
             for (var i = 0; i < $scope.activeTran.length; i++) {
-                console.log($scope.activeTran[i]);
                 if (i + 1 == $scope.activeTran.length) {
                     $scope.activeTran[i].active = true;
                 }
@@ -1086,7 +1082,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         if (transaction.length > 1) {
             angular.forEach($scope.rows, function (row) {
                 if (row.name == transaction[0].investor) {
-                    console.log(row[transaction[0].issue]);
                     if (!isNaN(parseFloat(row[transaction[0].issue]['u']))) {
                         if (parseFloat(row[transaction[0].issue]['u']) != parseFloat(row[transaction[0].issue]['ukey'])) {
                             var changed = (parseFloat(row[transaction[0].issue]['u']) - parseFloat(row[transaction[0].issue]['ukey']));
@@ -1195,16 +1190,21 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                                 row[tran.issue]['x'] = 0;
                             }
                         }
-                        if (row.name == tran.issue + " (unissued)") {
-                            angular.forEach($scope.issues, function (issue) {
-                                if (issue.issue == tran.issue) {
-                                    var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
+                    });
+                });
+
+                angular.forEach($scope.rows, function(row) {
+                    if (row.name == transaction.issue + " (unissued)") {
+                        angular.forEach($scope.issues, function (issue) {
+                            if (issue.issue == transaction.issue) {
+                                var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
+                                if (leftovers != 0) {
                                     var shares = {"u": leftovers, "ukey": leftovers};
                                     row[issue.issue] = shares;
                                 }
-                            });
-                        }
-                    });
+                            }
+                        });
+                    }
                 });
 
                 if (transaction.type == "options" && transaction.amount != 0) {
@@ -1241,7 +1241,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.saveGrant = function (grant) {
-        console.log(grant);
         if (grant.action == "" && isNaN(parseFloat(grant.unit))) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
