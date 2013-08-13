@@ -39,7 +39,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/profile/people";
+        x.link = "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
           x.activity = " added ";
           x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
@@ -58,8 +58,8 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+        x.link = "/company/documents/status?doc=" + x.item_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
         if (x.activity == "uploaded") {
@@ -79,6 +79,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
+    console.log($scope.activity);
     // angular.forEach($scope.activity, function(x) { //Replace emails with names
     //     if (x.email != null) {
     //       SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {

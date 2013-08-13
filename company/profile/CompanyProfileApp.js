@@ -146,7 +146,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/profile/people";
+        x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
           x.activity = "Added ";
           x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
@@ -165,8 +165,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+        x.link = "/company/documents/status?doc=" + x.item_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
         if (x.activity == "uploaded") {
@@ -258,7 +258,12 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
-  var rowNumber;
+
+  SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
+    if(x[0].email == userId)
+      document.location.href="/investor/profile";
+  });
+
   SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
     if (!x.name) {
       history.back();
@@ -312,8 +317,8 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+        x.link = "/company/documents/status?doc=" + x.item_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
         if (x.activity == "viewed") {
