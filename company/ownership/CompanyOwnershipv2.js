@@ -1589,9 +1589,6 @@ var statusController = function ($scope, SWBrijj) {
         ;
         SWBrijj.procm("ownership.get_company_views").then(function (views) {
             angular.forEach($scope.userStatus, function (person) {
-                SWBrijj.proc('account.get_investor_name', person.email, false).then(function (name) {
-                    person.name = name[1][0];
-                });
                 angular.forEach(views, function (view) {
                     if (view.email == person.email) {
                         person.viewed = "viewed";
@@ -1614,14 +1611,17 @@ var statusController = function ($scope, SWBrijj) {
 
     SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
         $scope.activity = data;
-        SWBrijj.tblm("ownership.company_activity_feed", ["email", "activity", "whendone"]).then(function(person) {
+        SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(person) {
             $scope.activityDetail = person;
             for (var ik = 0; ik < $scope.activity.length; ik++) {
                 if ($scope.activity[ik].count == 1) {
                     for (var j = 0; j < $scope.activityDetail.length; j++) {
                         if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                             if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-                                $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                                if ($scope.activityDetail[j].name == null || $scope.activityDetail[j].name.length < 2) 
+                                    $scope.activity[ik].namethem = $scope.activityDetail[j].email;
+                                else
+                                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
                                 $scope.activity[ik].whendone = $scope.activityDetail[j].whendone;
                             }
                         }
@@ -1642,15 +1642,6 @@ var statusController = function ($scope, SWBrijj) {
                     $scope.activity[i].icon = 'icon-view';
                 }
             }
-
-            angular.forEach($scope.activity, function(x) { //Replace emails with names
-                if (x.namethem != null) {
-                    SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
-                        x.namethem = name[1][0];
-                    });
-                }
-            });
-
         });
     });
 
@@ -1676,21 +1667,11 @@ var statusController = function ($scope, SWBrijj) {
     };
 
     $scope.changeVisibility = function (person) {
-        console.log(person);
+        var visibility = false;
         if (person.fullview == 'full') {
-            person.fullview = true;
+          visibility = true;
         }
-        else {
-            person.fullview = false;
-        }
-        SWBrijj.proc('ownership.update_investor_captable', person.email, person.fullview).then(function (data) {
-            if (person.fullview == true) {
-                person.fullview = "full";
-            }
-            else {
-                person.fullview = "personal";
-            }
-        });
+        SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) { });
     };
 
     // Modal for changing access type
