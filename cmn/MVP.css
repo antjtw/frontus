@@ -728,59 +728,6 @@ form.inputs {
   color: #1e2d3d;
 }
 
-.lognreg {
-	background-color: #1E2D3D;
-}
-
-.lognreg p strong{
-	font-family: 'FS Elliot Web Bold', sans-serif;;
-}
-
-.lognreg .caption {
-	padding-top: 10px;
-	font-size: 8px;
-	text-transform:uppercase;
-}
-
-.lognreg .caption a{
-	font-size: 8px;
-	text-transform:uppercase;
-	text-decoration: none;
-}
-
-.lognreg .teaser {
-	font-size: 14px;
-	font-family: 'FS Elliot Web Light', sans-serif;
-	color: #c7c7c7;
-	display:inline;
-
-}
-
-.lognreg .loginInput {
-	width: 288px;
-	height: 24px;
-	border-radius: 0px;
-	border: none;
-	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-}
-
-.lognreg .greenButton.loginButton {
-	width: 300px;
-	height: 30px;
-	text-align:center;
-	padding: 0 0 0 0;
-	color:#ffffff;
-	background-color: #1ABC96;
-}
-
-.lognreg .greenButton:disabled, .lognreg .greenButton:disabled:hover {
-  	background-color: #1ABC96; 
-  	color: #FFFFFF; 
-  	opacity: 0.5;
-}
-
 .navlogin .greenButton:disabled, .navlogin .greenButton:disabled:hover {
   	background-color: #1ABC96; 
   	color: #FFFFFF; 
@@ -792,9 +739,7 @@ form.inputs {
   	color: #FFFFFF; 
   	opacity: 0.5;
 	cursor:default;
-
 }
-
 
 .line{
 	border-top: 1px solid #a6a6a6;
@@ -810,32 +755,6 @@ form.inputs {
 	color: #0088cc;
 }
 
-/* Password Reset */
-
-#forgot {
-	width:500px;
-	padding-top:10px;
-	margin-top:10px;
-}
-
-#cancelButton {
-    font-size: 12px;
-	margin-top:10px;
-    display: block;
-    color: #3498DB;
-}
-
-
-
-.resetLabel {
-	text-align:left;
-	margin-left: 76px;
-	margin-bottom:10px;	
-}
-
-#resetConfirm {
-	margin-top:50px;
-}
 
 
 
