@@ -168,6 +168,10 @@
     box-shadow: none !important;
 }
 
+.home input:focus {
+    background-color: #FFFFFF;
+}
+
 .home input:focus:invalid {
     color: #666666;
 }
