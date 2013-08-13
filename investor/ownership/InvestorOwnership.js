@@ -212,7 +212,8 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
             $scope.trans = trans
 
             SWBrijj.procm('ownership.get_my_options', company).then(function (grants) {
-                console.log(grants.length)
+
+                $scope.grants = grants;
                 if (grants.length == 0) {
                     $scope.grantsview = 0;
                 }
@@ -220,6 +221,23 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                     $scope.grantsview = 1;
                 }
             });
+
+            angular.forEach($scope.grants, function (grant) {
+                angular.forEach($scope.trans, function (tran) {
+                    if (grant.tran_id == tran.tran_id) {
+                        grant.investor = tran.investor;
+                        if (grant.action == "forfeited") {
+                            if (tran.forfeited) {
+                                tran.forfeited = tran.forfeited + grant.unit;
+                            }
+                            else {
+                                tran.forfeited = grant.unit;
+                            }
+                        }
+                    }
+                });
+            });
+
             for (var i = 0, l = $scope.trans.length; i < l; i++) {
                 if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                     $scope.uniquerows.push($scope.trans[i].investor);
