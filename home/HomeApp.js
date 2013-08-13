@@ -79,6 +79,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
+    console.log($scope.activity);
     // angular.forEach($scope.activity, function(x) { //Replace emails with names
     //     if (x.email != null) {
     //       SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {

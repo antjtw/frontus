@@ -1,4 +1,4 @@
-function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
+function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$rootScope.selected = [];
@@ -88,6 +88,12 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			}
 		}
 		changeNav();
+	}
+
+	$rootScope.switch = function(companyURL) {
+		$rootScope.select(companyURL);
+		if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2)
+			$route.reload();
 	}
 
 	function isAdmin(companyObj) {
