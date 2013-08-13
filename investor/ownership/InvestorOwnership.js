@@ -86,85 +86,10 @@ owner.run(function ($rootScope) {
         return total;
     };
 
-    /* Calculates the Total Shares owned by an investor across all rounds */
-    $rootScope.shareSum = function (row) {
-        var total = 0
-        for (var key in row) {
-            if (row.hasOwnProperty(key)) {
-                if (key != "name") {
-                    if (parseInt(row[key]['u']) % 1 === 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
-                        total = total + parseInt(row[key]['u']);
-                    }
-                }
-            }
-        }
-        return total;
-    };
-    /* Calculates total shares */
-    $rootScope.totalShares = function (rows) {
-        var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (row.hasOwnProperty(key)) {
-                    if (key != "name") {
-                        if (parseInt(row[key]['u']) % 1 == 0 && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
-                            total = total + parseInt(row[key]['u']);
-                        }
-                    }
-                    ;
-                }
-                ;
-            }
-            ;
-        });
-        return total;
-    };
-
-    $rootScope.sharePercentage = function (row, rows, issuekeys) {
-        var percentage = 0
-        var totalpercentage = 0
-        for (var i = 0, l = issuekeys.length; i < l; i++) {
-            if (row[issuekeys[i]] != undefined) {
-                if (row[issuekeys[i]]['x'] != undefined) {
-                    percentage = percentage + row[issuekeys[i]]['x'];
-                }
-                ;
-            }
-        }
-        ;
-        for (var j = 0, a = rows.length; j < a; j++) {
-            for (var i = 0, l = issuekeys.length; i < l; i++) {
-                if (rows[j][issuekeys[i]] != undefined) {
-                    if (rows[j][issuekeys[i]]['x'] != undefined) {
-                        totalpercentage = totalpercentage + rows[j][issuekeys[i]]['x'];
-                    }
-                    ;
-                }
-            }
-            ;
-        }
-        ;
-        return (percentage + ($rootScope.shareSum(row) / $rootScope.totalShares(rows) * (100 - totalpercentage)));
-    };
-
     $rootScope.myPercentage = function (everyone) {
         return (100 - everyone);
     };
 
-    $rootScope.colTotal = function (header, rows, type) {
-        var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (key == header) {
-                    if (parseInt(row[key][type]) % 1 == 0 && String(key) != "$$hashKey") {
-                        total = total + parseInt(row[key][type]);
-                    }
-                }
-            }
-            ;
-        });
-        return total;
-    };
 
     $rootScope.postIssues = function (keys, issue) {
         console.log(keys);
@@ -430,6 +355,48 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         }
         ;
 
+    };
+
+    // Functions derived from services for use in the table
+
+    // Number of shareholders
+    $scope.numShareholders = function() {
+        return calculate.numShareholders($scope.rows);
+    };
+
+    // Total Shares in captable
+    $scope.totalShares = function(rows) {
+        return calculate.totalShares(rows);
+    };
+
+    // Total Shares | Paid for an issue column (type is either u or a)
+    $scope.totalPaid = function(rows) {
+        return calculate.totalPaid(rows);
+    };
+
+    // Total Shares for a shareholder row
+    $scope.shareSum = function(row) {
+        return calculate.shareSum(row);
+    };
+
+    // Total Shares | Paid for an issue column (type is either u or a)
+    $scope.colTotal = function(header, rows, type) {
+        return calculate.colTotal(header, rows, type);
+    };
+
+    // Total percentage ownership for each shareholder row
+    $scope.sharePercentage = function(row, rows, issuekeys) {
+        return calculate.sharePercentage(row, rows, issuekeys);
+    };
+
+    // Total percentage ownership for each shareholder row
+    $scope.pricePerShare = function() {
+        return calculate.pricePerShare($scope.issues);
+    };
+
+    // Last issue date for the sidebar In Brief section
+    $scope.lastIssue = function() {
+        return calculate.lastIssue($scope.issues);
     };
 
 

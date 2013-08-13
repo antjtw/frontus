@@ -83,6 +83,8 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 input:focus, textarea:focus {
     background-color: #E3E3E3;
+    outline: none;
+    box-shadow:none;
 }
 
 /* Accordians */
@@ -441,7 +443,7 @@ h2 {
 
 
 .bottomnav .nav > li:first-child > a {
-	padding: 0 5px 0 15px;
+	padding: 0 5px 0 0;
 	line-height: 30px;
 	text-align: left;
 	width: 155px;
@@ -1018,6 +1020,7 @@ form.inputs {
 	text-transform: uppercase;
 	color: #1E2D3D;
 	width: 140px;
+    vertical-align: top;
 }
 
 .docLibrary .capsums-col {
@@ -1434,12 +1437,13 @@ ul>li.curPage {
 }
 
 p.captablepair {
-	width: 70px;
+	width: 65px;
 	margin: 0 0 0 0;
 }
 
 td.tranSelected {
 	border: 2px solid #E3E3E3;
+    padding: 1px 0 0 9px;
 }
 
 .tranSelected {
@@ -1611,7 +1615,7 @@ tr.rowSelected {
     margin: 0 48px 0 48px;
 }
 
-.tableView td.status-bubbles > div > span, .tableView td.status-bubbles > div > div> span {
+.tableView td.status-bubbles > div > span, .tableView td.status-bubbles > div > div > span {
     font-size: 24px;
     margin-bottom: 8px;
 }
