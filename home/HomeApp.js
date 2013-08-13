@@ -18,8 +18,6 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
       $rootScope.notification.show("success", "You have successfully changed your password.");
-    } else if ($routeParams.msg == "first") {
-      $rootScope.notification.show("success", "Welcome to Sharewave!");
     }
   }
 
@@ -102,8 +100,6 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
       $rootScope.notification.show("success", "You have successfully changed your password.");
-    } else if ($routeParams.msg == "first") {
-      $rootScope.notification.show("success", "Welcome to Sharewave!");
     }
   }
   //$scope.company = $routeParams.company;
