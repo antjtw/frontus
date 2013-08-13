@@ -1343,6 +1343,39 @@ ul>li.curPage {
 	table-layout: fixed;
 }
 
+.captablepair-box {
+    position: relative;
+}
+
+.tableView.captable .output {
+    position: absolute;
+    pointer-events: none;
+    top: 9px;
+    left: 10px;
+}
+
+.tableView.captable .output.clickable {
+    pointer-events: auto;
+}
+
+.tableView.captable .output.footer {
+    top:26px;
+}
+
+.tableView.captable .output.second {
+    left: 75px;
+}
+
+.tableView.captable .captablepair {
+    color: #FFFFFF;
+}
+
+.tableView.captable .captablepair:focus {
+    color: #7f8c8d
+}
+
+.tableView.captable input:focus + .output { display: none; }
+
 .tableView.captable.viewcaptable {
     background: white;
 }

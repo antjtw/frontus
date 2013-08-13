@@ -357,6 +357,15 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
 
     };
 
+    $scope.formatAmount = function (amount) {
+        if (amount) {
+            while (/(\d+)(\d{3})/.test(amount.toString())){
+                amount = amount.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+            }
+        }
+        return amount;
+    };
+
     // Functions derived from services for use in the table
 
     // Number of shareholders

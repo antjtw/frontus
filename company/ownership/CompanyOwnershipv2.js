@@ -16,6 +16,31 @@ owner.config(function ($routeProvider, $locationProvider) {
 });
 
 
+/*
+ * memoize.js
+ * by @philogb and @addyosmani
+ * with further optimizations by @mathias
+ * and @DmitryBaranovsk
+ * perf tests: http://bit.ly/q3zpG3
+ * Released under an MIT license.
+ */
+function memoize( fn ) {
+    return function () {
+        var args = Array.prototype.slice.call(arguments),
+            hash = "",
+            i = args.length;
+        var currentArg = null;
+        while (i--) {
+            currentArg = args[i];
+            hash += (currentArg === Object(currentArg)) ?
+                JSON.stringify(currentArg) : currentArg;
+            fn.memoize || (fn.memoize = {});
+        }
+        return (hash in fn.memoize) ? fn.memoize[hash] :
+            fn.memoize[hash] = fn.apply(this, args);
+    };
+}
+
 // IE8 Shiv for checking for an array
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
@@ -1277,15 +1302,33 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         var checksome = false;
         angular.forEach($scope.rows, function(row) {
            if (row.send == true && (row.email != null && row.email != "")) {
-               console.log(row.email);
                checkcontent = true;
            }
            if (row.send == true) {
               checksome = true;
            }
         });
-        return !(checkcontent && checksome);
+        if ($scope.extraPeople.length > 0 && $scope.extraPeople[0].email) {
+            return false;
+        }
+        else {
+            return !(checkcontent && checksome);
+        }
     }
+
+    $scope.funcformatAmount = function (amount) {
+        if (amount) {
+            while (/(\d+)(\d{3})/.test(amount.toString())){
+                amount = amount.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+            }
+        }
+        return amount;
+    };
+
+    var memformatamount = memoize($scope.funcformatAmount);
+    $scope.formatAmount = function(amount) {
+        return memformatamount(amount);
+    };
 
     // Functions derived from services for use in the table
 
@@ -1300,18 +1343,21 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
+    var totalPaid = memoize(calculate.totalPaid);
     $scope.totalPaid = function(rows) {
-        return calculate.totalPaid(rows);
+        return totalPaid(rows);
     };
 
     // Total Shares for a shareholder row
+    var shareSum = memoize(calculate.shareSum);
     $scope.shareSum = function(row) {
-        return calculate.shareSum(row);
+        return shareSum(row);
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
+    var colTotal = memoize(calculate.colTotal);
     $scope.colTotal = function(header, rows, type) {
-        return calculate.colTotal(header, rows, type);
+        return colTotal(header, rows, type);
     };
 
     // Total percentage ownership for each shareholder row
