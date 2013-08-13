@@ -1068,6 +1068,7 @@ form.inputs {
 
 .docLibrary input:disabled {
 	background: none;
+    color: #7f8c8d;
 }
 
 .searchBox {
