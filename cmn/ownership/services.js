@@ -196,6 +196,20 @@ ownership.service('calculate', function () {
         });
         return total;
     };
+
+    //Returns the price per share for the most recent issue assuming such a value is given
+    this.pricePerShare = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].ppshare;
+        }
+    };
+
+    //Returns the price per share for the most recent issue assuming such a value is given
+    this.lastIssue = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].date;
+        }
+    };
 });
 
 ownership.service('switchval', function () {

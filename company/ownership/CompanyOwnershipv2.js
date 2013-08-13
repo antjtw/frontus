@@ -1270,6 +1270,16 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.sharePercentage = function(row, rows, issuekeys) {
         return calculate.sharePercentage(row, rows, issuekeys);
     };
+
+    // Total percentage ownership for each shareholder row
+    $scope.pricePerShare = function() {
+        return calculate.pricePerShare($scope.issues);
+    };
+
+    // Last issue date for the sidebar In Brief section
+    $scope.lastIssue = function() {
+        return calculate.lastIssue($scope.issues);
+    };
 };
 
 
