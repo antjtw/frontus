@@ -149,22 +149,24 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide"
 
+    // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
         $scope.issues = data;
-        for (var i = 0, l = $scope.issues.length; i < l; i++) {
-            $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
-            $scope.issues[i].key = $scope.issues[i].issue;
-            $scope.issuekeys.push($scope.issues[i].key);
-        }
-        $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
 
-        // Pivot shenanigans
+        // Get the company's Transactions
         SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
             $scope.trans = trans;
 
-            SWBrijj.tblm('ownership.company_grants').then(function (data) {
+            // Get the company's Grants
+            SWBrijj.tblm('ownership.company_grants').then(function (grants) {
+                $scope.grants = grants;
+                for (var i = 0, l = $scope.issues.length; i < l; i++) {
+                    $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
+                    $scope.issues[i].key = $scope.issues[i].issue;
+                    $scope.issuekeys.push($scope.issues[i].key);
+                }
+                $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
 
-                $scope.grants = data;
 
                 angular.forEach($scope.grants, function (grant) {
                     angular.forEach($scope.trans, function (tran) {

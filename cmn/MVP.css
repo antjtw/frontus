@@ -1441,12 +1441,8 @@ p.captablepair {
 	margin: 0 0 0 0;
 }
 
-td.tranSelected {
-	border: 2px solid #E3E3E3;
-    padding: 1px 0 0 9px;
-}
-
-.tranSelected {
+.tableView td.tranSelected {
+	outline: 2px solid #E3E3E3;
 }
 
 td.tranViewSelected {
