@@ -253,6 +253,13 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	   xhr.send(fd) */
 	};
 
+	var dots = document.getElementById('dots');
+
+	var int = setInterval(function() {
+	    if ((dots.innerHTML += '.').length == 4) 
+	        dots.innerHTML = '';
+	}, 333);
+
 	function uploadProgress(evt) {
 	  $scope.$apply(function () {
 	    if (evt.lengthComputable) {

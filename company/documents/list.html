@@ -38,9 +38,9 @@
               <!-- The template for showing files that are currently uploading -->
               <tr ng-show="progressVisible">
                 <td>{{uploading.docname}}</td>
-                <td><span class="uploadingText">Uploading Document...</td>
+                <td><span class="uploadingText">Uploading Document<span id="dots">...</span></td>
                 <!-- Replace button with progressbar -->
-                <td colspan="3"><img class="pull-right" src="http://www.xiconeditor.com/image/icons/loading.gif"></td>
+                <td colspan="3"><!-- <img class="pull-right" src="http://www.xiconeditor.com/image/icons/loading.gif"> --></td>
               </tr>
             </table>
             <div class="noFeed" ng-show="noDocs">You have no documents.</div>
