@@ -165,9 +165,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     $scope.issues[i].key = $scope.issues[i].issue;
                     $scope.issuekeys.push($scope.issues[i].key);
                 }
+
+                // Add extra blank issue, which will create a new one when clicked. Silly future date so that
+                // the issue always appears on the rightmost side of the table
                 $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
 
 
+                // Uses the grants to update the transactions with forfeited values
+                // Eliminates the need for further reference to forfeit grants
                 angular.forEach($scope.grants, function (grant) {
                     angular.forEach($scope.trans, function (tran) {
                         if (grant.tran_id == tran.tran_id) {
@@ -184,6 +189,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     });
                 });
 
+                // Various extra key fields given to the transactions to allow for reverting at a later point
                 for (var i = 0, l = $scope.trans.length; i < l; i++) {
                     $scope.trans[i].atype = switchval.tran($scope.trans[i].type);
                     $scope.trans[i].key = $scope.trans[i].issue;
@@ -197,6 +203,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         $scope.uniquerows.push($scope.trans[i].investor);
                         $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor, "email": $scope.trans[i].email, "emailkey": $scope.trans[i].email, "editable": "yes"});
                     }
+                    // Transactions inherit the issue values that are uneditable for individual transactions
                     angular.forEach($scope.issues, function (issue) {
                         if ($scope.trans[i].issue == issue.issue) {
                             $scope.trans[i].totalauth = issue.totalauth;
@@ -206,6 +213,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     });
                 }
 
+                // Generate the rows from the transactions
+                // u represents units throughout, a price
                 angular.forEach($scope.trans, function (tran) {
                     angular.forEach($scope.rows, function (row) {
                         if (row.name == tran.investor) {
@@ -242,6 +251,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     });
                 });
 
+
+                // Debt calculation for any rows with paid but no shares
                 angular.forEach($scope.rows, function (row) {
                     angular.forEach($scope.issues, function (issue) {
                         if (row[issue.issue] != undefined) {
@@ -252,6 +263,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     });
                 });
 
+                // Generate the unissued rows (the difference between total authorised and actually authorised)
                 angular.forEach($scope.issues, function (issue) {
                     if (!isNaN(parseFloat(issue.totalauth))) {
                         console.log(issue.totalauth);
@@ -277,6 +289,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 });
 
 
+                // Sort the columns before finally showing them
+                // Issues are sorted by date, rows by ownership within each issue
                 $scope.issues.sort(sorting.issuedate);
                 $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                 $scope.rows.sort(sorting.row($scope.issuekeys));
@@ -389,7 +403,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.saveIssueCheckDate = function (issue) {
-        //Fix the dates to take into account timezone differences.
+        //Fix the dates to take into account timezone differences
         var offset = issue.date.getTimezoneOffset();
         issue.date = issue.date.addMinutes(offset);
         $scope.saveIssueCheck(issue, 'date');
@@ -663,6 +677,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+
+    // Creates a new blank transaction with today's date
     $scope.createTran = function () {
         var newTran = {};
         newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": ($scope.activeIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
@@ -727,6 +743,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+    // Function for when the delete transaction button is pressed in the right sidebar
     $scope.manualdeleteTran = function (tran) {
         var d1 = tran['date'].toUTCString();
         SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function (data) {
@@ -749,6 +766,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+    // Preformatting on the date to factor in the local timezone offset
     $scope.saveTranDate = function (transaction) {
         //Fix the dates to take into account timezone differences.
         var offset = transaction.date.getTimezoneOffset();
@@ -756,6 +774,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         $scope.saveTran(transaction);
     };
 
+
+    // Save transaction function
     $scope.saveTran = function (transaction) {
 
         //Triggers the multi modal if more than one transaction exists
@@ -920,6 +940,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         console.log("done saving");
     };
 
+    // Function for saving grant. Used on the captable when paid is updated from the captable on an option
     $scope.saveGrant = function (grant) {
         if (grant.action == "" && isNaN(parseFloat(grant.unit))) {
             if (grant.grant_id != null) {
@@ -972,6 +993,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
     };
 
+
+    // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
         tran.issue = issue.issue;
         tran.totalauth = issue.totalauth;
@@ -1188,6 +1211,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         dialogFade: true
     };
 
+    // Adds new rows to the non-shareholder sharing
     $scope.addRemove = function () {
         var add = 0;
         angular.forEach($scope.extraPeople, function (people) {
@@ -1201,6 +1225,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
 
+    // Controls the orange border around the send boxes if an email is not given
     $scope.emailCheck = function (bool, person) {
         if (bool) {
             return !person;
@@ -1216,6 +1241,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+
+    // Send the share invites from the share modal
     $scope.sendInvites = function () {
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
@@ -1226,6 +1253,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 });
             }
         });
+
+        // Handles the non-shareholder shares
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
                 if (people.email) {
@@ -1240,6 +1269,23 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.extraPeople.push({'email': ""});
         }
     };
+
+
+    // Prevents the share button from being clickable until a send button has been clicked and an address filled out
+    $scope.checkInvites = function () {
+        var checkcontent = false;
+        var checksome = false;
+        angular.forEach($scope.rows, function(row) {
+           if (row.send == true && (row.email != null && row.email != "")) {
+               console.log(row.email);
+               checkcontent = true;
+           }
+           if (row.send == true) {
+              checksome = true;
+           }
+        });
+        return !(checkcontent && checksome);
+    }
 
     // Functions derived from services for use in the table
 

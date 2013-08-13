@@ -8,6 +8,9 @@
     </div>
 
     <div>
+        <p>Shareholders only see their personal holdings by default, change this by visiting their profile
+            to grant full access. Sharing with non-shareholders grants full-access.
+        </p>
         <form>
             <ul>
                 <li>
@@ -27,13 +30,10 @@
                     <input ng-change="addRemove();" ng-model="person.email" placeholder="ADD NON SHAREHOLDER">
                 </li>
             </ul>
-            <p>Shareholders only see their personal holdings by default, change this by visiting their profile
-                to grant full access. Sharing with non-shareholders grants full-access.
-            </p>
         </form>
     </div>
     <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
+        <button ng-disabled="checkInvites();" class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
 
     </div>
 </div>
@@ -301,7 +301,7 @@
                         </div>
                         <div class="row-fluid trancore">
                             <div>
-                                <p>Date <input ng-disabled="toggleView();" ng-change="saveIssueCheckDate(activeIssue, 'date')" type="text"
+                                <p>Date <input ng-disabled="toggleView();" ui-event="{blur : 'saveIssueCheckDate(activeIssue, \'date\')'}" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
                             </div>

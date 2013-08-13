@@ -2128,6 +2128,10 @@ tr.rowSelected {
 	height:463px;
 }
 
+.capshareModal p {
+    margin: 10px 15px 10px 15px;
+}
+
 .capshareModal ul{
 	margin: 0;
 	overflow: auto;
@@ -2139,11 +2143,12 @@ tr.rowSelected {
 }
 
 .capshareModal ul.extrasAdd {
-    height: 82px;
+    height: 83px;
 }
 
 .capshareModal ul > li:first-child {
 	text-transform: uppercase;
+    border-top: 1px solid #E3E3E3;
 }
 
 .capshareModal ul li {
@@ -2176,6 +2181,11 @@ tr.rowSelected {
 
 .capshareModal ul li > input.error {
 	border: 1px solid #F78D1E;
+}
+
+.capshareModal .button.greenButton {
+    display: block;
+    margin: 0 auto 0 auto;
 }
 
 /* Dropdown */
