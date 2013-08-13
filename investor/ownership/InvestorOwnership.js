@@ -242,11 +242,17 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                         if (tran.issue in row) {
                             row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
                             row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
+                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                            }
                         }
                         else {
                             row[tran.issue] = {}
                             row[tran.issue]["u"] = tran.units;
                             row[tran.issue]["a"] = tran.amount;
+                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                row[tran.issue]["u"] = (-tran.forfeited);
+                            }
                         }
                         ;
                     }

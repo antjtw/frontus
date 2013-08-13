@@ -583,13 +583,25 @@
                         </span>
                       </span>
                       <span class="capGuide" ng-switch-default>
-                        <h2>Understand your Ownership</h2>
+                        <span ng-hide="toggleView();">
+                            <h2>Understand your Ownership</h2>
 
-                        <p>Enter your securities, shareholders and their holdings directly into our responsive table.
+                            <p>Enter your securities, shareholders and their holdings directly into our responsive table.
                             We'll calculate the totals on your behalf, and any additional terms that you add will
                             influence your non-diluted view and financial modeling (coming soon).</p>
 
-                        <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                            <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                        </span>
+                        <span ng-show="toggleView();">
+                            <h2>In Brief</h2>
+
+                            <p>Post Model Valuation</p>
+                            <p>Date of last valuation</p>
+                            <p>Price-per-share</p>
+                            <p>Total Paid <input disabled value="{{totalPaid(rows);}}"></p>
+                            <p>Fully Diluted Units <input disabled value="{{totalShares(rows);}}"></p>
+                            <p>Shareholders <input disabled value="{{numShareholders();}}"></p>
+                        </span>
                       </span>
             </div>
         </div>
