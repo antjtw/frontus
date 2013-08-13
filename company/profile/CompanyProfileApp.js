@@ -258,7 +258,12 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
-  var rowNumber;
+
+  SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
+    if(x[0].email == userId)
+      document.location.href="/investor/profile";
+  });
+  
   SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
     if (!x.name) {
       history.back();
