@@ -92,7 +92,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
 	$rootScope.switch = function(companyURL) {
 		$rootScope.select(companyURL);
-		if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2)
+		if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) // Refresh page if user is on ownership or documents
 			$route.reload();
 	}
 
