@@ -714,6 +714,7 @@ form.inputs {
 	border-radius: 0;
 	margin: auto;
 	float:none;
+    font-family: 'FS Elliot Web Regular', sans-serif;;
 }
 
 .gateway .logo {
@@ -1288,6 +1289,14 @@ ul>li.curPage {
 	color: #2980B9;
 }
 
+.noFeed {
+    line-height: 12px;
+    font-size: 12px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    padding: 10px 0 5px 20px;
+    background-color: #f1f1f1;
+}
+
 .recipientInfo {
 	width: 663px;
 }
@@ -1609,6 +1618,13 @@ tr.rowSelected {
 
 .statusPop .popover .popover-content > form {
 	margin: 0 0 0 0;
+}
+
+.statusFeed {
+    height: 265px;
+    width: 330px;
+    margin: 0 0 20px 0;
+    overflow:auto;
 }
 
 /* Dynamic shifting of spans */
@@ -2437,4 +2453,17 @@ margin-top: 0.9em;
 
 .dropbox.over {
   background-color: #bfb;
+}
+
+/* Onboarding */
+.hero-unit.onboarding {
+    background-color: #34495e;
+    padding: 30px 20px 30px 20px;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
+
+.hero-unit.onboarding h2, .hero-unit.onboarding p{
+    color: #F1F1F1;
 }
