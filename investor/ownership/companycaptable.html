@@ -9,7 +9,7 @@
         <div class="row-fluid">
             <ul class="bodyText maintabs">
                 <li class="selectedtab">Ownership</li>
-                <a href="/investor/ownership/grant">
+                <a ng-show="grantsview" href="/investor/ownership/grant">
                     <li class="button">Grants</li>
                 </a>
             </ul>
@@ -399,9 +399,10 @@
                         </span>
                       </span>
                       <span class="capGuide" ng-switch-default>
-                        <h2>Understand your Ownership</h2>
+                        <h2>View your Ownership</h2>
 
-                        <p>Not sure what if anything we want here???</p>
+                        <p>The information to the left contains your company holdings and total percent ownership.
+                            Click on the values within the table to reveal additional detail.</p>
                       </span>
 </div>
 </div>

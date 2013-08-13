@@ -1,0 +1,216 @@
+/* Homepage */
+
+.home #hero{
+    background: url(/img/top-image-1920-2.jpg) no-repeat center;
+    background-size:cover;
+    height: 800px;
+}
+
+.home h1 {
+    color: white;
+    font-family: 'FS Elliot Web Thin', sans-serif;
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: normal;
+}
+
+.home h2 {
+    color: #1e2d3d;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: normal;
+}
+
+.home h3 {
+    color: white;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 18px;
+    letter-spacing: 1px;
+}
+
+.home p {
+    color: #8D8D8D;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: normal;
+}
+
+.videoModal.modal {
+    width: 50%;
+    height: 400px;
+    margin-left: -25%;
+    left: 50%;
+}
+
+.videoIframe {
+    width: 100%;
+    height: 400px;
+}
+
+.home .videoRow {
+    text-align: center;
+    padding: 15px 0 15px 0;
+    cursor: pointer;
+}
+
+.home .videoRow > h2 {
+    margin-left: 10px;
+    display: inline;
+}
+
+.home .videoRow .arrow-right {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 30px solid #1ABC96;
+}
+
+.home .paginator {
+    position:absolute;
+    bottom:0;
+    left:50%;
+}
+
+.home .btn-mini {
+    color: #8D8D8D;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    border: 0;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 84px;
+}
+
+.home .btn-mini strong {
+    color: #1e2d3d;
+}
+
+.home .btn-mini:hover {
+    color: #8D8D8D;
+    background-color: #f1f1f1;
+    padding-bottom: 10px;
+}
+
+.home .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled], .btn-mini:active {
+    color: #8D8D8D;
+    background-color: #f1f1f1;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+
+.home .btn-success {
+    position: relative;
+    display: block;
+    color: #8D8D8D;
+    background-color: #f1f1f1;
+    opacity: 1;
+    height: 84px;
+}
+
+.home .btn-success:before {
+    content: " ";
+    position: absolute;
+    top:-10px;
+    right: 105px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #f1f1f1;
+}
+
+.home .even {
+    background-color: #f1f1f1;
+}
+
+.home .button {
+    width: 222px;
+    height: 60px;
+    text-transform:capitalize;
+    border: 0;
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    letter-spacing: 1px;
+}
+
+.home .button.greenButton {
+    background-color: #1ABC96;
+}
+
+.home .button.blueButton {
+    margin-left: 15px;
+    background-color:#3498db;
+    width: 180px;
+}
+
+.home input {
+    width: 300px;
+    height: 30px;
+    border-radius: 0;
+    border: 0;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.home input:focus:invalid {
+    color: #666666;
+}
+
+
+
+/* Homepage carousel */
+
+.carousel-indicators {
+    display: none;
+}
+
+.carousel-control.left{
+    background: url(/img/orange-left.png) no-repeat !important;
+}
+
+.carousel-control.right{
+    background: url(/img/orange-right.png) no-repeat !important;
+}
+.carousel-control {
+    border: 0;
+    font-weight: 100;
+    font-size: 1px;
+}
+
+.carousel-linked-nav,
+.item img {
+    display: block;
+    margin: 0 auto;
+}
+
+.carousel-linked-nav {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.carousel-inner {
+    border: 1px solid #E3E3E3;
+    width: 85%;
+    margin: auto;
+}
+
+.carouseltabs {
+    width:85%;
+    margin:auto;
+}

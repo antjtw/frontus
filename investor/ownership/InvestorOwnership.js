@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj']);
+var owner = angular.module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj', 'ownerServices', 'ownerFilters']);
 
 owner.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
@@ -11,222 +11,6 @@ owner.config(function ($routeProvider, $locationProvider) {
         when('/', {templateUrl: 'companycaptable.html', controller: captableController}).
         when('/grant', {templateUrl: 'grant.html', controller: grantController}).
         otherwise({redirectTo: '/'});
-});
-
-// Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
-owner.service('calculate', function () {
-
-    // The remainder calculated for outstanding units rows.
-    this.whatsleft = function (total, issue, rows) {
-        var leftover = total;
-        angular.forEach(rows, function (row) {
-            if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                leftover = leftover - row[issue.issue]['u'];
-            }
-        });
-        return leftover
-    };
-
-    // Simple summation checking that the added value is a number.
-    this.sum = function (current, additional) {
-        if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
-            current = 0;
-        }
-        if (!isNaN(parseFloat(additional))) {
-            return (current + parseFloat(additional));
-        }
-        else {
-            return current;
-        }
-    };
-
-    // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
-    this.debt = function (rows, issue, row) {
-        var mon = parseFloat(issue.premoney);
-        if (isNaN(parseFloat(mon))) {
-            return null
-        }
-        else {
-            angular.forEach(rows, function (r) {
-                if (r[issue.issue] != undefined) {
-                    if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
-                        mon = mon + parseFloat(r[issue.issue]['a']);
-                    }
-                }
-            });
-        }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)
-    };
-
-    // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array. Buggy.
-    this.vested = function (rows, trans) {
-        var vesting = {};
-        angular.forEach(trans, function (tran) {
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && tran.vestingbegins != null) {
-                if (Date.compare(Date.today(), tran.vestingbegins) > -1) {
-                    if (!isNaN(parseFloat(vesting[tran.investor]))) {
-                        vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
-                    }
-                    else {
-                        vesting[tran.investor] = (tran.units * (tran.vestcliff / 100));
-                    }
-                    var cycleDate = angular.copy(tran.date);
-                    var remainingterm = angular.copy(tran.terms);
-                    while (Date.compare(tran.vestingbegins, cycleDate) > -1) {
-                        remainingterm = remainingterm - 1;
-                        cycleDate.addMonths(1);
-                    }
-                    remainingterm = remainingterm + 1;
-                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
-                    var x = 1;
-                    if (tran.vestfreq == "monthly") {
-                        x = 1
-                    }
-                    else if (tran.vestfreq == "weekly") {
-                        x = 0.25
-                    }
-                    else if (tran.vestfreq == "biweekly") {
-                        x = 0.5
-                    }
-                    else if (tran.vestfreq == "quarterly") {
-                        x = 3;
-                    }
-                    else if (tran.vestfreq == "yearly") {
-                        x = 12;
-                    }
-                    if (x < 1) {
-                        cycleDate.addWeeks(x * 4);
-                    }
-                    else {
-                        cycleDate.addMonths(x);
-                    }
-                    while (Date.compare(Date.today(), cycleDate) > -1) {
-                        vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
-                        if (x < 1) {
-                            cycleDate.addWeeks(x * 4);
-                        }
-                        else {
-                            cycleDate.addMonths(x);
-                        }
-                    }
-                }
-            }
-        });
-        angular.forEach(rows, function (row) {
-            if (!isNaN(vesting[row.name])) {
-                row.vested = vesting[row.name];
-            }
-        });
-        console.log(rows);
-        return rows
-    };
-});
-
-owner.service('switchval', function () {
-    this.tran = function (type) {
-        if (type == "debt" || type == 0) {
-            return 0;
-        }
-        else if (type == "options" || type == 1) {
-            return 1;
-        }
-        else {
-            return 2;
-        }
-    };
-
-    this.typeswitch = function (tran) {
-        if (tran.optundersec != null) {
-            tran.atype = 1;
-        }
-        else if (!isNaN(parseFloat(tran.amount)) && isNaN(parseFloat(tran.units))) {
-            tran.atype = 2;
-        }
-        else {
-            tran.atype = 0;
-        }
-        return tran;
-    };
-
-    this.typereverse = function (tran) {
-        if (tran == 1) {
-            tran = "options";
-        }
-        else if (tran == 2) {
-            tran = "debt";
-        }
-        else {
-            tran = "shares";
-        }
-        return tran;
-    };
-});
-
-owner.service('sorting', function () {
-
-    this.issuekeys = function (keys, issues) {
-        var sorted = [];
-        angular.forEach(issues, function (issue) {
-            angular.forEach(keys, function (key) {
-                if (issue.issue == key) {
-                    sorted.push(key);
-                }
-            });
-        });
-        return sorted;
-    };
-
-    this.issuedate = function (a, b) {
-        if (a.date < b.date)
-            return -1;
-        if (a.date > b.date)
-            return 1;
-        if (a.date = b.date) {
-            if (a.created < b.created)
-                return -1;
-            if (a.created > b.created)
-                return 1;
-        }
-        return 0;
-    };
-
-    // Sorts the rows
-    this.row = function (prop) {
-        return function (a, b) {
-            var i = 0;
-            // Working for the earliest issue to the latest
-            while (i < prop.length) {
-
-                // Filters out the unissued shares lines
-                if (a['nameeditable'] == 0) {
-                    if (b['nameeditable'] == 0) {
-                        if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-                            return 1;
-                        if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-                            return -1;
-                    }
-                    return -1
-                }
-                if (b['nameeditable'] == 0) {
-                    if (a['nameeditable'] == 0) {
-                        if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-                            return -1;
-                        if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-                            return 1;
-                    }
-                    return -1
-                }
-                // Ranks the adjacent rows and returns the order for the pair
-                if (a[prop[i]]['u'] < b[prop[i]]['u'])
-                    return 1;
-                if (a[prop[i]]['u'] > b[prop[i]]['u'])
-                    return -1;
-                i++
-            }
-            return 0;
-        }
-    };
-
 });
 
 owner.run(function ($rootScope) {
@@ -426,6 +210,16 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         SWBrijj.procm('ownership.get_my_transactions', company).then(function (trans) {
             console.log(trans);
             $scope.trans = trans
+
+            SWBrijj.procm('ownership.get_my_options', company).then(function (grants) {
+                console.log(grants.length)
+                if (grants.length == 0) {
+                    $scope.grantsview = 0;
+                }
+                else {
+                    $scope.grantsview = 1;
+                }
+            });
             for (var i = 0, l = $scope.trans.length; i < l; i++) {
                 if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                     $scope.uniquerows.push($scope.trans[i].investor);
@@ -477,18 +271,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                     }
                     ;
                 });
-            });
-
-            angular.forEach($scope.issues, function (issue) {
-                if (parseFloat(issue.totalauth) % 1 == 0) {
-                    var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
-                    if (leftovers != 0) {
-                        var issuename = String(issue.issue)
-                        var shares = {"u": leftovers, "a": null};
-                        $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                        $scope.rows[($scope.rows.length) - 1][issuename] = shares
-                    }
-                }
             });
 
 
@@ -659,7 +441,7 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         });
 
         // Get the full set of company grants
-        SWBrijj.tblm('ownership.company_grants').then(function (data) {
+        SWBrijj.procm('ownership.get_my_option_grants', company).then(function (data) {
 
             $scope.grants = data;
 
@@ -675,30 +457,27 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             angular.forEach($scope.trans, function (tran) {
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == tran.investor) {
-                        if (parseInt(tran.units) > 0) {
+                        if (parseFloat(tran.units) > 0) {
                             row["granted"] = calculate.sum(row["granted"], tran.units);
                         }
-                        else {
-                            row["forfeited"] = calculate.sum(row["forfeited"], tran.units);
-                        }
                     }
-                    ;
                 });
             });
 
+            //Calculate the total vested for each row
+            $scope.rows = calculate.vested($scope.rows, $scope.trans);
+
+            //Calculate the total exercised for each row
             angular.forEach($scope.grants, function (grant) {
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == grant.investor) {
-                        if (parseInt(grant.unit) > 0) {
+                        if (parseFloat(grant.unit) > 0) {
                             if (row[grant.action] == undefined) {
                                 row[grant.action] = 0;
                             }
-                            ;
                             row[grant.action] = calculate.sum(row[grant.action], grant.unit);
                         }
-                        ;
                     }
-                    ;
                 });
             });
 
