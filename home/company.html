@@ -48,17 +48,8 @@
     <h2>Needs Attention</h2>
       <div class="activityBlock">
           <table>
-              <tr ng-repeat="active in activity | orderBy:activityOrder">
-                  <td class="activity"><i class="{{active.icon}} icon"></i></td>
-                  <td class="item">
-                      <table>
-                          <tr><td><a href="/company/profile/view?id={{active.email}}">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-                          <tr><td class="time">{{active.time | date:"MMMM d, y"}}</td></tr>
-                      </table>
-                  </td>
-              </tr>
           </table>
-          <div class="noFeed" ng-show="noActivity">Nothing here yet.</div>
+          <div class="noFeed" ng-show="notifications.length !=0">Nothing here yet.</div>
       </div>
   </div>
 </div>
