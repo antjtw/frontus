@@ -1345,13 +1345,12 @@ ul>li.curPage {
 
 .captablepair-box {
     position: relative;
+    display: block;
 }
 
 .tableView.captable .output {
     position: absolute;
     pointer-events: none;
-    top: 9px;
-    left: 10px;
 }
 
 .tableView.captable .output.clickable {
