@@ -558,7 +558,7 @@ h2 {
 }
 
 .subnav-controls {
-	/* height: 82px; */
+	height: 82px;
 	white-space: nowrap;
 }
 
@@ -1261,9 +1261,11 @@ form.inputs {
 
 .tableView.captable .output.clickable {
     pointer-events: auto;
+    top: -9px;
 }
 
 .tableView.captable .output.footer {
+    top: -9px;
 }
 
 .tableView.captable .output.second {
