@@ -1,5 +1,5 @@
 <div class="footerBar">
-  <div class="container"> 
+  <div class="container scaling">
   	<footer> 
      	 <div class="row-fluid">
           <div class="span12 footerLinks" >
