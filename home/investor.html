@@ -2,24 +2,30 @@
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
     <div class="row-fluid">
-      <div><p class="title">Activity Feed</p></div>
-      <table>
-        <tr ng-repeat="active in activity | orderBy:activityOrder">
-        <td><i class="{{active.icon}} icon"></i></td>
-        <td>
-            <table>
-              <tr><td><a href="/investor/profile">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-              <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
-              </table>
-          </td>
-        </tr>
-      </table>
-      <div style="display: none;" ng-show="noActivity">There is no activity yet.</div>
+      <div><h2>Activity Feed</h2></div>
+      <div class="activityBlock">
+          <table>
+            <tr ng-repeat="active in activity | orderBy:activityOrder">
+            <td><i class="{{active.icon}} icon"></i></td>
+            <td>
+                <table>
+                  <tr><td><a href="/investor/profile">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
+                  <tr><td>{{active.time | date:"MMMM d, y"}}</td></tr>
+                  </table>
+              </td>
+            </tr>
+          </table>
+          <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+       </div>
     </div>
   </div>
 
   <div class="sidebar span4">
     <h2>Needs Attention</h2>
-    <div style="display: none;" ng-show="notifications.length != 0">Nothing here yet.</div>
+      <div class="activityBlock">
+          <table>
+          </table>
+          <div class="noFeed" ng-show="notifications.length !=0">Nothing here yet.</div>
+      </div>
   </div>
 </div>
