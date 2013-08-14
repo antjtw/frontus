@@ -230,7 +230,7 @@
                   <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
-                  <div ng-bind="formatAmount(row[key]['a'])" class="output second"></div>
+                  <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second"></div>
                 </span>
                 <span ng-switch-when="0">
                   <input disabled class="captablepair" placeholder="units"
@@ -251,7 +251,7 @@
                 <td ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
-                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
                     </span>
                 </td>
             </tr>
@@ -263,7 +263,7 @@
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
-                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
                     </span>
                 </td>
             </tr>
@@ -275,7 +275,7 @@
                 <td ng-repeat="one in issues">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one.issue, rows, 'u'))" class="output footer"></div>
-                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
             </tr>
@@ -287,7 +287,7 @@
                 <td ng-repeat="one in issues">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one.issue, dilutedRows, 'u'))" class="output footer"></div>
-                        <div ng-bind="formatAmount(colTotal(one.issue, dilutedRows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one.issue, dilutedRows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
             </tr>
@@ -604,7 +604,7 @@
                         <span ng-show="toggleView();">
                             <h2>In Brief</h2>
 
-                            <p>Post Money Valuation</p>
+                            <p>Post Money Valuation <input disabled value="{{lastPostMoney();}}"></p>
                             <p>Date of last valuation <input disabled value="{{lastIssue();}}"></p>
                             <p>Price-per-share <input disabled value="{{pricePerShare();}}"></p>
                             <p>Total Paid <input disabled value="{{totalPaid(rows);}}"></p>

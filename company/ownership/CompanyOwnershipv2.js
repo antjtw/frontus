@@ -1328,6 +1328,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         return memformatamount(amount);
     };
 
+    $scope.formatDollarAmount = function(amount) {
+        var output = memformatamount(amount);
+        if (output) {
+            output = "$" + output
+        }
+        return (output);
+    };
+
     // Functions derived from services for use in the table
 
     // Number of shareholders
@@ -1374,6 +1382,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.lastIssue = function() {
         return calculate.lastIssue($scope.issues);
     };
+
+    // Last issue date for the sidebar In Brief section
+    $scope.lastPostMoney = function() {
+        return calculate.lastPostMoney($scope.issues);
+    };
 };
 
 
@@ -1412,6 +1425,8 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         // Pivot from transactions to the rows of the table
         $scope.trans = data;
         angular.forEach($scope.trans, function (tran) {
+            var offset = tran.date.getTimezoneOffset();
+            tran.date = tran.date.addMinutes(offset);
             tran.datekey = tran['date'].toUTCString();
             if ($scope.uniquerows.indexOf(tran.investor) == -1) {
                 $scope.uniquerows.push(tran.investor);
@@ -1582,8 +1597,11 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             angular.forEach(exercises, function (value, key) {
                 angular.forEach($scope.trans, function (tran) {
                     if (tran.tran_id == key) {
-                        tran.amount = value * tran.price;
-                        $scope.saveTran(tran);
+                        // Check that a price has been given
+                        if (tran.price) {
+                            tran.amount = value * tran.price;
+                            $scope.saveTran(tran);
+                        }
                     }
                 });
             });
