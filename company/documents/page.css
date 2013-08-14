@@ -1,0 +1,45 @@
+.thisone {
+    background-color: lightgreen;
+}
+.thatone:hover {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.companyDocViewer {
+    border-left: 1px solid #E3E3E3;
+}
+
+.docVersiontab > ul > li {
+    margin-top: 20px;
+    height: 30px;
+    list-style-type: none;
+}
+
+.tableView td.status-bar > div {
+    background-color: #F1F1F1;
+    text-align: center;
+    padding: 10px 10px 0 10px;
+    height: 96px;
+    width: 100px;
+    display: inline-block;
+    margin: 0 6px 0 6px;
+    float: left;
+}
+
+/*.tableView tr.status-bubbles > div {
+    width: 120px;
+    margin: 0 48px 0 48px;
+}
+  */
+
+.tableView td.status-bar span[data-icon] {
+    font-size: 24px;
+    margin-bottom: 8px;
+    padding-top: 8px;
+}
+
+.doubleTime {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

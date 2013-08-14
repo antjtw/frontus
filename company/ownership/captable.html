@@ -8,6 +8,9 @@
     </div>
 
     <div>
+        <p>Shareholders only see their personal holdings by default, change this by visiting their profile
+            to grant full access. Sharing with non-shareholders grants full-access.
+        </p>
         <form>
             <ul>
                 <li>
@@ -27,13 +30,10 @@
                     <input ng-change="addRemove();" ng-model="person.email" placeholder="ADD NON SHAREHOLDER">
                 </li>
             </ul>
-            <p>Shareholders only see their personal holdings by default, change this by visiting their profile
-                to grant full access. Sharing with non-shareholders grants full-access.
-            </p>
         </form>
     </div>
     <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
+        <button ng-disabled="checkInvites();" class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
 
     </div>
 </div>
@@ -198,7 +198,7 @@
                 <td>%</td>
                 <td></td>
                 <td ng-repeat="one in issues | issueviewList">
-                    <span>UNITS</span>
+                    <span>SHARES</span>
                     <span>PAID</span>
                 </td>
             </tr>
@@ -221,14 +221,16 @@
                 </td>
                 <td ng-class="{tranSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
               <span ng-switch on="row.editable">
-                <span ng-switch-default>
+                <span class="captablepair-box" ng-switch-default>
                   <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18"
                          placeholder="units"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'>
+                  <div ng-bind="formatAmount(row[key]['u'])" class="output"></div>
                   <input ng-class="{tranSelected:row[key].state}" class="captablepair" maxlength="18" placeholder="paid"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
+                  <div ng-bind="formatAmount(row[key]['a'])" class="output second"></div>
                 </span>
                 <span ng-switch-when="0">
                   <input disabled class="captablepair" placeholder="units"
@@ -247,9 +249,10 @@
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
-
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
+                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                    </span>
                 </td>
             </tr>
             <!-- Un-editable diluted view -->
@@ -258,9 +261,10 @@
                 <td><input disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
-
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
+                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                    </span>
                 </td>
             </tr>
             <!-- Undiluted footer -->
@@ -269,8 +273,10 @@
                 <td><input disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issues">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}">
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
+                    </span>
                 </td>
             </tr>
             <!-- Diluted footer -->
@@ -279,8 +285,10 @@
                 <td><input disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issues">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, dilutedRows, 'u');}}">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, dilutedRows, 'a');}}">
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(colTotal(one.issue, dilutedRows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one.issue, dilutedRows, 'a'))" class="output second footer"></div>
+                    </span>
                 </td>
             </tr>
         </table>
@@ -301,7 +309,7 @@
                         </div>
                         <div class="row-fluid trancore">
                             <div>
-                                <p>Date <input ng-disabled="toggleView();" ng-change="saveIssueCheckDate(activeIssue, 'date')" type="text"
+                                <p>Date <input ng-disabled="toggleView();" ui-event="{blur : 'saveIssueCheckDate(activeIssue, \'date\')'}" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
                             </div>
@@ -444,15 +452,16 @@
                                 </div>
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
-                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
-                                        </p>
-
                                         <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
                                                                                  ng-class="{'content':!tran.units}" maxlength="18"
                                                                                  class="signless"
                                                                                  ui-event="{blur : 'saveTran(tran)'}"
                                                                                  ng-model="tran.units"></p>
+
+                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
+                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
+                                        </p>
+
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
@@ -583,13 +592,25 @@
                         </span>
                       </span>
                       <span class="capGuide" ng-switch-default>
-                        <h2>Understand your Ownership</h2>
+                        <span ng-hide="toggleView();">
+                            <h2>Understand your Ownership</h2>
 
-                        <p>Enter your securities, shareholders and their holdings directly into our responsive table.
+                            <p>Enter your securities, shareholders and their holdings directly into our responsive table.
                             We'll calculate the totals on your behalf, and any additional terms that you add will
                             influence your non-diluted view and financial modeling (coming soon).</p>
 
-                        <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                            <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                        </span>
+                        <span ng-show="toggleView();">
+                            <h2>In Brief</h2>
+
+                            <p>Post Money Valuation</p>
+                            <p>Date of last valuation <input disabled value="{{lastIssue();}}"></p>
+                            <p>Price-per-share <input disabled value="{{pricePerShare();}}"></p>
+                            <p>Total Paid <input disabled value="{{totalPaid(rows);}}"></p>
+                            <p>Fully Diluted Units <input disabled value="{{totalShares(rows);}}"></p>
+                            <p>Shareholders <input disabled value="{{numShareholders();}}"></p>
+                        </span>
                       </span>
             </div>
         </div>

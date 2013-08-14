@@ -107,6 +107,109 @@ ownership.service('calculate', function () {
         console.log(rows);
         return rows
     };
+
+
+    // Returns the number of shareholders (rows -1 for the empty row)
+    this.numShareholders = function (rows) {
+        return (rows.length - 1);
+    };
+
+    // Calculates the Total Shares owned by an investor across all rounds
+    this.shareSum = function (row) {
+        var total = 0;
+        for (var key in row) {
+            if (row.hasOwnProperty(key)) {
+                if (row[key] != null) {
+                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+                        total = total + parseFloat(row[key]['u']);
+                    }
+                }
+            }
+        }
+        return total;
+    };
+
+    // Returns the percentage ownership for each shareholder
+    this.sharePercentage = function (row, rows, issuekeys) {
+        var percentage = 0;
+        var totalpercentage = 0;
+        for (var i = 0, l = issuekeys.length; i < l; i++) {
+            if (row[issuekeys[i]] != undefined) {
+                if (row[issuekeys[i]]['x'] != undefined) {
+                    percentage = percentage + row[issuekeys[i]]['x'];
+                }
+            }
+        }
+        for (var j = 0, a = rows.length; j < a; j++) {
+            for (var i = 0, l = issuekeys.length; i < l; i++) {
+                if (rows[j][issuekeys[i]] != undefined) {
+                    if (rows[j][issuekeys[i]]['x'] != undefined) {
+                        totalpercentage = totalpercentage + rows[j][issuekeys[i]]['x'];
+                    }
+                }
+            }
+        }
+        return (percentage + (this.shareSum(row) / this.totalShares(rows) * (100 - totalpercentage)));
+    };
+
+    // Calculates total shares for the captable
+    this.totalShares = function (rows) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            for (var key in row) {
+                if (row.hasOwnProperty(key)) {
+                    if (row[key] != null) {
+                        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+                            total = total + parseFloat(row[key]['u']);
+                        }
+                    }
+                }
+            }
+        });
+        return total;
+    };
+
+    //Calculates the total for a column, will do either shares or money depending
+    this.colTotal = function (header, rows, type) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            for (var key in row) {
+                if (key == header) {
+                    if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
+                        total = total + parseFloat(row[key][type]);
+                    }
+                }
+            }
+        });
+        return total;
+    };
+
+    //Calculates the total money for all issues and transactions
+    this.totalPaid = function (rows) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            for (var key in row) {
+                if (row[key] != null && !isNaN(parseFloat(row[key]['a'])) && String(key) != "$$hashKey") {
+                    total = total + parseFloat(row[key]['a']);
+                }
+            }
+        });
+        return total;
+    };
+
+    //Returns the price per share for the most recent issue assuming such a value is given
+    this.pricePerShare = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].ppshare;
+        }
+    };
+
+    //Returns the price per share for the most recent issue assuming such a value is given
+    this.lastIssue = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].date;
+        }
+    };
 });
 
 ownership.service('switchval', function () {

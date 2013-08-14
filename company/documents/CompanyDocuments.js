@@ -74,10 +74,7 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 				console.log(data);
 			});
       	});
-	/*        SWBrijj.proc('document.share',scope.docId, scope.recipients, scope.messageText).then( function(data) {
-          alert(data); scope.hide(); });
-	*/
-       };
+      };
     },
     replace:true,
     priority: 20
@@ -87,12 +84,12 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 /* Controllers */
 
 function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
+  /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
 	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
-		for (var i = 0; i < data.length; i++) {
-			$scope.vInvestors.push(data[i].email);
-		}
+		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
+
 
 	$scope.loadDocuments = function() {
 		SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
@@ -106,8 +103,8 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	
 	$scope.docOrder = 'docname';
 	$scope.selectedDoc = 0;
-  	$scope.recipients = [];
-  	$scope.signaturedate = Date.today();
+  $scope.recipients = [];
+  $scope.signaturedate = Date.today();
 
 	$scope.setOrder = function(field) {	$scope.docOrder = ($scope.docOrder == field) ? '-' + field :  field; };
 
@@ -117,21 +114,21 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
   };
 
   $scope.askShare = function(docid) {
-  	$scope.selectedDoc = docid;
-    var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
-    $q.when(modalPromise).then(function(eel) {
+  $scope.selectedDoc = docid;
+  var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
+  $q.when(modalPromise).then(function(eel) {
       // for some reason, at this point, the element has "200" inserted as a text node.
       var el = eel[0];
       // if (el.childNodes[0] == "200")
       el.removeChild(el.childNodes[0]);
       eel.modal('show');
-    });
+  });
   };
 
 
   // Upload functions. Should probably be re-extracted
 
-  	$scope.dropText = 'Drop files here...';
+  $scope.dropText = 'Drop files here...';
 	$scope.files = [];
 
 	$scope.fmtFileSize = function (file) {
@@ -287,49 +284,29 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 			return 'There are uploads in progress. Leaving may result in some uploads not completing.';
 	}
 
-};
+}
+
+
 
 function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
   var docKey = parseInt($routeParams.doc);
   $scope.docId = docKey;
   $scope.docKey = docKey
   $scope.invq = false;
+  $scope.counterparty = true;
   $scope.countersign = true;
   $scope.finalized = false;
-  $scope.library = "document.my_company_library";
-  $scope.pages = "document.my_company_doc_length";
+  $scope.library = "document.my_counterparty_library";
+  $scope.pages = "document.my_counterparty_codex";
   $scope.docversions = []
-
-  $scope.init = function () {
-
-  };
 
   SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
       $scope.document=data;
+  });
 
-    });
-
-  SWBrijj.procm("document.we_shared_doc", parseInt(docKey)).then(function(stuff) {
-    	$scope.otherdocs = stuff;
-
-    	angular.forEach($scope.otherdocs, function(doc) {
-    		console.log(doc);
-		  	if (doc.signature_deadline != null) {
-		  		if (doc.when_signed == null) {
-		  			doc.countersign = false;
-		  		}
-
-		  		else if (doc.when_confirmed != null) {
-		  			doc.countersign = false;
-		  		}
-		  		else {
-		  			doc.countersign = true;
-		  		}
-		  		$scope.docversions.push(doc);
-		  	}
-		});
-    });
-
+  SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docId).then(function(data) {
+     $scope.docversions = data;
+  });
 
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
@@ -339,18 +316,34 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 
 	$scope.pickInvestor = function(doc) {
 		$scope.invq = true;
+    $scope.counterparty = true;
+    $scope.currentDoc = doc;
 		$scope.docId = doc.doc_id;
+    console.log(doc);
 		$scope.countersign = doc.countersign;
 		$scope.finalized = false;
 	};
 
 	$scope.getOriginal = function() {
 		$scope.invq = false;
-		$scope.docId = docKey;
+    $scope.counterparty = false;
+    $scope.currentDoc = $scope.document;
+		$scope.docId = $scope.docKey;
 		$scope.countersign = true;
 		$scope.finalized = false;
+    console.log($scope.docId);
 	}
-}
+
+  $scope.fakeSign = function(cd) {
+    SWBrijj.spoof_procm(cd.investor, "document.sign_document", cd.doc_id).then(function (data) {
+      console.log(data);
+//      window.location.reload();
+    }).except(function (x) {
+          alert(x.message);
+        });
+  }
+
+  }
 
 
 function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
@@ -359,11 +352,13 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
     $scope.document = data;
   });
 
-//	$scope.page_title = data[0].docname;
-// 	$scope.messageText = "Hi,\n Your signature is requested on " + $scope.document1.docname + ".";
+  SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
+    $scope.docversions = data;
+  });
 
-	// A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
-	SWBrijj.procm("document.get_doc_activity_cluster", parseInt(docId)).then(function(data) {
+
+  // A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
+	SWBrijj.procm("document.get_doc_activity_cluster", docId).then(function(data) {
 		$scope.activity = data;
 		console.log('data', data);
 		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
@@ -418,6 +413,21 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 			});
 		});
 
+/*  SWBrijj.procm("document.document_status", docId).then(function(data) {
+    $scope.userStatus = data;
+
+    angular.forEach($scope.userStatus, function(person) {
+      SWBrijj.proc('account.get_investor_name', person.sent_to, false).then(function(name) {
+        person.name = name[1][0];
+      });
+      person.shown = false;
+      person.button = "icon-plus";
+      if (person.event == "revoked") person.rstatus = 1;
+      if (person.event == "needsign") person.event = "needs signing";
+    });
+  });
+  */
+
 		$scope.activityOrder = function(card) {
 		   if (card.activity == "Uploaded by ") {
 			   return 0
@@ -428,16 +438,16 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		};
 
 	  $scope.editorEnabled = false;
-	  
+
 	  $scope.enableEditor = function() {
 		$scope.editorEnabled = true;
 		$scope.editableTitle = $scope.page_title;
 	  };
-	  
+
 	  $scope.disableEditor = function() {
 		$scope.editorEnabled = false;
 	  };
-	  
+
 	  $scope.save = function() {
 		var newname = $scope.editableTitle;
 		$scope.page_title = newname;
@@ -446,24 +456,6 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 			console.log(data);
 		});
 	  };
-	
-  SWBrijj.procm("document.document_status", docId).then(function(data) {
-	$scope.userStatus = data;
-
-	angular.forEach($scope.userStatus, function(person) {
-		SWBrijj.proc('account.get_investor_name', person.sent_to, false).then(function(name) {
-            person.name = name[1][0];
-        });
-		person.shown = false;
-		person.button = "icon-plus";
-		if (person.event == "revoked") {
-			person.rstatus = 1;
-		}
-		if (person.event == "needsign") {
-			person.event = "needs signing";
-		}
-	});
-  });
 	
 	$scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
@@ -477,20 +469,11 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 			});
 	};
 	
-	$scope.revokeUser = function (email) {
-		SWBrijj.procm("document.document_revoke", docId, email.toLowerCase()).then(function(data) {
-				console.log(data);
-			});
-	};
-	
-	$scope.opendetails = function(selected) {
-		 $scope.userStatus.forEach(function(name) {
-			if (selected == name.sent_to)
-				if (name.shown == true) {
-					name.shown = false;
-					name.button = "icon-plus";
-				}
-				else {
+	$scope.showStatusDetail = function(person) {
+		 $scope.docversions.forEach(function(name) {
+       name.shown = false;
+			 if (person.investor == name.investor) {
+          name.shown = true;
 					SWBrijj.procm("document.get_I_docstatus", name.sent_to, docId).then(function(data) {
 						console.log(data);
 						name.whenshared = data[1].loggedin;
@@ -512,26 +495,12 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 						else {
 							name.signed = 0;	
 						}
-						// if (data[5].loggedin != null) {
-						// 	console.log(data[5]);
-						// 	name.column5 = 2;
-						// 	name.reminder = data[5].loggedin;
-						// }
-						// else if (data[4].loggedin != null) {
-						// 	name.column5 = 1;
-						// 	name.reminder = data[4].loggedin;
-						// }
-						// else {
-						// 	name.column5 = 0;	
-						// }
 						name.button = "icon-minus";
-						name.shown = true;
 					});
 				}
 		});
 	};
 	
-		$scope.revoke = "";
 		$scope.reminder = "";
 		  
 		  $scope.modalUp = function () {
@@ -547,20 +516,6 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 			backdropFade: true,
 			dialogFade:true,
     		dialogClass: 'modal shareModal'
-		  };
-		  
-		  $scope.revmodalUp = function(name) {
-			$scope.revoke = name;
-			$scope.revokeModal = true;
-		  };
-		
-		  $scope.revclose = function () {
-			$scope.revokeModal = false;
-		  };
-		
-		  $scope.revopts = {
-			backdropFade: true,
-			dialogFade:true
 		  };
 		  
 		  $scope.remmodalUp = function(name) {

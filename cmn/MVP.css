@@ -83,6 +83,8 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 input:focus, textarea:focus {
     background-color: #E3E3E3;
+    outline: none;
+    box-shadow:none;
 }
 
 /* Accordians */
@@ -441,7 +443,7 @@ h2 {
 
 
 .bottomnav .nav > li:first-child > a {
-	padding: 0 5px 0 15px;
+	padding: 0 5px 0 0;
 	line-height: 30px;
 	text-align: left;
 	width: 155px;
@@ -556,7 +558,7 @@ h2 {
 }
 
 .subnav-controls {
-	height: 82px;
+	/* height: 82px; */
 	white-space: nowrap;
 }
 
@@ -728,59 +730,6 @@ form.inputs {
   color: #1e2d3d;
 }
 
-.lognreg {
-	background-color: #1E2D3D;
-}
-
-.lognreg p strong{
-	font-family: 'FS Elliot Web Bold', sans-serif;;
-}
-
-.lognreg .caption {
-	padding-top: 10px;
-	font-size: 8px;
-	text-transform:uppercase;
-}
-
-.lognreg .caption a{
-	font-size: 8px;
-	text-transform:uppercase;
-	text-decoration: none;
-}
-
-.lognreg .teaser {
-	font-size: 14px;
-	font-family: 'FS Elliot Web Light', sans-serif;
-	color: #c7c7c7;
-	display:inline;
-
-}
-
-.lognreg .loginInput {
-	width: 288px;
-	height: 24px;
-	border-radius: 0px;
-	border: none;
-	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-}
-
-.lognreg .greenButton.loginButton {
-	width: 300px;
-	height: 30px;
-	text-align:center;
-	padding: 0 0 0 0;
-	color:#ffffff;
-	background-color: #1ABC96;
-}
-
-.lognreg .greenButton:disabled, .lognreg .greenButton:disabled:hover {
-  	background-color: #1ABC96; 
-  	color: #FFFFFF; 
-  	opacity: 0.5;
-}
-
 .navlogin .greenButton:disabled, .navlogin .greenButton:disabled:hover {
   	background-color: #1ABC96; 
   	color: #FFFFFF; 
@@ -792,9 +741,7 @@ form.inputs {
   	color: #FFFFFF; 
   	opacity: 0.5;
 	cursor:default;
-
 }
-
 
 .line{
 	border-top: 1px solid #a6a6a6;
@@ -810,32 +757,6 @@ form.inputs {
 	color: #0088cc;
 }
 
-/* Password Reset */
-
-#forgot {
-	width:500px;
-	padding-top:10px;
-	margin-top:10px;
-}
-
-#cancelButton {
-    font-size: 12px;
-	margin-top:10px;
-    display: block;
-    color: #3498DB;
-}
-
-
-
-.resetLabel {
-	text-align:left;
-	margin-left: 76px;
-	margin-bottom:10px;	
-}
-
-#resetConfirm {
-	margin-top:50px;
-}
 
 
 
@@ -1018,6 +939,7 @@ form.inputs {
 	text-transform: uppercase;
 	color: #1E2D3D;
 	width: 140px;
+    vertical-align: top;
 }
 
 .docLibrary .capsums-col {
@@ -1039,8 +961,8 @@ form.inputs {
 }
 
 .docLibrary input {
-	border: 0px;
-	padding: 0px;
+	border: 0;
+	padding: 0;
     margin-right: 5px;
 	width: 60px;
 }
@@ -1065,6 +987,7 @@ form.inputs {
 
 .docLibrary input:disabled {
 	background: none;
+    color: #7f8c8d;
 }
 
 .searchBox {
@@ -1137,100 +1060,6 @@ form.inputs {
 
 /* Document Viewer */
 
-.selectedPill {
-	background-color: #FFF;
-	-moz-border-radius: 18px;
-	-webkit-border-radius: 18px;
-	border-radius: 18px;
-	-moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-	-webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-}
-
-.docVersiontab > ul > li {
-	margin-top: 20px;
-	height: 30px;
-	list-style-type: none;
-}
-
-.companyDocViewer {
-	border-left: 1px solid #E3E3E3;
-}
-
-ul>li.curPage {
-   border-color: navy;
-   font-weight: bold;
-   color: darkorchid;
-   background-color: lightcyan;
-}
-
-.curPage.unsaved {
-  background-color: lightseagreen;
-}
-
-.unsaved {
-    background-color: lightcoral;
-}
-.annotated {
-    background-color: lavender;
-}
-
-
-.annotation-control > .tools > button {
-	background: none;
-	border: none;
-	font-size: 20px;
-}
-
-.pageTurn {
-	height: 24px;
-	margin: 0 auto 0 auto;
-}
-
-.pageTurn > ul > li {
-	float:left;
-	display: inline;
-	margin: 0 5px 0 0;
-	height: 24px;
-	text-align: center;
-}
-
-.pageJump {
-    margin: 0 0 5px 5px;
-}
-
-.pageJump li {
-    float:left;
-    display: inline;
-    margin: 0 10px 0 0;
-    padding: 1px 3px 0 3px;
-    text-align: center;
-    border: solid 1px dimgray;
-}
-
-.docHolder {
-	padding: 20px 0 20px 0;
-	background-color: #F1F1F1;
-}
-
-.docViewerControls {
-	height: 82px;
-	white-space: nowrap;
-}
-
-.docViewerControls > div {
-	display: inline-block;
-	vertical-align: middle;
-	white-space: normal;
-	width: 100%;
-}
-
-.docPanel {
-	width: 700px;
-	height: 956px;
-	margin: 0 auto 0 auto;
-	overflow: auto;
-}
 
 /* Document Status */
 
@@ -1420,6 +1249,38 @@ ul>li.curPage {
 	table-layout: fixed;
 }
 
+.captablepair-box {
+    position: relative;
+    display: block;
+}
+
+.tableView.captable .output {
+    position: absolute;
+    pointer-events: none;
+}
+
+.tableView.captable .output.clickable {
+    pointer-events: auto;
+}
+
+.tableView.captable .output.footer {
+    top:26px;
+}
+
+.tableView.captable .output.second {
+    left: 65px;
+}
+
+.tableView.captable .captablepair {
+    color: #FFFFFF;
+}
+
+.tableView.captable .captablepair:focus {
+    color: #7f8c8d
+}
+
+.tableView.captable input:focus + .output { display: none; }
+
 .tableView.captable.viewcaptable {
     background: white;
 }
@@ -1434,15 +1295,12 @@ ul>li.curPage {
 }
 
 p.captablepair {
-	width: 70px;
+	width: 65px;
 	margin: 0 0 0 0;
 }
 
-td.tranSelected {
-	border: 2px solid #E3E3E3;
-}
-
-.tranSelected {
+.tableView td.tranSelected {
+	outline: 2px solid #E3E3E3;
 }
 
 td.tranViewSelected {
@@ -1611,7 +1469,7 @@ tr.rowSelected {
     margin: 0 48px 0 48px;
 }
 
-.tableView td.status-bubbles > div > span, .tableView td.status-bubbles > div > div> span {
+.tableView td.status-bubbles > div > span, .tableView td.status-bubbles > div > div > span {
     font-size: 24px;
     margin-bottom: 8px;
 }
@@ -1949,8 +1807,8 @@ tr.rowSelected {
 .modalHeader {
 	display: block;
 	text-align: left;
-    padding: 16px 0px 16px 22px;
-	margin: 0px;
+    padding: 16px 0 16px 22px;
+	margin: 0;
     background-color: #21b289;
     color: white;
     vertical-align: middle;
@@ -2128,6 +1986,10 @@ tr.rowSelected {
 	height:463px;
 }
 
+.capshareModal p {
+    margin: 10px 15px 10px 15px;
+}
+
 .capshareModal ul{
 	margin: 0;
 	overflow: auto;
@@ -2139,11 +2001,12 @@ tr.rowSelected {
 }
 
 .capshareModal ul.extrasAdd {
-    height: 82px;
+    height: 83px;
 }
 
 .capshareModal ul > li:first-child {
 	text-transform: uppercase;
+    border-top: 1px solid #E3E3E3;
 }
 
 .capshareModal ul li {
@@ -2176,6 +2039,11 @@ tr.rowSelected {
 
 .capshareModal ul li > input.error {
 	border: 1px solid #F78D1E;
+}
+
+.capshareModal .button.greenButton {
+    display: block;
+    margin: 0 auto 0 auto;
 }
 
 /* Dropdown */
