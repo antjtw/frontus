@@ -32,11 +32,13 @@
                 <!-- The four buttons for each row -->
                   <td class="button" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share">
                   <i class="icon-share  icon-large"></i></span></td>
-                <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
+                <!--
+                  <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
+                -->
                 <td class="button"><a href="/company/documents/status?doc={{doc.doc_id}}"><span tooltip-placement="bottom" tooltip="Status"><i class="icon-search icon-large"></i></span></a></td>
               </tr>
             </table>
-            <div style="display: none;" ng-show="noDocs">You have no documents.</div>
+            <div ng-hide="documents">You have no documents.</div>
     </section>
 
 

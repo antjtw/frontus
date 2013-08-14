@@ -38,15 +38,9 @@ function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScop
   var company = $rootScope.selected.company;
   $scope.currentCompany = company;
 
-	SWBrijj.procm("document.get_company_investor_library", company).then(function(data) {
+	SWBrijj.tblmm("document.my_investor_library", "company", company).then(function(data) {
     $scope.documents = data;
-    if ($scope.documents.length == 0) {
-      $scope.noDocs = true;
-    }
-	}).except(function(data) {
-    console.log('reloading');
-    location.reload();
-  });
+	});
 	
 	$scope.docOrder = 'docname';
 	

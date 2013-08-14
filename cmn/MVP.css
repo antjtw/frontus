@@ -550,7 +550,7 @@ h2 {
 }
 
 .subnav-controls {
-	height: 82px;
+	/* height: 82px; */
 	white-space: nowrap;
 }
 
@@ -1127,100 +1127,6 @@ form.inputs {
 
 /* Document Viewer */
 
-.selectedPill {
-	background-color: #FFF;
-	-moz-border-radius: 18px;
-	-webkit-border-radius: 18px;
-	border-radius: 18px;
-	-moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-	-webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-	box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
-}
-
-.docVersiontab > ul > li {
-	margin-top: 20px;
-	height: 30px;
-	list-style-type: none;
-}
-
-.companyDocViewer {
-	border-left: 1px solid #E3E3E3;
-}
-
-ul>li.curPage {
-   border-color: navy;
-   font-weight: bold;
-   color: darkorchid;
-   background-color: lightcyan;
-}
-
-.curPage.unsaved {
-  background-color: lightseagreen;
-}
-
-.unsaved {
-    background-color: lightcoral;
-}
-.annotated {
-    background-color: lavender;
-}
-
-
-.annotation-control > .tools > button {
-	background: none;
-	border: none;
-	font-size: 20px;
-}
-
-.pageTurn {
-	height: 24px;
-	margin: 0 auto 0 auto;
-}
-
-.pageTurn > ul > li {
-	float:left;
-	display: inline;
-	margin: 0 5px 0 0;
-	height: 24px;
-	text-align: center;
-}
-
-.pageJump {
-    margin: 0 0 5px 5px;
-}
-
-.pageJump li {
-    float:left;
-    display: inline;
-    margin: 0 10px 0 0;
-    padding: 1px 3px 0 3px;
-    text-align: center;
-    border: solid 1px dimgray;
-}
-
-.docHolder {
-	padding: 20px 0 20px 0;
-	background-color: #F1F1F1;
-}
-
-.docViewerControls {
-	height: 82px;
-	white-space: nowrap;
-}
-
-.docViewerControls > div {
-	display: inline-block;
-	vertical-align: middle;
-	white-space: normal;
-	width: 100%;
-}
-
-.docPanel {
-	width: 700px;
-	height: 956px;
-	margin: 0 auto 0 auto;
-	overflow: auto;
-}
 
 /* Document Status */
 
