@@ -258,6 +258,7 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
+  var rowNumber;
 
   SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
     if(x[0].email == userId)
@@ -277,19 +278,13 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     $scope.docs = x;
     var i = 0;
     angular.forEach($scope.docs, function(x) {
-      SWBrijj.procm('document.document_status_by_investor', userId, x['doc_id']).then(function(z) {
+      // SWBrijj.procm('document.document_status_by_investor', userId, x['doc_id']).then(function(z) {
         $scope.docs[i].event = z[0]['event'];
         $scope.docs[i].shown = false;
         $scope.docs[i].button = "icon-plus";
-        if ($scope.docs[i].event == "needsign") {
-          $scope.docs[i].event = "needs signing";
-        };
+        if ($scope.docs[i].event == "needsign") $scope.docs[i].event = "needs signing";
         i++;
-      });
     });
-    if ($scope.docs.length == 0) {
-      $scope.noDocs = true;
-    }
   });
 
   $scope.activity = [];

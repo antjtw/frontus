@@ -24,11 +24,24 @@
     <div class="headsection row-fluid">
         <h1><a href="/company/documents/"><i class="button icon-reply icon-2x"></i></a>{{document.docname}}</h1>
 
-        <div class="row-fluid">
+      <div class="row-fluid">
+        <div class="subnav-controls">
+          <div>
+            <a ng-click="shouldBeOpen=true"><button class="button subText blueButton" style="float:right;">Share Document</button></a>
+          </div>
+          <div class="DivHelper"></div>
+        </div>
+      </div>
+
+
+
+
+      <div class="row-fluid">
 
           <ul class="bodyText maintabs">
-            <a href="/company/documents/status?doc={{docKey}}"><li class="button">Status</li></a>
-            <li class="selectedtab">View</li>
+            <a href="/company/documents/status?doc={{docKey}}">
+              <li class="button">Status</li></a>
+              <li class="selectedtab">View</li>
            </ul>
         </div>
     </div>
@@ -37,16 +50,17 @@
   <div class="row-fluid">
     <div class="span3 docVersiontab leftBlock">
       <ul>
-        <li>
-          <span ng-click="getOriginal();">Original</span>
+        <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal();">
+          <span>Original</span>
         </li>
-        <li ng-repeat="doc in docversions">
-          <span ng-click="pickInvestor(doc);">{{doc.investor}}</span>
+        <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
+          <span>{{doc.investor}}</span>
         </li>
       </ul>
     </div>
     <div class="span9 companyDocViewer">
-        <doc-viewer doc-id="docId" invq="invq" needsign="false" countersign="countersign" finalized="finalized"></doc-viewer>
+        <div><button class="button subText greyButton" ng-click="fakeSign(currentDoc)">Sign</button></div>
+        <doc-viewer doc-id="docId" invq="false" counterparty="true" needsign="false" countersign="countersign" finalized="finalized"></doc-viewer>
     </div>
 
   </div>

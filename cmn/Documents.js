@@ -157,7 +157,7 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq', finalized:'=finalized', needsign:'=needsign', countersign:'=countersign'},
+    scope: { docId: '=docId', invq:'=invq', counterparty:'=counterparty', finalized:'=finalized', needsign:'=needsign', countersign:'=countersign'},
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
@@ -226,6 +226,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
     });
   };
+
+  $scope.$watch("docId", $scope.init);
 
   $scope.closeMe = function (ev) {
     var z = ev.currentTarget;
@@ -581,7 +583,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     canvas.width += fudge; // why do I need this?
 
     var img = new Image();
-    var imgurl = "url(/photo/docpg?id="+$scope.docId+"&investor="+$scope.invq+"&page="+page+")";
+    var imgurl = "url(/photo/docpg?id="+$scope.docId+"&investor="+$scope.invq+"&page="+page+"&counterparty="+$scope.counterparty+")";
     img.onload = function (x) {
       var ctx = canvas.getContext("2d");
       ctx.drawImage(img, lo, to, docpanel.offsetWidth + fudge, docpanel.offsetHeight);

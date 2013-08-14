@@ -1,18 +1,18 @@
 @font-face {
-	font-family: 'logo';
-	src:url('/cmn/fonts/logo/sharewave.eot');
-	src:url('/cmn/fonts/logo/sharewave.eot?#iefix') format('embedded-opentype'),
-		url('/cmn/fonts/logo/sharewave.woff') format('woff'),
-		url('/cmn/fonts/logo/sharewave.ttf') format('truetype'),
-		url('/cmn/fonts/logo/sharewave.svg#sharewave') format('svg');
+	font-family: 'sharewave';
+	src:url('fonts/sharewave.eot');
+	src:url('fonts/sharewave.eot?#iefix') format('embedded-opentype'),
+		url('fonts/sharewave.woff') format('woff'),
+		url('fonts/sharewave.ttf') format('truetype'),
+		url('fonts/sharewave.svg#sharewave') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
-[data-logo]:before {
-	font-family: 'logo';
-	content: attr(data-logo);
+[data-icon]:before {
+	font-family: 'sharewave';
+	content: attr(data-icon);
 	speak: none;
 	font-weight: normal;
 	font-variant: normal;
@@ -28,7 +28,7 @@ you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
 .icon-sharewave {
-	font-family: 'logo';
+	font-family: 'sharewave';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
