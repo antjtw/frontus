@@ -36,6 +36,7 @@ docviews.filter('fromNow', function() {
 function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScope) {
 
   var company = $rootScope.selected.company;
+  if ($rootScope.selected.isAdmin) document.location.href="/company/documents";
   $scope.currentCompany = company;
 
 	SWBrijj.tblmm("document.my_investor_library", "company", company).then(function(data) {
