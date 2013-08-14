@@ -350,7 +350,9 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     $scope.fullview = false;
   });
 
-  $scope.changeVisibility = function () {
+  $scope.changeVisibility = function (value) {
+    console.log(value);
+    $scope.fullview = value;
     var visibility = false;
     if ($scope.fullview == 'full') {
       visibility = true;

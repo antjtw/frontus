@@ -130,7 +130,7 @@ ownership.service('calculate', function () {
     };
 
     // Returns the percentage ownership for each shareholder
-    this.sharePercentage = function (row, rows, issuekeys) {
+    this.sharePercentage = function (row, rows, issuekeys, sharesum, totalshares) {
         var percentage = 0;
         var totalpercentage = 0;
         for (var i = 0, l = issuekeys.length; i < l; i++) {
@@ -149,7 +149,7 @@ ownership.service('calculate', function () {
                 }
             }
         }
-        return (percentage + (this.shareSum(row) / this.totalShares(rows) * (100 - totalpercentage)));
+        return (percentage + (sharesum / totalshares * (100 - totalpercentage)));
     };
 
     // Calculates total shares for the captable
@@ -208,6 +208,13 @@ ownership.service('calculate', function () {
     this.lastIssue = function (issues) {
         if (issues[issues.length-2]) {
             return issues[issues.length-2].date;
+        }
+    };
+
+    //Returns the post money valuation for the most recent issue assuming such a value is given
+    this.lastPostMoney = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].postmoney;
         }
     };
 });

@@ -23,19 +23,18 @@
       <section class="recipientInfo statusBlock">
       <div><p class="title">Ownership Permissions</p></div>
       <form ng-show="fullview">
-        <table>
-        <tr>
-          <td>
-            <label for="visibilitySelect">Type:</label>
-          </td>
-          <td>
-            <select ng-model="fullview" ng-change="changeVisibility()" id="visibilitySelect">
-              <option value="personal">Personal Only</option>
-              <option value="full">Full View</option>
-            </select>
-          </td>
-        </tr>
-        </table>
+        <label for="visibilitySelect">Type:</label>
+          <li class="dropdown standard">
+              <a class="dropdown-toggle">
+                  {{fullview}}
+              </a>
+              <ul class="dropdown-menu">
+                  <li>
+                      <a ng-click="changeVisibility('personal')">Personal Only</a>
+                      <a ng-click="changeVisibility('full')">Full View</a>
+                  </li>
+              </ul>
+          </li>
       </form>
       <div style="display: none;" ng-hide="fullview">You've not shared your cap table with this person.</div>
     </section>

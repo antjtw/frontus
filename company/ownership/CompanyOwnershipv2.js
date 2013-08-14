@@ -1063,15 +1063,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     // Toggles sidebar back and forth
     $scope.toggleSide = function () {
-        if ($scope.sideToggle) {
-          $scope.sideToggleName = "Show"
-          return true
+        if (!$scope.sideToggle) {
+            $scope.sideToggleName = "Hide"
+            return false
+        } else {
+            $scope.sideToggleName = "Show"
+            return true
         }
-        else {
-          $scope.sideToggleName = "Hide"
-          return false
-        };
-
     };
 
 
@@ -1334,6 +1332,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         return memformatamount(amount);
     };
 
+    $scope.formatDollarAmount = function(amount) {
+        var output = memformatamount(amount);
+        if (output) {
+            output = "$" + output
+        }
+        return (output);
+    };
+
     // Functions derived from services for use in the table
 
     // Number of shareholders
@@ -1342,8 +1348,9 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Total Shares in captable
+    var totalShares = memoize(calculate.totalShares)
     $scope.totalShares = function(rows) {
-        return calculate.totalShares(rows);
+        return totalShares(rows);
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
@@ -1365,8 +1372,9 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Total percentage ownership for each shareholder row
+    var sharePercentage = memoize(calculate.sharePercentage);
     $scope.sharePercentage = function(row, rows, issuekeys) {
-        return calculate.sharePercentage(row, rows, issuekeys);
+        return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
     };
 
     // Total percentage ownership for each shareholder row
@@ -1377,6 +1385,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     // Last issue date for the sidebar In Brief section
     $scope.lastIssue = function() {
         return calculate.lastIssue($scope.issues);
+    };
+
+    // Last issue date for the sidebar In Brief section
+    $scope.lastPostMoney = function() {
+        return calculate.lastPostMoney($scope.issues);
     };
 };
 
@@ -1416,6 +1429,8 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         // Pivot from transactions to the rows of the table
         $scope.trans = data;
         angular.forEach($scope.trans, function (tran) {
+            var offset = tran.date.getTimezoneOffset();
+            tran.date = tran.date.addMinutes(offset);
             tran.datekey = tran['date'].toUTCString();
             if ($scope.uniquerows.indexOf(tran.investor) == -1) {
                 $scope.uniquerows.push(tran.investor);
@@ -1586,8 +1601,11 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
             angular.forEach(exercises, function (value, key) {
                 angular.forEach($scope.trans, function (tran) {
                     if (tran.tran_id == key) {
-                        tran.amount = value * tran.price;
-                        $scope.saveTran(tran);
+                        // Check that a price has been given
+                        if (tran.price) {
+                            tran.amount = value * tran.price;
+                            $scope.saveTran(tran);
+                        }
                     }
                 });
             });

@@ -115,7 +115,7 @@ input:focus, textarea:focus {
 
 /* Fonts */
 
-p, input, button, select, textarea, a, address { 
+p, button, select, textarea, a, address {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -292,8 +292,15 @@ h2 {
 }
 
 .navbounder {
-	width: 1024px;
+	max-width: 1024px;
 	margin: 0 auto 0 auto;
+}
+
+.maincontent {
+    max-width: 1024px;
+    width: 100%;
+    overflow-x: auto;
+    margin: 0 auto 0 auto;
 }
 
 .topnav {
@@ -558,7 +565,7 @@ h2 {
 }
 
 .subnav-controls {
-	/* height: 82px; */
+	height: 82px;
 	white-space: nowrap;
 }
 
@@ -812,6 +819,12 @@ form.inputs {
 	padding-top:20px;
     border-color: #bdc3c7;
     border-left: 1px solid;
+}
+
+.coreEdit input {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
 }
 
 #passwordEdit {
@@ -1168,6 +1181,12 @@ form.inputs {
   height: 112px;
 }
 
+.container.scaling {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto 0 auto;
+}
+
 .footerLinks ul {
 
 	list-style-type:none;
@@ -1261,10 +1280,11 @@ form.inputs {
 
 .tableView.captable .output.clickable {
     pointer-events: auto;
+    top: -9px;
 }
 
 .tableView.captable .output.footer {
-    top:26px;
+    top: -9px;
 }
 
 .tableView.captable .output.second {
@@ -1521,6 +1541,44 @@ tr.rowSelected {
 }
 
 /* Dropdown buttons */
+
+.dropdown.standard {
+    list-style: none;
+}
+
+.standard .dropdown-toggle {
+    display: block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 30px;
+    width: 120px;
+    cursor: pointer;
+    outline: 1px solid #E3E3E3;
+    position: relative;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 30px;
+}
+
+.standard .dropdown-toggle:after {
+    position: absolute;
+    right:-21px;
+    content: '';
+    width:20px;
+    height:30px;
+    outline: 1px solid #E3E3E3;
+
+}
+
+.standard .dropdown-toggle:hover {
+    background-color: #E3E3E3;
+}
+
+.standard .dropdown-menu {
+    padding: 0;
+    margin: 0;
+}
 
 .edittoggle > .btn {
 	border-radius: 0 !important;
