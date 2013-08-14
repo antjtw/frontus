@@ -148,6 +148,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$rootScope.notification.color = color;
 		$rootScope.notification.style = "notification " + $rootScope.notification.color;
 		$rootScope.notification.message = message;
+		$rootScope.$apply();
 		setTimeout(function() { 
 			$rootScope.notification.visible = false; 
 			$rootScope.$apply();
