@@ -1260,6 +1260,10 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
     };
 
+    $scope.autoCheck = function(person) {
+        return person != null && person.length > 0;
+    }
+
     $scope.turnOnShares = function () {
         angular.forEach($scope.rows, function (row) {
             row.send = $scope.selectAll;

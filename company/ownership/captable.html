@@ -19,10 +19,10 @@
                     <span>Email</span>
                 </li>
                 <li ng-repeat="row in rows | shareList">
-                    <input class="checkbox" ng-model="row.send" type="checkbox">
+                    <input class="checkbox" ng-model="row.send" type="checkbox" tabindex="-1">
                     <span class="capshareNames">{{row.name}}</span>
                     <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}"
-                           ng-disabled="row.emailkey" ng-model="row.email">
+                           ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)">
                 </li>
             </ul>
             <ul class="extrasAdd">
