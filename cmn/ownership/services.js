@@ -210,6 +210,13 @@ ownership.service('calculate', function () {
             return issues[issues.length-2].date;
         }
     };
+
+    //Returns the post money valuation for the most recent issue assuming such a value is given
+    this.lastPostMoney = function (issues) {
+        if (issues[issues.length-2]) {
+            return issues[issues.length-2].postmoney;
+        }
+    };
 });
 
 ownership.service('switchval', function () {

@@ -292,8 +292,15 @@ h2 {
 }
 
 .navbounder {
-	width: 1024px;
+	max-width: 1024px;
 	margin: 0 auto 0 auto;
+}
+
+.maincontent {
+    max-width: 1024px;
+    width: 100%;
+    overflow-x: auto;
+    margin: 0 auto 0 auto;
 }
 
 .topnav {
@@ -1172,6 +1179,12 @@ form.inputs {
 
 .push {
   height: 112px;
+}
+
+.container.scaling {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto 0 auto;
 }
 
 .footerLinks ul {
