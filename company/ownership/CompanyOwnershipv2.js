@@ -427,6 +427,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
     };
 
+    $scope.saveIssueAssign = function (issue, field, i) {
+        if (i) {
+            issue[field] = i;
+        }
+        $scope.saveIssueCheck(issue, field)
+    }
+
     $scope.saveIssueCheckDate = function (issue) {
         //Fix the dates to take into account timezone differences
         var offset = issue.date.getTimezoneOffset();
@@ -791,6 +798,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+    $scope.saveTranAssign = function (transaction, field, value) {
+        if (value) {
+            transaction[field] = value;
+        }
+        $scope.saveTran(transaction);
+    };
+
     // Preformatting on the date to factor in the local timezone offset
     $scope.saveTranDate = function (transaction) {
         //Fix the dates to take into account timezone differences.
@@ -1135,12 +1149,13 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.irevert = function (issue) {
-        angular.forEach($scope.issues, function(coreIssue) {
-           if (coreIssue.issue == issue.issue) {
-               coreIssue = $scope.issueRevert;
-               $scope.activeIssue = coreIssue;
+        for (var i = 0, l = $scope.issues.length; i < l; i++) {
+           if ($scope.issues[i].issue == issue.issue) {
+               $scope.issues[i] = $scope.issueRevert;
+               $scope.activeIssue = $scope.issueRevert;
            }
-        });
+        };
+        console.log($scope.issues);
     };
 
 
@@ -1164,6 +1179,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
 
         return options;
+    }
+
+    $scope.pickmOption = function(value) {
+        $scope.pickTran = value;
+        console.log($scope.pickTran);
     }
 
     $scope.mComplete = function (picked, number, type) {

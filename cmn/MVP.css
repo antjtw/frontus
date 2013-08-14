@@ -7,6 +7,7 @@ html, body {
   padding: 0 !important;
   margin: 0 !important;
   background-color:#FFFFFF;
+  font-family: 'FS Elliot Web Regular', sans-serif;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -115,7 +116,7 @@ input:focus, textarea:focus {
 
 /* Fonts */
 
-p, button, select, textarea, a, address {
+p, button, select, textarea, a, address, div, input {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -1430,6 +1431,11 @@ td.tranViewSelected {
     border-left: 0;
 }
 
+div.rightTitle {
+    height: 22px;
+    margin: 0 0 10px 0;
+}
+
 .rightTitle > span {
     display: inline-block;
     width: 160px;
@@ -1544,6 +1550,7 @@ tr.rowSelected {
 
 .dropdown.standard {
     list-style: none;
+    display: inline-block;
 }
 
 .standard .dropdown-toggle {
@@ -1552,16 +1559,23 @@ tr.rowSelected {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     height: 30px;
-    width: 120px;
+    width: 140px;
     cursor: pointer;
     outline: 1px solid #E3E3E3;
     position: relative;
     text-align: left;
     padding-left: 20px;
     line-height: 30px;
+    margin: 0;
 }
 
-.standard .dropdown-toggle:after {
+.standard .dropdown-toggle > span {
+    position:absolute;
+    right: -19px;
+    font-size: 16px;
+}
+
+.standard .dropdown-toggle:before {
     position: absolute;
     right:-21px;
     content: '';
@@ -1573,11 +1587,44 @@ tr.rowSelected {
 
 .standard .dropdown-toggle:hover {
     background-color: #E3E3E3;
+    color: #8D8D8D;
 }
 
 .standard .dropdown-menu {
     padding: 0;
     margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: 0;
+    outline: 1px solid #E3E3E3;
+    width: 161px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.standard.small .dropdown-toggle {
+    width: 79px;
+    height: 22px;
+    line-height: 22px;
+}
+
+.standard.small .dropdown-toggle:before {
+  height: 22px
+}
+.standard.small .dropdown-menu , .standard.small .dropdown-menu > li , .standard.small .dropdown-menu > li > a {
+    box-sizing: border-box;
+    width: 101px;
+    min-width: 101px;
+}
+
+.standard .dropdown-menu > li > a {
+    color: #8D8D8D;
+}
+
+.standard .dropdown-menu > li > a:hover {
+    background-color: #E3E3E3;
+    background-image: none;
+    color: #8D8D8D;
 }
 
 .edittoggle > .btn {

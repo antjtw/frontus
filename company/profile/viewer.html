@@ -22,20 +22,21 @@
     <div class="row-fluid">
       <section class="recipientInfo statusBlock">
       <div><p class="title">Ownership Permissions</p></div>
-      <form ng-show="fullview">
-        <label for="visibilitySelect">Type:</label>
-          <li class="dropdown standard">
+      <div ng-show="fullview" class="cf">
+        <span class="pull-left">Type:</span>
+          <li class="dropdown standard pull-left">
               <a class="dropdown-toggle">
                   {{fullview}}
+                  <span aria-hidden="true" data-icon="&#xe031;"></span>
               </a>
               <ul class="dropdown-menu">
                   <li>
-                      <a ng-click="changeVisibility('personal')">Personal Only</a>
-                      <a ng-click="changeVisibility('full')">Full View</a>
+                      <a ng-click="changeVisibility('Personal Only')">Personal Only</a>
+                      <a ng-click="changeVisibility('Full View')">Full View</a>
                   </li>
               </ul>
           </li>
-      </form>
+      </div>
       <div style="display: none;" ng-hide="fullview">You've not shared your cap table with this person.</div>
     </section>
     <br>

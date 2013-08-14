@@ -344,7 +344,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
   };
 
   SWBrijj.tblm('ownership.company_audit', ['email', 'fullview'], 'email', userId).then(function(x) {
-    $scope.fullview = (x.fullview) ? 'full':'personal';
+    $scope.fullview = (x.fullview) ? 'Full View':'Personal Only';
     console.log($scope.fullview);
   }).except(function() {
     $scope.fullview = false;
@@ -354,7 +354,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     console.log(value);
     $scope.fullview = value;
     var visibility = false;
-    if ($scope.fullview == 'full') {
+    if ($scope.fullview == 'Full View') {
       visibility = true;
     }
     SWBrijj.proc('ownership.update_investor_captable', userId, visibility).then(function (data) {

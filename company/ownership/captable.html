@@ -45,9 +45,21 @@
         <form>
             <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
             <br>
-            <select ng-model="pickTran" ng-options="i.date as i.date | date:'mediumDate' for i in dateoptions();">
-                <option value="">New Transaction</option>
-            </select>
+            <div style="margin-left: 100px;">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{pickTran.date | date:'mediumDate'}}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a>New Transaction</a>
+                        </li>
+                        <li ng-repeat="i in dateoptions();">
+                            <a ng-click="pickmOption(i)">{{i.date | date:'mediumDate'}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
         </form>
     </div>
     <div class="modalButtons">
@@ -338,29 +350,49 @@
                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
                                                                                           ng-model="activeIssue.totalauth"></p>
 
-                                <p class="rightTitle"><span>Liquidation Preference</span>
-                                    <select ng-disabled="toggleView();" ng-init="activeIssue.liquidpref"
-                                            ng-change="saveIssueCheck(activeIssue, 'liquidpref')" ng-model="activeIssue.liquidpref"
-                                            ng-options="i for i in liquidpref">
-                                    </select>
-                                </p>
+                                <div class="rightTitle"><span>Liquidation Preference</span>
+                                    <li class="dropdown standard small">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.liquidpref}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in liquidpref">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'liquidpref', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
 
-                                <p class="rightTitle"><span>Participating Preferred</span>
-                                    <select ng-disabled="toggleView();" ng-init="activeIssue.partpref"
-                                            ng-change="saveIssueCheck(activeIssue, 'partpref')" ng-model="activeIssue.partpref"
-                                            ng-options="i for i in tf">
-                                    </select>
-                                </p>
+                                <div class="rightTitle"><span>Participating Preferred</span>
+                                    <li class="dropdown standard small">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.partpref}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in tf">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'partpref', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+
                             </accordion-group>
                           <span ng-show="trantype('options', activeIssue.atype);">
                             <accordion-group heading="Options">
-                                <p class="rightTitle"><span>Underlying Security</span>
-                                    <select ng-disabled="toggleView();" ng-init="activeIssue.optundersec"
-                                            ng-change="saveIssueCheck(activeIssue, 'optundersec')" ng-model="activeIssue.optundersec"
-                                            ng-options="i for i in allowKeys">
-                                        <option></option>
-                                    </select>
-                                </p>
+
+                                <div class="rightTitle"><span>Underlying Security</span>
+                                    <li class="dropdown standard small">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.optundersec}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in allowKeys">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+
                                 <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
                                                                                ng-class="{'content':!activeIssue.price}"
                                                                                ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
@@ -388,22 +420,37 @@
                                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
                                                                                          ng-model="activeIssue.vestcliff"></p>
 
-                                <p class="rightTitle"><span>Post Cliff Frequency</span>
-                                    <select ng-disabled="toggleView();" ng-init="activeIssue.vestfreq"
-                                            ng-change="saveIssueCheck(activeIssue, 'vestfreq')" ng-model="activeIssue.vestfreq"
-                                            ng-options="i for i in freqtypes">
-                                    </select>
-                                </p>
+                                <div class="rightTitle"><span>Post Cliff Frequency</span>
+                                    <li class="dropdown standard small">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.vestfreq}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in freqtypes">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+
                             </accordion-group>
                           </span>
                           <span ng-show="trantype('debt', activeIssue.atype);">
                             <accordion-group heading="Debt">
-                                <p class="rightTitle"><span>Underlying Security</span>
-                                    <select ng-init="activeIssue.debtundersec" ng-change="saveIssueCheck(activeIssue, 'debtundersec')"
-                                            ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
-                                        <option></option>
-                                    </select>
-                                </p>
+
+                                <div class="rightTitle"><span>Underlying Security</span>
+                                    <li class="dropdown standard small">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.debtundersec}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in allowKeys">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'debtundersec', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+
                                 <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
                                                                                        ng-class="{'content':!activeIssue.interestrate}"
                                                                                        ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
@@ -495,27 +542,50 @@
                                                                                                   ui-event="{blur : 'saveTran(tran)'}"
                                                                                                   ng-model="tran.totalauth"></p>
 
-                                        <p class="rightTitle"><span>Liquidation Preference</span>
-                                            <select ng-disabled="toggleView();" ng-init="tranIssue.liquidpref"
-                                                    ng-change="saveTran(tran)" ng-model="tran.liquidpref"
-                                                    ng-options="i for i in liquidpref">
-                                            </select>
-                                        </p>
 
-                                        <p class="rightTitle"><span>Participating Preferred</span>
-                                            <select ng-disabled="toggleView();" ng-init="tran.partpref" ng-change="saveTran(tran)"
-                                                    ng-model="tran.partpref" ng-options="i for i in tf">
-                                            </select>
-                                        </p>
+                                        <div class="rightTitle"><span>Liquidation Preference</span>
+                                            <li class="dropdown standard small">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.liquidpref}}
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in liquidpref">
+                                                        <a ng-click="saveTranAssign(tran, 'liquidpref', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </div>
+
+                                        <div class="rightTitle"><span>Participating Preferred</span>
+                                            <li class="dropdown standard small">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.partpref}}
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf">
+                                                        <a ng-click="saveTranAssign(tran, 'partpref', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </div>
+
                                     </accordion-group>
                               <span ng-show="trantype('options', tran.atype);">
                                 <accordion-group heading="Options">
-                                    <p class="rightTitle"><span>Underlying Security</span>
-                                        <select ng-disabled="toggleView();" ng-init="tran.optundersec" ng-change="saveTran(tran)"
-                                                ng-model="tran.optundersec" ng-options="i for i in allowKeys">
-                                            <option></option>
-                                        </select>
-                                    </p>
+
+                                    <div class="rightTitle"><span>Underlying Security</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.optundersec}}
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="i in allowKeys">
+                                                    <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </div>
+
                                     <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
                                                                                    ng-class="{'content':!tran.price}"
                                                                                    ui-event="{blur : 'saveTran(tran)'}"
@@ -539,21 +609,38 @@
                                                                                              ui-event="{blur : 'saveTran(tran)'}"
                                                                                              ng-model="tran.vestcliff"></p>
 
-                                    <p class="rightTitle"><span>Post Cliff Frequency</span>
-                                        <select ng-disabled="toggleView();" ng-init="tran.vestfreq" ng-change="saveTran(tran)"
-                                                ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
-                                        </select>
-                                    </p>
+
+                                    <div class="rightTitle"><span>Post Cliff Frequency</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.vestfreq}}
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="i in freqtypes">
+                                                    <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </div>
+
                                 </accordion-group>
                               </span>
                               <span ng-show="trantype('debt', tran.atype);">
                                   <accordion-group heading="Debt">
-                                      <p class="rightTitle"><span>Underlying Security</span>
-                                          <select ng-disabled="toggleView();" ng-init="tran.debtundersec" ng-change="saveTran(tran)"
-                                                  ng-model="tran.debtundersec" ng-options="i for i in allowKeys">
-                                              <option></option>
-                                          </select>
-                                      </p>
+
+                                      <div class="rightTitle"><span>Underlying Security</span>
+                                          <li class="dropdown standard small">
+                                              <a class="dropdown-toggle">
+                                                  {{tran.debtundersec}}
+                                              </a>
+                                              <ul class="dropdown-menu">
+                                                  <li ng-repeat="i in allowKeys">
+                                                      <a ng-click="saveTranAssign(tran, 'debtundersec', i)">{{i}}</a>
+                                                  </li>
+                                              </ul>
+                                          </li>
+                                      </div>
+
                                       <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
                                                                                              ng-class="{'content':!tran.interestrate}"
                                                                                              ui-event="{blur : 'saveTran(tran)'}"
