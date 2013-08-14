@@ -1722,7 +1722,6 @@ var statusController = function ($scope, SWBrijj) {
                 }
             }
 
-            $scope.activity.push({activity: "Created", icon: "icon-star"});
             $scope.shared_dates = [];
             for (var i = 0; i < $scope.activity.length; i++) {
                 $scope.activity[i].link = ($scope.activity[i].count == 1) ? "/company/profile/view?id=" + $scope.activity[i].email : "/company/profile/people";
@@ -1739,12 +1738,7 @@ var statusController = function ($scope, SWBrijj) {
     });
 
     $scope.activityOrder = function(card) {
-        if (card.activity == "Created") {
-            return 0;
-        }
-        else {
-            return -card.whendone;
-        }
+        return -card.whendone;
     };
 
     $scope.opendetails = function(selected) {
