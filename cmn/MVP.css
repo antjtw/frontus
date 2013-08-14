@@ -115,7 +115,7 @@ input:focus, textarea:focus {
 
 /* Fonts */
 
-p, input, button, select, textarea, a, address { 
+p, button, select, textarea, a, address {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -812,6 +812,12 @@ form.inputs {
 	padding-top:20px;
     border-color: #bdc3c7;
     border-left: 1px solid;
+}
+
+.coreEdit input {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
 }
 
 #passwordEdit {
