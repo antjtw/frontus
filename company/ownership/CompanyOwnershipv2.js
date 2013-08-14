@@ -1611,6 +1611,7 @@ var statusController = function ($scope, SWBrijj) {
 
     SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
         $scope.activity = data;
+        console.log(data);
         SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(person) {
             $scope.activityDetail = person;
             for (var ik = 0; ik < $scope.activity.length; ik++) {
@@ -1618,6 +1619,7 @@ var statusController = function ($scope, SWBrijj) {
                     for (var j = 0; j < $scope.activityDetail.length; j++) {
                         if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
                             if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
+                                $scope.activity[ik].email = $scope.activityDetail[j].email;
                                 if ($scope.activityDetail[j].name == null || $scope.activityDetail[j].name.length < 2) 
                                     $scope.activity[ik].namethem = $scope.activityDetail[j].email;
                                 else
@@ -1632,12 +1634,12 @@ var statusController = function ($scope, SWBrijj) {
             $scope.activity.push({activity: "Created", icon: "icon-star"});
             $scope.shared_dates = [];
             for (var i = 0; i < $scope.activity.length; i++) {
+                $scope.activity[i].link = ($scope.activity[i].count == 1) ? "/company/profile/view?id=" + $scope.activity[i].email : "/company/profile/people";
                 if ($scope.activity[i].activity == "shared") {
                     $scope.activity[i].activity = "Shared with ";
                     $scope.activity[i].icon = 'icon-redo';
                     $scope.shared_dates.push(new Date($scope.activity[i].whendone));
-                }
-                else if ($scope.activity[i].activity == "viewed") {
+                } else if ($scope.activity[i].activity == "viewed") {
                     $scope.activity[i].activity = "Viewed by ";
                     $scope.activity[i].icon = 'icon-view';
                 }
