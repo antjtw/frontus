@@ -18,15 +18,14 @@
     <table class="docLibrary tableView bodyText people-table">
       <tr class="column-label">
         <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
-        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">EMAIL ADDRESS</span></th>
+        <th class="button" ng-click="sortBy('email')"><span class="title sortedDown">EMAIL ADDRESS</span></th>
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
         <td><img src=""><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a>
           <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
         </td> 
-        <td><img src="">{{person.email}}</td>
-        <td class="button"><i ng-hide="person.hideLock" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke all access"></i>
+        <td>{{person.email}}</td>
         </tr>
       </tbody>
     </table>

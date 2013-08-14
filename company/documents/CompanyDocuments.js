@@ -49,7 +49,9 @@ docviews.directive('modalupload', function($timeout) {
     templateUrl: "modalUpload.html",
     link: function(scope, element, attrs) {
       scope.$watch('upModal', function(val, oldVal) {
-        if (val) $timeout(function() {scope.draginit(element);} ) ;
+        if (val) $timeout(function() {
+        	// scope.draginit(element);
+        } ) ;
       }); },
     replace:true,
     priority: 20
@@ -81,17 +83,24 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 
 /* Controllers */
 
-function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
+function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
 	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
 		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
 
-  SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
-  		$scope.documents = data;
-	}).except(function(err) { alert(err.message); });
 
+	$scope.loadDocuments = function() {
+		SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
+	  		$scope.documents = data;
+			if ($scope.documents.length == 0) {
+				$scope.noDocs = true;
+			}
+		}).except(function(err) { alert(err.message); });
+	}
+	$scope.loadDocuments();
+	
 	$scope.docOrder = 'docname';
 	$scope.selectedDoc = 0;
   $scope.recipients = [];
@@ -123,90 +132,113 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	$scope.files = [];
 
 	$scope.fmtFileSize = function (file) {
+	  if (file == null) return;
 	  if (file.size > 1024 * 1024 * 1024) return parseFloat(file.size / 1024 / 1024 / 1024).toFixed(2) + " GB";
 	  else if (file.size > 1024 * 1024) return parseFloat(file.size / 1024 / 1024).toFixed(2) + " MB";
 	  else if (file.size > 1024) return parseFloat(file.size / 1024).toFixed(2) + " kB";
 	  else return file.size + " bytes";
 	};
 
-	// init event handlers
-	$scope.dragEnterLeave = function(evt) {
-	  evt.stopPropagation();
-	  evt.preventDefault();
-	  $scope.dropText = "Drop files here...";
-	  $scope.dropClass = "";
-	  $scope.$apply();
-	};
+	// DRAG AND DROP BOX
+	// // init event handlers
+	// $scope.dragEnterLeave = function(evt) {
+	//   evt.stopPropagation();
+	//   evt.preventDefault();
+	//   $scope.dropText = "Drop files here...";
+	//   $scope.dropClass = "";
+	//   $scope.$apply();
+	// };
 
-	$scope.dragOver = function(evt) {
-	  evt.stopPropagation();
-	  evt.preventDefault();
-	  console.log(evt.dataTransfer.types);
-	  var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.some( function(x) { return x == 'Files'; } );
-	  $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
-	  $scope.dropClass = ok ? 'over' : 'not-available';
-	  $scope.$apply();
-	};
+	// $scope.dragOver = function(evt) {
+	//   evt.stopPropagation();
+	//   evt.preventDefault();
+	//   console.log(evt.dataTransfer.types);
+	//   var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.some( function(x) { return x == 'Files'; } );
+	//   $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!';
+	//   $scope.dropClass = ok ? 'over' : 'not-available';
+	//   $scope.$apply();
+	// };
 
-	$scope.drop = function (evt) {
-	  // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
-	  evt.stopPropagation();
-	  evt.preventDefault();
-	  $scope.dropText = 'Drop more files here...';
-	  $scope.dropClass = '';
-	  $scope.$apply();
-	  var files = evt.dataTransfer.files;
-	  if (files.length > 0) {
-	    for (var i = 0; i < files.length; i++) {
-	      $scope.files.push(files[i])
-	    }
-	  }
-	  $scope.$apply();
+	// $scope.drop = function (evt) {
+	//   // console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
+	//   evt.stopPropagation();
+	//   evt.preventDefault();
+	//   $scope.dropText = 'Drop more files here...';
+	//   $scope.dropClass = '';
+	//   $scope.$apply();
+	//   var files = evt.dataTransfer.files;
+	//   if (files.length > 0) {
+	//     for (var i = 0; i < files.length; i++) {
+	//       $scope.files.push(files[i])
+	//     }
+	//   }
+	//   $scope.$apply();
 
-	  // might as well go ahead and upload ( no point in getting a click
-	  $scope.uploadFile();
-	};
+	//   // might as well go ahead and upload ( no point in getting a click
+	//   $scope.uploadFile();
+	// };
 
-	$scope.draginit = function(elm) {
-	  var element = angular.element(".dropbox");
-	//      var element = elm.find('.dropbox');
-	  if (!element) return;
+	// $scope.draginit = function(elm) {
+	//   var element = angular.element(".dropbox");
+	// //      var element = elm.find('.dropbox');
+	//   if (!element) return;
 
-	  /*      element.on("dragenter", dragEnterLeave)
-	   .on("dragleave",dragEnterLeave)
-	   .on("dragover",dragOver)
-	   .on("drop",drop);
-	   */
-	  element = element[0];
-	  element.addEventListener("dragenter", $scope.dragEnterLeave, false);
-	  element.addEventListener("dragleave", $scope.dragEnterLeave, false);
-	  element.addEventListener("dragover", $scope.dragOver, false);
-	  element.addEventListener("drop", $scope.drop, false);
-	};
-
+	//   /*      element.on("dragenter", dragEnterLeave)
+	//    .on("dragleave",dragEnterLeave)
+	//    .on("dragover",dragOver)
+	//    .on("drop",drop);
+	//    */
+	//   element = element[0];
+	//   element.addEventListener("dragenter", $scope.dragEnterLeave, false);
+	//   element.addEventListener("dragleave", $scope.dragEnterLeave, false);
+	//   element.addEventListener("dragover", $scope.dragOver, false);
+	//   element.addEventListener("drop", $scope.drop, false);
+	// };
+	
+	$scope.files = [];
 	$scope.setFiles = function (element) {
-	  $scope.files = [];
 	  for (var i = 0; i < element.files.length; i++) {
 	    $scope.files.push(element.files[i]);
+      	$scope.$apply();
 	  }
 	  $scope.progressVisible = false;
 	};
 
+	$scope.uploading = [];
 	$scope.uploadDropbox = function() {
-	  Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
-	    SWBrijj.uploadLink(files).then( function(x) { console.log(x);}) ;
-	  }, cancel: function() { console.log('canceled'); }
+	  Dropbox.choose( { linkType: 'direct', multiselect: false, success: function(files) {
+	  	console.log(files);
+	 	$scope.progressVisible = true; $scope.noDocs = false;
+	  	$scope.uploading.docname = files[0].name.substring(0, files[0].name.lastIndexOf('.')); // Get name and trim extension
+	  	$scope.$apply(); 
+	    SWBrijj.uploadLink(files).then( function(x) {
+			$scope.progressVisible = false; $scope.files = [];
+			$scope.loadDocuments();
+			$rootScope.notification.show("success", "Your document has been uploaded.");
+	    });
+	  }, cancel: function() { 
+	  	console.log('canceled');
+	  	$scope.progressVisible = false; $scope.files = [];
+	  	}
 	  })
 	};
 	$scope.uploadFile = function () {
 	  var fd = new FormData();
-	  $scope.progressVisible = true;
-	  for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+	  for (var i in $scope.files) {
+	  	$scope.progressVisible = true; $scope.noDocs = false;
+	  	fd.append("uploadedFile", $scope.files[i]);
+	  	$scope.uploading.docname = $scope.files[i].name.substring(0, $scope.files[i].name.lastIndexOf('.')); // Get name and trim extension
+	  }
 	  SWBrijj.uploadFile(fd).then(function (x) {
-	    console.log(x);
+	    console.log('done', x);
+	    $scope.progressVisible = false; $scope.files = [];
+		$scope.loadDocuments();
+		$rootScope.notification.show("success", "Your document has been uploaded.");
 	  }).except(function (x) {
-	        alert(x.message);
-	      });
+	  	$rootScope.notification.show("fail", "There was an error uploading your document.");
+	  	$scope.progressVisible = false; $scope.files = [];
+	  	alert(x.message);
+	  });
 	  /*var xhr = new XMLHttpRequest()
 	   xhr.upload.addEventListener("progress", uploadProgress, false);
 	   xhr.addEventListener("load", uploadComplete, false);
@@ -215,6 +247,13 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	   xhr.open("POST", "/fileupload");
 	   xhr.send(fd) */
 	};
+
+	var dots = document.getElementById('dots');
+
+	var int = setInterval(function() {
+	    if ((dots.innerHTML += '.').length == 4) 
+	        dots.innerHTML = '';
+	}, 333);
 
 	function uploadProgress(evt) {
 	  $scope.$apply(function () {
@@ -240,6 +279,10 @@ function CompanyDocumentListController($scope, $modal, $q, SWBrijj) {
 	  alert("The upload has been canceled by the user or the browser dropped the connection.")
 	}
 
+	window.onbeforeunload = function() {
+		if ($scope.progressVisible)
+			return 'There are uploads in progress. Leaving may result in some uploads not completing.';
+	}
 
 }
 
@@ -362,7 +405,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
       		angular.forEach($scope.activity, function(x) { //Replace emails with names
 		        if (x.namethem != null) {
 		          SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
-		            x.namethem = name[1][0];
+		            	x.namethem = name[1][0];
 		          });
 		        }
 	     	});

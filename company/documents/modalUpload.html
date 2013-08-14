@@ -5,19 +5,20 @@
 </div>
 <div class="modalText">
 
-  <div class="dropbox" ng-class="dropClass">
+<!--   <div class="dropbox" ng-class="dropClass">
     <span>{{dropText}}</span>
-  </div>
+  </div> -->
+
+  <input class="bodyText button uploadButton" type="file" onchange="angular.element(this).scope().setFiles(this)" />
 
   <div ng-show="files.length">
-    <div ng-repeat="file in files.slice(0)">
-      <span>{{file.webkitRelativePath || file.name}}</span>
-      (<span>{{fmtFileSize(file)}}</span>)
-    </div>
+      <span>{{files[0].name}}</span>  
+      (<span>{{fmtFileSize(files[0])}}</span>)
   </div>
 </div>
 <div class="modalButtons">
-  <input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox()" value="Upload with dropbox" />
+  <input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox(); upModal = false;" value="Upload with dropbox" />
+  <button value="Upload" class="button subText greenButton"  ng-click="uploadFile(); upModal = false;">Upload</button>
 </div>
 
 </div>

@@ -24,11 +24,12 @@
       </div>  
     </div> 
   </div>
+
   <div id="{{nav}}">
     <div class="navbar topnav row-fluid">
       <div ng-class="{navbounder:!showLogin, navpadding:showLogin}">
         <ul class="nav pull-left nav-logo">
-          <li><a href="/" ng-href="{{logoLink}}"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a></li>
+          <li><a href="/" ng-href="{{logoLink}}"><img src="/img/logo.png"/></a></li>
         </ul>
         <ul class="nav pull-right nav-item">
           <li style="display: none;" class="dropdown" ng-show="isLoggedIn">
@@ -53,7 +54,7 @@
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
             <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="button" ng-repeat="company in companies">
-                <a class="button" ng-click="select('{{company.company}}')">{{company.name}}</a>
+                <a class="button" ng-click="switch('{{company.company}}')">{{company.name}}</a>
               </li>
             </ul>
           <li>

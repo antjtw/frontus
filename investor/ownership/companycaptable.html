@@ -9,7 +9,7 @@
         <div class="row-fluid">
             <ul class="bodyText maintabs">
                 <li class="selectedtab">Ownership</li>
-                <a href="/investor/ownership/grant">
+                <a ng-show="grantsview" href="/investor/ownership/grant">
                     <li class="button">Grants</li>
                 </a>
             </ul>
@@ -36,7 +36,7 @@
                 <td>%</td>
                 <td></td>
                 <td ng-repeat="one in issues">
-                    <span>UNITS</span>
+                    <span>SHARES</span>
                     <span>PAID</span>
                 </td>
             </tr>
@@ -45,9 +45,11 @@
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
 
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
+                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                    </span>
                 </td>
             </tr>
             <tr ng-hide="fullview" ng-repeat="row in rows">
@@ -55,9 +57,10 @@
                 <td><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
                 <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["u"]}}</p>
-
-                    <p class="captablepair" ng-click="getActiveTransaction(row.name, key)">{{row[key]["a"]}}</p>
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
+                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                    </span>
                 </td>
             </tr>
             <tr ng-hide="fullview">
@@ -72,8 +75,10 @@
                 <td><input disabled value="100%"></td>
                 <td></td>
                 <td ng-repeat="one in issues">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'u');}}">
-                    <input class="captablepair" disabled value="{{colTotal(one.issue, rows, 'a');}}">
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
+                    </span>
                 </td>
             </tr>
         </table>
@@ -399,9 +404,10 @@
                         </span>
                       </span>
                       <span class="capGuide" ng-switch-default>
-                        <h2>Understand your Ownership</h2>
+                        <h2>View your Ownership</h2>
 
-                        <p>Not sure what if anything we want here???</p>
+                        <p>The information to the left contains your company holdings and total percent ownership.
+                            Click on the values within the table to reveal additional detail.</p>
                       </span>
 </div>
 </div>

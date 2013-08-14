@@ -124,6 +124,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         angular.forEach($scope.admins, function(admin) {
           if (admin.email == me[0].email)
             admin.hideLock = true;
+          if (admin.name == null)
+            admin.name = admin.email;
         });
       });
     }).except(initFail);
@@ -144,7 +146,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     var i = 0;
     angular.forEach(data, function(x) {
       if (x.type == 'account') {
-        x.link = "/company/profile/people";
+        x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
           x.activity = "Added ";
           x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
@@ -163,8 +165,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+        x.link = "/company/documents/status?doc=" + x.item_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
         if (x.activity == "uploaded") {
@@ -234,6 +236,8 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
       angular.forEach($scope.people, function(person) {
         if (person.email == me[0].email)
           person.hideLock = true;
+        if (person.name == null) 
+          person.name = person.email;
       });
     });
     console.log(x);
@@ -255,6 +259,20 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
   var rowNumber;
+
+  SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
+    if(x[0].email == userId)
+      document.location.href="/investor/profile";
+  });
+
+  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+    if (!x.name) {
+      history.back();
+    }
+    $scope.user = x;
+  }).except(function(err) {
+    history.back();
+  });
 
   SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
     $scope.docs = x;
@@ -294,8 +312,8 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
+        x.link = "/company/documents/status?doc=" + x.item_id;
+        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
         if (x.activity == "viewed") {
@@ -323,6 +341,23 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
   $scope.activityOrder = function(card) {
     return -card.time;
+  };
+
+  SWBrijj.tblm('ownership.company_audit', ['email', 'fullview'], 'email', userId).then(function(x) {
+    $scope.fullview = (x.fullview) ? 'full':'personal';
+    console.log($scope.fullview);
+  }).except(function() {
+    $scope.fullview = false;
+  });
+
+  $scope.changeVisibility = function () {
+    var visibility = false;
+    if ($scope.fullview == 'full') {
+      visibility = true;
+    }
+    SWBrijj.proc('ownership.update_investor_captable', userId, visibility).then(function (data) {
+      $rootScope.notification.show("success", "Successfully changed cap table visibility")
+    });
   };
 
   $scope.opendetails = function(selected) {

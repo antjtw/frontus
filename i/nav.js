@@ -1,4 +1,4 @@
-function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
+function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$rootScope.selected = [];
@@ -6,7 +6,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 	$scope.nav = 'navBarLoggedOut';
 	var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
 	$scope.showBothBars = false;
-	$scope.isLoggedIn = false;
+	$rootScope.isLoggedIn = false;
 	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
 
 	function changeNav(){
@@ -17,7 +17,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 			$scope.nav = 'navBar';
 			$scope.showBothBars = true;
 		}
-		if ($scope.isLoggedIn) {
+		if ($rootScope.isLoggedIn) {
 			if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
 				$scope.logoLink = '/home/company';
 			} else {
@@ -90,6 +90,12 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 		changeNav();
 	}
 
+	$rootScope.switch = function(companyURL) {
+		$rootScope.select(companyURL);
+		if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) // Refresh page if user is on ownership or documents
+			$route.reload();
+	}
+
 	function isAdmin(companyObj) {
 		if (companyObj.email == "")
 			return true;
@@ -98,12 +104,12 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 
 	var cookie = readCookie("selectedCompany");
 	if (cookie != null) {
-		$scope.isLoggedIn = true;
+		$rootScope.isLoggedIn = true;
 		$rootScope.select(cookie);
 	}
 
 	SWBrijj.procm('account.nav_companies').then(function(x) {
-		$scope.isLoggedIn = true;
+		$rootScope.isLoggedIn = true;
 		for (var i = 0; i < x.length; i++) {
 			$scope.companies.push({company: x[i]['company'], name: x[i]['name'], isAdmin: isAdmin(x[i])});
 		}
@@ -114,7 +120,7 @@ function NavCtrl($scope, $rootScope, $routeParams, SWBrijj) {
 				$rootScope.select(cookie);
 			} else {
 				$rootScope.select($scope.companies[0]['company']);	
-			}	
+			}
 		}
 		
 	}).except(function(ignore) {
