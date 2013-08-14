@@ -94,9 +94,6 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.loadDocuments = function() {
 		SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
 	  		$scope.documents = data;
-			if ($scope.documents.length == 0) {
-				$scope.noDocs = true;
-			}
 		}).except(function(err) { alert(err.message); });
 	}
 	$scope.loadDocuments();
@@ -208,7 +205,7 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.uploadDropbox = function() {
 	  Dropbox.choose( { linkType: 'direct', multiselect: false, success: function(files) {
 	  	console.log(files);
-	 	$scope.progressVisible = true; $scope.noDocs = false;
+	 	$scope.progressVisible = true;
 	  	$scope.uploading.docname = files[0].name.substring(0, files[0].name.lastIndexOf('.')); // Get name and trim extension
 	  	$scope.$apply(); 
 	    SWBrijj.uploadLink(files).then( function(x) {
@@ -225,7 +222,7 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.uploadFile = function () {
 	  var fd = new FormData();
 	  for (var i in $scope.files) {
-	  	$scope.progressVisible = true; $scope.noDocs = false;
+	  	$scope.progressVisible = true;
 	  	fd.append("uploadedFile", $scope.files[i]);
 	  	$scope.uploading.docname = $scope.files[i].name.substring(0, $scope.files[i].name.lastIndexOf('.')); // Get name and trim extension
 	  }
@@ -298,6 +295,9 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
   $scope.finalized = false;
   $scope.library = "document.my_counterparty_library";
   $scope.pages = "document.my_counterparty_codex";
+  $scope.counterparty = false;
+  $scope.library = "document.my_company_library";
+  $scope.pages = "document.my_company_codex";
   $scope.docversions = []
 
   SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
@@ -315,13 +315,15 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 		};
 
 	$scope.pickInvestor = function(doc) {
-		$scope.invq = true;
+		$scope.invq = false;
     $scope.counterparty = true;
     $scope.currentDoc = doc;
 		$scope.docId = doc.doc_id;
     console.log(doc);
 		$scope.countersign = doc.countersign;
-		$scope.finalized = false;
+    $scope.library = "document.my_counterparty_library";
+    $scope.pages = "document.my_counterparty_codex";
+    $scope.finalized = false;
 	};
 
 	$scope.getOriginal = function() {
@@ -331,9 +333,14 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 		$scope.docId = $scope.docKey;
 		$scope.countersign = true;
 		$scope.finalized = false;
+    $scope.library = "document.my_company_library";
+    $scope.pages = "document.my_company_codex";
     console.log($scope.docId);
 	}
 
+  $scope.pageQueryString = function() {
+    return  "id="+$scope.docId+"&investor="+$scope.invq+"&counterparty="+$scope.counterparty;
+  }
   $scope.fakeSign = function(cd) {
     SWBrijj.spoof_procm(cd.investor, "document.sign_document", cd.doc_id).then(function (data) {
       console.log(data);

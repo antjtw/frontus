@@ -25,12 +25,10 @@
         <h1><a href="/company/documents/"><i class="button icon-reply icon-2x"></i></a>{{document.docname}}</h1>
 
       <div class="row-fluid">
-        <div class="subnav-controls">
           <div>
             <a ng-click="shouldBeOpen=true"><button class="button subText blueButton" style="float:right;">Share Document</button></a>
           </div>
           <div class="DivHelper"></div>
-        </div>
       </div>
 
 
@@ -60,7 +58,7 @@
     </div>
     <div class="span9 companyDocViewer">
         <div><button class="button subText greyButton" ng-click="fakeSign(currentDoc)">Sign</button></div>
-        <doc-viewer doc-id="docId" invq="false" counterparty="true" needsign="false" countersign="countersign" finalized="finalized"></doc-viewer>
+        <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false" counterparty="false" needsign="false" countersign="countersign" finalized="finalized"></doc-viewer>
     </div>
 
   </div>

@@ -60,6 +60,7 @@
           </tr>
           <tr ng-show="person.shown" >
           <td colspan="3" class="personDetails status-bar">
+
               <div><span data-icon="&#xe024;" aria-hidden="true"></span>
                 <p class="doubleTime">Delivered</p>
                 <p class="doubleTime">{{person.whendone | date:'MMMM dd, yyyy'}}</p>
@@ -70,10 +71,19 @@
                   <span ng-switch-when="0"><span data-icon="&#xe001;" aria-hidden="true"></span><p class="hltext">Unviewed</p></span>
                   <span ng-switch-default><span data-icon="&#xe001;" aria-hidden="true"></span><p class="doubleTime">Viewed</p><p class="doubleTime">{{person.whenviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.whenviewed | date:'h:mm a'}}</p></span>
               </div>
-              <div ng-switch on="person.deadline" >
-                  <span ng-switch-when="0"><span data-icon="&#xe015;" aria-hidden="true"></span><p class="hltext">Unviewed</p></span>
-                  <span ng-switch-default><span data-icon="&#xe015;" aria-hidden="true"></span><p class="doubleTime">Viewed</p><p class="doubleTime">{{person.whenviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.whenviewed | date:'h:mm a'}}</p></span>
-              </div>
+
+            <div>
+                  <span data-icon="&#xe015;" aria-hidden="true">
+                  <div ng-switch on="person.signature_deadline">
+                    <div ng-switch-when="null"><p>No signature required</p></div>
+                    <div ng-switch-default>
+                      <p class="doubleTime">Signature deadline</p>
+                      <p class="doubleTime">{{person.signature_deadline| date:'MMMM dd, yyyy'}}</p>
+                      <p>{{person.signature_deadline | date:'h:mm a'}}</p>
+                    </div>
+                  </div>
+                  </span>
+            </div>
               <div>
                   <span data-icon="&#xe00d;" aria-hidden="true">
                   <div ng-switch on="person.when_signed">

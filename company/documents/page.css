@@ -19,9 +19,9 @@
 .tableView td.status-bar > div {
     background-color: #F1F1F1;
     text-align: center;
-    padding: 10px 10px 0 10px;
+    padding: 10px 5px 0 5px;
     height: 96px;
-    width: 100px;
+    width: 110px;
     display: inline-block;
     margin: 0 6px 0 6px;
     float: left;

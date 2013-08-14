@@ -157,7 +157,8 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq', counterparty:'=counterparty', finalized:'=finalized', needsign:'=needsign', countersign:'=countersign'},
+    scope: { docId: '=docId', invq:'=invq', counterparty:'=counterparty', finalized:'=finalized', needsign:'=needsign',
+        countersign:'=countersign', pageQueryString: '=pageQueryString'},
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
