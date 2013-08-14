@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<div modal="issueModal" close="iclose()" options="opts">
+<div modal="issueModal" close="iclose(); irevert(changedIssue);" options="opts">
     <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Updating Issue?
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose()"></span>
@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<div modal="capDelete" close="dclose()" options="opts">
+<div modal="capDelete" close="dclose(); revertIssue(missue);" options="opts">
     <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose()"></span>
@@ -110,7 +110,7 @@
     </div>
 </div>
 
-<div modal="rowDelete" close="rclose()" options="opts">
+<div modal="rowDelete" close="rclose(); revertPerson(minvestor);" options="opts">
     <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rclose()"></span>
@@ -244,13 +244,15 @@
                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
                   <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second"></div>
                 </span>
-                <span ng-switch-when="0">
+                <span class="captablepair-box" ng-switch-when="0">
                   <input disabled class="captablepair" placeholder="units"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'>
+                   <div ng-bind="formatAmount(row[key]['u'])" class="output"></div>
                   <input disabled class="captablepair" placeholder="paid"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
+                   <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second"></div>
                 </span>
               </span>
                 </td>

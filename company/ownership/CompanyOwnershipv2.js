@@ -690,6 +690,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         angular.forEach($scope.rows, function (row) {
             if (row.namekey == investor) {
                 row.name = row.namekey;
+                $scope.nameChangeLR(row)
             }
         });
     };
@@ -1155,7 +1156,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                $scope.activeIssue = $scope.issueRevert;
            }
         };
-        console.log($scope.issues);
     };
 
 
