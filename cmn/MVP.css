@@ -1098,7 +1098,7 @@ form.inputs {
 	line-height: 8px;
 	font-size: 12px;
 	font-family: 'FS Elliot Web Regular', sans-serif;
-	padding-bottom: 5px;
+	padding-bottom: 4px;
 }
 
 .activityBlock td i {
@@ -1109,6 +1109,7 @@ form.inputs {
 	font-size: 12px;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	color: #666666;
+    line-height: 14px;
 }
 
 .activityBlock td.time {
