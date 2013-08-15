@@ -396,6 +396,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.getActiveIssue = function (issue) {
+
         $scope.sideBar = 1;
         $scope.activeIssue = issue;
         $scope.issueRevert = angular.copy(issue);
@@ -792,11 +793,28 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Preformatting on the date to factor in the local timezone offset
-    $scope.saveTranDate = function (transaction) {
-        //Fix the dates to take into account timezone differences.
-        var offset = transaction.date.getTimezoneOffset();
-        transaction.date = transaction.date.addMinutes(offset);
-        $scope.saveTran(transaction);
+    $scope.saveTranDate = function (transaction, evt) {
+        if (evt) { // User is typing
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            var dateString = angular.element('#' + transaction.$$hashKey).val();
+
+            if (charCode == 13 || evt == 'blur') { // Enter key press or blurred
+                var date = Date.parse(dateString);
+                if (date.getTime()) {
+                    transaction.date = date;
+                    console.log(transaction.date);
+                    var offset = transaction.date.getTimezoneOffset();
+                    transaction.date = transaction.date.addMinutes(offset);
+                    console.log(transaction.date);
+                    $scope.saveTran(transaction);
+                }
+            }
+        } else { // User is using calendar
+            //Fix the dates to take into account timezone differences.
+            var offset = transaction.date.getTimezoneOffset();
+            transaction.date = transaction.date.addMinutes(offset);
+            $scope.saveTran(transaction);
+        }
     };
 
 
@@ -1703,28 +1721,6 @@ var statusController = function ($scope, SWBrijj) {
     // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
     SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(data) {
         $scope.activity = data;
-        console.log(data);
-        // SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(person) {
-        //     $scope.activityDetail = person;
-        //     console.log(person);
-        //     for (var ik = 0; ik < $scope.activity.length; ik++) {
-        //         if ($scope.activity[ik].count == 1) {
-        //             for (var j = 0; j < $scope.activityDetail.length; j++) {
-        //                 if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
-        //                     if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-        //                         $scope.activity[ik].email = $scope.activityDetail[j].email;
-        //                         if ($scope.activityDetail[j].name == null || $scope.activityDetail[j].name.length < 2) 
-        //                             $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-        //                         else
-        //                             $scope.activity[ik].namethem = $scope.activityDetail[j].name;
-        //                         $scope.activity[ik].whendone = $scope.activityDetail[j].whendone;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // });
-
         $scope.shared_dates = [];
         for (var i = 0; i < $scope.activity.length; i++) {
             $scope.activity[i].timeAgo = moment($scope.activity[i].whendone).fromNow();
