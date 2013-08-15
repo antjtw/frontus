@@ -531,7 +531,7 @@
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p>Date <input id="{{tran.$$hashKey}}" ng-disabled="toggleView();" ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <p>Date <input id="{{tran.$$hashKey}}" ng-disabled="toggleView();" ui-event="{keyup:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                         </p>
                                         <span data-icon="&#xe00c;"
                                               ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
