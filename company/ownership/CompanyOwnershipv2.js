@@ -219,7 +219,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     $scope.trans[i].atype = switchval.tran($scope.trans[i].type);
                     $scope.trans[i].key = $scope.trans[i].issue;
                     $scope.trans[i].unitskey = $scope.trans[i].units;
-                    $scope.trans[i].paidkey = $scope.trans[i].paid;
+                    $scope.trans[i].paidkey = $scope.trans[i].amount;
                     var offset = $scope.trans[i].date.getTimezoneOffset();
                     $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
                     $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
@@ -776,6 +776,17 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
     };
 
+    $scope.revertTran = function (transaction) {
+        angular.forEach($scope.trans, function(tran) {
+            if (tran.tran_id == transaction.tran_id) {
+                console.log("here");
+                tran.units = tran.unitskey;
+                tran.amount = tran.paidkey;
+                $scope.saveTran(tran);
+            }
+        });
+    };
+
     // Function for when the delete transaction button is pressed in the right sidebar
     $scope.manualdeleteTran = function (tran) {
         var d1 = tran['date'].toUTCString();
@@ -789,10 +800,18 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     if (!isNaN(tran.units)) {
                         row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
                         row[tran.issue]['ukey'] = row[tran.issue]['u']
+                        if (row[tran.issue]['u'] == 0) {
+                            row[tran.issue]['u'] = null;
+                            row[tran.issue]['ukey'] = null;
+                        }
                     }
                     if (!isNaN(tran.amount)) {
                         row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
                         row[tran.issue]['akey'] = row[tran.issue]['a']
+                        if (row[tran.issue]['a'] == 0) {
+                            row[tran.issue]['a'] = null;
+                            row[tran.issue]['akey'] = null;
+                        }
                     }
                 }
             });
@@ -861,9 +880,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
         // Delete the transaction if an existing transaction has had all its information removed
         if (isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
-            console.log("deleting transaction");
-            console.log(transaction);
-            $scope.deleteTran(transaction);
+            $scope.tranDeleteUp(transaction);
             return
         }
         // Not quite enough information to save
@@ -914,14 +931,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                                 tran.date = tran.date;
                                 tran.key = tran.issue;
                                 tran.unitskey = tran.units;
-                                tran.paidkey = tran.paid;
+                                tran.paidkey = tran.amount;
                                 tran.tran_id = data[1][0];
                                 transaction.datekey = d1;
                                 tempunits = calculate.sum(tempunits, tran.units);
                                 tempamount = calculate.sum(tempamount, tran.amount);
                                 row[tran.issue]['u'] = tempunits;
-                                row[tran.issue]['a'] = tempamount;
                                 row[tran.issue]['ukey'] = tempunits;
+                                row[tran.issue]['a'] = tempamount;
                                 row[tran.issue]['akey'] = tempamount;
                                 if (!isNaN(parseFloat(tran.forfeited))) {
                                     row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
@@ -1110,7 +1127,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
 
-    //Captable Delete Modal
+    //Captable Delete Issue Modal
 
     $scope.dmodalUp = function (issue) {
         $scope.capDelete = true;
@@ -1134,6 +1151,17 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     $scope.rclose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.rowDelete = false;
+    };
+
+    // Captable transaction delete modal
+    $scope.tranDeleteUp = function (transaction) {
+        $scope.deleteTran = transaction;
+        $scope.tranDelete = true;
+    };
+
+    $scope.deleteclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.tranDelete = false;
     };
 
     //modal for updating issue fields that have different underlying values

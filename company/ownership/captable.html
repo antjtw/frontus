@@ -129,6 +129,25 @@
     </div>
 </div>
 
+<div modal="tranDelete" close="deleteclose();" options="opts">
+    <div class="modalHeader">
+        <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rclose()"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Are you sure you want to delete this transaction?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modalButtons">
+        <div class="left"><button class="button subText greyButton left" ng-click="deleteclose(); revertTran(deleteTran);">No</button></div>
+        <div class="right">
+            <button class="button subText greenButton" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
+        </div>
+    </div>
+</div>
+
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
     <div class="headsection row-fluid">
@@ -495,7 +514,7 @@
                                                        ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                         </p>
                                         <span data-icon="&#xe00c;"
-                                              ng-click="manualdeleteTran(tran);" aria-hidden="true"></span>
+                                              ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
