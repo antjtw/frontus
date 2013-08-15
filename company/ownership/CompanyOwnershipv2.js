@@ -395,6 +395,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.getActiveIssue = function (issue) {
+
         $scope.sideBar = 1;
         $scope.activeIssue = issue;
         $scope.issueRevert = angular.copy(issue);
@@ -826,11 +827,28 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Preformatting on the date to factor in the local timezone offset
-    $scope.saveTranDate = function (transaction) {
-        //Fix the dates to take into account timezone differences.
-        var offset = transaction.date.getTimezoneOffset();
-        transaction.date = transaction.date.addMinutes(offset);
-        $scope.saveTran(transaction);
+    $scope.saveTranDate = function (transaction, evt) {
+        if (evt) { // User is typing
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            var dateString = angular.element('#' + transaction.$$hashKey).val();
+
+            if (charCode == 13 || evt == 'blur') { // Enter key press or blurred
+                var date = Date.parse(dateString);
+                if (date.getTime()) {
+                    transaction.date = date;
+                    console.log(transaction.date);
+                    var offset = transaction.date.getTimezoneOffset();
+                    transaction.date = transaction.date.addMinutes(offset);
+                    console.log(transaction.date);
+                    $scope.saveTran(transaction);
+                }
+            }
+        } else { // User is using calendar
+            //Fix the dates to take into account timezone differences.
+            var offset = transaction.date.getTimezoneOffset();
+            transaction.date = transaction.date.addMinutes(offset);
+            $scope.saveTran(transaction);
+        }
     };
 
 
@@ -1326,6 +1344,10 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
     };
 
+    $scope.autoCheck = function(person) {
+        return person != null && person.length > 0;
+    }
+
     $scope.turnOnShares = function () {
         angular.forEach($scope.rows, function (row) {
             row.send = $scope.selectAll;
@@ -1772,49 +1794,28 @@ var statusController = function ($scope, SWBrijj) {
         })
     });
 
-    SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
+    // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
+    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(data) {
         $scope.activity = data;
-        SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(person) {
-            $scope.activityDetail = person;
-            for (var ik = 0; ik < $scope.activity.length; ik++) {
-                if ($scope.activity[ik].count == 1) {
-                    for (var j = 0; j < $scope.activityDetail.length; j++) {
-                        if (new Date($scope.activity[ik].whendone).getTime() == (new Date(($scope.activityDetail[j].whendone + '').substring(0, 15)).getTime())) {  //horrendous hack to trim hour/sec off date
-                            if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-                                if ($scope.activityDetail[j].name == null || $scope.activityDetail[j].name.length < 2) 
-                                    $scope.activity[ik].namethem = $scope.activityDetail[j].email;
-                                else
-                                    $scope.activity[ik].namethem = $scope.activityDetail[j].name;
-                                $scope.activity[ik].whendone = $scope.activityDetail[j].whendone;
-                            }
-                        }
-                    }
-                }
+        $scope.shared_dates = [];
+        for (var i = 0; i < $scope.activity.length; i++) {
+            $scope.activity[i].timeAgo = moment($scope.activity[i].whendone).fromNow();
+            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2)
+                $scope.activity[i].name = $scope.activity[i].email;
+            $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
+            if ($scope.activity[i].activity == "shared") {
+                $scope.activity[i].activity = "Shared with ";
+                $scope.activity[i].icon = 'icon-redo';
+                $scope.shared_dates.push(new Date($scope.activity[i].whendone));
+            } else if ($scope.activity[i].activity == "viewed") {
+                $scope.activity[i].activity = "Viewed by ";
+                $scope.activity[i].icon = 'icon-view';
             }
-
-            $scope.activity.push({activity: "Created", icon: "icon-star"});
-            $scope.shared_dates = [];
-            for (var i = 0; i < $scope.activity.length; i++) {
-                if ($scope.activity[i].activity == "shared") {
-                    $scope.activity[i].activity = "Shared with ";
-                    $scope.activity[i].icon = 'icon-redo';
-                    $scope.shared_dates.push(new Date($scope.activity[i].whendone));
-                }
-                else if ($scope.activity[i].activity == "viewed") {
-                    $scope.activity[i].activity = "Viewed by ";
-                    $scope.activity[i].icon = 'icon-view';
-                }
-            }
-        });
+        }
     });
 
     $scope.activityOrder = function(card) {
-        if (card.activity == "Created") {
-            return 0;
-        }
-        else {
-            return -card.whendone;
-        }
+        return -card.whendone;
     };
 
     $scope.opendetails = function(selected) {

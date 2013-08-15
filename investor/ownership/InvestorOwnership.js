@@ -9,6 +9,7 @@ owner.config(function ($routeProvider, $locationProvider) {
 
     $routeProvider.
         when('/', {templateUrl: 'companycaptable.html', controller: captableController}).
+        when('/:company', {templateUrl: 'companycaptable.html', controller: captableController}).
         when('/grant', {templateUrl: 'grant.html', controller: grantController}).
         otherwise({redirectTo: '/'});
 });
@@ -98,9 +99,17 @@ owner.run(function ($rootScope) {
 
 });
 
-var captableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope) {
+var captableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
 
-    var company = $rootScope.selected.company;
+    if ($routeParams.company) {
+        var company = $routeParams.company;
+        $rootScope.select(company);
+        $location.url("/investor/ownership");
+    } else {
+        var company = $rootScope.selected.company;        
+        if ($rootScope.selected.isAdmin) document.location.href="/company/ownership";
+    }
+
     $scope.currentCompany = company;
     console.log(company);
 

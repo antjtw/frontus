@@ -6,7 +6,7 @@ app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {controller:PeopleCtrl, templateUrl:'login.html'}).
+      when('/', {controller:PeopleCtrl, templateUrl:'people.html'}).
       when('/company', {controller:CompanyCtrl, templateUrl: 'company.html'}).
       when('/people', {controller:PeopleCtrl, templateUrl: 'people.html'}).
       otherwise({redirectTo:'/'});
@@ -47,6 +47,10 @@ function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
 
 function PeopleCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     $scope.code = $routeParams.code;
+    if ($scope.code == null) {
+      document.location.href="/";
+    }
+    
     SWBrijj.getInvitation($scope.code).then(function(x) {
       initPage($scope, x);
       console.log(x);
