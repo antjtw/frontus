@@ -75,7 +75,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 								break;
 							}
 						}
-					});
+					}).except();
 					SWBrijj.tblm('document.my_investor_library', ['company']).then(function(x) {
 						for (var i = 0; i < x.length; i++) {
 							if (x[i].company == $rootScope.selected.company) {
@@ -83,7 +83,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 								break;
 							}
 						}
-					});
+					}).except();
 				}
 			}
 		}
