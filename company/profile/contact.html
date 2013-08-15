@@ -66,7 +66,7 @@
                   <tr>
                     <td class="activity">{{active.activity}}<a href="{{active.link}}">{{active.target}}</a> </td>
                   </tr>
-                  <tr><td class="time">{{active.time | date:"MMMM d, y"}}</td></tr>
+                  <tr><td class="time">{{active.timeAgo}}</td></tr>
               </table>
           </td>
         </tr>
@@ -96,7 +96,7 @@
   </div>
   <div class="modalButtons two">
       <div class="left"><button class="button subText blueButton left" ng-click="pictureModalClose()">Cancel</button></div>
-      <div class="right"><button value="Upload" class="button subText greenButton"  ng-click="uploadFile(); pictureModalClose();">Upload</button></div>
+      <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(); pictureModalClose();">Upload</button></div>
 
 
     <!--<input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />-->

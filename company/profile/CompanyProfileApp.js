@@ -142,9 +142,10 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   }).except(initFail);
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_activity_cluster').then(function(data) {
+  SWBrijj.procm('global.get_company_activity').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
+      x.timeAgo = moment(x.time).fromNow();
       if (x.type == 'account') {
         x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
@@ -189,7 +190,6 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-    console.log($scope.activity);
   });
 
   $scope.activityOrder = function(card) {
@@ -288,10 +288,11 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
   });
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_investor_activity_cluster', userId).then(function(data) {
+  SWBrijj.procm('global.get_investor_activity', userId).then(function(data) {
     console.log(data);
     var i = 0;
     angular.forEach(data, function(x) {
+      x.timeAgo = moment(x.time).fromNow();
       if (x.type == 'account') {
         x.link = "/company/profile/people";
         if (x.activity == "addadmin") {
@@ -336,7 +337,6 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-    console.log($scope.activity);
   });
 
   $scope.activityOrder = function(card) {
