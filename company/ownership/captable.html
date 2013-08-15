@@ -54,7 +54,7 @@
                         <li>
                             <a>New Transaction</a>
                         </li>
-                        <li ng-repeat="i in dateoptions();">
+                        <li ng-repeat="i in dateoptions(changedTransactions);">
                             <a ng-click="pickmOption(i)">{{i.date | date:'mediumDate'}}</a>
                         </li>
                     </ul>
@@ -65,13 +65,13 @@
     <div class="modalButtons">
         <div class="left"><button class="button subText greyButton left" ng-click="mclose(); mReset();">Undo</button></div>
         <div class="right">
-            <button class="button subText greenButton" ng-click="mclose(); mComplete(pickTran, changedNum, changedType);">Complete
+            <button class="button subText greenButton" ng-click="mclose(); mComplete(changedTransactions, pickTran, changedNum, changedType);">Complete
             </button>
         </div>
     </div>
 </div>
 
-<div modal="issueModal" close="iclose(); irevert(changedIssue);" options="opts">
+<div modal="issueModal" close="iclose();" options="opts">
     <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Updating Issue?
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose()"></span>
@@ -348,20 +348,42 @@
                             </div>
                             <div class="DivHelper"></div>
                         </div>
-                        <accordion close-others="true">
-                            <accordion-group heading="Valuation">
-                                <p class="rightTitle"><span>Pre Money</span><input ng-disabled="toggleView();"
+                        <div class="row-fluid trancore">
+                            <div>
+                                <div>Security Type
+                                    <span ng-show="typeLocked(activeIssue);">
+                                        <li class="dropdown standard">
+                                            <a class="dropdown-toggle">
+                                                {{activeIssue.type}}
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="i in issuetypes">
+                                                    <a ng-click="saveIssueAssign(activeIssue, 'type', i)">{{i}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </span>
+                                    <span ng-hide="typeLocked(activeIssue);">
+                                        {{activeIssue.type}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="DivHelper"></div>
+                        </div>
+                        <!-- Equity Tab -->
+                        <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
+                                <p class="rightTitle"><span>Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                    pattern="[0-9]*(.[0-9]*)*"
                                                                                    ng-class="{'content':!activeIssue.premoney}"
                                                                                    ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
                                                                                    ng-model="activeIssue.premoney"></p>
 
-                                <p class="rightTitle"><span>Post Money</span><input ng-disabled="toggleView();"
+                                <p class="rightTitle"><span>Post-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                     ng-class="{'content':!activeIssue.postmoney}"
                                                                                     ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
                                                                                     ng-model="activeIssue.postmoney"></p>
 
-                                <p class="rightTitle"><span>Price Per Share</span><input ng-disabled="toggleView();"
+                                <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
                                                                                          ng-class="{'content':!activeIssue.ppshare}"
                                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
                                                                                          ng-model="activeIssue.ppshare"></p>
@@ -397,103 +419,102 @@
                                     </li>
                                 </div>
 
-                            </accordion-group>
-                          <span ng-show="trantype('options', activeIssue.atype);">
-                            <accordion-group heading="Options">
+                          </div>
+                          <!-- Options Tab -->
+                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
+                            <div class="rightTitle"><span>Underlying Security</span>
+                                <li class="dropdown standard small">
+                                    <a class="dropdown-toggle">
+                                        {{activeIssue.optundersec}}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="i in allowKeys">
+                                            <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </div>
 
-                                <div class="rightTitle"><span>Underlying Security</span>
-                                    <li class="dropdown standard small">
-                                        <a class="dropdown-toggle">
-                                            {{activeIssue.optundersec}}
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li ng-repeat="i in allowKeys">
-                                                <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i}}</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </div>
+                            <p class="rightTitle"><span>Total Authorized</span><input ng-disabled="toggleView();"
+                                                                                        ng-class="{'content':!activeIssue.totalauth}"
+                                                                                        ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                                        ng-model="activeIssue.totalauth"></p>
 
-                                <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
-                                                                               ng-class="{'content':!activeIssue.price}"
-                                                                               ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
-                                                                               ng-model="activeIssue.price"></p>
+                            <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
+                                                                           ng-class="{'content':!activeIssue.price}"
+                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                           ng-model="activeIssue.price"></p>
 
-                                <p class="rightTitle"><span>Granted</span><input disabled
-                                                                                 value="{{totalGranted(activeIssue.issue, trans);}}">
-                                </p>
+                            <p class="rightTitle"><span>Granted</span><input disabled
+                                                                             value="{{totalGranted(activeIssue.issue, trans);}}">
+                            </p>
 
-                                <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
-                                                                                       ng-class="{'content':!activeIssue.terms}"
-                                                                                       ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
-                                                                                       ng-model="activeIssue.terms"></p>
+                            <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                   ng-class="{'content':!activeIssue.terms}"
+                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
+                                                                                   ng-model="activeIssue.terms"></p>
 
-                                <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                            ng-class="{'content':!activeIssue.vestingbegins}"
-                                                                                            ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
-                                                                                            type="text"
-                                                                                            ng-model="activeIssue.vestingbegins"
-                                                                                            data-date-format="mm/dd/yyyy"
-                                                                                            bs-datepicker></p>
+                            <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
+                                                                                        ng-class="{'content':!activeIssue.vestingbegins}"
+                                                                                        ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
+                                                                                        type="text"
+                                                                                        ng-model="activeIssue.vestingbegins"
+                                                                                        data-date-format="mm/dd/yyyy"
+                                                                                        bs-datepicker></p>
 
-                                <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
-                                                                                         ng-class="{'content':!activeIssue.vestcliff}"
-                                                                                         ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
-                                                                                         ng-model="activeIssue.vestcliff"></p>
+                            <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                     ng-class="{'content':!activeIssue.vestcliff}"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
+                                                                                     ng-model="activeIssue.vestcliff"></p>
 
-                                <div class="rightTitle"><span>Post Cliff Frequency</span>
-                                    <li class="dropdown standard small">
-                                        <a class="dropdown-toggle">
-                                            {{activeIssue.vestfreq}}
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li ng-repeat="i in freqtypes">
-                                                <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </div>
+                            <div class="rightTitle"><span>Post Cliff Frequency</span>
+                                <li class="dropdown standard small">
+                                    <a class="dropdown-toggle">
+                                        {{activeIssue.vestfreq}}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="i in freqtypes">
+                                            <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </div>
+                          </div>
 
-                            </accordion-group>
-                          </span>
-                          <span ng-show="trantype('debt', activeIssue.atype);">
-                            <accordion-group heading="Debt">
+                          <!-- Debt tab -->
+                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
 
-                                <div class="rightTitle"><span>Underlying Security</span>
-                                    <li class="dropdown standard small">
-                                        <a class="dropdown-toggle">
-                                            {{activeIssue.debtundersec}}
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li ng-repeat="i in allowKeys">
-                                                <a ng-click="saveIssueAssign(activeIssue, 'debtundersec', i)">{{i}}</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </div>
+                              <p class="rightTitle"><span>Pre-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                           pattern="[0-9]*(.[0-9]*)*"
+                                                                                           ng-class="{'content':!activeIssue.premoney}"
+                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
+                                                                                           ng-model="activeIssue.premoney"></p>
 
-                                <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                       ng-class="{'content':!activeIssue.interestrate}"
-                                                                                       ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
-                                                                                       ng-model="activeIssue.interestrate"></p>
+                              <p class="rightTitle"><span>Post-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                            ng-class="{'content':!activeIssue.postmoney}"
+                                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
+                                                                                            ng-model="activeIssue.postmoney"></p>
 
-                                <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                       ng-class="{'content':!activeIssue.valcap}"
-                                                                                       ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
-                                                                                       ng-model="activeIssue.valcap"></p>
+                            <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                   ng-class="{'content':!activeIssue.interestrate}"
+                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
+                                                                                   ng-model="activeIssue.interestrate"></p>
 
-                                <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
-                                                                                  ng-class="{'content':!activeIssue.discount}"
-                                                                                  ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
-                                                                                  ng-model="activeIssue.discount"></p>
+                            <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                   ng-class="{'content':!activeIssue.valcap}"
+                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
+                                                                                   ng-model="activeIssue.valcap"></p>
 
-                                <p class="rightTitle"><span>Term</span><input ng-disabled="toggleView();"
-                                                                              ng-class="{'content':!activeIssue.term}"
-                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
-                                                                              ng-model="activeIssue.term"></p>
-                            </accordion-group>
-                          </span>
-                        </accordion>
+                            <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
+                                                                              ng-class="{'content':!activeIssue.discount}"
+                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
+                                                                              ng-model="activeIssue.discount"></p>
+
+                            <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                          ng-class="{'content':!activeIssue.term}"
+                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
+                                                                          ng-model="activeIssue.term"></p>
+                        </div>
                       </span>
 
 
@@ -544,8 +565,9 @@
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
-                                <accordion close-others="true">
-                                    <accordion-group heading="Valuation">
+
+                                <!-- Equity Tab -->
+                                <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
                                         <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                            ng-model="tran.premoney"></p>
@@ -590,9 +612,9 @@
                                             </li>
                                         </div>
 
-                                    </accordion-group>
-                              <span ng-show="trantype('options', tran.atype);">
-                                <accordion-group heading="Options">
+                                    </div>
+                                <!-- Option Tab -->
+                                <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
 
                                     <div class="rightTitle"><span>Underlying Security</span>
                                         <li class="dropdown standard small">
@@ -606,6 +628,14 @@
                                             </ul>
                                         </li>
                                     </div>
+
+                                    <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                              ui-event="{blur : 'saveTran(tran)'}"
+                                                                                              ng-model="tran.totalauth"></p>
+
+                                    <p class="rightTitle"><span>Granted</span><input disabled
+                                                                                     value="{{totalGranted(tran.issue, trans);}}">
+                                    </p>
 
                                     <p class="rightTitle"><span>Price</span><input ng-disabled="toggleView();"
                                                                                    ng-class="{'content':!tran.price}"
@@ -644,46 +674,37 @@
                                         </li>
                                     </div>
 
-                                </accordion-group>
-                              </span>
-                              <span ng-show="trantype('debt', tran.atype);">
-                                  <accordion-group heading="Debt">
+                              </div>
+                            <!-- Debt Tab -->
+                            <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
+                                 <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                   ng-model="tran.premoney"></p>
 
-                                      <div class="rightTitle"><span>Underlying Security</span>
-                                          <li class="dropdown standard small">
-                                              <a class="dropdown-toggle">
-                                                  {{tran.debtundersec}}
-                                              </a>
-                                              <ul class="dropdown-menu">
-                                                  <li ng-repeat="i in allowKeys">
-                                                      <a ng-click="saveTranAssign(tran, 'debtundersec', i)">{{i}}</a>
-                                                  </li>
-                                              </ul>
-                                          </li>
-                                      </div>
-
-                                      <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                             ng-class="{'content':!tran.interestrate}"
-                                                                                             ui-event="{blur : 'saveTran(tran)'}"
-                                                                                             ng-model="tran.interestrate"></p>
-
-                                      <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                             ng-class="{'content':!tran.valcap}"
-                                                                                             ui-event="{blur : 'saveTran(tran)'}"
-                                                                                             ng-model="tran.valcap"></p>
-
-                                      <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
-                                                                                        ng-class="{'content':!tran.discount}"
-                                                                                        ui-event="{blur : 'saveTran(tran)'}"
-                                                                                        ng-model="tran.discount"></p>
-
-                                      <p class="rightTitle"><span>Term</span><input ng-disabled="toggleView();"
-                                                                                    ng-class="{'content':!tran.term}"
+                                 <p class="rightTitle"><span>Post Money</span><input disabled
                                                                                     ui-event="{blur : 'saveTran(tran)'}"
-                                                                                    ng-model="tran.term"></p>
-                                  </accordion-group>
-                                </span>
-                                </accordion>
+                                                                                    ng-model="tran.postmoney"></p>
+
+                                  <p class="rightTitle"><span>Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                         ng-class="{'content':!tran.interestrate}"
+                                                                                         ui-event="{blur : 'saveTran(tran)'}"
+                                                                                         ng-model="tran.interestrate"></p>
+
+                                  <p class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                         ng-class="{'content':!tran.valcap}"
+                                                                                         ui-event="{blur : 'saveTran(tran)'}"
+                                                                                         ng-model="tran.valcap"></p>
+
+                                  <p class="rightTitle"><span>Discount</span><input ng-disabled="toggleView();"
+                                                                                    ng-class="{'content':!tran.discount}"
+                                                                                    ui-event="{blur : 'saveTran(tran)'}"
+                                                                                    ng-model="tran.discount"></p>
+
+                                  <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                ng-class="{'content':!tran.term}"
+                                                                                ui-event="{blur : 'saveTran(tran)'}"
+                                                                                ng-model="tran.term"></p>
+                              </div>
                             </tab>
                             <tab select="createTrantab();" heading="add"></tab>
                         </tabset>

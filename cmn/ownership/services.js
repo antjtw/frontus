@@ -220,23 +220,12 @@ ownership.service('calculate', function () {
 });
 
 ownership.service('switchval', function () {
-    this.tran = function (type) {
-        if (type == "debt" || type == 0) {
-            return 0;
-        }
-        else if (type == "options" || type == 1) {
-            return 1;
-        }
-        else {
-            return 2;
-        }
-    };
 
     this.typeswitch = function (tran) {
-        if (tran.optundersec != null) {
+        if (tran.type = "Option") {
             tran.atype = 1;
         }
-        else if (!isNaN(parseFloat(tran.amount)) && isNaN(parseFloat(tran.units))) {
+        else if (tran.type = "Debt") {
             tran.atype = 2;
         }
         else {
@@ -247,13 +236,13 @@ ownership.service('switchval', function () {
 
     this.typereverse = function (tran) {
         if (tran == 1) {
-            tran = "options";
+            tran = "Option";
         }
         else if (tran == 2) {
-            tran = "debt";
+            tran = "Debt";
         }
         else {
-            tran = "shares";
+            tran = "Equity";
         }
         return tran;
     };
