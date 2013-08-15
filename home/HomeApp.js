@@ -38,6 +38,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   SWBrijj.tblm('global.company_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
+      x.timeAgo = moment(x.time).fromNow();
       if (x.type == 'account') {
         x.link = "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
@@ -79,14 +80,6 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
       }
     });
     $scope.activity = data;
-    console.log($scope.activity);
-    // angular.forEach($scope.activity, function(x) { //Replace emails with names
-    //     if (x.email != null) {
-    //       SWBrijj.proc('account.get_investor_name', x.email, true).then(function(name) {
-    //         x.name = name[1][0];
-    //       });
-    //     }
-    // });
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
@@ -110,6 +103,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   SWBrijj.procm('global.get_investor_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
+      x.timeAgo = moment(x.time).fromNow();
       x.name = "You ";
       if (x.type == 'account') {
         x.link = "/company/profile/people";
