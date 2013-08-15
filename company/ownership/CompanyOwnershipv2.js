@@ -800,7 +800,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
             if (charCode == 13 || evt == 'blur') { // Enter key press or blurred
                 var date = Date.parse(dateString);
-                if (date.getTime()) {
+                if (date) {
                     transaction.date = date;
                     console.log(transaction.date);
                     var offset = transaction.date.getTimezoneOffset();
@@ -811,9 +811,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             }
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
-            var offset = transaction.date.getTimezoneOffset();
-            transaction.date = transaction.date.addMinutes(offset);
-            $scope.saveTran(transaction);
+            if (transaction.date instanceof Date) {
+                var offset = transaction.date.getTimezoneOffset();
+                transaction.date = transaction.date.addMinutes(offset);
+                $scope.saveTran(transaction);
+            }
         }
     };
 
