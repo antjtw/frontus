@@ -1002,6 +1002,7 @@ form.inputs {
 .docLibrary input:disabled {
 	background: none;
     color: #7f8c8d;
+    -webkit-text-fill-color: #7f8c8d; /* Safari Fix */
 }
 
 .searchBox {
@@ -1098,7 +1099,7 @@ form.inputs {
 	line-height: 8px;
 	font-size: 12px;
 	font-family: 'FS Elliot Web Regular', sans-serif;
-	padding-bottom: 4px;
+	padding-bottom: 5px;
 }
 
 .activityBlock td i {
