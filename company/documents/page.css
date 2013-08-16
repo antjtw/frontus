@@ -6,14 +6,27 @@
     cursor: pointer;
 }
 
+.button.subText {
+    float: right;
+    margin-left: 10px;
+}
+
 .companyDocViewer {
     border-left: 1px solid #E3E3E3;
 }
 
+.docVersiontab > ul {
+    margin-left: 0;
+}
 .docVersiontab > ul > li {
-    margin-top: 20px;
-    height: 30px;
+    /* margin-top: 15px; */
+    padding-left: 8px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+
+    /* height: 30px; */
     list-style-type: none;
+    line-height: normal;
 }
 
 .tableView td.status-bar > div {
@@ -42,4 +55,13 @@
 .doubleTime {
     margin-bottom: 0;
     padding-bottom: 0;
+}
+
+.smallDate {
+    font-size: 75%;
+    color: grey;
+}
+
+.activity-feed {
+    margin-left: 15px;
 }

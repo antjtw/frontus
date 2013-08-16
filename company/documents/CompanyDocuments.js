@@ -13,6 +13,7 @@ docviews.config(function($routeProvider, $locationProvider) {
       otherwise({redirectTo: '/'});
 });
 
+/*
 docviews.directive('draggable', function() {
   return {
     restrict: 'A',
@@ -22,7 +23,9 @@ docviews.directive('draggable', function() {
     }
   };
 });
+*/
 
+/*
 docviews.directive('library', function() {
   return {
     restrict: 'A',
@@ -33,6 +36,7 @@ docviews.directive('library', function() {
     }
   }
 });
+*/
 
 docviews.directive('modaldelete', function() {
   return {
@@ -290,11 +294,6 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
   $scope.docId = docKey;
   $scope.docKey = docKey
   $scope.invq = false;
-  $scope.counterparty = true;
-  $scope.countersign = true;
-  $scope.finalized = false;
-  $scope.library = "document.my_counterparty_library";
-  $scope.pages = "document.my_counterparty_codex";
   $scope.counterparty = false;
   $scope.library = "document.my_company_library";
   $scope.pages = "document.my_company_codex";
@@ -320,10 +319,8 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
     $scope.currentDoc = doc;
 		$scope.docId = doc.doc_id;
     console.log(doc);
-		$scope.countersign = doc.countersign;
     $scope.library = "document.my_counterparty_library";
     $scope.pages = "document.my_counterparty_codex";
-    $scope.finalized = false;
 	};
 
 	$scope.getOriginal = function() {
@@ -331,8 +328,6 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
     $scope.counterparty = false;
     $scope.currentDoc = $scope.document;
 		$scope.docId = $scope.docKey;
-		$scope.countersign = true;
-		$scope.finalized = false;
     $scope.library = "document.my_company_library";
     $scope.pages = "document.my_company_codex";
     console.log($scope.docId);
@@ -343,11 +338,26 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
   }
   $scope.fakeSign = function(cd) {
     SWBrijj.spoof_procm(cd.investor, "document.sign_document", cd.doc_id).then(function (data) {
-      console.log(data);
-//      window.location.reload();
+      cd.when_signed = data;
+      $scope.$$childHead.init();
     }).except(function (x) {
           alert(x.message);
         });
+  };
+
+  $scope.renege = function(cd) {
+    SWBrijj.procm("document.renege", cd.doc_id).then(function(data) {
+       cd.when_confirmed = null;
+      window.location.reload();
+    });
+  }
+
+  $scope.rejectSignature = function(cd) {
+    SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
+      cd.when_signed = null;
+      // $scope.$apply();
+      $scope.$$childHead.init();
+    })
   }
 
   }
@@ -365,10 +375,10 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 
 
   // A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
-	SWBrijj.procm("document.get_doc_activity_cluster", docId).then(function(data) {
+	SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
 		$scope.activity = data;
 		console.log('data', data);
-		SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
+		/*SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
 			$scope.activityDetail = person;
 			for (var ik = 0; ik < $scope.activity.length; ik++) {
 				if ($scope.activity[ik].count == 1) {
@@ -381,33 +391,11 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 							}
 					}
 				}
+
 			}
 
-			$scope.shared_dates = [];
-			for (var i = 0; i < $scope.activity.length; i++) {
-				if ($scope.activity[i].activity == "received") {
-					$scope.activity[i].activity = "Shared with ";
-					$scope.activity[i].icon = "icon-redo";
-          			$scope.shared_dates.push(new Date($scope.activity[i].event_time));					
-				}
-				else if ($scope.activity[i].activity == "viewed") {
-					$scope.activity[i].activity = "Viewed by ";
-					$scope.activity[i].icon = "icon-view";
-				}
-				else if ($scope.activity[i].activity == "reminder") {
-					$scope.activity[i].activity = "Reminded ";
-					$scope.activity[i].icon = "icon-redo";
-          			$scope.shared_dates.push(new Date($scope.activity[i].event_time));					
-				}
-				else if ($scope.activity[i].activity == "signed") {
-					$scope.activity[i].activity = "Signed by ";
-					$scope.activity[i].icon = "icon-pen";
-				}
-				else if ($scope.activity[i].activity == "uploaded") {
-					$scope.activity[i].activity = "Uploaded by ";
-					$scope.activity[i].icon = "icon-star";
-				}
-			}
+
+    $scope.shared_dates = [];
       		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
       		angular.forEach($scope.activity, function(x) { //Replace emails with names
 		        if (x.namethem != null) {
@@ -418,7 +406,8 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	     	});
 
 			});
-		});
+     */
+    });
 
 /*  SWBrijj.procm("document.document_status", docId).then(function(data) {
     $scope.userStatus = data;
@@ -463,8 +452,16 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 			console.log(data);
 		});
 	  };
-	
-	$scope.share = function(message, email, sign) {
+
+  $scope.rejectSignature = function(cd) {
+    SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
+      cd.when_signed = null;
+      //$scope.$apply();
+      $scope.$$childHead.init();
+    })
+  }
+
+  $scope.share = function(message, email, sign) {
 		 SWBrijj.procm("document.share_document", docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
 				console.log(data);
 			});
@@ -479,46 +476,12 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	$scope.showStatusDetail = function(person) {
 		 $scope.docversions.forEach(function(name) {
        name.shown = false;
-			 if (person.investor == name.investor) {
-          name.shown = true;
-					SWBrijj.procm("document.get_I_docstatus", name.sent_to, docId).then(function(data) {
-						console.log(data);
-						name.whenshared = data[1].loggedin;
-						if (data[0].loggedin != null) {
-							name.lastlogin = data[0].loggedin;
-						}
-						else {
-							name.lastlogin = 0;	
-						}
-						if (data[2].loggedin != null) {
-							name.lastviewed = data[2].loggedin;
-						}
-						else {
-							name.lastviewed = 0;	
-						}
-						if (data[3].loggedin != null) {
-							name.signed = data[3].loggedin;
-						}
-						else {
-							name.signed = 0;	
-						}
-						name.button = "icon-minus";
-					});
-				}
-		});
+     });
+     person.shown = true;
 	};
 	
 		$scope.reminder = "";
-		  
-		  $scope.modalUp = function () {
-			$scope.shouldBeOpen = true;
-		  };
-/*
-		  $scope.close = function () {
-			$scope.closeMsg = 'I was closed at: ' + new Date();
-			$scope.shouldBeOpen = false;
-		  };
-  */
+
 		  $scope.opts = {
 			backdropFade: true,
 			dialogFade:true,
@@ -556,3 +519,33 @@ angular.module('documentviews').filter('fromNow', function() {
 			  return moment(date).fromNow();
 			}
 		  });
+
+angular.module('documentviews').filter('icon', function() {
+   return function(activity) {
+     if (activity == "received") return "icon-redo";
+     else if (activity == "viewed") return "icon-view";
+     else if (activity == "reminder") return "icon-redo";
+     else if (activity == "signed") return "icon-pen";
+     else if (activity == "uploaded") return "icon-star";
+     else return "hunh?";
+     }
+});
+
+
+
+angular.module('documentviews').filter('description', function() {
+  return function(ac) {
+    var activity = ac.activity;
+    var person = ac.name;
+    if (activity == "sent") return "Sent to "+person;
+    else if (activity == "viewed") return "Viewed by "+person;
+    else if (activity == "reminder") return "Reminded "+person;
+    else if (activity == "signed") return "Signed by "+person;
+    else if (activity == "uploaded") return "Uploaded by "+person;
+    else if (activity == "received") return "";
+    else if (activity == "rejected") return "Rejected by "+person;
+    else if (activity == "countersigned") return "Countersigned by "+person;
+    else return activity + " by "+person;
+  }
+});
+
