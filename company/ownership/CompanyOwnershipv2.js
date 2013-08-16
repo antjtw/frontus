@@ -434,11 +434,31 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         $scope.saveIssueCheck(issue, field)
     }
 
-    $scope.saveIssueCheckDate = function (issue) {
+    $scope.saveIssueCheckDate = function (issue, field, evt) {
         //Fix the dates to take into account timezone differences
-        var offset = issue.date.getTimezoneOffset();
-        issue.date = issue.date.addMinutes(offset);
-        $scope.saveIssueCheck(issue, 'date');
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('#' + issue.$$hashKey).val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    issue.date = date;
+                    var offset = issue.date.getTimezoneOffset();
+                    issue.date = issue.date.addMinutes(offset);
+                    $scope.saveIssueCheck(issue, field);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if (issue.date instanceof Date) {
+                var offset = issue.date.getTimezoneOffset();
+                issue.date = issue.date.addMinutes(offset);
+                $scope.saveIssueCheck(issue, field);
+                keyPressed = false;
+            }
+        }
     };
 
     $scope.saveIssueCheck = function (issue, field) {
@@ -827,19 +847,20 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     // Preformatting on the date to factor in the local timezone offset
+    var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
     $scope.saveTranDate = function (transaction, evt) {
         if (evt) { // User is typing
-            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (evt != 'blur')
+                keyPressed = true;
             var dateString = angular.element('#' + transaction.$$hashKey).val();
-
-            if (charCode == 13 || evt == 'blur') { // Enter key press or blurred
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
                     transaction.date = date;
-                    console.log(transaction.date);
                     var offset = transaction.date.getTimezoneOffset();
                     transaction.date = transaction.date.addMinutes(offset);
-                    console.log(transaction.date);
+                    keyPressed = false;
                     $scope.saveTran(transaction);
                 }
             }
@@ -848,11 +869,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             if (transaction.date instanceof Date) {
                 var offset = transaction.date.getTimezoneOffset();
                 transaction.date = transaction.date.addMinutes(offset);
+                keyPressed = false;
                 $scope.saveTran(transaction);
             }
         }
     };
-
 
     // Save transaction function
     $scope.saveTran = function (transaction) {
