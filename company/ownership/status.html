@@ -110,8 +110,8 @@
              	<td><i class="{{active.icon}}"></i></td>
              	<td>
                 	<table>
-                		<tr><td>{{active.activity}} <ng-pluralize count="active.count" when="{'0': '', '1': '{{active.namethem}}', 'other': '{{active.count}} people'}"></ng-pluralize></td></tr>
-                        <tr><td>{{active.whendone | date:"MMMM d, y"}}</td></tr>
+                		<tr><td>{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
+                        <tr><td>{{active.timeAgo}}</td></tr>
                     </table>
                 </td>
              </tr>

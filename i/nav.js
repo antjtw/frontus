@@ -75,7 +75,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 								break;
 							}
 						}
-					});
+					}).except();
 					SWBrijj.tblm('document.my_investor_library', ['company']).then(function(x) {
 						for (var i = 0; i < x.length; i++) {
 							if (x[i].company == $rootScope.selected.company) {
@@ -83,7 +83,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 								break;
 							}
 						}
-					});
+					}).except();
 				}
 			}
 		}
@@ -148,6 +148,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$rootScope.notification.color = color;
 		$rootScope.notification.style = "notification " + $rootScope.notification.color;
 		$rootScope.notification.message = message;
+		$rootScope.$apply();
 		setTimeout(function() { 
 			$rootScope.notification.visible = false; 
 			$rootScope.$apply();

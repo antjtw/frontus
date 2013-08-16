@@ -7,6 +7,7 @@ html, body {
   padding: 0 !important;
   margin: 0 !important;
   background-color:#FFFFFF;
+  font-family: 'FS Elliot Web Regular', sans-serif;
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -115,7 +116,7 @@ input:focus, textarea:focus {
 
 /* Fonts */
 
-p, input, button, select, textarea, a, address { 
+p, button, select, textarea, a, address, div, input {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 12px;
 	line-height: 18px;
@@ -292,8 +293,15 @@ h2 {
 }
 
 .navbounder {
-	width: 1024px;
+	max-width: 1024px;
 	margin: 0 auto 0 auto;
+}
+
+.maincontent {
+    max-width: 1024px;
+    width: 100%;
+    overflow-x: auto;
+    margin: 0 auto 0 auto;
 }
 
 .topnav {
@@ -814,6 +822,12 @@ form.inputs {
     border-left: 1px solid;
 }
 
+.coreEdit input {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+}
+
 #passwordEdit {
 	padding-bottom:150px;	
 }
@@ -988,6 +1002,7 @@ form.inputs {
 .docLibrary input:disabled {
 	background: none;
     color: #7f8c8d;
+    -webkit-text-fill-color: #7f8c8d; /* Safari Fix */
 }
 
 .searchBox {
@@ -1095,6 +1110,7 @@ form.inputs {
 	font-size: 12px;
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	color: #666666;
+    line-height: 14px;
 }
 
 .activityBlock td.time {
@@ -1166,6 +1182,12 @@ form.inputs {
 
 .push {
   height: 112px;
+}
+
+.container.scaling {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto 0 auto;
 }
 
 .footerLinks ul {
@@ -1261,10 +1283,11 @@ form.inputs {
 
 .tableView.captable .output.clickable {
     pointer-events: auto;
+    top: -9px;
 }
 
 .tableView.captable .output.footer {
-    top:26px;
+    top: -9px;
 }
 
 .tableView.captable .output.second {
@@ -1315,7 +1338,7 @@ td.tranViewSelected {
 	float: right;
 	margin-left: 0;
 	width: 350px;
-    min-height: 500px;
+    min-height: 600px;
     border-left: 1px solid #E3E3E3;
 	transition: all 0.25s;
 	-moz-transition:all 0.25s; /* Firefox 4 */;
@@ -1408,6 +1431,11 @@ td.tranViewSelected {
 
 .nav-tabs > li:first-child > a, .nav-tabs > li:first-child > a:hover, .nav-tabs > li:first-child > a:focus {
     border-left: 0;
+}
+
+div.rightTitle {
+    height: 22px;
+    margin: 0 0 10px 0;
 }
 
 .rightTitle > span {
@@ -1521,6 +1549,85 @@ tr.rowSelected {
 }
 
 /* Dropdown buttons */
+
+.dropdown.standard {
+    list-style: none;
+    display: inline-block;
+}
+
+.standard .dropdown-toggle {
+    display: block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 30px;
+    width: 140px;
+    cursor: pointer;
+    outline: 1px solid #E3E3E3;
+    position: relative;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 30px;
+    margin: 0;
+}
+
+.standard .dropdown-toggle > span {
+    position:absolute;
+    right: -19px;
+    font-size: 16px;
+}
+
+.standard .dropdown-toggle:before {
+    position: absolute;
+    right:-21px;
+    content: '';
+    width:20px;
+    height:30px;
+    outline: 1px solid #E3E3E3;
+
+}
+
+.standard .dropdown-toggle:hover {
+    background-color: #E3E3E3;
+    color: #8D8D8D;
+}
+
+.standard .dropdown-menu {
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: 0;
+    outline: 1px solid #E3E3E3;
+    width: 161px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.standard.small .dropdown-toggle {
+    width: 79px;
+    height: 22px;
+    line-height: 22px;
+}
+
+.standard.small .dropdown-toggle:before {
+  height: 22px
+}
+.standard.small .dropdown-menu , .standard.small .dropdown-menu > li , .standard.small .dropdown-menu > li > a {
+    box-sizing: border-box;
+    width: 101px;
+    min-width: 101px;
+}
+
+.standard .dropdown-menu > li > a {
+    color: #8D8D8D;
+}
+
+.standard .dropdown-menu > li > a:hover {
+    background-color: #E3E3E3;
+    background-image: none;
+    color: #8D8D8D;
+}
 
 .edittoggle > .btn {
 	border-radius: 0 !important;

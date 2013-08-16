@@ -205,11 +205,19 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	  $scope.progressVisible = false;
 	};
 
+	function checkExtension(filename) {
+		var extension = filename.substring(filename.lastIndexOf('.') +1 )
+		var extensions = ['pdf', 'doc', 'docx'];
+		return (extensions.indexOf(extension) > -1);
+	}
 	$scope.uploading = [];
+
 	$scope.uploadDropbox = function() {
 	  Dropbox.choose( { linkType: 'direct', multiselect: false, success: function(files) {
 	  	console.log(files);
-	 	$scope.progressVisible = true;
+		if (!checkExtension(files[0].name))
+			return $rootScope.notification.show("fail", "This file type is not allowed.");
+	 	$scope.progressVisible = true; $scope.noDocs = false;
 	  	$scope.uploading.docname = files[0].name.substring(0, files[0].name.lastIndexOf('.')); // Get name and trim extension
 	  	$scope.$apply(); 
 	    SWBrijj.uploadLink(files).then( function(x) {
@@ -226,19 +234,19 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.uploadFile = function () {
 	  var fd = new FormData();
 	  for (var i in $scope.files) {
-	  	$scope.progressVisible = true;
+	  	if (!checkExtension($scope.files[i].name))
+			return $rootScope.notification.show("fail", "This file type is not allowed.");
+	  	$scope.progressVisible = true; $scope.noDocs = false;
 	  	fd.append("uploadedFile", $scope.files[i]);
 	  	$scope.uploading.docname = $scope.files[i].name.substring(0, $scope.files[i].name.lastIndexOf('.')); // Get name and trim extension
 	  }
 	  SWBrijj.uploadFile(fd).then(function (x) {
-	    console.log('done', x);
 	    $scope.progressVisible = false; $scope.files = [];
 		$scope.loadDocuments();
 		$rootScope.notification.show("success", "Your document has been uploaded.");
 	  }).except(function (x) {
-	  	$rootScope.notification.show("fail", "There was an error uploading your document.");
 	  	$scope.progressVisible = false; $scope.files = [];
-	  	alert(x.message);
+	  	$rootScope.notification.show("fail", "There was an error uploading your document.");
 	  });
 	  /*var xhr = new XMLHttpRequest()
 	   xhr.upload.addEventListener("progress", uploadProgress, false);
