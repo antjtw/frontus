@@ -84,6 +84,17 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 /* Controllers */
 
 function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
+  
+	if ($rootScope.selected.isAdmin) {
+        if ($rootScope.path.indexOf('/investor/') > -1) {
+            document.location.href=$rootScope.path.replace("/investor/", "/company/");
+        }
+    } else {
+        if ($rootScope.path.indexOf('/company/') > -1) {
+            document.location.href=$rootScope.path.replace("/company/", "/investor/");
+        }
+    }
+
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
 	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
@@ -92,15 +103,16 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 
 
 	$scope.loadDocuments = function() {
-		SWBrijj.tblm('document.my_company_library',[ 'doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
+		SWBrijj.tblm('document.my_company_library', ['doc_id','company','docname','last_updated','uploaded_by']).then(function(data) {
 	  		$scope.documents = data;
+	  		console.log(data);
 			if ($scope.documents.length == 0) {
 				$scope.noDocs = true;
 			}
-		}).except(function(err) { alert(err.message); });
+		}).except(function(err) { console.log(err.message); });
 	}
 	$scope.loadDocuments();
-	
+
 	$scope.docOrder = 'docname';
 	$scope.selectedDoc = 0;
   $scope.recipients = [];
@@ -214,8 +226,9 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	$scope.uploadDropbox = function() {
 	  Dropbox.choose( { linkType: 'direct', multiselect: false, success: function(files) {
 	  	console.log(files);
-		if (!checkExtension(files[0].name))
+		if (!checkExtension(files[0].name)) {
 			return $rootScope.notification.show("fail", "This file type is not allowed.");
+		}
 	 	$scope.progressVisible = true; $scope.noDocs = false;
 	  	$scope.uploading.docname = files[0].name.substring(0, files[0].name.lastIndexOf('.')); // Get name and trim extension
 	  	$scope.$apply(); 
@@ -232,9 +245,12 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 	};
 	$scope.uploadFile = function () {
 	  var fd = new FormData();
+	  if ($scope.files.length == 0) return $rootScope.notification.show("fail", "Please select a file to upload.");
 	  for (var i in $scope.files) {
-	  	if (!checkExtension($scope.files[i].name))
+	  	if (!checkExtension($scope.files[i].name)) {
+			$scope.files = [];
 			return $rootScope.notification.show("fail", "This file type is not allowed.");
+		}
 	  	$scope.progressVisible = true; $scope.noDocs = false;
 	  	fd.append("uploadedFile", $scope.files[i]);
 	  	$scope.uploading.docname = $scope.files[i].name.substring(0, $scope.files[i].name.lastIndexOf('.')); // Get name and trim extension
