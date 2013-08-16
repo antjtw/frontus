@@ -88,6 +88,10 @@ input:focus, textarea:focus {
     box-shadow:none;
 }
 
+.pointer {
+    cursor: pointer !important;
+}
+
 /* Accordians */
 
 .accordion-group {
@@ -298,7 +302,6 @@ h2 {
 }
 
 .maincontent {
-    max-width: 1024px;
     width: 100%;
     overflow-x: auto;
     margin: 0 auto 0 auto;
@@ -1569,12 +1572,6 @@ tr.rowSelected {
     padding-left: 20px;
     line-height: 30px;
     margin: 0;
-}
-
-.standard .dropdown-toggle > span {
-    position:absolute;
-    right: -19px;
-    font-size: 16px;
 }
 
 .standard .dropdown-toggle:before {

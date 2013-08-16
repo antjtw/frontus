@@ -856,18 +856,20 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     // Save transaction function
     $scope.saveTran = function (transaction) {
-
+        console.log(transaction);
         //Triggers the multi modal if more than one transaction exists
         if (transaction.length > 1) {
             angular.forEach($scope.rows, function (row) {
                 if (row.name == transaction[0].investor) {
+                    // Deals with Changes in Units
                     if (!isNaN(parseFloat(row[transaction[0].issue]['u']))) {
                         if (parseFloat(row[transaction[0].issue]['u']) != parseFloat(row[transaction[0].issue]['ukey'])) {
                             var changed = (parseFloat(row[transaction[0].issue]['u']) - parseFloat(row[transaction[0].issue]['ukey']));
                             $scope.mmodalUp(changed, "u", transaction);
-                            return;
+                            return
                         }
                     }
+                    // Deals with changes in Price
                     if (!isNaN(parseFloat(row[transaction[0].issue]['a']))) {
                         if (parseFloat(row[transaction[0].issue]['a']) != parseFloat(row[transaction[0].issue]['akey'])) {
                             var changed = (parseFloat(row[transaction[0].issue]['a']) - parseFloat(row[transaction[0].issue]['akey']));
@@ -877,7 +879,14 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     }
                 }
             });
-            return;
+            // Reverts in the case where multitransaction rows are set to blank
+            angular.forEach($scope.rows, function(row) {
+                 if (row.name == transaction[0].investor) {
+                     row[transaction[0].issue]['u'] = row[transaction[0].issue]['ukey']
+                     row[transaction[0].issue]['a'] = row[transaction[0].issue]['akey']
+                 }
+            });
+            return
         }
         // Moves on to the main saving process
         else {
@@ -896,7 +905,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         // Bail out if insufficient data has been added for the transaction
         if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
             console.log("transaction is undefined");
-            return;
+            return
         }
         // Delete the transaction if an existing transaction has had all its information removed
         if (isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
@@ -906,128 +915,135 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         // Not quite enough information to save
         else if (transaction['issue'] == undefined || (isNaN(parseFloat(transaction['units'])) && isNaN(parseFloat(transaction['amount'])))) {
             console.log("incomplete transaction");
-            return;
+            return
         }
         // We have enough info to begin the saving process
         else {
             if (transaction.type == "Option" && transaction.units < 0) {
                 transaction.units = transaction.unitskey;
                 $rootScope.notification.show("fail", "Cannot have a negative number of shares");
+                return
             }
             else if (transaction.amount < 0) {
                 transaction.amount = transaction.amountkey;
                 $rootScope.notification.show("fail", "Cannot have a negative amount for options");
+                return
             }
-            var d1 = transaction['date'].toUTCString();
-            if (transaction['tran_id'] == undefined) {
-                transaction['tran_id'] = '';
-            }
-            if (transaction['partpref'] != null) {
-                var partpref = $scope.strToBool(transaction['partpref']);
-            }
-            if (transaction['vestingbegins'] == undefined) {
-                var vestcliffdate = null
-            }
-
             else {
-                var vestcliffdate = (transaction['vestingbegins']).toUTCString();
-            }
+                var d1 = transaction['date'].toUTCString();
+                if (transaction['tran_id'] == undefined) {
+                    transaction['tran_id'] = '';
+                }
+                if (transaction['partpref'] != null) {
+                    var partpref = $scope.strToBool(transaction['partpref']);
+                }
+                if (transaction['vestingbegins'] == undefined) {
+                    var vestcliffdate = null
+                }
 
-            // Convert amount to a float but remove the NaNs if amount is undefined
-            transaction['amount'] = parseFloat(transaction['amount']);
-            if (isNaN(transaction['amount'])) {
-                transaction['amount'] = null;
-            }
-            transaction['units'] = parseFloat(transaction['units']);
-            if (isNaN(transaction['units'])) {
-                transaction['units'] = null;
-            }
-            console.log(transaction);
-            console.log(transaction.tran_id);
-            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
-                var tempunits = 0;
-                var tempamount = 0;
-                angular.forEach($scope.rows, function (row) {
-                    angular.forEach($scope.trans, function (tran) {
-                        if (row.name == tran.investor) {
-                            if (transaction.tran_id == '' && !tran.tran_id) {
-                                console.log("here");
-                                tran.tran_id = data[1][0];
-                            }
-                            if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
-                                tran.date = tran.date;
-                                tran.key = tran.issue;
-                                tran.unitskey = tran.units;
-                                tran.paidkey = tran.amount;
-                                transaction.datekey = d1;
-                                tempunits = calculate.sum(tempunits, tran.units);
-                                tempamount = calculate.sum(tempamount, tran.amount);
-                                row[tran.issue]['u'] = tempunits;
-                                row[tran.issue]['ukey'] = tempunits;
-                                row[tran.issue]['a'] = tempamount;
-                                row[tran.issue]['akey'] = tempamount;
+                else {
+                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+                }
 
-                                if (row[tran.issue]['u'] == 0) {
-                                    row[tran.issue]['u'] = null;
-                                    row[tran.issue]['akey'] = null;
+                // Convert amount to a float but remove the NaNs if amount is undefined
+                transaction['amount'] = parseFloat(transaction['amount']);
+                if (isNaN(transaction['amount'])) {
+                    transaction['amount'] = null;
+                }
+                transaction['units'] = parseFloat(transaction['units']);
+                if (isNaN(transaction['units'])) {
+                    transaction['units'] = null;
+                }
+                console.log(transaction);
+                console.log(transaction.tran_id);
+                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+                    var tempunits = 0;
+                    var tempamount = 0;
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.trans, function (tran) {
+                            if (row.name == tran.investor) {
+                                if (transaction.tran_id == '' && !tran.tran_id) {
+                                    console.log("here");
+                                    tran.tran_id = data[1][0];
                                 }
-                                if (row[tran.issue]['a'] == 0) {
-                                    row[tran.issue]['a'] = null;
-                                    row[tran.issue]['akey'] = null;
-                                }
-                                if (!isNaN(parseFloat(tran.forfeited))) {
-                                    row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
-                                    row[tran.issue]["ukey"] = row[tran.issue]["u"];
-                                }
-                                row[tran.issue]['x'] = 0;
-                            }
-                        }
-                    });
-                });
+                                if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
+                                    tran.date = tran.date;
+                                    tran.key = tran.issue;
+                                    tran.unitskey = tran.units;
+                                    tran.paidkey = tran.amount;
+                                    transaction.datekey = d1;
+                                    tempunits = calculate.sum(tempunits, tran.units);
+                                    tempamount = calculate.sum(tempamount, tran.amount);
+                                    row[tran.issue]['u'] = tempunits;
+                                    row[tran.issue]['ukey'] = tempunits;
+                                    row[tran.issue]['a'] = tempamount;
+                                    row[tran.issue]['akey'] = tempamount;
 
-                angular.forEach($scope.rows, function(row) {
-                    if (row.name == transaction.issue + " (unissued)") {
-                        angular.forEach($scope.issues, function (issue) {
-                            if (issue.issue == transaction.issue) {
-                                var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
-                                if (leftovers != 0) {
-                                    var shares = {"u": leftovers, "ukey": leftovers};
-                                    row[issue.issue] = shares;
+                                    if (row[tran.issue]['u'] == 0) {
+                                        row[tran.issue]['u'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    if (row[tran.issue]['a'] == 0) {
+                                        row[tran.issue]['a'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    if (!isNaN(parseFloat(tran.forfeited))) {
+                                        row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                        row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                                    }
+                                    row[tran.issue]['x'] = 0;
                                 }
                             }
                         });
+                    });
+
+                    angular.forEach($scope.rows, function(row) {
+                        if (row.name == transaction.issue + " (unissued)") {
+                            angular.forEach($scope.issues, function (issue) {
+                                if (issue.issue == transaction.issue) {
+                                    var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
+                                    if (leftovers != 0) {
+                                        var shares = {"u": leftovers, "ukey": leftovers};
+                                        row[issue.issue] = shares;
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    if (transaction.type == "Option" && !isNaN(parseFloat(transaction.amount))) {
+                        console.log("creating a grant");
+                        var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
+                        modGrant.amount = transaction.amount;
+                        modGrant.unit = (transaction.amount / transaction.price);
+                        angular.forEach($scope.grants, function (grant) {
+                            if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
+                                if (grant.date.toUTCString() == Date.today().toUTCString()) {
+                                    console.log("should be updating")
+                                    modGrant.grant_id = grant.grant_id;
+                                }
+                                else {
+                                    modGrant.amount = modGrant.amount - grant.amount;
+                                    modGrant.unit = modGrant.unit - grant.unit;
+                                }
+                            }
+                        });
+                        console.log(modGrant);
+                        $scope.saveGrant(modGrant);
+                        $scope.grants.push(modGrant);
                     }
-                });
 
-                if (transaction.type == "Option" && transaction.amount != 0) {
-                    var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
-                    modGrant.amount = transaction.amount;
-                    modGrant.unit = (transaction.amount / transaction.price);
-                    angular.forEach($scope.grants, function (grant) {
-                        if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
-                            if (grant.date.toUTCString() == Date.today().toUTCString()) {
-                                modGrant.grant_id = grant.grant_id;
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issues, function (issue) {
+                            if (row[issue.issue] != undefined) {
+                                if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                    row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                }
                             }
-                            else {
-                                modGrant.amount = modGrant.amount - grant.amount;
-                                modGrant.unit = modGrant.unit - grant.unit;
-                            }
-                        }
-                    });
-                    $scope.saveGrant(modGrant);
-                    $scope.grants.push(modGrant);
-                }
-
-                angular.forEach($scope.rows, function (row) {
-                    angular.forEach($scope.issues, function (issue) {
-                        if (row[issue.issue] != undefined) {
-                            if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
-                                row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-                            }
-                        }
+                        });
                     });
                 });
-            });
+            };
         }
         console.log("done saving");
     };
@@ -1250,6 +1266,12 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     $scope.pickmOption = function(value) {
         $scope.pickTran = value;
+        $scope.newtransaction = null;
+    }
+
+    $scope.pickOddOption = function(value) {
+        $scope.newtransaction = value;
+        $scope.pickTran = null;
     }
 
     $scope.mComplete = function (transactions, picked, number, type) {
@@ -1266,6 +1288,10 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     newTran = $scope.tranInherit(newTran, issue);
                 }
             });
+            if (number < 0 && newTran.type == "Option") {
+                $rootScope.notification.show("fail", "Cannot have a negative amount for options");
+                return;
+            }
             $scope.trans.push(newTran);
             $scope.activeTran.push(newTran);
             for (var i = 0; i < $scope.activeTran.length; i++) {
@@ -1287,7 +1313,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             }
             var newTran = picked;
         }
-        console.log(newTran);
         $scope.saveTran(newTran);
     };
 
@@ -1492,7 +1517,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
 
 // Grants page controller
-var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting) {
+var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, switchval, sorting) {
 
     SWBrijj.tblm('account.companies').then(function (comp) {
         $scope.company = comp[0]['company'];
@@ -1749,7 +1774,7 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
 
 };
 
-var statusController = function ($scope, SWBrijj) {
+var statusController = function ($scope, $rootScope, SWBrijj) {
 
     SWBrijj.tblm('account.my_company').then(function (x) {
         $scope.cinfo = x
@@ -1837,7 +1862,11 @@ var statusController = function ($scope, SWBrijj) {
         if (person.fullview == 'full') {
           visibility = true;
         }
-        SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) { });
+        SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) {
+            $rootScope.notification.show("success", "Changed ownership table access level");
+        }).except(function(x) {
+            $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+        });
     };
 
     // Modal for changing access type

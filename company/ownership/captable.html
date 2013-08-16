@@ -48,11 +48,16 @@
             <div style="margin-left: 100px;">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
-                        {{pickTran.date | date:'mediumDate'}}
+                        <span ng-show="newtransaction">
+                            {{newtransaction}}
+                        </span>
+                        <span ng-hide="newtransction">
+                            {{pickTran.date | date:'mediumDate'}}
+                        </span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a>New Transaction</a>
+                            <a ng-click="pickOddOption('New Transaction')">New Transaction</a>
                         </li>
                         <li ng-repeat="i in dateoptions(changedTransactions);">
                             <a ng-click="pickmOption(i)">{{i.date | date:'mediumDate'}}</a>

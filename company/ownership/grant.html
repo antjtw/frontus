@@ -29,9 +29,9 @@
               <th>Forfeited</th>
               <th>Exercised</th>
             </tr>
-          <tr ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows" ng-class="{rowSelected:row.state}">
+          <tr class="pointer" ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows" ng-class="{rowSelected:row.state}">
             <td>
-              <input disabled style="width:180px;" ng-model="row.name"></input>
+              <input class="pointer" disabled style="width:180px;" ng-model="row.name"></input>
             </td>
             <td>{{row.granted}}</td>
             <td>{{row.vested}}</td>
@@ -61,7 +61,7 @@
             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                 <div class="row-fluid trancore">
                     <div>
-                        <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                        <p>Date {{tran.date | date:'shortDate'}}
                         </p>
                     </div>
                     <div class="DivHelper"></div>
