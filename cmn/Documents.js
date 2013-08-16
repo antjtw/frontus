@@ -88,8 +88,8 @@ angular.module('draggable', []).
                  var dx = $event.clientX - $scope.initialMouseX;
                  var dy = $event.clientY - $scope.initialMouseY;
                  $element.css({
-                   top: $scope.startY + dy + 'px',
-                   left: $scope.startX + dx + 'px'
+                   top: ($scope.startY + dy) + 'px',
+                   left: ($scope.startX + dx) + 'px'
                  });
                  return false;
                };
@@ -103,8 +103,12 @@ angular.module('draggable', []).
                $scope.initdrag = function(ev) {
 //            startX = elm.prop('offsetLeft');
 //            startY = elm.prop('offsetTop');
-                 $scope.startX = ev.clientX-5;
-                 $scope.startY = ev.clientY-5 + $document.scrollTop();
+                 var dp = document.querySelector(".docPanel");
+                 var dpr = dp.getBoundingClientRect();
+                 var dprl = dpr.left - dp.offsetLeft;
+                 var dprt =  dpr.top - dp.offsetTop;
+                 $scope.startX = ev.clientX-dprl - ev.offsetX;
+                 $scope.startY = ev.clientY-dprt - ev.offsetY; // +document.scrollTop() ?
                  $scope.initialMouseX = ev.clientX;
                  $scope.initialMouseY = ev.clientY;
                  $scope.mousemove(ev);
@@ -157,7 +161,7 @@ docs.directive('backImg', function(){
 docs.directive('docViewer', function() {
   return {
     restrict: 'EA',
-    scope: { docId: '=docId', invq:'=invq', counterparty:'=counterparty', finalized:'=finalized', needsign:'=needsign', countersign:'=countersign'},
+    scope: { docId: '=docId', invq:'=invq', pageQueryString: '=pageQueryString'},
     templateUrl: '/cmn/docViewer.html',
     controller: DocumentViewController
   }
@@ -184,8 +188,6 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   };
 
   $scope.init = function () {
-    $scope.signable = "";
-    $scope.when_signed = "";
     $scope.notes=[];
 
     SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
@@ -198,11 +200,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       }
     });
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
-      $scope.signable = data["signature_status"] == 'signature requested';
-      $scope.signed = data["when_signed"];
-      if (data['annotations']) {
+      $scope.lib = data;
+      var aa = data['annotations'] || data['counterannotations'];
+      if (aa) {
         // restoreNotes
-        var annots = eval(data['annotations']);
+        var annots = eval(aa);
         var sticky;
         for(var i = 0;i<annots.length;i++) {
           var annot = annots[i];
@@ -433,26 +435,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
      */
   };
 
-  $scope.rejectSign = function (sig) {
-    SWBrijj.procm("document.reject_sign_document", $scope.docId).then(function (data) {
-      window.location.reload();
-    }).except(function (x) {
-          alert(x.message);
-        });
-  };
-
   $scope.acceptSign = function (sig) {
-    $scope.finalized = true;
-  };
-
-  $scope.finalizeSigns = function (event) {
-    $scope.saveNotes(event);
-    SWBrijj.procm("document.finalize_document", $scope.docId).then(function (data) {
-      $scope.finalized = false;
-      $scope.signed = true;
-    }).except(function (x) {
-          alert(x.message);
-        });
+    SWBrijj.procm("document.countersign", $scope.docId).then(function (data) {
+      console.log(data);
+      window.location.reload();
+    });
   };
 
   $scope.clearNotes = function(event) {
@@ -500,7 +487,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   $scope.saveNoteData = function () {
     var nd = $scope.getNoteData();
     console.log(nd);
-    SWBrijj.saveNoteData($scope.docId, JSON.stringify(nd)).then(function (data) {
+    SWBrijj.saveNoteData($scope.docId, $scope.invq, JSON.stringify(nd)).then(function (data) {
       console.log(data);
     });
   };
@@ -583,7 +570,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     canvas.width += fudge; // why do I need this?
 
     var img = new Image();
-    var imgurl = "url(/photo/docpg?id="+$scope.docId+"&investor="+$scope.invq+"&page="+page+"&counterparty="+$scope.counterparty+")";
+    var imgurl = "url(/photo/docpg?"+ $scope.pageQueryString+"&page="+page+")";
+    // var imgurl = "url(/photo/docpg?id="+$scope.docId+"&investor="+$scope.invq+"&page="+page+"&counterparty="+$scope.counterparty+")";
     img.onload = function (x) {
       var ctx = canvas.getContext("2d");
       ctx.drawImage(img, lo, to, docpanel.offsetWidth + fudge, docpanel.offsetHeight);
