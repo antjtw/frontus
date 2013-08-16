@@ -101,13 +101,21 @@ owner.run(function ($rootScope) {
 
 var captableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
 
-    if ($routeParams.company) {
+    if ($routeParams.company) { // Select a company if there is one in the URL
         var company = $routeParams.company;
         $rootScope.select(company);
-        $location.url("/investor/ownership");
     } else {
         var company = $rootScope.selected.company;        
-        if ($rootScope.selected.isAdmin) document.location.href="/company/ownership";
+    }
+
+    if ($rootScope.selected.isAdmin) {
+        if ($rootScope.path.indexOf('/investor/') > -1) {
+            document.location.href=$rootScope.path.replace("/investor/", "/company/");
+        }
+    } else {
+        if ($rootScope.path.indexOf('/company/') > -1) {
+            document.location.href=$rootScope.path.replace("/company/", "/investor/");
+        }
     }
 
     $scope.currentCompany = company;

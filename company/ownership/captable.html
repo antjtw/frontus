@@ -347,7 +347,7 @@
                         </div>
                         <div class="row-fluid trancore">
                             <div>
-                                <p>Date <input ng-disabled="toggleView();" ui-event="{blur : 'saveIssueCheckDate(activeIssue, \'date\')'}" type="text"
+                                <p>Date <input ng-disabled="toggleView();" id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
                             </div>
@@ -461,7 +461,9 @@
 
                             <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
                                                                                         ng-class="{'content':!activeIssue.vestingbegins}"
-                                                                                        ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
+                                                                                        id="{{activeIssue.$$hashKey}}" 
+                                                                                        ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')" 
+                                                                                        ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
                                                                                         type="text"
                                                                                         ng-model="activeIssue.vestingbegins"
                                                                                         data-date-format="mm/dd/yyyy"
@@ -536,7 +538,7 @@
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p>Date <input id="{{tran.$$hashKey}}" ng-disabled="toggleView();" ui-event="{keyup:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <p>Date <input ng-disabled="toggleView();" id="{{tran.$$hashKey}}" ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                         </p>
                                         <span data-icon="&#xe00c;"
                                               ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
@@ -653,7 +655,9 @@
 
                                     <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
                                                                                                 ng-class="{'content':!tran.vestingbegins}"
-                                                                                                ng-change="saveTran(tran)"
+                                                                                                id="{{tran.$$hashKey}}"
+                                                                                                ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}"
+                                                                                                ng-change="saveTranDate(tran)"
                                                                                                 type="text"
                                                                                                 ng-model="tran.vestingbegins"
                                                                                                 data-date-format="mm/dd/yyyy"
