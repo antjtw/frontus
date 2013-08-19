@@ -686,20 +686,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         })
     };
 
-
     // Creates a new blank transaction with today's date
-    $scope.createTran = function () {
-        var newTran = {};
-        newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": ($scope.activeIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
-        angular.forEach($scope.issues, function (issue) {
-            if (issue.issue == $scope.activeIssue) {
-                newTran = $scope.tranInherit(newTran, issue);
-            }
-        });
-        $scope.trans.push(newTran);
-        $scope.activeTran.push(newTran);
-    };
-
     $scope.createTrantab = function () {
         console.log("creating tab");
         if ($scope.activeTran[0].go) {
@@ -1062,7 +1049,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                         });
                         console.log(modGrant);
                         $scope.saveGrant(modGrant);
-                        $scope.grants.push(modGrant);
                     }
 
                     angular.forEach($scope.rows, function (row) {
@@ -1102,18 +1088,10 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
         var d1 = grant['date'].toUTCString();
         SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function (data) {
-            angular.forEach($scope.activeTran, function (tran) {
-                if (tran.tran_id == grant.tran_id) {
-                    angular.forEach(tran.activeAct, function (act) {
-                        if (act.grant_id == "") {
-                            act.grant_id = data[1][0];
-                            grant.grant_id = data[1][0];
-                            $scope.grants.push(grant);
-                        }
-                    });
-                }
-            });
-
+            if (grant.grant_id == "") {
+                grant.grant_id = data[1][0];
+            }
+            $scope.grants.push(grant);
         });
     };
 
