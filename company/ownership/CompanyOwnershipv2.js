@@ -1797,10 +1797,10 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
             $scope.userStatus[i].viewflag = 0;
             $scope.userStatus[i].lastlogin = 0;
             if ($scope.userStatus[i].fullview == false) {
-                $scope.userStatus[i].fullview = "personal";
+                $scope.userStatus[i].fullview = "Personal View";
             }
             else {
-                $scope.userStatus[i].fullview = "full";
+                $scope.userStatus[i].fullview = "Full View";
             }
         }
         ;
@@ -1862,12 +1862,21 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
         });
     };
 
+    $scope.selectVisibility = function (value, person) {
+        $scope.selectedI.fullview = value
+    }
+
     $scope.changeVisibility = function (person) {
         var visibility = false;
-        if (person.fullview == 'full') {
+        if (person.fullview == 'Full View') {
           visibility = true;
         }
         SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) {
+            angular.forEach($scope.userStatus, function(peep) {
+                if (peep.email == person.email) {
+                    peep.fullview = person.fullview
+                }
+            })
             $rootScope.notification.show("success", "Changed ownership table access level");
         }).except(function(x) {
             $rootScope.notification.show("fail", "Something went wrong, please try again later.");
@@ -1877,7 +1886,7 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
     // Modal for changing access type
     $scope.modalUp = function (person) {
         $scope.capAccess = true;
-        $scope.selectedI = person
+        $scope.selectedI = angular.copy(person);
     };
 
     $scope.close = function () {

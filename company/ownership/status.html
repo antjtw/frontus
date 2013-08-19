@@ -8,12 +8,19 @@
         <div class="modalText">
             <form>
                 <p>Shareholders only see their personal holdings by default.<br>  Non-shareholders have full-access by default.</p>
-                <br>
-
-                <select ng-model="selectedI.fullview" >
-                    <option value="personal">personal</option>
-                    <option value="full">full</option>
-                </select>
+                <div class="cf capaccess-drop">
+                    <li class="dropdown standard pull-left">
+                        <a class="dropdown-toggle">
+                            {{selectedI.fullview}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="selectVisibility('Personal Only', selectedI)">Personal Only</a>
+                                <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
             </form>
         </div>
         <div class="modalButtons">
