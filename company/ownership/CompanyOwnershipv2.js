@@ -392,7 +392,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         });
         if ($scope.activeTran.length < 1) {
             var anewTran = {};
-            anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined};
+            anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined'};
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue == currentcolumn) {
                     anewTran = $scope.tranInherit(anewTran, issue);
@@ -401,7 +401,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.trans.push(anewTran);
             $scope.activeTran.push(anewTran);
         }
-        $scope.tabAddTime = false;
     };
 
     $scope.getActiveIssue = function (issue) {
@@ -686,60 +685,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         })
     };
 
-    $scope.updateRow = function (investor) {
-        if (investor.name == "" && investor.namekey != undefined) {
-            $scope.rmodalUp(investor);
-            return
-        }
-        if (investor.name == "") {
-            var index = $scope.rows.indexOf(investor);
-            $scope.rows.splice(index, 1);
-            return
-        }
-        angular.forEach($scope.rows, function (row) {
-            if (investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
-                investor.name = investor.name + " (1)";
-            }
-        });
-        if (investor.name != investor.namekey) {
-            var index = $scope.rows.indexOf(investor);
-            angular.forEach($scope.trans, function (tran) {
-                if (tran.investor == investor.namekey) {
-                    tran.investor = investor.name;
-                    $scope.saveTran(tran);
-                }
-            });
-            if (investor.name) {
-                $scope.rows[index].namekey = investor.name
-            }
-        }
-        $scope.$apply();
-    };
-
-    $scope.revertPerson = function (investor) {
-        angular.forEach($scope.rows, function (row) {
-            if (row.namekey == investor) {
-                row.name = row.namekey;
-                $scope.nameChangeLR(row)
-            }
-        });
-    };
-
-    $scope.deletePerson = function (investor) {
-        $scope.sideBar = "x";
-        angular.forEach($scope.trans, function (tran) {
-            if (tran.investor == investor) {
-                $scope.deleteTran(tran);
-            }
-        });
-        angular.forEach($scope.rows, function (row) {
-            if (row.namekey == investor) {
-                var index = $scope.rows.indexOf(row);
-                $scope.rows.splice(index, 1);
-            }
-        });
-    };
-
 
     // Creates a new blank transaction with today's date
     $scope.createTran = function () {
@@ -755,7 +700,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.createTrantab = function () {
-        if ($scope.tabAddTime) {
+        console.log("creating tab");
+        if ($scope.activeTran[0].key != 'undefined') {
             var inIssue = $scope.activeTran[0].issue
             var newTran = {};
             newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
@@ -775,7 +721,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 }
             }
         }
-        $scope.tabAddTime = true;
     };
 
     $scope.deleteTran = function (tran) {
@@ -846,6 +791,60 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     }
                 }
             });
+        });
+    };
+
+    $scope.updateRow = function (investor) {
+        if (investor.name == "" && investor.namekey != undefined) {
+            $scope.rmodalUp(investor);
+            return
+        }
+        if (investor.name == "") {
+            var index = $scope.rows.indexOf(investor);
+            $scope.rows.splice(index, 1);
+            return
+        }
+        angular.forEach($scope.rows, function (row) {
+            if (investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
+                investor.name = investor.name + " (1)";
+            }
+        });
+        if (investor.name != investor.namekey) {
+            var index = $scope.rows.indexOf(investor);
+            angular.forEach($scope.trans, function (tran) {
+                if (tran.investor == investor.namekey) {
+                    tran.investor = investor.name;
+                    $scope.saveTran(tran);
+                }
+            });
+            if (investor.name) {
+                $scope.rows[index].namekey = investor.name
+            }
+        }
+        $scope.$apply();
+    };
+
+    $scope.revertPerson = function (investor) {
+        angular.forEach($scope.rows, function (row) {
+            if (row.namekey == investor) {
+                row.name = row.namekey;
+                $scope.nameChangeLR(row)
+            }
+        });
+    };
+
+    $scope.deletePerson = function (investor) {
+        $scope.sideBar = "x";
+        angular.forEach($scope.trans, function (tran) {
+            if (tran.investor == investor) {
+                $scope.deleteTran(tran);
+            }
+        });
+        angular.forEach($scope.rows, function (row) {
+            if (row.namekey == investor) {
+                var index = $scope.rows.indexOf(row);
+                $scope.rows.splice(index, 1);
+            }
         });
     };
 
