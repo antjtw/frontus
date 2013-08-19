@@ -401,6 +401,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.trans.push(anewTran);
             $scope.activeTran.push(anewTran);
         }
+        $scope.activeTran[0].go = false;
     };
 
     $scope.getActiveIssue = function (issue) {
@@ -701,7 +702,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     $scope.createTrantab = function () {
         console.log("creating tab");
-        if ($scope.activeTran[0].key != 'undefined') {
+        if ($scope.activeTran[0].go) {
             var inIssue = $scope.activeTran[0].issue
             var newTran = {};
             newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
@@ -721,6 +722,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 }
             }
         }
+        $scope.activeTran[0].go = true;
     };
 
     $scope.deleteTran = function (tran) {
