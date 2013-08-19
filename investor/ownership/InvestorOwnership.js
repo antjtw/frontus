@@ -108,7 +108,7 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         var company = $rootScope.selected.company;        
     }
 
-    if ($rootScope.selected.isAdmin) {
+/*    if ($rootScope.selected.isAdmin) {
         if ($rootScope.path.indexOf('/investor/') > -1) {
             document.location.href=$rootScope.path.replace("/investor/", "/company/");
         }
@@ -116,7 +116,7 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         if ($rootScope.path.indexOf('/company/') > -1) {
             document.location.href=$rootScope.path.replace("/company/", "/investor/");
         }
-    }
+    }*/
 
     $scope.currentCompany = company;
     console.log(company);

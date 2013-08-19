@@ -89,7 +89,7 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 
 function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
   
-	if ($rootScope.selected.isAdmin) {
+/*	if ($rootScope.selected.isAdmin) {
         if ($rootScope.path.indexOf('/investor/') > -1) {
             document.location.href=$rootScope.path.replace("/investor/", "/company/");
         }
@@ -97,7 +97,7 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
         if ($rootScope.path.indexOf('/company/') > -1) {
             document.location.href=$rootScope.path.replace("/company/", "/investor/");
         }
-    }
+    }*/
 
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
