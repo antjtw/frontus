@@ -92,238 +92,265 @@
 <div ng-switch on="sideBar">
 <span ng-switch-when="1">
                         <div class="headsection row-fluid">
-                            <h2><input disabled ui-event="{blur : 'saveIssue(activeIssue)'}"
+                            <h2><input disabled ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
                                        ng-model="activeIssue.issue"></h2>
+
+                            <p>Customize terms for this issue</p>
                         </div>
                         <div class="row-fluid trancore">
                             <div>
-                                <p>Date <input disabled ng-change="saveIssue(activeIssue)"
-                                               type="text"
+                                <p>Date <input disabled id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
                             </div>
                             <div class="DivHelper"></div>
                         </div>
-                        <accordion close-others="true">
-                            <accordion-group heading="Valuation">
-                                <p class="rightTitle"><span>Pre Money</span><input disabled
-                                                                                   pattern="[0-9]*(.[0-9]*)*"
-                                                                                   ng-class="{'content':!activeIssue.premoney}"
-                                                                                   ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                   ng-model="activeIssue.premoney"></p>
+                        <div class="row-fluid trancore">
+                            <div>
+                                <div>Security Type
+                                    <span ng-show="typeLocked(activeIssue);">
+                                        <li class="dropdown standard">
+                                            <a class="dropdown-toggle">
+                                                {{activeIssue.type}}
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="i in issuetypes">
+                                                    <a ng-click="saveIssueAssign(activeIssue, 'type', i)">{{i}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </span>
+                                    <span ng-hide="typeLocked(activeIssue);">
+                                        {{activeIssue.type}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="DivHelper"></div>
+                        </div>
+                        <!-- Equity Tab -->
+                        <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
+                            <p class="rightTitle"><span>Pre-Money Valuation</span><input disabled
+                                                                                         pattern="[0-9]*(.[0-9]*)*"
+                                                                                         ng-class="{'content':!activeIssue.premoney}"
+                                                                                         ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
+                                                                                         ng-model="activeIssue.premoney"></p>
 
-                                <p class="rightTitle"><span>Post Money</span><input disabled
-                                                                                    ng-class="{'content':!activeIssue.postmoney}"
-                                                                                    ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                    ng-model="activeIssue.postmoney">
-                                </p>
+                            <p class="rightTitle"><span>Post-Money Valuation</span><input disabled
+                                                                                          ng-class="{'content':!activeIssue.postmoney}"
+                                                                                          ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
+                                                                                          ng-model="activeIssue.postmoney"></p>
 
-                                <p class="rightTitle"><span>Price Per Share</span><input disabled
-                                                                                         ng-class="{'content':!activeIssue.ppshare}"
-                                                                                         ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                         ng-model="activeIssue.ppshare">
-                                </p>
+                            <p class="rightTitle"><span>Share Price</span><input disabled
+                                                                                 ng-class="{'content':!activeIssue.ppshare}"
+                                                                                 ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
+                                                                                 ng-model="activeIssue.ppshare"></p>
 
-                                <p class="rightTitle"><span>Total Authorized</span><input disabled
-                                                                                          ng-class="{'content':!activeIssue.totalauth}"
-                                                                                          ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                          ng-model="activeIssue.totalauth">
-                                </p>
+                            <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                      ng-class="{'content':!activeIssue.totalauth}"
+                                                                                      ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                                      ng-model="activeIssue.totalauth"></p>
 
-                                <p class="rightTitle"><span>Liquidation Preference</span>
-                                    <select disabled ng-init="activeIssue.liquidpref"
-                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.liquidpref"
-                                            ng-options="i for i in liquidpref">
-                                    </select>
-                                </p>
+                            <p class="rightTitle"><span>Liquidation Preference</span><input disabled
+                                                                                      ng-class="{'content':!activeIssue.liquidpref}"
+                                                                                      ng-model="activeIssue.liquidpref"></p>
 
-                                <p class="rightTitle"><span>Participating Preferred</span>
-                                    <select disabled ng-init="activeIssue.partpref"
-                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.partpref"
-                                            ng-options="i for i in tf">
-                                    </select>
-                                </p>
-                            </accordion-group>
-                          <span ng-show="trantype('options', activeIssue.atype);">
-                            <accordion-group heading="Options">
-                                <p class="rightTitle"><span>Underlying Security</span>
-                                    <select disabled ng-init="activeIssue.optundersec"
-                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.optundersec"
-                                            ng-options="i for i in allowKeys">
-                                        <option></option>
-                                    </select>
-                                </p>
-                                <p class="rightTitle"><span>Price</span><input disabled
-                                                                               ng-class="{'content':!activeIssue.price}"
-                                                                               ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                               ng-model="activeIssue.price"></p>
+                            <p class="rightTitle"><span>Participating Preferred</span><input disabled
+                                                                                      ng-class="{'content':!activeIssue.partpref}"
+                                                                                      ng-model="activeIssue.partpref"></p>
 
-                                <p class="rightTitle"><span>Granted</span><input disabled
-                                                                                 value="{{totalGranted(activeIssue.issue, trans);}}">
-                                </p>
+                        </div>
+                          <!-- Options Tab -->
+                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
+                              <div class="rightTitle"><span>Underlying Security</span>
+                                  <li class="dropdown standard small">
+                                      <a class="dropdown-toggle">
+                                          {{activeIssue.optundersec}}
+                                      </a>
+                                  </li>
+                              </div>
 
-                                <p class="rightTitle"><span>Term (months)</span><input disabled
-                                                                                       ng-class="{'content':!activeIssue.terms}"
-                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                       ng-model="activeIssue.terms"></p>
+                              <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                        ng-class="{'content':!activeIssue.totalauth}"
+                                                                                        ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                                        ng-model="activeIssue.totalauth"></p>
 
-                                <p class="rightTitle"><span>Vesting Cliff Date</span><input disabled
-                                                                                            ng-class="{'content':!activeIssue.vestingbegins}"
-                                                                                            ng-change="saveIssue(activeIssue)"
-                                                                                            type="text"
-                                                                                            ng-model="activeIssue.vestingbegins"
-                                                                                            data-date-format="mm/dd/yyyy"
-                                                                                            bs-datepicker></p>
+                              <p class="rightTitle"><span>Price</span><input disabled
+                                                                             ng-class="{'content':!activeIssue.price}"
+                                                                             ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                             ng-model="activeIssue.price"></p>
 
-                                <p class="rightTitle"><span>Vesting Cliff %</span><input disabled
-                                                                                         ng-class="{'content':!activeIssue.vestcliff}"
-                                                                                         ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                         ng-model="activeIssue.vestcliff">
-                                </p>
+                              <p class="rightTitle"><span>Granted</span><input disabled
+                                                                               value="{{totalGranted(activeIssue.issue, trans);}}">
+                              </p>
 
-                                <p class="rightTitle"><span>Post Cliff Frequency</span>
-                                    <select disabled ng-init="activeIssue.vestfreq"
-                                            ng-change="saveIssue(activeIssue)" ng-model="activeIssue.vestfreq"
-                                            ng-options="i for i in freqtypes">
-                                    </select>
-                                </p>
-                            </accordion-group>
-                          </span>
-                          <span ng-show="trantype('debt', activeIssue.atype);">
-                            <accordion-group heading="Debt">
-                                <p class="rightTitle"><span>Underlying Security</span>
-                                    <select ng-init="activeIssue.debtundersec" ng-change="saveIssue(activeIssue)"
-                                            ng-model="activeIssue.debtundersec" ng-options="i for i in allowKeys">
-                                        <option></option>
-                                    </select>
-                                </p>
-                                <p class="rightTitle"><span>Interest Rate</span><input disabled
-                                                                                       ng-class="{'content':!activeIssue.interestrate}"
-                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                       ng-model="activeIssue.interestrate">
-                                </p>
+                              <p class="rightTitle"><span>Term (months)</span><input disabled
+                                                                                     ng-class="{'content':!activeIssue.terms}"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
+                                                                                     ng-model="activeIssue.terms"></p>
 
-                                <p class="rightTitle"><span>Valuation Cap</span><input disabled
-                                                                                       ng-class="{'content':!activeIssue.valcap}"
-                                                                                       ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                       ng-model="activeIssue.valcap">
-                                </p>
+                              <p class="rightTitle"><span>Vesting Cliff Date</span><input disabled
+                                                                                          ng-class="{'content':!activeIssue.vestingbegins}"
+                                                                                          id="{{activeIssue.$$hashKey}}"
+                                                                                          ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
+                                                                                          ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
+                                                                                          type="text"
+                                                                                          ng-model="activeIssue.vestingbegins"
+                                                                                          data-date-format="mm/dd/yyyy"
+                                                                                          bs-datepicker></p>
 
-                                <p class="rightTitle"><span>Discount</span><input disabled
-                                                                                  ng-class="{'content':!activeIssue.discount}"
-                                                                                  ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                                  ng-model="activeIssue.discount"></p>
+                              <p class="rightTitle"><span>Vesting Cliff %</span><input disabled
+                                                                                       ng-class="{'content':!activeIssue.vestcliff}"
+                                                                                       ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
+                                                                                       ng-model="activeIssue.vestcliff"></p>
 
-                                <p class="rightTitle"><span>Term</span><input disabled
-                                                                              ng-class="{'content':!activeIssue.term}"
-                                                                              ui-event="{blur : 'saveIssue(activeIssue)'}"
-                                                                              ng-model="activeIssue.term"></p>
-                            </accordion-group>
-                          </span>
-                        </accordion>
+                              <div class="rightTitle"><span>Post Cliff Frequency</span>
+                                  <li class="dropdown standard small">
+                                      <a class="dropdown-toggle">
+                                          {{activeIssue.vestfreq}}
+                                      </a>
+                                  </li>
+                              </div>
+                          </div>
+
+                          <!-- Debt tab -->
+                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
+
+                              <p class="rightTitle"><span>Pre-Money Valuation</span><input disabled
+                                                                                           pattern="[0-9]*(.[0-9]*)*"
+                                                                                           ng-class="{'content':!activeIssue.premoney}"
+                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
+                                                                                           ng-model="activeIssue.premoney"></p>
+
+                              <p class="rightTitle"><span>Post-Money Valuation</span><input disabled
+                                                                                            ng-class="{'content':!activeIssue.postmoney}"
+                                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
+                                                                                            ng-model="activeIssue.postmoney"></p>
+
+                              <p class="rightTitle"><span>Interest Rate</span><input disabled
+                                                                                     ng-class="{'content':!activeIssue.interestrate}"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
+                                                                                     ng-model="activeIssue.interestrate"></p>
+
+                              <p class="rightTitle"><span>Valuation Cap</span><input disabled
+                                                                                     ng-class="{'content':!activeIssue.valcap}"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
+                                                                                     ng-model="activeIssue.valcap"></p>
+
+                              <p class="rightTitle"><span>Discount</span><input disabled
+                                                                                ng-class="{'content':!activeIssue.discount}"
+                                                                                ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
+                                                                                ng-model="activeIssue.discount"></p>
+
+                              <p class="rightTitle"><span>Term (months)</span><input disabled
+                                                                                     ng-class="{'content':!activeIssue.term}"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
+                                                                                     ng-model="activeIssue.term"></p>
+                          </div>
                       </span>
 
 
                       <span ng-switch-when="2">
                         <div class="tabbed headsection row-fluid">
                             <h2>{{activeInvestor}}<span disabled data-icon="&#xe00c;"
-                                                        ng-click="deletePersonButton(activeInvestor);"
-                                                        aria-hidden="true"></span>
+                                                        ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
                             </h2>
 
                             <p>Customize terms for this shareholder</p>
                         </div>
-                        <!-- <button ng-click="createTran();">Add</button> -->
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}"
-                                 active="tran.active">
+                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p>Date <input disabled ng-change="saveTranDate(tran)"
-                                                       type="text"
-                                                       ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <p>Date <input disabled id="{{tran.$$hashKey}}" ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                         </p>
                                         <span data-icon="&#xe00c;"
-                                              ng-click="manualdeleteTran(tran);" aria-hidden="true"></span>
+                                              ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p>Paid $<input disabled ng-class="{'content':!tran.amount}"
-                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}"
-                                                        ng-model="tran.amount">
-                                        </p>
-
                                         <p ng-hide="tran.forfeited">Shares<input disabled
-                                                                                 ng-class="{'content':!tran.units}"
-                                                                                 maxlength="18"
+                                                                                 ng-class="{'content':!tran.units}" maxlength="18"
                                                                                  class="signless"
                                                                                  ui-event="{blur : 'saveTran(tran)'}"
                                                                                  ng-model="tran.units"></p>
+
+                                        <p>Paid $<input disabled ng-class="{'content':!tran.amount}"
+                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
+                                        </p>
+
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
                                 <div ng-show="tran.forfeited" class="row-fluid trancore">
                                     <div>
                                         <p>Shares<input disabled ng-class="{'content':!tran.units}"
-                                                        maxlength="18" class="signless"
-                                                        ui-event="{blur : 'saveTran(tran)'}"
+                                                        maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                         ng-model="tran.units"></p>
 
-                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18"
-                                                         class="signless"
-                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited">
-                                        </p>
+                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></p>
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
-                                <accordion close-others="true">
-                                    <accordion-group heading="Valuation">
-                                        <p class="rightTitle"><span>Pre Money</span><input disabled
-                                                                                           pattern="[0-9]*(.[0-9]*)*"
-                                                                                           ui-event="{blur : 'saveTran(tran)'}"
-                                                                                           ng-model="tran.premoney"></p>
 
-                                        <p class="rightTitle"><span>Post Money</span><input disabled
-                                                                                            ui-event="{blur : 'saveTran(tran)'}"
-                                                                                            ng-model="tran.postmoney">
-                                        </p>
+                                <!-- Equity Tab -->
+                                <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
+                                    <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                       ui-event="{blur : 'saveTran(tran)'}"
+                                                                                       ng-model="tran.premoney"></p>
 
-                                        <p class="rightTitle"><span>Price Per Share</span><input
-                                                disabled
-                                                ng-class="{'content':!tran.ppshare}"
-                                                ui-event="{blur : 'saveTran(tran)'}"
-                                                ng-model="tran.ppshare"></p>
+                                    <p class="rightTitle"><span>Post Money</span><input disabled
+                                                                                        ui-event="{blur : 'saveTran(tran)'}"
+                                                                                        ng-model="tran.postmoney"></p>
 
-                                        <p class="rightTitle"><span>Total Authorized</span><input disabled
-                                                                                                  ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                  ng-model="tran.totalauth">
-                                        </p>
+                                    <p class="rightTitle"><span>Price Per Share</span><input disabled
+                                                                                             ng-class="{'content':!tran.ppshare}"
+                                                                                             ui-event="{blur : 'saveTran(tran)'}"
+                                                                                             ng-model="tran.ppshare"></p>
 
-                                        <p class="rightTitle"><span>Liquidation Preference</span>
-                                            <select disabled ng-init="tranIssue.liquidpref"
-                                                    ng-change="saveTran(tran)" ng-model="tran.liquidpref"
-                                                    ng-options="i for i in liquidpref">
-                                            </select>
-                                        </p>
+                                    <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                              ui-event="{blur : 'saveTran(tran)'}"
+                                                                                              ng-model="tran.totalauth"></p>
 
-                                        <p class="rightTitle"><span>Participating Preferred</span>
-                                            <select disabled ng-init="tran.partpref"
-                                                    ng-change="saveTran(tran)"
-                                                    ng-model="tran.partpref" ng-options="i for i in tf">
-                                            </select>
-                                        </p>
-                                    </accordion-group>
-                              <span ng-show="trantype('options', tran.atype);">
-                                <accordion-group heading="Options">
-                                    <p class="rightTitle"><span>Underlying Security</span>
-                                        <select disabled ng-init="tran.optundersec"
-                                                ng-change="saveTran(tran)"
-                                                ng-model="tran.optundersec" ng-options="i for i in allowKeys">
-                                            <option></option>
-                                        </select>
+
+                                    <div class="rightTitle"><span>Liquidation Preference</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.liquidpref}}
+                                            </a>
+                                        </li>
+                                    </div>
+
+                                    <div class="rightTitle"><span>Participating Preferred</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.partpref}}
+                                            </a>
+                                        </li>
+                                    </div>
+
+                                </div>
+                                <!-- Option Tab -->
+                                <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
+
+                                    <div class="rightTitle"><span>Underlying Security</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.optundersec}}
+                                            </a>
+                                        </li>
+                                    </div>
+
+                                    <p class="rightTitle"><span>Total Authorized</span><input disabled
+                                                                                              ui-event="{blur : 'saveTran(tran)'}"
+                                                                                              ng-model="tran.totalauth"></p>
+
+                                    <p class="rightTitle"><span>Granted</span><input disabled
+                                                                                     value="{{totalGranted(tran.issue, trans);}}">
                                     </p>
+
                                     <p class="rightTitle"><span>Price</span><input disabled
                                                                                    ng-class="{'content':!tran.price}"
                                                                                    ui-event="{blur : 'saveTran(tran)'}"
@@ -334,61 +361,61 @@
                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                            ng-model="tran.terms"></p>
 
-                                    <p class="rightTitle"><span>Vesting Cliff Date</span><input
-                                            disabled
-                                            ng-class="{'content':!tran.vestingbegins}"
-                                            ng-change="saveTran(tran)"
-                                            type="text"
-                                            ng-model="tran.vestingbegins"
-                                            data-date-format="mm/dd/yyyy"
-                                            bs-datepicker></p>
+                                    <p class="rightTitle"><span>Vesting Cliff Date</span><input disabled
+                                                                                                ng-class="{'content':!tran.vestingbegins}"
+                                                                                                id="{{tran.$$hashKey}}"
+                                                                                                ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}"
+                                                                                                ng-change="saveTranDate(tran)"
+                                                                                                type="text"
+                                                                                                ng-model="tran.vestingbegins"
+                                                                                                data-date-format="mm/dd/yyyy"
+                                                                                                bs-datepicker></p>
 
                                     <p class="rightTitle"><span>Vesting Cliff %</span><input disabled
                                                                                              ng-class="{'content':!tran.vestcliff}"
                                                                                              ui-event="{blur : 'saveTran(tran)'}"
-                                                                                             ng-model="tran.vestcliff">
-                                    </p>
+                                                                                             ng-model="tran.vestcliff"></p>
 
-                                    <p class="rightTitle"><span>Post Cliff Frequency</span>
-                                        <select disabled ng-init="tran.vestfreq"
-                                                ng-change="saveTran(tran)"
-                                                ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
-                                        </select>
-                                    </p>
-                                </accordion-group>
-                              </span>
-                              <span ng-show="trantype('debt', tran.atype);">
-                                  <accordion-group heading="Debt">
-                                      <p class="rightTitle"><span>Underlying Security</span>
-                                          <select disabled ng-init="tran.debtundersec"
-                                                  ng-change="saveTran(tran)"
-                                                  ng-model="tran.debtundersec" ng-options="i for i in allowKeys">
-                                              <option></option>
-                                          </select>
-                                      </p>
-                                      <p class="rightTitle"><span>Interest Rate</span><input disabled
-                                                                                             ng-class="{'content':!tran.interestrate}"
-                                                                                             ui-event="{blur : 'saveTran(tran)'}"
-                                                                                             ng-model="tran.interestrate">
-                                      </p>
 
-                                      <p class="rightTitle"><span>Valuation Cap</span><input disabled
-                                                                                             ng-class="{'content':!tran.valcap}"
-                                                                                             ui-event="{blur : 'saveTran(tran)'}"
-                                                                                             ng-model="tran.valcap"></p>
+                                    <div class="rightTitle"><span>Post Cliff Frequency</span>
+                                        <li class="dropdown standard small">
+                                            <a class="dropdown-toggle">
+                                                {{tran.vestfreq}}
+                                            </a>
+                                        </li>
+                                    </div>
 
-                                      <p class="rightTitle"><span>Discount</span><input disabled
-                                                                                        ng-class="{'content':!tran.discount}"
+                                </div>
+                                <!-- Debt Tab -->
+                                <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
+                                    <p class="rightTitle"><span>Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                       ui-event="{blur : 'saveTran(tran)'}"
+                                                                                       ng-model="tran.premoney"></p>
+
+                                    <p class="rightTitle"><span>Post Money</span><input disabled
                                                                                         ui-event="{blur : 'saveTran(tran)'}"
-                                                                                        ng-model="tran.discount"></p>
+                                                                                        ng-model="tran.postmoney"></p>
 
-                                      <p class="rightTitle"><span>Term</span><input disabled
-                                                                                    ng-class="{'content':!tran.term}"
-                                                                                    ui-event="{blur : 'saveTran(tran)'}"
-                                                                                    ng-model="tran.term"></p>
-                                  </accordion-group>
-                                </span>
-                                </accordion>
+                                    <p class="rightTitle"><span>Interest Rate</span><input disabled
+                                                                                           ng-class="{'content':!tran.interestrate}"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.interestrate"></p>
+
+                                    <p class="rightTitle"><span>Valuation Cap</span><input disabled
+                                                                                           ng-class="{'content':!tran.valcap}"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.valcap"></p>
+
+                                    <p class="rightTitle"><span>Discount</span><input disabled
+                                                                                      ng-class="{'content':!tran.discount}"
+                                                                                      ui-event="{blur : 'saveTran(tran)'}"
+                                                                                      ng-model="tran.discount"></p>
+
+                                    <p class="rightTitle"><span>Term (months)</span><input disabled
+                                                                                           ng-class="{'content':!tran.term}"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.term"></p>
+                                </div>
                             </tab>
                         </tabset>
                       </span>

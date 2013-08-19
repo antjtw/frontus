@@ -62,21 +62,6 @@ owner.run(function ($rootScope) {
         return -total;
     };
 
-    $rootScope.trantype = function (type, activetype) {
-        if (activetype == "Option" && type == "Option") {
-            return true;
-        }
-        else if (activetype == "Debt" && type == "Debt") {
-            return true;
-        }
-        else if (activetype == "Equity" && type == "Equity") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
-
 //Calculates total grants in each issue
     $rootScope.totalGranted = function (issue, trans) {
         var granted = 0;
@@ -591,6 +576,10 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         }
     };
 
+    $scope.deleteIssueButton = function (activeIssue) {
+        $scope.dmodalUp(activeIssue);
+    };
+
     $scope.deleteIssue = function (issue) {
         console.log(issue);
         SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
@@ -611,6 +600,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     $scope.rows.splice(index, 1);
                 }
             });
+            $scope.sideBar = "x";
         });
     };
 
@@ -981,7 +971,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.trans, function (tran) {
                             if (row.name == tran.investor) {
-                                if (transaction.tran_id == '' && !tran.tran_id) {
+                                if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
                                     console.log("here");
                                     tran.tran_id = data[1][0];
                                 }
@@ -1473,6 +1463,11 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     }
 
     // Functions derived from services for use in the table
+
+    //switches the sidebar based on the type of the issue
+    $scope.trantype = function (type, activetype) {
+        return switchval.trantype(type, activetype);
+    };
 
     // Number of shareholders
     $scope.numShareholders = function() {

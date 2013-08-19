@@ -92,6 +92,18 @@ input:focus, textarea:focus {
     cursor: pointer !important;
 }
 
+/* Tooltips */
+
+.tooltip-inner {
+    background-color: #1E2D3D;
+    border-radius: 0;
+}
+
+.tooltip.in {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
 /* Accordians */
 
 .accordion-group {
@@ -773,6 +785,24 @@ form.inputs {
 
 /* Profile Editing */
 
+.permission-block {
+    height: 41px;
+    white-space: nowrap;
+}
+
+.permission-block > div:first-child {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    width: 100%;
+}
+
+.permission-block .permission-label {
+    line-height: 30px;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
 /* Side Bar Navigation */
 
 .sidebar {
@@ -891,7 +921,7 @@ form.inputs {
 .editProfileFP input.name, .editProfileFP textarea.name {
 	font-size: 18px;
  	-webkit-box-shadow: none !important;
- 	-box-shadow: none !important;	
+ 	-box-shadow: none !important;
 }
 
 .editProfileFP label {
@@ -955,7 +985,7 @@ form.inputs {
 	font-family: 'FS Elliot Web Bold', sans-serif;
 	text-transform: uppercase;
 	color: #1E2D3D;
-	width: 140px;
+	width: 150px;
     vertical-align: top;
 }
 
@@ -981,7 +1011,7 @@ form.inputs {
 	border: 0;
 	padding: 0;
     margin-right: 5px;
-	width: 60px;
+	width: 67px;
 }
 
 /* Placeholder text color */
@@ -1027,7 +1057,7 @@ form.inputs {
 
 .tableView th {
 	background-color: #FFFFFF;
-	width: 140px;
+	width: 150px;
 	text-align: left;
 	padding: 0 0 0 10px;
 	margin: 0 0 0 0;
@@ -1236,254 +1266,6 @@ form.inputs {
 	font-family: 'FS Elliot Web Regular', sans-serif;
 	font-size: 10px;
 	font-weight: normal;
-}
-
-
-
-
-
-/* Captable */
-
-.capGuide {
-    display: block;
-    padding: 10px 0 0 20px;
-}
-
-.capcontainer {
-	overflow: auto;
-}
-
-.descriptionRow {
-    height: 20px;
-    color: #C7C7C7;
-    font-size: 10px;
-    text-transform: uppercase;
-}
-
-.descriptionRow td {
-    height: 20px;
-}
-
-.descriptionRow span {
-    display: inline-block;
-    width: 68px;
-}
-
-.tableView.captable  {
-	background: url("/img/stripe-pattern.png") repeat;
-	table-layout: fixed;
-}
-
-.captablepair-box {
-    position: relative;
-    display: block;
-}
-
-.tableView.captable .output {
-    position: absolute;
-    pointer-events: none;
-}
-
-.tableView.captable .output.clickable {
-    pointer-events: auto;
-    top: -9px;
-}
-
-.tableView.captable .output.footer {
-    top: -9px;
-}
-
-.tableView.captable .output.second {
-    left: 65px;
-}
-
-.tableView.captable .captablepair {
-    color: #FFFFFF;
-}
-
-.tableView.captable .captablepair:focus {
-    color: #7f8c8d
-}
-
-.tableView.captable input:focus + .output { display: none; }
-
-.tableView.captable.viewcaptable {
-    background: white;
-}
-
-.longRow td {
-	width: 150px !important;
-}
-
-.captablepair {
-	display: inline-block;
-	float: left;
-}
-
-p.captablepair {
-	width: 65px;
-	margin: 0 0 0 0;
-}
-
-.tableView td.tranSelected {
-	outline: 2px solid #E3E3E3;
-}
-
-td.tranViewSelected {
-    background-color: rgba(26, 188, 150, 0.1);
-}
-
-.tranViewSelected {
-    background-color: rgba(26, 188, 150, 0.1);
-}
-
-.span4.capright {
-	float: right;
-	margin-left: 0;
-	width: 350px;
-    min-height: 600px;
-    border-left: 1px solid #E3E3E3;
-	transition: all 0.25s;
-	-moz-transition:all 0.25s; /* Firefox 4 */;
-	-webkit-transition: all 0.25s; /* Safari and Chrome */
-	-o-transition: all 0.25s; /* Opera */
-}
-
-.span4.capright.button-offset {
-    margin-top: -28px;
-}
-
-.span4.capright > button {
-    top: 330px;
-    position:relative;
-
-    left: -68px;
-    -webkit-transform:rotate(90deg);
-    -moz-transform:rotate(90deg);
-    -o-transform:rotate(90deg);
-    -ms-transform:rotate(90deg);
-    border-radius: 0;
-    border: none;
-    background-color: #E3E3E3;
-    width: 108px;
-}
-
-.capright .headsection.tabbed {
-    border: none;
-}
-
-.capright .headsection {
-	padding-left: 20px;
-}
-
-.capright .headsection h2 input {
-    border: 0;
-    font-family: 'FS Elliot Web Light', sans-serif !important;
-    font-size: 24px;
-    line-height:21px;
-    font-weight: normal;
-    color: #1e2d3d;
-    text-transform: uppercase;
-    width: 280px;
-}
-
-.trantabs .nav.nav-tabs {
-	padding: 0 0 0 0;
-	margin: 0 0 0 0;
-}
-
-.trancore {
-	height: 44px;
-	border-bottom: 1px solid #E3E3E3;
-}
-
-.trancore > div {
-	display: inline-block;
-	vertical-align: middle;
-	white-space: normal;
-}
-
-.trancore p {
-	padding-left: 20px;
-	text-transform: uppercase;
-	display: block;
-	float: left;
-	height:12px;
-}
-
-.trancore input {
-	padding: 0;
-	border: 0;
-	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	width:100px;
-	margin: -3px 0 0 0;
-}
-
-.trancore input.signless {
-	margin: -3px 0 0 6px;
-}
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
-	border-top: 2px solid #1ABC96;
-	border-radius: 0;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-}
-
-.nav-tabs > li:first-child > a, .nav-tabs > li:first-child > a:hover, .nav-tabs > li:first-child > a:focus {
-    border-left: 0;
-}
-
-div.rightTitle {
-    height: 22px;
-    margin: 0 0 10px 0;
-}
-
-.rightTitle > span {
-    display: inline-block;
-    width: 160px;
-    margin-right: 40px;
-    text-transform: uppercase;
-}
-
-.rightTitle > input {
-	width:100px;
-	border: 0;
-}
-
-.rightTitle > select {
-    width: 100px;
-    height: 25px;
-}
-
-input.content, textarea.content {
-	background-color: #F1F1F1;
-	border-radius: 0px;
-	-moz-border-radius: 0px;
-	-webkit-border-radius: 0px;
-}
-
-textarea {
-    resize: none;
-}
-
-.staticHeaders {
-}
-
-/* Grants Table */
-
-tr.rowSelected {
-	background-color: rgba(26, 188, 150, 0.1);
-}
-
-.rowSelected > td {
-	background-color: transparent;
-}
-
-.grant-list {
-    list-style: none;
 }
 
 /* Status */
@@ -1738,29 +1520,6 @@ tr.rowSelected {
 	height: 37px;
 	text-align:center;
 	padding: 10px 25px 10px 25px;
-}
-.home .button.socialbtn {
-	width: 140px;
-	height: 60px;
-	text-align:center;
-	padding: 0 0 0 0;
-	margin: 7px;
-	color:#ffffff;
-
-}
-
-.home .button.socialbtn > span:first-child {
-	display: inline-block;
-	margin: 0 6px 0 0;
-	font-size: 28px;
-	display: inline-block;
-    vertical-align:middle;
-}
-
-.home .button.socialbtn > span:last-child {
-	font-size: 14px;
-	display: inline-block;
-    vertical-align:middle;
 }
 
 .button.socialbtn.twitter{

@@ -143,7 +143,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         console.log(data);
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
-            $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
             $scope.issues[i].key = $scope.issues[i].issue;
             $scope.issuekeys.push($scope.issues[i].key);
         };
@@ -309,7 +308,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                     else {
                         tran.liquidpref = $scope.tf[1];
                     }
-                    tran = switchval.typeswitch(tran);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -384,6 +382,11 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
     };
 
     // Functions derived from services for use in the table
+
+    //switches the sidebar based on the type of the issue
+    $scope.trantype = function (type, activetype) {
+        return switchval.trantype(type, activetype);
+    };
 
     // Number of shareholders
     $scope.numShareholders = function() {
@@ -516,7 +519,6 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
                     $scope.trans[i].active = true
                     first = first + 1
                 }
-                $scope.trans[i] = switchval.typeswitch($scope.trans[i]);
                 $scope.activeTran.push($scope.trans[i]);
             }
         }

@@ -21,33 +21,45 @@
     </div>
     <div class="row-fluid">
       <section class="recipientInfo statusBlock">
-      <div><p class="title">Ownership Permissions</p></div>
-      <div ng-show="fullview" class="cf">
-        <span class="pull-left">Type:</span>
-          <li class="dropdown standard pull-left">
-              <a class="dropdown-toggle">
-                  {{fullview}}
-              </a>
-              <ul class="dropdown-menu">
-                  <li>
-                      <a ng-click="changeVisibility('Personal Only')">Personal Only</a>
-                      <a ng-click="changeVisibility('Full View')">Full View</a>
-                  </li>
-              </ul>
-          </li>
+      <div>
+          <p class="title">Ownership Permissions</p>
+          <p>Shareholders will only see their personal holdings by default, unless you allow full access here</p>
+      </div>
+      <div ng-show="fullview" class="cf permission-block">
+        <div>
+            <div class="pull-left permission-label">Type:</div>
+            <div class="pull-left">
+              <li class="dropdown standard pull-left">
+                  <a class="dropdown-toggle">
+                      {{fullview}}
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>
+                          <a ng-click="changeVisibility('Personal Only')">Personal Only</a>
+                          <a ng-click="changeVisibility('Full View')">Full View</a>
+                      </li>
+                  </ul>
+              </li>
+            </div>
+        </div>
+        <div class="DivHelper"></div>
       </div>
       <div style="display: none;" ng-hide="fullview">You've not shared your cap table with this person.</div>
     </section>
     <br>
-    <section class="recipientInfo statusBlock">
-      <div><p class="title">Document Permissions</p></div>
+    <section class="recipientInfo docLibrary">
+      <div>
+          <p class="title">Document Permissions</p>
+          <p>The following files can be viewed by this person</p>
+      </div>
       <table class="tableView bodyText">
-
-        <tr class="subText" ng-hide="noDocs">
+        <tr class="column-label" class="subText" ng-hide="noDocs">
           <th class="button"><span class="title sortedDown">Name</span></th>
           <th colspan="2" class="button"><span class="title">Status</span></th>
         </tr>
-
+          <tr class="noFeed" ng-show="docs.length == 0">
+              <td colspan="2">You've not shared any documents with this person.</td>
+          </tr>
         <tbody ng-repeat="doc in docs">
           <tr>
           <td><img src="">{{doc.docname}}</td>
@@ -89,7 +101,6 @@
         </tr>
         </tbody>
       </table>
-      <div class="noFeed" ng-show="docs.length == 0">You've not shared any documents with this person.</div>
     </section>
     </div>
   </div>
