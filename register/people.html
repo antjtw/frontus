@@ -4,27 +4,27 @@
       <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
       <p class="tagline">the best way to manage your shareholders<p>
     </div>
-    <div class="spacer40"></div> 
-   
+    <div class="spacer40"></div>
     <div class="span9 offset1 text-center line"></div>
-    <div class="spacer10"></div> <br> 
-    <p>To protect the information of {{company}}, please register <strong>{{email}}</strong></p>
+    <div class="spacer10"></div>
+    <div class="span9 offset1 text-center">
+        <p>To protect the information of {{company}}, please register <strong>{{email}}</strong></p>
+        <form id="login" class="text-center inputs" ng-submit="doActivate()">
+          <fieldset>
+            <input placeholder="Name" class="loginInput" type="text" ng-model="name" />
+            <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
+            <div class="spacer30"></div>
 
-    <form id="login" class="text-center inputs" ng-submit="doActivate()">
-      <fieldset>
-        <input placeholder="Name" class="loginInput" type="text" ng-model="name" />
-        <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
-        <div class="spacer30"></div>  
-
-      <button type="submit" class="button greenButton loginButton bodyText" ng-disabled="fieldCheck()">Register</button>
-          <p class="caption">By registering, you agree to our<a href="/privacy"> Terms of Use and Privacy Policy</a></p>
-        <br>
-      </fieldset>
-    </form>
+          <button type="submit" class="button greenButton loginButton bodyText" ng-disabled="fieldCheck()">Register</button>
+              <p class="caption">By registering, you agree to our<a href="/privacy"> Terms of Use and Privacy Policy</a></p>
+            <br>
+          </fieldset>
+        </form>
+     </div>
   </div>
   <div class="span5 gateway register">
     <p><img src="/img/reg-graphic-holding.png"> <span class="teaser">Review your personal holdings</span></p>
-   <p> <img src="/img/reg-graphic-copies.png"> <span class="teaser">Maintain copies of company documents</span></p>
-   <p> <img src="/img/reg-graphic-esign.png"> <span class="teaser">Electronically sign documents</span></p>
+    <p><img src="/img/reg-graphic-copies.png"> <span class="teaser">Maintain copies of company documents</span></p>
+    <p><img src="/img/reg-graphic-esign.png"> <span class="teaser">Electronically sign documents</span></p>
   </div>
 </div>
