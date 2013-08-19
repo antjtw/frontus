@@ -1,4 +1,4 @@
-function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
+function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj, sharedData) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$rootScope.selected = [];
@@ -108,6 +108,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$rootScope.select(cookie);
 	}
 
+/*    sharedData.getCompanies()*/
 	SWBrijj.procm('account.nav_companies').then(function(x) {
 		$rootScope.isLoggedIn = true;
 		for (var i = 0; i < x.length; i++) {

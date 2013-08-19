@@ -15,6 +15,19 @@ owner.config(function ($routeProvider, $locationProvider) {
         otherwise({redirectTo: '/'});
 });
 
+owner.factory('sharedData', function(SWBrijj, $q) {
+
+    var getCompanies = function() {
+       var deferred = $q.defer();
+        SWBrijj.procm('account.nav_companies').then(function(x) {
+            deferred.resolve(x);
+        });
+        return deferred.promise;
+    }
+
+    return { getCompanies:getCompanies };
+});
+
 
 /*
  * memoize.js
