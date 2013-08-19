@@ -108,20 +108,24 @@
          <div class="row-fluid">
              <div>
                 <p class="subText">Activity Feed</p>
-             </div> 
-             <div class="activityBlock">
-             <table>
-             <tr ng-repeat="active in activity | orderBy:activityOrder">
-             	<td><i class="{{active.icon}}"></i></td>
-             	<td>
-                	<table>
-                		<tr><td>{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
-                        <tr><td>{{active.timeAgo}}</td></tr>
-                    </table>
-                </td>
-             </tr>
-             </table> 
-             </div>  
+             </div>
+
+             <section class="statusFeed">
+                 <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+                 <div class="activityBlock">
+                     <table>
+                         <tr ng-repeat="active in activity | orderBy:activityOrder">
+                            <td><i class="{{active.icon}}"></i></td>
+                            <td class="item">
+                                <table>
+                                    <tr><td class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
+                                    <tr><td class="time">{{active.timeAgo}}</td></tr>
+                                </table>
+                            </td>
+                         </tr>
+                     </table>
+                 </div>
+             </section>
          </div> 
      </div>
     </div>
