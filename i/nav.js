@@ -1,4 +1,4 @@
-function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj, sharedData) {
+function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	window.SWBrijj = SWBrijj;
 	$scope.companies = [];
 	$rootScope.selected = [];
