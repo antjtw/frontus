@@ -123,11 +123,13 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 				$rootScope.select($scope.companies[0]['company']);	
 			}
 		}
+        $rootScope.$broadcast('adminIn');
 		
 	}).except(function(ignore) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
 		$rootScope.showLogin = true;
+        $rootScope.$broadcast('adminIn');
 	});
 
 	function readCookie(name) {

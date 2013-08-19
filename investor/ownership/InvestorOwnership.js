@@ -108,15 +108,17 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         var company = $rootScope.selected.company;        
     }
 
-/*    if ($rootScope.selected.isAdmin) {
-        if ($rootScope.path.indexOf('/investor/') > -1) {
-            document.location.href=$rootScope.path.replace("/investor/", "/company/");
+    $scope.$on('adminIn', function() {
+        if ($rootScope.selected.isAdmin) {
+            if ($rootScope.path.indexOf('/investor/') > -1) {
+                document.location.href=$rootScope.path.replace("/investor/", "/company/");
+            }
+        } else {
+            if ($rootScope.path.indexOf('/company/') > -1) {
+                document.location.href=$rootScope.path.replace("/company/", "/investor/");
+            }
         }
-    } else {
-        if ($rootScope.path.indexOf('/company/') > -1) {
-            document.location.href=$rootScope.path.replace("/company/", "/investor/");
-        }
-    }*/
+    });
 
     $scope.currentCompany = company;
     console.log(company);
