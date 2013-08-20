@@ -1412,7 +1412,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                 if (people.email) {
                     SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
                         SWBrijj.proc('ownership.update_investor_captable', people.email, true).then(function (data) {
-                            console.log("success");
+                            $rootScope.notification.show("success", "Ownership Table share request sent");
                         });
                     });
                 }
