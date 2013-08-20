@@ -128,8 +128,23 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
     // Switches the page when you select a new company
     $rootScope.switch = function(company) {
-        console.log(company.isAdmin);
         $rootScope.select(company.company);
+        if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/people') > -1)) {
+            document.location.href=$rootScope.path.replace("/company/profile/people", "/home/");
+        }
+        if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/') > -1)) {
+            document.location.href=$rootScope.path.replace("/company/profile/", "/home/");
+        }
+        if ($rootScope.path.indexOf('/home/') > -1) {
+            console.log("here")
+            if (!company.isAdmin && ($rootScope.path.indexOf('/company') > -1)) {
+                console.log("burrowing in")
+                document.location.href=$rootScope.path.replace("/company", "");
+            }
+            else if (company.isAdmin && ($rootScope.path.indexOf('/company') == -1)) {
+                document.location.href=$rootScope.path.replace("/home/", "/home/company/");
+            }
+        }
         if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) { // Refresh page if user is on ownership or documents
             console.log($rootScope.path.indexOf('/company/'));
             if (company.isAdmin && ($rootScope.path.indexOf('/investor/') > -1)) {
