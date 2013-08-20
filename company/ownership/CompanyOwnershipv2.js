@@ -267,7 +267,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                                 row[tran.issue]["akey"] = tran.amount;
                                 row[tran.issue]["state"] = false;
                                 if (!isNaN(parseFloat(tran.forfeited))) {
-                                    row[tran.issue]["u"] = (-tran.forfeited);
+                                    row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                     row[tran.issue]["ukey"] = row[tran.issue]["u"];
                                 }
                             }
@@ -996,6 +996,9 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                                     transaction.datekey = d1;
                                     tempunits = calculate.sum(tempunits, tran.units);
                                     tempamount = calculate.sum(tempamount, tran.amount);
+                                    if (!isNaN(parseFloat(tran.forfeited))) {
+                                        tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                                    }
                                     row[tran.issue]['u'] = tempunits;
                                     row[tran.issue]['ukey'] = tempunits;
                                     row[tran.issue]['a'] = tempamount;
@@ -1008,10 +1011,6 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
                                     if (row[tran.issue]['a'] == 0) {
                                         row[tran.issue]['a'] = null;
                                         row[tran.issue]['akey'] = null;
-                                    }
-                                    if (!isNaN(parseFloat(tran.forfeited))) {
-                                        row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
-                                        row[tran.issue]["ukey"] = row[tran.issue]["u"];
                                     }
                                     row[tran.issue]['x'] = 0;
                                 }
