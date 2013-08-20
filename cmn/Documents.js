@@ -38,6 +38,17 @@ function getNoteBounds(n) {
   return [bds,ibds];
 }
 
+function countCRs(str) {
+  var z = str;
+  var cnt = 0;
+  while(true) {
+    var a = z.indexOf('\n');
+    if (a < 0) return cnt;
+    cnt++;
+    z = z.substring(a+1);
+  }
+}
+
 angular.module('draggable', []).
     directive('draggable', ['$document' , function($document) {
       return {
@@ -50,8 +61,9 @@ angular.module('draggable', []).
             '<li ng-click="dragMe($event)"><span data-icon="&#xe043;"</span></li>'+
             '<li ng-show="growable" ng-click="biggerMe($event)"><span data-icon="&#xe041;" aria-hidden="true"/></li>'+
             '<li ng-show="growable" ng-click="smallerMe($event)"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
+            '<li></li>' +
             '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li></ul>'+
-            '<span style="display:inline-block" ng-transclude></span>' +
+            '<span ng-transclude></span>' +
             '</div>',
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
@@ -279,6 +291,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     var pad;
     bb.style.width = '30px';
     bb.style.height = '20px';
+    var crs = countCRs(bb.value);
     if (bb.clientHeight < bb.scrollHeight) {
       pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb,'padding-bottom');
       bb.style.height = (bb.scrollHeight - pad) + "px";
@@ -290,13 +303,15 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     bb.fontSize = getIntProperty(bb,'font-size');
     bb.lineHeight = Math.floor(bb.fontSize * 1.4);
     bb.style.lineHeight = 1.4;
+    bb.rows = crs+2;
+    bb.style.height = "auto";
     bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
   }
 
   $scope.newBoxX = function(page, val, style) {
     $scope.restoredPage = page;
     var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable" >'+
-        '<textarea ng-model="annotext" class="row-fluid"/></div>')($scope);
+        '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
     aa.scope().ntype='text';
     aa.scope().growable = true; // for the growable icons
     var bb = aa[0].querySelector("textarea");
@@ -305,7 +320,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
        if (bb.clientWidth < bb.scrollWidth) bb.style.width = (bb.scrollWidth + 5) +"px";
     }, 300);
     */
-    bb.addEventListener('input', function(e) { $scope.fixBox(bb); });
+    bb.addEventListener('input', function(e) { $scope.fixBox(bb);
+/*      if (bb.value.substring(bb.value.length-1) == "\n") {
+        bb.value+="\r\n";
+      }  */
+    });
     var ta = aa.find('textarea');
     ta.scope().annotext = val;
     ta.width( ta.width() );
