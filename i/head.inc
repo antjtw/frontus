@@ -5,7 +5,6 @@
 <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap-responsive.css">
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
 <!-- Fonts -->
-<link type="text/css" rel="stylesheet" href="/lib/fontawesome/css/font-awesome.css">
 <script type="text/javascript">
 WebFontConfig = { fontdeck: { id: '35219' } };
 

@@ -18,24 +18,24 @@ function getNoteBounds(n) {
   if (ntyp == 'text') {
     var t = n.find('textarea')[0];
     z = t.offset;
-    bds[2] = bds[2]+z[0]+z[2];
-    bds[3] = bds[3]+z[1]+z[3];
+    ibds = [z[0], z[1], z[2], z[3]];
+    ibds[0]+= t.offsetLeft; // + getIntProperty(t,'padding-left');
+    ibds[1]+= t.offsetTop; // + getIntProperty(t,'padding-top');
   } else if (ntyp == 'canvas') {
     var c = n.find('canvas')[0];
     z = c.offset;
-    bds[2] = bds[2] + z[0] + z[2];
-    bds[3] = bds[3] + z[1]+z[3];
+    ibds = [z[0], z[1], z[2], z[3]];
+    ibds[0]+= c.offsetLeft; // + getIntProperty(t,'padding-left');
+    ibds[1]+= c.offsetTop; // + getIntProperty(t,'padding-top');
   } else if (ntyp == 'check') {
-    bds[0] += 12;
-    bds[1] += 27;
-    bds[2] = 14;
-    bds[3] = 14;
+    ibds = [12, 27, 14, 14];
+//    ibds[0]+= t.offsetLeft + getIntProperty(t,'padding-left');
+//    ibds[1]+= t.offsetTop + getIntProperty(t,'padding-top');
   }
-  bds[0] -= dpo[0];
-  bds[1] -= dpo[1];
-  bds[2] += bds[0];
-  bds[3] += bds[1];
-  return bds;
+  ibds[0]-=dpo[0];
+  ibds[1]-=dpo[1];
+
+  return [bds,ibds];
 }
 
 angular.module('draggable', []).
@@ -187,9 +187,14 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     return (!$scope.unsaved(page)) && $scope.annotated[page - 1];
   };
 
+  $scope.annotable = function() {
+    if ($scope.lib == undefined) return true;
+    return ($scope.invq && ($scope.lib.when_signed || !$scope.lib.signature_deadline))
+        || (!$scope.invq && $scope.lib.original && (!$scope.lib.when_signed || $scope.lib.when_confirmed));
+  }
   $scope.init = function () {
     $scope.notes=[];
-
+    if (!$scope.docId) return;
     SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
       $scope.docLength = data.length;
       // does scaling happen here?
@@ -201,7 +206,7 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     });
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.lib = data;
-      var aa = data['annotations'] || data['counterannotations'];
+      var aa = data['annotations'];
       if (aa) {
         // restoreNotes
         var annots = eval(aa);
@@ -217,8 +222,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           }
           // the notes were pushed in the newXXX function
           sticky.css({
-            top:  annot[0][4],
-            left: annot[0][3]
+            top:  annot[0][1][1],
+            left: annot[0][1][0]
           });
 
         }
@@ -443,7 +448,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   };
 
   $scope.clearNotes = function(event) {
-    SWBrijj.deletePage( $scope.docId, $scope.currentPage).then(function(x) {
+    SWBrijj.procm( $scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
+            $scope.docId, $scope.currentPage).then(function(x) {
     var docpanel = document.querySelector(".docPanel");
     var imgurl = docpanel.style.backgroundImage;
     docpanel.style.backgroundImage = imgurl;
@@ -465,16 +471,38 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
   $scope.getNoteData = function () {
     var noteData = [];
+    var dp = document.querySelector(".docPanel");
     for (var i = 0; i < $scope.notes.length; i++) {
       var n = $scope.notes[i];
-      var pos = [n.page, n.width(), n.height(), n[0].style.left, n[0].style.top];
+      var bnds = getNoteBounds(n);
+      var pos = [n.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight ];
       var typ = n.scope().ntype;
       var val = [];
       var style = [];
       var ndx = [pos, typ, val, style];
+
       if (typ == 'text')  {
-        val.push(n[0].querySelector("textarea").value);
-        style.push(n.find('textarea').css('fontSize'));
+        var se = n[0].querySelector("textarea");
+        var lh = getIntProperty(se,'line-height');
+        val.push(se.value);
+        style.push( getIntProperty(se,'font-size') );
+
+        // var lho = Math.floor( (1/1.4) * lh);
+        // ndx[0][2][1]+=lho;
+
+        ndx[0][2][0]+=3;
+        ndx[0][2][1]-=5;
+
+      } else if (typ == 'check') {
+        var se = n[0].querySelector("span.check-annotation");
+        var lh =  getIntProperty(se,'line-height');
+        style.push(getIntProperty(se,'font-size') );
+        var lho = Math.floor( (1/1.4) * lh);
+        ndx[0][2][1]+=lho;
+
+        // ndx[0][2][0]+=2;
+        ndx[0][2][1]-=4;
+
       } else if (typ == 'canvas') {
         var se = n[0].querySelector("canvas");
         val.push(se.strokes);
@@ -487,8 +515,12 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
   $scope.saveNoteData = function () {
     var nd = $scope.getNoteData();
     console.log(nd);
-    SWBrijj.saveNoteData($scope.docId, $scope.invq, JSON.stringify(nd)).then(function (data) {
+    SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, JSON.stringify(nd)).then(function (data) {
       console.log(data);
+
+      var docpanel = document.querySelector(".docPanel");
+      var imgurl = docpanel.style.backgroundImage;
+      docpanel.style.backgroundImage = imgurl;
     });
   };
 
@@ -502,6 +534,18 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         c) upload the modified image.
    */
   $scope.saveNotes = function(e) {
+    var pr = $scope.invq ? "document.doSignStamp" : $scope.lib.original ? "document.doCounterStamp" : "document.doShareStamp";
+    SWBrijj.procm(pr, $scope.docId, $scope.currentPage).then(function(data) {
+      console.log(data);
+
+      var docpanel = document.querySelector(".docPanel");
+      var imgurl = docpanel.style.backgroundImage;
+      docpanel.style.backgroundImage = imgurl;
+
+    });
+  }
+
+  $scope.xxxsaveNotes = function(e) {
     var pageList = [];
     var noteList = [];
     for(var i=0;i<$scope.notes.length;i++) {
@@ -633,7 +677,6 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           ctx.fillStyle = "blue";
 
           var fs = getComputed(se,'font-size');
-          // ctx.font = '28px FontAwesome';
           ctx.font = fs +' Sharewave';
 
           /*padx = getIntProperty(se, 'padding-left');

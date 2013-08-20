@@ -297,22 +297,33 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 
 
 
-function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
+function CompanyDocumentViewController($scope, $routeParams, $location, $compile, SWBrijj) {
   var docKey = parseInt($routeParams.doc);
-  $scope.docId = docKey;
+  $scope.urlInves = $routeParams.investor;
   $scope.docKey = docKey
   $scope.invq = false;
-  $scope.counterparty = false;
-  $scope.library = "document.my_company_library";
-  $scope.pages = "document.my_company_codex";
+  $scope.counterparty = !!$scope.urlInves;
+
+  $scope.library = $scope.urlInves ? "document.my_counterparty_library" : "document.my_company_library";
+  $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
+
   $scope.docversions = []
 
-  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
+/*  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
       $scope.document=data;
   });
+  */
 
-  SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docId).then(function(data) {
+  SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
      $scope.docversions = data;
+    if ($scope.counterparty) {
+      for(var i = 0;i<data.length;i++) {
+        var doc = data[i];
+        if (doc.investor == $scope.urlInves) { $scope.pickInvestor(doc); break; }
+      }
+    } else {
+      $scope.getOriginal();
+    }
   });
 
 	$scope.share = function(message, email, sign) {
@@ -326,9 +337,11 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
     $scope.counterparty = true;
     $scope.currentDoc = doc;
 		$scope.docId = doc.doc_id;
-    console.log(doc);
     $scope.library = "document.my_counterparty_library";
     $scope.pages = "document.my_counterparty_codex";
+    var z = $location.search();
+    z['investor']=doc.investor;
+    $location.search(z);
 	};
 
 	$scope.getOriginal = function() {
@@ -338,7 +351,9 @@ function CompanyDocumentViewController($scope, $routeParams, $compile, SWBrijj) 
 		$scope.docId = $scope.docKey;
     $scope.library = "document.my_company_library";
     $scope.pages = "document.my_company_codex";
-    console.log($scope.docId);
+    var z = $location.search();
+    delete z['investor'];
+    $location.search(z);
 	}
 
   $scope.pageQueryString = function() {

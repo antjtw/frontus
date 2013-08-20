@@ -98,14 +98,10 @@
               <div>
                   <span data-icon="&#xe00d;" aria-hidden="true">
                   <div ng-switch on="person.when_signed">
-                    <div ng-switch-when="null"><p>Unsigned</p>
-                      <button class="button subText greyButton" ng-click="fakeSign(person)">Sign</button>
-                    </div>
                     <div ng-switch-default>
                       <p class="doubleTime">Signed</p>
                       <p class="doubleTime">{{person.when_signed | date:'MMMM dd, yyyy'}}</p>
                       <p>{{person.when_signed | date:'h:mm a'}}</p>
-                      <button class="button subText greyButton" ng-click="rejectSignature(person)">Reject</button>
                     </div>
                   </div>
                   </span>
