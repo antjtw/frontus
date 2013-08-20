@@ -102,6 +102,17 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		return false;
 	}
 
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+
 	var cookie = readCookie("selectedCompany");
 	if (cookie != null) {
 		$rootScope.isLoggedIn = true;
@@ -132,17 +143,6 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         $rootScope.$broadcast('adminIn');
 	});
 
-	function readCookie(name) {
-		var nameEQ = name + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0;i < ca.length;i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1,c.length);
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-		}
-		return null;
-	}
-
 	$rootScope.notification = {};
 	$rootScope.notification.visible = false;
 
@@ -166,5 +166,15 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       else {
         return true;
       }
+    };
+
+    $scope.otherCompanies = function (companies, current) {
+         var othercomps = [];
+         angular.forEach(companies, function(company) {
+              if (company.name != current) {
+                  othercomps.push(company);
+              };
+         });
+        return othercomps
     };
 }
