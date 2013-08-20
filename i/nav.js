@@ -8,6 +8,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.showBothBars = false;
 	$rootScope.isLoggedIn = false;
 	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
+    console.log($rootScope.path);
 
 	function changeNav(){
 		if (singleBarPages.indexOf($rootScope.path) > -1) {
@@ -34,6 +35,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$rootScope.select = function(companyURL) {
+        console.log(companyURL);
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
@@ -95,7 +97,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     }
 
 	var cookie = readCookie("selectedCompany");
-	if (cookie != null) {
+	if (cookie != null  && cookie != "undefined") {
 		$rootScope.isLoggedIn = true;
 		$rootScope.select(cookie);
 	}
@@ -122,15 +124,27 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
 		$rootScope.showLogin = true;
-        $rootScope.$broadcast('adminIn');
 	});
 
     // Switches the page when you select a new company
-    $rootScope.switch = function(companyURL) {
-        $rootScope.select(companyURL);
-        if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) // Refresh page if user is on ownership or documents
-            $route.reload();
-    }
+    $rootScope.switch = function(company) {
+        console.log(company.isAdmin);
+        $rootScope.select(company.company);
+        if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) { // Refresh page if user is on ownership or documents
+            console.log($rootScope.path.indexOf('/company/'));
+            if (company.isAdmin && ($rootScope.path.indexOf('/investor/') > -1)) {
+                console.log("admin on investor page")
+                document.location.href=$rootScope.path.replace("/investor/", "/company/");
+            }
+            else if (!company.isAdmin && ($rootScope.path.indexOf('/company/') > -1)) {
+                console.log("non-admin on investor page")
+                document.location.href=$rootScope.path.replace("/company/", "/investor/");
+            }
+            else {
+                $route.reload();
+            }
+        }
+    };
 
     // Notification code
 	$rootScope.notification = {};

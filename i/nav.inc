@@ -55,7 +55,7 @@
             <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="dropdown-label"><span>CHANGE COMPANY:</span></li>
               <li class="button" ng-repeat="company in otherCompanies(companies, selected.name)">
-                <a class="button" ng-click="switch('{{company.company}}')">{{company.name}}</a>
+                <a class="button" ng-click="switch({{company}})">{{company.name}}</a>
               </li>
             </ul>
           <li>
