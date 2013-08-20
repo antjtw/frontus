@@ -1126,7 +1126,7 @@ form.inputs {
 }
 
 .activityBlock > table {
-	margin: 20px 10px 10px 0px;
+	margin: 15px 10px 10px 0px;
 	overflow:auto;
 }
 
@@ -1295,6 +1295,10 @@ form.inputs {
 
 .statusPop .popover .popover-content > form {
 	margin: 0 0 0 0;
+}
+
+.activityFeed-header {
+   margin: 0;
 }
 
 .statusFeed {
