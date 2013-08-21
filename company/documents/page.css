@@ -77,3 +77,19 @@ div.container {
 .activity-feed {
     margin-left: 0;
 }
+
+table.docLibrary {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+table.docLibrary > tbody > tr:first-child > td {
+    cursor: pointer;
+}
+
+.status-showing td {
+    background-color: #f1f1f1;
+}

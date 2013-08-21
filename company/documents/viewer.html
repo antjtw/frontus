@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1><a href="/company/documents/"><i class="button icon-reply icon-2x"></i></a>{{document.docname}}</h1>
+        <h1><a href="/company/documents/"><span data-icon="&#xe038;" style="font-size: 300%;" aria-hidden="true"/></a>{{ document.docname }}</h1>
 
       <div class="row-fluid">
           <div>
@@ -26,10 +26,10 @@
     <div class="span3 docVersiontab leftBlock">
       <ul>
         <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal();">
-          <span>Original</span>
+          <span class="unselectable">Original</span>
         </li>
         <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
-          <span>{{doc.name}} <span class="smallDate">({{doc.investor}})</span></span>
+          <span class="unselectable" >{{doc.name}} <span class="smallDate">({{doc.investor}})</span></span>
         </li>
       </ul>
     </div>

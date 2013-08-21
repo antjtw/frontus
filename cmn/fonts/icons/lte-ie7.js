@@ -67,7 +67,9 @@ window.onload = function() {
 			'icon-info' : '&#xe044;',
 			'icon-admin' : '&#xe045;',
 			'icon-view' : '&#xe001;',
-			'icon-grab' : '&#xe043;'
+			'icon-grab' : '&#xe043;',
+			'icon-spam' : '&#xe000;',
+			'icon-countersign' : '&#xe02e;'
 		},
 		els = document.getElementsByTagName('*'),
 		i, attr, html, c, el;

@@ -48,12 +48,12 @@
       <div class="row-fluid">
         <table class="docLibrary tableView bodyText">
           <tr class="column-label">
-            <th class="button"><span>Shareholder</span></th>
-            <th class="button"><span>Email</span></th>
-            <th colspan="2" class="button"><span>Status</span></th>
+            <th><span>Shareholder</span></th>
+            <th><span>Email</span></th>
+            <th colspan="2"><span>Status</span></th>
           </tr>
           <tbody ng-repeat="person in docversions">
-          <tr ng-click="showStatusDetail(person)">
+          <tr ng-class="{'status-showing': person.shown}" ng-click="showStatusDetail(person)">
             <td>{{person.name}}</td>
             <td>{{person.investor}}</td>
             <td>{{person.signature_status}}</td>
@@ -107,7 +107,7 @@
                   </span>
               </div>
             <div>
-                  <span data-icon="&#xe00d;" aria-hidden="true">
+                  <span data-icon="&#xe02e;" aria-hidden="true">
                   <div ng-switch on="person.when_confirmed">
                     <div ng-switch-when="null">
                       <p>Not countersigned</p></div>

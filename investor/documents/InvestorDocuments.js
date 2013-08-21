@@ -8,8 +8,8 @@ docviews.config(function($routeProvider, $locationProvider) {
     
   $routeProvider.
       when('/', {templateUrl: 'list.html',   controller: InvestorDocumentListController}).
-      when('/:id', {templateUrl: 'viewer.html', controller: InvestorDocumentViewController}).
-      otherwise({redirectTo: '/:company'});
+      when('/view', {templateUrl: 'viewer.html', controller: InvestorDocumentViewController}).
+      otherwise({redirectTo: '/'});
 });
 
 /*docviews.directive('draggable', function() {
@@ -61,15 +61,16 @@ function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScop
 }
 
 function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
-  $scope.docId = parseInt($routeParams.id);
+  $scope.docId = parseInt($routeParams.doc);
   $scope.library = "document.my_investor_library";
   $scope.pages = "document.my_investor_codex";
 
   $scope.init = function () {
     $scope.invq = true;
-    SWBrijj.procm("document.get_investor_document", parseInt($scope.docId)).then(function(data) {
+
+    SWBrijj.tblm("document.my_investor_library", /*['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'],*/ "doc_id", $scope.docId).then(function(data) {
       $scope.document=data;
-      if ($scope.document[0].signature_deadline != null && $scope.document[0].when_signed == null) {
+      if ($scope.document.signature_deadline != null && $scope.document.when_signed == null) {
         $scope.needsign = true;
       }
       else {
@@ -77,5 +78,10 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
       }
     });
 
+
   };
+
+  $scope.pageQueryString = function() {
+    return  "id="+$scope.docId+"&investor=true";
+  }
 }

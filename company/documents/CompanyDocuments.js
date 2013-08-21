@@ -309,10 +309,9 @@ function CompanyDocumentViewController($scope, $routeParams, $location, $compile
 
   $scope.docversions = []
 
-/*  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docId).then(function(data) {
+  SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", $scope.docKey).then(function(data) {
       $scope.document=data;
   });
-  */
 
   SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
      $scope.docversions = data;
@@ -498,9 +497,9 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	
 	$scope.showStatusDetail = function(person) {
 		 $scope.docversions.forEach(function(name) {
-       name.shown = false;
+       if (name === person) name.shown = !name.shown;
+       else name.shown = false;
      });
-     person.shown = true;
 	};
 	
 		$scope.reminder = "";

@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-warning, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-doc2, .icon-doc, .icon-doc-upload, .icon-doc-download, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-magnify, .icon-key, .icon-delete3, .icon-delete2, .icon-cog, .icon-circle-upload, .icon-circle-download, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-down, .icon-circle-delete, .icon-cicle-minus, .icon-text, .icon-text-smaller, .icon-text-bigger, .icon-text-edit, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-pie, .icon-check, .icon-email, .icon-calendar, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-twitter-bird, .icon-linkedin2, .icon-facebook-f, .icon-lock, .icon-unlocked, .icon-share, .icon-arrow-2up, .icon-arrow-2right, .icon-arrow-2left, .icon-arrow-2down, .icon-back, .icon-conversion, .icon-info, .icon-admin, .icon-view, .icon-grab {
+.icon-warning, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-doc2, .icon-doc, .icon-doc-upload, .icon-doc-download, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-magnify, .icon-key, .icon-delete3, .icon-delete2, .icon-cog, .icon-circle-upload, .icon-circle-download, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-down, .icon-circle-delete, .icon-cicle-minus, .icon-text, .icon-text-smaller, .icon-text-bigger, .icon-text-edit, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-pie, .icon-check, .icon-email, .icon-calendar, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-twitter-bird, .icon-linkedin2, .icon-facebook-f, .icon-lock, .icon-unlocked, .icon-share, .icon-arrow-2up, .icon-arrow-2right, .icon-arrow-2left, .icon-arrow-2down, .icon-back, .icon-conversion, .icon-info, .icon-admin, .icon-view, .icon-grab, .icon-spam, .icon-countersign {
 	font-family: 'sharewave';
 	speak: none;
 	font-style: normal;
@@ -222,4 +222,10 @@ you can use the generic selector below, but it's slower:
 }
 .icon-grab:before {
 	content: "\e043";
+}
+.icon-spam:before {
+	content: "\e000";
+}
+.icon-countersign:before {
+	content: "\e02e";
 }

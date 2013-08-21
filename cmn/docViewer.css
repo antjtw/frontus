@@ -77,7 +77,7 @@ ul>li.curPage, .curPage.annotated {
     white-space: nowrap;
 }
 
-.docViewerControls > div {
+.docViewerControls > div:first-child {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
