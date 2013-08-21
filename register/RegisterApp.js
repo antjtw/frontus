@@ -15,6 +15,11 @@ app.config(function($routeProvider, $locationProvider){
 
 function CompanyCtrl($scope, $location, $routeParams, SWBrijj, $rootScope){
     $scope.code = $routeParams.code;
+
+    if ($scope.code == null) {
+        document.location.href="/";
+    }
+
     SWBrijj.getInvitation($scope.code).then(function(x) {
       console.log(x);
       initPage($scope, x);

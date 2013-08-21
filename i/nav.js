@@ -8,6 +8,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.showBothBars = false;
 	$rootScope.isLoggedIn = false;
 	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
+    console.log($rootScope.path);
 
 	function changeNav(){
 		if (singleBarPages.indexOf($rootScope.path) > -1) {
@@ -29,24 +30,12 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.isCollapsed = true;
 	$rootScope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
-	$scope.doLogin = function() {
-      SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
-      	if (x) {
-			document.location.href = x;
-			console.log("redirecting to: " + x);
-      	} else {
-      		document.location.href="/login/?error=" + $scope.username;
-      	}
-      }).except(function(x) {
-      	console.log('Login error');
-      });
-    }
-
 	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
 	$scope.documents = {visible: false, adminlink: '/company/documents', investorlink: '/investor/documents', link: ''};
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
 	$rootScope.select = function(companyURL) {
+        console.log(companyURL);
 		document.cookie = "selectedCompany="+companyURL + "; path=/";
 		for (var i = 0; i < $scope.companies.length; i++) {
 			if ($scope.companies[i].company == companyURL) {
@@ -90,24 +79,30 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		changeNav();
 	}
 
-	$rootScope.switch = function(companyURL) {
-		$rootScope.select(companyURL);
-		if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) // Refresh page if user is on ownership or documents
-			$route.reload();
-	}
-
 	function isAdmin(companyObj) {
 		if (companyObj.email == "")
 			return true;
 		return false;
 	}
 
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+
 	var cookie = readCookie("selectedCompany");
-	if (cookie != null) {
+	if (cookie != null  && cookie != "undefined") {
 		$rootScope.isLoggedIn = true;
 		$rootScope.select(cookie);
 	}
 
+/*    sharedData.getCompanies()*/
 	SWBrijj.procm('account.nav_companies').then(function(x) {
 		$rootScope.isLoggedIn = true;
 		for (var i = 0; i < x.length; i++) {
@@ -116,7 +111,9 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
 		if (x.length > 0) {
 			var cookie = readCookie("selectedCompany");
-			if (cookie != null) {
+			if (cookie != null && cookie != "undefined") {
+                console.log("we're using cookies");
+                console.log(cookie);
 				$rootScope.select(cookie);
 			} else {
 				$rootScope.select($scope.companies[0]['company']);	
@@ -129,17 +126,42 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$rootScope.showLogin = true;
 	});
 
-	function readCookie(name) {
-		var nameEQ = name + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0;i < ca.length;i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1,c.length);
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-		}
-		return null;
-	}
+    // Switches the page when you select a new company
+    $rootScope.switch = function(company) {
+        $rootScope.select(company.company);
+        if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/people') > -1)) {
+            document.location.href=$rootScope.path.replace("/company/profile/people", "/home/");
+        }
+        if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/') > -1)) {
+            document.location.href=$rootScope.path.replace("/company/profile/", "/home/");
+        }
+        if ($rootScope.path.indexOf('/home/') > -1) {
+            console.log("here")
+            if (!company.isAdmin && ($rootScope.path.indexOf('/company') > -1)) {
+                console.log("burrowing in")
+                document.location.href=$rootScope.path.replace("/company", "");
+            }
+            else if (company.isAdmin && ($rootScope.path.indexOf('/company') == -1)) {
+                document.location.href=$rootScope.path.replace("/home/", "/home/company/");
+            }
+        }
+        if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) { // Refresh page if user is on ownership or documents
+            console.log($rootScope.path.indexOf('/company/'));
+            if (company.isAdmin && ($rootScope.path.indexOf('/investor/') > -1)) {
+                console.log("admin on investor page")
+                document.location.href=$rootScope.path.replace("/investor/", "/company/");
+            }
+            else if (!company.isAdmin && ($rootScope.path.indexOf('/company/') > -1)) {
+                console.log("non-admin on investor page")
+                document.location.href=$rootScope.path.replace("/company/", "/investor/");
+            }
+            else {
+                $route.reload();
+            }
+        }
+    };
 
+    // Notification code
 	$rootScope.notification = {};
 	$rootScope.notification.visible = false;
 
@@ -156,6 +178,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		}, 3000);
 	};
 
+    // Returns true (disabling the login button) until the fields are filled out
 	$scope.fieldCheck = function() {
       if ($scope.username && $scope.password) {
         return false;
@@ -164,4 +187,29 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         return true;
       }
     };
+
+    // Filters out the current company from the selectable list
+    $scope.otherCompanies = function (companies, current) {
+         var othercomps = [];
+         angular.forEach(companies, function(company) {
+              if (company.name != current) {
+                  othercomps.push(company);
+              };
+         });
+        return othercomps
+    };
+
+    // Login Function
+    $scope.doLogin = function() {
+        SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
+            if (x) {
+                document.location.href = x;
+                console.log("redirecting to: " + x);
+            } else {
+                document.location.href="/login/?error=" + $scope.username;
+            }
+        }).except(function(x) {
+                console.log('Login error');
+            });
+    }
 }

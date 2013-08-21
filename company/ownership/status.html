@@ -1,22 +1,34 @@
 <div class="container">
 
-  <div modal="capAccess" close="close()" options="shareopts">
-    <div class="modalHeader">
-        <p class="subText">Change this person's access level?</p>
+    <div modal="capAccess" close="close()" options="shareopts">
+        <div class="modalHeader">
+            <span data-icon="&#xe026;" aria-hidden="true"></span>Change this person's access level?
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
+        </div>
+        <div class="modalText">
+            <form>
+                <p>Shareholders only see their personal holdings by default.<br>  Non-shareholders have full-access by default.</p>
+                <div class="cf capaccess-drop">
+                    <li class="dropdown standard pull-left">
+                        <a class="dropdown-toggle">
+                            {{selectedI.fullview}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="selectVisibility('Personal Only', selectedI)">Personal Only</a>
+                                <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+            </form>
+        </div>
+        <div class="modalButtons">
+            <div class="left"><button class="button subText blueButton left" ng-click="close()">Cancel</button></div>
+            <div class="right"><button class="button subText greenButton" ng-click="changeVisibility(selectedI); close();">Change</button></div>
+        </div>
     </div>
-    
-    <div class="modalText">
-    <form>
-        <select ng-model="selectedI.fullview">
-          <option value="personal">personal</option>
-          <option value="full">full</option>
-        </select>
-    </div>
-    </form>
-    <div class="modalButtons">
-        <button class="button subText greenButton" ng-click="changeVisibility(selectedI); close();">Change</button>
-    </div>
-  </div>
+
 
 	<div class="row-fluid">      
      <div class="span8 recipientInfo docLibrary statusBlock">
@@ -102,21 +114,25 @@
          
          <div class="row-fluid">
              <div>
-                <p class="subText">Activity Feed</p>
-             </div> 
-             <div class="activityBlock">
-             <table>
-             <tr ng-repeat="active in activity | orderBy:activityOrder">
-             	<td><i class="{{active.icon}}"></i></td>
-             	<td>
-                	<table>
-                		<tr><td>{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
-                        <tr><td>{{active.timeAgo}}</td></tr>
-                    </table>
-                </td>
-             </tr>
-             </table> 
-             </div>  
+                <p class="activityFeed-header subText">Activity Feed</p>
+             </div>
+
+             <section class="statusFeed">
+                 <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+                 <div class="activityBlock">
+                     <table>
+                         <tr ng-repeat="active in activity | orderBy:activityOrder">
+                            <td><i class="{{active.icon}}"></i></td>
+                            <td class="item">
+                                <table>
+                                    <tr><td class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
+                                    <tr><td class="time">{{active.timeAgo}}</td></tr>
+                                </table>
+                            </td>
+                         </tr>
+                     </table>
+                 </div>
+             </section>
          </div> 
      </div>
     </div>

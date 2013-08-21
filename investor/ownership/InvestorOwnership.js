@@ -9,7 +9,6 @@ owner.config(function ($routeProvider, $locationProvider) {
 
     $routeProvider.
         when('/', {templateUrl: 'companycaptable.html', controller: captableController}).
-        when('/:company', {templateUrl: 'companycaptable.html', controller: captableController}).
         when('/grant', {templateUrl: 'grant.html', controller: grantController}).
         otherwise({redirectTo: '/'});
 });
@@ -101,14 +100,17 @@ owner.run(function ($rootScope) {
 
 var captableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
 
-    if ($routeParams.company) {
-        var company = $routeParams.company;
-        $rootScope.select(company);
-        $location.url("/investor/ownership");
+    var company = $rootScope.selected.company;
+
+/*    if ($rootScope.selected.isAdmin) {
+        if ($rootScope.path.indexOf('/investor/') > -1) {
+            document.location.href=$rootScope.path.replace("/investor/", "/company/");
+        }
     } else {
-        var company = $rootScope.selected.company;        
-        if ($rootScope.selected.isAdmin) document.location.href="/company/ownership";
-    }
+        if ($rootScope.path.indexOf('/company/') > -1) {
+            document.location.href=$rootScope.path.replace("/company/", "/investor/");
+        }
+    }*/
 
     $scope.currentCompany = company;
     console.log(company);
@@ -135,7 +137,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
         console.log(data);
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
-            $scope.issues[i] = switchval.typeswitch($scope.issues[i]);
             $scope.issues[i].key = $scope.issues[i].issue;
             $scope.issuekeys.push($scope.issues[i].key);
         };
@@ -301,7 +302,6 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                     else {
                         tran.liquidpref = $scope.tf[1];
                     }
-                    tran = switchval.typeswitch(tran);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -376,6 +376,11 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
     };
 
     // Functions derived from services for use in the table
+
+    //switches the sidebar based on the type of the issue
+    $scope.trantype = function (type, activetype) {
+        return switchval.trantype(type, activetype);
+    };
 
     // Number of shareholders
     $scope.numShareholders = function() {
@@ -508,7 +513,6 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
                     $scope.trans[i].active = true
                     first = first + 1
                 }
-                $scope.trans[i] = switchval.typeswitch($scope.trans[i]);
                 $scope.activeTran.push($scope.trans[i]);
             }
         }

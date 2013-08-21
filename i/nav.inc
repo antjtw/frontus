@@ -53,8 +53,9 @@
             <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}" ng-href="{{{true: '#', false: ''}[companies.length > 1]}}" ng-bind="selected.name"></a>
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
             <ul class="dropdown-menu" ng-show="companies.length > 1">
-              <li class="button" ng-repeat="company in companies">
-                <a class="button" ng-click="switch('{{company.company}}')">{{company.name}}</a>
+              <li class="dropdown-label"><span>CHANGE COMPANY:</span></li>
+              <li class="button" ng-repeat="company in otherCompanies(companies, selected.name)">
+                <a class="button" ng-click="switch({{company}})">{{company.name}}</a>
               </li>
             </ul>
           <li>

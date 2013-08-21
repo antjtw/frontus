@@ -38,9 +38,10 @@
 	}
 
 	.home #hero{
+        background: url(/img/top-image-800-2.jpg) no-repeat center;
 		width: 80%;
-		height: 400px;
-	}
+        height: 400px;
+    }
 
 	.home .button {
 		margin: 0 0 0 0;
