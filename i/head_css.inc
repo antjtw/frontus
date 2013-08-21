@@ -7,3 +7,4 @@
 
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
+<link type="text/css" rel="stylesheet" href="/cmn/fonts/fselliot/elliot.css">

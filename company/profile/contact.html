@@ -53,7 +53,7 @@
     </form>
     
     <div>
-      <p class="title">Activity Feed</p>
+      <p class="activityFeed-header subText">Activity Feed</p>
     </div> 
     <section class="statusFeed">
       <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
@@ -87,11 +87,16 @@
     <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
-        <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
+          <div class="fileinputs">
+              <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+              <div class="fakefile">
+                  CHOOSE FILE
+                  <div ng-show="files.length">
+                      <span>{{files[0].name}}</span>
+                  </div>
+              </div>
+          </div>
       </fieldset>
-      <div ng-show="files.length">
-        <span>{{files[0].name}}</span>
-      </div>
     </form>
   </div>
   <div class="modalButtons two">
