@@ -22,7 +22,7 @@
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
         <tr>
-        <td><img src=""><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a>
+        <td><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a>
           <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
         </td> 
         <td>{{person.email}}</td>

@@ -40,23 +40,33 @@
 <!-- <div modal="pictureModal" close="pictureModalClose()" options="opts" ng-controller="FileDNDCtrl"> -->
 <div modal="pictureModal" close="pictureModalClose()" options="opts">
   <div class="modalHeader">
-    <p class="subText">Profile Picture</p>
+      <span data-icon="&#xe00b;" aria-hidden="true"></span>Profile Picture<span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
   </div>
   <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
+    <p>You can upload a JPG, GIF, or PNG file<br>(file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
-        <input class="bodyText button uploadButton" type="file" onchange="angular.element(this).scope().setFiles(this);" />
+          <div class="fileinputs">
+              <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+              <div class="fakefile">
+                  CHOOSE FILE
+                  <div ng-show="files.length">
+                    <span>{{files[0].name}}</span>
+                  </div>
+              </div>
+          </div>
       </fieldset>
-      <div ng-show="files.length">
-        <span>{{files[0].name}}</span>
-      </div>
     </form>
   </div>
 
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Cancel</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
-  </div>
+    <div class="modalButtons">
+        <div class="left"><button class="button subText blueButton left" ng-click="pictureModalClose()">TAKE ME BACK!</button></div>
+        <div class="right">
+            <button class="button subText greenButton" ng-click="uploadFile(); pictureModalClose();">
+                UPLOAD
+            </button>
+        </div>
+    </div>
 </div>
 
 <div modal="passwordModal" close="passwordModalClose()" options="opts" ng-controller="PasswordCtrl">
