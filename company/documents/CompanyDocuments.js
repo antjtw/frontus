@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['documents','ui.bootstrap', '$strap.directives','brijj', 'email']);
+var docviews = angular.module('documentviews', ['documents', 'ui.bootstrap', '$strap.directives','brijj', 'email']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -101,7 +101,7 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
-	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
+	SWBrijj.tblmm('global.investor_list', ['email', 'name'], 'company', $rootScope.selected.company).then(function(data) {
 		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
 

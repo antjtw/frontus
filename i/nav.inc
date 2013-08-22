@@ -31,6 +31,7 @@
         <ul class="nav pull-left nav-logo">
           <li><a href="/" ng-href="{{logoLink}}"><img src="/img/logo.png"/></a></li>
         </ul>
+
         <ul class="nav pull-right nav-item">
           <li style="display: none;" class="dropdown" ng-show="isLoggedIn">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
@@ -44,6 +45,9 @@
             <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="isCollapsed = !isCollapsed" ng-show="showLogin">LOGIN</a>
           <li>
         </ul>
+
+       <span class="for-r0ml pull-right" style="line-height: 40px;">{{userid}}</span>
+
       </div>
     </div>
     <div style="display:none" class="bottomnav navbar row-fluid" ng-show="showBothBars">

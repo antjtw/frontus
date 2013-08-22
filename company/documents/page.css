@@ -74,6 +74,11 @@ div.container {
     color: grey;
 }
 
+.documentStatus {
+  font-size: 50%;
+  padding-left: 4em;
+}
+
 .activity-feed {
     margin-left: 0;
 }
@@ -92,4 +97,78 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .status-showing td {
     background-color: #f1f1f1;
+}
+
+
+
+.dModalButtons {
+    display: block;
+    padding: 0 0 20px 0;
+}
+
+.dModalButtons button {
+    padding: 0 !important;
+    cursor: pointer;
+    border: 0;
+    box-sizing:border-box;
+    vertical-align: middle;
+    padding: 0 0 0 0;
+}
+
+.dModalButtons button {
+    display: inline-block;
+    text-align: center;
+    margin-left: 20px;
+}
+
+.dModalButtons button:last-child {
+    float:right;
+    margin-right: 20px;
+}
+
+
+/*
+.button:hover {
+    text-decoration: none;
+}
+
+.button.adisabled {
+    background-color:#BDC3C7;
+    cursor:default;
+}
+
+.button.adisabled:hover {
+    background-color:#BDC3C7;
+}
+*/
+
+button.blueButton {
+    color:#ffffff;
+    background-color:#34495E;
+    width: 143px;
+    height: 37px;
+    text-align:center;
+    padding: 0 0 0 0;
+}
+
+button.greenButton {
+    width: 143px;
+    height: 37px;
+    text-align:center;
+    padding: 0 0 0 0;
+    color:#ffffff;
+    background-color: #1ABC96;
+}
+
+button.greenButton:hover {
+    background-color: #1ccaa1;
+}
+
+button.greyButton {
+    color:#ffffff;
+    background-color:#bdc3c7;
+    width: 143px;
+    height: 37px;
+    text-align:center;
+    padding: 0 0 0 0;
 }

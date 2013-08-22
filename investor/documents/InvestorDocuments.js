@@ -1,73 +1,48 @@
-'use strict';
 
 /* App Module */
-var docviews = angular.module('documentviews', ['documents','ui.bootstrap','brijj']);
+var docviews = angular.module('documentviews', ['documents', 'ui.bootstrap', 'brijj']);
 
-docviews.config(function($routeProvider, $locationProvider) {
+docviews.config(function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
-    
+
   $routeProvider.
-      when('/', {templateUrl: 'list.html',   controller: InvestorDocumentListController}).
+      when('/', {templateUrl: 'list.html', controller: InvestorDocumentListController}).
       when('/view', {templateUrl: 'viewer.html', controller: InvestorDocumentViewController}).
       otherwise({redirectTo: '/'});
 });
 
-/*docviews.directive('draggable', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, elm, attrs) {
-      var options = scope.$eval(attrs.draggable); //allow options to be passed in
-      $(elm).draggable(options);
-    }
-  };
-});
-*/
-
-docviews.filter('fromNow', function() {
-  return function(date) {
+docviews.filter('fromNow', function () {
+  return function (date) {
     var d = moment(date);
     if (d) return d.fromNow();
+    return "unknown";
   }
 });
 
-
 /* Controllers */
-
 function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScope) {
-
-/*  if ($rootScope.selected.isAdmin) {
-      if ($rootScope.path.indexOf('/investor/') > -1) {
-          document.location.href=$rootScope.path.replace("/investor/", "/company/");
-      }
-  } else {
-      if ($rootScope.path.indexOf('/company/') > -1) {
-          document.location.href=$rootScope.path.replace("/company/", "/investor/");
-      }
-  }*/
-
   var company = $rootScope.selected.company;
-  if ($rootScope.selected.isAdmin) document.location.href="/company/documents";
+ /* if ($rootScope.selected.isAdmin) document.location.href = "/company/documents"; */
   $scope.currentCompany = company;
 
-	SWBrijj.tblmm("document.my_investor_library", "company", company).then(function(data) {
+  SWBrijj.tblmm("document.my_investor_library", "company", company).then(function (data) {
     $scope.documents = data;
-	});
-	
-	$scope.docOrder = 'docname';
-	
-	$scope.setOrder = function(field) {
-	  $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
-	};
+  });
 
-	$scope.searchFilter = function (obj) {
-     var re = new RegExp($scope.query, 'i');
-     return !$scope.query || re.test(obj.docname);
+  $scope.docOrder = 'docname';
+
+  $scope.setOrder = function (field) {
+    $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
   };
 
-  $scope.time = function(doc) {
+  $scope.searchFilter = function (obj) {
+    var re = new RegExp($scope.query, 'i');
+    return !$scope.query || re.test(obj.docname);
+  };
+
+  $scope.time = function (doc) {
     return doc.when_signed || doc.signature_deadline;
-  }
-							 		
+  };
 }
 
 function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj) {
@@ -78,20 +53,17 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
   $scope.init = function () {
     $scope.invq = true;
 
-    SWBrijj.tblm("document.my_investor_library", /*['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'],*/ "doc_id", $scope.docId).then(function(data) {
-      $scope.document=data;
-      if ($scope.document.signature_deadline != null && $scope.document.when_signed == null) {
-        $scope.needsign = true;
-      }
-      else {
-        $scope.needsign = false;
-      }
+    SWBrijj.tblm("document.my_investor_library", /*['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'],*/ "doc_id", $scope.docId).then(function (data) {
+      $scope.document = data;
+      // $scope.needsign = $scope.document.signature_deadline != null && $scope.document.when_signed == null;
     });
-
 
   };
 
-  $scope.pageQueryString = function() {
-    return  "id="+$scope.docId+"&investor=true";
-  }
+  $scope.confirmModalClose = function() {
+    $scope.confirmModal = false;
+  };
+  $scope.pageQueryString = function () {
+    return  "id=" + $scope.docId + "&investor=true";
+  };
 }

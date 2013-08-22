@@ -19,10 +19,10 @@
       <div class="span4">
         <div class="pageTurn">
           <ul>
-            <li class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"/></li>
-            <li><input ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
+            <li ng-class="{'hidden' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"/></li>
+            <li><input ng-class="{'hidden':docLength==1}" ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
             <li>/ {{docLength}}</li>
-            <li class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"/></li>
+            <li ng-class="{'hidden':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"/></li>
           </ul>
         </div>
       </div>
