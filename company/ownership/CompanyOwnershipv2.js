@@ -14,7 +14,7 @@ owner.config(function ($routeProvider, $locationProvider) {
         when('/status', {templateUrl: 'status.html', controller: statusController}).
         otherwise({redirectTo: '/'});
 });
-
+/*
 owner.factory('sharedData', function(SWBrijj, $q) {
 
     var getCompanies = function() {
@@ -26,7 +26,7 @@ owner.factory('sharedData', function(SWBrijj, $q) {
     }
 
     return { getCompanies:getCompanies };
-});
+});*/
 
 
 /*
@@ -1411,7 +1411,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             angular.forEach($scope.extraPeople, function (people) {
                 if (people.email) {
                     SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', people.email, true).then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', people.email, 'Full View').then(function (data) {
                             $rootScope.notification.show("success", "Ownership Table share request sent");
                         });
                     });
@@ -1793,27 +1793,17 @@ var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, 
 
 var statusController = function ($scope, $rootScope, SWBrijj) {
 
-    SWBrijj.tblm('account.my_company').then(function (x) {
-        $scope.cinfo = x
-    });
-
     SWBrijj.tblm('ownership.lastupdated').then(function (time) {
         $scope.lastupdated = time[0].last_edited
     });
 
-    SWBrijj.tblm("ownership.company_audit").then(function (data) {
+    SWBrijj.tblm("ownership.company_access").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
             $scope.userStatus[i].viewed = "unviewed";
             $scope.userStatus[i].viewflag = 0;
             $scope.userStatus[i].lastlogin = 0;
-            if ($scope.userStatus[i].fullview == false) {
-                $scope.userStatus[i].fullview = "Personal View";
-            }
-            else {
-                $scope.userStatus[i].fullview = "Full View";
-            }
         }
         ;
         SWBrijj.procm("ownership.get_company_views").then(function (views) {
@@ -1821,7 +1811,7 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
                 angular.forEach(views, function (view) {
                     if (view.email == person.email) {
                         person.viewed = "viewed";
-                        person.whenviewed = view.whendone;
+                        person.whenviewed = view.event_time;
                         person.viewflag = 1;
                     }
                 });
@@ -1839,7 +1829,7 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
     });
 
     // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "whendone"]).then(function(data) {
+    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "event_time"]).then(function(data) {
         $scope.activity = data;
         $scope.shared_dates = [];
         for (var i = 0; i < $scope.activity.length; i++) {
@@ -1875,18 +1865,14 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
     };
 
     $scope.selectVisibility = function (value, person) {
-        $scope.selectedI.fullview = value
+        $scope.selectedI.level = value
     }
 
     $scope.changeVisibility = function (person) {
-        var visibility = false;
-        if (person.fullview == 'Full View') {
-          visibility = true;
-        }
-        SWBrijj.proc('ownership.update_investor_captable', person.email, visibility).then(function (data) {
+        SWBrijj.proc('ownership.update_investor_captable', person.email, person.level).then(function (data) {
             angular.forEach($scope.userStatus, function(peep) {
                 if (peep.email == person.email) {
-                    peep.fullview = person.fullview
+                    peep.level = person.level
                 }
             })
             $rootScope.notification.show("success", "Changed ownership table access level");
