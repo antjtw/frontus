@@ -129,8 +129,8 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
     $scope.investorOrder = "name";
 
     SWBrijj.procm('ownership.mark_viewed', company).then(function (x) {
-        $scope.fullview = Boolean(x[0].mark_viewed);
-        console.log($scope.fullview);
+        $scope.level = x[0].mark_viewed;
+        console.log($scope.level);
     });
 
     SWBrijj.procm('ownership.get_my_issues', company).then(function (data) {
@@ -259,7 +259,7 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
                 });
             });
         });
-    }).except(initFail);
+    });
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -542,7 +542,3 @@ var grantController = function ($scope, $parse, SWBrijj, calculate, switchval, s
         ;
     };
 };
-
-function initFail(x) {
-    document.location.href='/login';
-}

@@ -6,8 +6,8 @@
     <div class="row-fluid">
       <div class="span3"> <!-- Photo -->
         <form>
-          <div class="editProfilePhoto">
-            <img ng-src="{{photoURL}}" style='width:140px; height:140px;' ng-click="pictureModalOpen()">
+          <div class="editProfilePhoto" ng-click="pictureModalOpen()">
+            <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
           </div>
         </form>
       </div>
@@ -29,7 +29,7 @@
         </tr>
         <tbody ng-repeat="admin in admins">
           <tr>
-          <td><img src=""><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
+          <td><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
           <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
@@ -53,7 +53,7 @@
     </form>
     
     <div>
-      <p class="title">Activity Feed</p>
+      <p class="activityFeed-header subText">Activity Feed</p>
     </div> 
     <section class="statusFeed">
       <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
@@ -87,11 +87,16 @@
     <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
-        <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
+          <div class="fileinputs">
+              <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+              <div class="fakefile">
+                  CHOOSE FILE
+                  <div ng-show="files.length">
+                      <span>{{files[0].name}}</span>
+                  </div>
+              </div>
+          </div>
       </fieldset>
-      <div ng-show="files.length">
-        <span>{{files[0].name}}</span>
-      </div>
     </form>
   </div>
   <div class="modalButtons two">
