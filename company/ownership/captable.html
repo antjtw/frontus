@@ -36,6 +36,26 @@
     </div>
 </div>
 
+<div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
+    <div class="modalHeader">
+        <span data-icon="&#xe027;" aria-hidden="true"></span>Edit this row's email?
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <p>Changing the email address of this row will invite a new email to get a personal view of the captable. If the old
+            email ({{oldEmail}}) has a personal view of the captable they will no longer be able to see it.
+        </p>
+        <div><input ng-model="newEmail"></div>
+    </div>
+    <div class="modalButtons">
+        <div class="left"><button class="button subText greyButton left" ng-click="alterEmailModalClose()">Undo</button></div>
+        <div class="right">
+            <button class="button subText greenButton" ng-click="alterEmailModalClose(); alterEmail();">Change
+            </button>
+        </div>
+    </div>
+</div>
+
 <div modal="capMulti" close="mclose(); mReset();" options="opts">
    <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Is this a new transaction?
@@ -725,9 +745,15 @@
 
                             <p>Info on this shareholder</p>
                         </div>
-                        <span class="capGuide">
-                            <p>{{activeInvestorEmail}}</p>
-                        </span>
+                        <div ng-show="activeInvestorEmail" class="row-fluid trancore">
+                            <div>
+                                <p>
+                                    {{activeInvestorEmail}}
+                                    <span ng-click="alterEmailModalUp(activeInvestorEmail);" data-icon="&#xe00e;" aria-hidden="true"></span>
+                                </p>
+                            </div>
+                            <div class="DivHelper"></div>
+                        </div>
                       </span>
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">

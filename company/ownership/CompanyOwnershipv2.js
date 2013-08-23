@@ -1354,6 +1354,33 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
         dialogClass: 'capshareModal modal'
     };
 
+    // Alter already shared row's email address
+    $scope.alterEmailModalUp = function (email) {
+        $scope.capEditEmail = true;
+        $scope.oldEmail = email;
+        $scope.newEmail = angular.copy(email);
+    };
+
+    $scope.alterEmailModalClose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.capEditEmail = false;
+    };
+
+    $scope.alterEmail = function() {
+         if ($scope.newEmail != "") {
+             SWBrijj.proc('ownership.update_row_share', $scope.newEmail, $scope.oldEmail, $scope.activeInvestorName).then(function (data) {
+                 angular.forEach($scope.rows, function (row) {
+                     if (row.name == $scope.activeInvestorName) {
+                         $rootScope.notification.show("success", "Email address updated");
+                         row.email = $scope.newEmail;
+                         row.emailkey = row.email;
+                         $scope.activeInvestorEmail = $scope.newEmail;
+                     }
+                 });
+             });
+         }
+    };
+
     $scope.opts = {
         backdropFade: true,
         dialogFade: true
@@ -1805,7 +1832,6 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
             $scope.userStatus[i].viewflag = 0;
             $scope.userStatus[i].lastlogin = 0;
         }
-        ;
         SWBrijj.procm("ownership.get_company_views").then(function (views) {
             angular.forEach($scope.userStatus, function (person) {
                 angular.forEach(views, function (view) {
