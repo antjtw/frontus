@@ -38,6 +38,10 @@
     -moz-box-shadow: none;
 }
 
+.lognreg input {
+    background-color: #ffffff;
+}
+
 input.loginInput:focus {
     background-color: #FFFFFF;
 }
