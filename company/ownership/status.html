@@ -11,11 +11,12 @@
                 <div class="cf capaccess-drop">
                     <li class="dropdown standard pull-left">
                         <a class="dropdown-toggle">
-                            {{selectedI.fullview}}
+                            {{selectedI.level}}
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a ng-click="selectVisibility('Personal Only', selectedI)">Personal Only</a>
+                                <a ng-click="selectVisibility('No View', selectedI)">No View</a>
+                                <a ng-click="selectVisibility('Personal View', selectedI)">Personal Only</a>
                                 <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
                             </li>
                         </ul>
@@ -71,7 +72,7 @@
                 <tr>
                 <td ng-click="(opendetails(person.email))">{{person.name}}</td>
                 <td ng-click="(opendetails(person.email))">{{person.email}}</td>
-       			    <td ng-click="(opendetails(person.email))">{{person.fullview}}</td>
+       			    <td ng-click="(opendetails(person.email))">{{person.level}}</td>
        		     	<td ng-click="(opendetails(person.email))">{{person.viewed}}</td>
                 <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></td>
                 </tr>
