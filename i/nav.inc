@@ -58,8 +58,8 @@
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
             <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="dropdown-label"><span>CHANGE COMPANY:</span></li>
-              <li class="button" ng-repeat="company in otherCompanies(companies, selected.name)">
-                <a class="button" ng-click="switch({{company}})">{{company.name}}</a>
+              <li class="button" ng-repeat="company in companies">
+                <a class="button" ng-hide="company==selected.company" ng-click="switch({{company}})">{{company.name}}</a>
               </li>
             </ul>
           <li>

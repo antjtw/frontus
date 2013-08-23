@@ -21,11 +21,7 @@ docviews.filter('fromNow', function () {
 
 /* Controllers */
 function InvestorDocumentListController($scope, SWBrijj, $routeParams, $rootScope) {
-  var company = $rootScope.selected.company;
- /* if ($rootScope.selected.isAdmin) document.location.href = "/company/documents"; */
-  $scope.currentCompany = company;
-
-  SWBrijj.tblmm("document.my_investor_library", "company", company).then(function (data) {
+    SWBrijj.tblmm("document.my_investor_library", "company", company).then(function (data) {
     $scope.documents = data;
   });
 
@@ -53,9 +49,8 @@ function InvestorDocumentViewController($scope, $routeParams, $compile, SWBrijj)
   $scope.init = function () {
     $scope.invq = true;
 
-    SWBrijj.tblm("document.my_investor_library", /*['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'],*/ "doc_id", $scope.docId).then(function (data) {
+    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function (data) {
       $scope.document = data;
-      // $scope.needsign = $scope.document.signature_deadline != null && $scope.document.when_signed == null;
     });
 
   };

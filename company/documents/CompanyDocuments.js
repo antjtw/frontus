@@ -89,19 +89,9 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 
 function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
 
-/*	if ($rootScope.selected.isAdmin) {
-        if ($rootScope.path.indexOf('/investor/') > -1) {
-            document.location.href=$rootScope.path.replace("/investor/", "/company/");
-        }
-    } else {
-        if ($rootScope.path.indexOf('/company/') > -1) {
-            document.location.href=$rootScope.path.replace("/company/", "/investor/");
-        }
-    }*/
-
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
-	SWBrijj.tblmm('global.investor_list', ['email', 'name'], 'company', $rootScope.selected.company).then(function(data) {
+	SWBrijj.tblmm('global.investor_list', ['email', 'name']).then(function(data) {
 		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
 
@@ -378,7 +368,7 @@ function CompanyDocumentViewController($scope, $routeParams, $location, $compile
     return  "id="+$scope.docId+"&investor="+$scope.invq+"&counterparty="+$scope.counterparty;
   }
   $scope.fakeSign = function(cd) {
-    SWBrijj.spoof_procm(cd.investor, "document.sign_document", cd.doc_id).then(function (data) {
+    SWBrijj.spoof_procm(cd.investor, cd.company, "document.sign_document", cd.doc_id).then(function (data) {
       cd.when_signed = data;
       $scope.$$childHead.init();
     }).except(function (x) {
