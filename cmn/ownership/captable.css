@@ -16,8 +16,9 @@
     text-transform: uppercase;
 }
 
-.descriptionRow td {
+.tableView.captable .descriptionRow td {
     height: 20px;
+    padding: 0 0 0 6px;
 }
 
 .descriptionRow span {
@@ -28,6 +29,39 @@
 .tableView.captable  {
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
+}
+
+.tableView.captable td {
+    margin: 0;
+    padding: 0;
+}
+
+.tableView th {
+    margin: 0;
+    padding: 0;
+}
+
+.tableView.captable input {
+    margin: 0;
+    padding: 0;
+}
+
+.tableView.captable input:disabled {
+    background: transparent;
+}
+
+.tableView.captable th > input {
+    background-color: #FFFFFF;
+    padding: 0 0 0 6px;
+}
+
+.tableView.captable input {
+    background-color: #FFFFFF;
+    padding: 9px 0 9px 6px;
+}
+
+.tableView.captable input:focus {
+    background-color: #E3E3E3;
 }
 
 .captablepair-box {
@@ -56,14 +90,8 @@
 }
 
 .tableView.captable .captablepair {
-    color: #FFFFFF;
+    color: #7f8c8d;
 }
-
-.tableView.captable .captablepair:focus {
-    color: #7f8c8d
-}
-
-.tableView.captable input:focus + .output { display: none; }
 
 .tableView.captable.viewcaptable {
     background: white;
@@ -84,7 +112,28 @@ p.captablepair {
 }
 
 .tableView td.tranSelected {
-    outline: 2px solid #E3E3E3;
+    border: 2px solid #E3E3E3;
+}
+
+.tableView.captable .tranSelected > input {
+    padding: 7px 0 7px 4px;
+}
+
+.tableView.captable .tranSelected > input:last-child {
+    padding: 7px 0 7px 6px;
+    width: 65px;
+}
+
+.tableView.captable .tranSelected > input:first-child {
+    border-left: 2px solid #E3E3E3;
+    border-top: 2px solid #E3E3E3;
+    border-bottom: 2px solid #E3E3E3;
+}
+
+.tableView.captable .tranSelected > input:last-child {
+    border-right: 2px solid #E3E3E3;
+    border-top: 2px solid #E3E3E3;
+    border-bottom: 2px solid #E3E3E3;
 }
 
 td.tranViewSelected {
@@ -320,6 +369,24 @@ tr.rowSelected {
     display: block;
     margin: 0 auto 0 auto;
 }
+
+.modal .input-row {
+    height:65px;
+    border-top: 1px solid #E3E3E3;
+    border-bottom: 1px solid #E3E3E3;
+    margin: 10px 20px 0 20px;
+}
+
+.modal .input-row > p {
+    margin: 5px 0 0 0;
+}
+
+.modal .input-row > input {
+    float:none;
+    width: 100%;
+    margin: 5px 0 0 0;
+}
+
 
 /* ios button thingy */
 

@@ -1824,21 +1824,19 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
         $scope.lastupdated = time[0].last_edited
     });
 
-    SWBrijj.tblm("ownership.company_access").then(function (data) {
+    SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
-            $scope.userStatus[i].viewed = "unviewed";
-            $scope.userStatus[i].viewflag = 0;
-            $scope.userStatus[i].lastlogin = 0;
         }
-        SWBrijj.procm("ownership.get_company_views").then(function (views) {
+        SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
+            console.log(activities);
             angular.forEach($scope.userStatus, function (person) {
-                angular.forEach(views, function (view) {
-                    if (view.email == person.email) {
-                        person.viewed = "viewed";
-                        person.whenviewed = view.event_time;
-                        person.viewflag = 1;
+                angular.forEach(activities, function (activity) {
+                    if (activity.email == person.email) {
+                        var act = activity.activity;
+                        var time = activity.event_time;
+                        person[act] = time;
                     }
                 });
             });
@@ -1922,6 +1920,31 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
         backdropFade: true,
         dialogFade: true,
         dialogClass: 'modal'
+    };
+
+    // Alter already shared row's email address
+    $scope.alterEmailModalUp = function (email) {
+        $scope.capEditEmail = true;
+        $scope.oldEmail = email;
+        $scope.newEmail = angular.copy(email);
+    };
+
+    $scope.alterEmailModalClose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.capEditEmail = false;
+    };
+
+    $scope.alterEmail = function() {
+        if ($scope.newEmail != "") {
+            SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
+                console.log(data);
+            });
+        }
+    };
+
+    $scope.opts = {
+        backdropFade: true,
+        dialogFade: true
     };
 
 };

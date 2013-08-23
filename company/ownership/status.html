@@ -30,6 +30,29 @@
         </div>
     </div>
 
+    <div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
+        <div class="modalHeader">
+            <span data-icon="&#xe027;" aria-hidden="true"></span>Edit this row's email?
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
+        </div>
+        <div class="modalText">
+            <p>Changing the email address of this row will invite a new email to view the captable. The account
+                associated with the old email will no longer be able to see it.
+            </p>
+            <div class="input-row">
+                <p>Email Address</p>
+                <input ng-model="newEmail">
+            </div>
+        </div>
+        <div class="modalButtons">
+            <div class="left"><button class="button subText greyButton left" ng-click="alterEmailModalClose()">Undo</button></div>
+            <div class="right">
+                <button class="button subText greenButton" ng-click="alterEmailModalClose(); alterEmail();">Change
+                </button>
+            </div>
+        </div>
+    </div>
+
 
 	<div class="row-fluid">      
      <div class="span8 recipientInfo docLibrary statusBlock">
@@ -73,24 +96,27 @@
                 <td ng-click="(opendetails(person.email))">{{person.name}}</td>
                 <td ng-click="(opendetails(person.email))">{{person.email}}</td>
        			    <td ng-click="(opendetails(person.email))">{{person.level}}</td>
-       		     	<td ng-click="(opendetails(person.email))">{{person.viewed}}</td>
-                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></td>
+       		     	<td ng-click="(opendetails(person.email))">
+                        <span ng-hide="person.viewed">unviewed</span>
+                        <span ng-show="person.viewed">viewed</span>
+                    </td>
+                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></span></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
                     <td class="status-bubbles" colspan="5">
-                        <div><span data-icon="&#xe024;" aria-hidden="true"></span><p class="doubleTime">Delivered</p><p class="doubleTime">{{person.whendone | date:'MMMM dd, yyyy'}}</p><p>{{person.whendone | date:'h:mm a'}}</p></div>
+                        <div><span data-icon="&#xe024;" aria-hidden="true"></span><p class="doubleTime">Delivered</p><p class="doubleTime">{{person.received | date:'MMMM dd, yyyy'}}</p><p>{{person.received | date:'h:mm a'}}</p><p ng-hide="person.viewed" ng-click="alterEmailModalUp(person.email)">Edit and Resend</p></div>
                         
                         <div>
                             <div ng-switch on="person.lastlogin" >
-                                <span ng-switch-when="0"><span data-icon="&#xe026;" aria-hidden="true"></span><p class="hltext">Never Logged In</p></span>
-                                <span ng-switch-default><span data-icon="&#xe026;" aria-hidden="true"></span><p class="doubleTime">Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
+                                <span ng-hide="person.lastlogin"><span data-icon="&#xe026;" aria-hidden="true"></span><p class="hltext">Never Logged In</p></span>
+                                <span ng-show="person.lastlogin"><span data-icon="&#xe026;" aria-hidden="true"></span><p class="doubleTime">Last Seen</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
                             </div>
                         </div>
                        
                         <div>
-                            <div ng-switch on="person.viewflag" >
-                                <span ng-switch-when="0"><span data-icon="&#xe001;" aria-hidden="true"></span><p class="hltext">Unviewed</p></span>
-                                <span ng-switch-default><span data-icon="&#xe001;" aria-hidden="true"></span><p class="doubleTime">Viewed</p><p class="doubleTime">{{person.whenviewed | date:'MMMM dd, yyyy'}}</p><p>{{person.whenviewed | date:'h:mm a'}}</p></span>
+                            <div>
+                                <span ng-hide="person.viewed"><span data-icon="&#xe001;" aria-hidden="true"></span><p class="hltext">Unviewed</p></span>
+                                <span ng-show="person.viewed"><span data-icon="&#xe001;" aria-hidden="true"></span><p class="doubleTime">Viewed</p><p class="doubleTime">{{person.viewed | date:'MMMM dd, yyyy'}}</p><p>{{person.viewed | date:'h:mm a'}}</p></span>
                             </div>
                         </div>
                     </td>
