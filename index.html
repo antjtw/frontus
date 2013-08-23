@@ -8,12 +8,16 @@
         <link type="text/css" rel="stylesheet" href="/cmn/index.css">
         <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
       	<meta name="description" content="The best way to manage your shareholders">
-    	<script src="index.js"></script>
+ 		<script src="index.js"></script>
 		<script>
 			$(document).ready(function(){
 			  $( "#inviteButton" ).click(function() {
 			    $('html, body').animate({
 			      scrollTop: $( "#CompanyRegister-form" ).offset().top - 20}, 600);
+			  });
+			  $( "#nextPage" ).click(function() {
+			    $('html, body').animate({
+			      scrollTop: $( "#comms" ).offset().top}, 600);
 			  });
 			});
 		</script>
@@ -30,7 +34,8 @@
 			</div>
 			<span ng-view=""></span>
 			<div id="hero">
-				<!--<img src="/img/white-down.png" id="nextPage" class="paginator">-->
+				<img src="/img/white-down.png" id="nextPage" class="paginator hidden-phone" data-0="opacity:1"
+                     data-100="opacity:0">
     			<div class="row-fluid">
 					<div class="span10 offset1"> 
 						<div class="spacer80"></div>
@@ -52,24 +57,22 @@
 				<div class="row-fluid pad">
 					<div class="span10 offset1 text-center" >
 						<h2>Communication Made Easy</h2>
-						<p>Sharewave makes it easy to deliver company information to <br> your shareholders, employees, board and customers.
-						</p>
+						<p>Sharewave makes it easy to deliver company information to <br> your shareholders, employees, board and customers.</p>
 						<div class="spacer40"></div>
                         <div class="comms">
                             <img class="bkg" src="/img/graphic-color.png">
                             <img class="ike" src="/img/graphic-1.png" data-bottom-center="opacity:1"
                                  data--200-bottom-center="opacity:0">
-                            <img class="jet" src="/img/graphic-2.png" data--250-bottom-center="opacity:1"
-                                 data--275-bottom-center="opacity:0">
-                            <img class="check" src="/img/graphic-3.png" data--400-bottom-center="opacity:1"
-                                 data--425-bottom-center="opacity:0">
+                            <img class="jet" src="/img/graphic-2.png" data--200-bottom-center="opacity:1"
+                                 data--225-bottom-center="opacity:0">
+                            <img class="check" src="/img/graphic-3.png" data--260-bottom-center="opacity:1"
+                                 data--285-bottom-center="opacity:0">
                             <div class="dots"
                                  data--100-bottom-center="width:50px;"
                                  data--150-bottom-center="width:50px;"
-                                 data--200-bottom-center="width:350px;"
-                                 data--300-bottom-center="width:350px;"
-                                 data--350-bottom-center="width:450px;"
-                                 data--400-bottom-center="width:550px;"  >
+                                 data--225-bottom-center="width:350px;"
+                                 data--240-bottom-center="width:350px;"
+                                 data--270-bottom-center="width:550px;"  >
                             </div>
                         </div>
 					</div>

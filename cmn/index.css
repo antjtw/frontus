@@ -1,9 +1,32 @@
 /* Homepage */
 
-.home #hero{
-    background: url(/img/top-image-1920-2.jpg) no-repeat center;
-    background-size:cover;
-    height: 800px;
+@media (max-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+    }
+}
+
+@media (min-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+        position: relative;
+    }
 }
 
 .home h1 {
@@ -73,11 +96,7 @@
     border-left: 30px solid #1ABC96;
 }
 
-.home .paginator {
-    position:absolute;
-    bottom:0;
-    left:50%;
-}
+
 
 .home .btn-mini {
     color: #8D8D8D;
@@ -323,4 +342,6 @@
 .signature img.key {
     z-index: 1;
 }
+
+
 
