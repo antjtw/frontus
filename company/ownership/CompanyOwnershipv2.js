@@ -142,7 +142,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     }*/
 
     // Set the view toggles to their defaults
-    $scope.radioModel = "Edit";
+    $scope.radioModel = "View";
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
 
@@ -349,6 +349,7 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
     };
 
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
+        $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.sideBar = 2;
         $scope.activeTran = [];
         $scope.activeIssue = currentcolumn;
@@ -399,7 +400,9 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
             $scope.trans.push(anewTran);
             $scope.activeTran.push(anewTran);
         }
-        $scope.activeTran[0].go = false;
+        if ($scope.sidebarstart != 2) {
+            $scope.activeTran[0].go = false;
+        }
     };
 
     $scope.getActiveIssue = function (issue) {
@@ -1857,15 +1860,16 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
         $scope.activity = data;
         $scope.shared_dates = [];
         for (var i = 0; i < $scope.activity.length; i++) {
-            $scope.activity[i].timeAgo = moment($scope.activity[i].whendone).fromNow();
+            $scope.activity[i].timeAgo = moment($scope.activity[i].event_time).fromNow();
             if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2)
                 $scope.activity[i].name = $scope.activity[i].email;
             $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
-            if ($scope.activity[i].activity == "shared") {
+            if ($scope.activity[i].activity == "received") {
                 $scope.activity[i].activity = "Shared with ";
                 $scope.activity[i].icon = 'icon-redo';
                 $scope.shared_dates.push(new Date($scope.activity[i].whendone));
-            } else if ($scope.activity[i].activity == "viewed") {
+            }
+            else if ($scope.activity[i].activity == "viewed") {
                 $scope.activity[i].activity = "Viewed by ";
                 $scope.activity[i].icon = 'icon-view';
             }
@@ -1873,7 +1877,7 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
     });
 
     $scope.activityOrder = function(card) {
-        return -card.whendone;
+        return -card.event_time;
     };
 
     $scope.opendetails = function(selected) {

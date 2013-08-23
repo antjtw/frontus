@@ -130,7 +130,9 @@ var captableController = function ($scope, $parse, SWBrijj, calculate, switchval
 
     SWBrijj.procm('ownership.mark_viewed', company).then(function (x) {
         $scope.level = x[0].mark_viewed;
-        console.log($scope.level);
+        if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
+            document.location.href="/home/";
+        }
     });
 
     SWBrijj.procm('ownership.get_my_issues', company).then(function (data) {

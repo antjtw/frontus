@@ -36,9 +36,17 @@
     padding: 0;
 }
 
+.tableView.captable td.viewName {
+    padding: 0 0 0 6px;
+}
+
 .tableView th {
     margin: 0;
     padding: 0;
+}
+
+.tableView th.staticHeaders {
+    padding: 0 0 0 6px;
 }
 
 .tableView.captable input {
@@ -47,6 +55,10 @@
 }
 
 .tableView.captable input:disabled {
+    background: transparent;
+}
+
+.capright input:disabled {
     background: transparent;
 }
 
@@ -73,7 +85,8 @@
     position: absolute;
     pointer-events: none;
     overflow-x: hidden;
-    width: 69px;
+    width: 67px;
+    padding: 0 0 0 6px;
 }
 
 .tableView.captable .output.clickable {
@@ -194,6 +207,10 @@ td.tranViewSelected {
     width: 280px;
 }
 
+.capright .tab-content {
+    min-height: 400px;
+}
+
 .trantabs .nav.nav-tabs {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -248,7 +265,7 @@ div.rightTitle {
     margin: 0 0 10px 0;
 }
 
-.rightTitle > span {
+.rightTitle > span:first-child {
     display: inline-block;
     width: 160px;
     margin-right: 40px;
@@ -351,10 +368,6 @@ tr.rowSelected {
 
 .capshareModal ul li > input {
     margin: 10px 0 9px 10px;
-}
-
-.capshareModal ul li > input[type='checkbox']:first-child {
-    margin: 13px 0 13px 20px;
 }
 
 .capshareModal ul li > input {

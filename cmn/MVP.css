@@ -83,12 +83,12 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 }
 
 textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    background-color: #E3E3E3;
+    background-color: #F1F1F1;
     border-radius: 0;
 }
 
 input:focus, textarea:focus {
-    background-color: #E3E3E3;
+    background-color: #F1F1F1;
     outline: none;
     box-shadow:none;
 }
