@@ -127,6 +127,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
 		$rootScope.showLogin = true;
+        $rootScope.isLoggedIn = false;
 	});
 
     // Notification code
