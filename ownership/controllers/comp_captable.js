@@ -399,6 +399,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             delete row[issue.key];
                         });
                     }
+                    $scope.issueRevert = angular.copy(issue);
+                    console.log($scope.issueRevert);
                     var keepgoing = true;
                     var deleterow = -1;
                     var issuename = String(issue.issue);
