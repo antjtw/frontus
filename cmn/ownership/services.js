@@ -63,8 +63,11 @@ ownership.service('calculate', function () {
                         remainingterm = remainingterm - 1;
                         cycleDate.addMonths(1);
                     }
-                    remainingterm = remainingterm + 1;
+                    remainingterm = remainingterm;
+                    var finalDate = tran.vestingbegins.addMonths(remainingterm);
+                    console.log("remaining term is " + String(remainingterm));
                     var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                    console.log("monthly percentage is " + String(monthlyperc));
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
                         x = 1
@@ -87,7 +90,8 @@ ownership.service('calculate', function () {
                     else {
                         cycleDate.addMonths(x);
                     }
-                    while (Date.compare(Date.today(), cycleDate) > -1) {
+                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                        console.log("The cycle data is " + String(cycleDate));
                         vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
@@ -99,9 +103,10 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+       angular.forEach(rows, function (row) {
             if (!isNaN(vesting[row.name])) {
-                row.vested = vesting[row.name];
+                var result =Math.round(vesting[row.name]*1000)/1000
+                row.vested = result;
             }
         });
         console.log(rows);
