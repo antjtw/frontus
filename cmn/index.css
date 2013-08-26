@@ -62,6 +62,10 @@
     font-weight: normal;
 }
 
+.home input {
+    background-color: #FFFFFF;
+}
+
 .videoModal.modal {
     width: 50%;
     height: 400px;

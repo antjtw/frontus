@@ -34,7 +34,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     SWBrijj.procm('account.onboarding_update', false);
   }
 
-  $scope.activity = [];
+/*  $scope.activity = [];
   SWBrijj.tblm('global.company_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
@@ -83,7 +83,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-  });
+  });*/
 
   $scope.activityOrder = function(card) {
         return -card.time;
