@@ -489,7 +489,7 @@ h2 {
 	padding: 0 0 0 0;
 	line-height: 30px;
 	text-align: center;
-	width: 98px;
+	padding: 0 20px 0 20px;
     text-shadow: none;
 }
 
@@ -567,6 +567,10 @@ h2 {
 	height: 122px;
 	position: relative;
 	border-bottom: 1px solid #E3E3E3;
+}
+
+.headsection > h1 {
+    margin-left: 15px;
 }
 
 .headsection > h1, .headsection > h2 {
@@ -908,6 +912,7 @@ form.inputs {
 }
 
 /* Placeholder text color */
+
 
 .docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
     color: #C7C7C7;
