@@ -2,49 +2,23 @@
 
 /* App Module */
 
-var docviews = angular.module('documentviews', ['documents','ui.bootstrap', '$strap.directives','brijj', 'email']);
+function calculateRedirect($scope) {
+  var z = readCookie('role');
+  console.log("calculating redirect: "+z);
+  return z == 'issuer' ? '/company-list' : '/investor-list';
+}
+
+var docviews = angular.module('documentviews', ['documents', 'ui.bootstrap', '$strap.directives','brijj', 'email']);
 
 docviews.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
-      when('/', {templateUrl: 'list.html',   controller: CompanyDocumentListController}).
-      when('/view', {templateUrl: 'viewer.html', controller: CompanyDocumentViewController}).
-	    when('/status', {templateUrl: 'status.html', controller: CompanyDocumentStatusController}).
-      otherwise({redirectTo: '/'});
-});
-
-/*
-docviews.directive('draggable', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, elm, attrs) {
-      var options = scope.$eval(attrs.draggable); //allow options to be passed in
-      $(elm).draggable(options);
-    }
-  };
-});
-*/
-
-/*
-docviews.directive('library', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, elm, attrs) {
-       scope.listScrolls = function() {
-         return elm[0].scrollHeight > elm[0].height;
-       }
-    }
-  }
-});
-*/
-
-docviews.directive('modaldelete', function() {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalDelete.html",
-    replace:true,
-    priority: 20
-  }
+      when('/company-list', {templateUrl: 'companyList.html',   controller: CompanyDocumentListController}).
+      when('/company-view', {templateUrl: 'companyViewer.html', controller: CompanyDocumentViewController}).
+      when('/company-status', {templateUrl: 'companyStatus.html', controller: CompanyDocumentStatusController}).
+      when('/investor-list', {templateUrl: 'investorList.html', controller: InvestorDocumentListController}).
+      when('/investor-view', {templateUrl: 'investorViewer.html', controller: InvestorDocumentViewController}).
+      otherwise({redirectTo: calculateRedirect() /*'/' */});
 });
 
 docviews.directive('modalupload', function($timeout) {
@@ -87,21 +61,16 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
 
 /* Controllers */
 
-function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) {
+function CompanyDocumentListController($scope, $modal, $location, $q, $rootScope, SWBrijj) {
+  if ($rootScope.selected.role == 'investor') {
+    $location.path('/investor-list');
+    return;
+  }
 
-/*	if ($rootScope.selected.isAdmin) {
-        if ($rootScope.path.indexOf('/investor/') > -1) {
-            document.location.href=$rootScope.path.replace("/investor/", "/company/");
-        }
-    } else {
-        if ($rootScope.path.indexOf('/company/') > -1) {
-            document.location.href=$rootScope.path.replace("/company/", "/investor/");
-        }
-    }*/
 
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = []
-	SWBrijj.tblm('account.company_investors', ['email', 'name']).then(function(data) {
+	SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
 		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
 
@@ -316,7 +285,12 @@ function CompanyDocumentListController($scope, $modal, $q, $rootScope, SWBrijj) 
 
 
 
-function CompanyDocumentViewController($scope, $routeParams, $location, $compile, SWBrijj) {
+function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope, $location, $compile, SWBrijj) {
+  if ($rootScope.selected.role == 'investor') {
+    $location.path('/investor-view');
+    return;
+  }
+
   var docKey = parseInt($routeParams.doc);
   $scope.urlInves = $routeParams.investor;
   $scope.docKey = docKey
@@ -378,7 +352,7 @@ function CompanyDocumentViewController($scope, $routeParams, $location, $compile
     return  "id="+$scope.docId+"&investor="+$scope.invq+"&counterparty="+$scope.counterparty;
   }
   $scope.fakeSign = function(cd) {
-    SWBrijj.spoof_procm(cd.investor, "document.sign_document", cd.doc_id).then(function (data) {
+    SWBrijj.spoof_procm(cd.investor, cd.company, "document.sign_document", cd.doc_id).then(function (data) {
       cd.when_signed = data;
       $scope.$$childHead.init();
     }).except(function (x) {
@@ -389,7 +363,8 @@ function CompanyDocumentViewController($scope, $routeParams, $location, $compile
   $scope.renege = function(cd) {
     SWBrijj.procm("document.renege", cd.doc_id).then(function(data) {
        cd.when_confirmed = null;
-      window.location.reload();
+      // window.location.reload();
+      $route.reload();
     });
   }
 
@@ -419,51 +394,7 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 	SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
 		$scope.activity = data;
 		console.log('data', data);
-		/*SWBrijj.procm("document.get_doc_activity", parseInt(docId)).then(function(person) {
-			$scope.activityDetail = person;
-			for (var ik = 0; ik < $scope.activity.length; ik++) {
-				if ($scope.activity[ik].count == 1) {
-					for (var j = 0; j < $scope.activityDetail.length; j++) {
-							if (new Date($scope.activity[ik].event_time).getTime() == (new Date(($scope.activityDetail[j].event_time + '').substring(0, 15)).getTime())) {
-								if ($scope.activity[ik].activity == $scope.activityDetail[j].activity) {
-										$scope.activity[ik].namethem = $scope.activityDetail[j].person;
-										$scope.activity[ik].event_time = $scope.activityDetail[j].event_time;
-									}
-							}
-					}
-				}
-
-			}
-
-
-    $scope.shared_dates = [];
-      		$scope.lastsent = new Date(Math.max.apply(null,$scope.shared_dates)).getTime();
-      		angular.forEach($scope.activity, function(x) { //Replace emails with names
-		        if (x.namethem != null) {
-		          SWBrijj.proc('account.get_investor_name', x.namethem, true).then(function(name) {
-		            	x.namethem = name[1][0];
-		          });
-		        }
-	     	});
-
-			});
-     */
     });
-
-/*  SWBrijj.procm("document.document_status", docId).then(function(data) {
-    $scope.userStatus = data;
-
-    angular.forEach($scope.userStatus, function(person) {
-      SWBrijj.proc('account.get_investor_name', person.sent_to, false).then(function(name) {
-        person.name = name[1][0];
-      });
-      person.shown = false;
-      person.button = "icon-plus";
-      if (person.event == "revoked") person.rstatus = 1;
-      if (person.event == "needsign") person.event = "needs signing";
-    });
-  });
-  */
 
 		$scope.activityOrder = function(card) {
 		   if (card.activity == "Uploaded by ") {
@@ -549,6 +480,63 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
 		}
 	
 }
+
+
+function InvestorDocumentListController($scope, $route, SWBrijj, $location, $routeParams, $rootScope) {
+  if ($rootScope.selected.role == 'issuer') {
+    $location.path("/company-list");
+    return;
+  }
+  SWBrijj.tblm("document.this_investor_library").then(function (data) {
+    $scope.documents = data;
+  });
+
+  $scope.docOrder = 'docname';
+
+  $scope.setOrder = function (field) {
+    $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
+  };
+
+  $scope.searchFilter = function (obj) {
+    var re = new RegExp($scope.query, 'i');
+    return !$scope.query || re.test(obj.docname);
+  };
+
+  $scope.time = function (doc) {
+    return doc.when_signed || doc.signature_deadline;
+  };
+}
+
+function InvestorDocumentViewController($scope, $location, $rootScope, $routeParams, $compile, SWBrijj) {
+  if ($rootScope.selected.role == 'issuer') {
+    $location.path("/company-view");
+    return;
+  }
+
+  $scope.docId = parseInt($routeParams.doc);
+  $scope.library = "document.my_investor_library";
+  $scope.pages = "document.my_investor_codex";
+
+  $scope.init = function () {
+    $scope.invq = true;
+
+    SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function (data) {
+      $scope.document = data;
+    });
+
+  };
+
+  $scope.confirmModalClose = function() {
+    $scope.confirmModal = false;
+  };
+  $scope.pageQueryString = function () {
+    return  "id=" + $scope.docId + "&investor=true";
+  };
+}
+
+
+
+
 
 /* Services */
 

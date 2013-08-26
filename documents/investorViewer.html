@@ -1,0 +1,44 @@
+<div class="container" data-ng-init="init()">
+  <div class="row-fluid">
+    <div class="headsection row-fluid">
+      <h1><a href="/documents/"><span data-icon="&#xe038;" style="font-size: 300%;" aria-hidden="true"/></a>{{document.docname}}
+        <span class="documentStatus">{{document.signature_status}}</span>
+      </h1>
+
+      <div class="row-fluid">
+        <div>
+          <button ng-click="confirmModal=true" class="button subText blueButton">Sign Document</button>
+
+          <button class="button subText greyButton" ng-hide="currentDoc.when_signed || currentDoc.original == currentDoc.docId" ng-click="fakeSign(currentDoc)">Fake Sign</button>
+          <button class="button subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
+          <button class="button subText greyButton" ng-show="currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div modal="confirmModal" close="confirmModalClose()" options="opts">
+    <div class="modalHeader">
+      <span data-icon="&#xe00d;" aria-hidden="true"></span>Confirm Electronic Signature
+      <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
+    </div>
+
+    <div class='modalText'>
+      <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">Do you wish to electonically sign this document? (This action is irreversible)
+    </div>
+
+    <div class="dModalButtons">
+      <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
+      <button class="greenButton" ng-click="signDocument(currentDoc); confirmModalClose();">Sign</button>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="true"></doc-viewer>
+  </div>
+
+</div>
+
+         
