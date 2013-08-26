@@ -100,7 +100,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   $scope.company = $rootScope.selected.name;
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_investor_home').then(function(data) {
+  /*SWBrijj.procm('global.get_investor_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       x.timeAgo = moment(x.time).fromNow();
@@ -150,7 +150,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-  });
+  });*/
 
   $scope.activityOrder = function(card) {
         return -card.time;
