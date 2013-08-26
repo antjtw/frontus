@@ -571,6 +571,8 @@ h2 {
 
 .headsection > h1, .headsection > h2 {
 	margin-top: 30px;
+    margin-bottom: 0px;
+    min-height: 26px;
 }
 
 .maintabs {
