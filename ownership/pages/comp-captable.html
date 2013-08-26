@@ -330,10 +330,10 @@
                 <td><input disabled value="{{totalShares(rows);}}"></td>
                 <td><input disabled value="100.00%"></td>
                 <td></td>
-                <td ng-repeat="one in issues">
+                <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'u'))" class="output footer"></div>
-                        <div ng-bind="formatDollarAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
             </tr>
@@ -342,10 +342,10 @@
                 <td><input disabled value="{{totalShares(dilutedRows);}}"></td>
                 <td><input disabled value="100.00%"></td>
                 <td></td>
-                <td ng-repeat="one in issues">
+                <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one.issue, dilutedRows, 'u'))" class="output footer"></div>
-                        <div ng-bind="formatDollarAmount(colTotal(one.issue, dilutedRows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one, dilutedRows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one, dilutedRows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
             </tr>

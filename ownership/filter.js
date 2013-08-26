@@ -6,7 +6,7 @@ ownership.filter('shareList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.emailkey == null && row.name != "") {
+            if (row.emailkey == null && row.name != "" && row.editable == "yes") {
                 returnrows.push(row);
             }
         });
