@@ -1305,13 +1305,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
+        var failed = []
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
                     $rootScope.notification.show("success", "Ownership Table share request sent");
                     row.send = false;
                     row.emailkey = row.email;
-                });
+                }).except(function(err) {
+                        failed.push(row.email);
+                    });
             }
         });
 
@@ -1323,11 +1326,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         SWBrijj.proc('ownership.update_investor_captable', people.email, 'Full View').then(function (data) {
                             $rootScope.notification.show("success", "Ownership Table share request sent");
                         });
-                    });
+                    }).except(function(err) {
+                            failed.push(people.email);
+                        });
                 }
             });
             $scope.extraPeople = [];
             $scope.extraPeople.push({'email': ""});
+        }
+
+        if (failed.length > 0) {
+            var failedemails = ""
+            angular.forEach(failed, function(fail) {
+                failedemails = String(fail) + ", " + failedemails
+            });
+            $rootScope.notification.show("fail", "Emails: " + failedemails + " failed to send");
         }
     };
 
