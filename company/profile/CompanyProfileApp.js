@@ -166,7 +166,7 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.item_id;
+        x.link = "/documents/company-status?doc=" + x.item_id;
         SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
@@ -313,7 +313,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.item_id;
+        x.link = "/documents/company-status?doc=" + x.item_id;
         SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 

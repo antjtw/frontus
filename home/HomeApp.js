@@ -59,7 +59,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
           x.icon = "icon-circle-minus";
         }
       } else if (x.type == 'document') {
-        x.link = "/company/documents/status?doc=" + x.item_id;
+        x.link = "/documents/company-status?doc=" + x.item_id;
         SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
         }); 
@@ -126,7 +126,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
         }
       } else
       if (x.type == 'document') {
-        x.link = "/investor/documents/" + x.doc_id;
+        x.link = "/documents/view?doc=" + x.doc_id;
         SWBrijj.tblm('document.my_investor_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
           x.target = res["docname"];
         }); 
