@@ -1300,6 +1300,10 @@ form.inputs {
     color: #8D8D8D;
 }
 
+.dropdown-toggle .invisible-drop {
+    visibility: hidden;
+}
+
 .edittoggle > .btn {
 	border-radius: 0 !important;
 	-webkit-border-radius: 0 !important;

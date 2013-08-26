@@ -382,7 +382,7 @@
                                     <span ng-show="typeLocked(activeIssue);">
                                         <li class="dropdown standard small">
                                             <a class="dropdown-toggle">
-                                                {{activeIssue.type}}
+                                                {{activeIssue.type}}<span class="invisible-drop">'</span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li ng-repeat="i in issuetypes">
@@ -424,7 +424,7 @@
                                 <div class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                     <li class="dropdown standard small">
                                         <a class="dropdown-toggle">
-                                            {{activeIssue.liquidpref}}
+                                            {{activeIssue.liquidpref}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li ng-repeat="i in liquidpref">
@@ -437,7 +437,7 @@
                                 <div class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                     <li class="dropdown standard small">
                                         <a class="dropdown-toggle">
-                                            {{activeIssue.partpref}}
+                                            {{activeIssue.partpref}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li ng-repeat="i in tf">
@@ -453,7 +453,7 @@
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                                 <li class="dropdown standard small">
                                     <a class="dropdown-toggle">
-                                        {{activeIssue.optundersec}}
+                                        {{activeIssue.optundersec}}<span class="invisible-drop">'</span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li ng-repeat="i in allowKeys">
@@ -500,7 +500,7 @@
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
                                 <li class="dropdown standard small">
                                     <a class="dropdown-toggle">
-                                        {{activeIssue.vestfreq}}
+                                        {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li ng-repeat="i in freqtypes">
@@ -621,7 +621,7 @@
                                         <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
-                                                    {{tran.liquidpref}}
+                                                    {{tran.liquidpref}}<span class="invisible-drop">'</span>
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li ng-repeat="i in liquidpref">
@@ -639,7 +639,7 @@
                                         <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
-                                                    {{tran.partpref}}
+                                                    {{tran.partpref}}<span class="invisible-drop">'</span>
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li ng-repeat="i in tf">
@@ -661,7 +661,7 @@
                                     <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                                         <li class="dropdown standard small">
                                             <a class="dropdown-toggle">
-                                                {{tran.optundersec}}
+                                                {{tran.optundersec}}<span class="invisible-drop">'</span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li ng-repeat="i in allowKeys">
@@ -708,7 +708,7 @@
                                     <div class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
                                         <li class="dropdown standard small">
                                             <a class="dropdown-toggle">
-                                                {{tran.vestfreq}}
+                                                {{tran.vestfreq}}<span class="invisible-drop">'</span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li ng-repeat="i in freqtypes">
