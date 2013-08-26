@@ -111,7 +111,13 @@ ownership.service('calculate', function () {
 
     // Returns the number of shareholders (rows -1 for the empty row)
     this.numShareholders = function (rows) {
-        return (rows.length - 1);
+        var number = 0
+        angular.forEach(rows, function(row) {
+            if (row.editable == "yes") {
+                number += 1
+            }
+        });
+        return number;
     };
 
     // Calculates the Total Shares owned by an investor across all rounds

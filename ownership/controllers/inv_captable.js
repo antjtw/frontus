@@ -52,8 +52,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     $scope.grantsview = 1;
                 }
                 SWBrijj.tblm('ownership.this_company_options_grants').then(function (grants) {
-
                     $scope.grants = grants;
+                    // Uses the grants to update the transactions with forfeited values
+                    // Eliminates the need for further reference to forfeit grants
                     angular.forEach($scope.grants, function (grant) {
                         angular.forEach($scope.trans, function (tran) {
                             if (grant.tran_id == tran.tran_id) {
@@ -87,34 +88,41 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     }
                     ;
 
+                    // Generate the rows from the transactions
+                    // u represents units throughout, a price
                     angular.forEach($scope.trans, function (tran) {
                         angular.forEach($scope.rows, function (row) {
                             if (row.name == tran.investor) {
                                 if (tran.issue in row) {
                                     row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
                                     row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
+                                    row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                                    row[tran.issue]["akey"] = row[tran.issue]["a"];
                                     if (!isNaN(parseFloat(tran.forfeited))) {
                                         row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                        row[tran.issue]["ukey"] = row[tran.issue]["u"];
                                     }
                                 }
                                 else {
-                                    row[tran.issue] = {}
+                                    row[tran.issue] = {};
                                     row[tran.issue]["u"] = tran.units;
                                     row[tran.issue]["a"] = tran.amount;
+                                    row[tran.issue]["ukey"] = tran.units;
+                                    row[tran.issue]["akey"] = tran.amount;
+                                    row[tran.issue]["state"] = false;
                                     if (!isNaN(parseFloat(tran.forfeited))) {
-                                        row[tran.issue]["u"] = (-tran.forfeited);
+                                        row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                        row[tran.issue]["ukey"] = row[tran.issue]["u"];
                                     }
                                 }
-                                ;
                             }
                             else {
                                 if (tran.issue in row) {
                                 }
                                 else {
-                                    row[tran.issue] = {"u": null, "a": null};
+                                    row[tran.issue] = {"u": null, "a": null, "ukey": null, "akey": null};
                                 }
                             }
-                            ;
                         });
                     });
 

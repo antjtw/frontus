@@ -688,22 +688,26 @@ form.inputs {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 
 .loginInput:-moz-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 .loginInput::-moz-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 .loginInput:-ms-input-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 
 
@@ -904,20 +908,25 @@ form.inputs {
 }
 
 /* Placeholder text color */
+
 .docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
-   color: #C7C7C7;
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input:-moz-placeholder, .docLibrary input:disabled:-moz-placeholder { /* Firefox 18- */
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input::-moz-placeholder, .docLibrary input:disabled::-moz-placeholder {  /* Firefox 19+ */
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input:-ms-input-placeholder, .docLibrary input:disabled:-ms-input-placeholder {
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 
