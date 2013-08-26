@@ -1,9 +1,32 @@
 /* Homepage */
 
-.home #hero{
-    background: url(/img/top-image-1920-2.jpg) no-repeat center;
-    background-size:cover;
-    height: 800px;
+@media (max-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+    }
+}
+
+@media (min-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+        position: relative;
+    }
 }
 
 .home h1 {
@@ -73,11 +96,7 @@
     border-left: 30px solid #1ABC96;
 }
 
-.home .paginator {
-    position:absolute;
-    bottom:0;
-    left:50%;
-}
+
 
 .home .btn-mini {
     color: #8D8D8D;
@@ -242,3 +261,87 @@
     width:85%;
     margin:auto;
 }
+
+
+/* Parallax Communication Graphics */
+
+.comms {
+    position: relative;
+    width: 820px;
+    margin: 0 auto 0 auto;
+}
+
+.comms img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.comms img.bkg {
+    z-index: 10;
+    position: relative;
+}
+
+.comms img.ike {
+    z-index: 20;
+}
+
+.comms img.jet {
+    z-index: 30;
+}
+
+.comms img.check {
+    z-index: 40;
+}
+
+.comms .dots {
+    position: relative;
+    z-index:0;
+    top:-120px;
+    left:70px;
+    width:100%;
+    height:7px;
+    background:url(/img/dot.png) repeat-x;
+}
+
+
+/* Parallax features */
+
+.signature {
+    position: relative;
+}
+
+.signature img {
+    position: absolute;
+}
+
+.signature img.dottedline {
+    z-index: 1;
+}
+
+.signature img.sign {
+    z-index: 2;
+}
+
+.signature img.pen {
+    z-index: 3;
+}
+
+.permission {
+    position: relative;
+}
+
+.permission img {
+    position: absolute;
+}
+
+.permission img.keyhole {
+    z-index: 0;
+}
+
+.signature img.key {
+    z-index: 1;
+}
+
+
+
