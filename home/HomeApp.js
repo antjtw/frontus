@@ -21,10 +21,6 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     }
   }
 
-  SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
-     $scope.name = x[0]['name'];
-  }).except(initFail);
-
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
   }).except(initFail);
