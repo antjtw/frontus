@@ -221,6 +221,16 @@ td.tranViewSelected {
     color: #8D8D8D;
 }
 
+.capright .date-selection input {
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+.capright .date-selection input:disabled {
+    margin-left: 10px;
+    padding-left: 0;
+}
+
 .capright .in-brief h2 {
     margin-bottom: 20px;
 }

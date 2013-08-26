@@ -1280,6 +1280,7 @@ form.inputs {
     width: 79px;
     height: 22px;
     line-height: 22px;
+    padding-left: 10px;
 }
 
 .standard.small .dropdown-toggle:before {
@@ -1291,6 +1292,11 @@ form.inputs {
     width: 101px;
     min-width: 101px;
 }
+
+.standard.small .dropdown-menu > li > a {
+    padding-left: 10px;
+}
+
 
 .standard .dropdown-menu > li > a {
     color: #8D8D8D;

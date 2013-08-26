@@ -369,7 +369,7 @@
                             <p>Customize terms for this issue</p>
                         </div>
                         <div class="row-fluid trancore">
-                            <div>
+                            <div class="date-selection">
                                 <p>Date <input ng-disabled="toggleView();" id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                 </p>
@@ -559,7 +559,7 @@
                         <tabset class="trantabs">
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                                 <div class="row-fluid trancore">
-                                    <div ng-hide="toggleView();">
+                                    <div class="date-selection" ng-hide="toggleView();">
                                         <p>Date <input ng-disabled="toggleView();" id="{{tran.$$hashKey}}" ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}" ng-change="saveTranDate(tran)" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
                                         </p>
                                         <span data-icon="&#xe00c;"
