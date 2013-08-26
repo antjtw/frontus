@@ -204,11 +204,36 @@ td.tranViewSelected {
     font-weight: normal;
     color: #1e2d3d;
     text-transform: uppercase;
-    width: 280px;
+    width: 260px;
 }
 
 .capright .tab-content {
     min-height: 400px;
+}
+
+.capright .issue-delete {
+    border: 1px solid #E3E3E3;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 18px;
+    padding: 2px 2px 0 2px;
+    color: #8D8D8D;
+}
+
+.capright .in-brief h2 {
+    margin-bottom: 20px;
+}
+
+.capright .in-brief p {
+    font-size: 16px;
+}
+
+.capright .in-brief span {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #1e2d3d;
 }
 
 .trantabs .nav.nav-tabs {

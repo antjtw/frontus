@@ -1,4 +1,9 @@
-var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculate, switchval, sorting) {
+var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting) {
+
+    if ($rootScope.selected.role == 'investor') {
+        $location.path('/investor-captable');
+        return;
+    }
 
     var company = $rootScope.selected.company;
     $scope.currentCompany = company;
@@ -59,6 +64,8 @@ var captableController = function ($scope, $rootScope, $parse, SWBrijj, calculat
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
+        console.log(data);
+        if (Object.keys(data).length == 0) {$scope.radioModel = "Edit"};
         $scope.issues = data;
 
         // Get the company's Transactions

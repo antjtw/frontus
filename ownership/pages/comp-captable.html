@@ -361,7 +361,8 @@
             <span ng-switch-when="1">
                         <div class="headsection row-fluid">
                             <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
-                                       ng-model="activeIssue.issue"><span ng-disabled="toggleView();" data-icon="&#xe00c;"
+                                       ng-model="activeIssue.issue">
+                                <span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
                                                                           ng-click="deleteIssueButton(activeIssue);" aria-hidden="true"></span>
                             </h2>
 
@@ -549,7 +550,7 @@
 
                       <span ng-switch-when="2">
                         <div class="tabbed headsection row-fluid">
-                            <h2>{{activeInvestor}}<span ng-disabled="toggleView();" data-icon="&#xe00c;"
+                            <h2>{{activeInvestor}}<span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
                                                         ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
                             </h2>
 
@@ -779,15 +780,15 @@
 
                             <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
                         </span>
-                        <span ng-show="toggleView();">
+                        <span class="in-brief" ng-show="toggleView();">
                             <h2>In Brief</h2>
 
-                            <p><input disabled value="{{lastPostMoney();}}"> Post Money Valuation</p>
-                            <p><input disabled value="{{lastIssue();}}"> Date of last valuation</p>
-                            <p><input disabled value="{{pricePerShare();}}"> Price-per-share</p>
-                            <p><input disabled value="{{totalPaid(rows);}}"> Total Paid</p>
-                            <p><input disabled value="{{totalShares(rows);}}"> Fully Diluted Units</p>
-                            <p><input disabled value="{{numShareholders();}}"> Shareholders</p>
+                            <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
+                            <p ng-show="lastIssue()"><span>{{lastIssue() | date:'shortDate'}}</span> Date of last valuation</p>
+                            <p ng-show="pricePerShare()"><span>${{pricePerShare()}}</span> Price-per-share</p>
+                            <p ng-show="totalPaid(rows)"><span>${{totalPaid(rows)}}</span> Total Paid</p>
+                            <p ng-show="totalShares(rows)"><span>{{totalShares(rows)}}</span> Fully Diluted Units</p>
+                            <p ng-show="numShareholders()"><span>{{numShareholders()}}</span> Shareholders</p>
                         </span>
                       </span>
             </div>

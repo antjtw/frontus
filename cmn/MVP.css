@@ -89,8 +89,8 @@ textarea, input, input[type="text"], input[type="password"], input[type="datetim
 
 input:focus, textarea:focus {
     background-color: #F1F1F1;
-    outline: none;
-    box-shadow:none;
+    outline: none !important;
+    box-shadow:none !important;
 }
 
 .pointer {
