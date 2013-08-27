@@ -1416,13 +1416,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Total Shares in captable
     var totalShares = memoize(calculate.totalShares)
     $scope.totalShares = function(rows) {
-        return totalShares(rows);
+        return $scope.formatAmount(totalShares(rows));
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var totalPaid = memoize(calculate.totalPaid);
     $scope.totalPaid = function(rows) {
-        return totalPaid(rows);
+        return $scope.formatDollarAmount(totalPaid(rows));
     };
 
     // Total Shares for a shareholder row
@@ -1445,7 +1445,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
-        return calculate.pricePerShare($scope.issues);
+        return $scope.formatDollarAmount(calculate.pricePerShare($scope.issues));
     };
 
     // Last issue date for the sidebar In Brief section
@@ -1455,6 +1455,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Last issue date for the sidebar In Brief section
     $scope.lastPostMoney = function() {
-        return calculate.lastPostMoney($scope.issues);
+        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
     };
 };

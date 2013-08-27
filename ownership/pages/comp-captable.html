@@ -917,8 +917,8 @@
 
                             <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
                             <p ng-show="lastIssue()"><span>{{lastIssue() | date:'shortDate'}}</span> Date of last valuation</p>
-                            <p ng-show="pricePerShare()"><span>${{pricePerShare()}}</span> Price-per-share</p>
-                            <p ng-show="totalPaid(rows)"><span>${{totalPaid(rows)}}</span> Total Paid</p>
+                            <p ng-show="pricePerShare()"><span>{{pricePerShare()}}</span> Price-per-share</p>
+                            <p ng-show="totalPaid(rows)"><span>{{totalPaid(rows)}}</span> Total Paid</p>
                             <p ng-show="totalShares(rows)"><span>{{totalShares(rows)}}</span> Fully Diluted Units</p>
                             <p ng-show="numShareholders()"><span>{{numShareholders()}}</span> Shareholders</p>
                         </span>
