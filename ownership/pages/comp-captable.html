@@ -911,7 +911,9 @@
                             <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
-                            <h2>In Brief</h2>
+                            <div class="headsection row-fluid tabbed">
+                                <h2>Summary</h2>
+                            </div>
 
                             <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
                             <p ng-show="lastIssue()"><span>{{lastIssue() | date:'shortDate'}}</span> Date of last valuation</p>

@@ -235,19 +235,25 @@ td.tranViewSelected {
     padding-left: 0;
 }
 
+.capright .in-brief p, .capright .in-brief span, .capright .in-brief h2 {
+    color: #1e2d3d;
+}
+
+.capright .in-brief .headsection {
+    padding-left: 0;
+}
+
 .capright .in-brief h2 {
     margin-bottom: 20px;
 }
 
 .capright .in-brief p {
-    font-size: 16px;
+    font-size: 14px;
+    margin-bottom: 25px;
 }
 
 .capright .in-brief span {
     display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #1e2d3d;
 }
 
 .trantabs .nav.nav-tabs {
