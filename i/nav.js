@@ -29,6 +29,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
   $scope.switch = function(nc) {
+      $rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
       SWBrijj.switch_company(nc.company, nc.role).then( function(data) {
         $scope.companies = data;
         $scope.initCompany(true);
@@ -76,7 +77,6 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
     if (switching) {
         if (($rootScope.path.indexOf('ownership') > -1) && (($rootScope.path.indexOf('grants') > -1) || ($rootScope.path.indexOf('status') > -1))) {
-            console.log("redirecting");
             document.location.href = '/ownership'; return;
         }
     }
