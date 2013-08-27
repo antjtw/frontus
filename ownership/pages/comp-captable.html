@@ -238,7 +238,7 @@
             <tr ng-hide="toggleView();" class="column-label">
                 <th colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="one in issues">
+                <th  ng-repeat="one in issues">
                     <input placeholder="new security name" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue">
                 </th>

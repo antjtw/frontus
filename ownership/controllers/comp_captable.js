@@ -229,6 +229,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
         $scope.sidebarstart = angular.copy($scope.sideBar);
+        $scope.oldActive = angular.copy($scope.activeTran);
         if ($scope.toggleView()) {
             $scope.sideBar = 4;
         }
@@ -284,7 +285,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.trans.push(anewTran);
             $scope.activeTran.push(anewTran);
         }
-        if ($scope.sidebarstart != 2) {
+        if ($scope.oldActive[0] != $scope.activeTran[0]) {
             $scope.activeTran[0].go = false;
         }
     };
@@ -580,7 +581,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Creates a new blank transaction with today's date
     $scope.createTrantab = function () {
-        console.log("creating tab");
         if ($scope.activeTran[0].go) {
             var inIssue = $scope.activeTran[0].issue
             var newTran = {};
