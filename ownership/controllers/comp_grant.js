@@ -133,6 +133,11 @@ var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, 
         }
     };
 
+    $scope.saveGrantDrop = function (grant, type) {
+         grant.action = type;
+         $scope.saveGrant(grant);
+    };
+
     $scope.saveGrant = function (grant) {
         console.log(grant);
         if (isNaN(parseFloat(grant.unit))) {
@@ -240,13 +245,6 @@ var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, 
     };
 
     $scope.saveTran = function (transaction) {
-        if (transaction['vestingbegins'] == undefined) {
-            var vestcliffdate = null
-        }
-
-        else {
-            var vestcliffdate = (transaction['vestingbegins']).toUTCString();
-        }
         var d1 = transaction['date'].toUTCString();
         SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
 

@@ -123,6 +123,17 @@ owner.run(function ($rootScope) {
         return total;
     };
 
+//Calculates total vested in column
+    $rootScope.totalVestedAction = function (rows) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            if (!isNaN(parseFloat(row.vested))) {
+                total = total + parseFloat(row.vested);
+            }
+        });
+        return total;
+    };
+
     $rootScope.postIssues = function (keys, issue) {
         console.log(keys);
         console.log(issue);

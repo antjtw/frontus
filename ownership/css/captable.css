@@ -45,6 +45,10 @@
     padding: 0;
 }
 
+.tableView th:first-of-type {
+    padding-left: 5px;
+}
+
 .tableView th.staticHeaders {
     padding: 0 0 0 6px;
 }
