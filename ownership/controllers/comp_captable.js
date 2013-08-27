@@ -406,7 +406,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         });
                     }
                     $scope.issueRevert = angular.copy(issue);
-                    console.log($scope.issueRevert);
                     var keepgoing = true;
                     var deleterow = -1;
                     var issuename = String(issue.issue);
@@ -1141,8 +1140,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.irevert = function (issue) {
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             if ($scope.issues[i].issue == issue.issue) {
-                $scope.issues[i] = $scope.issueRevert;
-                $scope.activeIssue = $scope.issueRevert;
+                $scope.issues[i] = angular.copy($scope.issueRevert);
+                $scope.activeIssue = angular.copy($scope.issueRevert);
             }
         };
     };
