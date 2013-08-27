@@ -76,6 +76,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
     if (switching) {
         if (($rootScope.path.indexOf('ownership') > -1) && (($rootScope.path.indexOf('grants') > -1) || ($rootScope.path.indexOf('status') > -1))) {
+            console.log("redirecting");
             document.location.href = '/ownership'; return;
         }
     }
