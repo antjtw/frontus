@@ -283,7 +283,7 @@
               <span ng-switch on="row.editable">
                 <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                   <input class="captablepair" maxlength="18"
-                         placeholder="units"
+                         placeholder="shares"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                          ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'>
                   <input class="captablepair" maxlength="18" placeholder="paid"
@@ -291,12 +291,10 @@
                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
                 </span>
                 <span class="captablepair-box" ng-switch-when="0">
-                  <input disabled class="captablepair" placeholder="units"
-                         ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                         ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'>
+                  <input disabled class="captablepair" placeholder="shares"
+                         ng-model='row[key]["u"]'>
                   <input disabled class="captablepair" placeholder="paid"
-                         ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                         ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
+                         ng-model='row[key]["a"]'>
                 </span>
               </span>
                 </td>
