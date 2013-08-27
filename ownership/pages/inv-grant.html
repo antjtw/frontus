@@ -39,10 +39,10 @@
           </tr>
           <tr class='tablefooter'>
             <td></td>
-            <td><input disabled value="{{totalTranAction('granted', trans)}}"></input></td>
-            <td><input disabled value="{{totalGrantAction('vested', grants);}}"></input></td>
-            <td><input disabled value="{{totalTranAction('forfeited', trans)}}"></input></td>
-            <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></input></td>
+              <td><input disabled value="{{totalTranAction('granted', trans)}}"></td>
+              <td><input disabled value="{{totalVestedAction(rows);}}"></td>
+              <td><input disabled value="{{totalGrantAction('forfeited', grants)}}"></td>
+              <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></td>
           </tr>
         </table>
       </div>
