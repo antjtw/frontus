@@ -77,7 +77,9 @@
                     <p class="rightTitle"><span>Granted</span><input disabled value="{{totalGranted(tran.issue, trans);}}"></p>
                     <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></p>
                     <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></p>
-                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" id="{{tran.$$hashKey}}"
+                                                                                ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\' , $event)', blur:'saveTranDate(tran, \'vestingbegins\' , \'blur\')'}"
+                                                                                ng-change="saveTranDate(tran, 'vestingbegins')" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                     <p class="rightTitle"><span>Post Cliff Frequency</span>
                       <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                       </select>

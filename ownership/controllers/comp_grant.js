@@ -244,8 +244,45 @@ var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, 
         });
     };
 
+    var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
+    $scope.saveTranDate = function (transaction, field, evt) {
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('#' + transaction.$$hashKey).val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    transaction[field] = date;
+                    var offset = transaction[field].getTimezoneOffset();
+                    transaction[field] = transaction[field].addMinutes(offset);
+                    keyPressed = false;
+                    $scope.saveTran(transaction);
+                }
+            }
+        } else { // User is using calendar
+            //Fix the dates to take into account timezone differences.
+            if (transaction[field] instanceof Date) {
+                var offset = transaction[field].getTimezoneOffset();
+                transaction[field] = transaction[field].addMinutes(offset);
+                keyPressed = false;
+                $scope.saveTran(transaction);
+            }
+        }
+    };
+
     $scope.saveTran = function (transaction) {
         var d1 = transaction['date'].toUTCString();
+        if (transaction['vestingbegins'] == undefined) {
+            var vestcliffdate = null
+        }
+
+        else {
+            var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+        }
+
+        console.log(vestcliffdate);
         SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
 
         });

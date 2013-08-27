@@ -49,8 +49,9 @@ ownership.service('calculate', function () {
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && tran.vestingbegins != null) {
-                if (Date.compare(Date.today(), tran.vestingbegins) > -1) {
+            var vestbegin = angular.copy(tran.vestingbegins)
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                if (Date.compare(Date.today(), vestbegin) > -1) {
                     if (!isNaN(parseFloat(vesting[tran.investor]))) {
                         vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
                     }
@@ -59,15 +60,13 @@ ownership.service('calculate', function () {
                     }
                     var cycleDate = angular.copy(tran.date);
                     var remainingterm = angular.copy(tran.terms);
-                    while (Date.compare(tran.vestingbegins, cycleDate) > -1) {
+                    while (Date.compare(vestbegin, cycleDate) > -1) {
                         remainingterm = remainingterm - 1;
                         cycleDate.addMonths(1);
                     }
                     remainingterm = remainingterm;
-                    var finalDate = tran.vestingbegins.addMonths(remainingterm);
-                    console.log("remaining term is " + String(remainingterm));
+                    var finalDate = vestbegin.addMonths(remainingterm);
                     var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
-                    console.log("monthly percentage is " + String(monthlyperc));
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
                         x = 1
