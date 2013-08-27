@@ -343,7 +343,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     return -card.time;
   };
 
-  SWBrijj.tblm('ownership.company_audit', ['email', 'fullview'], 'email', userId).then(function(x) {
+  SWBrijj.tblm('ownership.company_access', ['email', 'fullview'], 'email', userId).then(function(x) {
     $scope.fullview = (x.fullview) ? 'Full View':'Personal Only';
     console.log($scope.fullview);
   }).except(function() {
@@ -408,7 +408,7 @@ function initPage($scope, x, row) {
 }
 
 function initFail(x) {
-	document.location.href='/login';
+	return;
 }
 
 	function updated(x) {}
