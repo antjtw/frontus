@@ -365,6 +365,12 @@ tr.rowSelected {
     border-bottom: none;
 }
 
+/* Status Page */
+
+.activityBlock {
+    width: 236px;
+}
+
 /* Specialized Modals */
 
 .capaccess-drop {

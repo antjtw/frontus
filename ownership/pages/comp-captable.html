@@ -611,10 +611,6 @@
                                                                                                  ui-event="{blur : 'saveTran(tran)'}"
                                                                                                  ng-model="tran.ppshare"></p>
 
-                                        <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled
-                                                                                                  ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                  ng-model="tran.totalauth"></p>
-
 
                                         <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                             <li class="dropdown standard small">
@@ -668,14 +664,6 @@
                                             </ul>
                                         </li>
                                     </div>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled
-                                                                                              ui-event="{blur : 'saveTran(tran)'}"
-                                                                                              ng-model="tran.totalauth"></p>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled
-                                                                                     value="{{totalGranted(tran.issue, trans);}}">
-                                    </p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
                                                                                    ng-class="{'content':!tran.price}"
@@ -793,8 +781,6 @@
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Price Per Share</span><input disabled ng-model="tran.ppshare"></p>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled ng-model="tran.totalauth"></p>
-
 
                                     <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                         <li class="dropdown standard small">
@@ -833,12 +819,6 @@
                                             </a>
                                         </li>
                                     </div>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled ng-model="tran.totalauth"></p>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled
-                                                                                                                                                             value="{{totalGranted(tran.issue, trans);}}">
-                                    </p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input disabled ng-model="tran.price"></p>
 

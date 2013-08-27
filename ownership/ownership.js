@@ -87,8 +87,12 @@ owner.run(function ($rootScope) {
     $rootScope.totalGranted = function (issue, trans) {
         var granted = 0;
         angular.forEach(trans, function (tran) {
-            if (tran.issue == issue && tran.type == "options" && !isNaN(parseFloat(tran.units))) {
+            if (tran.issue == issue && tran.type == "Option" && !isNaN(parseFloat(tran.units))) {
+                console.log(tran)
                 granted = granted + parseFloat(tran.units);
+                if (tran.forfeited) {
+                    granted = granted - tran.forfeited;
+                }
             }
         });
         return granted;

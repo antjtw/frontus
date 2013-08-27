@@ -100,7 +100,7 @@
                         <span ng-hide="person.viewed">unviewed</span>
                         <span ng-show="person.viewed">viewed</span>
                     </td>
-                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'statusPop.html'"></span></td>
+                <td class="button statusPop"><span data-icon="&#xe011;" aria-hidden="true" data-unique="1" data-placement="bottom" email="{{person.email}}" bs-popover="'pages/statusPop.html'"></span></td>
                 </tr>
                 <tr ng-Show="person.shown" class="personDetails">
                     <td class="status-bubbles" colspan="5">
@@ -146,18 +146,14 @@
 
              <section class="statusFeed">
                  <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-                 <div class="activityBlock">
-                     <table>
-                         <tr ng-repeat="active in activity | orderBy:activityOrder">
-                            <td><i class="{{active.icon}}"></i></td>
-                            <td class="item">
-                                <table>
-                                    <tr><td class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></td></tr>
-                                    <tr><td class="time">{{active.timeAgo}}</td></tr>
-                                </table>
-                            </td>
-                         </tr>
-                     </table>
+                 <div>
+                     <ul class="activityBlock">
+                         <li ng-repeat="active in activity | orderBy:activityOrder">
+                            <i class="{{active.icon}}"></i>
+                                    <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span>
+                                    <span class="time">{{active.timeAgo}}</span>
+                         </li>
+                     </ul>
                  </div>
              </section>
          </div> 
