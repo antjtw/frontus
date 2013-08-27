@@ -545,7 +545,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.activeInvestorName = investor.name;
         $scope.activeInvestorEmail = investor.email;
         $scope.activeInvestorNameKey = investor.name;
-        $scope.$apply();
     };
 
     $scope.nameChangeLR = function (investor) {
