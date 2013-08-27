@@ -73,6 +73,11 @@ input.loginInput:focus, textarea:focus, select:focus {
     background:none;
 }
 
+ul {
+    padding : 0;
+    margin: 0;
+}
+
 .open .caret{
     border-top :0 !important;
     border-bottom: 4px solid black;

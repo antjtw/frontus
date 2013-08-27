@@ -343,6 +343,11 @@ tr.rowSelected {
 
 .grant-list {
     list-style: none;
+    border-bottom: 1px solid #E3E3E3;;
+}
+
+.grant-list:last-of-type {
+    border-bottom: none;
 }
 
 /* Specialized Modals */

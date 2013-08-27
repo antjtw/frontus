@@ -90,8 +90,8 @@
                         <select ng-init="act.action" ng-change="saveGrant(act)" ng-model="act.action" ng-options="i for i in possibleActions">
                         </select>
                       </p>
-                      <p>Date <input ng-change="saveGrant(act)" type="text" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p>Shares<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit"></input></p>
+                      <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-change="saveGrant(act)" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                      <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit">
                     </li>
                   </ul>
                   </accordion-group>
