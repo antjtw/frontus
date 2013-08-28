@@ -946,19 +946,41 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         });
                     });
 
-                    angular.forEach($scope.rows, function(row) {
-                        if (row.name == transaction.issue + " (unissued)") {
-                            angular.forEach($scope.issues, function (issue) {
-                                if (issue.issue == transaction.issue) {
-                                    var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
-                                    if (leftovers != 0) {
-                                        var shares = {"u": leftovers, "ukey": leftovers};
-                                        row[issue.issue] = shares;
-                                    }
-                                }
-                            });
+                    var keepgoing = true;
+                    var deleterow = -1;
+                    var issuename = String(transaction.issue);
+                    var leftovers
+                    angular.forEach($scope.issues, function (issue) {
+                        if (issue.issue == transaction.issue) {
+                            leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
                         }
                     });
+                    var shares = {"u": leftovers, "ukey": leftovers, "x": null};
+                    angular.forEach($scope.rows, function (row) {
+                        if (keepgoing) {
+                            if (row.name == issuename + " (unissued)") {
+                                keepgoing = false;
+                                if (leftovers != 0) {
+                                    row[issuename] = shares;
+                                    row['name'] = issue.issue + " (unissued)";
+                                }
+                                else {
+                                    deleterow = $scope.rows.indexOf(row);
+                                }
+                            }
+                        }
+                    });
+                    if (keepgoing != false) {
+                        if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
+                            $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
+                            $scope.rows[($scope.rows.length) - 1][issuename] = shares;
+                        }
+                    }
+                    if (deleterow > -1) {
+                        $scope.rows.splice(deleterow, 1);
+                    }
+
+
 
                     if (transaction.type == "Option" && !isNaN(parseFloat(transaction.amount))) {
                         console.log("creating a grant");
