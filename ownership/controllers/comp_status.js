@@ -66,6 +66,9 @@ var statusController = function ($scope, $rootScope, SWBrijj) {
                 else {
                     name.shown = true;
                 }
+            else {
+                name.shown = false;
+            }
         });
     };
 

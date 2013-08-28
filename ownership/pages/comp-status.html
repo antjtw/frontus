@@ -93,20 +93,23 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                     <tr ng-class="{selectedrow:person.shown}" class="status-row">
-                    <td ng-click="(opendetails(person.email))"><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a></td>
-                    <td ng-click="(opendetails(person.email))">{{person.email}}</td>
-                        <td ng-click="(opendetails(person.email))">{{person.level}}</td>
-                        <td ng-click="(opendetails(person.email))">
-                            <span ng-hide="person.viewed">unviewed</span>
-                            <span ng-show="person.viewed">viewed</span>
+                        <td ng-click="(opendetails(person.email))"><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a></td>
+                        <td ng-click="(opendetails(person.email))">{{person.email}}</td>
+                            <td ng-click="(opendetails(person.email))">{{person.level}}</td>
+                            <td ng-click="(opendetails(person.email))">
+                                <span ng-hide="person.viewed">unviewed</span>
+                                <span ng-show="person.viewed">viewed</span>
+                            </td>
+                        <td class="button" ng-click="(opendetails(person.email))">
+                            <span ng-Hide="person.shown" data-icon="&#xe031;" aria-hidden="true"></span>
+                            <span ng-Show="person.shown" data-icon="&#xe034;" aria-hidden="true"></span>
                         </td>
-                    <td class="button" ng-click="(opendetails(person.email))"><span data-icon="&#xe011;" aria-hidden="true"></span></td>
                     </tr>
                     <tr class="status-detail" ng-Show="person.shown">
                         <td><span data-icon="&#xe024;" aria-hidden="true"></span>Delivered</td>
                         <td colspan="4">
                             {{person.received | date:'MMMM dd, yyyy, h:mm a'}}
-                            <span ng-hide="person.viewed" ng-click="alterEmailModalUp(person.email)">Edit and Resend</span>
+                            <span class="pointer" ng-hide="person.viewed" ng-click="alterEmailModalUp(person.email)">Edit and Resend</span>
                         </td>
                     </tr>
                     <tr class="status-detail" ng-Show="person.shown">
@@ -117,7 +120,7 @@
                         <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.viewed">Never Viewed</span><span ng-show="person.viewed">Viewed</span></td>
                         <td colspan="4">
                             {{person.viewed | date:'MMMM dd, yyyy, h:mm a'}}
-                            <span ng-click="modalUp(person);">Permissions</span>
+                            <span class="pointer" ng-click="modalUp(person);">Permissions</span>
                         </td>
                     </tr>
                 </tbody>

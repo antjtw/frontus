@@ -402,22 +402,34 @@ tr.rowSelected {
     color: #F1F1F1;
 }
 
-.status-detail {
+.tableView tr.status-detail {
     height: 41px;
     background-color: #E3E3E3;
+    border-bottom: thin solid #A6A6A6;
 }
 
 .status-detail td {
     background-color: transparent;
 }
 
-.status-detail td > span:first-child {
+.status-detail td:first-child > span:first-child {
     font-size: 18px;
     line-height: 18px;
+    vertical-align: middle;
+    margin-right: 15px;
 }
 
 .status-detail > td:last-of-type > span {
     float: right;
+    margin-right: 20px;
+    text-align: center;
+    width: 120px;
+    height: 22px;
+    line-height: 22px;
+    border: 2px solid #1ABC96;
+    color: #1ABC96;
+    background-color: #FFFFFF;
+    text-transform: UPPERCASE;
 }
 
 /* Specialized Modals */
