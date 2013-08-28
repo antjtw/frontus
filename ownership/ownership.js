@@ -88,7 +88,6 @@ owner.run(function ($rootScope) {
         var granted = 0;
         angular.forEach(trans, function (tran) {
             if (tran.issue == issue && tran.type == "Option" && !isNaN(parseFloat(tran.units))) {
-                console.log(tran)
                 granted = granted + parseFloat(tran.units);
                 if (tran.forfeited) {
                     granted = granted - tran.forfeited;

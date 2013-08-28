@@ -1156,7 +1156,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.imodalUp = function (issue, field) {
         $scope.issueModal = true;
         $scope.changedIssue = issue;
-        $scope.changedIssueField = field
+        $scope.changedIssueField = field;
     };
 
     $scope.iclose = function () {

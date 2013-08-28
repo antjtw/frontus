@@ -74,7 +74,7 @@
                       </select>
                     </p>
                     <p class="rightTitle"><span>Price</span><input ng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></p>
-                    <p class="rightTitle"><span>Granted</span><input disabled value="{{totalGranted(tran.issue, trans);}}"></p>
+                    <p class="rightTitle"><span>Granted</span><input disabled value="{{tran.units}}"></p>
                     <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></p>
                     <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></p>
                     <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" id="{{tran.$$hashKey}}"
