@@ -246,12 +246,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.allowKeys = allowablekeys;
 
         angular.forEach($scope.rows, function (row) {
-            angular.forEach($scope.issuekeys, function (key) {
-                if (row.name == currenttran && currentcolumn == key) {
-                    row[currentcolumn].state = true;
-                }
-                else {
-                    row[key].state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    if (row.name == currenttran && currentcolumn == issue.issue) {
+                        row[currentcolumn].state = true;
+                    }
+                    else {
+                        row[issue.issue].state = false;
+                        row.state = false;
+                        issue.state = false;
+                    }
                 }
             });
         });
@@ -297,10 +301,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.issueRevert = angular.copy(issue);
 
         angular.forEach($scope.rows, function (row) {
-            angular.forEach($scope.issuekeys, function (key) {
-                row[key].state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    row[issue.issue].state = false;
+                    row.state = false;
+                    issue.state = false;
+                }
             });
         });
+
+        issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
         var allowablekeys = angular.copy($scope.issuekeys);
@@ -536,10 +546,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.sideBar = 3;
 
         angular.forEach($scope.rows, function (row) {
-            angular.forEach($scope.issuekeys, function (key) {
-                row[key].state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    row[issue.issue].state = false;
+                    row.state = false;
+                    issue.state = false;
+                }
             });
         });
+
+        investor.state = true;
 
         if (investor.name == "") {
             var values = {"name": "", "editable": "0"};
@@ -809,6 +825,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 transaction = transaction[0];
             }
         }
+        // Remove any commas added to the numbers
+        transaction.units = transaction.units.replace(/\,/g,'');
+        transaction.amount = transaction.amount.replace(/\,/g,'');
+
         if (!(/^\d+$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
             transaction.units = transaction.unitskey;
