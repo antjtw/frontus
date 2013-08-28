@@ -826,8 +826,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         }
         // Remove any commas added to the numbers
-        transaction.units = transaction.units.replace(/\,/g,'');
-        transaction.amount = transaction.amount.replace(/\,/g,'');
+        if (transaction.units) {
+            transaction.units = transaction.units.replace(/\,/g,'');
+        }
+        if (transaction.amount) {
+            transaction.amount = transaction.amount.replace(/\,/g,'');
+        }
 
         if (!(/^\d+$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
