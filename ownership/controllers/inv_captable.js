@@ -293,38 +293,48 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     };
 
     // Total Shares in captable
+    var totalShares = memoize(calculate.totalShares)
     $scope.totalShares = function(rows) {
-        return calculate.totalShares(rows);
+        return $scope.formatAmount(totalShares(rows));
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
+    var totalPaid = memoize(calculate.totalPaid);
     $scope.totalPaid = function(rows) {
-        return calculate.totalPaid(rows);
+        return $scope.formatDollarAmount(totalPaid(rows));
     };
 
     // Total Shares for a shareholder row
+    var shareSum = memoize(calculate.shareSum);
     $scope.shareSum = function(row) {
-        return calculate.shareSum(row);
+        return $scope.formatAmount(shareSum(row));
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
+    var colTotal = memoize(calculate.colTotal);
     $scope.colTotal = function(header, rows, type) {
-        return calculate.colTotal(header, rows, type);
+        return colTotal(header, rows, type);
     };
 
     // Total percentage ownership for each shareholder row
+    var sharePercentage = memoize(calculate.sharePercentage);
     $scope.sharePercentage = function(row, rows, issuekeys) {
-        return calculate.sharePercentage(row, rows, issuekeys);
+        return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
     };
 
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
-        return calculate.pricePerShare($scope.issues);
+        return $scope.formatDollarAmount(calculate.pricePerShare($scope.issues));
     };
 
     // Last issue date for the sidebar In Brief section
     $scope.lastIssue = function() {
         return calculate.lastIssue($scope.issues);
+    };
+
+    // Last issue date for the sidebar In Brief section
+    $scope.lastPostMoney = function() {
+        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
     };
 
 

@@ -1451,7 +1451,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Total Shares for a shareholder row
     var shareSum = memoize(calculate.shareSum);
     $scope.shareSum = function(row) {
-        return shareSum(row);
+        return $scope.formatAmount(shareSum(row));
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
