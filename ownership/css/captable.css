@@ -60,10 +60,12 @@
 
 .tableView.captable input:disabled {
     background: transparent;
+    -webkit-text-fill-color: #8D8D8D;
 }
 
 .capright input:disabled {
     background: transparent;
+    -webkit-text-fill-color: #8D8D8D;
 }
 
 .tableView.captable th > input {
@@ -159,16 +161,19 @@ p.captablepair {
 
 .tranViewSelected .captablepair-box > div, .tranViewSelected .captablepair-box > div:hover {
     color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 .tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected:hover, .tableView.captable th.tranViewSelected, .tableView.captable th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 .span4.capright {
