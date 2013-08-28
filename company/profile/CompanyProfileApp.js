@@ -265,7 +265,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       document.location.href="/investor/profile";
   });
 
-  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+  SWBrijj.tblm('global.combined_investor_list', 'email', userId).then(function(x) {
     if (!x.name) {
       history.back();
     }
@@ -343,21 +343,16 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     return -card.time;
   };
 
-  SWBrijj.tblm('ownership.company_access', ['email', 'fullview'], 'email', userId).then(function(x) {
-    $scope.fullview = (x.fullview) ? 'Full View':'Personal Only';
-    console.log($scope.fullview);
-  }).except(function() {
-    $scope.fullview = false;
+  SWBrijj.tblm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(x) {
+    $scope.level = x.level;
+  }).except(function(err) {
+    $scope.level = false;
   });
 
   $scope.changeVisibility = function (value) {
     console.log(value);
-    $scope.fullview = value;
-    var visibility = false;
-    if ($scope.fullview == 'Full View') {
-      visibility = true;
-    }
-    SWBrijj.proc('ownership.update_investor_captable', userId, visibility).then(function (data) {
+    $scope.level = value;
+    SWBrijj.proc('ownership.update_investor_captable', userId, $scope.level).then(function (data) {
       $rootScope.notification.show("success", "Successfully changed cap table visibility")
     });
   };

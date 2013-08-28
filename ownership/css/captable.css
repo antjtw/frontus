@@ -377,6 +377,10 @@ tr.rowSelected {
 
 /* Status Page */
 
+a.oldschool-link  {
+    color: #2980B9;
+}
+
 .activityBlock {
     width: 236px;
 }
@@ -426,7 +430,7 @@ tr.rowSelected {
     width: 120px;
     height: 22px;
     line-height: 22px;
-    border: 2px solid #1ABC96;
+    border: 1px solid #1ABC96;
     color: #1ABC96;
     background-color: #FFFFFF;
     text-transform: UPPERCASE;
