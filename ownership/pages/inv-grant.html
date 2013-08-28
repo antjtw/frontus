@@ -49,7 +49,7 @@
     </div>
 
 
-    <div class="span4">
+    <div class="span4 capright">
       <div ng-switch on="sideBar" >
         <span ng-switch-when="1">
           <div class="headsection row-fluid">
@@ -62,28 +62,36 @@
 
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
-                    <p>Underlying Security
-                      <select disabled ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in issuekeys">
-                      <option></option>
-                      </select>
-                    </p>
-                    <p>Price<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                    <p>Granted <input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
-                    <p>Term (months)<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
-                    <p>Vesting Cliff %<input disabled ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
-                    <p>Vesting Cliff Date<input disabled ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                    <p>Post Cliff Frequency
-                      <select disabled ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
-                      </select>
-                    </p>
+                      <p class="rightTitle"><span>Underlying Security</span>
+                          <select disabled ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in tran.allowKeys">
+                              <option></option>
+                          </select>
+                      </p>
+                      <p class="rightTitle"><span>Price</span><input disabled ng-model="tran.price"></p>
+                      <p class="rightTitle"><span>Granted</span><input disabled value="{{totalGranted(tran.issue, trans);}}"></p>
+                      <p class="rightTitle"><span>Term (months)</span><input disabled ng-model="tran.terms"></p>
+                      <p class="rightTitle"><span>Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
+                      <p class="rightTitle"><span>Vesting Cliff Date</span><input disabled type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                      <p class="rightTitle"><span>Post Cliff Frequency</span>
+                          <select disabled ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
+                          </select>
+                      </p>
                   </accordion-group>
                   <accordion-group heading="Grant Activity">
                   <ul>
-                    <li ng-repeat="act in tran.activeAct">
-                      <p>Action<input disabled ng-model="act.action"></input></p>
-                      <p>Date <input disabled type="text" ng-model="act.date"></p>
-                      <p>Shares<input disabled ng-model="act.unit"></input></p>
-                    </li>
+                      <li class="grant-list" ng-repeat="act in tran.activeAct">
+                          <div class="rightTitle"><span>Action</span>
+                              <ul style="display: inline-block">
+                                  <li class="dropdown standard small">
+                                      <a class="dropdown-toggle">
+                                          {{act.action}}<span class="invisible-drop">'</span>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <p class="rightTitle"><span>Date</span><input disabled ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                          <p class="rightTitle"><span>Shares</span><input disabled ng-model="act.unit">
+                      </li>
                   </ul>
                   </accordion-group>
               </accordion>

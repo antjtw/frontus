@@ -613,6 +613,7 @@
 
 
                                         <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
+                                          <ul class="dropdown-list">
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
                                                     {{tran.liquidpref}}<span class="invisible-drop">'</span>
@@ -623,6 +624,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                          </ul>
                                         </div>
 
                                         <p ng-show="toggleView();" class="rightTitle">
@@ -631,6 +633,7 @@
                                         </p>
 
                                         <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
+                                          <ul class="dropdown-list">
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
                                                     {{tran.partpref}}<span class="invisible-drop">'</span>
@@ -641,6 +644,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                          </ul>
                                         </div>
 
                                         <p ng-show="toggleView();" class="rightTitle">

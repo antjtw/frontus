@@ -1246,6 +1246,13 @@ form.inputs {
 
 /* Dropdown buttons */
 
+.dropdown-list {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
 .dropdown.standard {
     list-style: none;
     display: inline-block;
@@ -1264,13 +1271,18 @@ form.inputs {
     text-align: left;
     padding-left: 20px;
     line-height: 30px;
+    height: 30px;
     margin: 0;
 }
 
-.standard .dropdown-toggle:before {
+.standard .dropdown-toggle::before {
+    display: block;
     position: absolute;
+    padding: 0;
+    margin: 0;
     right:-21px;
-    content: url('/img/down-arrow-20x30.png');
+    content: " ";
+    background: url('/img/down-arrow-20x30.png');
     width:20px;
     height:30px;
     outline: 1px solid #E3E3E3;
@@ -1283,6 +1295,9 @@ form.inputs {
 }
 
 .standard .dropdown-menu {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
     padding: 0;
     margin: 0;
     border-radius: 0;
@@ -1301,11 +1316,15 @@ form.inputs {
     padding-left: 10px;
 }
 
-.standard.small .dropdown-toggle:before {
-  content: url('/img/down-arrow-20x22.png');
+.standard.small .dropdown-toggle::before {
+  content: " ";
+  background: url('/img/down-arrow-20x22.png');
   height: 22px;
 }
+
 .standard.small .dropdown-menu , .standard.small .dropdown-menu > li , .standard.small .dropdown-menu > li > a {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 101px;
     min-width: 101px;
