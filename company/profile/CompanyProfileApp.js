@@ -230,31 +230,41 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
     hidePopover();
   });
 
-  SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
-    $scope.people = x;
-    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
-      angular.forEach($scope.people, function(person) {
-        if (person.email == me[0].email)
-          person.hideLock = true;
-        if (person.name == null) 
-          person.name = person.email;
-      });
-    });
-    console.log(x);
-    $scope.sort = 'name';
-  }).except(function(x) {
-    console.log(x);
-    initFail();
-  });
+  SWBrijj.tblm('global.combined_investor_list', ['email', 'name']).then(function (x) {
+      $scope.people = x;
+      SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function (admins) {
+          var issuers = admins;
+          angular.forEach(admins, function (admin) {
+              admin.role = "issuer";
+              $scope.people.push(admin);
+          });
+          SWBrijj.tblm('account.profile', ['email']).then(function (me) {
+              angular.forEach($scope.people, function (person) {
+                  if (person.email == me[0].email)
+                      person.hideLock = true;
+                  if (person.name == null)
+                      person.name = person.email;
+              });
+          });
+          console.log(x);
+          $scope.sort = 'name';
+      }).except(function (x) {
+              console.log(x);
+              initFail();
+          }).except(function (x) {
+              console.log(x);
+              initFail();
+            });
+          });
 
-  $scope.sortBy = function(col) {
-      if ($scope.sort == col) {
-        $scope.sort = ('-' + col);
-      } else {
-        $scope.sort = col;
+      $scope.sortBy = function (col) {
+          if ($scope.sort == col) {
+              $scope.sort = ('-' + col);
+          } else {
+              $scope.sort = col;
+          }
       }
-    }
-}
+  };
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
