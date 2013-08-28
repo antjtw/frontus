@@ -370,19 +370,24 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.saveIssueCheck = function (issue, field) {
         var x = false;
         var testcopy = angular.copy(issue);
-        if (!angular.equals(testcopy, $scope.issueRevert)) {
-            angular.forEach($scope.trans, function(tran) {
-                if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                    $scope.imodalUp(issue, field);
-                    x = true;
-                }
-            });
-            if (x == false) {
-                $scope.saveIssue(issue, field);
-            }
+        if ($scope.issueModal == true) {
+            return;
         }
         else {
-            return;
+            if (!angular.equals(testcopy, $scope.issueRevert)) {
+                angular.forEach($scope.trans, function(tran) {
+                    if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
+                        $scope.imodalUp(issue, field);
+                        x = true;
+                    }
+                });
+                if (x == false) {
+                    $scope.saveIssue(issue, field);
+                }
+            }
+            else {
+                return;
+            }
         }
     };
 
