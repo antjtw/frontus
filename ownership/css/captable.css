@@ -330,6 +330,11 @@ div.rightTitle {
 .rightTitle > input {
     width:100px;
     border: 0;
+    padding: 0;
+    margin: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .rightTitle > select {
@@ -342,6 +347,8 @@ input.content, textarea.content {
     border-radius: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 textarea {
