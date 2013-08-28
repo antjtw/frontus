@@ -28,6 +28,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
             document.location.href="/home/";
         }
+        if ($scope.level == 'Full View') {
+            $scope.fullview = true;
+        }
     });
 
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
