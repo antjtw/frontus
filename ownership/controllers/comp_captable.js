@@ -448,8 +448,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
                     if (keepgoing != false) {
                         if (!isNaN(parseFloat(issue.totalauth)) && !isNaN(parseFloat(leftovers)) && leftovers != 0) {
-                            $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                            $scope.rows[($scope.rows.length) - 1][issuename] = shares;
+                            $scope.rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
+                            $scope.rows[($scope.rows.length) - 2][issuename] = shares;
                         }
                     }
                     if (deleterow > -1) {
@@ -471,6 +471,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                             }
                         }
+                    });
+
+                    // Make sure we have a clean slate for everyone (including any new unissued rows
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issuekeys, function (issuekey) {
+                            if (issuekey in row) {
+                            }
+                            else {
+                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            }
+                        });
                     });
 
                     var index = $scope.issuekeys.indexOf(issue.key);
@@ -553,6 +564,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.rows, function (row) {
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue) {
+                    console.log(row);
+                    console.log(issue.issue);
                     row[issue.issue].state = false;
                     row.state = false;
                     issue.state = false;
@@ -655,6 +668,39 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
 
+            var keepgoing = true;
+            var deleterow = -1;
+            var issuename = String(tran.issue);
+            var leftovers
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue == tran.issue) {
+                    leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
+                }
+            });
+            var shares = {"u": leftovers, "ukey": leftovers, "x": null};
+            angular.forEach($scope.rows, function (row) {
+                if (keepgoing) {
+                    if (row.name == issuename + " (unissued)") {
+                        keepgoing = false;
+                        if (leftovers != 0) {
+                            row[issuename] = shares;
+                        }
+                        else {
+                            deleterow = $scope.rows.indexOf(row);
+                        }
+                    }
+                }
+            });
+            if (keepgoing != false) {
+                if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
+                    $scope.rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
+                    $scope.rows[($scope.rows.length) - 2][issuename] = shares;
+                }
+            }
+            if (deleterow > -1) {
+                $scope.rows.splice(deleterow, 1);
+            }
+
         });
     };
 
@@ -697,6 +743,39 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 }
             });
+
+            var keepgoing = true;
+            var deleterow = -1;
+            var issuename = String(tran.issue);
+            var leftovers
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue == tran.issue) {
+                    leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
+                }
+            });
+            var shares = {"u": leftovers, "ukey": leftovers, "x": null};
+            angular.forEach($scope.rows, function (row) {
+                if (keepgoing) {
+                    if (row.name == issuename + " (unissued)") {
+                        keepgoing = false;
+                        if (leftovers != 0) {
+                            row[issuename] = shares;
+                        }
+                        else {
+                            deleterow = $scope.rows.indexOf(row);
+                        }
+                    }
+                }
+            });
+            if (keepgoing != false) {
+                if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
+                    $scope.rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
+                    $scope.rows[($scope.rows.length) - 2][issuename] = shares;
+                }
+            }
+            if (deleterow > -1) {
+                $scope.rows.splice(deleterow, 1);
+            }
         });
     };
 
@@ -962,7 +1041,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 keepgoing = false;
                                 if (leftovers != 0) {
                                     row[issuename] = shares;
-                                    row['name'] = issue.issue + " (unissued)";
                                 }
                                 else {
                                     deleterow = $scope.rows.indexOf(row);
@@ -972,8 +1050,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
                     if (keepgoing != false) {
                         if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
-                            $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                            $scope.rows[($scope.rows.length) - 1][issuename] = shares;
+                            $scope.rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
+                            $scope.rows[($scope.rows.length) - 2][issuename] = shares;
                         }
                     }
                     if (deleterow > -1) {
@@ -1009,6 +1087,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
                                     row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                                 }
+                            }
+                        });
+                    });
+
+                    // Make sure we have a clean slate for everyone (including any new unissued rows
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issuekeys, function (issuekey) {
+                            if (issuekey in row) {
+                            }
+                            else {
+                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
                             }
                         });
                     });
