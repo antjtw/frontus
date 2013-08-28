@@ -446,8 +446,9 @@ a.oldschool-link  {
 /* Specialized Modals */
 
 .capaccess-drop {
+    display: inline-block;
     text-align: left;
-    margin: 0 100px;
+    margin: 20px auto 5px auto;
 }
 
 .capshareModal input, .capshareModal span {
