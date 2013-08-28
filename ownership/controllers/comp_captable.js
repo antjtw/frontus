@@ -869,8 +869,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
                 }
-                console.log(transaction);
-                console.log(transaction.tran_id);
                 angular.forEach($scope.rows, function (row) {
                     if ((row.name == transaction.investor) && row.email) {
                         transaction.email = row.email;

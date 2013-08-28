@@ -128,6 +128,10 @@ p.captablepair {
     margin: 0 0 0 0;
 }
 
+.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields:hover {
+    background-color: rgba(26, 188, 150, 0.1);
+}
+
 .tableView td.tranSelected {
     border: 2px solid #E3E3E3;
 }
@@ -153,12 +157,16 @@ p.captablepair {
     border-bottom: 2px solid #E3E3E3;
 }
 
-td.tranViewSelected {
-    background-color: rgba(26, 188, 150, 0.1);
+.tranViewSelected .captablepair-box > div, .tranViewSelected .captablepair-box > div:hover {
+    color: #F1F1F1;
 }
 
-.tranViewSelected {
-    background-color: rgba(26, 188, 150, 0.1);
+td.tranViewSelected, td.tranViewSelected:hover {
+    background-color: #8D8D8D;
+}
+
+.tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected:hover {
+    background-color: #8D8D8D;
 }
 
 .span4.capright {
