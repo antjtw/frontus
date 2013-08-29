@@ -1524,8 +1524,9 @@ form.inputs {
 /* Styling file uploads with fake overlay */
 
 .modal div.fileinputs {
+    margin-top: 10px;
     position: relative;
-    height: 41px;
+    height: 50px;
     border-bottom: 1px solid #E3E3E3;
     border-top: 1px solid #E3E3E3;
 }
@@ -1535,13 +1536,22 @@ form.inputs {
     top: 0px;
     left: 0px;
     z-index: 1;
-    line-height: 41px;
+    line-height: 50px;
     margin-left: 20px;
 }
 
 .modal div.fakefile > div {
     display: inline-block;
     margin-left: 10px;
+}
+
+.modal div.fakefile > span {
+    display: inline-block;
+    width: 160px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    border: 1px solid #E3E3E3;
 }
 
 .modal input.file {
