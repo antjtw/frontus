@@ -25,9 +25,9 @@
         <table class="captable tableView bodyText">
             <tr class="column-label">
                 <th colspan="2">Ownership</th>
-                <th><span class="longrow">Shareholder</span></th>
-                <th class="capEditHeaders" ng-repeat="one in issues" ng-click="getActiveIssue(one)">
-                    {{one.issue}}
+                <th class="longrow">Shareholder</th>
+                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
+                    <span>{{one.issue}}</span>
                 </th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
@@ -40,29 +40,19 @@
                     <span>PAID</span>
                 </td>
             </tr>
-            <tr ng-show="fullview" ng-repeat="row in rows">
+            <tr ng-repeat="row in rows">
                 <td><input disabled value="{{shareSum(row);}}"></td>
-                <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
-
+                <td ng-show="fullview"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td ng-hide="fullview"><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
+                <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+                <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
-                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
                     </span>
                 </td>
             </tr>
-            <tr ng-hide="fullview" ng-repeat="row in rows">
-                <td><input disabled value="{{shareSum(row);}}"></td>
-                <td><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
-                <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <span class="captablepair-box">
-                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
-                        <div ng-bind="formatAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
-                    </span>
-                </td>
-            </tr>
+            <!-- Extra row containing all the others -->
             <tr ng-hide="fullview">
                 <td><input disabled></td>
                 <td><input disabled value="{{everyone.percentage  | number:3}}%"></td>
