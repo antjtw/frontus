@@ -296,7 +296,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.getActiveIssue = function (issue) {
 
-        $scope.sideBar = 1;
+        if ($scope.toggleView()) {
+            $scope.sideBar = 5;
+        }
+        else {
+            $scope.sideBar = 1;
+        }
         $scope.activeIssue = issue;
         $scope.issueRevert = angular.copy(issue);
 
@@ -1180,35 +1185,35 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.toggleView = function () {
         if ($scope.radioModel == "View") {
             $scope.captablestate = 1;
-            if ($scope.sideBar == 2) {
+            if ($scope.sideBar == 2 || $scope.sideBar == 1) {
                 $scope.sideBar = "hello";
-                angular.forEach($scope.rows, function (row) {
-                    row.state = false;
-                    angular.forEach($scope.issues, function (issue) {
-                        if (issue.issue) {
-                            row[issue.issue].state = false;
-                            issue.state = false;
-                        }
-                    });
-                });
             }
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        row[issue.issue].state = false;
+                        issue.state = false;
+                    }
+                });
+            });
             return true;
         }
         else {
             $scope.dilutionSwitch = true;
             $scope.captablestate = 0;
-            if ($scope.sideBar == 4) {
+            if ($scope.sideBar == 4 || $scope.sideBar == 5) {
                 $scope.sideBar = "hello";
-                angular.forEach($scope.rows, function (row) {
-                    row.state = false;
-                    angular.forEach($scope.issues, function (issue) {
-                        if (issue.issue) {
-                            row[issue.issue].state = false;
-                            issue.state = false;
-                        }
-                    });
-                });
             }
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        row[issue.issue].state = false;
+                        issue.state = false;
+                    }
+                });
+            });
             return false;
         }
     };
