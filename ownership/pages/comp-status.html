@@ -2,13 +2,14 @@
 
     <div modal="capAccess" close="close()" options="shareopts">
         <div class="modalHeader">
-            <span data-icon="&#xe026;" aria-hidden="true"></span>Change this person's access level?
+            <span data-icon="&#xe026;" aria-hidden="true"></span>Change Permissions
             <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
         </div>
         <div class="modalText">
             <form>
-                <p>Shareholders only see their personal holdings by default.<br>  Non-shareholders have full-access by default.</p>
+                <p>Shareholders only see their personal holdings by default,<br> non-shareholders will see the full table unless revoked.</p>
                 <div class="cf capaccess-drop">
+                    <span>CURRENT</span>
                     <li class="dropdown standard pull-left">
                         <a class="dropdown-toggle">
                             {{selectedI.level}}
@@ -16,7 +17,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a ng-click="selectVisibility('No View', selectedI)">No View</a>
-                                <a ng-click="selectVisibility('Personal View', selectedI)">Personal Only</a>
+                                <a ng-click="selectVisibility('Personal View', selectedI)">Personal View</a>
                                 <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
                             </li>
                         </ul>

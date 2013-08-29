@@ -453,7 +453,19 @@ a.oldschool-link  {
 .capaccess-drop {
     display: inline-block;
     text-align: left;
-    margin: 20px auto 5px auto;
+    margin: 15px 0 0 0;
+    width: 320px;
+    height: 41px;
+    padding: 0 20px 5px 20px;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.capaccess-drop > span {
+    display: inline-block;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 20px;
 }
 
 .capshareModal input, .capshareModal span {
