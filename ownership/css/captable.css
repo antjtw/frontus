@@ -490,6 +490,10 @@ a.oldschool-link  {
 
 /* Specialized Modals */
 
+.capaccess-form {
+    border-bottom: 1px solid #E3E3E3;
+}
+
 .capaccess-drop {
     display: inline-block;
     text-align: left;
@@ -497,7 +501,6 @@ a.oldschool-link  {
     width: 320px;
     height: 41px;
     padding: 0 20px 5px 20px;
-    border-bottom: 1px solid #E3E3E3;
 }
 
 .capaccess-drop > span {
