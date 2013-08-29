@@ -246,6 +246,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.allowKeys = allowablekeys;
 
         angular.forEach($scope.rows, function (row) {
+            row.state = false;
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue) {
                     if (row.name == currenttran && currentcolumn == issue.issue) {
@@ -253,7 +254,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                     else {
                         row[issue.issue].state = false;
-                        row.state = false;
                         issue.state = false;
                     }
                 }
@@ -301,10 +301,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.issueRevert = angular.copy(issue);
 
         angular.forEach($scope.rows, function (row) {
+            row.state = false;
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue) {
                     row[issue.issue].state = false;
-                    row.state = false;
                     issue.state = false;
                 }
             });
@@ -562,12 +562,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.sideBar = 3;
 
         angular.forEach($scope.rows, function (row) {
+            row.state = false;
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue) {
-                    console.log(row);
-                    console.log(issue.issue);
                     row[issue.issue].state = false;
-                    row.state = false;
                     issue.state = false;
                 }
             });
