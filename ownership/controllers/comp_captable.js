@@ -1181,7 +1181,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if ($scope.radioModel == "View") {
             $scope.captablestate = 1;
             if ($scope.sideBar == 2) {
-                $scope.sideBar = 4;
+                $scope.sideBar = "hello";
+                angular.forEach($scope.rows, function (row) {
+                    row.state = false;
+                    angular.forEach($scope.issues, function (issue) {
+                        if (issue.issue) {
+                            row[issue.issue].state = false;
+                            issue.state = false;
+                        }
+                    });
+                });
             }
             return true;
         }
@@ -1189,7 +1198,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.dilutionSwitch = true;
             $scope.captablestate = 0;
             if ($scope.sideBar == 4) {
-                $scope.sideBar = 2;
+                $scope.sideBar = "hello";
+                angular.forEach($scope.rows, function (row) {
+                    row.state = false;
+                    angular.forEach($scope.issues, function (issue) {
+                        if (issue.issue) {
+                            row[issue.issue].state = false;
+                            issue.state = false;
+                        }
+                    });
+                });
             }
             return false;
         }
