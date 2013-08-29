@@ -337,10 +337,11 @@ div.rightTitle {
 }
 
 .rightTitle > input {
-    width:100px;
+    width:102px;
+    height: 22px;
     border: 0;
     padding: 0;
-    margin: 0;
+    margin: 0 0 0 2px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -484,7 +485,7 @@ a.oldschool-link  {
     border: 1px solid #1ABC96;
     color: #1ABC96;
     background-color: #FFFFFF;
-    text-transform: UPPERCASE;
+    text-transform: uppercase;
 }
 
 /* Specialized Modals */

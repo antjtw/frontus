@@ -417,22 +417,18 @@
                         <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                    pattern="[0-9]*(.[0-9]*)*"
-                                                                                   ng-class="{'content':!activeIssue.premoney}"
                                                                                    ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
                                                                                    ng-model="activeIssue.premoney"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                    ng-class="{'content':!activeIssue.postmoney}"
                                                                                     ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
                                                                                     ng-model="activeIssue.postmoney"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
-                                                                                         ng-class="{'content':!activeIssue.ppshare}"
                                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
                                                                                          ng-model="activeIssue.ppshare"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
-                                                                                          ng-class="{'content':!activeIssue.totalauth}"
                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
                                                                                           ng-model="activeIssue.totalauth"></p>
 
@@ -479,7 +475,6 @@
                             </div>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
-                                                                                        ng-class="{'content':!activeIssue.totalauth}"
                                                                                         ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
                                                                                         ng-model="activeIssue.totalauth"></p>
 
@@ -488,18 +483,15 @@
                             </p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
-                                                                             ng-class="{'content':!activeIssue.price}"
                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
                                                                              ng-model="activeIssue.price"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
-                                                                                   ng-class="{'content':!activeIssue.terms}"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
                                                                                    ng-model="activeIssue.terms"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                        ng-class="{'content':!activeIssue.vestingbegins}"
-                                                                                        id="{{activeIssue.$$hashKey}}" 
+                                                                                        id="{{activeIssue.$$hashKey}}"
                                                                                         ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')" 
                                                                                         ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
                                                                                         type="text"
@@ -508,7 +500,6 @@
                                                                                         bs-datepicker></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
-                                                                                     ng-class="{'content':!activeIssue.vestcliff}"
                                                                                      ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
                                                                                      ng-model="activeIssue.vestcliff"></p>
 
@@ -531,32 +522,26 @@
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                            pattern="[0-9]*(.[0-9]*)*"
-                                                                                           ng-class="{'content':!activeIssue.premoney}"
                                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
                                                                                            ng-model="activeIssue.premoney"></p>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                            ng-class="{'content':!activeIssue.postmoney}"
                                                                                             ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
                                                                                             ng-model="activeIssue.postmoney"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                   ng-class="{'content':!activeIssue.interestrate}"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
                                                                                    ng-model="activeIssue.interestrate"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                   ng-class="{'content':!activeIssue.valcap}"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
                                                                                    ng-model="activeIssue.valcap"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
-                                                                              ng-class="{'content':!activeIssue.discount}"
                                                                               ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
                                                                               ng-model="activeIssue.discount"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
-                                                                          ng-class="{'content':!activeIssue.term}"
                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
                                                                           ng-model="activeIssue.term"></p>
                         </div>
@@ -589,12 +574,11 @@
                                 <div class="row-fluid trancore">
                                     <div>
                                         <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
-                                                                                 ng-class="{'content':!tran.units}" maxlength="18"
                                                                                  class="signless"
                                                                                  ui-event="{blur : 'saveTran(tran)'}"
                                                                                  ng-model="tran.units"></p>
 
-                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
+                                        <p>Paid $<input ng-disabled="toggleView();"
                                                         maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
                                         </p>
 
@@ -603,11 +587,11 @@
                                 </div>
                                 <div ng-show="tran.forfeited" class="row-fluid trancore">
                                     <div>
-                                        <p>Shares<input ng-disabled="toggleView();" ng-class="{'content':!tran.units}"
+                                        <p>Shares<input ng-disabled="toggleView();"
                                                         maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                         ng-model="tran.units"></p>
 
-                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                        <p>Forfeit<input disabled maxlength="18" class="signless"
                                                          ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></p>
                                     </div>
                                     <div class="DivHelper"></div>
@@ -624,7 +608,6 @@
                                                                                             ng-model="tran.postmoney"></p>
 
                                         <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Price Per Share</span><input ng-disabled="toggleView();"
-                                                                                                 ng-class="{'content':!tran.ppshare}"
                                                                                                  ui-event="{blur : 'saveTran(tran)'}"
                                                                                                  ng-model="tran.ppshare"></p>
 
@@ -687,17 +670,14 @@
                                     </div>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
-                                                                                   ng-class="{'content':!tran.price}"
                                                                                    ui-event="{blur : 'saveTran(tran)'}"
                                                                                    ng-model="tran.price"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
-                                                                                           ng-class="{'content':!tran.terms}"
                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                            ng-model="tran.terms"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                                ng-class="{'content':!tran.vestingbegins}"
                                                                                                 id="{{tran.$$hashKey}}"
                                                                                                 ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}"
                                                                                                 ng-change="saveTranDate(tran)"
@@ -707,7 +687,6 @@
                                                                                                 bs-datepicker></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
-                                                                                             ng-class="{'content':!tran.vestcliff}"
                                                                                              ui-event="{blur : 'saveTran(tran)'}"
                                                                                              ng-model="tran.vestcliff"></p>
 
@@ -737,22 +716,18 @@
                                                                                     ng-model="tran.postmoney"></p>
 
                                   <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                         ng-class="{'content':!tran.interestrate}"
                                                                                          ui-event="{blur : 'saveTran(tran)'}"
                                                                                          ng-model="tran.interestrate"></p>
 
                                   <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                         ng-class="{'content':!tran.valcap}"
                                                                                          ui-event="{blur : 'saveTran(tran)'}"
                                                                                          ng-model="tran.valcap"></p>
 
                                   <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
-                                                                                    ng-class="{'content':!tran.discount}"
                                                                                     ui-event="{blur : 'saveTran(tran)'}"
                                                                                     ng-model="tran.discount"></p>
 
                                   <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
-                                                                                ng-class="{'content':!tran.term}"
                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                 ng-model="tran.term"></p>
                               </div>

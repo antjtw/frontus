@@ -21,6 +21,8 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         // Pivot from transactions to the rows of the table
         $scope.trans = data;
         angular.forEach($scope.trans, function (tran) {
+            var offset = tran.date.getTimezoneOffset();
+            tran.date = tran.date.addMinutes(offset);
             tran.datekey = tran['date'].toUTCString();
             if ($scope.uniquerows.indexOf(tran.investor) == -1) {
                 $scope.uniquerows.push(tran.investor);

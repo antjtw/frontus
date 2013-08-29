@@ -1180,11 +1180,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.toggleView = function () {
         if ($scope.radioModel == "View") {
             $scope.captablestate = 1;
+            if ($scope.sideBar == 2) {
+                $scope.sideBar = 4;
+            }
             return true;
         }
         else {
             $scope.dilutionSwitch = true;
             $scope.captablestate = 0;
+            if ($scope.sideBar == 4) {
+                $scope.sideBar = 2;
+            }
             return false;
         }
     };
