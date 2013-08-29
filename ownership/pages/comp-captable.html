@@ -313,7 +313,7 @@
                 </td>
             </tr>
             <!-- Unissued Rows -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
+            <tr class="unissued-rows" ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>

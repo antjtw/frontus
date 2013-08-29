@@ -82,6 +82,10 @@
     background-color: #E3E3E3;
 }
 
+.tableView.captable .unissued-rows {
+    font-style: italic;
+}
+
 .captablepair-box {
     position: relative;
     display: block;
