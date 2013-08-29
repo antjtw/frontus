@@ -1573,6 +1573,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
+    var colTotalIssued = memoize(calculate.colTotalIssued);
+    $scope.colTotalIssued = function(header, rows, type) {
+        return colTotalIssued(header, rows, type);
+    };
+
+    // Total Shares | Paid for an issue column (type is either u or a)
     var colTotal = memoize(calculate.colTotal);
     $scope.colTotal = function(header, rows, type) {
         return colTotal(header, rows, type);

@@ -1,6 +1,20 @@
 var ownership = angular.module('ownerFilters', []);
 
 
+// Returns the rows not including unissued shares
+ownership.filter('noUnissue', function () {
+    return function (rows) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.editable == "yes") {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
+
 // Returns the list of rows that have not yet had shares
 ownership.filter('shareList', function () {
     return function (rows) {
@@ -14,12 +28,25 @@ ownership.filter('shareList', function () {
     };
 });
 
-// Returns the issues that have real values for the captable view
+// Returns the rows that have real values for the captable view
 ownership.filter('rowviewList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "") {
+            if (row.name != "" && row.editable == "yes") {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
+// Returns the unissued rows for the captable view
+ownership.filter('unissuedrowviewList', function () {
+    return function (rows) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.name != "" && row.editable != "yes") {
                 returnrows.push(row);
             }
         });

@@ -194,6 +194,23 @@ ownership.service('calculate', function () {
         return total;
     };
 
+    //Calculates the total for a column, without unissued shares
+    this.colTotalIssued = function (header, rows, type) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            if (row.editable == "yes") {
+                for (var key in row) {
+                    if (key == header) {
+                        if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
+                            total = total + parseFloat(row[key][type]);
+                        }
+                    }
+                }
+            }
+        });
+        return total;
+    };
+
     //Calculates the total money for all issues and transactions
     this.totalPaid = function (rows) {
         var total = 0;

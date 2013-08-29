@@ -263,7 +263,7 @@
                 </td>
             </tr>
             <!-- Editable rows -->
-            <tr ng-hide="toggleView();" ng-repeat="row in rows">
+            <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
                 <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
                 </td>
@@ -300,7 +300,20 @@
                 </td>
             </tr>
             <!-- Un-editable view -->
+            <!-- Regular Rows -->
             <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
+                <td><input disabled value="{{shareSum(row);}}"></td>
+                <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+                <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
+                    </span>
+                </td>
+            </tr>
+            <!-- Unissued Rows -->
+            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
@@ -330,7 +343,11 @@
                 <td></td>
                 <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
+                        <!-- Without Unissued -->
+                        <div ng-hide="toggleView()" ng-bind="formatAmount(colTotalIssued(one, rows, 'u'))" class="output footer"></div>
+                        <!-- With Unissued -->
+                        <div ng-show="toggleView()" ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
+
                         <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
