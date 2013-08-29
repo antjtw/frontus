@@ -104,7 +104,6 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       }
       SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) { 
           console.log("saved: "+x);
-          $rootScope.select($scope.company);
           $rootScope.notification.show("success", "Your company profile has been updated successfully.");
           $scope.namekey = $scope.name;
           $scope.companykey = $scope.company;
