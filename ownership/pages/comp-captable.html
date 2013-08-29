@@ -328,7 +328,7 @@
             <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
                 <td><input disabled value="{{shareSum(row);}}"></td>
                 <td><input disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
-                <td ng-click="getActiveInvestor(row);">{{row.name}}</td>
+                <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
