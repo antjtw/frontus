@@ -1490,3 +1490,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
     };
 };
+
+// IE fix to remove enter to submit form
+function testForEnter()
+{
+    if (event.keyCode == 13)
+    {
+        event.cancelBubble = true;
+        event.returnValue = false;
+    }
+};
