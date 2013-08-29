@@ -56,7 +56,7 @@
 
 
 	<div class="row-fluid">      
-     <div class="span8 recipientInfo docLibrary statusBlock">
+     <div class="span12">
         <div class="headsection row-fluid">
             <h1>{{selected.name}}</h1>
 
@@ -69,6 +69,8 @@
                </ul>
             </div>
           </div>
+     </div>
+     <div style="margin-left: 0;" class="span8 recipientInfo docLibrary statusBlock">
 
           <div class="row-fluid">
             <div class="subnav-controls">
@@ -130,21 +132,27 @@
         </div>   
  
 	 <div ng-show="lastupdated" class="span3 offset1">
-        <div class="headsection row-fluid">
-        </div>      
 
         <div class="row-fluid">
-            <div>
-                <p class="subText">Information</p>
+            <div class="row-fluid">
+                <div class="subnav-controls">
+                    <div>
+                        <div class="pull-left">
+                            <h2>Information</h2>
+                        </div>
+                    </div>
+                    <div class="DivHelper"></div>
+                </div>
             </div>
-            <ul>
-                <li>Last Edited: {{lastupdated | date:"mediumDate"}}</li>
+            <ul class="information-pair">
+                <li>{{lastupdated | date:"mediumDate"}}</li>
+                <li>Last Edited</li>
             </ul>  
         </div>
          
-         <div class="row-fluid">
+         <div class="row-fluid activity-feed">
              <div>
-                <p class="activityFeed-header subText">Activity Feed</p>
+                <h2>Activity Feed</h2>
              </div>
 
              <section class="statusFeed">
@@ -153,8 +161,10 @@
                      <ul class="activityBlock">
                          <li ng-repeat="active in activity | orderBy:activityOrder">
                             <i class="{{active.icon}}"></i>
-                                    <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span>
-                                    <span class="time">{{active.timeAgo}}</span>
+                                    <div>
+                                        <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span><br>
+                                        <span class="time">{{active.timeAgo}}</span>
+                                    </div>
                          </li>
                      </ul>
                  </div>
