@@ -1,3 +1,9 @@
+/* Captable Bootstrap Overrides */
+
+.accordion-heading .accordion-toggle {
+    padding: 11px 20px;
+}
+
 /* Captable */
 
 .capGuide {
@@ -370,8 +376,14 @@ textarea {
 
 /* Grants Table */
 
-tr.rowSelected {
-    background-color: rgba(26, 188, 150, 0.1);
+tr.rowSelected, tr.rowSelected:hover {
+    background-color: #8D8D8D;
+    color: #F1F1F1;
+}
+
+.rowSelected > td > input:disabled {
+    color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 .rowSelected > td {
@@ -396,6 +408,10 @@ tr.rowSelected {
 
 a.oldschool-link  {
     color: #3498db;
+}
+
+.overflow-tab > div.accordion-body {
+    overflow-y: visible;
 }
 
 .activityBlock {

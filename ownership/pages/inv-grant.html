@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="row-fluid">
-    <div class="span8 docLibrary statusBlock" style="overflow:auto;">
+    <div class="span8 docLibrary leftBlock">
       <div class="headsection row-fluid">
         <h1>{{selected.name}}</h1>
 
@@ -52,45 +52,34 @@
     <div class="span4 capright">
       <div ng-switch on="sideBar" >
         <span ng-switch-when="1">
-          <div class="headsection row-fluid">
+          <div class="headsection tabbed row-fluid">
               <h2>{{activeInvestor}}</h2>
               <p>Terms from the ownership table</p>
           </div>
-          <tabset>
-            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'mediumDate'}}" active="tran.active">
-              <p>Date <input disabled type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+          <tabset class="trantabs">
+            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
 
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
-                      <p class="rightTitle"><span>Underlying Security</span>
-                          <select disabled ng-init="tran.optundersec" ng-change="saveTran(tran)" ng-model="tran.optundersec" ng-options="i for i in tran.allowKeys">
-                              <option></option>
-                          </select>
-                      </p>
-                      <p class="rightTitle"><span>Price</span><input disabled ng-model="tran.price"></p>
-                      <p class="rightTitle"><span>Granted</span><input disabled value="{{tran.units}}"></p>
-                      <p class="rightTitle"><span>Term (months)</span><input disabled ng-model="tran.terms"></p>
-                      <p class="rightTitle"><span>Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
-                      <p class="rightTitle"><span>Vesting Cliff Date</span><input disabled type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p class="rightTitle"><span>Post Cliff Frequency</span>
-                          <select disabled ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
-                          </select>
-                      </p>
+                      <p ng-show="tran.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="tran.optundersec"></p>
+
+                      <p ng-show="tran.price" class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input disabled ng-model="tran.price"></p>
+
+                      <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
+
+                      <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
+
+                      <p ng-show="tran.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
+
+
+                      <p ng-show="tran.vestfreq" class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span><input disabled ng-model="tran.vestfreq"></p>
                   </accordion-group>
                   <accordion-group heading="Grant Activity">
                   <ul>
                       <li class="grant-list" ng-repeat="act in tran.activeAct">
-                          <div class="rightTitle"><span>Action</span>
-                              <ul style="display: inline-block">
-                                  <li class="dropdown standard small">
-                                      <a class="dropdown-toggle">
-                                          {{act.action}}<span class="invisible-drop">'</span>
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
-                          <p class="rightTitle"><span>Date</span><input disabled ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                          <p class="rightTitle"><span>Shares</span><input disabled ng-model="act.unit">
+                          <p class="rightTitle"><span>Action</span><input disabled ng-model="act.action"></p>
+                          <p class="rightTitle"><span>Date</span><span>{{act.date | date:'shortDate'}}</span></p>
+                          <p class="rightTitle"><span>Shares</span><input disabled ng-model="act.unit"></p>
                       </li>
                   </ul>
                   </accordion-group>
