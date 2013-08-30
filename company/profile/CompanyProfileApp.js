@@ -21,7 +21,12 @@ function hidePopover() {
   angular.element('.popover').hide();
 }
 
-function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
+function ContactCtrl($scope, $route, $location, $rootScope, SWBrijj) {
+
+    if ($rootScope.selected.role == 'investor') {
+        document.location.href="/home";
+        return;
+    }
 
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;

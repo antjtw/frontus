@@ -1,9 +1,13 @@
 // Grants page controller
-var grantController = function ($scope, $rootScope, $parse, SWBrijj, calculate, switchval, sorting) {
+var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting) {
 
-    SWBrijj.tblm('account.companies').then(function (comp) {
-        $scope.company = comp[0]['company'];
-    });
+    if ($rootScope.selected.role == 'investor') {
+        $location.path('/investor-grants');
+        return;
+    }
+
+    var company = $rootScope.selected.company;
+    $scope.company = company;
 
 
     $scope.rows = [];

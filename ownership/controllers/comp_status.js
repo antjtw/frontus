@@ -1,4 +1,9 @@
-var statusController = function ($scope, $rootScope, SWBrijj) {
+var statusController = function ($scope, $rootScope, SWBrijj, $location) {
+
+    if ($rootScope.selected.role == 'investor') {
+        $location.path('/investor-captable');
+        return;
+    }
 
     SWBrijj.tblm('ownership.lastupdated').then(function (time) {
         $scope.lastupdated = time[0].last_edited

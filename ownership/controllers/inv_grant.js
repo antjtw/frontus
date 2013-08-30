@@ -1,6 +1,11 @@
 // Grants page controller
 var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope) {
 
+    if ($rootScope.selected.role == 'issuer') {
+        $location.path('/company-grants');
+        return;
+    }
+
     var company = $rootScope.selected.company;
     $scope.currentCompany = company;
 
