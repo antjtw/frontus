@@ -226,6 +226,11 @@ function ContactCtrl($scope, $route, $location, $rootScope, SWBrijj) {
 
 function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
 
+    if ($rootScope.selected.role == 'investor') {
+        document.location.href="/home";
+        return;
+    }
+
   angular.element('body').click(function(x) {
     if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
       x.preventDefault();
@@ -270,7 +275,13 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
       }
   };
 
-function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
+function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
+
+  if ($rootScope.selected.role == 'investor') {
+        document.location.href="/home";
+        return;
+  }
+
   var userId = $routeParams.id;
   var rowNumber;
 
