@@ -214,7 +214,12 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
     border-radius: 0;
     border: none;
     background-color: #E3E3E3;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
     width: 108px;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 .capright .headsection.tabbed {
@@ -470,14 +475,25 @@ a.oldschool-link  {
     color: #F1F1F1;
 }
 
+/*.status-row.selectedrow:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-top: 6px solid #8D8D8D;
+    position: absolute;
+}*/
+
 .status-row.selectedrow a {
     color: #F1F1F1;
 }
 
 .tableView tr.status-detail {
     height: 41px;
-    background-color: #E3E3E3;
-    border-bottom: thin solid #A6A6A6;
+    background-color: #F1F1F1;
+    border-bottom: thin solid #C7C7C7;
 }
 
 .status-detail td {
@@ -492,8 +508,9 @@ a.oldschool-link  {
 }
 
 .status-detail > td:last-of-type > span {
+    font-size: 10px;
     float: right;
-    margin-right: 20px;
+    margin-right: 60px;
     text-align: center;
     width: 120px;
     height: 22px;

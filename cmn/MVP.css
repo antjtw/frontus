@@ -491,12 +491,15 @@ h2 {
     width: 225px;
 }
 
-.bottomnav .nav > li > a {
+.bottomnav .nav > li > a.button {
 	padding: 0 0 0 0;
 	line-height: 30px;
 	text-align: center;
 	padding: 0 20px 0 20px;
     text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .bottomnav .nav > li > a:hover {
@@ -590,21 +593,22 @@ h2 {
 	vertical-align: bottom;
 	position: absolute;
 	bottom: 0;
-	margin: 0 0 5px 0;
+	margin: 0 0 3px 0;
 }
 
 .maintabs li {
 	float: left;
 	display: inline;
 	margin: 0 20px -20px 0;
-	padding: 3px 5px 5px 5px;
+	padding: 3px 5px 3px 5px;
 	width: 85px;
 	text-align: center;
 }
 
-.selectedtab {
+li.selectedtab {
 	color: #1ABC96;
 	border-bottom: 2px solid #1ABC96;
+    padding: 3px 0 3px 0;
 }
 
 .subnav-controls {
@@ -879,6 +883,7 @@ form.inputs {
 	border-top: 1px solid #E3E3E3;
 	border-bottom: 1px solid #E3E3E3;
 	font-family: 'FS Elliot Web Bold', sans-serif;
+    font-size: 11px;
 	text-transform: uppercase;
 	color: #1E2D3D;
 }
@@ -886,6 +891,7 @@ form.inputs {
 
 .docLibrary .column-label input {
 	font-family: 'FS Elliot Web Bold', sans-serif;
+    font-size: 11px;
 	text-transform: uppercase;
 	color: #1E2D3D;
 	width: 150px;
@@ -1379,6 +1385,9 @@ form.inputs {
 
 .edittoggle > .btn.active {
 	color: #15A085;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .minidrop > ul {
