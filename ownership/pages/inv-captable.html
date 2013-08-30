@@ -32,8 +32,8 @@
             </tr>
             <!-- Descriptive row viewable from all modes -->
             <tr class="descriptionRow">
-                <td>Shares</td>
-                <td>%</td>
+                <td class="input-right">Shares</td>
+                <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues">
                     <span>SHARES</span>
@@ -42,8 +42,8 @@
             </tr>
             <tr ng-repeat="row in rows">
                 <td><input disabled value="{{shareSum(row);}}"></td>
-                <td ng-show="fullview"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td ng-hide="fullview"><input disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
+                <td ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -61,8 +61,8 @@
                 </td>
             </tr>
             <tr ng-show="fullview" class='tablefooter'>
-                <td><input disabled value="{{totalShares(rows);}}"></td>
-                <td><input disabled value="100%"></td>
+                <td><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                <td><input class="input-right" disabled value="100%"></td>
                 <td></td>
                 <td ng-repeat="one in issues">
                     <span class="captablepair-box">

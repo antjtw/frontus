@@ -64,6 +64,14 @@
     padding: 0;
 }
 
+.tableView.captable .input-right {
+    text-align: right;
+}
+
+.tableView.captable td.input-right {
+    padding-right: 5px;
+}
+
 .tableView.captable input:disabled {
     background: transparent;
     -webkit-text-fill-color: #8D8D8D;

@@ -258,8 +258,8 @@
 
             <!-- Descriptive row viewable from all modes -->
             <tr class="descriptionRow">
-                <td>Shares</td>
-                <td>%</td>
+                <td class="input-right">Shares</td>
+                <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues | issueviewList">
                     <span>SHARES</span>
@@ -268,8 +268,8 @@
             </tr>
             <!-- Editable rows -->
             <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
-                <td class="capsums-col"><input disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
+                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
                 </td>
                 <td>
               <span ng-switch on="row.nameeditable">
@@ -312,8 +312,8 @@
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
-                <td><input disabled value="{{shareSum(row);}}"></td>
-                <td><input disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -336,8 +336,8 @@
             </tr>
             <!-- Un-editable diluted view -->
             <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
-                <td><input disabled value="{{shareSum(row);}}"></td>
-                <td><input disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
+                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
                 <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -348,8 +348,8 @@
             </tr>
             <!-- Undiluted footer -->
             <tr ng-show="toggleDilution();" class='tablefooter'>
-                <td><input disabled value="{{totalShares(rows);}}"></td>
-                <td><input disabled value="100.00%"></td>
+                <td><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                <td><input class="input-right" disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
