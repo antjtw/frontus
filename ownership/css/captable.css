@@ -42,6 +42,9 @@
     padding: 0;
 }
 
+.tableView .unissued-rows td {
+}
+
 .tableView.captable td.viewName {
     padding: 0 0 0 6px;
 }
@@ -150,6 +153,10 @@ p.captablepair {
 
 .tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields:hover {
     background-color: rgba(26, 188, 150, 0.1);
+}
+
+.tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
+    background-color: #FFFFFF;
 }
 
 .tableView td.tranSelected {

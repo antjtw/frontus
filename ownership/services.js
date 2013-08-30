@@ -171,7 +171,7 @@ ownership.service('calculate', function () {
         for (var key in row) {
             if (row.hasOwnProperty(key)) {
                 if (row[key] != null) {
-                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
                         total = total + parseFloat(row[key]['u']);
                     }
                 }
@@ -210,7 +210,7 @@ ownership.service('calculate', function () {
             for (var key in row) {
                 if (row.hasOwnProperty(key)) {
                     if (row[key] != null) {
-                        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey" && row['nameeditable'] != 0) {
+                        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
                             total = total + parseFloat(row[key]['u']);
                         }
                     }
