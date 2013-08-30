@@ -1,51 +1,65 @@
 <div ng-init="init()">
 
   <div class="row-fluid docViewerControls">
-    <div>
-      <div class="annotation-control span4">
-        <div class="tools" ng-hide="annotable()">
-          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"/></button>
-          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"/></button>
-          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"/></button>
-          <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"/></button>
-        </div>
+    <div style='padding-top: 10px; padding-bottom: 20px; '>
+        <span class="tools span4" ng-class="{hidden: !annotable()}">
+          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
+          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
+          <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
+        </span>
 
+        <!--
         <ul class="subText pageJump cf">
             <li ng-class="{curPage:page==currentPage, unsaved:unsaved(page), annotated:isAnnotated(page)}" style="cursor:pointer"
                 ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
           </ul>
-      </div>
+          -->
 
-      <div class="span4">
-        <div class="pageTurn">
-          <ul>
-            <li ng-class="{'hidden' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"/></li>
-            <li><input ng-class="{'hidden':docLength==1}" ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
+        <span class="tools pageTurn span2">
+          <ul ng-class="{'hidden':docLength==1}" >
+            <li ng-class="{'hidden' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span></li>
+            <li><label>
+              <input ng-model="currentPage" ng-change="jumpPage(currentPage)"
+                     style="width:20px;">
+            </label></li>
             <li>/ {{docLength}}</li>
-            <li ng-class="{'hidden':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"/></li>
+            <li ng-class="{'hidden':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span></li>
           </ul>
-        </div>
-      </div>
+        </span>
 
-      <div class="span4">
+      <span class="tools span1">
+        <button ng-class="{hidden: docLength==1}" ng-click="showPageBar=!showPageBar"><span data-icon="&#xe043;" aria-hidden="true"></span></button>
+      </span>
+
+<!--  <div class="span4">
         <div ng-hide="annotable()">
           <button ng-click="saveNoteData()">Store</button>
           <button ng-click="saveNotes($event)">Save</button>
           <button ng-click="clearNotes($event)">Clear</button>
           <button ng-click="clearAllNotes($event)">Clear All Pages</button>
-          <!-- <button ng-show="lib.signature_deadline" ng-click="submitSign();">Submit</button> -->
-          <!-- <button ng-show="lib.when_signed && !invq && !lib.when_confirmed" ng-click="rejectSign();">Reject Signature</button> -->
-          <!-- <button ng-show="lib.when_signed && !invq && !lib.when_confirmed" ng-click="acceptSign();">Countersign</button> -->
         </div>
       </div>
+      -->
     </div>
-    <div class="DivHelper"></div>
   </div>
 
-  <!-- The ng-show is to (attempt) to prevent requests before the docId is set.  Works most of the time
-       Back end has to ignore id=undefined, because sometimes, it doesn't work -->
+  <div>
+    <ul class="page-bar" ng-show="showPageBar && docLength > 1" style="background-color: rgb(85,98,111);overflow: hidden; padding-top: 6px; padding-bottom: 6px; margin-left: 0; margin-bottom: 0;" >
+      <li ng-class="{hidden: pageScroll==0}" ng-click="pageBarLeft();"
+          style="margin-left: 0.5em; font-size: 150%;">
+        <span data-icon="&#xe032;"></span></li>
+      <li ng-repeat="page in showPages()"
+          ng-class="{curPage:page==currentPage}"
+          style="padding-left: 2.5em;"
+          ng-click="jumpPage(page)">
+        <span data-icon="{{isAnnotated(page)?'&#xe006;' : '&#xe009;'}}" aria-hidden="true"></span><span> Page {{page}}</span></li>
+      <li ng-show="morePages()"
+          style="float: right; margin-right:0.5em; font-size: 150%;">
+        <span ng-click="pageBarRight();" data-icon="&#xe033;"></span></li>
+    </ul>
+  </div>
   <div ng-show="docId" class="row-fluid docHolder" style="position:relative;">
-    <!-- <div class="docPanel" back-img="/photo/docpg?id={{docId}}&investor={{invq}}&counterparty={{counterparty}}&page={{currentPage}}" ></div> -->
     <div class="docPanel" back-img="/photo/docpg?{{pageQueryString}}&page={{currentPage}}"></div>
   </div>
 </div>

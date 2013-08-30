@@ -14,19 +14,19 @@ function getNoteBounds(n) {
   var dpo = [ dp.offsetLeft, dp.offsetTop];
   var bds = [ getIntProperty(n[0],'left'), getIntProperty(n[0], 'top'),0,0];
   var ntyp = n.scope().ntype;
-  var z;
+  var z, ibds;
   if (ntyp == 'text') {
     var t = n.find('textarea')[0];
     z = t.offset;
     ibds = [z[0], z[1], z[2], z[3]];
-    ibds[0]+= t.offsetLeft; // + getIntProperty(t,'padding-left');
-    ibds[1]+= t.offsetTop; // + getIntProperty(t,'padding-top');
+    ibds[0] += t.offsetLeft; // + getIntProperty(t,'padding-left');
+    ibds[1] += t.offsetTop; // + getIntProperty(t,'padding-top');
   } else if (ntyp == 'canvas') {
     var c = n.find('canvas')[0];
     z = c.offset;
     ibds = [z[0], z[1], z[2], z[3]];
-    ibds[0]+= c.offsetLeft; // + getIntProperty(t,'padding-left');
-    ibds[1]+= c.offsetTop; // + getIntProperty(t,'padding-top');
+    ibds[0] += c.offsetLeft; // + getIntProperty(t,'padding-left');
+    ibds[1] += c.offsetTop; // + getIntProperty(t,'padding-top');
   } else if (ntyp == 'check') {
     ibds = [12, 27, 14, 14];
 //    ibds[0]+= t.offsetLeft + getIntProperty(t,'padding-left');
@@ -48,6 +48,9 @@ function countCRs(str) {
     z = z.substring(a+1);
   }
 }
+
+
+
 
 angular.module('draggable', []).
     directive('draggable', ['$document' , function($document) {
@@ -74,8 +77,7 @@ angular.module('draggable', []).
           elm.css({position: 'absolute'});
         },
 
-           controller: ["$scope", "$element", "$attrs", "$transclude",
-             function($scope, $element, $attrs, $transclude, otherInjectables) {
+           controller: ["$scope", "$element", function($scope, $element) {
 
     /*           $transclude(function(clone, scope) {
                  $scope.annotation = scope;
@@ -185,8 +187,46 @@ docs.filter('fromNow', function() {
   }
 });
 
-function DocumentViewController($scope, $compile, $document, SWBrijj) {
-  $scope.currentPage = 1;
+docs.directive('icon', function() {
+  return {
+    restrict: 'E',
+    template: '<button><span data-icon="&#xe00d;" aria-hidden="true"></span></button>'
+  }
+});
+
+function DocumentViewController($scope, $compile, $route, $location, $routeParams, $rootScope, $window, SWBrijj) {
+
+
+  $window.addEventListener('beforeunload', function(event) {
+    var ndx = $scope.getNoteData();
+    if (ndx == $scope.lib.annotations) return; // no changes
+    // This is a synchronous save
+    var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+    // console.log(res);   // I expect this returns true (meaning updated).  If not, the data is lost
+    if (!res) alert('failed to save annotations');
+  });
+
+  /* Save the notes when navigating away */
+  $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+    if (!document.querySelector('.docPanel')) return;
+    $scope.saveNoteData();
+  });
+
+  $scope.showPages = function() {
+    return $scope.range($scope.pageScroll+1, Math.min($scope.pageScroll+$scope.pageBarSize, $scope.docLength+1));
+  };
+
+  $scope.morePages = function() {
+    return $scope.docLength > $scope.pageScroll+$scope.pageBarSize;
+  };
+
+  $scope.pageBarRight = function() {
+    $scope.pageScroll = Math.min($scope.docLength-$scope.pageBarSize+1, $scope.pageScroll+($scope.pageBarSize-1));
+  };
+
+  $scope.pageBarLeft = function() {
+    $scope.pageScroll = Math.max(0, $scope.pageScroll - ($scope.pageBarSize - 1));
+  };
 
   $scope.unsaved = function (page) {
     var nn = $scope.notes;
@@ -196,28 +236,46 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     return false;
   };
   $scope.isAnnotated = function (page) {
-    return (!$scope.unsaved(page)) && $scope.annotated[page - 1];
+    return $scope.unsaved(page) || $scope.annotated[page - 1];
   };
 
-  $scope.annotable = function() {
+  $scope.removeAllNotes = function() {
+    for (i = 0; i < $scope.notes.length; i++) {
+      document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+    }
+    $scope.notes = [];
+  };
+  $scope.annotable = function () {
     if ($scope.lib == undefined) return true;
-    return ($scope.invq && ($scope.lib.when_signed || !$scope.lib.signature_deadline))
-        || (!$scope.invq && $scope.lib.original && (!$scope.lib.when_signed || $scope.lib.when_confirmed));
-  }
+    return ($scope.invq && (!$scope.lib.when_signed && $scope.lib.signature_deadline))
+        || (!$scope.invq && (!$scope.lib.original || ($scope.lib.when_signed && !$scope.lib.when_confirmed)));
+  };
   $scope.init = function () {
     $scope.notes=[];
+    $scope.pageScroll = 0;
+    $scope.pageBarSize = 13;
+    $scope.showPageBar = true;
+
+    if ($routeParams.page) $scope.currentPage = parseInt($routeParams.page);
     if (!$scope.docId) return;
+
     SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
       $scope.docLength = data.length;
       // does scaling happen here?
-      $scope.currentPage = 1;
+
       $scope.annotated = new Array(data.length);
       for(var i=0;i<data.length;i++) {
         $scope.annotated[data[i].page-1] = data[i].annotated;
       }
     });
+    // This gets called twice because init gets called twice.
+    // That doubles up the notes, so -- until I figure out why init gets called twice,
+    // need to delete all the notes that init created the first time around
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
       $scope.lib = data;
+      // if there were notes left over, delete them
+      $scope.removeAllNotes();
+
       var aa = data['annotations'];
       if (aa) {
         // restoreNotes
@@ -260,19 +318,25 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     }
   };
 
+  $scope.setPage = function(n) {
+    $scope.currentPage = n;
+    var s = $location.search();
+    s.page=n;
+    $location.search(s);
+  }
   $scope.nextPage = function(value) { 
     if ($scope.currentPage < $scope.docLength) {
-      $scope.currentPage = value+1; 
+      $scope.setPage(value+1);
     }
   };
   $scope.previousPage = function(value) { 
     if ($scope.currentPage > 1) {
-      $scope.currentPage = value-1; 
+      $scope.setPage(value-1);
     }
   };
   
   $scope.jumpPage = function(value) {
-    $scope.currentPage = value; };
+    $scope.setPage(value); };
 
   $scope.range = function(start, stop, step){
     if (typeof stop=='undefined'){ stop = start; start = 0; }
@@ -287,26 +351,26 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     aa.scope().initdrag(event);
   };
 
-  $scope.fixBox = function(bb) {
+  $scope.fixBox = function (bb) {
     var pad;
     bb.style.width = '30px';
     bb.style.height = '20px';
     var crs = countCRs(bb.value);
     if (bb.clientHeight < bb.scrollHeight) {
-      pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb,'padding-bottom');
+      pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb, 'padding-bottom');
       bb.style.height = (bb.scrollHeight - pad) + "px";
     }
     if (bb.clientWidth < bb.scrollWidth) {
-      pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb,'padding-right');
-      bb.style.width = (bb.scrollWidth + 10) +"px";
+      // pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb, 'padding-right');
+      bb.style.width = (bb.scrollWidth + 10) + "px";
     }
-    bb.fontSize = getIntProperty(bb,'font-size');
+    bb.fontSize = getIntProperty(bb, 'font-size');
     bb.lineHeight = Math.floor(bb.fontSize * 1.4);
     bb.style.lineHeight = 1.4;
-    bb.rows = crs+2;
+    bb.rows = crs + 2;
     bb.style.height = "auto";
     bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
-  }
+  };
 
   $scope.newBoxX = function(page, val, style) {
     $scope.restoredPage = page;
@@ -364,28 +428,28 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     aa.scope().initdrag(event);
   };
 
-  $scope.fixPad = function(aa) {
-      var z = aa.find('canvas')[0];
-      z.width = ( aa.width() - 8);
-      z.height = (aa.height() - 27);
-      z.offset = [getComputed(z,'offsetTop'), getComputed(z,'offsetLeft'), z.offsetWidth, z.offsetHeight];
-      var strokes = z.strokes;
-      var ctx = z.getContext('2d');
-      ctx.lineCap = 'round';
-      ctx.color = 'blue';
-      ctx.lineWidth = 2;
-      ctx.setAlpha(0.5);
-      for(var i=0;i<strokes.length;i++) {
-        var line = strokes[i];
-        with(ctx) {
-          beginPath();
-          moveTo(line[1],line[2]);
-          lineTo(line[3],line[4]);
-          strokeStyle = line[0];
-          stroke();
-        }
+  $scope.fixPad = function (aa) {
+    var z = aa.find('canvas')[0];
+    z.width = ( aa.width() - 8);
+    z.height = (aa.height() - 27);
+    z.offset = [getComputed(z, 'offsetTop'), getComputed(z, 'offsetLeft'), z.offsetWidth, z.offsetHeight];
+    var strokes = z.strokes;
+    var ctx = z.getContext('2d');
+    ctx.lineCap = 'round';
+    ctx.color = 'blue';
+    ctx.lineWidth = 2;
+    // ctx.setAlpha(0.5);
+    for (var i = 0; i < strokes.length; i++) {
+      var line = strokes[i];
+      with (ctx) {
+        beginPath();
+        moveTo(line[1], line[2]);
+        lineTo(line[3], line[4]);
+        strokeStyle = line[0];
+        stroke();
       }
-  }
+    }
+  };
 
   $scope.newPadX = function(page,lines) {
     $scope.restoredPage = page;
@@ -407,9 +471,9 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     ctx.color = 'blue';
     ctx.lineWidth = 2;
     ctx.fillStyle = 'white';
-    ctx.setAlpha(0);
+    // ctx.setAlpha(0);
     ctx.fillRect(0,0,200,200);
-    ctx.setAlpha(0.5);
+    // ctx.setAlpha(0.5);
 
     canvas.addEventListener('mousedown', function(e) {
       this.down = true;
@@ -440,12 +504,13 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     return aa;
   };
 
-  $scope.submitSign = function (sig) {
-    SWBrijj.procm("document.sign_document", $scope.docId).then(function (data) {
-      window.location.reload();
+  /*$scope.submitSign = function (sig) {
+    SWBrijj.procm("document.sign_document", $scope.docId, $scope.getNoteData() ).then(function (data) {
+      $route.reload(); // window.location.reload();
     }).except(function (x) {
           alert(x.message);
         });
+        */
     /*
      if (sig == false || sig == undefined) {
      alert("Need to click the box");
@@ -457,7 +522,11 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
      });
      }
      */
-  };
+  // };
+
+  $scope.showPageBar = function(evt) {
+
+  }
 
   $scope.acceptSign = function (sig) {
     SWBrijj.procm("document.countersign", $scope.docId).then(function (data) {
@@ -475,34 +544,36 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     });
   };
 
-  $scope.clearAllNotes = function(event) {
-    for(var i=1;i <= $scope.docLength;i++) {
+  $scope.clearAllNotes = function (event) {
+    for (var i = 1; i <= $scope.docLength; i++) {
       var z = i;
-      SWBrijj.deletePage( $scope.docId, i).then(function (x) {
+      SWBrijj.deletePage($scope.docId, i).then(function (x) {
         if (z = $scope.currentPage) {
           var docpanel = document.querySelector(".docPanel");
           var imgurl = docpanel.style.backgroundImage;
           docpanel.style.backgroundImage = imgurl;
         }
-    });
+      });
     }
-  }
+  };
 
   $scope.getNoteData = function () {
     var noteData = [];
     var dp = document.querySelector(".docPanel");
     for (var i = 0; i < $scope.notes.length; i++) {
       var n = $scope.notes[i];
+      if (!n.scope()) continue; // why?
       var bnds = getNoteBounds(n);
       var pos = [n.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight ];
       var typ = n.scope().ntype;
       var val = [];
       var style = [];
       var ndx = [pos, typ, val, style];
+      var se, lh;
 
       if (typ == 'text')  {
-        var se = n[0].querySelector("textarea");
-        var lh = getIntProperty(se,'line-height');
+        se = n[0].querySelector("textarea");
+        lh = getIntProperty(se,'line-height');
         val.push(se.value);
         style.push( getIntProperty(se,'font-size') );
 
@@ -513,8 +584,8 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         ndx[0][2][1]-=5;
 
       } else if (typ == 'check') {
-        var se = n[0].querySelector("span.check-annotation");
-        var lh =  getIntProperty(se,'line-height');
+        se = n[0].querySelector("span.check-annotation");
+        lh =  getIntProperty(se,'line-height');
         style.push(getIntProperty(se,'font-size') );
         var lho = Math.floor( (1/1.4) * lh);
         ndx[0][2][1]+=lho;
@@ -523,23 +594,26 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         ndx[0][2][1]-=4;
 
       } else if (typ == 'canvas') {
-        var se = n[0].querySelector("canvas");
+        se = n[0].querySelector("canvas");
         val.push(se.strokes);
       }
       noteData.push(ndx);
     }
-    return noteData;
+    return JSON.stringify(noteData);
   };
 
   $scope.saveNoteData = function () {
     var nd = $scope.getNoteData();
     console.log(nd);
-    SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, JSON.stringify(nd)).then(function (data) {
+    if ($scope.lib == undefined) return;
+    SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
       console.log(data);
 
       var docpanel = document.querySelector(".docPanel");
-      var imgurl = docpanel.style.backgroundImage;
-      docpanel.style.backgroundImage = imgurl;
+      if (docpanel) {
+        var imgurl = docpanel.style.backgroundImage;
+        docpanel.style.backgroundImage = imgurl;
+      }
     });
   };
 
@@ -552,9 +626,9 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
         b) stamp each note onto it and
         c) upload the modified image.
    */
-  $scope.saveNotes = function(e) {
+  $scope.saveNotes = function (e) {
     var pr = $scope.invq ? "document.doSignStamp" : $scope.lib.original ? "document.doCounterStamp" : "document.doShareStamp";
-    SWBrijj.procm(pr, $scope.docId, $scope.currentPage).then(function(data) {
+    SWBrijj.procm(pr, $scope.docId, $scope.currentPage).then(function (data) {
       console.log(data);
 
       var docpanel = document.querySelector(".docPanel");
@@ -562,8 +636,9 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       docpanel.style.backgroundImage = imgurl;
 
     });
-  }
+  };
 
+  /*
   $scope.xxxsaveNotes = function(e) {
     var pageList = [];
     var noteList = [];
@@ -581,27 +656,26 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
     $scope.notes = [];
 
-           /*
-    then(function (x) {
-      var docpanel = document.querySelector(".docPanel");
-      var imgurl = docpanel.style.backgroundImage;
-      docpanel.style.backgroundImage = imgurl;
-      var keepnotes = [];
-      for (var i = 0; i < $scope.notes.length; i++) {
-        if ($scope.notes[i].page != $scope.currentPage) {
-          keepnotes.push($scope.notes[i]);
-        } else {
-          document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
-        }
-      }
-      $scope.notes = keepnotes;
-    }).
-        except(function (x) {
-          console.log(x.message);
-        });
-        */
+//    then(function (x) {
+//      var docpanel = document.querySelector(".docPanel");
+//      var imgurl = docpanel.style.backgroundImage;
+//      docpanel.style.backgroundImage = imgurl;
+//      var keepnotes = [];
+//      for (var i = 0; i < $scope.notes.length; i++) {
+//        if ($scope.notes[i].page != $scope.currentPage) {
+//          keepnotes.push($scope.notes[i]);
+//        } else {
+//          document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
+//        }
+//      }
+//      $scope.notes = keepnotes;
+//    }).
+//        except(function (x) {
+//          console.log(x.message);
+//        });
   };
-
+*/
+/*
   $scope.savePageNotes = function(page, notes) {
 
     // At this point, figure out any size extensions required by annotations which stick out
@@ -638,18 +712,17 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
     img.onload = function (x) {
       var ctx = canvas.getContext("2d");
       ctx.drawImage(img, lo, to, docpanel.offsetWidth + fudge, docpanel.offsetHeight);
-  //  var canvascount = 0;
+      //  var canvascount = 0;
 
       for (var nnum = 0; nnum < notes.length; nnum++) {
         var note = notes[nnum];
         var ntype = note.scope().ntype;
         var notex = note[0];
 
-        var se, ll, tt, lh, padx, pady, bl, bt;
+        var se, ll, tt, lh, padx, pady, i;
         var bnds = getNoteBounds(note);
-        ll = bnds[0]+lo;
-        tt = bnds[1]+to;
-
+        ll = bnds[0] + lo;
+        tt = bnds[1] + to;
 
         if (ntype == 'text') {
           var annotext = note.scope().$$nextSibling.annotext;
@@ -657,60 +730,57 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
 
           lh = se.lineHeight; // had to be set by fixBox
 
-          /*padx = getIntProperty(se, 'padding-left');
-          pady = getIntProperty(se, 'padding-top');
-          bl = getIntProperty(se, 'border-left') +
-              getIntProperty(notex, 'border-left');
+          // padx = getIntProperty(se, 'padding-left');
+          // pady = getIntProperty(se, 'padding-top');
+          // bl = getIntProperty(se, 'border-left') +
+          // getIntProperty(notex, 'border-left');
 
-          bt = getIntProperty(se, 'border-top') +
-              getIntProperty(notex, 'border-top');
-            */
+          // bt = getIntProperty(se, 'border-top') +
+          // getIntProperty(notex, 'border-top');
 
           ctx.fillStyle = "blue";
           // ctx.font = "16px Optima";
           ctx.font = getComputed(se, 'font');
 
-          /*
-          tt += se.offsetTop+pady;
-          ll += se.offsetLeft+padx;
-          */
+          // tt += se.offsetTop+pady;
+          // ll += se.offsetLeft+padx;
 
           padx = 6;
           pady = 6;
 
           ll += padx + se.offset[0];
-          tt += pady + se.offset[1] - Math.floor( (1-1/1.4) * lh);
+          tt += pady + se.offset[1] - Math.floor((1 - 1 / 1.4) * lh);
 
           // This "4" was better as "8" for a smaller font.
           // ctx.scale( (canvas.width-4)/(canvas.width),1);
-          ctx.scale(1,1);
+          ctx.scale(1, 1);
 
           var anoray = annotext.split('\n');
-          for (var i = 0; i < anoray.length; i++) {
+          for (i = 0; i < anoray.length; i++) {
             ctx.fillText(anoray[i], ll, tt + lh * (i + 1));
           }
-          ctx.scale(1,1);
+          ctx.scale(1, 1);
         }
         else if (ntype == 'check') {
           se = notex.querySelector("span");
           ctx.fillStyle = "blue";
 
-          var fs = getComputed(se,'font-size');
-          ctx.font = fs +' Sharewave';
+          var fs = getComputed(se, 'font-size');
+          ctx.font = fs + ' Sharewave';
 
-          /*padx = getIntProperty(se, 'padding-left');
-          pady = getIntProperty(se, 'padding-top');
-          bl = getIntProperty(se, 'border-left') +
-              getIntProperty(notex, 'border-left');
+          // padx = getIntProperty(se, 'padding-left');
+          // pady = getIntProperty(se, 'padding-top');
+          // bl = getIntProperty(se, 'border-left') +
+          // getIntProperty(notex, 'border-left');
 
-          bt = getIntProperty(se, 'border-top') +
-              getIntProperty(notex, 'border-top');
-          ll += padx; //  + se.offset[0];
-          tt += pady; // + se.offset[1] - 6;
+          // bt = getIntProperty(se, 'border-top') +
+          // getIntProperty(notex, 'border-top');
+          // ll += padx; //  + se.offset[0];
+          // tt += pady; // + se.offset[1] - 6;
 
-          ll += 12;
-          */
-          tt += (bnds[3]-bnds[1]) * (1/1.4);
+          // ll += 12;
+
+          tt += (bnds[3] - bnds[1]) * (1 / 1.4);
 
           // ctx.fillText("\uf00c", ll, tt);
           ctx.fillText("\ue023", ll, tt);
@@ -721,22 +791,18 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           // ll += se.offset[0];
           // tt += se.offset[1];
 
-        /* canvascount++;
-          // var ctxxx = se.getContext('2d');
-          var imgx = new Image();
-          imgx.onload = function () {
-            ctx.drawImage(imgx, ll, tt);
-            canvascount--;
-          };
+          // canvascount++;
+           // var ctxxx = se.getContext('2d');
+          // var imgx = new Image();
+          // imgx.onload = function () {
+          // ctx.drawImage(imgx, ll, tt);
+          // canvascount--;
+          // };
 
-          imgx.src = se.toDataURL("image/png");
-          */
+          // imgx.src = se.toDataURL("image/png");
 
           // var imgData=ctxxx.getImageData(0,0,se.offsetWidth, se.offsetHeight);
           // ctx.putImageData(imgData,ll,tt);
-
-
-
 
           //    if (e.target.tagName == 'DIV') {
 
@@ -744,31 +810,31 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
           //z.height = (aa.height() - 27);
           //z.offset = [getComputed(z,'offsetTop'), getComputed(z,'offsetLeft')];
 
-          ll+= 4; tt += 23;
+          ll += 4;
+          tt += 23;
 
           var strokes = se.strokes;
           ctx.lineCap = 'round';
           ctx.color = 'blue';
           ctx.lineWidth = 2;
           // ctx.setAlpha(0.5);
-          for(var i=0;i<strokes.length;i++) {
+          for (i = 0; i < strokes.length; i++) {
             var line = strokes[i];
-            with(ctx) {
+            with (ctx) {
               beginPath();
-              moveTo(line[1]+ll,line[2]+tt);
-              lineTo(line[3]+ll,line[4]+tt);
+              moveTo(line[1] + ll, line[2] + tt);
+              lineTo(line[3] + ll, line[4] + tt);
               strokeStyle = line[0];
               stroke();
             }
           }
         }
       }
-      for (var i = 0; i < notes.length; i++) {
-        document.querySelector('.docPanel').removeChild(notes[i][0]);
-      }
+
+      $scope.removeAllNotes();
 
       var z = canvas.toDataURL('image/tiff');
-      SWBrijj.uploadDataURL($scope.docId, page, z).then( function(data) {
+      SWBrijj.uploadDataURL($scope.docId, page, z).then(function (data) {
             if (page == $scope.currentPage) {
               var docpanel = document.querySelector(".docPanel");
               var imgurl = docpanel.style.backgroundImage;
@@ -779,35 +845,47 @@ function DocumentViewController($scope, $compile, $document, SWBrijj) {
       );
       $scope.$apply();
 
-      }
+    };
 
-      /*
-            var cvfin = function () {
 
-              // TODO: if the canvascount doesnt go to zero after a while, abort somehow
-              if (canvascount == 0) {
-                var z = canvas.toDataURL('image/tiff');
-                SWBrijj.uploadDataURL($scope.docId, page, z).then( function(data) {
-                      if (page == $scope.currentPage) {
-                          var docpanel = document.querySelector(".docPanel");
-                          var imgurl = docpanel.style.backgroundImage;
-                          docpanel.style.backgroundImage = imgurl;
-                      }
+    //        var cvfin = function () {
 
-                    }
-              );
-                $scope.$apply();
-              } else {
-                window.setTimeout(cvfin, 50);
-              }
+    //          // TODO: if the canvascount doesnt go to zero after a while, abort somehow
+    //          if (canvascount == 0) {
+    //            var z = canvas.toDataURL('image/tiff');
+    //            SWBrijj.uploadDataURL($scope.docId, page, z).then( function(data) {
+    //                  if (page == $scope.currentPage) {
+    //                      var docpanel = document.querySelector(".docPanel");
+    //                      var imgurl = docpanel.style.backgroundImage;
+    //                      docpanel.style.backgroundImage = imgurl;
+    //                  }
 
-            };
+    //                }
+    //          );
+    //            $scope.$apply();
+    //          } else {
+    //            window.setTimeout(cvfin, 50);
+    //          }
 
-            window.setTimeout(cvfin, 50);
-          };
-          */
+    //        };
+
+    //        window.setTimeout(cvfin, 50);
+    //      };
+
 
   // must set the src AFTER the onload function for IE9
-    img.src=imgurl.substring(4,imgurl.length-1);
-  };
-};
+  //  img.src=imgurl.substring(4,imgurl.length-1);
+//  };
+  */
+
+}
+/* Looking for a way to detect if I need to reload the page because the user has been logged out
+*/
+/* For images, the "login redirect" should return an image that says "Please login again"
+ */
+/*
+ $('<img/>').attr('src', 'http://picture.de/image.png').load(function() {
+ $(this).remove(); // prevent memory leaks as @benweet suggested
+ $('body').css('background-image', 'url(http://picture.de/image.png)');
+ });
+    */

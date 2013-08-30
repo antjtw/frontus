@@ -30,9 +30,9 @@ email.directive('replace', function() {
    return {
     restrict: 'A',
     link: function(scope, elm, attrs, ctrl) {
-      scope.replacex = function() {
+      scope.replacex = function () {
         scope.recipients[parseInt(attrs.index)] = elm.text();
-      }
+      };
       elm.on('blur', function(event) {
         scope.replacex();
         scope.$apply();
@@ -60,14 +60,14 @@ email.directive("emailTo", function() {
         ', </span>'+
         '<input ng-model="nextRecip" ng-on-blur="addRecip(nextRecip)" ui-keypress="{enter: \'addRecip(nextRecip)\'}" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="0"/></span></div>',
     controller: ["$scope","$element", function EmailToController($scope,$element) {
-    $scope.remove = function(x) {
+    $scope.remove = function (x) {
       // slice doesn't seem to work here
       // $scope.recipients.slice(x,1);
-      for(var i=x; i<$scope.recipients.length;i ++) {
-        $scope.recipients[i]=$scope.recipients[i+1];
+      for (var i = x; i < $scope.recipients.length; i++) {
+        $scope.recipients[i] = $scope.recipients[i + 1];
       }
-      $scope.recipients.length = $scope.recipients.length-1;
-    }
+      $scope.recipients.length = $scope.recipients.length - 1;
+    };
     $scope.addRecip = function(nr, x) {
       if (nr) {
         for(var i=0;i<$scope.recipients.length;i++) {

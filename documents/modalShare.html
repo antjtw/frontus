@@ -2,18 +2,26 @@
   <div class="modalHeader">
     <span data-icon="&#xe004;" aria-hidden="true"></span>
     <span data-icon="&#xe006;" aria-hidden="true"></span>
-    <span style="padding-left: 20px"/>Share a Document
+    <span style="padding-left: 20px">Share a Document</span>
     <span ng-click="hide()" class="close" data-icon="&#xe00f" aria-hidden="true"></span>
   </div>
 
     <div class="modalText">
       <div class="emailSection">
         <email-to ng-model="recipients">This is a test</email-to>
-        <p>Signature Required? <input ng-model="signeeded" type="checkbox"></p>
-        <p ng-show="signeeded">Date <input type="text" ng-model="signaturedate" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+        <p><label>
+          Signature Required?
+          <input ng-model="signeeded" type="checkbox">
+        </label></p>
+        <p ng-show="signeeded"><label>
+          Date
+          <input type="text" ng-model="signaturedate" data-date-format="mm/dd/yyyy" bs-datepicker>
+        </label></p>
       </div>
       <div class="messageSection">
-        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+        <label>
+          <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+        </label>
       </div>
     </div>
     <div class="modalButtons">

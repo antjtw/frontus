@@ -163,6 +163,16 @@ button.greenButton {
 button.greenButton:hover {
     background-color: #1ccaa1;
 }
+button.greenButton[disabled] {
+    background-color: rgba(28,202,161,0.4);
+    /* visibility:hidden; */
+    cursor: inherit;
+}
+button.greenButton[disabled]:hover {
+    background-color: rgba(28,202,161,0.4);
+    /*visibility:hidden; */
+    cursor: inherit;
+}
 
 button.greyButton {
     color:#ffffff;
@@ -171,4 +181,31 @@ button.greyButton {
     height: 37px;
     text-align:center;
     padding: 0 0 0 0;
+}
+
+.modal {
+  margin-left: -180px;
+  width: auto;
+  background-color: #FFFFFF;
+  border: 0;
+  border-radius: 0px;
+}
+
+.sign-modal {
+    width: 400px;
+}
+
+.sign-modal label {
+    display: inline;
+    font-size: 10px;
+    padding: 15px 0px 15px 20px;
+    text-transform: none;
+}
+
+.sign-modal input {
+    border: 0;
+    margin: auto;
+    color: inherit;
+    width: auto;
+    float: none;
 }
