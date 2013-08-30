@@ -269,7 +269,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (String(tran['partpref']) == "true") {
                         tran.partpref = $scope.tf[0];
                     }
-                    else {
+                    else if (String(tran['partpref']) == "false") {
                         tran.partpref = $scope.tf[1];
                     }
                     $scope.activeTran.push(tran);
@@ -325,7 +325,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (String($scope.activeIssue.partpref) == "true") {
             $scope.activeIssue.partpref = $scope.tf[0];
         }
-        else {
+        else if (String($scope.activeIssue.partpref) == "false") {
             $scope.activeIssue.partpref = $scope.tf[1];
         }
         if ($scope.activeIssue.name == "") {
@@ -411,10 +411,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (issue['key'] != null) {
                 var dateconvert = new Date(issue['date']);
                 var d1 = dateconvert.toUTCString();
-                if (issue['partpref'] != null) {
-                    var partpref = $scope.strToBool(issue['partpref']);
-                }
-                ;
+                var partpref = $scope.strToBool(issue['partpref']);
+
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
@@ -831,12 +829,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (transaction.amount) {
             transaction.amount = String(transaction.amount).replace(/\,/g,'');
         }
-
-        if (!(/^\d+$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
+        console.log(transaction.units);
+        if (!(/^\d+(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
             transaction.units = transaction.unitskey;
         };
-        if (!(/^\d+$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
+        if (!(/^\d+(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };
@@ -872,9 +870,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
                 }
-                if (transaction['partpref'] != null) {
-                    var partpref = $scope.strToBool(transaction['partpref']);
-                }
+                var partpref = $scope.strToBool(transaction['partpref']);
                 if (transaction['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
@@ -1027,8 +1023,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             case "false":
             case "no":
             case "0":
-            case null:
                 return false;
+            case null:
+            case undefined:
+            case "undefined":
+                return null;
             default:
                 return Boolean(string);
         }

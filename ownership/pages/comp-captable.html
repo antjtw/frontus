@@ -894,7 +894,7 @@
                                         <input disabled ng-model="tran.liquidpref">
                                     </p>
 
-                                    <p class="rightTitle">
+                                    <p ng-show="tran.liquidpref" class="rightTitle">
                                         <span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                         <input disabled ng-model="tran.partpref">
                                     </p>
