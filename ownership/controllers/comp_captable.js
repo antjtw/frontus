@@ -1070,15 +1070,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if ($scope.sideBar == 2 || $scope.sideBar == 1) {
                 $scope.sideBar = "hello";
             }
-            angular.forEach($scope.rows, function (row) {
-                row.state = false;
-                angular.forEach($scope.issues, function (issue) {
-                    if (issue.issue) {
-                        row[issue.issue].state = false;
-                        issue.state = false;
-                    }
-                });
-            });
             return true;
         }
         else {
@@ -1087,15 +1078,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if ($scope.sideBar == 4 || $scope.sideBar == 5) {
                 $scope.sideBar = "hello";
             }
-            angular.forEach($scope.rows, function (row) {
-                row.state = false;
-                angular.forEach($scope.issues, function (issue) {
-                    if (issue.issue) {
-                        row[issue.issue].state = false;
-                        issue.state = false;
-                    }
-                });
-            });
             return false;
         }
     };
