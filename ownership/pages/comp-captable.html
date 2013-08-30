@@ -608,7 +608,7 @@
                                                                                                                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                                 ng-model="tran.postmoney"></p>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Price Per Share</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
                                                                                                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                            ng-model="tran.ppshare"></p>
 
@@ -814,7 +814,7 @@
                           </div>
                       </span>
 
-                    <!-- Options Side Bar when UnEditable -->
+                    <!-- Transactions Side Bar when UnEditable -->
                       <span ng-switch-when="4">
                         <div class="tabbed headsection row-fluid">
                             <h2>{{activeInvestor}}
@@ -847,7 +847,7 @@
 
                                     <p ng-show="tran.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled ng-model="tran.postmoney"></p>
 
-                                    <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Price Per Share</span><input disabled ng-model="tran.ppshare"></p>
+                                    <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input disabled ng-model="tran.ppshare"></p>
 
                                     <p class="rightTitle">
                                         <span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
