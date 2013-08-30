@@ -536,13 +536,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveInvestor = function (investor) {
+        console.log(investor);
         $scope.sideBar = 3;
 
         angular.forEach($scope.rows, function (row) {
             row.state = false;
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue) {
-                    row[issue.issue].state = false;
+                    if (row[issue.issue]) {
+                        row[issue.issue].state = false;
+                    }
                     issue.state = false;
                 }
             });
