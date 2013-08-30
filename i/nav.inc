@@ -37,7 +37,7 @@
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
-              <li ng-show="selected.isAdmin"><a class="menuProfileText button" href="/company/profile">MY COMPANY</a></li>
+              <li ng-show="selected.role=='issuer'"><a class="menuProfileText button" href="/company/profile">MY COMPANY</a></li>
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
@@ -67,7 +67,7 @@
               </li>
             </ul>
           <li>
-          <li ng-show="ownership.visible" ng-class="{active: path.indexOf('/ownership') != -1}"><a class="button" href="{{ownership.link}}">Ownership</a></li>
+          <li ng-class="{active: path.indexOf('/ownership') != -1}"><a class="button" href="/ownership">Ownership</a></li>
           <li ng-class="{active: path.indexOf('/documents') != -1}"><a class="button" href="/documents">Documents</a></li>
           <li ng-show="people.visible" ng-class="{active: path.indexOf('/profile/people') != -1}"><a class="button" href="{{people.link}}">People</a></li>
         </ul>

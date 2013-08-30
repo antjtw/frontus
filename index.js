@@ -23,13 +23,13 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
     });
   }
 
-  if ($rootScope.isLoggedIn) {
+/*  if ($rootScope.isLoggedIn) {
     if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
       document.location.href='/home/company';
     } else {
       document.location.href='/home';
     }
-  }
+  }*/
 
   $scope.fieldCheck = function() {
     if ($scope.user.email && $scope.user.name && $scope.user.company) {

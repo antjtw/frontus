@@ -25,17 +25,18 @@
           <p class="title">Ownership Permissions</p>
           <p>Shareholders will only see their personal holdings by default, unless you allow full access here</p>
       </div>
-      <div ng-show="fullview" class="cf permission-block">
+      <div ng-show="level" class="cf permission-block">
         <div>
             <div class="pull-left permission-label">Type:</div>
             <div class="pull-left">
               <li class="dropdown standard pull-left">
                   <a class="dropdown-toggle">
-                      {{fullview}}
+                      {{level}}
                   </a>
                   <ul class="dropdown-menu">
                       <li>
-                          <a ng-click="changeVisibility('Personal Only')">Personal Only</a>
+                          <a ng-click="changeVisibility('No View')">No View</a>
+                          <a ng-click="changeVisibility('Personal View')">Personal View</a>
                           <a ng-click="changeVisibility('Full View')">Full View</a>
                       </li>
                   </ul>
@@ -44,7 +45,7 @@
         </div>
         <div class="DivHelper"></div>
       </div>
-      <div style="display: none;" ng-hide="fullview">You've not shared your cap table with this person.</div>
+      <div style="display: none;" ng-hide="level">You've not shared your cap table with this person.</div>
     </section>
     <br>
     <section class="recipientInfo docLibrary">

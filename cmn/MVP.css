@@ -73,6 +73,12 @@ input.loginInput:focus, textarea:focus, select:focus {
     background:none;
 }
 
+ul {
+    padding : 0;
+    margin: 0;
+    list-style: none;
+}
+
 .open .caret{
     border-top :0 !important;
     border-bottom: 4px solid black;
@@ -82,15 +88,15 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 	background-color: transparent;
 }
 
-textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    background-color: #E3E3E3;
+textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    background-color: #F1F1F1;
     border-radius: 0;
 }
 
 input:focus, textarea:focus {
-    background-color: #E3E3E3;
-    outline: none;
-    box-shadow:none;
+    background-color: #F1F1F1;
+    outline: none !important;
+    box-shadow:none !important;
 }
 
 .pointer {
@@ -422,7 +428,7 @@ h2 {
 	-moz-box-shadow: none;
 	padding: 0 0 0 0;
 	margin-top: 0;
-	width: 160px;
+	width: 240px;
     border-top: 1px solid #E3E3E3;
 }
 
@@ -482,14 +488,14 @@ h2 {
     padding: 0 0 0 15px;
     line-height: 30px;
     text-align: left;
-    width: 145px;
+    width: 225px;
 }
 
 .bottomnav .nav > li > a {
 	padding: 0 0 0 0;
 	line-height: 30px;
 	text-align: center;
-	width: 98px;
+	padding: 0 20px 0 20px;
     text-shadow: none;
 }
 
@@ -569,8 +575,14 @@ h2 {
 	border-bottom: 1px solid #E3E3E3;
 }
 
+.headsection > h1 {
+    margin-left: 15px;
+}
+
 .headsection > h1, .headsection > h2 {
 	margin-top: 30px;
+    margin-bottom: 0px;
+    min-height: 26px;
 }
 
 .maintabs {
@@ -686,22 +698,26 @@ form.inputs {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 
 .loginInput:-moz-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 .loginInput::-moz-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 .loginInput:-ms-input-placeholder {
     color: #C7C7C7;
     font-size: 10px;
 	font-family: 'FS Elliot Web Light', sans-serif;
+    opacity: 1;
 }
 
 
@@ -860,7 +876,6 @@ form.inputs {
 }
 
 .docLibrary .column-label {
-	height: 20px;
 	border-top: 1px solid #E3E3E3;
 	border-bottom: 1px solid #E3E3E3;
 	font-family: 'FS Elliot Web Bold', sans-serif;
@@ -903,20 +918,26 @@ form.inputs {
 }
 
 /* Placeholder text color */
+
+
 .docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
-   color: #C7C7C7;
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input:-moz-placeholder, .docLibrary input:disabled:-moz-placeholder { /* Firefox 18- */
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input::-moz-placeholder, .docLibrary input:disabled::-moz-placeholder {  /* Firefox 19+ */
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 .docLibrary input:-ms-input-placeholder, .docLibrary input:disabled:-ms-input-placeholder {
-   color: #C7C7C7;  
+    color: #C7C7C7;
+    opacity: 1;
 }
 
 
@@ -957,7 +978,7 @@ form.inputs {
     background-color: #FFFFFF;
     width: 150px;
     text-align: left;
-    padding: 0 0 0 10px;
+    padding: 0 0 0 5px;
     margin: 0 0 0 0;
     position: relative;
     font-weight: normal;
@@ -1184,8 +1205,7 @@ form.inputs {
 }
 
 .statusFeed {
-    height: 265px;
-    width: 330px;
+    height: 365px;
     margin: 0 0 20px 0;
     overflow:auto;
 }
@@ -1227,6 +1247,13 @@ form.inputs {
 
 /* Dropdown buttons */
 
+.dropdown-list {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
 .dropdown.standard {
     list-style: none;
     display: inline-block;
@@ -1245,13 +1272,18 @@ form.inputs {
     text-align: left;
     padding-left: 20px;
     line-height: 30px;
+    height: 30px;
     margin: 0;
 }
 
-.standard .dropdown-toggle:before {
+.standard .dropdown-toggle::before {
+    display: block;
     position: absolute;
+    padding: 0;
+    margin: 0;
     right:-21px;
-    content: url('/img/down-arrow-20x30.png');
+    content: " ";
+    background: url('/img/down-arrow-20x30.png');
     width:20px;
     height:30px;
     outline: 1px solid #E3E3E3;
@@ -1264,6 +1296,9 @@ form.inputs {
 }
 
 .standard .dropdown-menu {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
     padding: 0;
     margin: 0;
     border-radius: 0;
@@ -1279,17 +1314,27 @@ form.inputs {
     width: 79px;
     height: 22px;
     line-height: 22px;
+    padding-left: 10px;
 }
 
-.standard.small .dropdown-toggle:before {
-  content: url('/img/down-arrow-20x22.png');
+.standard.small .dropdown-toggle::before {
+  content: " ";
+  background: url('/img/down-arrow-20x22.png');
   height: 22px;
 }
+
 .standard.small .dropdown-menu , .standard.small .dropdown-menu > li , .standard.small .dropdown-menu > li > a {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 101px;
     min-width: 101px;
 }
+
+.standard.small .dropdown-menu > li > a {
+    padding-left: 10px;
+}
+
 
 .standard .dropdown-menu > li > a {
     color: #8D8D8D;
@@ -1299,6 +1344,10 @@ form.inputs {
     background-color: #E3E3E3;
     background-image: none;
     color: #8D8D8D;
+}
+
+.dropdown-toggle .invisible-drop {
+    visibility: hidden;
 }
 
 .edittoggle > .btn {
@@ -1476,8 +1525,9 @@ form.inputs {
 /* Styling file uploads with fake overlay */
 
 .modal div.fileinputs {
+    margin-top: 10px;
     position: relative;
-    height: 41px;
+    height: 50px;
     border-bottom: 1px solid #E3E3E3;
     border-top: 1px solid #E3E3E3;
 }
@@ -1487,13 +1537,22 @@ form.inputs {
     top: 0px;
     left: 0px;
     z-index: 1;
-    line-height: 41px;
+    line-height: 50px;
     margin-left: 20px;
 }
 
 .modal div.fakefile > div {
     display: inline-block;
     margin-left: 10px;
+}
+
+.modal div.fakefile > span {
+    display: inline-block;
+    width: 160px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    border: 1px solid #E3E3E3;
 }
 
 .modal input.file {
@@ -1638,7 +1697,7 @@ form.inputs {
 
 .modalText p {
     text-align: left;
-    margin-left: 20px;
+    margin: 0 20px 0 20px;
 }
 
 .modalCopy {

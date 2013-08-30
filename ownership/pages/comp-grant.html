@@ -8,9 +8,9 @@
         <div class="row-fluid">
 
           <ul class="bodyText maintabs">
-            <a href="/company/ownership/"><li class="button">Ownership</li></a>
+            <a href="/ownership/company-captable"><li class="button">Ownership</li></a>
             <li class="selectedtab">Grants</li>
-            <a href="/company/ownership/status"><li class="button">Status</li></a>
+            <a href="/ownership/company-status"><li class="button">Status</li></a>
            </ul>
         </div>
       </div>
@@ -31,7 +31,7 @@
             </tr>
           <tr class="pointer" ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows" ng-class="{rowSelected:row.state}">
             <td>
-              <input class="pointer" disabled style="width:180px;" ng-model="row.name"></input>
+              <input class="pointer" disabled style="width:180px;" ng-model="row.name">
             </td>
             <td>{{row.granted}}</td>
             <td>{{row.vested}}</td>
@@ -40,10 +40,10 @@
           </tr>
           <tr class='tablefooter'>
             <td></td>
-            <td><input disabled value="{{totalTranAction('granted', trans)}}"></input></td>
-            <td><input disabled value="{{totalGrantAction('vested', grants);}}"></input></td>
-            <td><input disabled value="{{totalGrantAction('forfeited', grants)}}"></input></td>
-            <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></input></td>
+            <td><input disabled value="{{totalTranAction('granted', trans)}}"></td>
+            <td><input disabled value="{{totalVestedAction(rows);}}"></td>
+            <td><input disabled value="{{totalGrantAction('forfeited', grants)}}"></td>
+            <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></td>
           </tr>
         </table>
       </div>
@@ -73,11 +73,13 @@
                       <option></option>
                       </select>
                     </p>
-                    <p class="rightTitle"><span>Price</span><input ng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></input></p>
-                    <p class="rightTitle"><span>Granted</span><input disabled value="{{totalGranted(tran.issue, trans);}}"></input></p>
-                    <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></input></p>
-                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></input></p>
-                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" ng-change="saveTran(tran)" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                    <p class="rightTitle"><span>Price</span><input ng-class="{'content':!tran.price}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.price"></p>
+                    <p class="rightTitle"><span>Granted</span><input disabled value="{{tran.units}}"></p>
+                    <p class="rightTitle"><span>Term (months)</span><input ng-class="{'content':!tran.terms}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.terms"></p>
+                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-class="{'content':!tran.vestcliff}" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.vestcliff"></p>
+                    <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-class="{'content':!tran.vestingbegins}" id="{{tran.$$hashKey}}"
+                                                                                ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\' , $event)', blur:'saveTranDate(tran, \'vestingbegins\' , \'blur\')'}"
+                                                                                ng-change="saveTranDate(tran, 'vestingbegins')" type="text" ng-model="tran.vestingbegins" data-date-format="mm/dd/yyyy" bs-datepicker></p>
                     <p class="rightTitle"><span>Post Cliff Frequency</span>
                       <select ng-init="tran.vestfreq" ng-change="saveTran(tran)" ng-model="tran.vestfreq" ng-options="i for i in freqtypes">
                       </select>
@@ -86,12 +88,22 @@
                   <accordion-group heading="Grant Activity">
                   <ul>
                     <li class="grant-list" ng-repeat="act in tran.activeAct">
-                      <p>Action
-                        <select ng-init="act.action" ng-change="saveGrant(act)" ng-model="act.action" ng-options="i for i in possibleActions">
-                        </select>
-                      </p>
-                      <p>Date <input ng-change="saveGrant(act)" type="text" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
-                      <p>Shares<input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit"></input></p>
+                        <div class="rightTitle"><span>Action</span>
+                            <ul style="display: inline-block">
+                                <li class="dropdown standard small">
+                                    <a class="dropdown-toggle">
+                                        {{act.action}}<span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-repeat="i in possibleActions">
+                                            <a ng-click="saveGrantDrop(act, i)">{{i}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                      <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act)" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                      <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit">
                     </li>
                   </ul>
                   </accordion-group>
@@ -101,7 +113,7 @@
         </span>
 
         <span ng-switch-when="2">
-          <p>Investor Email <input disabled ng-model="activeInvestorName"></input></p>
+          <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
         </span>
         <span class="capGuide" ng-switch-default>
             <h2>Manage your Grants</h2>

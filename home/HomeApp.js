@@ -21,9 +21,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     }
   }
 
-  SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
-     $scope.name = x[0]['name'];
-  }).except(initFail);
+  $scope.company = $rootScope.selected.name;
 
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
@@ -34,7 +32,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     SWBrijj.procm('account.onboarding_update', false);
   }
 
-  $scope.activity = [];
+/*  $scope.activity = [];
   SWBrijj.tblm('global.company_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
@@ -83,7 +81,7 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-  });
+  });*/
 
   $scope.activityOrder = function(card) {
         return -card.time;
@@ -100,7 +98,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   $scope.company = $rootScope.selected.name;
 
   $scope.activity = [];
-  SWBrijj.procm('global.get_investor_home').then(function(data) {
+  /*SWBrijj.procm('global.get_investor_home').then(function(data) {
     var i = 0;
     angular.forEach(data, function(x) {
       x.timeAgo = moment(x.time).fromNow();
@@ -150,7 +148,7 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     if ($scope.activity.length == 0) {
       $scope.noActivity = true;
     }
-  });
+  });*/
 
   $scope.activityOrder = function(card) {
         return -card.time;

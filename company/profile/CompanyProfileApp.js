@@ -104,7 +104,6 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
       }
       SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) { 
           console.log("saved: "+x);
-          $rootScope.select($scope.company);
           $rootScope.notification.show("success", "Your company profile has been updated successfully.");
           $scope.namekey = $scope.name;
           $scope.companykey = $scope.company;
@@ -230,31 +229,41 @@ function PeopleCtrl($scope, $route, $rootScope, SWBrijj) {
     hidePopover();
   });
 
-  SWBrijj.tblm('account.company_investors', ['email', 'name', 'role']).then(function(x) {
-    $scope.people = x;
-    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
-      angular.forEach($scope.people, function(person) {
-        if (person.email == me[0].email)
-          person.hideLock = true;
-        if (person.name == null) 
-          person.name = person.email;
-      });
-    });
-    console.log(x);
-    $scope.sort = 'name';
-  }).except(function(x) {
-    console.log(x);
-    initFail();
-  });
+  SWBrijj.tblm('global.combined_investor_list', ['email', 'name']).then(function (x) {
+      $scope.people = x;
+      SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function (admins) {
+          var issuers = admins;
+          angular.forEach(admins, function (admin) {
+              admin.role = "issuer";
+              $scope.people.push(admin);
+          });
+          SWBrijj.tblm('account.profile', ['email']).then(function (me) {
+              angular.forEach($scope.people, function (person) {
+                  if (person.email == me[0].email)
+                      person.hideLock = true;
+                  if (person.name == null)
+                      person.name = person.email;
+              });
+          });
+          console.log(x);
+          $scope.sort = 'name';
+      }).except(function (x) {
+              console.log(x);
+              initFail();
+          }).except(function (x) {
+              console.log(x);
+              initFail();
+            });
+          });
 
-  $scope.sortBy = function(col) {
-      if ($scope.sort == col) {
-        $scope.sort = ('-' + col);
-      } else {
-        $scope.sort = col;
+      $scope.sortBy = function (col) {
+          if ($scope.sort == col) {
+              $scope.sort = ('-' + col);
+          } else {
+              $scope.sort = col;
+          }
       }
-    }
-}
+  };
 
 function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) { 
   var userId = $routeParams.id;
@@ -265,7 +274,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       document.location.href="/investor/profile";
   });
 
-  SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+  SWBrijj.tblm('global.combined_investor_list', 'email', userId).then(function(x) {
     if (!x.name) {
       history.back();
     }
@@ -343,21 +352,16 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     return -card.time;
   };
 
-  SWBrijj.tblm('ownership.company_audit', ['email', 'fullview'], 'email', userId).then(function(x) {
-    $scope.fullview = (x.fullview) ? 'Full View':'Personal Only';
-    console.log($scope.fullview);
-  }).except(function() {
-    $scope.fullview = false;
+  SWBrijj.tblm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(x) {
+    $scope.level = x.level;
+  }).except(function(err) {
+    $scope.level = false;
   });
 
   $scope.changeVisibility = function (value) {
     console.log(value);
-    $scope.fullview = value;
-    var visibility = false;
-    if ($scope.fullview == 'Full View') {
-      visibility = true;
-    }
-    SWBrijj.proc('ownership.update_investor_captable', userId, visibility).then(function (data) {
+    $scope.level = value;
+    SWBrijj.proc('ownership.update_investor_captable', userId, $scope.level).then(function (data) {
       $rootScope.notification.show("success", "Successfully changed cap table visibility")
     });
   };
@@ -408,7 +412,7 @@ function initPage($scope, x, row) {
 }
 
 function initFail(x) {
-	document.location.href='/login';
+	return;
 }
 
 	function updated(x) {}

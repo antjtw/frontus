@@ -21,15 +21,15 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.showBothBars = false;
 	$rootScope.isLoggedIn = false;
 	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
-  console.log($rootScope.path);
+    console.log($rootScope.path);
 
 	$scope.isCollapsed = true;
 	$rootScope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
-	$scope.ownership = {visible: false, adminlink: '/company/ownership/', investorlink: '/investor/ownership/', link: ''};
 	$scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
   $scope.switch = function(nc) {
+      $rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
       SWBrijj.switch_company(nc.company, nc.role).then( function(data) {
         $scope.companies = data;
         $scope.initCompany(true);
@@ -52,16 +52,13 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       $scope.switch(thiscmp);
     }
     if (thiscmp.role == 'issuer') {
-					$scope.ownership.link = $scope.ownership.adminlink;
 					$scope.people.link = $scope.people.adminlink;
-					$scope.ownership.visible = true;
 					$scope.people.visible = true;
 		} else {
-					$scope.ownership.link = $scope.ownership.investorlink;
 					$scope.people.link = $scope.people.investorlink;
-					$scope.ownership.visible = true;
 					$scope.people.visible = false;
 		}
+
 
     if (singleBarPages.indexOf($rootScope.path) > -1) {
       $scope.nav = 'navBarLoggedOut';
@@ -76,6 +73,12 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       } else {
         $scope.logoLink = '/home';
       }
+    }
+
+    if (switching) {
+        if (($rootScope.path.indexOf('ownership') > -1) && (($rootScope.path.indexOf('grants') > -1) || ($rootScope.path.indexOf('status') > -1))) {
+            document.location.href = '/ownership'; return;
+        }
     }
 
     $route.reload();
@@ -127,16 +130,19 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 		$scope.nav = 'navBarLoggedOut';
 		console.log('Not logged in');
 		$rootScope.showLogin = true;
+        $rootScope.isLoggedIn = false;
 	});
 
     // Notification code
 	$rootScope.notification = {visible: false};
 
 	$rootScope.notification.show = function (color, message, callback) {
-		$rootScope.notification = {visible: true, color: color, style: "notification " + color, message: message };
-		$rootScope.$apply();
+		$rootScope.notification.color = color;
+        $rootScope.notification.message = message;
+        $rootScope.notification.style = "notification " + color;
+        $rootScope.notification.visible = true;
 		setTimeout(function() { 
-			$rootScope.notification.visible = false; 
+			$rootScope.notification.visible = false;
 			$rootScope.$apply();
 			if (callback) { callback(); }
 		}, 3000);

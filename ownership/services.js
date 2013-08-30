@@ -49,8 +49,9 @@ ownership.service('calculate', function () {
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && tran.vestingbegins != null) {
-                if (Date.compare(Date.today(), tran.vestingbegins) > -1) {
+            var vestbegin = angular.copy(tran.vestingbegins)
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                if (Date.compare(Date.today(), vestbegin) > -1) {
                     if (!isNaN(parseFloat(vesting[tran.investor]))) {
                         vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
                     }
@@ -59,11 +60,12 @@ ownership.service('calculate', function () {
                     }
                     var cycleDate = angular.copy(tran.date);
                     var remainingterm = angular.copy(tran.terms);
-                    while (Date.compare(tran.vestingbegins, cycleDate) > -1) {
+                    while (Date.compare(vestbegin, cycleDate) > -1) {
                         remainingterm = remainingterm - 1;
                         cycleDate.addMonths(1);
                     }
-                    remainingterm = remainingterm + 1;
+                    remainingterm = remainingterm;
+                    var finalDate = vestbegin.addMonths(remainingterm);
                     var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
@@ -87,7 +89,8 @@ ownership.service('calculate', function () {
                     else {
                         cycleDate.addMonths(x);
                     }
-                    while (Date.compare(Date.today(), cycleDate) > -1) {
+                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                        console.log("The cycle data is " + String(cycleDate));
                         vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
@@ -99,9 +102,10 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+       angular.forEach(rows, function (row) {
             if (!isNaN(vesting[row.name])) {
-                row.vested = vesting[row.name];
+                var result =Math.round(vesting[row.name]*1000)/1000
+                row.vested = result;
             }
         });
         console.log(rows);
@@ -111,7 +115,13 @@ ownership.service('calculate', function () {
 
     // Returns the number of shareholders (rows -1 for the empty row)
     this.numShareholders = function (rows) {
-        return (rows.length - 1);
+        var number = 0
+        angular.forEach(rows, function(row) {
+            if (row.editable == "yes") {
+                number += 1
+            }
+        });
+        return number;
     };
 
     // Calculates the Total Shares owned by an investor across all rounds
@@ -177,6 +187,23 @@ ownership.service('calculate', function () {
                 if (key == header) {
                     if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
                         total = total + parseFloat(row[key][type]);
+                    }
+                }
+            }
+        });
+        return total;
+    };
+
+    //Calculates the total for a column, without unissued shares
+    this.colTotalIssued = function (header, rows, type) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            if (row.editable == "yes") {
+                for (var key in row) {
+                    if (key == header) {
+                        if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
+                            total = total + parseFloat(row[key][type]);
+                        }
                     }
                 }
             }
