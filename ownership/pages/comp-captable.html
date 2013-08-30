@@ -1,3 +1,6 @@
+
+
+
 <div class="container">
 
 <div modal="capShare" close="close()" options="shareopts">
@@ -240,7 +243,8 @@
                 <th class="longrow">Shareholder</th>
                 <th  ng-repeat="one in issues">
                     <input placeholder="new security name" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue">
+                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
+                           onkeydown="testForEnter();">
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -271,11 +275,13 @@
               <span ng-switch on="row.nameeditable">
                 <span ng-switch-default>
                   <input placeholder="NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
-                         ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}">
+                         ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
+                         onkeydown="testForEnter();">
                 </span>
                 <span ng-switch-when="0">
                   <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
-                         ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}">
+                         ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
+                         onkeydown="testForEnter();">
                 </span>
               </span>
                 </td>
@@ -285,16 +291,20 @@
                   <input class="captablepair" maxlength="18"
                          placeholder="shares"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                         ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'>
+                         ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'
+                         onkeydown="testForEnter();">
                   <input class="captablepair" maxlength="18" placeholder="paid"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                         ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'>
+                         ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
+                         onkeydown="testForEnter();">
                 </span>
                 <span class="captablepair-box" ng-switch-when="0">
                   <input disabled class="captablepair" placeholder="shares"
-                         ng-model='row[key]["u"]'>
+                         ng-model='row[key]["u"]'
+                         onkeydown="testForEnter();">
                   <input disabled class="captablepair" placeholder="paid"
-                         ng-model='row[key]["a"]'>
+                         ng-model='row[key]["a"]'
+                         onkeydown="testForEnter();">
                 </span>
               </span>
                 </td>
@@ -377,7 +387,8 @@
                     <span ng-switch-when="1">
                         <div class="headsection row-fluid">
                             <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
-                                       ng-model="activeIssue.issue">
+                                       ng-model="activeIssue.issue"
+                                       onkeydown="testForEnter();">
                                 <span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
                                                                           ng-click="deleteIssueButton(activeIssue);" aria-hidden="true"></span>
                             </h2>
@@ -387,7 +398,8 @@
                         <div class="row-fluid trancore">
                             <div class="date-selection">
                                 <p>Date <input ng-disabled="toggleView();" id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
-                                               ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                               ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                                               onkeydown="testForEnter();">
                                 </p>
                             </div>
                             <div class="DivHelper"></div>
@@ -419,19 +431,23 @@
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                    pattern="[0-9]*(.[0-9]*)*"
                                                                                    ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
-                                                                                   ng-model="activeIssue.premoney"></p>
+                                                                                   ng-model="activeIssue.premoney"
+                                                                                   onkeydown="testForEnter();"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                     ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
-                                                                                    ng-model="activeIssue.postmoney"></p>
+                                                                                    ng-model="activeIssue.postmoney"
+                                                                                    onkeydown="testForEnter();"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
                                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
-                                                                                         ng-model="activeIssue.ppshare"></p>
+                                                                                         ng-model="activeIssue.ppshare"
+                                                                                         onkeydown="testForEnter();"></p>
 
                                 <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
-                                                                                          ng-model="activeIssue.totalauth"></p>
+                                                                                          ng-model="activeIssue.totalauth"
+                                                                                          onkeydown="testForEnter();"></p>
 
                                 <div class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                     <li class="dropdown standard small">
@@ -477,7 +493,8 @@
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
                                                                                         ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
-                                                                                        ng-model="activeIssue.totalauth"></p>
+                                                                                        ng-model="activeIssue.totalauth"
+                                                                                        onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled
                                                                              value="{{totalGranted(activeIssue.issue, trans);}}">
@@ -485,11 +502,13 @@
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
-                                                                             ng-model="activeIssue.price"></p>
+                                                                             ng-model="activeIssue.price"
+                                                                             onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
-                                                                                   ng-model="activeIssue.terms"></p>
+                                                                                   ng-model="activeIssue.terms"
+                                                                                   onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
                                                                                         id="{{activeIssue.$$hashKey}}"
@@ -502,7 +521,8 @@
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
                                                                                      ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
-                                                                                     ng-model="activeIssue.vestcliff"></p>
+                                                                                     ng-model="activeIssue.vestcliff"
+                                                                                     onkeydown="testForEnter();"></p>
 
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
                                 <li class="dropdown standard small">
@@ -524,27 +544,33 @@
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                            pattern="[0-9]*(.[0-9]*)*"
                                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
-                                                                                           ng-model="activeIssue.premoney"></p>
+                                                                                           ng-model="activeIssue.premoney"
+                                                                                           onkeydown="testForEnter();"></p>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                             ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
-                                                                                            ng-model="activeIssue.postmoney"></p>
+                                                                                            ng-model="activeIssue.postmoney"
+                                                                                            onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
-                                                                                   ng-model="activeIssue.interestrate"></p>
+                                                                                   ng-model="activeIssue.interestrate"
+                                                                                   onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
-                                                                                   ng-model="activeIssue.valcap"></p>
+                                                                                   ng-model="activeIssue.valcap"
+                                                                                   onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
                                                                               ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
-                                                                              ng-model="activeIssue.discount"></p>
+                                                                              ng-model="activeIssue.discount"
+                                                                              onkeydown="testForEnter();"></p>
 
                             <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
-                                                                          ng-model="activeIssue.term"></p>
+                                                                          ng-model="activeIssue.term"
+                                                                          onkeydown="testForEnter();"></p>
                         </div>
                       </span>
 
@@ -577,10 +603,11 @@
                                         <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
                                                                                  class="signless"
                                                                                  ui-event="{blur : 'saveTran(tran)'}"
-                                                                                 ng-model="tran.units"></p>
+                                                                                 ng-model="tran.units"
+                                                                                 onkeydown="testForEnter();"></p>
 
-                                        <p>Paid $<input ng-disabled="toggleView();"
-                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount">
+                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
+                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();">
                                         </p>
 
                                     </div>
@@ -590,10 +617,11 @@
                                     <div>
                                         <p>Shares<input ng-disabled="toggleView();"
                                                         maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
-                                                        ng-model="tran.units"></p>
+                                                        ng-model="tran.units" onkeydown="testForEnter();"></p>
 
-                                        <p>Forfeit<input disabled maxlength="18" class="signless"
-                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited"></p>
+                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
+
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
@@ -601,14 +629,17 @@
                                 <!-- Equity Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                                                                                                                      onkeydown="testForEnter();"
                                                                                                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                       ng-model="tran.premoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled
+                                                                                                                                                                                                                onkeydown="testForEnter();"
                                                                                                                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                                 ng-model="tran.postmoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
+                                                                                                                                                                       onkeydown="testForEnter();"
                                                                                                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                            ng-model="tran.ppshare"></p>
 
@@ -671,10 +702,12 @@
                                     </div>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                         onkeydown="testForEnter();"
                                                                                                                                                                                          ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                          ng-model="tran.price"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                   onkeydown="testForEnter();"
                                                                                                                                                                                    ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                    ng-model="tran.terms"></p>
 
@@ -688,6 +721,7 @@
                                                                                                                                                                                        bs-datepicker></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                             onkeydown="testForEnter();"
                                                                                                                                                                                                              ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                              ng-model="tran.vestcliff"></p>
 
@@ -709,26 +743,32 @@
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                                                                                                                                                            onkeydown="testForEnter();"
                                                                                                                                                                             ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                             ng-model="tran.premoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post Money</span><input disabled
+                                                                                                                                                                                                      onkeydown="testForEnter();"
                                                                                                                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                       ng-model="tran.postmoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                onkeydown="testForEnter();"
                                                                                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                 ng-model="tran.interestrate"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                       onkeydown="testForEnter();"
                                                                                                                                                                                                        ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                        ng-model="tran.valcap"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
+                                                                                                                                                                          onkeydown="testForEnter();"
                                                                                                                                                                           ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                           ng-model="tran.discount"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                                                                                    onkeydown="testForEnter();"
                                                                                                                                                                     ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                     ng-model="tran.term"></p>
                                 </div>
