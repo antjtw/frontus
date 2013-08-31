@@ -66,10 +66,10 @@ window.onload = function() {
 			'icon-conversion' : '&#xe039;',
 			'icon-info' : '&#xe044;',
 			'icon-admin' : '&#xe045;',
-			'icon-view' : '&#xe001;',
 			'icon-grab' : '&#xe043;',
 			'icon-spam' : '&#xe000;',
-			'icon-countersign' : '&#xe02e;'
+			'icon-countersign' : '&#xe02e;',
+			'icon-view' : '&#xe001;'
 		},
 		els = document.getElementsByTagName('*'),
 		i, attr, html, c, el;

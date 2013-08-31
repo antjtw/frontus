@@ -209,3 +209,8 @@ button.greyButton {
     width: auto;
     float: none;
 }
+
+.error-message {
+    color: red;
+    font-weight: bolder;
+}

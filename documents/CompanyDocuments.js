@@ -108,9 +108,7 @@ docviews.factory('errorHttpInterceptor',
         if (response.data[0]=='x') {
           var errm = eval(response.data.substr(2));
           if (errm.javaClassName == "net.r0kit.brijj.BrijjServlet$NotLoggedIn") {
-            // document.location.href="/login";
-            // or, broadcast a "not logged in event and have someone handle it
-            $rootScope.$broadcast('event:notLoggedIn');
+            $rootScope.$broadcast('event:loginRequired');
             return response;
           }
           $rootScope.$broadcast('event:brijjError', errm.message);
@@ -137,9 +135,11 @@ function CompanyDocumentListController($scope, $modal, $location, $q, $rootScope
     return;
   }
 
-  $scope.$on('event:loginRequired', function() { $location.path('/login'); });
-  $scope.$on('event:brijjError', function(event, msg) { alert("brijjError: "+msg); });
-  $scope.$on('event:notLoggedIn', function(event) { $route.path('/login')});
+  // Set up event handlers
+  SWBrijj.defaultErrorHandler = function(errm) { $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
+        ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {$scope.errorMessage = msg; });
 
   /* this investor list is used by the sharing email list drop-down */
 	$scope.vInvestors = [];
@@ -352,12 +352,14 @@ function CompanyDocumentListController($scope, $modal, $location, $q, $rootScope
 	  alert("The upload has been canceled by the user or the browser dropped the connection.")
 	}
 
-	window.onbeforeunload = function() {
+  /*
+	window.onbeforeunload = function(event) {
 		if ($scope.progressVisible)
 			return 'There are uploads in progress. Leaving may result in some uploads not completing.';
     else
       return '';
 	}
+	*/
 
 }
 
@@ -369,9 +371,11 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     return;
   }
 
-  $scope.$on('event:loginRequired', function() { $location.path('/login'); });
-  $scope.$on('event:brijjError', function(event, msg) { alert("brijjError: "+msg); });
-  $scope.$on('event:notLoggedIn', function(event) { $route.path('/login')});
+  // Set up event handlers
+  SWBrijj.defaultErrorHandler = function(errm) { $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
+      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {$scope.errorMessage = msg; });
 
   var docKey = parseInt($routeParams.doc);
   $scope.urlInves = $routeParams.investor;
@@ -468,9 +472,11 @@ function CompanyDocumentStatusController($scope, $routeParams, SWBrijj) {
     return;
   }
 
-  $scope.$on('event:loginRequired', function() { $location.path('/login'); });
-  $scope.$on('event:brijjError', function(event, msg) { alert("brijjError: "+msg); });
-  $scope.$on('event:notLoggedIn', function(event) { $route.path('/login')});
+  // Set up event handlers
+  SWBrijj.defaultErrorHandler = function(errm) { $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
+      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {$scope.errorMessage = msg; });
 
   var docId = parseInt($routeParams.doc);
   SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", docId).then(function(data) {
@@ -580,9 +586,11 @@ function InvestorDocumentListController($scope, SWBrijj, $location, $rootScope) 
     return;
   }
 
-  $scope.$on('event:loginRequired', function() { $location.path('/login'); });
-  $scope.$on('event:brijjError', function(event, msg) { alert("brijjError: "+msg); });
-  $scope.$on('event:notLoggedIn', function(event) { $route.path('/login')});
+  // Set up event handlers
+  SWBrijj.defaultErrorHandler = function(errm) { $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
+      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {$scope.errorMessage = msg; });
 
   SWBrijj.tblm("document.this_investor_library").then(function (data) {
     $scope.documents = data;
@@ -604,15 +612,17 @@ function InvestorDocumentListController($scope, SWBrijj, $location, $rootScope) 
   };
 }
 
-function InvestorDocumentViewController($scope, $location, $route, $rootScope, $routeParams, SWBrijj) {
-  if ($rootScope.selected.role == 'issuer') {
-    $location.path("/company-view");
-    return;
-  }
+/*************************************************************************************************/
 
-  $scope.$on('event:loginRequired', function() { $location.path('/login'); });
-  $scope.$on('event:brijjError', function(event, msg) { alert("brijjError: "+msg); });
-  $scope.$on('event:notLoggedIn', function(event) { $route.path('/login')});
+function InvestorDocumentViewController($scope, $location, $rootScope, $routeParams, SWBrijj) {
+  // Switch to company view if the role is issuer
+  if ($rootScope.selected.role == 'issuer') { $location.path("/company-view"); return; }
+
+  // Set up event handlers
+  SWBrijj.defaultErrorHandler = function(errm) { $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
+      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {$scope.errorMessage = msg; });
 
   $scope.init = function () {
     $scope.docId = parseInt($routeParams.doc);
@@ -674,26 +684,28 @@ function InvestorDocumentViewController($scope, $location, $route, $rootScope, $
   $scope.unSign = function(cd) {
     SWBrijj.procm('document.unsign', cd.doc_id).then(function(data) {
       cd.when_signed = null;
+
+      var dce = angular.element(".docPanel").scope();
+      dce.init();
+      // $scope.init();
       $route.reload();
     });
   };
 }
 
 
+/************************************************************
+ *  Filters
+ *  *********************************************************/
 
-
-
-/* Services */
-
-
-/* Filters */
-
+/* Filter to format the activity time */
 angular.module('documentviews').filter('fromNow', function() {
 			return function(date) {
 			  return moment(date).fromNow();
 			}
 		  });
 
+/* Filter to select the activity icon for document status */
 angular.module('documentviews').filter('icon', function() {
    return function(activity) {
      if (activity == "received") return "icon-redo";
@@ -705,8 +717,7 @@ angular.module('documentviews').filter('icon', function() {
      }
 });
 
-
-
+/* Filter to format the activity description on document status */
 angular.module('documentviews').filter('description', function() {
   return function(ac) {
     var activity = ac.activity;

@@ -199,7 +199,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
 
   $window.addEventListener('beforeunload', function(event) {
     var ndx = $scope.getNoteData();
-    if (ndx == $scope.lib.annotations) return; // no changes
+    if ( (!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
     // This is a synchronous save
     var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
     // console.log(res);   // I expect this returns true (meaning updated).  If not, the data is lost
@@ -209,6 +209,9 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   /* Save the notes when navigating away */
   $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
     if (!document.querySelector('.docPanel')) return;
+
+    // don't save note data if I'm being redirected to log in
+    if (newUrl.match(/login([?]|$)/)) return;
     $scope.saveNoteData();
   });
 
