@@ -2,9 +2,33 @@ var upload = angular.module('upload', ['ui.bootstrap','ui.utils', 'brijj']);
 
 // upload.directive('backImg', function(){
 
+upload.directive('uploadmodal', function() {
+  return {
+    restrict: 'EA',
+    templateUrl: '/cmn/upload.html',
+    controller: UploadController,
+    replace: true
+  }
+});
 
 
+/*docviews.directive('modalupload', function($timeout) {
+ return {
+ restrict: 'EA',
+ templateUrl: "modalUpload.html",
+ link: function(scope, element, attrs) {
+ scope.$watch('uploadModal', function(val, oldVal) {
+ if (val) $timeout(function() {
+ scope.draginit(element);
+ } ) ;
+ }); },
+ replace:true,
+ priority: 20
+ }
+ });
+ */
 
+function UploadController($scope, SWBrijj) {
 $scope.dropText = 'Drop files here...';
 $scope.files = [];
 
@@ -101,6 +125,8 @@ $scope.uploadFile = function () {
    xhr.open("POST", "/fileupload");
    xhr.send(fd) */
 };
+
+}
 
 function uploadProgress(evt) {
   $scope.$apply(function () {

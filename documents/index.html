@@ -18,6 +18,7 @@
   <script type="text/javascript" src="/lib/datejs/build/date.js"></script>
   <script src="/cmn/Documents.js"></script>
   <script src="/cmn/Email.js"></script>
+  <script src="/cmn/Upload.js"></script>
   <script src="/documents/CompanyDocuments.js"></script>
 
 </head>
@@ -28,6 +29,7 @@
   <!--{{/i/nav.inc}}-->
 
   <div class="maincontent">
+    <h1 class='error-message' ng-show='errorMessage'>{{ errorMessage }}</h1>
     <div ng-view></div>
   </div>
   <div class="minimumGap"></div>

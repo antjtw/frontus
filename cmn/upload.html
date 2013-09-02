@@ -1,0 +1,26 @@
+<div class="upload-modal">
+
+  <div class="modalHeader">
+    <span data-icon="&#xe00d;" aria-hidden="true"></span>Upload a Document
+    <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="uploadModalClose()"></span>
+  </div>
+
+<div class="modalText">
+
+<!--   <div class="dropbox" ng-class="dropClass">
+    <span>{{dropText}}</span>
+  </div> -->
+
+  <input class="bodyText button uploadButton" type="file" onchange="angular.element(this).scope().setFiles(this)" />
+
+  <div ng-show="files.length">
+      <span>{{files[0].name}}</span>  
+      (<span>{{fmtFileSize(files[0])}}</span>)
+  </div>
+</div>
+<div class="modalButtons">
+  <input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox(); uploadModalClose();" value="Upload with dropbox" />
+  <button value="Upload" class="button subText greenButton"  ng-click="uploadFile(); uploadModalClose();">Upload</button>
+</div>
+
+</div>

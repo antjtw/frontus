@@ -1,6 +1,5 @@
 <div class="container">
 
-	<div modal="upModal" options="upopts" modalupload></div>
   <div modal="shareModal" modalshare></div>
 
   <div class="row-fluid">
@@ -11,7 +10,7 @@
     <div class="row-fluid">
         <div class="subnav-controls">
           <div>
-            <a ng-click="upModal=true"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
+            <a ng-click="uploadModal=true"><button class="button subText blueButton" style="float:right;">Add Document</button></a>
           </div>
           <div class="DivHelper"></div>
         </div>
@@ -48,6 +47,7 @@
             <div ng-hide="documents">You have no documents.</div>
     </section>
 
+    <uploadModal ng-show="uploadModal" close="uploadModalClose()" > <!-- the close is if it is a modal -->  </uploadModal>
 
   </div>
 </div>

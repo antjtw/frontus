@@ -80,44 +80,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
             document.location.href = '/ownership'; return;
         }
     }
-
     $route.reload();
-
-    /*
-		changeNav();
-
-
-    if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/people') > -1)) {
-      document.location.href=$rootScope.path.replace("/company/profile/people", "/home/");
-    }
-    if (!company.isAdmin && ($rootScope.path.indexOf('/company/profile/') > -1)) {
-      document.location.href=$rootScope.path.replace("/company/profile/", "/home/");
-    }
-    if ($rootScope.path.indexOf('/home/') > -1) {
-      console.log("here")
-      if (!company.isAdmin && ($rootScope.path.indexOf('/company') > -1)) {
-        console.log("burrowing in")
-        document.location.href=$rootScope.path.replace("/company", "");
-      }
-      else if (company.isAdmin && ($rootScope.path.indexOf('/company') == -1)) {
-        document.location.href=$rootScope.path.replace("/home/", "/home/company/");
-      }
-    }
-    if ($rootScope.path.indexOf('/ownership') + $rootScope.path.indexOf('/documents') > -2) { // Refresh page if user is on ownership or documents
-      console.log($rootScope.path.indexOf('/company/'));
-      if (company.isAdmin && ($rootScope.path.indexOf('/investor/') > -1)) {
-        console.log("admin on investor page")
-        document.location.href=$rootScope.path.replace("/investor/", "/company/");
-      }
-      else if (!company.isAdmin && ($rootScope.path.indexOf('/company/') > -1)) {
-        console.log("non-admin on investor page")
-        document.location.href=$rootScope.path.replace("/company/", "/investor/");
-      }
-      else {
-        $route.reload();
-      }
-      */
-
   }
 
   $rootScope.userid = readCookie("userid");

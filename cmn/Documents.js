@@ -260,6 +260,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     $scope.showPageBar = true;
 
     if ($routeParams.page) $scope.currentPage = parseInt($routeParams.page);
+    else if (!$scope.currentPage) $scope.currentPage = 1;
     if (!$scope.docId) return;
 
     SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
@@ -607,8 +608,8 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
 
   $scope.saveNoteData = function () {
     var nd = $scope.getNoteData();
-    console.log(nd);
     if ($scope.lib == undefined) return;
+    if (nd == $scope.lib.annotations) return;
     SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
       console.log(data);
 
@@ -641,43 +642,6 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     });
   };
 
-  /*
-  $scope.xxxsaveNotes = function(e) {
-    var pageList = [];
-    var noteList = [];
-    for(var i=0;i<$scope.notes.length;i++) {
-      var p = $scope.notes[i].scope().page;
-      var x = pageList.indexOf(p);
-      if ( x == -1) { pageList.push(p); noteList.push([]); x = pageList.indexOf(p); }
-      noteList[x].push($scope.notes[i]);
-    }
-
-    // pageList is now the list of pages
-    for(var j=0;j<pageList.length;j++) {
-      $scope.savePageNotes(pageList[j], noteList[j]);
-    }
-
-    $scope.notes = [];
-
-//    then(function (x) {
-//      var docpanel = document.querySelector(".docPanel");
-//      var imgurl = docpanel.style.backgroundImage;
-//      docpanel.style.backgroundImage = imgurl;
-//      var keepnotes = [];
-//      for (var i = 0; i < $scope.notes.length; i++) {
-//        if ($scope.notes[i].page != $scope.currentPage) {
-//          keepnotes.push($scope.notes[i]);
-//        } else {
-//          document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
-//        }
-//      }
-//      $scope.notes = keepnotes;
-//    }).
-//        except(function (x) {
-//          console.log(x.message);
-//        });
-  };
-*/
 /*
   $scope.savePageNotes = function(page, notes) {
 
