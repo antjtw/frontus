@@ -207,13 +207,15 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   });
 
   /* Save the notes when navigating away */
-  $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+  // There seems to be a race condition with using $locationChangeStart or Success
+ /* $rootScope.$on('$locationChangeSuccess', function(event, newUrl, oldUrl) {
     if (!document.querySelector('.docPanel')) return;
 
     // don't save note data if I'm being redirected to log in
     if (newUrl.match(/login([?]|$)/)) return;
     $scope.saveNoteData();
   });
+   */
 
   $scope.showPages = function() {
     return $scope.range($scope.pageScroll+1, Math.min($scope.pageScroll+$scope.pageBarSize, $scope.docLength+1));
@@ -609,6 +611,8 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   $scope.saveNoteData = function () {
     var nd = $scope.getNoteData();
     if ($scope.lib == undefined) return;
+    // This happens when the "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+    if (!$scope.lib.annotations) return;
     if (nd == $scope.lib.annotations) return;
     SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
       console.log(data);

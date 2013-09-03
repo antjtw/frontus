@@ -1,26 +1,35 @@
-<div class="upload-modal">
+<div>
 
-  <div class="modalHeader">
+  <!-- don't need a header since all I have is a drop zone -->
+  <!-- <div class="modalHeader">
     <span data-icon="&#xe00d;" aria-hidden="true"></span>Upload a Document
     <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="uploadModalClose()"></span>
-  </div>
+    -->
+  <!-- </div>  -->
 
-<div class="modalText">
+  <span class="drop-target" ng-class="dropClass">
+    <span ng-show="!showProgress">{{dropText}}</span>
+    <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
+  </span>
 
-<!--   <div class="dropbox" ng-class="dropClass">
-    <span>{{dropText}}</span>
+
+
+  <!-- <input class="bodyText uploadButton" type="file" value="Test" onchange="angular.element(this).scope().setFiles(this)"/> -->
+
+  <!-- Dropping documents immediately launches the upload -->
+  <!-- <div ng-show="files.length">
+    <div ng-repeat="file in files">
+      <span>{{file.name}}</span>
+      (<span>{{fmtFileSize(file)}}</span>)
+    </div>
   </div> -->
 
-  <input class="bodyText button uploadButton" type="file" onchange="angular.element(this).scope().setFiles(this)" />
-
-  <div ng-show="files.length">
-      <span>{{files[0].name}}</span>  
-      (<span>{{fmtFileSize(files[0])}}</span>)
-  </div>
-</div>
-<div class="modalButtons">
-  <input class="bodyText button uploadButton" type="button" ng-click="uploadDropbox(); uploadModalClose();" value="Upload with dropbox" />
-  <button value="Upload" class="button subText greenButton"  ng-click="uploadFile(); uploadModalClose();">Upload</button>
-</div>
+<!-- There are no buttons left -->
+<!-- <div class="dModalButtons" > -->
+  <!-- Dropbox files are also on your hard drive -- so just drag them -->
+  <!-- <button ng-show="Dropbox != undefined" class="bodyText uploadButton" ng-click="uploadDropbox(); uploadModalClose();" value="Upload with dropbox"></button> -->
+  <!-- Upload button is not required because dropping file launches upload immediately -->
+  <!-- <button value="Upload" class="subText greenButton"  ng-click="uploadFile(); uploadModalClose();">Upload</button> -->
+<!-- </div> -->
 
 </div>
