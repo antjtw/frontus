@@ -1123,6 +1123,91 @@ form.inputs {
 	padding-bottom: 0;
 }
 
+/* Status Pages */
+
+.status-row td {
+    background-color: transparent;
+}
+
+.status-row:hover {
+    background-color: rgba(26, 188, 150, 0.1);
+}
+
+.status-row.selectedrow, .status-row.selectedrow:hover {
+    background-color: #8D8D8D;
+    color: #F1F1F1;
+}
+
+/*.status-row.selectedrow:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-top: 6px solid #8D8D8D;
+    position: absolute;
+}*/
+
+.status-row.selectedrow a {
+    color: #F1F1F1;
+}
+
+.tableView tr.status-detail {
+    height: 41px;
+    background-color: #F1F1F1;
+    border-bottom: thin solid #C7C7C7;
+}
+
+.status-detail td {
+    background-color: transparent;
+}
+
+.status-detail td:first-child > span:first-child {
+    font-size: 18px;
+    line-height: 18px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+.status-detail > td:last-of-type > span {
+    font-size: 10px;
+    float: right;
+    margin-right: 60px;
+    text-align: center;
+    width: 120px;
+    height: 22px;
+    line-height: 22px;
+    border: 1px solid #1ABC96;
+    color: #1ABC96;
+    background-color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.activityBlock {
+    width: 220px;
+    padding: 15px 0 0 0;
+}
+
+.activityBlock span:first-of-type {
+    color: #666666;
+}
+
+.activityBlock > li {
+    margin-bottom: 15px;
+}
+
+.activityBlock > li > i {
+    font-size: 14px;
+    vertical-align: top;
+    padding: 2px 10px 0 0;
+}
+
+.activityBlock > li > div {
+    display: inline-block;
+    max-width: 190px;
+}
+
 /* Footer */
 .minimumGap {
 	min-height:150px;

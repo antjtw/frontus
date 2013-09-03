@@ -557,7 +557,7 @@ angular.module('documentviews').filter('fromNow', function() {
 /* Filter to select the activity icon for document status */
 angular.module('documentviews').filter('icon', function() {
    return function(activity) {
-     if (activity == "received") return "icon-redo";
+     if (activity == "sent") return "icon-email";
      else if (activity == "viewed") return "icon-view";
      else if (activity == "reminder") return "icon-redo";
      else if (activity == "signed") return "icon-pen";
