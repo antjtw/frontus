@@ -1487,6 +1487,27 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.lastPostMoney = function() {
         return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
     };
+
+    window.onbeforeunload = function() {
+        var trigger = false;
+        angular.forEach($scope.rows, function(row) {
+            if (row.name && row.editable == "yes") {
+                var check = true;
+                angular.forEach($scope.issuekeys, function(issue) {
+                    if (row[issue]['ukey'] || row[issue]['akey']) {
+                        check = false;
+                    }
+                });
+                if (check) {
+                    console.log(row);
+                    trigger = true;
+                }
+            }
+        })
+        if (trigger)
+            return 'There are rows without transactions. These will not be saved.';
+    }
+
 };
 
 // IE fix to remove enter to submit form
