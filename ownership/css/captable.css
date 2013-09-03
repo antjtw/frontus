@@ -1,3 +1,9 @@
+/* Captable Bootstrap Overrides */
+
+.accordion-heading .accordion-toggle {
+    padding: 11px 20px;
+}
+
 /* Captable */
 
 .capGuide {
@@ -36,6 +42,9 @@
     padding: 0;
 }
 
+.tableView .unissued-rows td {
+}
+
 .tableView.captable td.viewName {
     padding: 0 0 0 6px;
 }
@@ -56,6 +65,14 @@
 .tableView.captable input {
     margin: 0;
     padding: 0;
+}
+
+.tableView.captable .input-right {
+    text-align: right;
+}
+
+.tableView.captable td.input-right {
+    padding-right: 5px;
 }
 
 .tableView.captable input:disabled {
@@ -80,6 +97,10 @@
 
 .tableView.captable input:focus {
     background-color: #E3E3E3;
+}
+
+.tableView.captable .unissued-rows {
+    font-style: italic;
 }
 
 .captablepair-box {
@@ -132,6 +153,10 @@ p.captablepair {
 
 .tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields:hover {
     background-color: rgba(26, 188, 150, 0.1);
+}
+
+.tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
+    background-color: #FFFFFF;
 }
 
 .tableView td.tranSelected {
@@ -204,7 +229,12 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
     border-radius: 0;
     border: none;
     background-color: #E3E3E3;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
     width: 108px;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 .capright .headsection.tabbed {
@@ -333,10 +363,11 @@ div.rightTitle {
 }
 
 .rightTitle > input {
-    width:100px;
+    width:92px;
+    height: 22px;
     border: 0;
-    padding: 0;
-    margin: 0;
+    padding: 0 0 0 10px;
+    margin: 0 0 0 2px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -365,8 +396,14 @@ textarea {
 
 /* Grants Table */
 
-tr.rowSelected {
-    background-color: rgba(26, 188, 150, 0.1);
+tr.rowSelected, tr.rowSelected:hover {
+    background-color: #8D8D8D;
+    color: #F1F1F1;
+}
+
+.rowSelected > td > input:disabled {
+    color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 .rowSelected > td {
@@ -391,6 +428,10 @@ tr.rowSelected {
 
 a.oldschool-link  {
     color: #3498db;
+}
+
+.overflow-tab > div.accordion-body {
+    overflow-y: visible;
 }
 
 .activityBlock {
@@ -449,14 +490,25 @@ a.oldschool-link  {
     color: #F1F1F1;
 }
 
+/*.status-row.selectedrow:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-top: 6px solid #8D8D8D;
+    position: absolute;
+}*/
+
 .status-row.selectedrow a {
     color: #F1F1F1;
 }
 
 .tableView tr.status-detail {
     height: 41px;
-    background-color: #E3E3E3;
-    border-bottom: thin solid #A6A6A6;
+    background-color: #F1F1F1;
+    border-bottom: thin solid #C7C7C7;
 }
 
 .status-detail td {
@@ -471,8 +523,9 @@ a.oldschool-link  {
 }
 
 .status-detail > td:last-of-type > span {
+    font-size: 10px;
     float: right;
-    margin-right: 20px;
+    margin-right: 60px;
     text-align: center;
     width: 120px;
     height: 22px;
@@ -480,10 +533,14 @@ a.oldschool-link  {
     border: 1px solid #1ABC96;
     color: #1ABC96;
     background-color: #FFFFFF;
-    text-transform: UPPERCASE;
+    text-transform: uppercase;
 }
 
 /* Specialized Modals */
+
+.capaccess-form {
+    border-bottom: 1px solid #E3E3E3;
+}
 
 .capaccess-drop {
     display: inline-block;
@@ -492,7 +549,6 @@ a.oldschool-link  {
     width: 320px;
     height: 41px;
     padding: 0 20px 5px 20px;
-    border-bottom: 1px solid #E3E3E3;
 }
 
 .capaccess-drop > span {

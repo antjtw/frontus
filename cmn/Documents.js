@@ -89,6 +89,7 @@ angular.module('draggable', []).
                /* This is the drag - code -- its been moved to work on the drag widget */
                $scope.mousedown = function ($event) {
                  // if ($event.target.tagName == 'DIV') {
+                   console.log($event);
                    $scope.initdrag($event);
                    return false;
                  // } else {
@@ -101,6 +102,7 @@ angular.module('draggable', []).
                $scope.mousemove = function ($event) {
                  var dx = $event.clientX - $scope.initialMouseX;
                  var dy = $event.clientY - $scope.initialMouseY;
+                 console.log($scope.startY);
                  $element.css({
                    top: ($scope.startY + dy) + 'px',
                    left: ($scope.startX + dx) + 'px'
@@ -287,7 +289,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
         for(var i = 0;i<annots.length;i++) {
           var annot = annots[i];
           if (annot[1] == 'check') {
-            sticky = $scope.newCheckX(annot[0][0]);
+            sticky = $scope.newBoxX(annot[0][0]);
           } else if (annot[1] == 'text') {
             sticky = $scope.newBoxX(annot[0][0],annot[2][0], annot[3]);
           } else if (annot[1] == 'canvas') {
@@ -480,13 +482,12 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
 
     canvas.addEventListener('mousedown', function(e) {
       this.down = true;
-      this.X = e.offsetX ;
-      this.Y = e.offsetY ;
+      this.X = e.offsetX;
+      this.Y = e.offsetY;
     }, false);
     canvas.addEventListener('mouseover', function(e) { this.down = false; });
     canvas.addEventListener('mouseout', function(e) { this.down = false; });
     canvas.addEventListener('mouseup', function() { this.down = false; });
-
     canvas.strokes = [];
     canvas.addEventListener('mousemove', function(e) {
       if(this.down) {

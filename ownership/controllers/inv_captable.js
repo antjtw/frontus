@@ -190,6 +190,23 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
 
+
+        // Sets the states for the grey selection box
+        angular.forEach($scope.rows, function (row) {
+            row.state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    if (row.name == currenttran && currentcolumn == issue.issue) {
+                        row[currentcolumn].state = true;
+                    }
+                    else {
+                        row[issue.issue].state = false;
+                        issue.state = false;
+                    }
+                }
+            });
+        });
+
         var first = 0
         angular.forEach($scope.trans, function (tran) {
             if (tran.investor == currenttran) {
@@ -219,6 +236,19 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     $scope.getActiveIssue = function (issue) {
         $scope.sideBar = 1;
         $scope.activeIssue = issue;
+
+        // Set the states for the grey selected box
+        angular.forEach($scope.rows, function (row) {
+            row.state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    row[issue.issue].state = false;
+                    issue.state = false;
+                }
+            });
+        });
+
+        issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
         var allowablekeys = angular.copy($scope.issuekeys);
@@ -250,6 +280,20 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     $scope.getActiveInvestor = function (investor) {
         $scope.sideBar = 3;
+
+        // Set the states for the selected boxes
+        angular.forEach($scope.rows, function (row) {
+            row.state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    row[issue.issue].state = false;
+                    issue.state = false;
+                }
+            });
+        });
+
+        investor.state = true;
+
         if (investor.name == "") {
             var values = {"name": "", "editable": "0"}
             angular.forEach($scope.issuekeys, function (key) {

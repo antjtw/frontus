@@ -68,7 +68,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
       $scope.showBothBars = true;
     }
     if ($rootScope.isLoggedIn) {
-      if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
+      if (thiscmp.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
         $scope.logoLink = '/home/company';
       } else {
         $scope.logoLink = '/home';
