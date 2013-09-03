@@ -363,10 +363,10 @@ div.rightTitle {
 }
 
 .rightTitle > input {
-    width:102px;
+    width:92px;
     height: 22px;
     border: 0;
-    padding: 0;
+    padding: 0 0 0 10px;
     margin: 0 0 0 2px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
