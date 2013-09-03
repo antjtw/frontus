@@ -95,6 +95,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                     tran.forfeited = grant.unit;
                                 }
                             }
+                            if (grant.action == "exercised") {
+                                if (tran.exercised) {
+                                    tran.exercised = tran.exercised + grant.unit;
+                                }
+                                else {
+                                    tran.exercised = grant.unit;
+                                }
+                            }
                         }
                     });
                 });
@@ -1102,10 +1110,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (row.name != undefined) {
                 var something = null;
                 var temprow = {"name": row.name, "email": row.email};
-                angular.forEach($scope.issuekeys, function (issue) {
-                    if (row[issue].a > 0) {
-                        temprow[issue] = row[issue];
-                        something = true;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        if (row.editable == "yes" && issue.type == "Equity") {
+                            temprow[issue.issue] = row[issue.issue];
+                            something = true;
+                        }
+                        if (issue.type == "Option" && row[issue.issue]['a'] > 0) {
+                            angular.forEach($scope.trans, function(tran) {
+                                 if (row.name == tran.investor) {
+                                     temprow[issue.issue] = {}
+                                     temprow[issue.issue]['u'] = tran.exercised
+                                     temprow[issue.issue]['a'] = row[issue.issue]['a']
+                                 }
+                            });
+                        }
                     }
                 });
                 if (something) {
