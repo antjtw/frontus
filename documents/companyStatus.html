@@ -8,7 +8,9 @@
     <div class="modalText">
       Send a reminder to {{reminder}}.
       <p>Message</p>
-      <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+      <label>
+        <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+      </label>
     </div>
 
     <div class="modalButtons">
@@ -19,15 +21,15 @@
 
   <div class="row-fluid">
     <div class="headsection row-fluid">
-      <h1><a href="/documents/"><span data-icon="&#xe038;" style="font-size: 300%;" aria-hidden="true"/></a>{{document.docname}}</h1>
+      <h1><a href="/documents/"><span data-icon="&#xe038;" style="font-size: 300%;" aria-hidden="true"></span></a>{{document.docname}}</h1>
 
       <div class="row-fluid">
 
         <ul class="bodyText maintabs">
           <li class="selectedtab">Status</li>
-          <a href="/documents/company-view?doc={{document.doc_id}}">
-            <li class="button">View</li>
-          </a>
+          <li class="button"><a href="/documents/company-view?doc={{document.doc_id}}">
+            View
+          </a></li>
         </ul>
       </div>
     </div>
@@ -62,17 +64,14 @@
           <td colspan="3" class="personDetails status-bar">
 
             <div>
-                  <span data-icon="&#xe024;" aria-hidden="true">
-                  <div>
+                  <span data-icon="&#xe024;" aria-hidden="true"></span>
                     <p class="doubleTime">Sent</p>
                     <p class="doubleTime">{{person.when_shared | date:'MMMM dd, yyyy'}}</p>
                     <p>{{person.when_shared | date:'h:mm a'}}</p>
-                  </div>
-                  </span>
             </div>
 
             <div>
-                  <span data-icon="&#xe001;" aria-hidden="true">
+                  <span data-icon="&#xe001;" aria-hidden="true"></span>
                   <div ng-switch on="person.last_viewed">
                     <div ng-switch-when="null"><p>Never viewed</p></div>
                     <div ng-switch-default>
@@ -81,11 +80,10 @@
                       <p>{{person.last_viewed | date:'h:mm a'}}</p>
                     </div>
                   </div>
-                  </span>
             </div>
 
             <div>
-                  <span data-icon="&#xe015;" aria-hidden="true">
+                  <span data-icon="&#xe015;" aria-hidden="true"></span>
                   <div ng-switch on="person.signature_deadline">
                     <div ng-switch-when="null"><p>No signature required</p></div>
                     <div ng-switch-default>
@@ -93,10 +91,9 @@
                       <p class="doubleTime">{{person.signature_deadline| date:'MMMM dd, yyyy'}}</p>
                     </div>
                   </div>
-                  </span>
             </div>
               <div>
-                  <span data-icon="&#xe00d;" aria-hidden="true">
+                  <span data-icon="&#xe00d;" aria-hidden="true"></span>
                   <div ng-switch on="person.when_signed">
                     <div ng-switch-default>
                       <p class="doubleTime">Signed</p>
@@ -104,10 +101,9 @@
                       <p>{{person.when_signed | date:'h:mm a'}}</p>
                     </div>
                   </div>
-                  </span>
               </div>
             <div>
-                  <span data-icon="&#xe02e;" aria-hidden="true">
+                  <span data-icon="&#xe02e;" aria-hidden="true"></span>
                   <div ng-switch on="person.when_confirmed">
                     <div ng-switch-when="null">
                       <p>Not countersigned</p></div>
@@ -117,7 +113,6 @@
                       <p>{{person.when_confirmed | date:'h:mm a'}}</p>
                     </div>
                   </div>
-                  </span>
               </div>
               </td>
           </tr>

@@ -13,11 +13,12 @@
   <!--{{/i/head_js.inc}}-->
   <script src="/lib/angular/angular-strap.js"></script>
   <script src="/lib/datepicker/bootstrap-datepicker.js"></script>
-  <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
-          data-app-key="cg7umgovyixtqhi"></script>
+  <!-- <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
+          data-app-key="cg7umgovyixtqhi"></script> -->
   <script type="text/javascript" src="/lib/datejs/build/date.js"></script>
   <script src="/cmn/Documents.js"></script>
   <script src="/cmn/Email.js"></script>
+  <script src="/cmn/Upload.js"></script>
   <script src="/documents/CompanyDocuments.js"></script>
 
 </head>
@@ -28,6 +29,7 @@
   <!--{{/i/nav.inc}}-->
 
   <div class="maincontent">
+    <h1 class='error-message' ng-show='errorMessage'>{{ errorMessage }}</h1>
     <div ng-view></div>
   </div>
   <div class="minimumGap"></div>
