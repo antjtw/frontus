@@ -164,7 +164,8 @@ ul>li.curPage {
 .draggable div > textarea {
     margin-bottom: 0;
     aria-multiline: "true";
-    white-space: pre-wrap;
+    white-space: nowrap;
+    word-wrap: normal;
     overflow: hidden;
     line-height: normal;
     resize: both;
