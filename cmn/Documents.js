@@ -208,14 +208,11 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
 
   /* Save the notes when navigating away */
   // There seems to be a race condition with using $locationChangeStart or Success
- /* $rootScope.$on('$locationChangeSuccess', function(event, newUrl, oldUrl) {
-    if (!document.querySelector('.docPanel')) return;
-
+  $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
     // don't save note data if I'm being redirected to log in
     if (newUrl.match(/login([?]|$)/)) return;
     $scope.saveNoteData();
   });
-   */
 
   $scope.showPages = function() {
     return $scope.range($scope.pageScroll+1, Math.min($scope.pageScroll+$scope.pageBarSize, $scope.docLength+1));

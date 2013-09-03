@@ -248,6 +248,15 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
 		$scope.docId = doc.doc_id;
     $scope.library = "document.my_counterparty_library";
     $scope.pages = "document.my_counterparty_codex";
+    $scope.modifiedPages = [];
+
+    SWBrijj.tblmm("document.my_counterparty_codex", ["page", "annotated"], "doc_id", doc.doc_id).then(function(x) {
+       for(var i=0;i< x.length;i++){
+         if (x[i].annotated) $scope.modifiedPages.push(x[i].page);
+       }
+      $scope.modifiedPages.sort( function(a,b) { return a>b; });
+    });
+
     var z = $location.search();
     z['investor']=doc.investor;
     $location.search(z);
@@ -272,13 +281,23 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.spoof_procm(cd.investor, cd.company, "document.sign_document", cd.doc_id, "[]").then(function (data) {
       cd.when_signed = data;
       $route.reload();
+      $scope.$apply();
     });
   };
+
+  $scope.retract = function(cd) {
+    SWBrijj.procm('document.retract_share', cd.doc_id).then(function (data) {
+      $scope.getOriginal();
+      $route.reload();
+      $scope.$apply();
+    })
+  }
 
   $scope.renege = function (cd) {
     SWBrijj.procm("document.renege", cd.doc_id).then(function (data) {
       cd.when_confirmed = null;
       $route.reload();
+      $scope.$apply();
     });
   };
 
@@ -286,6 +305,7 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
       cd.when_signed = null;
       $route.reload();
+      $scope.$apply();
     })
   };
 
@@ -314,6 +334,12 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
           $scope.confirmModalClose();
         });
   };
+
+  $scope.shareWith = function(doc, cp, msg, sig, dline) {
+    SWBrijj.procm("document.share_document", doc.doc_id, cp.toLowerCase(), msg, Boolean(sig), dline).
+        then(function(data) { $route.reload(); $scope.$apply(); });
+  };
+
 
   }
 
