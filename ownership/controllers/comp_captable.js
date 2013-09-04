@@ -373,15 +373,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var date = Date.parse(dateString);
                 if (date) {
                     issue[field] = date;
-                    var offset = issue.date.getTimezoneOffset();
+                    var offset = issue[field].getTimezoneOffset();
                     issue[field] = issue[field].addMinutes(offset);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
-            if (issue.date instanceof Date) {
-                var offset = issue.date.getTimezoneOffset();
+            if (issue[field] instanceof Date) {
+                var offset = issue[field].getTimezoneOffset();
                 issue[field] = issue[field].addMinutes(offset);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
@@ -967,17 +967,24 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (transaction.type == "Option" && !isNaN(parseFloat(transaction.amount))) {
                         console.log("creating a grant");
                         var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
-                        modGrant.amount = transaction.amount;
-                        modGrant.unit = (transaction.amount / transaction.price);
+                        var previousTotal = 0
+                        angular.forEach($scope.grants, function(grant) {
+                            if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
+                                previousTotal = previousTotal + grant.unit;
+                                console.log(grant);
+                            }
+                        });
+                        console.log(previousTotal);
+                        var units = transaction.amount - (previousTotal * transaction.price);
+                        modGrant.unit = (units / transaction.price);
                         angular.forEach($scope.grants, function (grant) {
                             if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
-                                if (grant.date.toUTCString() == Date.today().toUTCString()) {
-                                    console.log("should be updating")
+                                var offset = grant.date.getTimezoneOffset();
+                                var today = Date.today().addMinutes(-offset).toUTCString();
+                                if (grant.date.toUTCString() == today) {
+                                    console.log("should be updating");
+                                    modGrant.unit = modGrant.unit + grant.unit;
                                     modGrant.grant_id = grant.grant_id;
-                                }
-                                else {
-                                    modGrant.amount = modGrant.amount - grant.amount;
-                                    modGrant.unit = modGrant.unit - grant.unit;
                                 }
                             }
                         });
@@ -1024,7 +1031,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 return;
             }
         }
-        if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
+        if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) <= 0) {
             return;
         }
         if (grant.grant_id == undefined) {
@@ -1034,8 +1041,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function (data) {
             if (grant.grant_id == "") {
                 grant.grant_id = data[1][0];
+                $scope.grants.push(grant);
             }
-            $scope.grants.push(grant);
+            else {
+                angular.forEach($scope.grants, function(x) {
+                    if (x.grant_id == grant.grant_id) {
+                        x = grant
+                    }
+                });
+            }
         });
     };
 
