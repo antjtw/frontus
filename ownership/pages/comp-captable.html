@@ -373,8 +373,8 @@
             </tr>
             <!-- Diluted footer -->
             <tr ng-hide="toggleDilution();" class='tablefooter'>
-                <td><input disabled value="{{totalShares(dilutedRows);}}"></td>
-                <td><input disabled value="100.00%"></td>
+                <td><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
+                <td><input class="input-right" disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
