@@ -41,7 +41,7 @@
                 </td>
             </tr>
             <tr ng-repeat="row in rows">
-                <td><input disabled value="{{shareSum(row);}}"></td>
+                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
@@ -55,8 +55,8 @@
             <!-- Extra row containing all the others -->
             <tr ng-hide="fullview">
                 <td><input disabled></td>
-                <td><input disabled value="{{everyone.percentage  | number:3}}%"></td>
-                <td>Other Investors</td>
+                <td><input class="input-right" disabled value="{{everyone.percentage  | number:3}}%"></td>
+                <td class="viewName">Other Investors</td>
                 <td ng-repeat="key in issuekeys">
                 </td>
             </tr>
