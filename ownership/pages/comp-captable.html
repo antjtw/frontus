@@ -458,7 +458,7 @@
                                                                                           ng-model="activeIssue.totalauth"
                                                                                           onkeydown="testForEnter();"></p>
 
-                                <div class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
+                                <div class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is guaranteed on a liquidity event">Liquidation Preference</span>
                                     <li class="dropdown standard small">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.liquidpref}}<span class="invisible-drop">'</span>
@@ -963,12 +963,12 @@
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
                             <h2>Understand your Ownership</h2>
-
-                            <p>Enter your securities, shareholders and their holdings directly into our responsive table.
-                            We'll calculate the totals on your behalf, and any additional terms that you add will
-                            influence your non-diluted view and financial modeling (coming soon).</p>
-
-                            <p>When you've finished editing, toggle to a view-only mode to better interact with your data.</p>
+                            <p> This ownership table, often referred to as a cap table, will show you exactly what percentage
+                                of your company each shareholder owns.</p>
+                            <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
+                            <p><span tooltip-placement="top" tooltip="A financial instrument representing ownership, debt, or rights to ownership. (Ex. common stock, convertible debt, Series A, option pool.)">What's a security?</span></p>
+                            <p><span tooltip-placement="top" tooltip="These terms influence ownership calculations, the more terms you enter the more accurate your information.">What does "fully diluted" mean?</span></p>
+                            <p><span tooltip-placement="top" tooltip="This represents the total outstanding shares if all debt and options/grants are exercised, toggling will show current ownership.">Why should I enter terms?</span></p>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">
