@@ -88,8 +88,8 @@
                                                                                                                                                                      ng-model="tran.terms"></p>
 
                       <p class="rightTitle"><span>Vesting Cliff Date</span><input id="{{tran.$$hashKey}}"
-                                                                                                                                                                         ui-event="{keydown:'saveTranDate(tran, $event)', blur:'saveTranDate(tran, \'blur\')'}"
-                                                                                                                                                                         ng-change="saveTranDate(tran)"
+                                                                                                                                                                         ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\', $event)', blur:'saveTranDate(tran, \'vestingbegins\', \'blur\')'}"
+                                                                                                                                                                         ng-change="saveTranDate(tran, \'vestingbegins\')"
                                                                                                                                                                          type="text"
                                                                                                                                                                          ng-model="tran.vestingbegins"
                                                                                                                                                                          data-date-format="mm/dd/yyyy"

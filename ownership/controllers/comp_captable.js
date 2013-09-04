@@ -372,9 +372,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    issue.date = date;
+                    issue[field] = date;
                     var offset = issue.date.getTimezoneOffset();
-                    issue.date = issue.date.addMinutes(offset);
+                    issue[field] = issue[field].addMinutes(offset);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
@@ -382,7 +382,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         } else { // User is using calendar
             if (issue.date instanceof Date) {
                 var offset = issue.date.getTimezoneOffset();
-                issue.date = issue.date.addMinutes(offset);
+                issue[field] = issue[field].addMinutes(offset);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
             }
@@ -438,7 +438,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 else {
                     var vestcliffdate = issue['vestingbegins']
                 }
-                console.log(vestcliffdate);
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
@@ -781,7 +780,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Preformatting on the date to factor in the local timezone offset
     var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
-    $scope.saveTranDate = function (transaction, evt) {
+    $scope.saveTranDate = function (transaction, field, evt) {
         if (evt) { // User is typing
             if (evt != 'blur')
                 keyPressed = true;
@@ -790,18 +789,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    transaction.date = date;
-                    var offset = transaction.date.getTimezoneOffset();
-                    transaction.date = transaction.date.addMinutes(offset);
+                    transaction[field] = date;
+                    var offset = transaction[field].getTimezoneOffset();
+                    transaction[field] = transaction[field].addMinutes(offset);
                     keyPressed = false;
                     $scope.saveTran(transaction);
                 }
             }
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
-            if (transaction.date instanceof Date) {
-                var offset = transaction.date.getTimezoneOffset();
-                transaction.date = transaction.date.addMinutes(offset);
+            if (transaction[field] instanceof Date) {
+                var offset = transaction[field].getTimezoneOffset();
+                transaction[field] = transaction[field].addMinutes(offset);
                 keyPressed = false;
                 $scope.saveTran(transaction);
             }
