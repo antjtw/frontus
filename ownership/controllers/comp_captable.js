@@ -82,7 +82,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 angular.forEach($scope.issues, function(issue) {
                     var offset = issue.date.getTimezoneOffset();
                     issue.date = issue.date.addMinutes(offset);
-                    issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                    if (issue.vestingbegins) {
+                        issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                    }
                 })
 
 
