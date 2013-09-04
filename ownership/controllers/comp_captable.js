@@ -838,11 +838,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             transaction.amount = String(transaction.amount).replace(/\,/g,'');
         }
         console.log(transaction.units);
-        if (!(/^\d+(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
+        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
             transaction.units = transaction.unitskey;
         };
-        if (!(/^\d+(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
+        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };
