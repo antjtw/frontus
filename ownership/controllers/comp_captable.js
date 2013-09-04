@@ -439,7 +439,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var vestcliffdate = issue['vestingbegins']
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
-                    console.log(issue['vestingbegins'])
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
                         angular.forEach($scope.rows, function (row) {
@@ -466,6 +465,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         }
                     });
+
+                    angular.forEach($scope.issues, function(x) {
+                        if (x.tran_id == issue.tran_id) {
+                            x.vestingbegins = issue.vestingbegins;
+                            x.date = issue.date;
+                        }
+                    })
 
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
