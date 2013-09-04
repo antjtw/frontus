@@ -123,6 +123,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var offset = $scope.trans[i].date.getTimezoneOffset();
                     $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
                     $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
+                    if ($scope.trans[i].vestingbegins) {
+                        $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                    }
                     $scope.trans[i].investorkey = $scope.trans[i].investor;
                     if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                         $scope.uniquerows.push($scope.trans[i].investor);
