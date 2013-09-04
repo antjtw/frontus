@@ -82,6 +82,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 angular.forEach($scope.issues, function(issue) {
                     var offset = issue.date.getTimezoneOffset();
                     issue.date = issue.date.addMinutes(offset);
+                    issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                 })
 
 
@@ -430,7 +431,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var vestcliffdate = null
                 }
                 else {
-                    var vestcliffdate = (issue['vestingbegins']).toUTCString();
+                    var vestcliffdate = issue['vestingbegins']
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
                     var oldissue = issue['key'];
@@ -889,7 +890,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
 
                 else {
-                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+                    var vestcliffdate = transaction['vestingbegins'];
                 }
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
