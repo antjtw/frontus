@@ -9,8 +9,11 @@
 div.maincontent {
     max-width: 1280px;
 }
-div.container {
-    width: 1080px;
+
+.back-icon {
+    font-size: 200%;
+    color: #1e2d3d;
+    line-height: 36px;
 }
 
 .button.subText {
