@@ -106,6 +106,8 @@ docviews.factory('errorHttpInterceptor',
 
 docviews.run(function($rootScope, $document) {
   $document.on('click', function(event) { delete $rootScope.errorMessage; });
+
+  $rootScope.$on('$routeChangeError', function(x, y) { console.log(x); console.log(y); });
 });
 /************************************************************************************************
  ISSUER CONTROLLERS
@@ -281,7 +283,6 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.spoof_procm(cd.investor, cd.company, "document.sign_document", cd.doc_id, "[]").then(function (data) {
       cd.when_signed = data;
       $route.reload();
-      $scope.$apply();
     });
   };
 
@@ -289,7 +290,6 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.procm('document.retract_share', cd.doc_id).then(function (data) {
       $scope.getOriginal();
       $route.reload();
-      $scope.$apply();
     })
   }
 
@@ -297,7 +297,6 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.procm("document.renege", cd.doc_id).then(function (data) {
       cd.when_confirmed = null;
       $route.reload();
-      $scope.$apply();
     });
   };
 
@@ -305,7 +304,6 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
     SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
       cd.when_signed = null;
       $route.reload();
-      $scope.$apply();
     })
   };
 
@@ -337,7 +335,7 @@ function CompanyDocumentViewController($scope, $routeParams, $route, $rootScope,
 
   $scope.shareWith = function(doc, cp, msg, sig, dline) {
     SWBrijj.procm("document.share_document", doc.doc_id, cp.toLowerCase(), msg, Boolean(sig), dline).
-        then(function(data) { $route.reload(); $scope.$apply(); });
+        then(function(data) { $route.reload(); });
   };
 
 

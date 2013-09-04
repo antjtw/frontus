@@ -12,9 +12,9 @@
             <button style="float:right" class="subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
             <button style="float:right" class="subText greyButton" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
             <!-- ui-keypress="{enter: \'addRecip(nextRecip)\'}" -->
-            <label ng-hide="counterparty" style="float:right"><button ng-click="shareWith(document,recip)" class="subText blueButton">Share with:</button>
+            <span ng-hide="counterparty" style="float:right"><button ng-click="shareWith(document,recip)" class="subText blueButton">Share with:</button>
               <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue"
-                     typeahead-min-length="1"/></label>
+                     typeahead-min-length="1"/></span>
           </div>
       </div>
       <div class="cf row-fluid">
