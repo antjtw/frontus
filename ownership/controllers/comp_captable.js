@@ -79,6 +79,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.issuekeys.push($scope.issues[i].key);
                 }
 
+                angular.forEach($scope.issues, function(issue) {
+                    var offset = issue.date.getTimezoneOffset();
+                    issue.date = issue.date.addMinutes(offset);
+                })
+
 
 
                 // Uses the grants to update the transactions with forfeited values
