@@ -468,8 +468,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                     angular.forEach($scope.issues, function(x) {
                         if (x.tran_id == issue.tran_id) {
+                            console.log(vestcliffdate);
                             x.vestingbegins = issue.vestingbegins;
-                            x.date = issue.date;
                         }
                     })
 
