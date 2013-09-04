@@ -64,7 +64,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        if (Object.keys(data).length == 0) {$scope.radioModel = "Edit"};
+        if (Object.keys(data).length == 0) {
+            $scope.radioModel = "Edit"
+        }
+        else {
+            $scope.hideTour = true;
+        }
         $scope.issues = data;
 
         // Get the company's Transactions
@@ -471,6 +476,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var index = $scope.issuekeys.indexOf(issue.key);
                     $scope.issuekeys[index] = issue.issue;
                     issue.key = issue.issue;
+                    $scope.hideTour = true;
                 });
             }
 
@@ -489,6 +495,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var index = allowablekeys.indexOf(issue.issue);
                     allowablekeys.splice(index, 1);
                     $scope.allowKeys = allowablekeys;
+                    $scope.hideTour = true;
                 });
             }
         }
