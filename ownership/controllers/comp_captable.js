@@ -191,7 +191,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 angular.forEach($scope.rows, function (row) {
                     angular.forEach($scope.issues, function (issue) {
                         if (row[issue.issue] != undefined) {
-                            if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                            if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
                                 row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                             }
                         }
@@ -470,7 +470,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                     angular.forEach($scope.rows, function (row) {
                         if (row[issue.issue] != undefined) {
-                            if (isNaN(parseFloat(row[issue.issue]['u'])) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                            if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
                                 row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                             }
                         }
@@ -1001,7 +1001,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issues, function (issue) {
                             if (row[issue.issue] != undefined) {
-                                if ((isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
                                     row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                                 }
                             }
