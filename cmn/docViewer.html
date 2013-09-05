@@ -1,6 +1,6 @@
 <div ng-init="init()">
 
-  <div class="row-fluid docViewerControls">
+  <div ng-class="{hidden: (!annotable() && docLength==1)}" class="row-fluid docViewerControls">
       <div>
         <div>
             <span class="tools span4" ng-class="{hidden: !annotable()}">
@@ -56,7 +56,7 @@
         <span data-icon="&#xe032;"></span></li>
       <li ng-repeat="page in showPages()"
           ng-class="{curPage:page==currentPage}"
-          style="padding-left: 2.5em;"
+          class="page-tabs"
           ng-click="jumpPage(page)">
         <span data-icon="{{isAnnotated(page)?'&#xe006;' : '&#xe009;'}}" aria-hidden="true"></span><span> Page {{page}}</span></li>
       <li ng-show="morePages()"

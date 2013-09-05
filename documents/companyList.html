@@ -33,8 +33,8 @@
               <tr class="column-label status-columns">
                 <th class="button" ng-click="setOrder('docname')"><span class="title sortedDown">Name</span></th><th colspan="5" class="button" ng-click="setOrder('last_updated')"><span class="title">Last Updated</span></th>
               </tr>
-              <tr class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
-                <td><a href="/documents/company-view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
+              <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
+                <td>{{doc.docname}}</td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
                 <!-- The four buttons for each row -->
                 <td class="button for-r0ml" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share icon-large"></i></span></td>

@@ -254,6 +254,14 @@ function CompanyDocumentListController($scope, $modal, $location, $q, $rootScope
                 $scope.$apply();
             });
     }
+
+    $scope.gotoDoc = function (docid) {
+        console.log("here");
+        var link = "/documents/company-view?doc=" + docid;
+        console.log(link);
+        document.location.href=link;
+        return;
+    }
 }
 
 /*********************************************************************************************************************/

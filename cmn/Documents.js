@@ -257,7 +257,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   $scope.init = function () {
     $scope.notes=[];
     $scope.pageScroll = 0;
-    $scope.pageBarSize = 13;
+    $scope.pageBarSize = 9;
     $scope.showPageBar = true;
 
     if ($routeParams.page) $scope.currentPage = parseInt($routeParams.page);

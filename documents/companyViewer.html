@@ -20,9 +20,10 @@
       <ul>
         <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal();">
           <span class="unselectable">Original</span>
+          <span class="tab-arrow" data-icon="&#xe033;"></span>
         </li>
         <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
-          <span class="unselectable" >{{doc.name}} [{{ doc.doc_id }}] <span class="smallDate">({{doc.investor}})</span></span>
+          <span class="unselectable" >{{doc.name}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
           <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
              <li>Page {{ pp }}</li>
           </ul>
