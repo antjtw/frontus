@@ -168,6 +168,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 h1 {
 	font-family: 'FS Elliot Web Thin', sans-serif !important;
 	font-size: 36px;
+    line-height: 36px;
 	font-weight: normal;	
 	color: #1e2d3d;
 }
@@ -632,6 +633,10 @@ li.selectedtab {
     border-radius: 0;
     background-color: #F1F1F1;
     height: 16px;
+}
+
+.subnav-controls h2 {
+    margin-left: 10px;
 }
 
 .subnav-controls .search-icon {
@@ -1168,6 +1173,7 @@ form.inputs {
     line-height: 18px;
     vertical-align: middle;
     margin-right: 15px;
+    color: #8D8D8D;
 }
 
 .status-detail > td:last-of-type > span {
@@ -1191,6 +1197,10 @@ form.inputs {
 
 .activityBlock span:first-of-type {
     color: #666666;
+}
+
+.activityBlock span:last-of-type {
+    text-transform: uppercase;
 }
 
 .activityBlock > li {

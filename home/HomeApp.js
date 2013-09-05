@@ -32,56 +32,13 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
     SWBrijj.procm('account.onboarding_update', false);
   }
 
-/*  $scope.activity = [];
-  SWBrijj.tblm('global.company_home').then(function(data) {
-    var i = 0;
-    angular.forEach(data, function(x) {
-      x.timeAgo = moment(x.time).fromNow();
-      if (x.type == 'account') {
-        x.link = "/company/profile/view?id=" + x.item_id;
-        if (x.activity == "addadmin") {
-          x.activity = " added ";
-          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeadmin") {
-          x.activity = " removed ";
-          x.target = (x.count > 1) ? x.count + "administrators": "an administrator";
-          x.icon = "icon-circle-minus";
-        } else if (x.activity == "addinvestor") {
-          x.activity = " added ";
-          x.target = (x.count > 1) ? x.count + "investors": "an investor";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeinvestor") {
-          x.activity = " removed ";
-          x.target = (x.count > 1) ? x.count + "investors": "an investor";
-          x.icon = "icon-circle-minus";
-        }
-      } else if (x.type == 'document') {
-        x.link = "/documents/company-status?doc=" + x.item_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
-          x.target = res["docname"];
-        }); 
-        if (x.activity == "uploaded") {
-          x.activity = " uploaded ";
-          x.icon = "icon-star";
-        } else if (x.activity == "sent") {
-          x.activity = " shared ";
-          x.icon = "icon-redo";
-        }
-      } else if (x.type == 'ownership') {
-        x.link = "/company/ownership/";
-        x.target = "Ownership table";
-        if (x.activity == "shared") {
-          x.activity = " shared ";
-          x.icon = "icon-redo";
-        }
+ $scope.activity = [];
+  SWBrijj.tblm('global.get_company_activity').then(function(data) {
+      $scope.activity = data;
+      if ($scope.activity.length == 0) {
+          $scope.noActivity = true;
       }
-    });
-    $scope.activity = data;
-    if ($scope.activity.length == 0) {
-      $scope.noActivity = true;
-    }
-  });*/
+  });
 
   $scope.activityOrder = function(card) {
         return -card.time;
@@ -180,3 +137,58 @@ function initPage($scope, x, row) {
 function initFail(x) {
   document.location.href='/login';
 }
+
+/************************************************************
+ *  Filters
+ *  *********************************************************/
+
+/* Filter to format the activity time */
+angular.module('HomeApp').filter('fromNow', function() {
+    return function(date) {
+        return moment(date).fromNow();
+    }
+});
+
+/* Filter to select the activity icon for document status */
+angular.module('HomeApp').filter('icon', function() {
+    return function(activity) {
+        if (activity == "sent") return "icon-email";
+        else if (activity == "received") return "icon-email";
+        else if (activity == "viewed") return "icon-view";
+        else if (activity == "reminder") return "icon-redo";
+        else if (activity == "signed") return "icon-pen";
+        else if (activity == "uploaded") return "icon-star";
+        else return "hunh?";
+    }
+});
+
+/* Filter to format the activity description on document status */
+angular.module('HomeApp').filter('description', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var person
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "Captable sent to " + person;
+            else if (activity == "viewed") return "Captable viewed by "+person;
+        }
+        else {
+            var document = ac.docname;
+            if (activity == "sent") return document + " sent to "+person;
+            else if (activity == "viewed") return document + " viewed by "+person;
+            else if (activity == "reminder") return "Reminded "+person + " about " +document;
+            else if (activity == "signed") return document + " signed by "+person;
+            else if (activity == "uploaded") return document + " uploaded by "+person;
+            else if (activity == "received") return "";
+            else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
+            else if (activity == "countersigned") return document + " countersigned by "+person;
+            else return activity + " by "+person;
+        }
+    }
+});

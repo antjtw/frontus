@@ -1,24 +1,36 @@
 <div class="container">
   <div class="row-fluid">
-    <div class="row-fluid">
-        <h1><a href="/documents/"><span data-icon="&#xe038;" style="font-size: 300%;" aria-hidden="true"></span></a>{{ document.docname }}</h1>
+    <div class="headsection row-fluid">
+        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname }}</h1>
 
-      <div class="row-fluid">
+<!--      <div class="row-fluid">
           <div>
-            <!-- <button ng-click="shouldBeOpen=true" class="button subText blueButton">Share Document</button> -->
+            &lt;!&ndash; <button ng-click="shouldBeOpen=true" class="button subText blueButton">Share Document</button> &ndash;&gt;
+            <button style="float:right" class="subText greyButton" ng-show="tester && currentDoc.original" ng-click="retract(currentDoc)">Retract share</button>
             <button style="float:right" class="subText greyButton" ng-show="tester && !(currentDoc.when_signed || currentDoc.original == currentDoc.docId)" ng-click="fakeSign(currentDoc)">Fake Sign</button>
             <button style="float:right" class="subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="confirmModal=true">Countersign</button>
             <button style="float:right" class="subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
             <button style="float:right" class="subText greyButton" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
-            <!-- ui-keypress="{enter: \'addRecip(nextRecip)\'}" -->
-            <label ng-hide="counterparty" style="float:right"><button ng-click="shareWith(recipient)" class="subText blueButton">Share with:</button>
-              <input ng-model="nextRecip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue"
-                     typeahead-min-length="1"/></label>
+            &lt;!&ndash; ui-keypress="{enter: \'addRecip(nextRecip)\'}" &ndash;&gt;
+            <span ng-hide="counterparty" style="float:right"><button ng-click="shareWith(document,recip)" class="subText blueButton">Share with:</button>
+              <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue"
+                     typeahead-min-length="1"/></span>
           </div>
+      </div>-->
+
+      <div class="row-fluid">
+
+            <ul class="bodyText maintabs">
+                <a href="/documents/company-status?doc={{docKey}}">
+                    <li class="button">Status</li>
+                </a>
+                <li class="selectedtab">View</li>
+            </ul>
       </div>
+
       <div class="cf row-fluid">
 
-          <ul style="position:relative;padding-bottom: 5px; border-bottom: rgb(227,227,227) 1px solid;" class="bodyText maintabs">
+          <ul class="bodyText maintabs">
               <li class="button"><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
               <li class="selectedtab">View</li>
            </ul>
@@ -33,7 +45,10 @@
           <span class="unselectable">Original</span>
         </li>
         <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
-          <span class="unselectable" >{{doc.name}} <span class="smallDate">({{doc.investor}})</span></span>
+          <span class="unselectable" >{{doc.name}} [{{ doc.doc_id }}] <span class="smallDate">({{doc.investor}})</span></span>
+          <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
+             <li>Page {{ pp }}</li>
+          </ul>
         </li>
       </ul>
     </div>

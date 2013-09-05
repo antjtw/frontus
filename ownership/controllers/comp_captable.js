@@ -84,6 +84,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.issuekeys.push($scope.issues[i].key);
                 }
 
+                angular.forEach($scope.issues, function(issue) {
+                    var offset = issue.date.getTimezoneOffset();
+                    issue.date = issue.date.addMinutes(offset);
+                    if (issue.vestingbegins) {
+                        issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                    }
+                })
+
 
 
                 // Uses the grants to update the transactions with forfeited values
@@ -120,6 +128,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var offset = $scope.trans[i].date.getTimezoneOffset();
                     $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
                     $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
+                    if ($scope.trans[i].vestingbegins) {
+                        $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                    }
                     $scope.trans[i].investorkey = $scope.trans[i].investor;
                     if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                         $scope.uniquerows.push($scope.trans[i].investor);
@@ -366,17 +377,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    issue.date = date;
-                    var offset = issue.date.getTimezoneOffset();
-                    issue.date = issue.date.addMinutes(offset);
+                    issue[field] = date;
+                    var offset = issue[field].getTimezoneOffset();
+                    issue[field] = issue[field].addMinutes(offset);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
-            if (issue.date instanceof Date) {
-                var offset = issue.date.getTimezoneOffset();
-                issue.date = issue.date.addMinutes(offset);
+            if (issue[field] instanceof Date) {
+                var offset = issue[field].getTimezoneOffset();
+                issue[field] = issue[field].addMinutes(offset);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
             }
@@ -430,7 +441,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var vestcliffdate = null
                 }
                 else {
-                    var vestcliffdate = (issue['vestingbegins']).toUTCString();
+                    var vestcliffdate = issue['vestingbegins']
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
                     var oldissue = issue['key'];
@@ -459,6 +470,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         }
                     });
+
+                    angular.forEach($scope.issues, function(x) {
+                        if (x.tran_id == issue.tran_id) {
+                            x.vestingbegins = issue.vestingbegins;
+                        }
+                    })
 
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
@@ -770,7 +787,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Preformatting on the date to factor in the local timezone offset
     var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
-    $scope.saveTranDate = function (transaction, evt) {
+    $scope.saveTranDate = function (transaction, field, evt) {
         if (evt) { // User is typing
             if (evt != 'blur')
                 keyPressed = true;
@@ -779,18 +796,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    transaction.date = date;
-                    var offset = transaction.date.getTimezoneOffset();
-                    transaction.date = transaction.date.addMinutes(offset);
+                    transaction[field] = date;
+                    var offset = transaction[field].getTimezoneOffset();
+                    transaction[field] = transaction[field].addMinutes(offset);
                     keyPressed = false;
                     $scope.saveTran(transaction);
                 }
             }
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
-            if (transaction.date instanceof Date) {
-                var offset = transaction.date.getTimezoneOffset();
-                transaction.date = transaction.date.addMinutes(offset);
+            if (transaction[field] instanceof Date) {
+                var offset = transaction[field].getTimezoneOffset();
+                transaction[field] = transaction[field].addMinutes(offset);
                 keyPressed = false;
                 $scope.saveTran(transaction);
             }
@@ -845,11 +862,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             transaction.amount = String(transaction.amount).replace(/\,/g,'');
         }
         console.log(transaction.units);
-        if (!(/^\d+(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
+        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
             transaction.units = transaction.unitskey;
         };
-        if (!(/^\d+(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
+        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };
@@ -891,7 +908,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
 
                 else {
-                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+                    var vestcliffdate = transaction['vestingbegins'];
                 }
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
@@ -957,17 +974,24 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (transaction.type == "Option" && !isNaN(parseFloat(transaction.amount))) {
                         console.log("creating a grant");
                         var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
-                        modGrant.amount = transaction.amount;
-                        modGrant.unit = (transaction.amount / transaction.price);
+                        var previousTotal = 0
+                        angular.forEach($scope.grants, function(grant) {
+                            if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
+                                previousTotal = previousTotal + grant.unit;
+                                console.log(grant);
+                            }
+                        });
+                        console.log(previousTotal);
+                        var units = transaction.amount - (previousTotal * transaction.price);
+                        modGrant.unit = (units / transaction.price);
                         angular.forEach($scope.grants, function (grant) {
                             if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
-                                if (grant.date.toUTCString() == Date.today().toUTCString()) {
-                                    console.log("should be updating")
+                                var offset = grant.date.getTimezoneOffset();
+                                var today = Date.today().addMinutes(-offset).toUTCString();
+                                if (grant.date.toUTCString() == today) {
+                                    console.log("should be updating");
+                                    modGrant.unit = modGrant.unit + grant.unit;
                                     modGrant.grant_id = grant.grant_id;
-                                }
-                                else {
-                                    modGrant.amount = modGrant.amount - grant.amount;
-                                    modGrant.unit = modGrant.unit - grant.unit;
                                 }
                             }
                         });
@@ -1014,7 +1038,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 return;
             }
         }
-        if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit))) {
+        if (grant.action == "" || grant.action == undefined || isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) <= 0) {
             return;
         }
         if (grant.grant_id == undefined) {
@@ -1024,8 +1048,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function (data) {
             if (grant.grant_id == "") {
                 grant.grant_id = data[1][0];
+                $scope.grants.push(grant);
             }
-            $scope.grants.push(grant);
+            else {
+                angular.forEach($scope.grants, function(x) {
+                    if (x.grant_id == grant.grant_id) {
+                        x = grant
+                    }
+                });
+            }
         });
     };
 
