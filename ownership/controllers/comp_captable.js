@@ -239,7 +239,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
                 if ($scope.radioModel == "Edit") {
-                    introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();
+                    setTimeout(function() {
+                        introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();
+                    },100);
                 }
 
             });
