@@ -175,8 +175,8 @@ angular.module('HomeApp').filter('description', function() {
         }
         var type = ac.type;
         if (type == "ownership") {
-            if (activity == "received") return "Captable sent to " + person;
-            else if (activity == "viewed") return "Captable viewed by "+person;
+            if (activity == "received") return "Ownership Table sent to " + person;
+            else if (activity == "viewed") return "Ownership Table viewed by "+person;
         }
         else {
             var document = ac.docname;
