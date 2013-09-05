@@ -476,12 +476,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         }
                     });
 
-                    angular.forEach($scope.issues, function(x) {
-                        if (x.tran_id == issue.tran_id) {
-                            x.vestingbegins = issue.vestingbegins;
-                        }
-                    })
-
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issuekeys, function (issuekey) {
