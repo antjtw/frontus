@@ -491,11 +491,11 @@
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                                 <li class="dropdown standard small">
                                     <a class="dropdown-toggle">
-                                        {{activeIssue.optundersec}}<span class="invisible-drop">'</span>
+                                        {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-repeat="i in allowKeys">
-                                            <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i}}</a>
+                                            <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -701,11 +701,11 @@
                                     <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                                         <li class="dropdown standard small">
                                             <a class="dropdown-toggle">
-                                                {{tran.optundersec}}<span class="invisible-drop">'</span>
+                                                {{tran.optundersec  | maxLength}}<span class="invisible-drop">'</span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li ng-repeat="i in allowKeys">
-                                                    <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i}}</a>
+                                                    <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i  | maxLength}}</a>
                                                 </li>
                                             </ul>
                                         </li>

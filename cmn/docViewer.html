@@ -1,20 +1,35 @@
 <div ng-init="init()">
 
   <div class="row-fluid docViewerControls">
-      <div class="row-fluid">
-          <div class="subnav-controls">
-              <div>
-              </div>
-              <div class="DivHelper"></div>
-          </div>
+      <div>
+        <div>
+            <span class="tools span4" ng-class="{hidden: !annotable()}">
+                <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
+                <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
+                <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
+            </span>
+        </div>
+        <div>
+            <span class="tools pageTurn span4">
+              <ul ng-class="{'hidden':docLength==1}" >
+                  <li ng-class="{'hidden' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span></li>
+                  <li>
+                      <input ng-model="currentPage" ng-change="jumpPage(currentPage)"
+                             style="width:20px;">
+                  </li>
+                  <li>/ {{docLength}}</li>
+                  <li ng-class="{'hidden':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span></li>
+              </ul>
+            </span>
+        </div>
+<!--        <div>
+            <span class="tools span1">
+                <button ng-class="{hidden: docLength==1}" ng-click="showPageBar=!showPageBar"><span data-icon="&#xe043;" aria-hidden="true"></span></button>
+            </span>
+        </div>-->
       </div>
-    <div style='padding-top: 10px; padding-bottom: 20px; '>
-        <span class="tools span4" ng-class="{hidden: !annotable()}">
-          <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
-          <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-          <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
-          <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
-        </span>
+      <div class="DivHelper"></div>
 
         <!--
         <ul class="subText pageJump cf">
@@ -22,22 +37,6 @@
                 ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
           </ul>
           -->
-
-        <span class="tools pageTurn span2">
-          <ul ng-class="{'hidden':docLength==1}" >
-            <li ng-class="{'hidden' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span></li>
-            <li><label>
-              <input ng-model="currentPage" ng-change="jumpPage(currentPage)"
-                     style="width:20px;">
-            </label></li>
-            <li>/ {{docLength}}</li>
-            <li ng-class="{'hidden':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span></li>
-          </ul>
-        </span>
-
-      <span class="tools span1">
-        <button ng-class="{hidden: docLength==1}" ng-click="showPageBar=!showPageBar"><span data-icon="&#xe043;" aria-hidden="true"></span></button>
-      </span>
 
 <!--  <div class="span4">
         <div ng-hide="annotable()">
@@ -48,7 +47,6 @@
         </div>
       </div>
       -->
-    </div>
   </div>
 
   <div>

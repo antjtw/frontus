@@ -3,50 +3,20 @@
     <div class="headsection row-fluid">
         <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname }}</h1>
 
-<!--      <div class="row-fluid">
-          <div>
-            &lt;!&ndash; <button ng-click="shouldBeOpen=true" class="button subText blueButton">Share Document</button> &ndash;&gt;
-            <button style="float:right" class="subText greyButton" ng-show="tester && currentDoc.original" ng-click="retract(currentDoc)">Retract share</button>
-            <button style="float:right" class="subText greyButton" ng-show="tester && !(currentDoc.when_signed || currentDoc.original == currentDoc.docId)" ng-click="fakeSign(currentDoc)">Fake Sign</button>
-            <button style="float:right" class="subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="confirmModal=true">Countersign</button>
-            <button style="float:right" class="subText greyButton" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
-            <button style="float:right" class="subText greyButton" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
-            &lt;!&ndash; ui-keypress="{enter: \'addRecip(nextRecip)\'}" &ndash;&gt;
-            <span ng-hide="counterparty" style="float:right"><button ng-click="shareWith(document,recip)" class="subText blueButton">Share with:</button>
-              <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue"
-                     typeahead-min-length="1"/></span>
-          </div>
-      </div>-->
-
-      <div class="row-fluid">
-
+        <div class="row-fluid">
             <ul class="bodyText maintabs">
                 <a href="/documents/company-status?doc={{docKey}}">
                     <li class="button">Status</li>
                 </a>
                 <li class="selectedtab">View</li>
             </ul>
-      </div>
-
-      <div class="cf row-fluid">
-
-          <ul class="bodyText maintabs">
-              <li class="button"><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
-              <li class="selectedtab">View</li>
-           </ul>
         </div>
     </div>
   </div>
 
+
   <div class="row-fluid">
     <div class="span3 docVersiontab leftBlock">
-        <div class="row-fluid">
-            <div class="subnav-controls">
-                <div>
-                </div>
-                <div class="DivHelper"></div>
-            </div>
-        </div>
       <ul>
         <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal();">
           <span class="unselectable">Original</span>
@@ -60,9 +30,52 @@
       </ul>
     </div>
     <div class="span9 companyDocViewer">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <button class="btn" ng-show="tester && currentDoc.original" ng-click="retract(currentDoc)">Retract share</button>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <button class="btn" ng-show="tester && !(currentDoc.when_signed || currentDoc.original == currentDoc.docId)" ng-click="fakeSign(currentDoc)">Fake Sign</button>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="confirmModal=true">Countersign</button>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <button class="btn" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="share-button">
+                            <span ng-hide="counterparty">
+                                <button class="btn" ng-click="shareWith(document,recip)">Share with:</button>
+                                <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+        </div>
+        <div class="row-fluid">
          <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false"></doc-viewer>
+        </div>
     </div>
   </div>
+</div>
 
   <div modal="confirmModal" close="confirmModalClose()" options="opts">
     <div class="sign-modal">
@@ -85,5 +98,3 @@
       </div>
     </div>
   </div>
-
-</div>

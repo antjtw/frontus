@@ -66,3 +66,12 @@ ownership.filter('issueviewList', function () {
         return returnissues;
     };
 });
+
+ownership.filter('maxLength', function () {
+    return function (word) {
+        if (word.length > 12) {
+            return word.substring(0, 11)
+        }
+        else return word
+    };
+});

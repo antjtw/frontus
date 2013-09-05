@@ -46,15 +46,20 @@ ul>li.curPage {
     background: none;
     border: none;
     font-size: 20px;
+    margin: 0 0 0 20px;
 }
 
 .pageTurn {
-    width: 120px;
     margin: 0 auto 0 auto;
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+}
+
+.pageTurn > ul {
+    margin-left: 60px;
 }
 
 .pageTurn > ul > li {
-    float:left;
     display: inline;
     margin: 0 5px 0 0;
     height: 24px;
@@ -76,6 +81,8 @@ ul>li.curPage {
 
 .docViewerControls {
     white-space: nowrap;
+    height: 82px;
+    border-top: 1px solid #E3E3E3;
 }
 
 .docViewerControls > div:first-child {
