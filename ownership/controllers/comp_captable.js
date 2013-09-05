@@ -1,3 +1,5 @@
+
+
 var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting) {
 
     if ($rootScope.selected.role == 'investor') {
@@ -236,6 +238,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
+                if ($scope.radioModel == "Edit") {
+                    introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();
+                }
 
             });
         });
