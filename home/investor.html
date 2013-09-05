@@ -1,24 +1,31 @@
-
+<div class="headsection row-fluid">
+    <h1>{{company}}</h1>
+</div>
 <div class="editProfileFP row-fluid">
-  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <div class="row-fluid">
-      <div><h2>Activity Feed</h2></div>
-      <div class="activityBlock">
-          <table>
-            <tr ng-repeat="active in activity | orderBy:activityOrder">
-            <td><i class="{{active.icon}} icon"></i></td>
-            <td>
-                <table>
-                  <tr><td><a href="/investor/profile">{{active.name}}</a> {{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-                  <tr><td>{{active.timeAgo}}</td></tr>
-                  </table>
-              </td>
-            </tr>
-          </table>
-          <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-       </div>
+    <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left">
+                        <h2>Activity Feed</h2>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <ul class="activityBlock">
+                <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | investordescription">
+                    <i class="{{active.activity | icon}}"></i>
+                    <div>
+                        <span class="activity">{{active | investordescription }}</span><br>
+                        <span class="time">{{active.event_time | fromNow}}</span>
+                    </div>
+                </li>
+            </ul>
+            <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+        </div>
     </div>
-  </div>
 
   <div class="sidebar span4">
     <h2>Needs Attention</h2>

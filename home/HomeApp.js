@@ -55,57 +55,12 @@ function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   $scope.company = $rootScope.selected.name;
 
   $scope.activity = [];
-  /*SWBrijj.procm('global.get_investor_home').then(function(data) {
-    var i = 0;
-    angular.forEach(data, function(x) {
-      x.timeAgo = moment(x.time).fromNow();
-      x.name = "You ";
-      if (x.type == 'account') {
-        x.link = "/company/profile/people";
-        if (x.activity == "addadmin") {
-          x.activity = " added an ";
-          x.target = "administrator";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeadmin") {
-          x.activity = " removed an ";
-          x.target = "administrator";
-          x.icon = "icon-circle-minus";
-        } else if (x.activity == "addinvestor") {
-          x.activity = " added an ";
-          x.target = "an investor";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeinvestor") {
-          x.activity = " removed an ";
-          x.target = "an investor";
-          x.icon = "icon-circle-minus";
-        }
-      } else
-      if (x.type == 'document') {
-        x.link = "/documents/view?doc=" + x.doc_id;
-        SWBrijj.tblm('document.my_investor_library', ['docname'], 'doc_id', x.doc_id).then(function(res){
-          x.target = res["docname"];
-        }); 
-        if (x.activity == "uploaded") {
-          x.activity = " uploaded ";
-          x.icon = "icon-star";
-        } else if (x.activity == "received") {
-          x.activity = " received ";
-          x.icon = "icon-redo";
-        }
-      } else if (x.type == 'ownership') {
-        x.link = "/investor/ownership/";
-        x.target = "Ownership table";
-        if (x.activity == "shared") {
-          x.activity = " received ";
-          x.icon = "icon-redo";
-        }
+  SWBrijj.tblm('global.get_investor_activity').then(function(data) {
+      $scope.activity = data;
+      if ($scope.activity.length == 0) {
+          $scope.noActivity = true;
       }
-    });
-    $scope.activity = data;
-    if ($scope.activity.length == 0) {
-      $scope.noActivity = true;
-    }
-  });*/
+  });
 
   $scope.activityOrder = function(card) {
         return -card.time;
@@ -189,6 +144,41 @@ angular.module('HomeApp').filter('description', function() {
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
             else return activity + " by "+person;
+        }
+    }
+});
+
+/* Filter to format the activity description on document status */
+angular.module('HomeApp').filter('investordescription', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var company = ac.company
+        var person
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "You received " + company + "'s captable";
+            else if (activity == "viewed") return "You received " + company + "'s captable";
+        }
+        else if (type == "document") {
+            var document = ac.docname;
+            if (activity == "received") return "You received " + document + " from " + company;
+            else if (activity == "viewed") return "You viewed " + document;
+            else if (activity == "reminder") return "You were reminded about" +document;
+            else if (activity == "signed") return "You signed "+document;
+            else if (activity == "rejected") return company + "rejected your signature on" +document;
+            else if (activity == "countersigned") return company + " countersigned "+document;
+            else  {
+                return activity + " by "+person;
+            }
+        }
+        else {
+            return "";
         }
     }
 });
