@@ -201,7 +201,7 @@
 
     <div class="row-fluid">
         <div class="subnav-controls">
-            <div>
+            <div data-step="5" data-intro="Switch between editing & viewing your table in it's finished form, and easily share with others">
                 <div class="pull-left">
                     <div class="edittoggle btn-group">
                         <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'View'"><span
@@ -244,7 +244,7 @@
                 <th  ng-repeat="one in issues">
                     <input placeholder="add security" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
-                           onkeydown="testForEnter();">
+                           onkeydown="testForEnter();" data-step="2" data-intro="Add securities as columns, and define their terms in the rail">
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -268,15 +268,15 @@
             </tr>
             <!-- Editable rows -->
             <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
-                </td>
+                    <td data-step="4" data-intro="View the total ownership for each shareholder across all securities" class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                    <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
+                    </td>
                 <td>
               <span ng-switch on="row.nameeditable">
                 <span ng-switch-default>
                   <input placeholder="ADD NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
                          ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
-                         onkeydown="testForEnter();">
+                         onkeydown="testForEnter();" data-step="3" data-intro="Enter your shareholders in the rows, with their shares and cash value under each security column">
                 </span>
                 <span ng-switch-when="0">
                   <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
@@ -363,7 +363,7 @@
                 <td><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
                 <td><input class="input-right" disabled value="100.00%"></td>
                 <td></td>
-                <td ng-repeat="one in issuekeys">
+                <td ng-repeat="one in issuekeys" >
                     <span class="captablepair-box">
                         <div ng-show="toggleView()" ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
 
@@ -371,6 +371,7 @@
                     </span>
                 </td>
             </tr>
+
             <!-- Diluted footer -->
             <tr ng-hide="toggleDilution();" class='tablefooter'>
                 <td><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
@@ -962,13 +963,19 @@
                       </span>
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
-                            <h2>Understand your Ownership</h2>
-                            <p> This ownership table, often referred to as a cap table, will show you exactly what percentage
-                                of your company each shareholder owns.</p>
-                            <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
-                            <p><span tooltip-placement="top" tooltip="A financial instrument representing ownership, debt, or rights to ownership. (Ex. common stock, convertible debt, Series A, option pool.)">What's a security?</span></p>
-                            <p><span tooltip-placement="top" tooltip="These terms influence ownership calculations, the more terms you enter the more accurate your information.">What does "fully diluted" mean?</span></p>
-                            <p><span tooltip-placement="top" tooltip="This represents the total outstanding shares if all debt and options/grants are exercised, toggling will show current ownership.">Why should I enter terms?</span></p>
+                            <div class="captour" data-step="1" data-intro="Let's take a quick tour of your ownership table">
+                                <h2 >Understand your Ownership</h2>
+                                <p> This ownership table, often referred to as a cap table, will show you exactly what percentage
+                                    of your company each shareholder owns.</p>
+                                <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
+                                <br>
+
+                                <p><span class="captips" tooltip-placement="top" tooltip="A financial instrument representing ownership, debt, or rights to ownership. (Ex. common stock, convertible debt, Series A, option pool.)">What's a security?</span></p>
+                                <p><span class="captips" tooltip-placement="top" tooltip="These terms influence ownership calculations, the more terms you enter the more accurate your information.">What does "fully diluted" mean?</span></p>
+                                <p><span class="captips" tooltip-placement="top" tooltip="This represents the total outstanding shares if all debt and options/grants are exercised, toggling will show current ownership.">Why should I enter terms?</span></p>
+                            </div>
+                            <br>
+                            <a ng-hide="hideTour" class="button lightBlueButton" href="javascript:void(0);" onclick="javascript:introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();">Take a Tour</a>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">

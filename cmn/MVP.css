@@ -1528,12 +1528,21 @@ form.inputs {
 }
 
 .button.blueButton {
-	color:#ffffff;
-	background-color:#34495E;
-	width: 143px;
-	height: 37px;
-	text-align:center;
-	padding: 0 0 0 0;
+     color:#ffffff;
+     background-color:#34495E;
+     width: 143px;
+     height: 37px;
+     text-align:center;
+     padding: 0 0 0 0;
+ }
+
+.button.lightBlueButton {
+    color:#ffffff;
+    background-color:#3498db;
+    width: 143px;
+    height: 37px;
+    text-align:center;
+    padding: 10px 25px 10px 25px;
 }
 
 .button.greenButton {
