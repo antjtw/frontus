@@ -132,7 +132,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issues, function (issue) {
                             if (row[issue.issue] != undefined) {
-                                if (isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
+                                if (issue.type == "Debt" && isNaN(parseInt(row[issue.issue]['u'])) && !isNaN(parseInt(row[issue.issue]['a']))) {
                                     row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                                 }
                                 ;
