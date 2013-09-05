@@ -27,7 +27,7 @@ function calculateRedirect() {
   return readCookie('role') == 'issuer' ? '/company-list' : '/investor-list';
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'ui.bootstrap', '$strap.directives','brijj', 'email']);
+var docviews = angular.module('documentviews', ['documents', 'upload', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email']);
 
 docviews.config(function($routeProvider, $locationProvider, $httpProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -178,6 +178,82 @@ function CompanyDocumentListController($scope, $modal, $location, $q, $rootScope
     });
   }
 
+    // Document Upload pieces
+    // Modal Up and Down Functions
+
+    $scope.documentUploadOpen = function () {
+        $scope.files = [];
+        $scope.showProgress = false;
+        $scope.showProcessing = false;
+        $scope.documentUploadModal = true;
+    };
+
+    $scope.documentUploadClose = function () {
+        $scope.documentUploadModal = false;
+    };
+
+    $scope.narrowopts = {
+        backdropFade: true,
+        dialogFade:true,
+        dialogClass: 'narrowModal modal'
+    };
+
+    // File manipulation
+
+    var mimetypes = ["application/pdf"];
+
+    $scope.setFiles = function(element) {
+        $scope.files = [];
+        for (var i = 0; i < element.files.length; i++) {
+            for(var j = 0;j<mimetypes.length;j++) {
+                if (element.files[i].type == mimetypes[j]) $scope.files.push(element.files[i]);
+                $scope.$apply();
+            }
+        }
+    }
+
+    $scope.uploadFile = function (files) {
+        $scope.$on("upload:progress", function(evt, arg) {
+            $scope.loadProgress = 100 * (arg.loaded / arg.total);
+            $scope.showProgress=true;
+            $scope.$apply();
+        });
+        $scope.$on("upload:load", function(evt, arg) {
+            $rootScope.showProgress = false;
+            $rootScope.showProcessing = true;
+            $scope.$apply();
+        });
+        $scope.$on(
+            "upload:error", function(evt, arg) {
+                $rootScope.errorMessage = arg;
+                $scope.showProgress=false;
+                $scope.documentUploadClose();
+                $scope.$apply();
+                console.log(arg); });
+        $scope.$on(
+            "upload:abort", function(evt, arg) {
+                $rootScope.errorMessage = arg;
+                $scope.showProgress=false;
+                $scope.$apply();
+                console.log(evt); console.log(arg); });
+
+        var fd = new FormData();
+        for (var i in files) fd.append("uploadedFile", files[i]);
+        var upxhr = SWBrijj.uploadFile(fd);
+        upxhr.then(function(x) {
+            $scope.dropText = moreDocs;
+            $scope.showProgress = false;
+            $scope.showProcessing = false;
+            $scope.documentUploadModal = false;
+            $rootScope.errorMessage = '';
+            $scope.$apply();
+            $route.reload();
+        }).except(function(x) {
+                $scope.dropText = moreDocs;
+                $scope.showProgress=false;
+                $scope.$apply();
+            });
+    }
 }
 
 /*********************************************************************************************************************/

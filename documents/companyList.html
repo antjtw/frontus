@@ -20,7 +20,10 @@
                             <input type="text" ng-model="filterText">
                         </div>
                         <div class="pull-right">
-                            <uploadModal style="display: inline-block;" class="upload-modal"></uploadModal>
+                            <div class="share-button">
+                                <button ng-click="documentUploadOpen();" class="btn">Upload</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="DivHelper"></div>
@@ -56,4 +59,34 @@
 
 
   </div>
+</div>
+
+<div modal="documentUploadModal" close="documentUploadClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe00b;" aria-hidden="true"></span>Upload a document
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
+    </div>
+
+    <div class="modalText">
+        <p>You can upload a PDF (file size limit is 20MB)</p>
+        <form class="form-inline">
+            <fieldset>
+                <div  class="fileinputs">
+                    <input ng-hide="showProgress || showProcessing" type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                    <div ng-hide="showProgress" class="fakefile">
+                        <span>CHOOSE FILE</span>
+                        <div ng-show="files.length">
+                            <span>{{files[0].name}}</span>
+                        </div>
+                    </div>
+                    <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
+                    <div ng-show="showProcessing" class="progress-bar">Processing Document</div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modalButtons two">
+        <div class="left"><button class="button subText blueButton left" ng-click="documentUploadClose()">Cancel</button></div>
+        <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(files)">Upload</button></div>
+    </div>
 </div>
