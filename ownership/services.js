@@ -86,7 +86,7 @@ ownership.service('calculate', function () {
         return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)
     };
 
-    // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array. Buggy.
+    // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array.
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {

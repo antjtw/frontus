@@ -239,6 +239,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 });
                 $scope.rows.push(values);
 
+                //Calculate the total vested for each row
+                $scope.rows = calculate.vested($scope.rows, $scope.trans);
+
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
@@ -494,6 +497,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
 
                     $scope.issueRevert = angular.copy(issue);
+
+                    //Calculate the total vested for each row
+                    $scope.rows = calculate.vested($scope.rows, $scope.trans);
 
                     var index = $scope.issuekeys.indexOf(issue.key);
                     $scope.issuekeys[index] = issue.issue;
@@ -1014,6 +1020,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         });
                     });
 
+                    //Calculate the total vested for each row
+                    $scope.rows = calculate.vested($scope.rows, $scope.trans);
+
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issuekeys, function (issuekey) {
@@ -1159,14 +1168,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             temprow[issue.issue] = row[issue.issue];
                             something = true;
                         }
-                        if (issue.type == "Option" && row[issue.issue]['a'] > 0) {
-                            angular.forEach($scope.trans, function(tran) {
-                                 if (row.name == tran.investor) {
-                                     temprow[issue.issue] = {}
-                                     temprow[issue.issue]['u'] = tran.exercised
-                                     temprow[issue.issue]['a'] = row[issue.issue]['a']
-                                 }
-                            });
+                        if (issue.type == "Option" && row.vested > 0) {
+                             temprow[issue.issue] = {};
+                             temprow[issue.issue]['u'] = row.vested;
+                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
                         }
                     }
                 });
