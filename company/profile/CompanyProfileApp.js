@@ -427,6 +427,19 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
   };
 }
 
+app.filter('fileLength', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 25) {
+                return word.substring(0, 24) + "..";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
+
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames

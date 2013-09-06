@@ -692,3 +692,16 @@ angular.module('documentviews').filter('description', function() {
   }
 });
 
+angular.module('documentviews').filter('fileLength', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 23) {
+                return word.substring(0, 22) + "..";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
+

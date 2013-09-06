@@ -189,3 +189,16 @@ function initPage($scope, x, row) {
 	}
 
 	function updated(x) {}
+
+app.filter('fileLength', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 25) {
+                return word.substring(0, 24) + "..";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
