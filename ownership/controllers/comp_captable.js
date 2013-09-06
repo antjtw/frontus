@@ -1404,7 +1404,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
-                    $rootScope.notification.show("success", "Ownership Table share request sent");
+                    $rootScope.notification.show("success", "Your table has been shared!");
                     row.send = false;
                     row.emailkey = row.email;
                 }).except(function(err) {
@@ -1419,7 +1419,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (people.email) {
                     SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
                         SWBrijj.proc('ownership.update_investor_captable', people.email, 'Full View').then(function (data) {
-                            $rootScope.notification.show("success", "Ownership Table share request sent");
+                            $rootScope.notification.show("success", "Your table has been shared!");
                         });
                     }).except(function(err) {
                             $rootScope.notification.show("fail", "Email : " + people.email + " failed to send");

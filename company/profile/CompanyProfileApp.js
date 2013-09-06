@@ -169,6 +169,8 @@ function ContactCtrl($scope, $route, $location, $rootScope, SWBrijj) {
           x.target = + (x.count > 1) ? x.count + " investors": "an investor";
           x.icon = "icon-circle-minus";
         }
+
+
       } else if (x.type == 'document') {
         x.link = "/documents/company-status?doc=" + x.item_id;
         SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
@@ -187,7 +189,14 @@ function ContactCtrl($scope, $route, $location, $rootScope, SWBrijj) {
         if (x.activity == "shared") {
           x.activity = "Shared ";
           x.icon = "icon-redo";
+        } else if (x.activity == "viewed") {
+            x.activity = "Viewed ";
+            x.icon = "icon-view";
+        } else if (x.activity == "received") {
+            x.activity = "Received ";
+            x.icon = "icon-email";
         }
+
       }
     });
     $scope.activity = data;
@@ -341,7 +350,7 @@ function ViewerCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         x.link = "/documents/company-status?doc=" + x.item_id;
         SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
           x.target = res["docname"];
-        }); 
+        });
         if (x.activity == "viewed") {
           x.activity = "Viewed ";
           x.icon = "icon-star";
