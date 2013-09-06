@@ -752,12 +752,12 @@
                                 </div>
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre Money</span><input disabled pattern="[0-9]*(.[0-9]*)*"
+                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled pattern="[0-9]*(.[0-9]*)*"
                                                                                                                                                                             onkeydown="testForEnter();"
                                                                                                                                                                             ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                             ng-model="tran.premoney"></p>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post Money</span><input disabled
+                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled
                                                                                                                                                                                                       onkeydown="testForEnter();"
                                                                                                                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                       ng-model="tran.postmoney"></p>
