@@ -1,6 +1,6 @@
 <!--[if lt IE 10]>
     <script type="text/javascript">
-        window.location = "https://www.sharewave.com/err/browser.html";
+        document.location.href = '/err/browser.html';
     </script>
 <![endif]-->
 
