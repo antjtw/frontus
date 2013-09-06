@@ -164,7 +164,10 @@ angular.module('HomeApp').filter('description', function() {
 angular.module('HomeApp').filter('investordescription', function() {
     return function(ac) {
         var activity = ac.activity;
-        var company = ac.company
+        var company = ac.company_name;
+        if (company == null) {
+            company = ac.company;
+        }
         var person
         if (ac.name) {
             person = ac.name;
