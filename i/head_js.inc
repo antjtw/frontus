@@ -1,3 +1,8 @@
+<!--[if lt IE 10]>
+    <script type="text/javascript">
+        window.location = "https://www.sharewave.com/err/browser.html";
+    </script>
+<![endif]-->
 
 <script src="/lib/jquery/jquery-1.8.3.js"></script>
 <script src="/lib/bootstrap/bootstrap.js"></script>

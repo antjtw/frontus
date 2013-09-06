@@ -91,3 +91,33 @@ input.loginInput:invalid:focus {
 #resetConfirm {
     margin-top:50px;
 }
+
+
+/* Upgrade Browser */
+
+.hero-unit.browserlist {
+    background-color: #e3e3e3;
+    padding: 30px 0px 4px 32px;
+}
+
+.browserup {
+    background-color: #fff;
+    border: 4px solid #fff;
+    height: 180px;
+    width: 140px !important;
+    overflow:hidden;
+    padding: 20px 0 25px 0;
+}
+
+.browserup:hover{
+    border: 4px solid #1ABC96;
+    position: relative;
+    cursor: pointer;
+}
+
+h2.browser {
+    font-size: 16px;
+    padding-top: 14px;
+    line-height: 4px;
+}
+
