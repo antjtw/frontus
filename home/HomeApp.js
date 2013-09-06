@@ -14,7 +14,13 @@ app.config(function($routeProvider, $locationProvider){
 app.controller("MainController", function($scope, $location) {
 });
 
-function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+function CompanyCtrl($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
+
+    if ($rootScope.selected.role == 'investor') {
+        $location.path('/');
+        return;
+    }
+
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
       $rootScope.notification.show("success", "You have successfully changed your password.");
@@ -45,7 +51,13 @@ function CompanyCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
   };
 }
 
-function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
+function InvestorCtrl($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
+
+    if ($rootScope.selected.role == 'issuer') {
+        $location.path('/company');
+        return;
+    }
+
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
       $rootScope.notification.show("success", "You have successfully changed your password.");
