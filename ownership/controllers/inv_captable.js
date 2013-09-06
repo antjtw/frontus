@@ -156,7 +156,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
                     $scope.issues.sort(sorting.issuedate);
                     $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
-                    $scope.rows.sort(sorting.row($scope.issuekeys));
+                    $scope.rows.sort(sorting.basicrow());
 
                     SWBrijj.procm('ownership.get_everyone_else', company).then(function (x) {
                         $scope.everyone = {}

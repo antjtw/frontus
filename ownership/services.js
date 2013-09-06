@@ -360,7 +360,7 @@ ownership.service('sorting', function () {
         return 0;
     };
 
-    // Sorts the rows
+/*    // Sorts the rows by issue type from earliest to latest
     this.row = function (prop) {
         return function (a, b) {
             var i = 0;
@@ -394,6 +394,15 @@ ownership.service('sorting', function () {
                 i++
             }
             return 0;
+        }
+    };*/
+
+    // Sorts the rows by greatest ownership
+    this.basicrow = function () {
+        return function (a, b) {
+            if (a.startpercent > b.startpercent) return -1
+            else if (b.startpercent > a.startpercent) return 1
+            else return 0;
         }
     };
 

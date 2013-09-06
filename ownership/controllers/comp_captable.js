@@ -222,12 +222,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
                 });
 
+                angular.forEach($scope.rows, function(row) {
+                    row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
+                });
+
 
                 // Sort the columns before finally showing them
                 // Issues are sorted by date, rows by ownership within each issue
                 $scope.issues.sort(sorting.issuedate);
                 $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
-                $scope.rows.sort(sorting.row($scope.issuekeys));
+                $scope.rows.sort(sorting.basicrow());
 
                 var values = {"name": "", "editable": "0"};
                 angular.forEach($scope.issuekeys, function (key) {

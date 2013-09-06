@@ -69,11 +69,13 @@ ownership.filter('issueviewList', function () {
 
 ownership.filter('maxLength', function () {
     return function (word) {
-        if (word.length > 9) {
-            return word.substring(0, 8);
-        }
-        else {
-            return word;
+        if (word.length) {
+            if (word.length > 9) {
+                return word.substring(0, 8);
+            }
+            else {
+                return word;
+            }
         }
     };
 });
