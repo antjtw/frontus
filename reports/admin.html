@@ -1,18 +1,3 @@
-<!DOCTYPE HTML>
-<html ng-app="myApp">
-<head>
-	<base href="reports/"/>
-	<title>Administrative Functions</title>
-	<link rel="stylesheet" href="css/MVP.css">
-  <!--{{/i/head_css.inc}}-->
-  <!--{{/i/head_js.inc}}-->
-	
-</head>
-
-<body>
-	<div id="wrap">
-
-     <!--{{/i/nav.inc}}-->
 
         <div id="wrap">
           <div class="container">
@@ -51,7 +36,8 @@
 		<div id="demoDiv" ng-controller='DemoController'>
 		  <div infinite-scroll='nextPage()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
 		    <div ng-repeat='item in items'>
-		      <!-- <span>{{item.company_name}} ( <a hg-href='https://{{item.company_domain}}'>{{item.company_domain}}</a> )</span>
+
+          <!-- <span>{{item.company_name}} ( <a hg-href='https://{{item.company_domain}}'>{{item.company_domain}}</a> )</span>
 		      <span>{{item.name}} ( {{item.email}} )</span>
 		      <small>created {{item.created}}</small>
 		-->
@@ -61,87 +47,4 @@
 		  </div>
 		</div>
 
-
-
-
-        </div>
-
-      <div id="push"></div>   
-	</div>
-	
-
-      <!--{{/i/foot.inc}}-->
-
-<!-- has to go here because it needs to come after jQuery - - which is in foot.inc -->
-	<script src="js/angular.js"></script>
-	<script src="js/ng-infinite-scroll.js"></script>
-
-
-	<script>	
-		var nli = function(x) { document.querySelector("#googleResult").innerHTML=x.message;
-			if (x.message == "Not Logged In") {
-				var sc = angular.element(document.querySelector("#login-dialog")).scope();
-				sc.show = true;
-				sc.$apply();
-			}
-		}
-		
-		jQuery("#toGoogle").click(function() {
-			var gsn = document.querySelector("input[name=worksheet]").value;
-			SWBrijj.proc("signUpsToGoogle", gsn)
-				.then(function(x) { document.querySelector("#googleResult").innerHTML=x;})
-				.except(nli);
-		});
-		
-		
-		var LoginController = function($scope) {
-		    $scope.connect = function() {
-			  SWBrijj.login($scope.username, $scope.password).then(function(data) { 
-				if (data) { $scope.show = false; $scope.result=""; } else $scope.result = "Login failed";
-				$scope.$apply();
-				var os = angular.element(document.querySelector("#demoDiv")).scope();
-				os.busy = false;
-				os.nextPage();
-				os.$apply();
-			  });
-			};
-		};
-		
-		var app = angular.module("myApp",['infinite-scroll']);
-				app.directive("interested", function() {
-					return {
-						// scope: { item: '=' }
-						template: "<div><span>{{item.company_name}} ( <a hg_ref='https://{{item.company_domain}}' > {{item.company_domain}}</a> )</span>"+
-						"<p><span>{{item.name}} ( {{item.email}} )</span><small>created {{item.created}}</small></div>"
-					}
-				});
-		
-		app.controller('DemoController', function($scope) {
-		  $scope.items = [];
-		  $scope.busy = false;
-		  $scope.before = new Date();
-
-		  $scope.nextPage = function() {
-		    if ($scope.busy) return;
-		    $scope.busy = true;
-
-			SWBrijj.procm("signUps", 30, $scope.before).then(function(data) {
-		      var items = data;
-		      for (var i = 0; i < data.length; i++) {
-		        $scope.items.push(data[i]);
-		      }
-		      $scope.before = $scope.items[$scope.items.length - 1].created;
-		      $scope.busy = false;
-			  $scope.$apply();
-		    }).except(nli);
-		  };
-		});
-		
-/*		var sc = angular.element(document.querySelector("#demoDiv")).scope();
-		DemoController(sc);
-		*/
-		
-	  </script>
-
-	</body>
-</html>
+</div>
