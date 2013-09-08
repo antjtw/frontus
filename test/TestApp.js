@@ -12,8 +12,33 @@ app.config(function($routeProvider, $locationProvider){
       when('/linkedin', {controller: 'TestCtrl', templateUrl: 'linkedin.html'}).
       when('/twitter', {controller: 'TestCtrl', templateUrl: 'twitter.html'}).
       when('/upload', {controller: 'TestCtrl', templateUrl: 'upload.html'}).
+      when('/sql', {controller: 'TestCtrl', templateUrl: 'sql.html'}).
       when('/other', {controller:'TestCtrl', templateUrl: 'other.html'}).
       otherwise({redirectTo:'/other'});
+});
+
+app.directive('ngModelOnblur', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function(scope, elm, attr, ngModelCtrl) {
+      if (attr.type === 'radio' || attr.type === 'checkbox') return;
+
+      elm.unbind('input').unbind('keydown').unbind('change');
+      elm.bind('blur', function() {
+        scope.$apply(function() {
+          ngModelCtrl.$setViewValue(elm.val());
+        });
+      });
+      elm.bind("keydown keypress", function(event) {
+        if (event.which === 13) {
+          scope.$apply(function() {
+            ngModelCtrl.$setViewValue(elm.val());
+          });
+        }
+      });
+    }
+  };
 });
 
 app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
@@ -74,12 +99,16 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
         $scope.progressVisible = false;
     };
 
-    $scope.uploadDropbox = function() {
-      Dropbox.choose( { linkType: 'direct', multiselect: true, success: function(files) {
-        SWBrijj.uploadLink.apply(null,files).then( function(x) { console.log(x);}) ;
-      }, cancel: function() { console.log('canceled'); }
+    $scope.uploadDropbox = function () {
+      Dropbox.choose({ linkType: 'direct', multiselect: true, success: function (files) {
+        SWBrijj.uploadLink.apply(null, files).then(function (x) {
+          console.log(x);
+        });
+      }, cancel: function () {
+        console.log('canceled');
+      }
       })
-    }
+    };
     $scope.uploadFile = function () {
         var fd = new FormData();
         $scope.progressVisible = true;
@@ -135,27 +164,39 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
   //noinspection JSUnresolvedVariable
     // SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
 
-  $scope.contactSave = function(){
-     SWBrijj.proc("social_update", $scope.twitter, $scope.linkedin, $scope.google, $scope.dropbox, $scope.facebook).
-        then(function(x) { alert("done: "+x); });
-  }
+  $scope.twitter= $scope.linkedin = $scope.google = $scope.dropbox = $scope.facebook = "";
+  $scope.contactSave = function () {
+    SWBrijj.proc("social_update", $scope.twitter, $scope.linkedin, $scope.google, $scope.dropbox, $scope.facebook).
+        then(function (x) {
+          alert("done: " + x);
+        });
+  };
 
-  $scope.authTwitter = function() {
-    SWBrijj.proc("oauth.twitter_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
-  $scope.authLinkedin = function() {
-    SWBrijj.proc("oauth.linkedin_authorize").then(function(x) {
-      document.location.href=x[1][0]; });
-  }
-  $scope.authDropbox = function() {
-      SWBrijj.proc("oauth.dropbox_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
-  $scope.authGoogle = function() {
-    SWBrijj.proc("oauth.google_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
-  $scope.authFacebook = function() {
-    SWBrijj.proc("oauth.facebook_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
+  $scope.authTwitter = function () {
+    SWBrijj.proc("oauth.twitter_authorize").then(function (x) {
+      document.location.href = x[1][0];
+    });
+  };
+  $scope.authLinkedin = function () {
+    SWBrijj.proc("oauth.linkedin_authorize").then(function (x) {
+      document.location.href = x[1][0];
+    });
+  };
+  $scope.authDropbox = function () {
+    SWBrijj.proc("oauth.dropbox_authorize").then(function (x) {
+      document.location.href = x[1][0];
+    });
+  };
+  $scope.authGoogle = function () {
+    SWBrijj.proc("oauth.google_authorize").then(function (x) {
+      document.location.href = x[1][0];
+    });
+  };
+  $scope.authFacebook = function () {
+    SWBrijj.proc("oauth.facebook_authorize").then(function (x) {
+      document.location.href = x[1][0];
+    });
+  };
 
 
   $scope.dropbox_init = function() {
@@ -200,4 +241,10 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };
 
+  $scope.doSelect = function() {
+    SWBrijj.doSQL($scope.sql).then(function(x) {
+      $scope.columns = x[0];
+      $scope.data = x[1];
+    });
+  }
 }]);

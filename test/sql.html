@@ -1,0 +1,14 @@
+
+<div>
+  <h1> SQL viewer </h1>
+  <label>SQL statement:<input ng-change="doSelect()" ng-model-onblur ng-model="sql" type="text" size="100" style="width:690px"/></label>
+  <hr>
+  <table>
+    <tr>
+      <th ng-repeat="col in columns">{{ col }}</th>
+    </tr>
+    <tr ng-repeat="row in data">
+      <td ng-repeat="cell in row">{{ cell }}</td>
+    </tr>
+  </table>
+</div>
