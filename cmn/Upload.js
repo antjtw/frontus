@@ -177,43 +177,6 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
           $scope.showProgress=false;
           $scope.$apply();
         });
-
-    // the race condition is that these events should be set before I do the xhr.send
-    // otherwise, they might complete (or error out) before I add the eventlistener
-
-//    upx.addEventListener("progress", uploadProgress, false);
-//    upx.addEventListener("load", uploadComplete, false);
-//    upx.addEventListener("error", uploadFailed, false);
-//    upx.addEventListener("abort", uploadCanceled, false);
-
-    // there is also loadstart  and loadend
   }
 }
-
-/*
-function uploadProgress(evt) {
-  $scope.$apply(function () {
-    if (evt.lengthComputable) {
-      $scope.progress = Math.round(evt.loaded * 100 / evt.total)
-    } else {
-      $scope.progress = 'unable to compute'
-    }
-  })
-}
-
-function uploadComplete(evt) {
-  alert(evt.target.responseText)
-}
-
-function uploadFailed(evt) {
-  alert("There was an error attempting to upload the file.")
-}
-
-function uploadCanceled(evt) {
-  $scope.progressVisible = false;
-  $scope.$apply();
-  alert("The upload has been canceled by the user or the browser dropped the connection.")
-}
-  */
-
 

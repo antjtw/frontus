@@ -1,8 +1,6 @@
 
-var app = angular.module('TestApp', ['ngResource', 'brijj']);
-
+var app = angular.module('TestApp', ['ngResource', 'brijj'], function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
-app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
@@ -42,7 +40,19 @@ app.directive('ngModelOnblur', function() {
 });
 
 app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
-    // var dropbox = $scope.$element.querySelector(".dropbox"); // $element seems to be an array of elements
+
+    /** @name SWBrijj#proc
+     * @function
+     * @param {string}
+     * @param {...} */
+
+  /** @name SWBrijj#procm
+   * @type {function(string, *)} */
+
+    /** @name Object#except
+     * @type {function( function(!Object) )} */
+
+  // var dropbox = $scope.$element.querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
 
@@ -63,6 +73,17 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
     }
 
     function dragOver(evt) {
+      /** @name evt
+       * @type { Event } */
+
+      /** @name Event#dataTransfer
+       *  @type { DataTransfer } */
+
+      /** @name DataTransfer */
+
+      /** @name DataTransfer#types
+       * @type { [string] } */
+
         evt.stopPropagation();
         evt.preventDefault();
       console.log(evt.dataTransfer.types);
@@ -100,56 +121,34 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
     };
 
     $scope.uploadDropbox = function () {
-      Dropbox.choose({ linkType: 'direct', multiselect: true, success: function (files) {
+      /** @name Dropbox
+       * @type { class } */
+      /** @name Dropbox#choose
+       * @function
+       * @param { map } */
+
+      /** @name SWBrijj#uploadLink
+       * @function
+       */
+       Dropbox.choose({ linkType: 'direct', multiselect: true, success: function (files) {
         SWBrijj.uploadLink.apply(null, files).then(function (x) {
           console.log(x);
         });
       }, cancel: function () {
         console.log('canceled');
       }
-      })
+      });
     };
     $scope.uploadFile = function () {
         var fd = new FormData();
         $scope.progressVisible = true;
-        for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+        for (var i=0; i<$scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
         SWBrijj.uploadFile(fd).then(function (x) {
             console.log(x);
         }).except(function (x) {
             alert(x.message);
         });
-        /*var xhr = new XMLHttpRequest()
-         xhr.upload.addEventListener("progress", uploadProgress, false);
-         xhr.addEventListener("load", uploadComplete, false);
-         xhr.addEventListener("error", uploadFailed, false);
-         xhr.addEventListener("abort", uploadCanceled, false);
-         xhr.open("POST", "/fileupload");
-         xhr.send(fd) */
     };
-
-    function uploadProgress(evt) {
-        $scope.$apply(function () {
-            if (evt.lengthComputable) {
-                $scope.progress = Math.round(evt.loaded * 100 / evt.total)
-            } else {
-                $scope.progress = 'unable to compute'
-            }
-        })
-    }
-
-    function uploadComplete(evt) {
-        alert(evt.target.responseText)
-    }
-
-    function uploadFailed(evt) {
-        alert("There was an error attempting to upload the file.")
-    }
-
-    function uploadCanceled(evt) {
-        $scope.progressVisible = false;
-        $scope.$apply();
-        alert("The upload has been canceled by the user or the browser dropped the connection.")
-    }
 
   $scope.googleList = function () {
       SWBrijj.procm("oauth.get_google_list", $scope.mimeType).then(function (x) { $scope.gfiles = x; $scope.$apply(); });
@@ -206,10 +205,10 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
       .except( function(x) {} );
     var dropbox = angular.element(".dropbox")[0];
 
-    dropbox.addEventListener("dragenter", dragEnterLeave, false);
-    dropbox.addEventListener("dragleave", dragEnterLeave, false);
-    dropbox.addEventListener("dragover", dragOver, false);
-    dropbox.addEventListener("drop", drop, false);
+    dropbox.addEventListener('dragenter', dragEnterLeave, false);
+    dropbox.addEventListener('dragleave', dragEnterLeave, false);
+    dropbox.addEventListener('dragover', dragOver, false);
+    dropbox.addEventListener('drop', drop, false);
 
   };
 
@@ -242,7 +241,12 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
     };
 
   $scope.doSelect = function() {
-    SWBrijj.doSQL($scope.sql).then(function(x) {
+    /** @name SWBrijj#view
+     * @function
+     * @param {string}
+     * @param {...}
+     */
+    SWBrijj.view($scope.sql).then(function(x) {
       $scope.columns = x[0];
       $scope.data = x[1];
     });
