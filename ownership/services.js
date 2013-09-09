@@ -160,11 +160,12 @@ ownership.service('calculate', function () {
             var vestbegin = angular.copy(tran.vestingbegins)
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
-                    if (!isNaN(parseFloat(vesting[tran.investor]))) {
-                        vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
+                    if (vesting[tran.investor] && !isNaN(parseFloat(vesting[tran.investor][tran.issue]))) {
+                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (tran.units * (tran.vestcliff / 100));
                     }
                     else {
-                        vesting[tran.investor] = (tran.units * (tran.vestcliff / 100));
+                        vesting[tran.investor] = {};
+                        vesting[tran.investor][tran.issue] = (tran.units * (tran.vestcliff / 100));
                     }
                     var cycleDate = angular.copy(tran.date);
                     var remainingterm = angular.copy(tran.terms);
@@ -199,7 +200,7 @@ ownership.service('calculate', function () {
                     }
                     while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
                         console.log("The cycle data is " + String(cycleDate));
-                        vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
+                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
                         }
@@ -210,13 +211,18 @@ ownership.service('calculate', function () {
                 }
             }
         });
+        console.log(vesting);
         angular.forEach(rows, function (row) {
-            if (!isNaN(vesting[row.name])) {
-                var result =Math.round(vesting[row.name]*1000)/1000
-                row.vested = result;
+            if (vesting[row.name]) {
+                row.vested = {}
+                for (var issue in vesting[row.name]) {
+                    if (!isNaN(vesting[row.name][issue])) {
+                        var result = Math.round(vesting[row.name][issue]*1000)/1000
+                        row.vested[issue] = result;
+                    }
+                }
             }
         });
-        console.log(rows);
         return rows
     };
 
