@@ -218,9 +218,19 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
 
     $scope.setFiles = function(element) {
         $scope.files = [];
+        $scope.fileError = ""
         for (var i = 0; i < element.files.length; i++) {
             for(var j = 0;j<mimetypes.length;j++) {
-                if (element.files[i].type == mimetypes[j]) $scope.files.push(element.files[i]);
+                console.log(element.files[i].size)
+                if (element.files[i].size > 20000000) {
+                    $scope.fileError = "Please choose a smaller file";
+                }
+                else if (element.files[i].type != mimetypes[j]) {
+                    $scope.fileError = "Please choose a pdf"
+                }
+                else {
+                    $scope.files.push(element.files[i]);
+                }
                 $scope.$apply();
             }
         }
@@ -252,7 +262,6 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
                 $scope.showProgress=false;
                 $scope.$apply();
                 console.log(evt); console.log(arg); });
-
         var fd = new FormData();
         for (var i=0;i<files.length;i++) fd.append("uploadedFile", files[i]);
         var upxhr = SWBrijj.uploadFile(fd);

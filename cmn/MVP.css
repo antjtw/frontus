@@ -1615,7 +1615,6 @@ form.inputs {
 /* Styling file uploads with fake overlay */
 
 .modal div.fileinputs {
-    margin-top: 10px;
     position: relative;
     height: 50px;
     border-bottom: 1px solid rgb(227, 227, 227);

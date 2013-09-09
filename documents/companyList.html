@@ -69,10 +69,13 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
     </div>
 
-    <div class="modalText">
+    <div class="modalText uploadModal">
         <p>Currently we're only taking PDF files (20MB max)</p>
         <form class="form-inline">
             <fieldset>
+                <div ng-show="fileError" class="upload-errors">
+                    <span>{{fileError}}</span>
+                </div>
                 <div  class="fileinputs">
                     <input ng-hide="showProgress || showProcessing" type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
                     <div ng-hide="showProgress" class="fakefile">

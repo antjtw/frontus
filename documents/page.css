@@ -251,6 +251,21 @@ button.greyButton {
     float: none;
 }
 
+.modalText.uploadModal p {
+    margin-bottom: 10px;
+}
+
+.upload-errors {
+    position: relative;
+    height: 40px;
+    border-top: 1px solid rgb(227, 227, 227);
+}
+
+.upload-errors > span {
+    line-height: 40px;
+    color: #ff0000;
+}
+
 .error-message {
     color: red;
     font-weight: bolder;
