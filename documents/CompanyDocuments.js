@@ -482,9 +482,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   }
 
   $scope.share = function(message, email, sign) {
-      sign = (sign == "yes") ? true : false;
+      sign = (sign == "Yes") ? true : false;
       console.log(sign);
-      SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), Date.parse('22 November 2113')).then(function(data) {
+      if (sign) {
+          console.log("here");
+          var date = Date.parse('22 November 2113');
+      }
+      else {
+          date = null;
+      }
+      SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
           console.log(data);
           $scope.signeeded = "No"
           $route.reload();
