@@ -13,8 +13,8 @@
       </div>
       <div class="span7">
         <p>
-            <input class="name" ng-class="{'content':!name}" type="text" ng-model="name" maxlength="30" ui-event="{blur: 'contactSave()'}">
-            <label>Company Name</label>
+            <label><input class="name" ng-class="{'content':!name}" type="text" ng-model="name" maxlength="30" data-ui-event="{blur: 'contactSave()'}">
+            Company Name</label>
         </p>
         <p><button class="button subText greenButton" ng-click="adminModalOpen()">Add Admin</button></p>
       </div>
@@ -30,7 +30,7 @@
         <tbody ng-repeat="admin in admins">
           <tr>
           <td><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
-          <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" tooltip-placement="bottom" tooltip-html-unsafe="Revoke admin privileges"></i>
+          <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" data-tooltip-placement="bottom" data-tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
       </table>
@@ -42,12 +42,12 @@
     <form>
       <fieldset>
         <p>
-          <input ng-class="{'content':!company}" type="text" ng-model="company" name="company" ui-event="{blur: 'contactSave()'}">
-          <label>Website</label>
+          <label><input ng-class="{'content':!company}" type="text" ng-model="company" name="company" ui-event="{blur: 'contactSave()'}">
+          Website</label>
         </p>
         <p>
-          <textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-          <label>Address</label>
+          <label><textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+          Address</label>
         </p>
       </fieldset>
     </form>
@@ -118,8 +118,9 @@
     <form>
       <fieldset>
         <div class="row-fluid field">
-          <label>Email</label>  
+          <label>Email
           <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
+            </label>
         </div>
       </fieldset>
     </form>

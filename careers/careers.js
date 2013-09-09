@@ -1,6 +1,4 @@
-var app = angular.module('careers', ['ui.bootstrap', 'brijj']);
-
-app.config(function($routeProvider, $locationProvider){
+var app = angular.module('careers', ['ui.bootstrap', 'brijj'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -8,6 +6,7 @@ app.config(function($routeProvider, $locationProvider){
       otherwise({redirectTo:'/'});
 });
 
-function AccordionCtrl($scope) {
+app.controller('AccordionCtrl',['$scope', function($scope) {
   $scope.oneAtATime = true;
-}
+}]);
+

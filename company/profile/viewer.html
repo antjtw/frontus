@@ -14,8 +14,8 @@
       </div>
       <div class="span7">
         <p>
-            <input ng-class="{'content':!user.name}" class="name" type="text" ng-model="user.name" disabled>
-            <label>Name</label>
+            <label><input ng-class="{'content':!user.name}" class="name" type="text" ng-model="user.name" disabled>
+            Name</label>
         </p>
       </div>
     </div>
@@ -28,7 +28,7 @@
       <div ng-show="level" class="cf permission-block">
         <div>
             <div class="pull-left permission-label">Type:</div>
-            <div class="pull-left">
+            <ul class="pull-left">
               <li class="dropdown standard pull-left">
                   <a class="dropdown-toggle">
                       {{level}}
@@ -41,7 +41,7 @@
                       </li>
                   </ul>
               </li>
-            </div>
+            </ul>
         </div>
         <div class="DivHelper"></div>
       </div>
@@ -54,7 +54,7 @@
           <p>The following files can be viewed by this person</p>
       </div>
       <table class="tableView bodyText">
-        <tr class="column-label" class="subText" ng-hide="noDocs">
+        <tr class="column-label subText" ng-hide="noDocs">
           <th class="button"><span class="title sortedDown">Name</span></th>
           <th colspan="2" class="button"><span class="title">Status</span></th>
         </tr>
@@ -65,38 +65,31 @@
           <tr>
           <td><img src="">{{doc.docname}}</td>
           <td>{{doc.event}}</td>
-          <td class="button" ng-click="(opendetails(doc.doc_id))"><i class="{{doc.button}}"></i>
+          <td class="button" ng-click="(opendetails(doc.doc_id))"><i class="{{doc.button}}"></i></td>
           </tr>
-          <tr ng-Show="doc.shown" class="personDetails">
+          <tr ng-show="doc.shown" class="personDetails">
             <td colspan="2">
-                <div><p>Delivered</p><p class="doubleTime">{{doc.whenshared | date:'MMMM dd, yyyy'}}</p><p>{{doc.whenshared | date:'h:mm a'}}</p></div>
-                <div>
-                    <div ng-switch on="doc.lastlogin" >
-                        <span ng-switch-when="0"><p class="hltext">Never Logged In</p></span>
-                        <span ng-switch-default><p>Last Seen</p><p class="doubleTime">{{doc.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastlogin | date:'h:mm a'}}</p></span>
-                    </div>
+                <div><p>Delivered</p><p class="doubleTime">{{doc.whenshared | date:'MMMM dd, yyyy'}}</p>
+                  <p>{{doc.whenshared | date:'h:mm a'}}</p></div>
+                <div ng-switch="doc.lastlogin" >
+                   <div ng-switch-when="0"><p class="hltext">Never Logged In</p></div>
+                   <div ng-switch-default><p>Last Seen</p><p class="doubleTime">{{doc.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastlogin | date:'h:mm a'}}</p></div>
                 </div>
-               
-                <div>
-                    <div ng-switch on="doc.lastviewed" >
-                        <span ng-switch-when="0"><p class="hltext">Unviewed</p></span>
-                        <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{doc.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastviewed | date:'h:mm a'}}</p></span>
-                    </div>
+
+                <div ng-switch="doc.lastviewed" >
+                   <div ng-switch-when="0"><p class="hltext">Unviewed</p></div>
+                   <div ng-switch-default><p>Viewed</p><p class="doubleTime">{{doc.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastviewed | date:'h:mm a'}}</p></div>
                 </div>
-                
-                <div>
-                  <div ng-switch on="doc.signed" >
-                        <span ng-switch-when="0"><p class="hltext">Unsigned</p></span>
-                        <span ng-switch-default><p>Signed</p><p class="doubleTime">{{doc.signed | date:'MMMM dd, yyyy'}}</p><p>{{doc.signed | date:'h:mm a'}}</p></span>
-                    </div>
+
+                <div ng-switch="doc.signed" >
+                   <div ng-switch-when="0"><p class="hltext">Unsigned</p></div>
+                   <div ng-switch-default><p>Signed</p><p class="doubleTime">{{doc.signed | date:'MMMM dd, yyyy'}}</p><p>{{doc.signed | date:'h:mm a'}}</p></div>
                 </div>
-                
-                <div>
-                  <div ng-switch on="doc.column5" >
-                      <p ng-switch-default="0"></p>
-                        <span ng-switch-when="2"><p>Revoked</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></span>
-                        <span ng-switch-when="1"><p>Resent</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></span>
-                    </div>
+
+                <div ng-switch="doc.column5" >
+                   <p ng-switch-default="0"></p>
+                   <div ng-switch-when="2"><p>Revoked</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></div>
+                   <div ng-switch-when="1"><p>Resent</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></div>
                 </div>
             </td>
         </tr>
@@ -109,12 +102,12 @@
     <form>
       <fieldset>
         <p>
-          <input type="text" ng-model="user.email" disabled>
-          <label>Email</label>
+          <label><input type="text" ng-model="user.email" disabled>
+          Email</label>
         </p>
         <p>
-          <textarea ng-class="{'content':!user.street}"  ng-model="user.street" rows="3" disabled></textarea>
-          <label>Address</label>
+          <label><textarea ng-class="{'content':!user.street}"  ng-model="user.street" rows="3" disabled></textarea>
+          Address</label>
         </p>
       </fieldset>
     </form>

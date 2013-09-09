@@ -30,7 +30,7 @@
 }
 
 .home h1 {
-    color: white;
+    color: rgb(255, 255, 255);
     font-family: 'FS Elliot Web Thin', sans-serif;
     font-size: 42px;
     line-height: 45px;
@@ -38,7 +38,7 @@
 }
 
 .home h2 {
-    color: #1e2d3d;
+    color: rgb(30, 45, 61);
     font-family: 'FS Elliot Web Light', sans-serif;
     font-size: 24px;
     line-height: 28px;
@@ -46,7 +46,7 @@
 }
 
 .home h3 {
-    color: white;
+    color: rgb(255, 255, 255);
     font-family: 'FS Elliot Web Light', sans-serif;
     font-size: 18px;
     font-weight: normal;
@@ -55,7 +55,7 @@
 }
 
 .home p {
-    color: #8D8D8D;
+    color: rgb(141, 141, 141);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
     line-height: 22px;
@@ -63,7 +63,7 @@
 }
 
 .home input {
-    background-color: #FFFFFF;
+    background-color: rgb(255, 255, 255);
 }
 
 .videoModal.modal {
@@ -97,13 +97,13 @@
     height: 0;
     border-top: 20px solid transparent;
     border-bottom: 20px solid transparent;
-    border-left: 30px solid #1ABC96;
+    border-left: 30px solid rgb(26, 188, 150);
 }
 
 
 
 .home .btn-mini {
-    color: #8D8D8D;
+    color: rgb(141, 141, 141);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -118,18 +118,18 @@
 }
 
 .home .btn-mini strong {
-    color: #1e2d3d;
+    color: rgb(30, 45, 61);
 }
 
 .home .btn-mini:hover {
-    color: #8D8D8D;
-    background-color: #f1f1f1;
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
     padding-bottom: 10px;
 }
 
 .home .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled], .btn-mini:active {
-    color: #8D8D8D;
-    background-color: #f1f1f1;
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -139,8 +139,8 @@
 .home .btn-success {
     position: relative;
     display: block;
-    color: #8D8D8D;
-    background-color: #f1f1f1;
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
     opacity: 1;
     height: 84px;
 }
@@ -154,11 +154,11 @@
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid #f1f1f1;
+    border-bottom: 10px solid rgb(241, 241, 241);
 }
 
 .home .even {
-    background-color: #f1f1f1;
+    background-color: rgb(241, 241, 241);
 }
 
 .home .button {
@@ -172,12 +172,12 @@
 }
 
 .home .button.greenButton {
-    background-color: #1ABC96;
+    background-color: rgb(26, 188, 150);
 }
 
 .home .button.blueButton {
     margin-left: 15px;
-    background-color:#3498db;
+    background-color: rgb(52, 152, 219);
     width: 180px;
 }
 
@@ -187,7 +187,7 @@
     text-align:center;
     padding: 0 0 0 0;
     margin: 7px;
-    color:#ffffff;
+    color: rgb(255, 255, 255);
 
 }
 
@@ -216,11 +216,11 @@
 }
 
 .home input:focus {
-    background-color: #FFFFFF;
+    background-color: rgb(255, 255, 255);
 }
 
 .home input:focus:invalid {
-    color: #666666;
+    color: rgb(102, 102, 102);
 }
 
 
@@ -256,7 +256,7 @@
 }
 
 .carousel-inner {
-    border: 1px solid #E3E3E3;
+    border: 1px solid rgb(227, 227, 227);
     width: 85%;
     margin: auto;
 }

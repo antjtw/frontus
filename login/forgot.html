@@ -1,7 +1,7 @@
 <div class="row-fluid">
   <div class="span5 offset4 gateway text-center">
     <div>
-      <a href="/"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></a>
+      <a href="/"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></span></a>
       <p class="tagline">the best way to manage your shareholders<p>
     </div>
     <div class="spacer40"></div> 
@@ -12,8 +12,10 @@
     <div class="text-error">{{fed}}</div>
     <form id="login" class="text-center inputs">
       <fieldset>
+        <label>
         <input required class="loginInput FI" placeholder="Email Address" tabindex="1"
-               autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username" />
+               data-autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username" />
+          </label>
         <div class="spacer30"></div>                  
         <button ng-disabled="forgotDisabled()" ng-click="doForgot()" ng-class="forgotClass()"
                 tabindex="3">Send Instructions</button>

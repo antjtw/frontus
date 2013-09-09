@@ -1,7 +1,7 @@
 /* Login & Register */
 
 .lognreg {
-    background-color: #1E2D3D;
+    background-color: rgb(30, 45, 61);
 }
 
 .lognreg p strong{
@@ -23,7 +23,7 @@
 .lognreg .teaser {
     font-size: 14px;
     font-family: 'FS Elliot Web Light', sans-serif;
-    color: #c7c7c7;
+    color: rgb(199, 199, 199);
     display:inline;
 
 }
@@ -31,7 +31,7 @@
 .lognreg .loginInput {
     width: 288px;
     height: 24px;
-    border-radius: 0px;
+    border-radius: 0;
     border: none;
     box-shadow: none;
     -webkit-box-shadow: none;
@@ -39,11 +39,11 @@
 }
 
 .lognreg input {
-    background-color: #ffffff;
+    background-color: rgb(255, 255, 255);
 }
 
 input.loginInput:focus {
-    background-color: #FFFFFF;
+    background-color: rgb(255, 255, 255);
 }
 
 input.loginInput:invalid:focus {
@@ -56,13 +56,13 @@ input.loginInput:invalid:focus {
     height: 30px;
     text-align:center;
     padding: 0 0 0 0;
-    color:#ffffff;
-    background-color: #1ABC96;
+    color: rgb(255, 255, 255);
+    background-color: rgb(26, 188, 150);
 }
 
 .lognreg .greenButton:disabled, .lognreg .greenButton:disabled:hover {
-    background-color: #1ABC96;
-    color: #FFFFFF;
+    background-color: rgb(26, 188, 150);
+    color: rgb(255, 255, 255);
     opacity: 0.5;
 }
 
@@ -79,7 +79,7 @@ input.loginInput:invalid:focus {
     font-size: 12px;
     margin-top:10px;
     display: block;
-    color: #3498DB;
+    color: rgb(52, 152, 219);
 }
 
 .resetLabel {
@@ -96,13 +96,13 @@ input.loginInput:invalid:focus {
 /* Upgrade Browser */
 
 .hero-unit.browserlist {
-    background-color: #e3e3e3;
-    padding: 30px 0px 4px 32px;
+    background-color: rgb(227, 227, 227);
+    padding: 30px 0 4px 32px;
 }
 
 .browserup {
-    background-color: #fff;
-    border: 4px solid #fff;
+    background-color: rgb(255, 255, 255);
+    border: 4px solid rgb(255, 255, 255);
     height: 180px;
     width: 140px !important;
     overflow:hidden;
@@ -110,7 +110,7 @@ input.loginInput:invalid:focus {
 }
 
 .browserup:hover{
-    border: 4px solid #1ABC96;
+    border: 4px solid rgb(26, 188, 150);
     position: relative;
     cursor: pointer;
 }

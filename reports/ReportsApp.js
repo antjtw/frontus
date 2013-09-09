@@ -1,8 +1,5 @@
 
-var app = angular.module('ReportsApp', ['ui.bootstrap', 'brijj']);
-
-//this is used to assign the correct template and controller for each URL path
-app.config(function($routeProvider, $locationProvider){
+var app = angular.module('ReportsApp', ['ui.bootstrap', 'brijj'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
       when('/admin', {templateUrl: '/reports/admin.html',   controller: 'ContactCtrl'}).
@@ -17,9 +14,11 @@ app.controller('ReportsCtrl',['$scope', 'SWBrijj', function($scope, SWBrijj) {
     document.cookie="rux="+encodeURIComponent(ru)+";path=/";
     document.location.href=ru;
   });
-  }
+  };
 
   $scope.download = function() {
+    /** @name SWBrijj#getSignups
+     *  @function */
   SWBrijj.getSignups().then(function(x) {
     document.location.href=x;
   });
@@ -74,6 +73,13 @@ app.controller('SignupCntCtl',['$scope', 'SWBrijj', function($scope, SWBrijj) {
     var datestring = yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
     var downloadname = "signup-report-" + datestring + ".xlsx";
 
+    /** @name SWBrijj#procd
+     * @function
+     * @param {string} name
+     * @param {string} procedure
+     * @param {string} mimetype
+     * @param {Date} timestamp
+     */
     SWBrijj.procd(downloadname, "get_signups", "application/ms-excel", new Date()).then( function(x) { document.location.href=x; });
   };
 }]);

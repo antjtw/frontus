@@ -5,9 +5,11 @@
 
         <div class="row-fluid">
             <ul class="bodyText maintabs">
-                <a href="/documents/company-status?doc={{docKey}}">
-                    <li class="button">Status</li>
+                <li class="button">
+                  <a href="/documents/company-status?doc={{docKey}}">
+                    Status
                 </a>
+              </li>
                 <li class="selectedtab">View</li>
             </ul>
         </div>
@@ -62,8 +64,9 @@
                     <div class="pull-right">
                         <div class="share-button">
                             <span ng-hide="counterparty">
-                                <button class="btn" ng-click="shareWith(document,recip)">Share with:</button>
+                                <label><button class="btn" ng-click="shareWith(document,recip)">Share with:</button>
                                 <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                                  </label>
                             </span>
                         </div>
                     </div>

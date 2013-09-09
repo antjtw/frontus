@@ -1,4 +1,4 @@
-var upload = angular.module('upload', ['ui.bootstrap', 'ui.utils', 'ui.bootstrap.progressbar', 'brijj']);
+var upload = angular.module('upload', ['ui.bootstrap', 'ui.utils', 'ui.bootstrap.progressbar', 'brijj'], function() {});
 
 var upmsg = "Add documents by dropping here";
 var moreDocs = 'Add more documents';
@@ -7,13 +7,14 @@ var mimetypes = ["application/pdf"];
 
 // upload.directive('backImg', function(){
 
-upload.directive('uploadmodal', function ($timeout) {
+upload.directive('uploadmodal', function () {
   return {
     restrict: 'EA',
     templateUrl: '/cmn/upload.html',
     controller: UploadController,
     replace: true,
     link: function (scope, element, attr) {
+      void(attr);
       scope.draginit(element);
       // This is how I would do it if it were modal
       /*scope.$watch('uploadModal', function (val, oldVal) {
@@ -41,13 +42,13 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
   };
 
 // init event handlers
-  $scope.dragLeave = function(evt) {
+  $scope.dragLeave = function (evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    $scope.dropClass= '';
+    $scope.dropClass = '';
     $scope.dropText = upmsg;
     $scope.$apply();
-  }
+  };
 
   /*$scope.dragEnter = function (evt) {
     evt.stopPropagation();
@@ -100,6 +101,7 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
   };
 
   $scope.draginit = function (elm) {
+    void elm;
     var element = angular.element(".drop-target");
 //      var element = elm.find('.dropbox');
     if (!element) return;
@@ -140,11 +142,17 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
 
   $scope.uploadFile = function (files) {
     $scope.$on("upload:progress", function(evt, arg) {
+      void(evt);
+      /** @name arg
+       * @type { { loaded:number, total:number} }
+       */
       $scope.loadProgress = 100 * (arg.loaded / arg.total);
       $scope.showProgress=true;
       $scope.$apply();
     });
     $scope.$on("upload:load", function(evt, arg) {
+      void(evt);
+      void(arg);
         // $route.reload();
         // $scope.$apply();
       $rootScope.errorMessage = "processing document conversion...";
@@ -164,15 +172,17 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
           console.log(evt); console.log(arg); });
 
     var fd = new FormData();
-    for (var i in files) fd.append("uploadedFile", files[i]);
+    for (var i=0;i<files.length;i++) fd.append("uploadedFile", files[i]);
     var upxhr = SWBrijj.uploadFile(fd);
     upxhr.then(function(x) {
+      void(x);
       $scope.dropText = moreDocs;
       $scope.showProgress=false;
       $rootScope.errorMessage = '';
       $route.reload();
       $scope.$apply();
     }).except(function(x) {
+          void(x);
           $scope.dropText = moreDocs;
           $scope.showProgress=false;
           $scope.$apply();

@@ -10,16 +10,16 @@
 }
 
 .static p.title {
-    color: #34495E;
+    color: rgb(52, 73, 94);
 }
 
 .static a {
-    color: #3498DB;
+    color: rgb(52, 152, 219);
     text-decoration: none;
 }
 
 .static a:hover {
-    color: #2980B9
+    color: rgb(41, 128, 185)
 }
 
 .static a .accordian-toggle {
@@ -43,11 +43,11 @@
 
 .static .social a {
     text-decoration: none;
-    color: #8d8d8d;
+    color: rgb(141, 141, 141);
 }
 
 .static .social a:hover {
-    color: #666666;
+    color: rgb(102, 102, 102);
 }
 
 
@@ -66,7 +66,7 @@
 }
 
 .careers a, .careers a:hover{
-    color: #8D8D8D;
+    color: rgb(141, 141, 141);
 }
 
 .careers .accordion-inner {
@@ -74,7 +74,7 @@
 }
 
 .careers p.subtext {
-    color: #34495E;
+    color: rgb(52, 73, 94);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 10px;
     font-weight: normal;
@@ -88,12 +88,12 @@
 }
 
 .careers .mail a {
-    color: #3498DB;
+    color: rgb(52, 152, 219);
     text-decoration: none;
 }
 
 .careers .mail a:hover {
-    color: #2980B9
+    color: rgb(41, 128, 185)
 }
 
 
@@ -112,7 +112,7 @@ address {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
     font-size: 36px !important;
     font-weight: normal !important;
-    color: #1e2d3d !important;
+    color: rgb(30, 45, 61) !important;
 }
 
 #iubenda_policy h2 {
@@ -120,7 +120,7 @@ address {
     font-size: 24px !important;
     line-height:21px !important;
     font-weight: normal !important;
-    color: #1e2d3d !important;
+    color: rgb(30, 45, 61) !important;
 }
 
 #iubenda_policy  h3, #iubenda_policy h4{
@@ -128,14 +128,14 @@ address {
     font-weight: normal !important;
     font-size: 14px !important;
     line-height: 21px !important;
-    color: #34495E;
+    color: rgb(52, 73, 94);
 }
 
 
 /* Survey */
 
 #ss-form {
-    color: #666666;
+    color: rgb(102, 102, 102);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
     font-weight: normal;

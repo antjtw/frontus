@@ -18,18 +18,20 @@
       </fieldset>
 
       <fieldset>
+        <legend class="headline2">List of Google Drive files</legend>
         <div class="formBounder">
-          <legend class="headline2">List of Google Drive files</legend>
           <div class="row-fluid"
                data-step='2' data-intro='Mime type of Google files to retrieve'
             >
-            <label class="bodyText">Mime Type</label>
+            <label class="bodyText">Mime Type
 			<input type="text" name="mime-type" ng-model="mimeType"/>
+              </label>
           </div>
 		  <div class="button blueButton" ng-click="googleList()">Get List</div>
           <div ng-repeat='gfile in gfiles'>
-		   <span ng-click='import(gfile.url)'>{{gfile.name}}</a> <small>last modified {{gfile.updated}}</small>
+		   <span ng-click='import(gfile.url)'>{{gfile.name}}</span> <small>last modified {{gfile.updated}}</small>
 		  </div>
+          </div>
       </fieldset>
     </form>
 </div>

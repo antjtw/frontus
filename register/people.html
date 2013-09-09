@@ -1,8 +1,9 @@
 <div class="row-fluid">
   <div class="span5 offset1 gateway text-center">
     <div>
-      <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
+      <div class="logo" data-logo="&#xe02e;" aria-hidden="true">
       <p class="tagline">the best way to manage your shareholders<p>
+        </div>
     </div>
     <div class="spacer40"></div>
     <div class="span9 offset1 text-center line"></div>
@@ -11,8 +12,12 @@
         <p>To protect the information of {{company}}, please register <strong>{{email}}</strong></p>
         <form id="login" class="text-center inputs" ng-submit="doActivate()">
           <fieldset>
+            <label>
             <input placeholder="Full Name" class="loginInput" type="text" ng-model="name" />
-            <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
+              </label>
+            <label>
+              <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
+              </label>
             <div class="spacer30"></div>
 
           <button type="submit" class="button greenButton loginButton bodyText" ng-disabled="fieldCheck()">Register</button>

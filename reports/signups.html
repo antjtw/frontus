@@ -1,9 +1,10 @@
 <div>
-  <legend class="headline2">Sign-ups</legend>
+  <h2 class="headline2">Sign-ups</h2>
   <div class="formBounder">
     <div class="row-fluid">
-      <label class="bodyText">GoogleSpreadsheet name</label>
+      <label class="bodyText">GoogleSpreadsheet name
       <input type="text" style="width:90%;" name="worksheet" value="signups"/>
+        </label>
     </div>
     <button class="button" ng-click="downloadExcel()">Download to Excel</button>
 
@@ -14,13 +15,13 @@
 </div>
 
 <div id="demoDiv">
-  <div infinite-scroll='nextPage()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
+  <div data-infinite-scroll='nextPage()' data-infinite-scroll-disabled='busy' data-infinite-scroll-distance='1'>
     <div ng-repeat='item in items'>
       <!-- <span>{{item.company_name}} ( <a hg-href='http://{{item.company_domain}}'>{{item.company_domain}}</a> )</span>
       <span>{{item.name}} ( {{item.email}} )</span>
       <small>created {{item.created}}</small>
       -->
-      <div interested></div>
+      <div data-interested></div>
     </div>
     <div ng-show='busy'>Loading data...</div>
   </div>

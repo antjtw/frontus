@@ -1,8 +1,9 @@
 <div class="row-fluid">
   <div class="span5 offset1 gateway text-center">
     <div>
-      <span class="logo" data-logo="&#xe02e;" aria-hidden="true">
-      <p class="tagline">the best way to manage your shareholders<p>
+      <div class="logo" data-logo="&#xe02e;" aria-hidden="true">
+      <p class="tagline">the best way to manage your shareholders
+        </div>
     </div>
     <div class="spacer40"></div> 
    
@@ -12,7 +13,9 @@
         <p>Welcome, {{company}} <br>To begin, create a password to accompany  your <br> email  address:   <strong>{{email}}</strong></p>
         <form id="login" class="text-center inputs" ng-submit="doActivate()">
           <fieldset>
+            <label>
             <input placeholder="Password" class="loginInput" autocomplete="off" type="password" ng-model="password" />
+              </label>
             <div class="spacer30"></div>
           <button type="submit" class="button greenButton loginButton bodyText" ng-disabled="fieldCheck()">Register</button>
               <p class="caption">By registering, you agree to our<a target="_blank" href="/privacy"> Terms of Use and Privacy Policy</a></p>

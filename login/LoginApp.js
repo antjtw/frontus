@@ -1,24 +1,23 @@
 //app for the program
-var app = angular.module('LoginApp', ['brijj']);
+var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locationProvider){
 
 //this is used to assign the correct template and controller for each URL path
-app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/forgot', {controller:ForgotCtrl, templateUrl: 'forgot.html'}).
-      when('/sent', {controller:SentCtrl, templateUrl: 'sent.html'}).
-      when('/home', {controller:HomeCtrl, templateUrl:'home.html'}).
-      when('/logout', {controller: LogoutCtrl, templateUrl: 'logout.html'}).
-      when('/reset', {controller: ResetCtrl, templateUrl: 'reset.html'}).
+      when('/', {controller:'LoginCtrl', templateUrl:'login.html'}).
+      when('/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
+      when('/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
+      when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
+      when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
+      when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
       otherwise({redirectTo:'/'});
 });
 
 
 //Controller for the Login Page
-function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
+app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope, $routeParams, SWBrijj) {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     $scope.username = "";
     $scope.password = "";
@@ -29,6 +28,11 @@ function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
       $scope.showError = false;
     }
     $scope.doLogin = function() {
+      /** @name SWBrijj#login
+       * @function
+       * @param {string} username
+       * @param {string} password
+       */
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
       if(x) {
 			document.location.href = x;
@@ -39,56 +43,60 @@ function LoginCtrl($scope, $location, $route, $routeParams, SWBrijj){
           $scope.password = "";
         }
     });
-    }
+    };
 
     $scope.fieldCheck = function() {
-      if ($scope.username && $scope.password) {
-        return false;
-      }
-      else {
-        return true;
-      }
+      return !($scope.username && $scope.password);
     };
     
     // could also add that the password is not long enough?
     $scope.loginDisabled = function() {
         return $scope.username == null || $scope.username.length < 3 || $scope.password.length < 6;
-    }
+    };
     $scope.loginClass = function() {
         return "button greenButton loginButton bodyText" + ($scope.loginDisabled() ? " adisabled" : "");
     }
-};
+}]);
 
 function LogoutCtrl($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
+    /** @name SWBrijj#logout
+     *  @function
+     */
     SWBrijj.logout().then(function(x) {
+      void(x);
       document.location.href='/?logout';
     });
   }
 }
 
 //Controller for the home page
-function HomeCtrl($scope){
+app.controller('HomeCtrl', ['$scope', function($scope) {
     $scope.user = function(){
       document.location.href = '/investor/profile';
 //      return $routeParams.userName;
     };
-}
+}]);
 
 //Controller for the home page
-function ForgotCtrl($scope, $location, SWBrijj) {
+app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $location, SWBrijj) {
     $scope.username="";
     $scope.fed="";
     $scope.showReset = false;
     
     $scope.forgotDisabled = function() { 
-        return $scope.username == null || $scope.username.length < 3; }
+        return $scope.username == null || $scope.username.length < 3; };
     $scope.forgotClass = function() {
-         return "button greenButton loginButton bodyText" + ($scope.forgotDisabled() ? " adisabled" : ""); }
+         return "button greenButton loginButton bodyText" + ($scope.forgotDisabled() ? " adisabled" : ""); };
     $scope.doForgot = function() {
-      $scope.forgotDisabled = function() { return true; }
+      $scope.forgotDisabled = function() { return true; };
+      /** @name SWBrijj#forgot
+       * @function
+       * @param {string} username
+       */
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
+        void(x);
         $location.path("/sent");
       }).except(function(x) { 
         console.log(x);
@@ -96,12 +104,16 @@ function ForgotCtrl($scope, $location, SWBrijj) {
         $location.path("/sent");
       });
     }
-};
+}]);
 
-function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
-  $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; }
-  $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); }
-  
+app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope, $routeParams, SWBrijj) {
+  $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; };
+  $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); };
+
+  /** @name SWBrijj#resetFillout
+   * @function
+   * @param {string} code
+   */
   SWBrijj.resetFillout($routeParams.code).then(function(x) {
     if (x[1][1]) { // Check if code is already used
       document.location.href="/login";
@@ -110,8 +122,14 @@ function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
   });
 
   $scope.doReset = function() {
-    $scope.resetDisabled = function() { return true; }
+    $scope.resetDisabled = function() { return true; };
+    /** @name SWBrijj#resetPassword
+     * @function
+     * @param {string} password
+     * @param {string} code
+     */
     SWBrijj.resetPassword($scope.password, $routeParams.code).then(function(y) {
+      void(y);
       SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
         if(x) {
           document.location.href = x + "?msg=resetPassword";
@@ -124,7 +142,7 @@ function ResetCtrl($scope, $route, $routeParams, SWBrijj) {
       $scope.fed = "There was an error. Please try again later."
     });
   }
-}
+}]);
 
-function SentCtrl() {
-}
+app.controller('SentCtrl', [ function() {
+}]);
