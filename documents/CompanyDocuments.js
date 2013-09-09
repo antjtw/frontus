@@ -243,8 +243,8 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
             $scope.$apply();
         });
         $scope.$on("upload:load", function(evt, arg) {
-          void(evt);
-          void(arg);
+            void(evt);
+            void(arg);
             $rootScope.showProgress = false;
             $rootScope.showProcessing = true;
             $scope.$apply();
@@ -275,7 +275,8 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
-              void(x);
+                $scope.fileError = "Oops, something went wrong. Please try again.";
+                $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress=false;
                 $scope.$apply();
