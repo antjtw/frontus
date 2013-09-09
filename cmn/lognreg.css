@@ -34,8 +34,6 @@
     border-radius: 0;
     border: none;
     box-shadow: none;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
 }
 
 .lognreg input {

@@ -32,22 +32,17 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
   }*/
 
   $scope.fieldCheck = function() {
-    if ($scope.user.email && $scope.user.name && $scope.user.company) {
-      return false;
-    }
-    else {
-      return true;
-    }
+    return !($scope.user.email && $scope.user.name && $scope.user.company);
   };
 
   $scope.toggle = true;
 
   $scope.companyRequest = function () {
       SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function (x) {
-          console.log(x);
+        void(x);
       }).except(function (x) {
-              console.log(x);
-          });
+        void(x);
+      });
   };
 
   $scope.opts = {

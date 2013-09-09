@@ -345,6 +345,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
 	$scope.pickInvestor = function(doc) {
     if (!$scope.counterparty) {
+      console.log('saving note data: (CompanyDocuments (348)');
       angular.element(".docPanel").scope().saveNoteData();
     }
 		$scope.invq = false;

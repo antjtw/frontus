@@ -9,20 +9,35 @@ function getComputed(se, z) {
   return se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
 }
 
-function getNoteBounds(n) {
+function getOffset(ev) {
+  var offx, offy;
+  if (ev.offsetX === undefined) { // Firefox code
+    // offx = ev.pageX - ev.target.offsetLeft;
+    // offy = ev.pageY - ev.target.offsetTop;
+
+    offx = ev.originalEvent.layerX;
+    offy = ev.originalEvent.layerY;
+
+  } else {
+    offx = ev.offsetX;
+    offy = ev.offsetY;
+  }
+  return [offx, offy];
+}
+function getNoteBounds(nx) {
   var dp = document.querySelector('.docPanel');
   var dpo = [ dp.offsetLeft, dp.offsetTop];
-  var bds = [ getIntProperty(n[0],'left'), getIntProperty(n[0], 'top'),0,0];
-  var ntyp = n.scope().ntype;
+  var bds = [ getIntProperty(nx,'left'), getIntProperty(nx, 'top'),0,0];
+  var ntyp = nx.notetype;
   var z, ibds;
   if (ntyp == 'text') {
-    var t = n.find('textarea')[0];
+    var t = nx.querySelector('textarea');
     z = t.offset;
     ibds = [z[0], z[1], z[2], z[3]];
     ibds[0] += t.offsetLeft; // + getIntProperty(t,'padding-left');
     ibds[1] += t.offsetTop; // + getIntProperty(t,'padding-top');
   } else if (ntyp == 'canvas') {
-    var c = n.find('canvas')[0];
+    var c = nx.querySelector('canvas');
     z = c.offset;
     ibds = [z[0], z[1], z[2], z[3]];
     ibds[0] += c.offsetLeft; // + getIntProperty(t,'padding-left');
@@ -73,7 +88,7 @@ angular.module('draggable', [], function() {}).
           void(attrs);
           document.querySelector('.docPanel').appendChild(elm[0]);
           scope.page = scope.restoredPage || scope.currentPage;
-          elm.page = scope.page;
+          elm[0].page = scope.page;
           scope.$parent.notes.push(elm);
           elm.css({position: 'absolute'});
         },
@@ -89,13 +104,8 @@ angular.module('draggable', [], function() {}).
 
                /* This is the drag - code -- its been moved to work on the drag widget */
                $scope.mousedown = function ($event) {
-                 // if ($event.target.tagName == 'DIV') {
-                   console.log($event);
                    $scope.initdrag($event);
                    return false;
-                 // } else {
-                 //   return true;
-                 // }
                };
 
                dragicon.bind('mousedown', $scope.mousedown);
@@ -105,8 +115,8 @@ angular.module('draggable', [], function() {}).
                  var dy = $event.clientY - $scope.initialMouseY;
                  console.log($scope.startY);
                  $element.css({
-                   top: ($scope.startY + dy) + 'px',
-                   left: ($scope.startX + dx) + 'px'
+                   top: (Math.max(0, $scope.startY + dy) ) + 'px',
+                   left: (Math.max(0, $scope.startX + dx) ) + 'px'
                  });
                  return false;
                };
@@ -118,14 +128,16 @@ angular.module('draggable', [], function() {}).
                };
 
                $scope.initdrag = function(ev) {
-//            startX = elm.prop('offsetLeft');
-//            startY = elm.prop('offsetTop');
+
                  var dp = document.querySelector(".docPanel");
                  var dpr = dp.getBoundingClientRect();
                  var dprl = dpr.left - dp.offsetLeft;
                  var dprt =  dpr.top - dp.offsetTop;
-                 $scope.startX = ev.clientX-dprl - ev.offsetX;
-                 $scope.startY = ev.clientY-dprt - ev.offsetY; // +document.scrollTop() ?
+
+                 // Do I need to add in document.scrollTop ?
+                 var offs = getOffset(ev);
+                 $scope.startX = ev.clientX-dprl - offs[0];
+                 $scope.startY = ev.clientY-dprt - offs[1];
                  $scope.initialMouseX = ev.clientX;
                  $scope.initialMouseY = ev.clientY;
                  $scope.mousemove(ev);
@@ -182,7 +194,7 @@ docs.directive('docViewer', function() {
     restrict: 'EA',
     scope: { docId: '=docId', invq:'=invq', pageQueryString: '=pageQueryString'},
     templateUrl: '/cmn/docViewer.html',
-    controller: DocumentViewController
+    controller: 'DocumentViewController'
   }
 });
 
@@ -199,12 +211,14 @@ docs.directive('icon', function() {
   }
 });
 
-function DocumentViewController($scope, $compile, $location, $routeParams, $window, SWBrijj) {
-
-
+docs.controller('DocumentViewController', ['$scope','$compile','$location','$routeParams', '$window','SWBrijj',
+  function($scope, $compile, $location, $routeParams, $window, SWBrijj) {
   $window.addEventListener('beforeunload', function(event) {
     void(event);
     var ndx = $scope.getNoteData();
+    /** @name $scope#lib#annotations
+     * @type {[Object]}
+     */
     if ( (!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
 
     /** @name SWBrijj#_sync
@@ -215,8 +229,11 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
      * @param {...}
      */
     // This is a synchronous save
+        console.log("saving note data (228): "+ndx);
+    /** @name $scope#lib#original
+     * @type {int} */
     var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
-    // console.log(res);   // I expect this returns true (meaning updated).  If not, the data is lost
+    // I expect this returns true (meaning updated).  If not, the data is lost
     if (!res) alert('failed to save annotations');
   });
 
@@ -226,6 +243,7 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     void(oldUrl);
     // don't save note data if I'm being redirected to log in
     if (newUrl.match(/login([?]|$)/)) return;
+    console.log("saving note data (240) due to $locationChangeStart");
     $scope.saveNoteData();
   });
 
@@ -321,8 +339,8 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
           }
           // the notes were pushed in the newXXX function
           sticky.css({
-            top:  annot[0][1][1],
-            left: annot[0][1][0]
+            top:  Math.max(0, annot[0][1][1]),
+            left: Math.max(0, annot[0][1][0])
           });
 
         }
@@ -406,17 +424,10 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable" >'+
         '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
     aa.scope().ntype='text';
+    aa[0].notetype='text';
     aa.scope().growable = true; // for the growable icons
     var bb = aa[0].querySelector("textarea");
-/*    window.setInterval( function() {
-       if (bb.clientHeight < bb.scrollHeight) bb.style.height = (bb.scrollHeight+5) +"px";
-       if (bb.clientWidth < bb.scrollWidth) bb.style.width = (bb.scrollWidth + 5) +"px";
-    }, 300);
-    */
     bb.addEventListener('input', function(e) { void(e); $scope.fixBox(bb);
-/*      if (bb.value.substring(bb.value.length-1) == "\n") {
-        bb.value+="\r\n";
-      }  */
     });
     var ta = aa.find('textarea');
     ta.scope().annotext = val;
@@ -442,6 +453,7 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
         '<span class="check-annotation" data-icon="&#xe023;"></i>' +
         '</div>')($scope);
     aa.scope().ntype = 'check';
+    aa[0].notetype='check';
     return aa;
   };
   $scope.newDate = function(event) {
@@ -484,6 +496,8 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     var aa = $compile('<div draggable ng-show="currentPage=='+page+'"	 class="row-fluid draggable">'+
         '<canvas style="background-color:white"></canvas></div>')($scope);
     aa.scope().ntype='canvas';
+    aa[0].notetype='canvas';
+
     aa.css({resize: 'both',overflow:'hidden'});
 
     aa[0].addEventListener('mouseup', function(e) {
@@ -505,50 +519,32 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     // ctx.setAlpha(0.5);
 
     canvas.addEventListener('mousedown', function(e) {
-      this.down = true;
-      this.X = e.offsetX;
-      this.Y = e.offsetY;
+      canvas.down = true;
+      var offs = getOffset(e);
+      canvas.X = offs[0];
+      canvas.Y = offs[1];
     }, false);
-    canvas.addEventListener('mouseover', function(e) { void(e); this.down = false; });
-    canvas.addEventListener('mouseout', function(e) { void(e); this.down = false; });
-    canvas.addEventListener('mouseup', function() { void(e); this.down = false; });
+    canvas.addEventListener('mouseover', function(e) { void(e); canvas.down = false; });
+    canvas.addEventListener('mouseout', function(e) { void(e); canvas.down = false; });
+    canvas.addEventListener('mouseup', function(e) { void(e); canvas.down = false; });
     canvas.strokes = [];
     canvas.addEventListener('mousemove', function(e) {
-      if(this.down) {
+      if(canvas.down) {
         ctx.beginPath();
-        ctx.moveTo(this.X, this.Y);
-        ctx.lineTo(e.offsetX , e.offsetY );
+        ctx.moveTo(canvas.X, canvas.Y);
+        var offs = getOffset(e);
+        ctx.lineTo(offs[0] , offs[1] );
         ctx.strokeStyle = this.color;
-        canvas.strokes.push([this.color, this.X, this.Y, e.offsetX, e.offsetY]);
+        canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
         ctx.stroke();
-        this.X = e.offsetX ;
-        this.Y = e.offsetY ;
+        canvas.X = offs[0] ;
+        canvas.Y = offs[1] ;
       }
     }, true); // cancel bubble
     canvas.strokes = lines;
     $scope.fixPad(aa);
     return aa;
   };
-
-  /*$scope.submitSign = function (sig) {
-    SWBrijj.procm("document.sign_document", $scope.docId, $scope.getNoteData() ).then(function (data) {
-      $route.reload(); // window.location.reload();
-    }).except(function (x) {
-          alert(x.message);
-        });
-        */
-    /*
-     if (sig == false || sig == undefined) {
-     alert("Need to click the box");
-     }
-     if (sig == true) {
-     SWBrijj.procm("document.sign_document", parseInt(docId)).then(function(data) {
-     $scope.signable = 1;
-     $scope.$apply();
-     });
-     }
-     */
-  // };
 
   $scope.showPageBar = function(evt) {
 
@@ -557,7 +553,9 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
   $scope.acceptSign = function (sig) {
     void(sig);
     SWBrijj.procm("document.countersign", $scope.docId).then(function (data) {
-      console.log(data);
+      void(data);
+      // should this be: ??
+      // $route.reload();
       window.location.reload();
     });
   };
@@ -599,17 +597,17 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     var dp = document.querySelector(".docPanel");
     for (var i = 0; i < $scope.notes.length; i++) {
       var n = $scope.notes[i];
-      if (!n.scope()) continue; // why?
-      var bnds = getNoteBounds(n);
-      var pos = [n.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight ];
-      var typ = n.scope().ntype;
+      var nx = n[0];
+      var bnds = getNoteBounds(nx);
+      var pos = [nx.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight ];
+      var typ = nx.notetype;
       var val = [];
       var style = [];
       var ndx = [pos, typ, val, style];
       var se, lh;
 
       if (typ == 'text')  {
-        se = n[0].querySelector("textarea");
+        se = nx.querySelector("textarea");
         lh = getIntProperty(se,'line-height');
         val.push(se.value);
         style.push( getIntProperty(se,'font-size') );
@@ -621,7 +619,7 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
         ndx[0][2][1]-=5;
 
       } else if (typ == 'check') {
-        se = n[0].querySelector("span.check-annotation");
+        se = nx.querySelector("span.check-annotation");
         lh =  getIntProperty(se,'line-height');
         style.push(getIntProperty(se,'font-size') );
         ndx[0][2][1]+=Math.floor((1 / 1.4) * lh);
@@ -630,11 +628,17 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
         ndx[0][2][1]-=4;
 
       } else if (typ == 'canvas') {
-        se = n[0].querySelector("canvas");
+        se = nx.querySelector("canvas");
         val.push(se.strokes);
       }
       noteData.push(ndx);
     }
+
+  /*
+    notData.sort(function(x,y) { if (x[0][0] == y[0][0]) {
+
+    } else return x[0][0] < y[0][0] });
+  */
     return JSON.stringify(noteData);
   };
 
@@ -651,9 +655,10 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
      * @param {boolean}
      * @param {json}
      */
-    SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
-      console.log(data);
+    console.log('saving note data (640): '+ nd);
 
+    SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
+      void(data);
       var docpanel = document.querySelector(".docPanel");
       if (docpanel) {
         var imgurl;
@@ -663,21 +668,12 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     });
   };
 
-  /* This could all be done server-side */
-  /* The approach is as follows:
-     1) figure out which pages need to be saved.
-     2) call savePage(n) for each of those pages
-     3) each savePage must
-        a) load the image from the server (asynchronously), then
-        b) stamp each note onto it and
-        c) upload the modified image.
-   */
+
+    /*
   $scope.saveNotes = function (e) {
     void(e);
     var pr = $scope.invq ? "document.doSignStamp" : $scope.lib.original ? "document.doCounterStamp" : "document.doShareStamp";
     SWBrijj.procm(pr, $scope.docId, $scope.currentPage).then(function (data) {
-      console.log(data);
-
       var docpanel = document.querySelector(".docPanel");
       var imgurl;
       imgurl = docpanel.style.backgroundImage;
@@ -685,6 +681,7 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
 
     });
   };
+*/
 
 /*
   $scope.savePageNotes = function(page, notes) {
@@ -889,7 +886,8 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
 //  };
   */
 
-}
+}]);
+
 /* Looking for a way to detect if I need to reload the page because the user has been logged out
 */
 /* For images, the "login redirect" should return an image that says "Please login again"

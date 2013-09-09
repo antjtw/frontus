@@ -24,7 +24,6 @@ app.controller('AdminCtrl', ['$scope', 'SWBrijj', function($scope, SWBrijj, $roo
         $rootScope.notification.show("success", "Company created");
         $scope.email = $scope.name = $scope.domain = $scope.companyName = "";
       }).except(function(x) {
-        console.log(x);
         $rootScope.notification.show("fail", "Error " + x.message);
       });
     };
