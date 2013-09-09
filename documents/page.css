@@ -148,13 +148,19 @@ table.docLibrary > tbody > tr:first-child > td {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    padding: 10px 20px 10px 20px;
+    padding: 5px 20px 5px 20px;
     border-bottom: 1px solid #E3E3E3;
 }
 
 .modalText.dshare > ul > li > span {
     float: left;
     line-height: 28px;
+}
+
+.modalText.dshare > ul > li > .dropdown-list {
+    float: left;
+    margin-left: 18px;
+    margin-top: 3px;
 }
 
 .modalText.dshare > ul > li > input[type=text] {

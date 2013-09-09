@@ -307,6 +307,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.invq = false;
   $scope.counterparty = !!$scope.urlInves;
   $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+  $scope.signeeded = "No";
+  $scope.messageText = "Hi, Your Signature is requested on "
 
   // For Email sharing
   $scope.recipients = [];
@@ -469,6 +471,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
       console.log(sign);
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), Date.parse('22 November 2113')).then(function(data) {
           console.log(data);
+          $scope.signeeded = "No"
           $route.reload();
       });
   };
