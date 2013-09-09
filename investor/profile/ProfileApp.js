@@ -6,12 +6,10 @@ var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event'
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
-      // when('/social', {controller:SocialCtrl, templateUrl: 'social.html'}).
-      // when('/password', {controller:PasswordCtrl, templateUrl: 'password.html'}).
-      //when('/photo', {controller:PhotoCtrl, templateUrl: 'photo.html'}).
+      when('/', {controller:'ContactCtrl', templateUrl:'contact.html'}).
       otherwise({redirectTo:'/'});
 });
+
 
 app.controller("MainProfileController", function($scope, $location) {
     $scope.toPassword = function() { $location.path('password') };
@@ -29,7 +27,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
     $scope.pictureModal = true;
   };
 
-  $scope.pictureModalClose = function () {      
+  $scope.pictureModalClose = function () {
     $scope.files = [];
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.pictureModal = false;
@@ -59,7 +57,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
         $scope.name = $scope.namekey;
         return;
       }
-      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) { 
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) {
           console.log("saved: "+x);
           $rootScope.notification.show("success", "Profile successfully updated");
           $scope.namekey = $scope.name;
@@ -74,7 +72,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
   /** @name SWBrijj#tbl
    * @function
    * @param {string} table_name */
-  SWBrijj.tbl('account.profile').then(function(x) { 
+  SWBrijj.tbl('account.profile').then(function(x) {
     initPage($scope, x);
     $scope.photoURL = '/photo/user?id=' + $scope.email;
     $scope.namekey = $scope.name;
@@ -95,7 +93,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
       console.log(x);
       $rootScope.notification.show("green", "Profile photo successfully updated");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
-    }).except( function(x) { 
+    }).except( function(x) {
       console.log(x);
       $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
@@ -104,7 +102,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
 
   $scope.setFiles = function(element) {
     $scope.files = [];
-    for (var i = 0; i < element.files.length; i++) { 
+    for (var i = 0; i < element.files.length; i++) {
       $scope.files.push(element.files[i]);
       $scope.$apply();
     }

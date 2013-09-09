@@ -485,9 +485,11 @@ h2 {
 
 .bottomnav .nav > li > a.button {
     line-height: 30px;
-	text-align: center;
-    padding: 0;
+    text-align: center;
+    padding: 0 20px 0 20px;
     text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
     box-shadow: none;
 }
 
