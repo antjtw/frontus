@@ -485,9 +485,11 @@ h2 {
 
 .bottomnav .nav > li > a.button {
     line-height: 30px;
-	text-align: center;
-    padding: 0;
+    text-align: center;
+    padding: 0 20px 0 20px;
     text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
     box-shadow: none;
 }
 
@@ -1413,6 +1415,7 @@ form.inputs {
     box-sizing: border-box;
     width: 101px;
     min-width: 101px;
+    text-align: left;
 }
 
 .standard.small .dropdown-menu > li > a {
@@ -1612,7 +1615,6 @@ form.inputs {
 /* Styling file uploads with fake overlay */
 
 .modal div.fileinputs {
-    margin-top: 10px;
     position: relative;
     height: 50px;
     border-bottom: 1px solid rgb(227, 227, 227);

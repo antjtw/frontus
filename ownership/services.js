@@ -153,6 +153,83 @@ ownership.service('calculate', function () {
         return rows
     };
 
+    // Calculates the vested amounts for the
+    this.detailedvested = function (rows, trans) {
+        var vesting = {};
+        angular.forEach(trans, function (tran) {
+            var vestbegin = angular.copy(tran.vestingbegins)
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                if (Date.compare(Date.today(), vestbegin) > -1) {
+                    if (!vesting[tran.investor]) {
+                        vesting[tran.investor] = {};
+                    }
+                    if (!isNaN(parseFloat(vesting[tran.investor][tran.issue]))) {
+                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (tran.units * (tran.vestcliff / 100));
+                    }
+                    else {
+                        vesting[tran.investor][tran.issue] = (tran.units * (tran.vestcliff / 100));
+                    }
+                    var cycleDate = angular.copy(tran.date);
+                    var remainingterm = angular.copy(tran.terms);
+                    while (Date.compare(vestbegin, cycleDate) > -1) {
+                        remainingterm = remainingterm - 1;
+                        cycleDate.addMonths(1);
+                    }
+                    remainingterm = remainingterm;
+                    var finalDate = vestbegin.addMonths(remainingterm);
+                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                    var x = 1;
+                    if (tran.vestfreq == "monthly") {
+                        x = 1
+                    }
+                    else if (tran.vestfreq == "weekly") {
+                        x = 0.25
+                    }
+                    else if (tran.vestfreq == "biweekly") {
+                        x = 0.5
+                    }
+                    else if (tran.vestfreq == "quarterly") {
+                        x = 3;
+                    }
+                    else if (tran.vestfreq == "yearly") {
+                        x = 12;
+                    }
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                        console.log("The cycle data is " + String(cycleDate));
+                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (x * ((monthlyperc / 100) * tran.units));
+                        if (x < 1) {
+                            cycleDate.addWeeks(x * 4);
+                        }
+                        else {
+                            cycleDate.addMonths(x);
+                        }
+                    }
+                }
+            }
+        });
+        console.log(vesting);
+        angular.forEach(rows, function (row) {
+            if (vesting[row.name]) {
+                row.vested = {}
+                for (var issue in vesting[row.name]) {
+                    if (!isNaN(vesting[row.name][issue])) {
+                        var result = Math.round(vesting[row.name][issue]*1000)/1000
+                        row.vested[issue] = result;
+                    }
+                }
+            }
+        });
+        return rows
+    };
+
+
+
 
     // Returns the number of shareholders (rows -1 for the empty row)
     this.numShareholders = function (rows) {

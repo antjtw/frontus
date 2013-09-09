@@ -162,6 +162,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                     row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                     row[tran.issue]["ukey"] = row[tran.issue]["u"];
                                 }
+                                if (!isNaN(parseFloat(tran.exercised))) {
+                                    row[tran.issue]["exercised"] = calculate.sum(row[tran.issue]["exercised"], (tran.exercised));
+                                }
                             }
                             else {
                                 row[tran.issue] = {};
@@ -173,6 +176,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 if (!isNaN(parseFloat(tran.forfeited))) {
                                     row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                     row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                                }
+                                if (!isNaN(parseFloat(tran.exercised))) {
+                                    row[tran.issue]["exercised"] = calculate.sum(row[tran.issue]["exercised"], (tran.exercised));
                                 }
                             }
                         }
@@ -240,7 +246,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 $scope.rows.push(values);
 
                 //Calculate the total vested for each row
-                $scope.rows = calculate.vested($scope.rows, $scope.trans);
+                $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
 
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
@@ -499,7 +505,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.issueRevert = angular.copy(issue);
 
                     //Calculate the total vested for each row
-                    $scope.rows = calculate.vested($scope.rows, $scope.trans);
+                    $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
 
                     var index = $scope.issuekeys.indexOf(issue.key);
                     $scope.issuekeys[index] = issue.issue;
@@ -564,7 +570,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
-    $scope.tranChangeU = function (value) {
+    $scope.tranChangeU = function (value, issue) {
+        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue));
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0]['units'] = value;
         }
@@ -1021,7 +1028,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
 
                     //Calculate the total vested for each row
-                    $scope.rows = calculate.vested($scope.rows, $scope.trans);
+                    $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
 
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
@@ -1164,14 +1171,20 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var temprow = {"name": row.name, "email": row.email};
                 angular.forEach($scope.issues, function (issue) {
                     if (issue.issue) {
-                        if (row.editable == "yes" && issue.type == "Equity") {
+                        temprow[issue.issue] = {};
+                        if (row.editable == "yes" && issue.type == "Equity" && row[issue.issue]['u'] > 0) {
                             temprow[issue.issue] = row[issue.issue];
                             something = true;
                         }
-                        if (issue.type == "Option" && row.vested > 0) {
-                             temprow[issue.issue] = {};
-                             temprow[issue.issue]['u'] = row.vested;
-                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
+                            temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
+                        else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
+                            temprow[issue.issue]['u'] = row.vested[issue.issue];
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
                         }
                     }
                 });

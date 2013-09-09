@@ -258,14 +258,8 @@ function PeopleCtrl($scope, $rootScope, SWBrijj) {
           });
           console.log(x);
           $scope.sort = 'name';
-      }).except(function (x) {
-              console.log(x);
-              initFail();
-          }).except(function (x) {
-              console.log(x);
-              initFail();
-            });
-          });
+      });
+  });
 
       $scope.sortBy = function (col) {
           if ($scope.sort == col) {
@@ -299,80 +293,24 @@ function ViewerCtrl($scope, $rootScope, $routeParams, SWBrijj) {
     history.back();
   });
 
-  SWBrijj.procm('document.get_investor_docs', userId).then(function(x) {
+  SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(x) {
     $scope.docs = x;
-    var i = 0;
-    angular.forEach($scope.docs, function(z) {
-      // SWBrijj.procm('document.document_status_by_investor', userId, x['doc_id']).then(function(z) {
-        $scope.docs[i].event = z[0]['event'];
-        $scope.docs[i].shown = false;
-        $scope.docs[i].button = 'icon-plus';
-        if ($scope.docs[i].event == "needsign") $scope.docs[i].event = "needs signing";
-        i++;
-    });
-  });
-
-  $scope.activity = [];
-  SWBrijj.procm('global.get_investor_activity', userId).then(function(data) {
-    console.log(data);
-    angular.forEach(data, function(x) {
-      x.timeAgo = moment(x.time).fromNow();
-      if (x.type == 'account') {
-        x.link = "/company/profile/people";
-        if (x.activity == "addadmin") {
-          x.activity = "Added ";
-          x.target = "as an administrator.";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeadmin") {
-          x.activity = "Removed ";
-          x.target = "as an administrator";
-          x.icon = "icon-circle-minus";
-        } else if (x.activity == "addinvestor") {
-          x.activity = "Added ";
-          x.target = "as an investor";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeinvestor") {
-          x.activity = "Removed ";
-          x.target = "as an investor";
-          x.icon = "icon-circle-minus";
-        }
-      } else if (x.type == 'document') {
-        x.link = "/documents/company-status?doc=" + x.item_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
-          x.target = res["docname"];
-        });
-        if (x.activity == "viewed") {
-          x.activity = "Viewed ";
-          x.icon = "icon-star";
-        } else if (x.activity == "received") {
-          x.activity = "Received ";
-          x.icon = "icon-redo";
-        }
-      } else if (x.type == 'ownership') {
-        x.link = "/company/ownership/";
-        x.target = "Ownership table";
-        if (x.activity == "shared") {
-          x.activity = "Received ";
-          x.icon = "icon-redo";
-        }
-      }
-    });
-    $scope.activity = data;
-    if ($scope.activity.length == 0) {
-      $scope.noActivity = true;
-    }
+      SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
+          $scope.level = access[0].level;
+      }).except(function(err) {
+              void(err);
+              $scope.level = false;
+          });
   });
 
   $scope.activityOrder = function(card) {
     return -card.time;
   };
 
-  SWBrijj.tblm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(x) {
-    $scope.level = x.level;
-  }).except(function(err) {
-        void(err);
-    $scope.level = false;
-  });
+   SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(stuff) {
+        $scope.activity = stuff;
+        console.log($scope.activity);
+    });
 
   $scope.changeVisibility = function (value) {
     console.log(value);
@@ -384,38 +322,10 @@ function ViewerCtrl($scope, $rootScope, $routeParams, SWBrijj) {
   };
 
   $scope.opendetails = function(selected) {
-    $scope.docs.forEach(function(doc) {     
-      if (selected == doc.doc_id)
-        if (doc.shown == true) {
-          doc.shown = false;
-          doc.button = "icon-plus";
-        } else {
-          SWBrijj.procm("document.get_I_docstatus", userId, parseInt(selected)).then(function(data) {
-            console.log(data);
-            doc.whenshared = data[1].loggedin;
-            if (data[0].loggedin != null) {
-              doc.lastlogin = data[0].loggedin;
-            }
-            else {
-              doc.lastlogin = 0; 
-            }
-            if (data[2].loggedin != null) {
-              doc.lastviewed = data[2].loggedin;
-            }
-            else {
-              doc.lastviewed = 0;  
-            }
-            if (data[3].loggedin != null) {
-              doc.signed = data[3].loggedin;
-            }
-            else {
-              doc.signed = 0;  
-            }
-            doc.button = "icon-minus";
-            doc.shown = true;
-          });
-        }
-    });
+      $scope.docs.forEach(function(name) {
+          if (name === selected) name.shown = !name.shown;
+          else name.shown = false;
+      });
   };
 }
 
@@ -430,6 +340,56 @@ app.filter('fileLength', function () {
             }
         }
     };
+});
+
+app.filter('fromNow', function() {
+    return function(date) {
+        return moment(date).fromNow();
+    }
+});
+
+/* Filter to select the activity icon for document status */
+app.filter('icon', function() {
+    return function(activity) {
+        if (activity == "sent") return "icon-email";
+        else if (activity == "received") return "icon-email";
+        else if (activity == "viewed") return "icon-view";
+        else if (activity == "reminder") return "icon-redo";
+        else if (activity == "signed") return "icon-pen";
+        else if (activity == "uploaded") return "icon-star";
+        else return "hunh?";
+    }
+});
+
+
+app.filter('description', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var person
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "Ownership Table sent to " + person;
+            else if (activity == "viewed") return "Ownership Table viewed by "+person;
+        }
+        else {
+            var document = ac.docname;
+            if (activity == "sent") return document + " sent to "+person;
+            else if (activity == "viewed") return document + " viewed by "+person;
+            else if (activity == "reminder") return "Reminded "+person + " about " +document;
+            else if (activity == "signed") return document + " signed by "+person;
+            else if (activity == "uploaded") return document + " uploaded by "+person;
+            else if (activity == "received") return document + " sent to "+person;
+            else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
+            else if (activity == "countersigned") return document + " countersigned by "+person;
+            else return activity + " by "+person;
+        }
+    }
 });
 
 /**

@@ -96,7 +96,7 @@
               </tr>
               	<tbody ng-repeat="person in userStatus">
                     <tr ng-class="{selectedrow:person.shown}" class="status-row">
-                        <td ng-click="(opendetails(person.email))"><a class="oldschool-link" href="/company/profile/view?id={{person.email}}">{{person.name}}</a></td>
+                        <td ng-click="(opendetails(person.email))">{{person.name}}</td>
                         <td ng-click="(opendetails(person.email))">{{person.email}}</td>
                             <td ng-click="(opendetails(person.email))">{{person.level}}</td>
                             <td ng-click="(opendetails(person.email))">

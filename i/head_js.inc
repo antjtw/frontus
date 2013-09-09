@@ -1,4 +1,4 @@
-<!--[if lt IE 10]>
+<!--[if lt IE 9]>
     <script type="text/javascript">
         document.location.href = '/err/browser.html';
     </script>
@@ -14,4 +14,9 @@
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/brijj/aBrijj.js"></script>
 <script src="/lib/moment.min.js"></script>
+
+<script>
+        window.console = window.console || {};
+        window.console.log = window.console.log || function() {};
+</script>
 
