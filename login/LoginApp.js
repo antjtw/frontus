@@ -58,7 +58,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     }
 }]);
 
-function LogoutCtrl($scope, SWBrijj) {
+app.controller('LogoutCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     /** @name SWBrijj#logout
@@ -69,7 +69,7 @@ function LogoutCtrl($scope, SWBrijj) {
       document.location.href='/?logout';
     });
   }
-}
+}]);
 
 //Controller for the home page
 app.controller('HomeCtrl', ['$scope', function($scope) {

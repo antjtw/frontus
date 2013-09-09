@@ -122,7 +122,7 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$rootScope', 'SWBrijj',
+docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$rootScope', '$route', 'SWBrijj',
     function($scope, $modal, $q, $rootScope, $route, SWBrijj) {
   if ($rootScope.selected.role == 'investor') {
     // $location.path('/investor-list?'); // goes into a bottomless recursion ?
