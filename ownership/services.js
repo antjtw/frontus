@@ -160,11 +160,13 @@ ownership.service('calculate', function () {
             var vestbegin = angular.copy(tran.vestingbegins)
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
-                    if (vesting[tran.investor] && !isNaN(parseFloat(vesting[tran.investor][tran.issue]))) {
+                    if (!vesting[tran.investor]) {
+                        vesting[tran.investor] = {};
+                    }
+                    if (!isNaN(parseFloat(vesting[tran.investor][tran.issue]))) {
                         vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (tran.units * (tran.vestcliff / 100));
                     }
                     else {
-                        vesting[tran.investor] = {};
                         vesting[tran.investor][tran.issue] = (tran.units * (tran.vestcliff / 100));
                     }
                     var cycleDate = angular.copy(tran.date);

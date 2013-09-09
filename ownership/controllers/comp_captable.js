@@ -1164,12 +1164,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var temprow = {"name": row.name, "email": row.email};
                 angular.forEach($scope.issues, function (issue) {
                     if (issue.issue) {
+                        temprow[issue.issue] = {};
                         if (row.editable == "yes" && issue.type == "Equity" && row[issue.issue]['u'] > 0) {
                             temprow[issue.issue] = row[issue.issue];
                             something = true;
                         }
-                        if (issue.type == "Option" && row.vested[issue.issue] > 0) {
-                             temprow[issue.issue] = {};
+                        if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
                              temprow[issue.issue]['u'] = row.vested[issue.issue];
                              temprow[issue.issue]['a'] = row[issue.issue]['a'];
                              something = true;
