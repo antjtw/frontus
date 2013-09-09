@@ -570,7 +570,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
-    $scope.tranChangeU = function (value) {
+    $scope.tranChangeU = function (value, issue) {
+        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue));
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0]['units'] = value;
         }
