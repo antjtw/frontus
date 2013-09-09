@@ -804,11 +804,18 @@ angular.module('documentviews').filter('lengthLimiter', function () {
 
 angular.module('documentviews').filter('nameoremail', function () {
     return function (person) {
+        var word = ""
         if (person.name) {
-            return person.name;
+            word = person.name;
         }
         else {
-            return person.investor;
+            word = person.investor;
+        }
+        if (word.length > 30) {
+            return word.substring(0, 29) + "...";
+        }
+        else {
+            return word;
         }
     };
 });
