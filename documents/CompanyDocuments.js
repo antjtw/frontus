@@ -308,7 +308,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.counterparty = !!$scope.urlInves;
   $scope.tester = $rootScope.userid.match(/sharewave.com$/);
   $scope.signeeded = "No";
-  $scope.messageText = "Hi, Your Signature is requested on "
+  $scope.messageText = "Hi, Please take a look at this document"
 
   // For Email sharing
   $scope.recipients = [];
@@ -464,6 +464,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
   $scope.changeSig = function(value) {
        $scope.signeeded = value;
+      if (value == "Yes") {
+          $scope.messageText = "Hi, Your signature is requested on " + $scope.document.docname;
+      }
+      else {
+          $scope.messageText = "Hi, Please take a look at this document";
+      }
   }
 
   $scope.share = function(message, email, sign) {
