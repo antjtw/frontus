@@ -7,10 +7,10 @@
     -->
   <!-- </div>  -->
 
-  <span class="drop-target" ng-class="dropClass">
+  <div class="drop-target" ng-class="dropClass">
     <span ng-show="!showProgress">{{dropText}}</span>
-    <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
-  </span>
+    <div ng-show="showProgress" class="progress-bar"><progress data-percent="loadProgress"></progress></div>
+  </div>
 
 
 

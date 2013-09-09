@@ -1,4 +1,4 @@
-var email = angular.module('email', ['ui.bootstrap','ui.utils', 'brijj']);
+var email = angular.module('email', ['ui.bootstrap','ui.utils', 'brijj'], function() {} );
 
 
 email.directive('backImg', function(){
@@ -30,10 +30,12 @@ email.directive('replace', function() {
    return {
     restrict: 'A',
     link: function(scope, elm, attrs, ctrl) {
+      void(ctrl);
       scope.replacex = function () {
         scope.recipients[parseInt(attrs.index)] = elm.text();
       };
       elm.on('blur', function(event) {
+        void(event);
         scope.replacex();
         scope.$apply();
       });
@@ -51,15 +53,18 @@ email.directive("emailTo", function() {
   return {
     restrict: 'E',
     link: function(scope, elm, attrs, ctrl) {
+      void(attrs);
+      void(elm);
+      void(ctrl);
       console.log(scope);
     },
     scope: false,
     template: '<div class="multiEmail"><span>To: </span><span ng-repeat="recip in recipients">'+
-        '<span index="{{$index}}" replace ui-keypress="{enter: \'replacex()\'}" contenteditable readonly>{{ recip }}</span>'+
+        '<span data-index="{{$index}}" data-replace data-ui-keypress="{enter: \'replacex()\'}" contenteditable data-readonly>{{ recip }}</span>'+
         '<span ng-click="remove({{$index}})" class="email-close" data-icon="&#xe00f" aria-hidden="true"></span>'+
         ', </span>'+
-        '<input ng-model="nextRecip" ng-on-blur="addRecip(nextRecip)" ui-keypress="{enter: \'addRecip(nextRecip)\'}" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="0"/></span></div>',
-    controller: ["$scope","$element", function EmailToController($scope,$element) {
+        '<input ng-model="nextRecip" data-ng-on-blur="addRecip(nextRecip)" data-ui-keypress="{enter: \'addRecip(nextRecip)\'}" type="text" data-typeahead="investor for investor in vInvestors | filter:$viewValue" data-typeahead-min-length="0"/></span></div>',
+    controller: ["$scope","$element", function($scope) {
     $scope.remove = function (x) {
       // slice doesn't seem to work here
       // $scope.recipients.slice(x,1);
@@ -68,7 +73,7 @@ email.directive("emailTo", function() {
       }
       $scope.recipients.length = $scope.recipients.length - 1;
     };
-    $scope.addRecip = function(nr, x) {
+    $scope.addRecip = function(nr) {
       if (nr) {
         for(var i=0;i<$scope.recipients.length;i++) {
           if ($scope.recipients[i] == nr) {

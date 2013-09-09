@@ -15,8 +15,8 @@
       </div>
       <div class="span5">
         <p>
-            <input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
-            <label>Name</label>
+            <label><input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
+            Name</label>
         </p>
         <p><button class="button subText greenButton" ng-click="passwordModalOpen()">Change Password</button></p>
       </div>
@@ -26,11 +26,11 @@
   <div class="sidebar span4">
     <form>
       <fieldset>
-         <input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
-         <label>Email</label>
+         <label><input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
+         Email</label>
 
-          <textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>         
-          <label>Address</label>
+          <label><textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+          Address</label>
        
       </fieldset>
     </form>
@@ -80,21 +80,25 @@
     <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
      <fieldset>
        <div class="row-fluid field">
-         <label>Current Password</label>           
+         <label>Current Password
          <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
+           </label>
        </div>
        <div class="row-fluid field">
-      <label>New Password</label>          
+      <label>New Password
       <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
+        </label>
       </div>
      <div class="row-fluid field">
-       <label>Confirm Password</label>  
+       <label>Confirm Password
        <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
+         </label>
      </div>
-  </div>
-  <div class="modalButtons">
-    <div class="left"><button class="button subText blueButton left" ng-click="passwordModalClose()">Cancel</button></div>
-    <div class="right"><button ng-disabled="validPasswordNot()" ng-class="{greenButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button></div>
+
+    <div class="modalButtons">
+      <div class="left"><button class="button subText blueButton left" ng-click="passwordModalClose()">Cancel</button></div>
+      <div class="right"><button ng-disabled="validPasswordNot()" ng-class="{greenButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button></div>
+    </div>
   </fieldset>
   </form>
   </div>

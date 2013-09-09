@@ -84,7 +84,7 @@
 	}
 
 	.span4.text-center.slideOptions {
-		min-height: 0px;
+		min-height: 0;
 	}
 
 	.home #register{

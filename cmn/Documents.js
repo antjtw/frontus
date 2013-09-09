@@ -52,7 +52,7 @@ function countCRs(str) {
 
 
 
-angular.module('draggable', []).
+angular.module('draggable', [], function() {}).
     directive('draggable', ['$document' , function($document) {
       return {
         restrict: 'EA',
@@ -70,6 +70,7 @@ angular.module('draggable', []).
             '</div>',
         link: function(scope, elm, attrs) {
           // the elm[0] is to unwrap the angular element
+          void(attrs);
           document.querySelector('.docPanel').appendChild(elm[0]);
           scope.page = scope.restoredPage || scope.currentPage;
           elm.page = scope.page;
@@ -133,6 +134,7 @@ angular.module('draggable', []).
                };
 
                $scope.biggerMe = function (ev) {
+                 void(ev);
                  var elem = $element.find('textarea');
                  var fs = elem.css('font-size');
                  elem.css( 'font-size', parseInt(fs.substr(0, fs.length-2)) + 2);
@@ -140,6 +142,7 @@ angular.module('draggable', []).
                };
 
                $scope.smallerMe = function (ev) {
+                 void(ev);
                  var elem = $element.find('textarea');
                  var fs = elem.css('font-size');
                  elem.css( 'font-size', parseInt(fs.substr(0, fs.length-2)) - 2);
@@ -158,7 +161,7 @@ angular.module('draggable', []).
 
 
 
-var docs = angular.module('documents', ['ui.bootstrap','brijj','draggable']);
+var docs = angular.module('documents', ['ui.bootstrap','brijj','draggable'], function() {});
 
 docs.directive('backImg', function(){
   return {
@@ -196,12 +199,21 @@ docs.directive('icon', function() {
   }
 });
 
-function DocumentViewController($scope, $compile, $route, $location, $routeParams, $rootScope, $window, SWBrijj) {
+function DocumentViewController($scope, $compile, $location, $routeParams, $window, SWBrijj) {
 
 
   $window.addEventListener('beforeunload', function(event) {
+    void(event);
     var ndx = $scope.getNoteData();
     if ( (!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
+
+    /** @name SWBrijj#_sync
+     * @function
+     * @param {string}
+     * @param {string}
+     * @param {string}
+     * @param {...}
+     */
     // This is a synchronous save
     var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
     // console.log(res);   // I expect this returns true (meaning updated).  If not, the data is lost
@@ -211,6 +223,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   /* Save the notes when navigating away */
   // There seems to be a race condition with using $locationChangeStart or Success
   $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+    void(oldUrl);
     // don't save note data if I'm being redirected to log in
     if (newUrl.match(/login([?]|$)/)) return;
     $scope.saveNoteData();
@@ -244,7 +257,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   };
 
   $scope.removeAllNotes = function() {
-    for (i = 0; i < $scope.notes.length; i++) {
+    for (var i = 0; i < $scope.notes.length; i++) {
       document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
     }
     $scope.notes = [];
@@ -264,6 +277,11 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     else if (!$scope.currentPage) $scope.currentPage = 1;
     if (!$scope.docId) return;
 
+    /** @name SWBrijj#tblmm
+     * @function
+     * @param {string}
+     * @param {...}
+     */
     SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
       $scope.docLength = data.length;
       // does scaling happen here?
@@ -273,7 +291,13 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
         $scope.annotated[data[i].page-1] = data[i].annotated;
       }
     });
-    // This gets called twice because init gets called twice.
+
+    /** @name SWBrijj#tblm
+     * @function
+     * @param {string}
+     * @param {...}
+     */
+      // This gets called twice because init gets called twice.
     // That doubles up the notes, so -- until I figure out why init gets called twice,
     // need to delete all the notes that init created the first time around
     SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
@@ -289,7 +313,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
         for(var i = 0;i<annots.length;i++) {
           var annot = annots[i];
           if (annot[1] == 'check') {
-            sticky = $scope.newBoxX(annot[0][0]);
+            sticky = $scope.newCheckX(annot[0][0]);
           } else if (annot[1] == 'text') {
             sticky = $scope.newBoxX(annot[0][0],annot[2][0], annot[3]);
           } else if (annot[1] == 'canvas') {
@@ -323,12 +347,12 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     }
   };
 
-  $scope.setPage = function(n) {
+  $scope.setPage = function (n) {
     $scope.currentPage = n;
     var s = $location.search();
-    s.page=n;
+    s.page = n;
     $location.search(s);
-  }
+  };
   $scope.nextPage = function(value) { 
     if ($scope.currentPage < $scope.docLength) {
       $scope.setPage(value+1);
@@ -389,7 +413,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
        if (bb.clientWidth < bb.scrollWidth) bb.style.width = (bb.scrollWidth + 5) +"px";
     }, 300);
     */
-    bb.addEventListener('input', function(e) { $scope.fixBox(bb);
+    bb.addEventListener('input', function(e) { void(e); $scope.fixBox(bb);
 /*      if (bb.value.substring(bb.value.length-1) == "\n") {
         bb.value+="\r\n";
       }  */
@@ -446,13 +470,12 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     // ctx.setAlpha(0.5);
     for (var i = 0; i < strokes.length; i++) {
       var line = strokes[i];
-      with (ctx) {
-        beginPath();
-        moveTo(line[1], line[2]);
-        lineTo(line[3], line[4]);
-        strokeStyle = line[0];
-        stroke();
-      }
+
+       ctx.beginPath();
+       ctx.moveTo(line[1], line[2]);
+       ctx.lineTo(line[3], line[4]);
+       ctx.strokeStyle = line[0];
+       ctx.stroke();
     }
   };
 
@@ -464,6 +487,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     aa.css({resize: 'both',overflow:'hidden'});
 
     aa[0].addEventListener('mouseup', function(e) {
+      void(e);
       $scope.fixPad(aa); $scope.resizeDown = false;  });
     aa[0].addEventListener('mousemove', function(e) {
       if (e.which != 0)
@@ -485,20 +509,18 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
       this.X = e.offsetX;
       this.Y = e.offsetY;
     }, false);
-    canvas.addEventListener('mouseover', function(e) { this.down = false; });
-    canvas.addEventListener('mouseout', function(e) { this.down = false; });
-    canvas.addEventListener('mouseup', function() { this.down = false; });
+    canvas.addEventListener('mouseover', function(e) { void(e); this.down = false; });
+    canvas.addEventListener('mouseout', function(e) { void(e); this.down = false; });
+    canvas.addEventListener('mouseup', function() { void(e); this.down = false; });
     canvas.strokes = [];
     canvas.addEventListener('mousemove', function(e) {
       if(this.down) {
-        with(ctx) {
-          beginPath();
-          moveTo(this.X, this.Y);
-          lineTo(e.offsetX , e.offsetY );
-          strokeStyle = this.color;
-          canvas.strokes.push([this.color, this.X, this.Y, e.offsetX, e.offsetY]);
-          stroke();
-        }
+        ctx.beginPath();
+        ctx.moveTo(this.X, this.Y);
+        ctx.lineTo(e.offsetX , e.offsetY );
+        ctx.strokeStyle = this.color;
+        canvas.strokes.push([this.color, this.X, this.Y, e.offsetX, e.offsetY]);
+        ctx.stroke();
         this.X = e.offsetX ;
         this.Y = e.offsetY ;
       }
@@ -530,9 +552,10 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
 
   $scope.showPageBar = function(evt) {
 
-  }
+  };
 
   $scope.acceptSign = function (sig) {
+    void(sig);
     SWBrijj.procm("document.countersign", $scope.docId).then(function (data) {
       console.log(data);
       window.location.reload();
@@ -540,21 +563,31 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
   };
 
   $scope.clearNotes = function(event) {
+    void(event);
     SWBrijj.procm( $scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
             $scope.docId, $scope.currentPage).then(function(x) {
+          void(x);
     var docpanel = document.querySelector(".docPanel");
-    var imgurl = docpanel.style.backgroundImage;
+          var imgurl;
+          imgurl = docpanel.style.backgroundImage;
     docpanel.style.backgroundImage = imgurl;
     });
   };
 
   $scope.clearAllNotes = function (event) {
+    void(event);
     for (var i = 1; i <= $scope.docLength; i++) {
       var z = i;
+      /** @name SWBrijj#deletePage
+       * @function
+       * @param {int}
+       */
       SWBrijj.deletePage($scope.docId, i).then(function (x) {
+        void(x);
         if (z = $scope.currentPage) {
           var docpanel = document.querySelector(".docPanel");
-          var imgurl = docpanel.style.backgroundImage;
+          var imgurl;
+          imgurl = docpanel.style.backgroundImage;
           docpanel.style.backgroundImage = imgurl;
         }
       });
@@ -591,8 +624,7 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
         se = n[0].querySelector("span.check-annotation");
         lh =  getIntProperty(se,'line-height');
         style.push(getIntProperty(se,'font-size') );
-        var lho = Math.floor( (1/1.4) * lh);
-        ndx[0][2][1]+=lho;
+        ndx[0][2][1]+=Math.floor((1 / 1.4) * lh);
 
         // ndx[0][2][0]+=2;
         ndx[0][2][1]-=4;
@@ -612,12 +644,20 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
     // This happens when the "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
     if (!$scope.lib.annotations) return;
     if (nd == $scope.lib.annotations) return;
+    /** @name SWBrijj#saveNoteData
+     * @function
+     * @param {int}
+     * @param {boolean}
+     * @param {boolean}
+     * @param {json}
+     */
     SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
       console.log(data);
 
       var docpanel = document.querySelector(".docPanel");
       if (docpanel) {
-        var imgurl = docpanel.style.backgroundImage;
+        var imgurl;
+        imgurl = docpanel.style.backgroundImage;
         docpanel.style.backgroundImage = imgurl;
       }
     });
@@ -633,12 +673,14 @@ function DocumentViewController($scope, $compile, $route, $location, $routeParam
         c) upload the modified image.
    */
   $scope.saveNotes = function (e) {
+    void(e);
     var pr = $scope.invq ? "document.doSignStamp" : $scope.lib.original ? "document.doCounterStamp" : "document.doShareStamp";
     SWBrijj.procm(pr, $scope.docId, $scope.currentPage).then(function (data) {
       console.log(data);
 
       var docpanel = document.querySelector(".docPanel");
-      var imgurl = docpanel.style.backgroundImage;
+      var imgurl;
+      imgurl = docpanel.style.backgroundImage;
       docpanel.style.backgroundImage = imgurl;
 
     });

@@ -1,18 +1,15 @@
 
-var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj']);
-
+var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj'],
+    function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
-app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
-      // when('/social', {controller:SocialCtrl, templateUrl: 'social.html'}).
-      // when('/password', {controller:PasswordCtrl, templateUrl: 'password.html'}).
-      //when('/photo', {controller:PhotoCtrl, templateUrl: 'photo.html'}).
+      when('/', {controller:'ContactCtrl', templateUrl:'contact.html'}).
       otherwise({redirectTo:'/'});
 });
+
 
 app.controller("MainProfileController", function($scope, $location) {
     $scope.toPassword = function() { $location.path('password') };
@@ -24,13 +21,13 @@ app.controller("MainProfileController", function($scope, $location) {
       return p == x; };
 } );
 
-function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
+app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
 
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
   };
 
-  $scope.pictureModalClose = function () {      
+  $scope.pictureModalClose = function () {
     $scope.files = [];
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.pictureModal = false;
@@ -51,6 +48,8 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
   };
 
   $scope.contactSave = function () {
+    /** @name $scope#street
+     * @type {string} */
     if ($scope.detectChanges != $scope.name + $scope.street) {
       $scope.detectChanges = $scope.name + $scope.street;
       if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
@@ -58,18 +57,22 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
         $scope.name = $scope.namekey;
         return;
       }
-      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) { 
+      SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) {
           console.log("saved: "+x);
           $rootScope.notification.show("success", "Profile successfully updated");
           $scope.namekey = $scope.name;
       }).except(function(x) {
+            void(x);
           $scope.namekey = $scope.name;
           $rootScope.notification.show("fail", "Something went wrong, please try again later.");
       });
     }
-  }
+  };
 
-  SWBrijj.tbl('account.profile').then(function(x) { 
+  /** @name SWBrijj#tbl
+   * @function
+   * @param {string} table_name */
+  SWBrijj.tbl('account.profile').then(function(x) {
     initPage($scope, x);
     $scope.photoURL = '/photo/user?id=' + $scope.email;
     $scope.namekey = $scope.name;
@@ -80,12 +83,17 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.photoURL = "/img/image-loader-140.png";
     var fd = new FormData();
     $scope.progressVisible = true;
-    for (var i in $scope.files) fd.append("uploadedFile", $scope.files[i]);
+    for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
+
+    /** @name SWBrijj#uploadImage
+     * @function
+     * @param {FormData}
+     */
     SWBrijj.uploadImage(fd).then(function(x) {
       console.log(x);
       $rootScope.notification.show("green", "Profile photo successfully updated");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
-    }).except( function(x) { 
+    }).except( function(x) {
       console.log(x);
       $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
@@ -94,35 +102,35 @@ function ContactCtrl($scope, $route, $rootScope, SWBrijj) {
 
   $scope.setFiles = function(element) {
     $scope.files = [];
-    for (var i = 0; i < element.files.length; i++) { 
+    for (var i = 0; i < element.files.length; i++) {
       $scope.files.push(element.files[i]);
       $scope.$apply();
     }
   }
-}
+}]);
 
-function SocialCtrl($scope, $location, SWBrijj) {  
+app.controller('SocialCtrl', ['$scope','$location','SWBrijj', function($scope, $location, SWBrijj) {
   $scope.contactSave = function(){
      SWBrijj.proc("social_update", $scope.twitter, $scope.linkedin, $scope.google, $scope.dropbox, $scope.facebook).
         then(function(x) { alert("done: "+x); });
-  }
+  };
 
   $scope.authTwitter = function() {
     SWBrijj.proc("oauth.twitter_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
+  };
   $scope.authLinkedin = function() {
     SWBrijj.proc("oauth.linkedin_authorize").then(function(x) {
       document.location.href=x[1][0]; });
-  }
+  };
   $scope.authDropbox = function() {
       SWBrijj.proc("oauth.dropbox_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
+  };
   $scope.authGoogle = function() {
     SWBrijj.proc("oauth.google_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
+  };
   $scope.authFacebook = function() {
     SWBrijj.proc("oauth.facebook_authorize").then(function(x) { document.location.href=x[1][0]; });
-  }
+  };
 
 
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope, x) }).except(initFail);
@@ -130,9 +138,9 @@ function SocialCtrl($scope, $location, SWBrijj) {
       .then(function(x)  { $scope.dropboxFiles=x; $scope.$apply(); })
       .except( function(x) {} );
 
-}
+}]);
 
-function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
+app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', function($scope, $route, $rootScope, SWBrijj) {
     $scope.currentPassword="";
     $scope.newPassword="";
     $scope.passwordConfirm="";
@@ -140,7 +148,7 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
     $scope.validPasswordNot = function() { 
         return !($scope.currentPassword && $scope.passwordMatches());
         // return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
-    }
+    };
 
     $scope.regexPassword = function() {
         var newP = $scope.newPassword;
@@ -167,16 +175,21 @@ function PasswordCtrl($scope, $route, $rootScope, SWBrijj) {
             }
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };
-}
+}]);
 
-function PhotoCtrl($scope, SWBrijj) {
+app.controller('PhotoCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {
     $scope.upload = function () {
         alert('heh');
     };
     
     SWBrijj.tbl('account.profile').then(function(x) { initPage($scope,x) }).except(initFail);
-}
+}]);
 
+/** initPage
+ * @param $scope
+ * @param x
+ * @param {number} [row]
+ */
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames
@@ -185,6 +198,7 @@ function initPage($scope, x, row) {
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
 }
 	function initFail(x) {
+    void(x);
 		document.location.href='/login';
 	}
 
@@ -200,5 +214,6 @@ app.filter('fileLength', function () {
                 return word;
             }
         }
+      return '';
     };
 });
