@@ -811,8 +811,8 @@ angular.module('documentviews').filter('nameoremail', function () {
         else {
             word = person.investor;
         }
-        if (word.length > 30) {
-            return word.substring(0, 29) + "...";
+        if (word.length > 24) {
+            return word.substring(0, 23) + "...";
         }
         else {
             return word;
