@@ -25,7 +25,7 @@
           <span class="tab-arrow" data-icon="&#xe033;"></span>
         </li>
         <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
-          <span class="unselectable" >{{doc.name}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
+          <span class="unselectable" >{{doc | nameoremail}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
           <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
              <li>Page {{ pp }}</li>
           </ul>
@@ -107,12 +107,24 @@
     <div class="modalText dshare">
         <ul>
             <li>
-                <span>Email</span>
+                <span>Email Address</span>
                 <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
             </li>
             <li>
-                <span>Signature Required?</span>
-                <input ng-model="signeeded" type="checkbox">
+                <span>Get Signature?</span>
+                <ul class="dropdown-list">
+                    <li class="dropdown standard small">
+                        <a class="dropdown-toggle">
+                            {{signeeded}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="changeSig('No')">No</a>
+                                <a ng-click="changeSig('Yes')">Yes</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
         </ul>
         <div class="messageSection">

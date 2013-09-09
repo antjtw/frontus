@@ -460,10 +460,17 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
         $scope.shareDocModal = false;
   };
 
+  $scope.changeSig = function(value) {
+       $scope.signeeded = value;
+  }
+
   $scope.share = function(message, email, sign) {
-        SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), Date.parse('22 November 2113')).then(function(data) {
-            console.log(data);
-        });
+      sign = (sign == "yes") ? true : false;
+      console.log(sign);
+      SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), Date.parse('22 November 2113')).then(function(data) {
+          console.log(data);
+          $route.reload();
+      });
   };
 
 
@@ -774,6 +781,17 @@ angular.module('documentviews').filter('lengthLimiter', function () {
             }
         }
         return '';
+    };
+});
+
+angular.module('documentviews').filter('nameoremail', function () {
+    return function (person) {
+        if (person.name) {
+            return person.name;
+        }
+        else {
+            return person.investor;
+        }
     };
 });
 

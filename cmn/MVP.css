@@ -1415,6 +1415,7 @@ form.inputs {
     box-sizing: border-box;
     width: 101px;
     min-width: 101px;
+    text-align: left;
 }
 
 .standard.small .dropdown-menu > li > a {
