@@ -1164,7 +1164,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var temprow = {"name": row.name, "email": row.email};
                 angular.forEach($scope.issues, function (issue) {
                     if (issue.issue) {
-                        if (row.editable == "yes" && issue.type == "Equity") {
+                        if (row.editable == "yes" && issue.type == "Equity" && row[issue.issue]['u'] > 0) {
                             temprow[issue.issue] = row[issue.issue];
                             something = true;
                         }
@@ -1172,6 +1172,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                              temprow[issue.issue] = {};
                              temprow[issue.issue]['u'] = row.vested;
                              temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                             something = true;
                         }
                     }
                 });
