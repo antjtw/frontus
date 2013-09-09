@@ -182,6 +182,7 @@ angular.module('HomeApp').filter('investordescription', function() {
         }
         else if (type == "document") {
             var document = ac.docname;
+            console.log(document);
             if (activity == "received") return "You received " + document + " from " + company;
             else if (activity == "viewed") return "You viewed " + document;
             else if (activity == "reminder") return "You were reminded about" +document;

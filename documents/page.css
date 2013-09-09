@@ -135,6 +135,32 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
+.modalText.dshare {
+    padding: 0;
+    margin: 0;
+}
+
+.modalText.dshare > ul {
+    width: 469px;
+}
+
+.modalText.dshare > ul > li {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.modalText.dshare > ul > li > span {
+    float: left;
+    line-height: 28px;
+}
+
+.modalText.dshare > ul > li > input[type=text] {
+    width: 300px;
+}
+
 
 /*
 .button:hover {

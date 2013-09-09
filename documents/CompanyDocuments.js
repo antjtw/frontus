@@ -337,12 +337,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
     }
   });
 
-	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
-				console.log(data);
-			});
-		};
-
 	$scope.pickInvestor = function(doc) {
     if (!$scope.counterparty) {
       angular.element(".docPanel").scope().saveNoteData();
@@ -454,6 +448,22 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.shareWith = function(doc, cp, msg, sig, dline) {
     SWBrijj.procm("document.share_document", doc.doc_id, cp.toLowerCase(), msg, Boolean(sig), dline).
         then(function(data) { void(data); $route.reload(); });
+  };
+
+  // Sharing modal functions
+
+  $scope.ShareDocOpen = function () {
+        $scope.shareDocModal = true;
+  };
+
+  $scope.shareDocClose = function () {
+        $scope.shareDocModal = false;
+  };
+
+  $scope.share = function(message, email, sign) {
+        SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), Date.parse('22 November 2113')).then(function(data) {
+            console.log(data);
+        });
   };
 
 
@@ -751,5 +761,19 @@ angular.module('documentviews').filter('fileLength', function () {
     }
     return '';
   };
+});
+
+angular.module('documentviews').filter('lengthLimiter', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 58) {
+                return word.substring(0, 57) + "...";
+            }
+            else {
+                return word;
+            }
+        }
+        return '';
+    };
 });
 
