@@ -147,12 +147,12 @@ angular.module('HomeApp').filter('description', function() {
         }
         else {
             var document = ac.docname;
-            if (activity == "sent") return document + " sent to "+person;
+            if (activity == "sent") return ""
             else if (activity == "viewed") return document + " viewed by "+person;
             else if (activity == "reminder") return "Reminded "+person + " about " +document;
             else if (activity == "signed") return document + " signed by "+person;
             else if (activity == "uploaded") return document + " uploaded by "+person;
-            else if (activity == "received") return "";
+            else if (activity == "received") return document + " sent to "+person;
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
             else return activity + " by "+person;

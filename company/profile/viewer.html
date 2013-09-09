@@ -35,7 +35,7 @@
                   </a>
                   <ul class="dropdown-menu">
                       <li>
-                          <a ng-click="changeVisibility('No View')">None</a>
+                          <a ng-click="changeVisibility('No View')">No View</a>
                           <a ng-click="changeVisibility('Personal View')">Personal View</a>
                           <a ng-click="changeVisibility('Full View')">Full View</a>
                       </li>
@@ -61,39 +61,35 @@
           <tr class="noFeed" ng-show="docs.length == 0">
               <td colspan="2">You've not shared any documents with this person.</td>
           </tr>
-        <tbody ng-repeat="doc in docs">
-          <tr>
-          <td><img src="">{{doc.docname}}</td>
-          <td>{{doc.event}}</td>
-          <td class="button" ng-click="(opendetails(doc.doc_id))"><i class="{{doc.button}}"></i></td>
+          <tbody ng-repeat="doc in docs">
+          <tr class="status-row" ng-class="{selectedrow:doc.shown}" ng-click="(opendetails(doc))">
+              <td style="width:50%;">{{doc.docname}}</td>
+              <td style="width:50%;">{{doc.event}}</td>
           </tr>
-          <tr ng-show="doc.shown" class="personDetails">
-            <td colspan="2">
-                <div><p>Delivered</p><p class="doubleTime">{{doc.whenshared | date:'MMMM dd, yyyy'}}</p>
-                  <p>{{doc.whenshared | date:'h:mm a'}}</p></div>
-                <div ng-switch="doc.lastlogin" >
-                   <div ng-switch-when="0"><p class="hltext">Never Logged In</p></div>
-                   <div ng-switch-default><p>Last Seen</p><p class="doubleTime">{{doc.lastlogin | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastlogin | date:'h:mm a'}}</p></div>
-                </div>
+          <tr class="status-detail" ng-Show="doc.shown">
+              <td><span data-icon="&#xe024;" aria-hidden="true"></span>Sent</td>
+              <td>
+                  {{doc.when_shared | date:'MMMM dd, yyyy, h:mm a'}}
+              </td>
+          </tr>
+          <tr class="status-detail" ng-Show="doc.shown">
+              <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="doc.last_viewed">Never Viewed</span><span ng-show="doc.last_viewed">Last Logged In</span></td>
+              <td>{{doc.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
+              <td><span data-icon="&#xe015;" aria-hidden="true"></span><span ng-hide="doc.signature_deadline">No Signature Required</span><span ng-show="doc.signature_deadline">Signature Deadline</span></td>
+              <td>{{doc.signature_deadline | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
+              <td><span data-icon="&#xe00d;" aria-hidden="true"></span><span ng-hide="doc.when_signed">Never Signed</span><span ng-show="doc.when_signed">Signed</span></td>
+              <td>{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
+              <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="doc.when_confirmed">Not Countersigned</span><span ng-show="doc.when_confirmed">Countersigned</span></td>
+              <td>{{doc.when_confirmed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
 
-                <div ng-switch="doc.lastviewed" >
-                   <div ng-switch-when="0"><p class="hltext">Unviewed</p></div>
-                   <div ng-switch-default><p>Viewed</p><p class="doubleTime">{{doc.lastviewed | date:'MMMM dd, yyyy'}}</p><p>{{doc.lastviewed | date:'h:mm a'}}</p></div>
-                </div>
-
-                <div ng-switch="doc.signed" >
-                   <div ng-switch-when="0"><p class="hltext">Unsigned</p></div>
-                   <div ng-switch-default><p>Signed</p><p class="doubleTime">{{doc.signed | date:'MMMM dd, yyyy'}}</p><p>{{doc.signed | date:'h:mm a'}}</p></div>
-                </div>
-
-                <div ng-switch="doc.column5" >
-                   <p ng-switch-default="0"></p>
-                   <div ng-switch-when="2"><p>Revoked</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></div>
-                   <div ng-switch-when="1"><p>Resent</p><p class="doubleTime">{{doc.reminder | date:'MMMM dd, yyyy'}}</p><p>{{doc.reminder | date:'h:mm a'}}</p></div>
-                </div>
-            </td>
-        </tr>
-        </tbody>
+          </tbody>
       </table>
     </section>
     </div>
@@ -114,24 +110,19 @@
 
     <div>
       <p class="title">Activity Feed</p>
-    </div> 
-    <section class="statusFeed">
-        <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-
-        <div class="activityBlock">
-      <table>
-        <tr ng-repeat="active in activity | orderBy:activityOrder">
-        <td><i class="{{active.icon}} icon"></i></td>
-        <td>
-            <table>
-              <tr><td>{{active.activity}} <a href="{{active.link}}">{{active.target}}</a> </td></tr>
-                  <tr><td>{{active.timeAgo}}</td></tr>
-              </table>
-          </td>
-        </tr>
-      </table> 
-
     </div>
-    </section>
+
+    <div class="row-fluid">
+          <ul class="activityBlock">
+              <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
+                  <i class="{{active.activity | icon}}"></i>
+                  <div>
+                      <span class="activity">{{active | description }}</span><br>
+                      <span class="time">{{active.time | fromNow}}</span>
+                  </div>
+              </li>
+          </ul>
+       <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+    </div>
   </div>
 </div>
