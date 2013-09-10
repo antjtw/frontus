@@ -18,10 +18,10 @@ ownership.service('calculate', function () {
     this.unissued = function (rows, issues, issuename) {
         var keepgoing = true;
         var deleterow = -1;
-        var leftovers
+        var leftovers;
         angular.forEach(issues, function (issue) {
             if (issue.issue == issuename) {
-                leftovers = issue.totalauth
+                leftovers = issue.totalauth;
                 angular.forEach(rows, function (row) {
                     if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
                         leftovers = leftovers - row[issue.issue]['u'];
@@ -29,6 +29,15 @@ ownership.service('calculate', function () {
                 });
             }
         });
+
+        angular.forEach(issues, function(issue) {
+             console.log(issue.optundersec);
+             console.log(issuename);
+             if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
+                   leftovers = leftovers - issue.totalauth;
+             }
+        });
+
         var shares = {"u": leftovers, "ukey": leftovers, "x": null};
         angular.forEach(rows, function (row) {
             if (keepgoing) {
@@ -213,7 +222,6 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        console.log(vesting);
         angular.forEach(rows, function (row) {
             if (vesting[row.name]) {
                 row.vested = {}

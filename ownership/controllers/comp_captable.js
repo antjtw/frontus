@@ -206,15 +206,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 // Generate the unissued rows (the difference between total authorised and actually authorised)
                 angular.forEach($scope.issues, function (issue) {
-                    if (!isNaN(parseFloat(issue.totalauth))) {
-                        var leftovers = calculate.whatsleft(issue.totalauth, issue, $scope.rows);
-                        if (leftovers != 0) {
-                            var issuename = String(issue.issue);
-                            var shares = {"u": leftovers, "a": null, "ukey": leftovers, "akey": null};
-                            $scope.rows.push({"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                            $scope.rows[($scope.rows.length) - 1][issuename] = shares;
-                        }
-                    }
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
                 });
 
 
@@ -472,6 +464,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         });
                     }
 
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    });
+
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
 
                     angular.forEach($scope.trans, function (tran) {
@@ -592,6 +588,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.tranChangeU = function (value, issue) {
+        angular.forEach($scope.issues, function (x) {
+            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+        });
+
         $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue));
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0]['units'] = value;
@@ -715,6 +715,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
 
+            angular.forEach($scope.issues, function (x) {
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+            });
+
             $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(tran.issue));
 
         });
@@ -757,6 +761,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         }
                     }
                 }
+            });
+            angular.forEach($scope.issues, function (x) {
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
             });
 
             $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(tran.issue));
@@ -1004,6 +1011,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 }
                             }
                         });
+                    });
+
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
                     });
 
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(transaction.issue));
