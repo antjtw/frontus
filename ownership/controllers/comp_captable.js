@@ -477,11 +477,32 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     angular.forEach($scope.trans, function (tran) {
                         if (tran.issue == issue.key) {
                             tran[item] = issue[item];
+                            if (item == "issue" && tran["optundersec"] && tran["optundersec"] == issue.key) {
+                                tran.optundersec = issue[item];
+                            }
+                            else if (item == "issue" && tran["debtundersec"] && tran["debtundersec"] == issue.key) {
+                                tran.debtundersec = issue[item];
+                            }
                             if (tran.tran_id != undefined) {
                                 $scope.saveTran(tran);
                             }
                         }
                     });
+
+                    // In the case where the issue is changed and there are other issues that use it as the underlying
+                    if (item == "issue") {
+                        angular.forEach($scope.issues, function (keyissue) {
+                            if (item == "issue" && keyissue["optundersec"] && keyissue["optundersec"] == issue.key) {
+                                keyissue.optundersec = issue[item];
+                                $scope.saveIssue(keyissue, 'optundersec');
+                            }
+                            else if (item == "issue" && keyissue["debtundersec"] && keyissue["debtundersec"] == issue.key) {
+                                keyissue.debtundersec = issue[item];
+                                $scope.saveIssue(keyissue, 'debtundersec');
+                            }
+                        });
+                    }
+
 
                     angular.forEach($scope.rows, function (row) {
                         if (row[issue.issue] != undefined) {
