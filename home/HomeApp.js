@@ -125,6 +125,8 @@ angular.module('HomeApp').filter('icon', function() {
         else if (activity == "reminder") return "icon-redo";
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
+        else if (activity == "rejected") return "icon-circle-delete";
+        else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
     }
 });
