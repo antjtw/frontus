@@ -327,6 +327,14 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         return amount;
     };
 
+    $scope.formatDollarAmount = function(amount) {
+        var output = $scope.formatAmount(amount);
+        if (output) {
+            output = "$" + output
+        }
+        return (output);
+    };
+
     // Functions derived from services for use in the table
 
     //switches the sidebar based on the type of the issue

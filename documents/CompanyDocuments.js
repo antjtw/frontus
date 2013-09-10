@@ -532,7 +532,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams',
   });
 
 
-  // A none too beautiful way of creating the activity table with only two database requests but quite a bit of client side action
 	SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
    		$scope.activity = data;
     });
