@@ -10,9 +10,9 @@ function readCookie(name) {
   return null;
 }
 
-
-function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
-	window.SWBrijj = SWBrijj;
+/** @unused NavCtrl */
+/* Not really, but referenced in angular attribute in .inc file */
+function NavCtrl($scope, $route, $rootScope, SWBrijj) {
 	$scope.companies = [];
 	$rootScope.selected = [];
 
@@ -21,7 +21,6 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 	$scope.showBothBars = false;
 	$rootScope.isLoggedIn = false;
 	$rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
-    console.log($rootScope.path);
 
 	$scope.isCollapsed = true;
 	$rootScope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
@@ -30,11 +29,17 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
 
   $scope.switch = function(nc) {
       $rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
+    /** @name SWBrijj#switch_company
+     * @function
+     * @param {string} company
+     * @param {string} role
+     */
       SWBrijj.switch_company(nc.company, nc.role).then( function(data) {
         $scope.companies = data;
         $scope.initCompany(true);
     });
-  }
+  };
+
 	$scope.initCompany = function(switching) {
     var cmps = $scope.companies;
     var thiscmp = cmps[0]; // pick the first one in case none are marked selected
@@ -81,7 +86,7 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
         }
     }
     $route.reload();
-  }
+  };
 
   $rootScope.userid = readCookie("userid");
   $rootScope.isLoggedIn = true;
@@ -90,10 +95,10 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     $scope.companies = x;
     $scope.initCompany(false);
 	}).except(function(ignore) {
+        void(ignore);
 		$scope.nav = 'navBarLoggedOut';
-		console.log('Not logged in');
 		$rootScope.showLogin = true;
-        $rootScope.isLoggedIn = false;
+    $rootScope.isLoggedIn = false;
 	});
 
     // Notification code
@@ -121,12 +126,12 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) {
       if (x) {
         document.location.href = x;
-        console.log("redirecting to: " + x);
       } else {
         document.location.href="/login/?error=" + $scope.username;
       }
     }).except(function(x) {
-      console.log('Login error');
+          void(x);
+          document.location.href = "/login/?error="+ x.message;
     });
   }
 }
