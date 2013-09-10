@@ -81,6 +81,19 @@ ownership.filter('maxLength', function () {
     };
 });
 
+ownership.filter('uneditIssue', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 25) {
+                return word.substring(0, 24) + "...";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
+
 ownership.filter('falseCheck', function () {
     return function (word) {
         if (word == false) {

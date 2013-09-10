@@ -252,7 +252,7 @@
                 <th colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue}}</span>
+                    <span>{{one.issue | uneditIssue}}</span>
                 </th>
             </tr>
 
