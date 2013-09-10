@@ -16,7 +16,7 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
 /** @name $scope#email
  * @type {string} */
 
-   app.controller('CompanyCtrll', ['$scope','$location','$routeParams','SWBrijj',
+   app.controller('CompanyCtrl', ['$scope','$location','$routeParams','SWBrijj',
   function($scope, $location, $routeParams, SWBrijj){
     $scope.code = $routeParams.code;
 
@@ -45,16 +45,13 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
        * @param {boolean} dontknow
        */
       SWBrijj.doCompanyActivate($scope.email.toLowerCase(), $scope.code, $scope.password, false).then(function(x) {
-        void(x);
-        SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
           if(x) {
             document.location.href = x + "?msg=first";
           } else {
             document.location.href = '/login';
           }
         });
-      });
-    };  
+    };
 
     $scope.fieldCheck = function() {
       return !$scope.password;
@@ -82,15 +79,12 @@ app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
 
     $scope.doActivate = function() {
       SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(y) {
-        void(y);
-        SWBrijj.login($scope.email.toLowerCase(), $scope.password).then(function(x) {
           if ($scope.redirect) {
             document.location.href = $scope.redirect;
           } else {
             document.location.href = x + "?msg=first";
           }
         });
-      });
     };
 
     $scope.fieldCheck = function() {
