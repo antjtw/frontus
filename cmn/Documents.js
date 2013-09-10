@@ -646,7 +646,6 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
     var nd = $scope.getNoteData();
     if ($scope.lib == undefined) return;
     // This happens when the "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
-    if (!$scope.lib.annotations) return;
     if (nd == $scope.lib.annotations) return;
     /** @name SWBrijj#saveNoteData
      * @function

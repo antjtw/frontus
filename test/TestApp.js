@@ -1,5 +1,5 @@
 
-var app = angular.module('TestApp', ['ngResource', 'brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('TestApp', ['ngResource', 'ui.bootstrap', 'brijj'], function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
@@ -39,7 +39,7 @@ app.directive('ngModelOnblur', function() {
   };
 });
 
-app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
+app.controller('TestCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $rootScope, SWBrijj) {
 
     /** @name SWBrijj#proc
      * @function
