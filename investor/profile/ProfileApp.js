@@ -80,7 +80,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope
   }).except(initFail);
 
   $scope.uploadFile = function() {
-    $scope.photoURL = "/img/image-loader-140.png";
+    $scope.photoURL = "/img/image-loader-140.gif";
     var fd = new FormData();
     $scope.progressVisible = true;
     for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);

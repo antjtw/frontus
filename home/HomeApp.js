@@ -125,6 +125,8 @@ angular.module('HomeApp').filter('icon', function() {
         else if (activity == "reminder") return "icon-redo";
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
+        else if (activity == "rejected") return "icon-circle-delete";
+        else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
     }
 });
@@ -187,7 +189,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "viewed") return "You viewed " + document;
             else if (activity == "reminder") return "You were reminded about" +document;
             else if (activity == "signed") return "You signed "+document;
-            else if (activity == "rejected") return company + "rejected your signature on" +document;
+            else if (activity == "rejected") return company + " rejected your signature on " +document;
             else if (activity == "countersigned") return company + " countersigned "+document;
             else  {
                 return activity + " by "+person;

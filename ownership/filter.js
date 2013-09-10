@@ -6,7 +6,7 @@ ownership.filter('noUnissue', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.editable == "yes" || row.name == "") {
+            if (row.editable != 0 || row.name == "") {
                 returnrows.push(row);
             }
         });
@@ -67,6 +67,7 @@ ownership.filter('issueviewList', function () {
     };
 });
 
+// Caps the length of issue names for the righthand dropdown
 ownership.filter('maxLength', function () {
     return function (word) {
         if (word) {
@@ -77,5 +78,27 @@ ownership.filter('maxLength', function () {
                 return word;
             }
         }
+    };
+});
+
+ownership.filter('uneditIssue', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 19) {
+                return word.substring(0, 18) + "...";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
+
+ownership.filter('falseCheck', function () {
+    return function (word) {
+        if (word == false) {
+            return "No"
+        }
+        else return word;
     };
 });

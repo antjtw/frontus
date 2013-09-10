@@ -201,7 +201,7 @@
 
     <div class="row-fluid">
         <div class="subnav-controls">
-            <div data-step="5" data-intro="Switch between editing & viewing your table in it's finished form, and easily share with others">
+            <div data-step="5" data-intro="Switch between editing & viewing your table in its finished form, and easily share with others">
                 <div class="pull-left">
                     <div class="edittoggle btn-group">
                         <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'View'"><span
@@ -252,7 +252,7 @@
                 <th colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue}}</span>
+                    <span>{{one.issue | uneditIssue}}</span>
                 </th>
             </tr>
 
@@ -475,7 +475,7 @@
                                 <div class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                     <li class="dropdown standard small">
                                         <a class="dropdown-toggle">
-                                            {{activeIssue.partpref}}<span class="invisible-drop">'</span>
+                                            {{activeIssue.partpref | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
                                             <li ng-repeat="i in tf">
@@ -678,7 +678,7 @@
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
-                                                    {{tran.partpref}}<span class="invisible-drop">'</span>
+                                                    {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li ng-repeat="i in tf">
