@@ -218,9 +218,19 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
 
     $scope.setFiles = function(element) {
         $scope.files = [];
+        $scope.fileError = ""
         for (var i = 0; i < element.files.length; i++) {
             for(var j = 0;j<mimetypes.length;j++) {
-                if (element.files[i].type == mimetypes[j]) $scope.files.push(element.files[i]);
+                console.log(element.files[i].size)
+                if (element.files[i].size > 20000000) {
+                    $scope.fileError = "Please choose a smaller file";
+                }
+                else if (element.files[i].type != mimetypes[j]) {
+                    $scope.fileError = "Please choose a pdf"
+                }
+                else {
+                    $scope.files.push(element.files[i]);
+                }
                 $scope.$apply();
             }
         }
@@ -233,8 +243,8 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
             $scope.$apply();
         });
         $scope.$on("upload:load", function(evt, arg) {
-          void(evt);
-          void(arg);
+            void(evt);
+            void(arg);
             $rootScope.showProgress = false;
             $rootScope.showProcessing = true;
             $scope.$apply();
@@ -252,7 +262,6 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
                 $scope.showProgress=false;
                 $scope.$apply();
                 console.log(evt); console.log(arg); });
-
         var fd = new FormData();
         for (var i=0;i<files.length;i++) fd.append("uploadedFile", files[i]);
         var upxhr = SWBrijj.uploadFile(fd);
@@ -266,7 +275,8 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
-              void(x);
+                $scope.fileError = "Oops, something went wrong. Please try again.";
+                $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress=false;
                 $scope.$apply();
@@ -307,6 +317,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.invq = false;
   $scope.counterparty = !!$scope.urlInves;
   $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+  $scope.signeeded = "No";
+  $scope.messageText = "Hi, Please take a look at this document"
 
   // For Email sharing
   $scope.recipients = [];
@@ -336,12 +348,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
       $scope.getOriginal();
     }
   });
-
-	$scope.share = function(message, email, sign) {
-		 SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
-				console.log(data);
-			});
-		};
 
 	$scope.pickInvestor = function(doc) {
     if (!$scope.counterparty) {
@@ -454,6 +460,43 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.shareWith = function(doc, cp, msg, sig, dline) {
     SWBrijj.procm("document.share_document", doc.doc_id, cp.toLowerCase(), msg, Boolean(sig), dline).
         then(function(data) { void(data); $route.reload(); });
+  };
+
+  // Sharing modal functions
+
+  $scope.ShareDocOpen = function () {
+        $scope.shareDocModal = true;
+  };
+
+  $scope.shareDocClose = function () {
+        $scope.shareDocModal = false;
+  };
+
+  $scope.changeSig = function(value) {
+       $scope.signeeded = value;
+      if (value == "Yes") {
+          $scope.messageText = "Hi, Your signature is requested on " + $scope.document.docname;
+      }
+      else {
+          $scope.messageText = "Hi, Please take a look at this document";
+      }
+  }
+
+  $scope.share = function(message, email, sign) {
+      sign = (sign == "Yes") ? true : false;
+      console.log(sign);
+      if (sign) {
+          console.log("here");
+          var date = Date.parse('22 November 2113');
+      }
+      else {
+          date = null;
+      }
+      SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+          console.log(data);
+          $scope.signeeded = "No"
+          $route.reload();
+      });
   };
 
 
@@ -742,8 +785,8 @@ angular.module('documentviews').filter('description', function() {
 angular.module('documentviews').filter('fileLength', function () {
   return function (word) {
     if (word) {
-      if (word.length > 23) {
-        return word.substring(0, 22) + "..";
+      if (word.length > 21) {
+        return word.substring(0, 20) + "..";
       }
       else {
         return word;
@@ -751,5 +794,37 @@ angular.module('documentviews').filter('fileLength', function () {
     }
     return '';
   };
+});
+
+angular.module('documentviews').filter('lengthLimiter', function () {
+    return function (word) {
+        if (word) {
+            if (word.length > 58) {
+                return word.substring(0, 57) + "...";
+            }
+            else {
+                return word;
+            }
+        }
+        return '';
+    };
+});
+
+angular.module('documentviews').filter('nameoremail', function () {
+    return function (person) {
+        var word = ""
+        if (person.name) {
+            word = person.name;
+        }
+        else {
+            word = person.investor;
+        }
+        if (word.length > 24) {
+            return word.substring(0, 23) + "...";
+        }
+        else {
+            return word;
+        }
+    };
 });
 

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname }}</h1>
+        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname | lengthLimiter}}</h1>
 
         <div class="row-fluid">
             <ul class="bodyText maintabs">
@@ -25,7 +25,7 @@
           <span class="tab-arrow" data-icon="&#xe033;"></span>
         </li>
         <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
-          <span class="unselectable" >{{doc.name}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
+          <span class="unselectable" >{{doc | nameoremail}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
           <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
              <li>Page {{ pp }}</li>
           </ul>
@@ -63,11 +63,7 @@
                     </div>
                     <div class="pull-right">
                         <div class="share-button">
-                            <span ng-hide="counterparty">
-                                <label><button class="btn" ng-click="shareWith(document,recip)">Share with:</button>
-                                <input ng-model="recip" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
-                                  </label>
-                            </span>
+                                <button ng-hide="counterparty" class="btn" ng-click="ShareDocOpen()">Share Document</button>
                         </div>
                     </div>
                 </div>
@@ -102,3 +98,44 @@
       </div>
     </div>
   </div>
+
+<div modal="shareDocModal" close="shareDocClose()" options="opts">
+    <div class="modalHeader">
+        <span data-icon="&#xe027;" aria-hidden="true"></span>Share Document
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
+    </div>
+    <div class="modalText dshare">
+        <ul>
+            <li>
+                <span>Email Address</span>
+                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+            </li>
+            <li>
+                <span>Get Signature?</span>
+                <ul class="dropdown-list">
+                    <li class="dropdown standard small">
+                        <a class="dropdown-toggle">
+                            {{signeeded}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="changeSig('No')">No</a>
+                                <a ng-click="changeSig('Yes')">Yes</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="messageSection">
+            <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+        </div>
+    </div>
+    <div class="modalButtons">
+        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
+        <div class="right">
+            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
+            </button>
+        </div>
+    </div>
+</div>

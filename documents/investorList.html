@@ -16,17 +16,14 @@
         <tr class="column-label status-columns">
           <th class="button" ng-click="setOrder('docname')" style="width:40%;"><span
               class="title sortedDown">Name</span></th>
-          <th class="button" ng-click="setOrder('last_updated')" style="width:25%;"><span
+          <th class="button" ng-click="setOrder('last_updated')" style="width:30%;"><span
               class="title">Last Updated</span></th>
-          <th class="button"><span class="title">Status</span></th>
-          <th class="button"><span class="title">Deadline</span></th>
+          <th class="button" style="width:30%;"><span class="title">Status</span></th>
         </tr>
         <tr ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
           <td><a href="/documents/investor-view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
           <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
           <td>{{doc.signature_status}}</td>
-          <td><span ng-show="doc.last_updated" class="dateFormatting">{{ doc.last_updated | fromNow}}</span></td>
-          <td></td>
         </tr>
       </table>
       <div style="display: none;" ng-show="documents.length == 0">You have no documents.</div>

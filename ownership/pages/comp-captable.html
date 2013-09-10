@@ -291,7 +291,7 @@
                   <input class="captablepair" maxlength="18"
                          placeholder="shares"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                         ng-change="tranChangeU(row[key]['u'])" ng-model='row[key]["u"]'
+                         ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
                          onkeydown="testForEnter();">
                   <input class="captablepair" maxlength="18" placeholder="paid"
                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
@@ -365,7 +365,7 @@
                 <td></td>
                 <td ng-repeat="one in issuekeys" >
                     <span class="captablepair-box">
-                        <div ng-show="toggleView()" ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
 
                         <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" class="output second footer"></div>
                     </span>

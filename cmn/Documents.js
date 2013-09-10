@@ -511,7 +511,7 @@ function DocumentViewController($scope, $compile, $location, $routeParams, $wind
     }, false);
     canvas.addEventListener('mouseover', function(e) { void(e); this.down = false; });
     canvas.addEventListener('mouseout', function(e) { void(e); this.down = false; });
-    canvas.addEventListener('mouseup', function() { void(e); this.down = false; });
+    canvas.addEventListener('mouseup', function(e) { void(e); this.down = false; });
     canvas.strokes = [];
     canvas.addEventListener('mousemove', function(e) {
       if(this.down) {
