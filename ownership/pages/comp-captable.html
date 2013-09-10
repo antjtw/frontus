@@ -475,7 +475,7 @@
                                 <div class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                     <li class="dropdown standard small">
                                         <a class="dropdown-toggle">
-                                            {{activeIssue.partpref}}<span class="invisible-drop">'</span>
+                                            {{activeIssue.partpref | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
                                             <li ng-repeat="i in tf">
@@ -678,7 +678,7 @@
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard small">
                                                 <a class="dropdown-toggle">
-                                                    {{tran.partpref}}<span class="invisible-drop">'</span>
+                                                    {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li ng-repeat="i in tf">

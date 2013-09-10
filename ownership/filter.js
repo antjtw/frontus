@@ -67,6 +67,7 @@ ownership.filter('issueviewList', function () {
     };
 });
 
+// Caps the length of issue names for the righthand dropdown
 ownership.filter('maxLength', function () {
     return function (word) {
         if (word) {
@@ -77,5 +78,14 @@ ownership.filter('maxLength', function () {
                 return word;
             }
         }
+    };
+});
+
+ownership.filter('falseCheck', function () {
+    return function (word) {
+        if (word == false) {
+            return "No"
+        }
+        else return word;
     };
 });
