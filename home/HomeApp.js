@@ -189,7 +189,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "viewed") return "You viewed " + document;
             else if (activity == "reminder") return "You were reminded about" +document;
             else if (activity == "signed") return "You signed "+document;
-            else if (activity == "rejected") return company + "rejected your signature on" +document;
+            else if (activity == "rejected") return company + " rejected your signature on " +document;
             else if (activity == "countersigned") return company + " countersigned "+document;
             else  {
                 return activity + " by "+person;
