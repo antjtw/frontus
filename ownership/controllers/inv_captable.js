@@ -320,9 +320,11 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     $scope.formatAmount = function (amount) {
         if (amount) {
-            while (/(\d+)(\d{3})/.test(amount.toString())){
-                amount = amount.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
-            }
+            var n = amount.toString().split(".");
+            //Comma-fies the first part
+            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            //Combines the two sections
+            amount = n.join(".");
         }
         return amount;
     };
