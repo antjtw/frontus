@@ -84,8 +84,8 @@ ownership.filter('maxLength', function () {
 ownership.filter('uneditIssue', function () {
     return function (word) {
         if (word) {
-            if (word.length > 25) {
-                return word.substring(0, 24) + "...";
+            if (word.length > 19) {
+                return word.substring(0, 18) + "...";
             }
             else {
                 return word;
