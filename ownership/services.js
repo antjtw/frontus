@@ -31,8 +31,6 @@ ownership.service('calculate', function () {
         });
 
         angular.forEach(issues, function(issue) {
-             console.log(issue.optundersec);
-             console.log(issuename);
              if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
                    leftovers = leftovers - issue.totalauth;
              }

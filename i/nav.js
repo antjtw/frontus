@@ -70,8 +70,14 @@ function NavCtrl($scope, $route, $rootScope, $routeParams, SWBrijj) {
     if ($rootScope.isLoggedIn) {
       if (thiscmp.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
         $scope.logoLink = '/home/company';
+        if ($rootScope.path == "/" ) {
+            document.location.href = '/home/company'; return;
+        }
       } else {
         $scope.logoLink = '/home';
+          if ($rootScope.path == "/" ) {
+              document.location.href = '/home'; return;
+          }
       }
     }
 
