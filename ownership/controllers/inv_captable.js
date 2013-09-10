@@ -141,6 +141,11 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         });
                     });
 
+                    // Generate the unissued rows (the difference between total authorised and actually authorised)
+                    angular.forEach($scope.issues, function (issue) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
+                    });
+
 
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issuekeys, function (issuekey) {
@@ -151,6 +156,11 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                             }
                             ;
                         });
+                    });
+
+                    // Calculate the start percentage for sorting purposes
+                    angular.forEach($scope.rows, function(row) {
+                        row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
                     });
 
 
