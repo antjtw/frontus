@@ -11,7 +11,7 @@ var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event'
 });
 
 
-app.controller("MainProfileController", function($scope, $location) {
+app.controller("MainProfileController", ['$scope','$location', function($scope, $location) {
     $scope.toPassword = function() { $location.path('password') };
     $scope.toContact = function() { $location.path('contact') };
     $scope.toSocial = function() { $location.path('social') };
@@ -19,7 +19,7 @@ app.controller("MainProfileController", function($scope, $location) {
     $scope.tab = function(x) { 
       var p = $location.path();  if (p == '/') p='contact';
       return p == x; };
-} );
+}] );
 
 app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
 

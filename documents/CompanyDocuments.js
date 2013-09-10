@@ -401,7 +401,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
      * @param {string} procname
      * @param {...*}
      */
-    SWBrijj.spoof_procm(cd.investor, cd.company, "document.sign_document", cd.doc_id, "[]").then(function (data) {
+    SWBrijj.spoof_procm(cd.investor, cd.company, "investor", "document.sign_document", cd.doc_id, "[]").then(function (data) {
       cd.when_signed = data;
       $route.reload();
     });

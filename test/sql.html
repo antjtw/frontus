@@ -8,7 +8,7 @@
       <th ng-repeat="col in columns">{{ col }}</th>
     </tr>
     <tr ng-repeat="row in data">
-      <td ng-repeat="cell in row">{{ cell }}</td>
+      <td ng-repeat="cell in row">{{ cell | fromNow }}</td>
     </tr>
   </table>
 </div>

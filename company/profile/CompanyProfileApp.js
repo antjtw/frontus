@@ -5,21 +5,21 @@ var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:ContactCtrl, templateUrl:'contact.html'}).
-      when('/people', {controller:PeopleCtrl, templateUrl:'people.html'}).
-      when('/view', {controller: ViewerCtrl, templateUrl:'viewer.html'}).
+      when('/', {controller: 'ContactCtrl', templateUrl:'contact.html'}).
+      when('/people', {controller: 'PeopleCtrl', templateUrl:'people.html'}).
+      when('/view', {controller: 'ViewerCtrl', templateUrl:'viewer.html'}).
       otherwise({redirectTo:'/'});
 });
 
-app.controller("MainProfileController", function($scope, $location) {
+app.controller("MainProfileController", ['$scope','$location', function($scope, $location) {
 
-} );
+} ] );
 
 function hidePopover() {
   angular.element('.popover').hide();
 }
 
-function ContactCtrl($scope, $rootScope, SWBrijj) {
+app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
   if ($rootScope.selected.role == 'investor') {
         document.location.href="/home";
         return;
@@ -224,9 +224,9 @@ function ContactCtrl($scope, $rootScope, SWBrijj) {
       $scope.$apply();
     }
   }
-}
+}]);
 
-function PeopleCtrl($scope, $rootScope, SWBrijj) {
+app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
 
     if ($rootScope.selected.role == 'investor') {
         document.location.href="/home";
@@ -268,8 +268,9 @@ function PeopleCtrl($scope, $rootScope, SWBrijj) {
               $scope.sort = col;
           }
       }
-}
-function ViewerCtrl($scope, $rootScope, $routeParams, SWBrijj) {
+}]);
+
+app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', function($scope, $rootScope, $routeParams, SWBrijj) {
 
   if ($rootScope.selected.role == 'investor') {
         document.location.href="/home";
@@ -327,7 +328,7 @@ function ViewerCtrl($scope, $rootScope, $routeParams, SWBrijj) {
           else name.shown = false;
       });
   };
-}
+}]);
 
 app.filter('fileLength', function () {
     return function (word) {

@@ -248,7 +248,18 @@ app.controller('TestCtrl',['$scope','SWBrijj',function($scope,SWBrijj) {
      */
     SWBrijj.view($scope.sql).then(function(x) {
       $scope.columns = x[0];
-      $scope.data = x[1];
+      $scope.data = x.slice(1);
     });
   }
 }]);
+
+
+
+/* Filter to format the activity time */
+angular.module('TestApp').filter('fromNow', function() {
+  return function(date) {
+    if (date == null) return '';
+    if ( date.constructor === Date) return moment(date).fromNow();
+    return date.toString();
+  }
+});
