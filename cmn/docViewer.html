@@ -52,7 +52,7 @@
   </div>
 
   <div>
-    <ul class="page-bar" ng-show="showPageBar && docLength > 1" style="background-color: rgb(85,98,111);overflow: hidden; padding-top: 6px; padding-bottom: 6px; margin-left: 0; margin-bottom: 0;" >
+    <ul class="page-bar" ng-show="showPageBar && docLength > 1 && annotable() " style="background-color: rgb(85,98,111);overflow: hidden; padding-top: 6px; padding-bottom: 6px; margin-left: 0; margin-bottom: 0;" >
       <li ng-class="{hidden: pageScroll==0}" ng-click="pageBarLeft();"
           style="margin-left: 0.5em; font-size: 150%;">
         <span data-icon="&#xe032;"></span></li>

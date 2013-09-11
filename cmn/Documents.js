@@ -212,29 +212,32 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope','$compile','$location','$routeParams', '$window','SWBrijj',
   function($scope, $compile, $location, $routeParams, $window, SWBrijj) {
-  $window.addEventListener('beforeunload', function(event) {
-    void(event);
-    var ndx = $scope.getNoteData();
-    /** @name $scope#lib#annotations
-     * @type {[Object]}
-     */
-    if ( (!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
+    $scope.features = { annotations: false};
 
-    /** @name SWBrijj#_sync
-     * @function
-     * @param {string}
-     * @param {string}
-     * @param {string}
-     * @param {...}
-     */
-    // This is a synchronous save
-        console.log("saving note data (228): "+ndx);
-    /** @name $scope#lib#original
-     * @type {int} */
-    var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
-    // I expect this returns true (meaning updated).  If not, the data is lost
-    if (!res) alert('failed to save annotations');
-  });
+  if ($scope.features.annotations) {
+    $window.addEventListener('beforeunload', function(event) {
+      void(event);
+      var ndx = $scope.getNoteData();
+      /** @name $scope#lib#annotations
+       * @type {[Object]}
+       */
+      if ( (!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
+
+      /** @name SWBrijj#_sync
+       * @function
+       * @param {string}
+       * @param {string}
+       * @param {string}
+       * @param {...}
+       */
+        // This is a synchronous save
+      console.log("saving note data (228): "+ndx);
+      /** @name $scope#lib#original
+       * @type {int} */
+      var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+      // I expect this returns true (meaning updated).  If not, the data is lost
+      if (!res) alert('failed to save annotations');
+    });
 
   /* Save the notes when navigating away */
   // There seems to be a race condition with using $locationChangeStart or Success
@@ -245,6 +248,8 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
     console.log("saving note data (240) due to $locationChangeStart");
     $scope.saveNoteData();
   });
+  }
+
 
   $scope.showPages = function() {
     return $scope.range($scope.pageScroll+1, Math.min($scope.pageScroll+$scope.pageBarSize, $scope.docLength+1));
@@ -280,6 +285,8 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
     $scope.notes = [];
   };
   $scope.annotable = function () {
+    if (true) return false;
+    // FIXME: annotations disabled
     if ($scope.lib == undefined) return true;
     return ($scope.invq && (!$scope.lib.when_signed && $scope.lib.signature_deadline))
         || (!$scope.invq && (!$scope.lib.original || ($scope.lib.when_signed && !$scope.lib.when_confirmed)));
