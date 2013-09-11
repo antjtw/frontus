@@ -78,6 +78,8 @@
 .tableView.captable input:disabled {
     background: transparent;
     -webkit-text-fill-color: #8D8D8D;
+    float: right;
+    margin-right: 5px;
 }
 
 .capright input:disabled {
