@@ -1532,6 +1532,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Caps decimals to 3 places
+            if (n[1] && n[1].length > 3) {
+                n[1] = n[1].substring(0,2);
+            }
             //Combines the two sections
             amount = n.join(".");
         }
