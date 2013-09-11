@@ -154,7 +154,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                             else {
                                 row[issuekey] = {"u": null, "a": null};
                             }
-                            ;
                         });
                     });
 
