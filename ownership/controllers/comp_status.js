@@ -124,8 +124,13 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location) {
     };
 
     $scope.alterEmail = function() {
-        if ($scope.newEmail != "") {
+        if ($scope.newEmail != $scope.oldEmail) {
             SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
+                console.log(data);
+            });
+        }
+        else if ($scope.newEmail == $scope.oldEmail) {
+            SWBrijj.proc('ownership.reshare', $scope.oldEmail).then(function (data) {
                 console.log(data);
             });
         }
