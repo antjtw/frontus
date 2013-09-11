@@ -6,7 +6,7 @@ ownership.filter('noUnissue', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.editable == "yes" || row.name == "") {
+            if (row.editable != 0 || row.name == "") {
                 returnrows.push(row);
             }
         });

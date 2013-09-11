@@ -270,7 +270,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, 
       }
 }]);
 
-app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', function($scope, $rootScope, $routeParams, SWBrijj) {
+app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', function($scope, $rootScope, $routeParams, SWBrijj) {
 
   if ($rootScope.selected.role == 'investor') {
         document.location.href="/home";
@@ -328,6 +328,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', function($sc
           else name.shown = false;
       });
   };
+
 }]);
 
 app.filter('fileLength', function () {
