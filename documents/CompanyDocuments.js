@@ -497,10 +497,13 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
           message = "";
       }
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
-          console.log(data);
+          $rootScope.notification.show("success", "Document shared with " + email);
           $scope.signeeded = "No"
           $route.reload();
-      });
+      }).except(function(x) {
+          $rootScope.notification.show("fail", "Oops, something went wrong.");
+          $scope.signeeded = "No"
+          });
   };
 
 
