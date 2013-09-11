@@ -1229,9 +1229,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             something = true;
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            console.log(row[issue.issue]['u']);
-                            console.log(row[issue.issue]['vested']);
-                            if (row[issue.issue]['u'] < row[issue.issue]['vested']) {
+                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
                                 console.log("working");
                                 temprow[issue.issue]['u'] = row[issue.issue]['u'];
                             }

@@ -208,7 +208,6 @@ ownership.service('calculate', function () {
                         cycleDate.addMonths(x);
                     }
                     while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        console.log("The cycle data is " + String(cycleDate));
                         vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
