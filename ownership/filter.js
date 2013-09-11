@@ -46,7 +46,7 @@ ownership.filter('unissuedrowviewList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.editable != "yes") {
+            if (row.name != "" && row.editable == 0) {
                 returnrows.push(row);
             }
         });
