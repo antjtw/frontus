@@ -276,6 +276,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
     };
 
+    $scope.saveTranAssign = function (transaction, field, value) {
+        if (value) {
+            transaction[field] = value;
+        }
+        $scope.saveTran(transaction);
+    };
+
     $scope.saveTran = function (transaction) {
         var d1 = transaction['date'].toUTCString();
         if (transaction['vestingbegins'] == undefined) {
