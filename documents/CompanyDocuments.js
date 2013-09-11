@@ -758,7 +758,7 @@ angular.module('documentviews').filter('fromNow', function() {
 /* Filter to select the activity icon for document status */
 angular.module('documentviews').filter('icon', function() {
    return function(activity) {
-     if (activity == "sent") return "icon-email";
+     if (activity == "received") return "icon-email";
      else if (activity == "viewed") return "icon-view";
      else if (activity == "reminder") return "icon-redo";
      else if (activity == "signed") return "icon-pen";
@@ -774,12 +774,15 @@ angular.module('documentviews').filter('description', function() {
   return function(ac) {
     var activity = ac.activity;
     var person = ac.name;
-    if (activity == "sent") return "Sent to "+person;
+    if (person == "") {
+       person = ac.person;
+    }
+    if (activity == "sent") return "";
     else if (activity == "viewed") return "Viewed by "+person;
     else if (activity == "reminder") return "Reminded "+person;
     else if (activity == "signed") return "Signed by "+person;
     else if (activity == "uploaded") return "Uploaded by "+person;
-    else if (activity == "received") return "";
+    else if (activity == "received") return "Sent to "+person;
     else if (activity == "rejected") return "Rejected by "+person;
     else if (activity == "countersigned") return "Countersigned by "+person;
     else return activity + " by "+person;
