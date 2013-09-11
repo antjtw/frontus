@@ -318,7 +318,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.counterparty = !!$scope.urlInves;
   $scope.tester = $rootScope.userid.match(/sharewave.com$/);
   $scope.signeeded = "No";
-  $scope.messageText = "Hi, Please take a look at this document"
+  $scope.messageText = "Add an optional message..."
 
   // For Email sharing
   $scope.recipients = [];
@@ -476,10 +476,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.changeSig = function(value) {
        $scope.signeeded = value;
       if (value == "Yes") {
-          $scope.messageText = "Hi, Your signature is requested on " + $scope.document.docname;
+          $scope.messageText = "Hi, Your signature is requested";
       }
       else {
-          $scope.messageText = "Hi, Please take a look at this document";
+          $scope.messageText = "Add an optional message...";
       }
   }
 
@@ -492,6 +492,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
       }
       else {
           date = null;
+      }
+      if (message == "Add an optional message...") {
+          message = "";
       }
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
           console.log(data);
