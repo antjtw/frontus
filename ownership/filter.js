@@ -71,8 +71,8 @@ ownership.filter('issueviewList', function () {
 ownership.filter('maxLength', function () {
     return function (word) {
         if (word) {
-            if (word.length > 9) {
-                return word.substring(0, 8);
+            if (word.length > 8) {
+                return word.substring(0, 7);
             }
             else {
                 return word;

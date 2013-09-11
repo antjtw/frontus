@@ -1218,6 +1218,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
                             something = true;
                         }
+                        else if (row[issue.issue]['exercised']) {
+                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            }
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
                             if (row[issue.issue]['u'] < row[issue.issue]['vested']) {
                                 temprow[issue.issue]['u'] = row[issue.issue]['u'];
