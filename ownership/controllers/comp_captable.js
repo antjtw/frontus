@@ -1218,7 +1218,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
                             something = true;
                         }
-                        else if (row[issue.issue]['exercised']) {
+                        else if (row[issue.issue]['exercised'] && !row.vested) {
                             if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
                                 temprow[issue.issue]['u'] = row[issue.issue]['u'];
                             }
