@@ -92,7 +92,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (issue.vestingbegins) {
                         issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                     }
-                })
+                });
 
 
 
