@@ -75,8 +75,21 @@ ul>li.curPage {
     right:50%;
 }
 
+.pageTurn .locked {
+    opacity: 0.3;
+}
+
 .page-bar > li.page-tabs {
     padding-left: 2.2em;
+}
+
+.page-jumper {
+    width: 24px;
+    border: none;
+    text-align: right;
+    height: 12px;
+    margin-bottom: 1px;
+    line-height: 12px;
 }
 
 .pageJump {
