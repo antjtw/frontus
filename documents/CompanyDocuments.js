@@ -122,11 +122,11 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q','$location', '$rootScope', '$route', 'SWBrijj',
-    function($scope, $modal, $q, $rootScope, $location, $route, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
-    $location.path('/investor-list'); // goes into a bottomless recursion ?
-    // document.location.href='/documents';  // this works
+docviews.controller('CompanyDocumentListController', ['$scope', '$location', '$modal','$q', '$rootScope', '$route', 'SWBrijj',
+    function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj) {
+    if ($rootScope.selected.role == 'investor') {
+    // $location.path('/investor-list?'); // goes into a bottomless recursion ?
+    document.location.href='/documents';  // this works
     // $location.path('/');
     return;
   }
