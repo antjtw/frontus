@@ -23,16 +23,14 @@ function setCursor(cursor) {
   }
 }
 
-function calculateRedirect() {
+/*function calculateRedirect() {
   if (readCookie('role') == 'issuer') {
-      console.log("issuer");
       return '/company-list';
   }
   else {
-      console.log("investor");
       return '/investor-list';
   }
-}
+}*/
 
 var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
     function($routeProvider, $locationProvider, $httpProvider) {
@@ -43,7 +41,7 @@ var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'u
       when('/company-status', {templateUrl: 'companyStatus.html', controller: 'CompanyDocumentStatusController'}).
       when('/investor-list', {templateUrl: 'investorList.html', controller: 'InvestorDocumentListController'}).
       when('/investor-view', {templateUrl: 'investorViewer.html', controller: 'InvestorDocumentViewController'}).
-      otherwise({redirectTo: calculateRedirect() });
+      otherwise({redirectTo: '/company-list' });
   $httpProvider.responseInterceptors.push('errorHttpInterceptor');
 });
 
