@@ -21,12 +21,14 @@ ownership.service('calculate', function () {
         var leftovers;
         angular.forEach(issues, function (issue) {
             if (issue.issue == issuename) {
-                leftovers = issue.totalauth;
-                angular.forEach(rows, function (row) {
-                    if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                        leftovers = leftovers - row[issue.issue]['u'];
-                    }
-                });
+                if (!isNaN(parseFloat(issue.totalauth))) {
+                    leftovers = issue.totalauth;
+                    angular.forEach(rows, function (row) {
+                        if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
+                            leftovers = leftovers - row[issue.issue]['u'];
+                        }
+                    });
+                }
             }
         });
 

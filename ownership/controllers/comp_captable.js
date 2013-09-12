@@ -1204,7 +1204,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 angular.forEach($scope.issues, function (issue) {
                     if (issue.issue) {
                         temprow[issue.issue] = {};
-                        if (row.editable == "yes" && issue.type == "Equity" && row[issue.issue]['u'] > 0) {
+                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
                             temprow[issue.issue] = row[issue.issue];
                             something = true;
                         }
