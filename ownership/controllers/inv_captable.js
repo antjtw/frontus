@@ -1,11 +1,11 @@
 var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (readCookie('role') == 'issuer') {
         $location.path('/company-captable');
         return;
     }
 
-    var company = $rootScope.selected.company;
+    var company = readCookie('company');
 
     $scope.currentCompany = company;
     console.log(company);

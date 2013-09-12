@@ -1,6 +1,6 @@
 var statusController = function ($scope, $rootScope, SWBrijj, $location) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
         $location.path('/investor-captable');
         return;
     }

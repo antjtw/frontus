@@ -1,12 +1,12 @@
 // Grants page controller
 var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
         $location.path('/investor-grants');
         return;
     }
 
-    var company = $rootScope.selected.company;
+    var company = readCookie('company');
     $scope.company = company;
 
 

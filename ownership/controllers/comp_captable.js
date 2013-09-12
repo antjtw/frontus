@@ -2,11 +2,11 @@
 
 var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
         $location.path('/investor-captable');
         return;
     }
-    var company = $rootScope.selected.company;
+    var company = readCookie('company');
     $scope.currentCompany = company;
 
     /*    if ($rootScope.selected.isAdmin) {

@@ -129,7 +129,7 @@ docviews.run(function($rootScope, $document) {
 
 docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '$location', '$rootScope', '$route', 'SWBrijj',
     function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj) {
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
     $location.path('/investor-list'); // goes into a bottomless recursion ?
     //document.location.href='/investor-list';  // this works
     // $location.path('/');
@@ -300,7 +300,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
 
 docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$route','$rootScope','$timeout','$location','SWBrijj',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+  if (readCookie('role') == 'investor') {
     $location.path('/investor-view');
     return;
   }
@@ -518,7 +518,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
 docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj',
   function($scope, $routeParams, $rootScope, $location, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+  if (readCookie('role') == 'investor') {
     $location.path('/investor-list');
     return;
   }
@@ -639,11 +639,11 @@ docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams',
 
 docviews.controller('InvestorDocumentListController',['$scope','SWBrijj','$location','$rootScope',
   function($scope, SWBrijj, $location, $rootScope) {
-  if ($rootScope.selected.role == 'issuer') {
+  if (readCookie('role') == 'issuer') {
     $location.path("/company-list");
     return;
   }
-  $scope.selectedCompany = $rootScope.selected.company;
+  $scope.selectedCompany = readCookie('company');
 
   // Set up event handlers
   SWBrijj.defaultErrorHandler = function(errm) { //noinspection JSValidateTypes
@@ -681,7 +681,7 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
   // Switch to company view if the role is issuer
     /** @name $routeParams#doc
      * @type {string} */
-  if ($rootScope.selected.role == 'issuer') { $location.path("/company-view"); return; }
+  if (readCookie('role') == 'issuer') { $location.path("/company-view"); return; }
 
   // Set up event handlers
   SWBrijj.defaultErrorHandler = function(errm) { //noinspection JSValidateTypes
@@ -703,7 +703,7 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
     $scope.invq = true;
     $scope.confirmModalClose();
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function (data) {
-      if ($rootScope.selected.company != data.company)  { $location.path("/investor-list?"); return; }
+      if (readCookie('company') != data.company)  { $location.path("/investor-list?"); return; }
       $scope.document = data;
     }).except(function(x) { void(x); $location.path("/investor-list?"); } );
   };
