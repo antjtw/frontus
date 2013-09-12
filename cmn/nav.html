@@ -65,6 +65,7 @@
               </li>
             </ul>
           <li>
+          <li ng-show="selected.role=='sheriff'" ng-class="{active: path.indexOf('/admin') != -1}"><a class="button" href="/admin">Admin</a></li>
           <li ng-class="{active: path.indexOf('/ownership') != -1}"><a class="button" href="/ownership">Ownership</a></li>
           <li ng-class="{active: path.indexOf('/documents') != -1}"><a class="button" href="/documents">Documents</a></li>
           <li ng-show="people.visible" ng-class="{active: path.indexOf('/profile/people') != -1}"><a class="button" href="{{people.link}}">People</a></li>
