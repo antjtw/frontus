@@ -20,7 +20,7 @@ function hidePopover() {
 }
 
 app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+  if (readCookie('role') == 'investor') {
         document.location.href="/home";
         return;
     }
@@ -228,7 +228,7 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope,
 
 app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
         document.location.href="/home";
         return;
     }
@@ -272,7 +272,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, 
 
 app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', function($scope, $rootScope, $routeParams, SWBrijj) {
 
-  if ($rootScope.selected.role == 'investor') {
+  if (readCookie('role') == 'investor') {
         document.location.href="/home";
         return;
   }
