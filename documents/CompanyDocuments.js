@@ -23,9 +23,14 @@ function setCursor(cursor) {
   }
 }
 
-function calculateRedirect() {
-  return readCookie('role') == 'issuer' ? '/company-list' : '/investor-list';
-}
+/*function calculateRedirect() {
+  if (readCookie('role') == 'issuer') {
+      return '/company-list';
+  }
+  else {
+      return '/investor-list';
+  }
+}*/
 
 var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
     function($routeProvider, $locationProvider, $httpProvider) {
@@ -36,7 +41,7 @@ var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'u
       when('/company-status', {templateUrl: 'companyStatus.html', controller: 'CompanyDocumentStatusController'}).
       when('/investor-list', {templateUrl: 'investorList.html', controller: 'InvestorDocumentListController'}).
       when('/investor-view', {templateUrl: 'investorViewer.html', controller: 'InvestorDocumentViewController'}).
-      otherwise({redirectTo: calculateRedirect() });
+      otherwise({redirectTo: '/company-list' });
   $httpProvider.responseInterceptors.push('errorHttpInterceptor');
 });
 
@@ -52,7 +57,7 @@ docviews.directive('library', function() {
   }
 });
 
-docviews.directive('modalshare', function($timeout, SWBrijj) {
+/*docviews.directive('modalshare', function($timeout, SWBrijj) {
   return {
     restrict: 'EA',
     templateUrl: "modalShare.html",
@@ -64,12 +69,12 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
       scope.nextRecip = "";
       scope.share = function() {
       	var sigdate = scope.signaturedate.toUTCString();
-        /** @name scope#messageText
-         * @type {string} */
-        /** @name scope#signeeded
-         * @type {boolean} */
-        /** @name scope#confirmSignature
-         * @type {boolean} */
+        *//** @name scope#messageText
+         * @type {string} *//*
+        *//** @name scope#signeeded
+         * @type {boolean} *//*
+        *//** @name scope#confirmSignature
+         * @type {boolean} *//*
          	angular.forEach(scope.recipients, function(x) {
       		SWBrijj.procm("document.share_document", scope.selectedDoc, x.toLowerCase(), scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
 			});
@@ -79,7 +84,7 @@ docviews.directive('modalshare', function($timeout, SWBrijj) {
     replace:true,
     priority: 20
   }
-});
+});*/
 
 docviews.factory('errorService', function() {
   return {
@@ -122,9 +127,9 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$rootScope', '$route', 'SWBrijj',
-    function($scope, $modal, $q, $rootScope, $route, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+docviews.controller('CompanyDocumentListController', ['$scope', '$location', '$modal','$q', '$rootScope', '$route', 'SWBrijj',
+    function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj) {
+    if ($rootScope.selected.role == 'investor') {
     // $location.path('/investor-list?'); // goes into a bottomless recursion ?
     document.location.href='/documents';  // this works
     // $location.path('/');
@@ -172,7 +177,7 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
      return !$scope.query || re.test(obj.docname);
   };
 
-  $scope.askShare = function(docid) {
+/*  $scope.askShare = function(docid) {
   $scope.selectedDoc = docid;
   var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
   $q.when(modalPromise).then(function(eel) {
@@ -182,15 +187,15 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
       el.removeChild(el.childNodes[0]);
       eel.modal('show');
   });
-  };
+  };*/
 
-  $scope.delete = function(docid) {
+/*  $scope.delete = function(docid) {
     SWBrijj.procm("document.delete",docid).then(function(x) {
       var i = x[0].delete;
       $rootScope.errorMessage = i == 1 ? "Document deleted" : i+" documents deleted";
       $route.reload();
     });
-  };
+  };*/
 
     // Document Upload pieces
     // Modal Up and Down Functions
