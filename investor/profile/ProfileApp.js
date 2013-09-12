@@ -1,5 +1,5 @@
 
-var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj'],
+var app = angular.module('ProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj'],
     function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');

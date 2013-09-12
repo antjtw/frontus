@@ -14,6 +14,7 @@
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/brijj/aBrijj.js"></script>
 <script src="/lib/moment.min.js"></script>
+<script src="/cmn/nav.js"></script>
 
 <script>
         window.console = window.console || {};

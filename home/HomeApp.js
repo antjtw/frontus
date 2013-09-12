@@ -1,20 +1,24 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj']);
 
+/** @name $routeParams#msg
+ *  @type {string}
+ */
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {controller:InvestorCtrl, templateUrl:'investor.html'}).
-      when('/company', {controller:CompanyCtrl, templateUrl:'company.html'}).
+      when('/', {controller: 'InvestorCtrl', templateUrl:'investor.html'}).
+      when('/company', {controller: 'CompanyCtrl', templateUrl:'company.html'}).
       otherwise({redirectTo:'/'});
 });
 
-app.controller("MainController", function($scope, $location) {
-});
+app.controller("MainController", ['$scope','$location', function($scope, $location) {
+}]);
 
-function CompanyCtrl($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
+app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
+  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
 
     if ($rootScope.selected.role == 'investor') {
         $location.path('/');
@@ -36,7 +40,7 @@ function CompanyCtrl($scope, $rootScope, $route, $location, $routeParams, SWBrij
   $scope.close = function() {
     $scope.onboarding = false;
     SWBrijj.procm('account.onboarding_update', false);
-  }
+  };
 
  $scope.activity = [];
   SWBrijj.tblm('global.get_company_activity').then(function(data) {
@@ -49,9 +53,10 @@ function CompanyCtrl($scope, $rootScope, $route, $location, $routeParams, SWBrij
   $scope.activityOrder = function(card) {
         return -card.time;
   };
-}
+}]);
 
-function InvestorCtrl($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj',
+  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
 
     if ($rootScope.selected.role == 'issuer') {
         $location.path('/company');
@@ -72,14 +77,16 @@ function InvestorCtrl($scope, $rootScope, $location, $route, $routeParams, SWBri
       if ($scope.activity.length == 0) {
           $scope.noActivity = true;
       }
-  });
+  }).except(function(msg) {
+        console.log(msg.message);
+      });
 
   $scope.activityOrder = function(card) {
         return -card.time;
   };
-}
+}]);
 
-function HomeCtrl($scope, $route) {
+app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
   SWBrijj.tbl('account.companies').then(function(x) {
     console.log(x);
     if (x.length > 0) { //User is a CEO of a company
@@ -90,8 +97,9 @@ function HomeCtrl($scope, $route) {
       })
     }
   });  
-}
+}]);
 
+/*
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames
@@ -99,10 +107,11 @@ function initPage($scope, x, row) {
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
   $scope.$apply();
-}
+} */
 
 function initFail(x) {
-  document.location.href='/login';
+  void(x);
+  console.log('I would have redirected to login'); // document.location.href='/login';
 }
 
 /************************************************************
@@ -135,7 +144,7 @@ angular.module('HomeApp').filter('icon', function() {
 angular.module('HomeApp').filter('description', function() {
     return function(ac) {
         var activity = ac.activity;
-        var person
+        var person;
         if (ac.name) {
             person = ac.name;
         }
@@ -146,10 +155,11 @@ angular.module('HomeApp').filter('description', function() {
         if (type == "ownership") {
             if (activity == "received") return "Ownership Table sent to " + person;
             else if (activity == "viewed") return "Ownership Table viewed by "+person;
+          else return "Something with Ownership Table";
         }
         else {
             var document = ac.docname;
-            if (activity == "sent") return ""
+            if (activity == "sent") return "";
             else if (activity == "viewed") return document + " viewed by "+person;
             else if (activity == "reminder") return "Reminded "+person + " about " +document;
             else if (activity == "signed") return document + " signed by "+person;
@@ -170,7 +180,7 @@ angular.module('HomeApp').filter('investordescription', function() {
         if (company == null) {
             company = ac.company;
         }
-        var person
+        var person;
         if (ac.name) {
             person = ac.name;
         }
@@ -181,6 +191,7 @@ angular.module('HomeApp').filter('investordescription', function() {
         if (type == "ownership") {
             if (activity == "received") return "You received " + company + "'s captable";
             else if (activity == "viewed") return "You received " + company + "'s captable";
+          else return "Something happened with "+company +"'s captable";
         }
         else if (type == "document") {
             var document = ac.docname;
