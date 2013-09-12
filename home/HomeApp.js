@@ -20,7 +20,7 @@ app.controller("MainController", ['$scope','$location', function($scope, $locati
 app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
   function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (readCookie('role') == 'investor') {
         $location.path('/');
         return;
     }
@@ -31,7 +31,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
     }
   }
 
-  $scope.company = $rootScope.selected.name;
+  $scope.company = readCookie('company');
 
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
@@ -58,7 +58,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj',
   function($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (readCookie('role') == 'issuer') {
         $location.path('/company');
         return;
     }
@@ -69,7 +69,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     }
   }
   //$scope.company = $routeParams.company;
-  $scope.company = $rootScope.selected.name;
+  $scope.company = readCookie('company');
 
   $scope.activity = [];
   SWBrijj.tblm('global.get_investor_activity').then(function(data) {
