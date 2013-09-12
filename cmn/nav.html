@@ -54,7 +54,7 @@
           <li ng-class="{dropdown: companies.length > 1}">
             <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}" ng-href="{{{true: '#', false: ''}[companies.length > 1]}}">{{selected.name}}<span class='for-r0ml'> ({{selected.role}})</span></a>
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
-            <ul class="dropdown-menu" ng-show="companies.length > 1">
+            <ul class="dropdown-menu" ng-show="companies.length > 1 || true">
               <li class="dropdown-label"><span>INVESTMENTS</span></li>
               <li class="button" ng-show="company.role=='investor'" ng-class="{'selected-company':company.company==selected.company && company.role==selected.role}" ng-repeat="company in companies">
                 <a class="button" ng-click="switch(company)">{{company.name}}</a>
