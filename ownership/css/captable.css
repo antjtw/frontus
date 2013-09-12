@@ -75,7 +75,7 @@
     padding-right: 5px;
 }
 
-.tableView.captable input:disabled {
+.tableView.captable .capsums-col input:disabled {
     background: transparent;
     -webkit-text-fill-color: #8D8D8D;
     float: right;
