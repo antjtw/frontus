@@ -124,10 +124,20 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location) {
     };
 
     $scope.alterEmail = function() {
-        if ($scope.newEmail != "") {
+        if ($scope.newEmail != $scope.oldEmail) {
             SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
                 console.log(data);
-            });
+                $rootScope.notification.show("success", "Successfully Updated Email");
+            }).except(function(x) {
+                    $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+                });
+        }
+        else if ($scope.newEmail == $scope.oldEmail) {
+            SWBrijj.proc('ownership.reshare', $scope.oldEmail).then(function (data) {
+                $rootScope.notification.show("success", "Successfully resent");
+            }).except(function(x) {
+                    $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+                });
         }
     };
 

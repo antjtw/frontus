@@ -74,7 +74,9 @@
               <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.last_viewed">Never Viewed</span><span ng-show="person.last_viewed">Last Logged In</span></td>
               <td colspan="4">{{person.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
-          <tr class="status-detail" ng-Show="person.shown && person.signature_deadline">
+
+          <!-- Row hidden for now as deadline not being used -->
+          <tr class="status-detail for-r0ml" ng-Show="person.shown && person.signature_deadline">
               <td><span data-icon="&#xe015;" aria-hidden="true"></span><span ng-hide="person.signature_deadline">No Signature Required</span><span ng-show="person.signature_deadline">Signature Deadline</span></td>
               <td colspan="4">{{person.signature_deadline | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>

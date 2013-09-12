@@ -74,8 +74,18 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         });
                     });
 
+                    angular.forEach($scope.issues, function(issue) {
+                        var offset = issue.date.getTimezoneOffset();
+                        issue.date = issue.date.addMinutes(offset);
+                        if (issue.vestingbegins) {
+                            issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                        }
+                    });
+
 
                     for (var i = 0, l = $scope.trans.length; i < l; i++) {
+                        var offset = $scope.trans[i].date.getTimezoneOffset();
+                        $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
@@ -154,7 +164,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                             else {
                                 row[issuekey] = {"u": null, "a": null};
                             }
-                            ;
                         });
                     });
 
@@ -333,6 +342,10 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
             var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Caps decimals to 3 places
+            if (n[1] && n[1].length > 4) {
+                n[1] = n[1].substring(0,3);
+            }
             //Combines the two sections
             amount = n.join(".");
         }

@@ -92,7 +92,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (issue.vestingbegins) {
                         issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                     }
-                })
+                });
 
 
 
@@ -1209,12 +1209,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             something = true;
                         }
                         if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            }
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
+                        else if (row[issue.issue]['exercised'] && !row.vested) {
+                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            }
                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
                             something = true;
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            temprow[issue.issue]['u'] = row.vested[issue.issue];
+                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
+                                console.log("working");
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row.vested[issue.issue];
+                            }
                             temprow[issue.issue]['a'] = row[issue.issue]['a'];
                             something = true;
                         }
@@ -1511,6 +1532,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Caps decimals to 3 places
+            if (n[1] && n[1].length > 4) {
+                n[1] = n[1].substring(0,3);
+            }
             //Combines the two sections
             amount = n.join(".");
         }

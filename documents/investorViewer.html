@@ -5,17 +5,26 @@
         <span class="documentStatus">{{document.signature_status}}</span>
       </h1>
 
-      <div class="row-fluid">
-        <div>
-          <button ng-click="confirmModal=true" ng-show="signable();" class="button subText blueButton">Sign Document</button>
-          <button class="button subText greyButton" ng-show="tester && document.when_signed" ng-click="unSign(document)">UnSign</button>
-        </div>
-      </div>
-
     </div>
 
   </div>
-
+    <div ng-show="signable() || (tester && document.when_signed)" class="row-fluid">
+        <div class="subnav-controls">
+            <div>
+                <div class="pull-right">
+                    <div class="share-button">
+                        <button ng-click="confirmModal=true" ng-show="signable();" class="btn">Sign Document</button>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <div class="share-button">
+                        <button class="btn" ng-show="tester && document.when_signed" ng-click="unSign(document)">UnSign</button>
+                    </div>
+                </div>
+            </div>
+            <div class="DivHelper"></div>
+        </div>
+    </div>
   <div class="row-fluid">
     <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="true"></doc-viewer>
   </div>

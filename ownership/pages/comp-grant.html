@@ -74,8 +74,8 @@
                                   {{tran.optundersec | maxLength}}<span class="invisible-drop">'</span>
                               </a>
                               <ul class="dropdown-menu">
-                                  <li ng-repeat="i in allowKeys">
-                                      <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i}}</a>
+                                  <li ng-repeat="i in tran.allowKeys">
+                                      <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i | maxLength}}</a>
                                   </li>
                               </ul>
                           </li>
