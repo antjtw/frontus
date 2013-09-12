@@ -25,7 +25,8 @@ navm.directive('navbar', function () {
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
   function ($scope, $route, $rootScope, SWBrijj) {
     $scope.companies = [];
-    $rootScope.selected = {};
+    $rootScope.selected = { company: readCookie('company'), role: readCookie('role')};
+    $rootScope.userid = readCookie('userid');
 
     $scope.nav = 'navBarLoggedOut';
     var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
