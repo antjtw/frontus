@@ -1,4 +1,4 @@
-var app = angular.module('AdminApp', ['ngResource', 'ui.bootstrap', 'brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('AdminApp', ['ngResource', 'ui.bootstrap', 'nav', 'brijj'], function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
@@ -12,6 +12,8 @@ var app = angular.module('AdminApp', ['ngResource', 'ui.bootstrap', 'brijj'], fu
       when('/upload', {controller: 'AdminCtrl', templateUrl: 'upload.html'}).
       when('/sql', {controller: 'AdminCtrl', templateUrl: 'sql.html'}).
       when('/other', {controller:'AdminCtrl', templateUrl: 'other.html'}).
+      when('/contacts', {controller: 'ContactsCtrl', templateUrl: 'contacts.html'}).
+      when('/signups', {controller: 'SignupsCtrl', templateUrl: 'signups.html'}).
       otherwise({redirectTo:'/other'});
 });
 
@@ -268,8 +270,89 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $r
       $scope.columns = x[0];
       $scope.data = x.slice(1);
     });
+  };
+
+
+  $scope.authorize = function() {
+    SWBrijj.proc("get_google_access").then(function(x) {
+      var ru = x[1][0];
+      document.cookie="rux="+encodeURIComponent(ru)+";path=/";
+      document.location.href=ru;
+    });
+  };
+
+  $scope.download = function() {
+    /** @name SWBrijj#getSignups
+     *  @function */
+    SWBrijj.getSignups().then(function(x) {
+      document.location.href=x;
+    });
   }
+
+
 }]);
+
+
+
+
+app.controller('ContactsCtrl',['$scope', 'SWBrijj', function($scope, SWBrijj) {
+  SWBrijj.procm('profile').then(function(x) {
+    console.log(x);
+    $scope.items = x;
+    $scope.$apply();
+  });
+}]);
+
+app.controller('SignupsCtrl',['$scope', 'SWBrijj', function($scope, SWBrijj) {
+  SWBrijj.proc('get_signupcnt_all').then(function(x) {
+    $scope.signupcnt_all = x[1][0];
+    $scope.$apply();
+  });
+
+  SWBrijj.proc('get_signupcnt_today').then(function(x) {
+    $scope.signupcnt_today = x[1][0];
+    $scope.$apply();
+  });
+
+  SWBrijj.proc('get_signupcnt_yesterday').then(function(x) {
+    $scope.signupcnt_yesterday = x[1][0];
+    $scope.$apply();
+  });
+
+
+
+
+
+  $scope.downloadExcel = function() {
+
+    // GET CURRENT DATE
+    var date = new Date();
+
+    // GET YYYY, MM AND DD FROM THE DATE OBJECT
+    var yyyy = date.getFullYear().toString();
+    var mm = (date.getMonth()+1).toString();
+    var dd  = date.getDate().toString();
+
+    // CONVERT mm AND dd INTO chars
+    var mmChars = mm.split('');
+    var ddChars = dd.split('');
+
+    // CONCAT THE STRINGS IN YYYY-MM-DD FORMAT
+    var datestring = yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
+    var downloadname = "signup-report-" + datestring + ".xlsx";
+
+    /** @name SWBrijj#procd
+     * @function
+     * @param {string} name
+     * @param {string} procedure
+     * @param {string} mimetype
+     * @param {Date} timestamp
+     */
+    SWBrijj.procd(downloadname, "get_signups", "application/ms-excel", new Date()).then( function(x) { document.location.href=x; });
+  };
+}]);
+
+
 
 
 

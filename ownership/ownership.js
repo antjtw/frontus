@@ -9,7 +9,7 @@ function calculateRedirect($scope) {
 }
 
 var owner = angular
-    .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'brijj', 'ownerServices', 'ownerFilters'])
+    .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'ownerServices', 'ownerFilters'])
 
 owner.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');

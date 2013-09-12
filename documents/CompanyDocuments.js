@@ -27,7 +27,7 @@ function calculateRedirect() {
   return readCookie('role') == 'issuer' ? '/company-list' : '/investor-list';
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
+var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
     function($routeProvider, $locationProvider, $httpProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
