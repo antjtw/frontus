@@ -37,6 +37,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
        */
       SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
         $scope.initCompany(data);
+        $route.reload();
       });
     };
 
@@ -58,6 +59,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
                       thiscmp.current = true;
                   }
               });
+            $route.reload();
           });
       }
 
@@ -92,7 +94,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
           }
         }
       }
-      $route.reload();
     };
 
     $rootScope.isLoggedIn = true;
