@@ -61,6 +61,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
         }
       }
       $rootScope.selected = thiscmp;
+      if (!thiscmp.current) {
+          SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
+              angular.forEach(data, function (comp) {
+                  if (thiscmp.company == comp.company && comp.current == true) {
+                      thiscmp.current = true;
+                  }
+              });
+          });
+      }
+
 
       if (thiscmp.role == 'issuer') {
         $scope.people.link = $scope.people.adminlink;
