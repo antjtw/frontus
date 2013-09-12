@@ -74,7 +74,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.issues = data;
 
         // Get the company's Transactions
-        alert("call me once");
         SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
             $scope.trans = trans;
 

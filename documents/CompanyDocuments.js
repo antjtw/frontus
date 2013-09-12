@@ -321,7 +321,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.docKey = docKey;
   $scope.invq = false;
   $scope.counterparty = !!$scope.urlInves;
-  $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+  $scope.tester = false;
   $scope.signeeded = "No";
   $scope.messageText = "Add an optional message..."
 
@@ -699,7 +699,7 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
     $scope.thisPage = $routeParams.page ? parseInt($routeParams.page) : 1 ;
     $scope.library = "document.my_investor_library";
     $scope.pages = "document.my_investor_codex";
-    $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+    $scope.tester = false;
     $scope.invq = true;
     $scope.confirmModalClose();
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function (data) {
