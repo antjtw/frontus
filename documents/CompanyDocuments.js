@@ -24,7 +24,14 @@ function setCursor(cursor) {
 }
 
 function calculateRedirect() {
-  return readCookie('role') == 'issuer' ? '/company-list' : '/investor-list';
+  if (readCookie('role') == 'issuer') {
+      console.log("issuer");
+      return '/company-list';
+  }
+  else {
+      console.log("investor");
+      return '/investor-list';
+  }
 }
 
 var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
