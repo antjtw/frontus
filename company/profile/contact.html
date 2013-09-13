@@ -29,7 +29,7 @@
         </tr>
         <tbody ng-repeat="admin in admins">
           <tr>
-          <td><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
+          <td>{{admin.name}}</td>
           <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" data-tooltip-placement="bottom" data-tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
