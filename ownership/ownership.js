@@ -21,7 +21,7 @@ owner.config(function ($routeProvider, $locationProvider) {
         when('/company-status', {templateUrl: 'pages/comp-status.html', controller: statusController}).
         when('/investor-captable', {templateUrl: 'pages/inv-captable.html', controller: invCaptableController}).
         when('/investor-grants', {templateUrl: 'pages/inv-grant.html', controller: invGrantController}).
-        otherwise({redirectTo: 'pages/inv-captable.html' });
+        otherwise({redirectTo: '/investor-captable' });
 });
 /*
 owner.factory('sharedData', function(SWBrijj, $q) {
