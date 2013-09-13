@@ -1,11 +1,12 @@
-var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
+var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location,
+    navState) {
 
-    if (readCookie('role') == 'issuer') {
+    if (navState.role == 'issuer') {
         $location.path('/company-captable');
         return;
     }
 
-    var company = readCookie('company');
+    var company = navState.company;
 
     $scope.currentCompany = company;
     console.log(company);

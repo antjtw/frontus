@@ -19,8 +19,8 @@ function hidePopover() {
   angular.element('.popover').hide();
 }
 
-app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
-  if (readCookie('role') == 'investor') {
+app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', function($scope, $rootScope, SWBrijj, navState) {
+  if (navState.role == 'investor') {
         document.location.href="/home";
         return;
     }
@@ -226,9 +226,9 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope,
   }
 }]);
 
-app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
+app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', function($scope, $rootScope, SWBrijj, navState) {
 
-    if (readCookie('role') == 'investor') {
+    if (navState.role == 'investor') {
         document.location.href="/home";
         return;
     }
@@ -270,9 +270,10 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, 
       }
 }]);
 
-app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', function($scope, $rootScope, $routeParams, SWBrijj) {
+app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', 'navState',
+  function($scope, $rootScope, $routeParams, SWBrijj, navState) {
 
-  if (readCookie('role') == 'investor') {
+  if (navState.role == 'investor') {
         document.location.href="/home";
         return;
   }
