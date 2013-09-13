@@ -147,19 +147,19 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', function($scope,
         x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
           x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeadmin") {
           x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
           x.icon = "icon-circle-minus";
         } else if (x.activity == "addinvestor") {
           x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeinvestor") {
           x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
           x.icon = "icon-circle-minus";
         }
 
