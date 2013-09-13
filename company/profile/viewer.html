@@ -77,10 +77,6 @@
               <td>{{doc.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-              <td><span data-icon="&#xe015;" aria-hidden="true"></span><span ng-hide="doc.signature_deadline">No Signature Required</span><span ng-show="doc.signature_deadline">Signature Deadline</span></td>
-              <td>{{doc.signature_deadline | date:'MMMM dd, yyyy, h:mm a'}}</td>
-          </tr>
-          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
               <td><span data-icon="&#xe00d;" aria-hidden="true"></span><span ng-hide="doc.when_signed">Never Signed</span><span ng-show="doc.when_signed">Signed</span></td>
               <td>{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
