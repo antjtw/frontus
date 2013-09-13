@@ -1,12 +1,12 @@
 
 
-var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting) {
+var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (navState.role == 'investor') {
         $location.path('/investor-captable');
         return;
     }
-    var company = $rootScope.selected.company;
+    var company = navState.company;
     $scope.currentCompany = company;
 
     /*    if ($rootScope.selected.isAdmin) {

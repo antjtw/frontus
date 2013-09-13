@@ -17,10 +17,10 @@ app.config(function($routeProvider, $locationProvider){
 app.controller("MainController", ['$scope','$location', function($scope, $location) {
 }]);
 
-app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
-  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
+app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState',
+  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState) {
 
-    if ($rootScope.selected.role == 'investor') {
+    if (navState.role == 'investor') {
         $location.path('/');
         return;
     }
@@ -31,7 +31,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
     }
   }
 
-  $scope.company = $rootScope.selected.name;
+  $scope.company = navState.name;
 
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
@@ -55,10 +55,10 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
   };
 }]);
 
-app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj',
-  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
+  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (navState.role == 'issuer') {
         $location.path('/company');
         return;
     }
@@ -69,7 +69,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     }
   }
   //$scope.company = $routeParams.company;
-  $scope.company = $rootScope.selected.name;
+  $scope.company = navState.name;
 
   $scope.activity = [];
   SWBrijj.tblm('global.get_investor_activity').then(function(data) {

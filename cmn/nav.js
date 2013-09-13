@@ -1,16 +1,17 @@
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++) {
-  var c = ca[i];
-  while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-  }
-  return null;
-}
 
 var navm = angular.module('nav', ['ui.bootstrap'], function () {
 });
+
+navm.factory('navState', [function () {
+  return {
+    company: undefined,
+    role: undefined,
+    userid: undefined,
+    isLoggedIn: false,
+    path: undefined,
+    loaded: false
+  }
+}]);
 
 /** @unused NavCtrl */
 /* Not really, but referenced in angular attribute in .inc file */
@@ -22,25 +23,24 @@ navm.directive('navbar', function () {
   }
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
-  function ($scope, $route, $rootScope, SWBrijj) {
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
+  function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
     $scope.companies = [];
-    $rootScope.selected = { company: readCookie('company'), role: readCookie('role')};
-    $rootScope.userid = readCookie('userid');
 
     $scope.nav = 'navBarLoggedOut';
     var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
+    $scope.navState = navState;
     $scope.showBothBars = false;
-    $rootScope.isLoggedIn = false;
-    $rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
+    navState.isLoggedIn = false;
+    navState.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
 
     $scope.isCollapsed = true;
-    $rootScope.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
+    navState.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
     $scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
     $scope.switch = function (nc) {
-      $rootScope.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
+      navState.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
       /** @name SWBrijj#switch_company
        * @function
        * @param {string} company
@@ -62,20 +62,27 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
           break;
         }
       }
-      $rootScope.selected = thiscmp;
-      if (!thiscmp.current) {
+      if (thiscmp.current) {
+        navState.company = thiscmp.company;
+        navState.role = thiscmp.role;
+        navState.name = thiscmp.name;
+      } else {
           SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
               angular.forEach(data, function (comp) {
                   if (thiscmp.company == comp.company && comp.current == true) {
-                      thiscmp.current = true;
+                    thiscmp.current = true;
+                    navState.company = thiscmp.company;
+                    navState.role = thiscmp.role;
+                    navState.name = thiscmp.name;
+                    $route.reload();
+                    return;
                   }
               });
-            $route.reload();
           });
       }
 
-
-      if (thiscmp.role == 'issuer') {
+      // FIXME:  all this stuff should be run after switch_company return above.
+      if (navState.role == 'issuer') {
         $scope.people.link = $scope.people.adminlink;
         $scope.people.visible = true;
       } else {
@@ -83,23 +90,23 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
         $scope.people.visible = false;
       }
 
-      if (singleBarPages.indexOf($rootScope.path) > -1) {
+      if (singleBarPages.indexOf(navState.path) > -1) {
         $scope.nav = 'navBarLoggedOut';
         $scope.showBothBars = false;
       } else {
         $scope.nav = 'navBar';
         $scope.showBothBars = true;
       }
-      if ($rootScope.isLoggedIn) {
+      if (navState.isLoggedIn) {
         if (thiscmp.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
           $scope.logoLink = '/home/company';
-          if ($rootScope.path == "/") {
+          if (navState.path == "/") {
             document.location.href = '/home/company';
             return;
           }
         } else {
           $scope.logoLink = '/home';
-          if ($rootScope.path == "/") {
+          if (navState.path == "/") {
             document.location.href = '/home';
             return;
           }
@@ -107,15 +114,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
       }
     };
 
-    $rootScope.isLoggedIn = true;
+    navState.isLoggedIn = true;
 
     SWBrijj.tblm('global.my_companies').then(function (x) {
       $scope.initCompany(x);
     }).except(function (ignore) {
           void(ignore);
           $scope.nav = 'navBarLoggedOut';
-          $rootScope.showLogin = true;
-          $rootScope.isLoggedIn = false;
+          navState.showLogin = true;
+          navState.isLoggedIn = false;
         });
 
     // Notification code
@@ -144,6 +151,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj',
     $scope.doLogin = function () {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function (x) {
         if (x) {
+          navState.userid = $scope.username;
           document.location.href = x;
         } else {
           document.location.href = "/login/?error=" + $scope.username;

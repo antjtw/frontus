@@ -21,7 +21,8 @@ app.controller("MainProfileController", ['$scope','$location', function($scope, 
       return p == x; };
 }] );
 
-app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', function($scope, $rootScope, SWBrijj) {
+app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
+  function($scope, $rootScope, SWBrijj, navState) {
 
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
