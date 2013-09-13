@@ -48,39 +48,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
        */
       SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
         $scope.initCompany(data);
-        $route.reload();
       });
     };
 
-    $scope.initCompany = function(cmps) {
-      $scope.companies = cmps;
-      if ( ! (cmps && cmps.length > 0) ) return; // no companies
-      var thiscmp = cmps[0]; // pick the first one in case none are marked selected
-      for (var i = 0; i < cmps.length; i++) {
-        if (cmps[i].current) {
-          thiscmp = cmps[i];
-          break;
-        }
-      }
-      if (thiscmp.current) {
-        navState.company = thiscmp.company;
-        navState.role = thiscmp.role;
-        navState.name = thiscmp.name;
-      } else {
-          SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
-              angular.forEach(data, function (comp) {
-                  if (thiscmp.company == comp.company && comp.current == true) {
-                    thiscmp.current = true;
-                    navState.company = thiscmp.company;
-                    navState.role = thiscmp.role;
-                    navState.name = thiscmp.name;
-                    $route.reload();
-                    return;
-                  }
-              });
-          });
-      }
-
+    $scope.patchThingsUp = function() {
       // FIXME:  all this stuff should be run after switch_company return above.
       if (navState.role == 'issuer') {
         $scope.people.link = $scope.people.adminlink;
@@ -97,8 +68,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.nav = 'navBar';
         $scope.showBothBars = true;
       }
+
+      /*
       if (navState.isLoggedIn) {
-        if (thiscmp.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
+        if (navState.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
           $scope.logoLink = '/home/company';
           if (navState.path == "/") {
             document.location.href = '/home/company';
@@ -107,16 +80,51 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         } else {
           $scope.logoLink = '/home';
           if (navState.path == "/") {
-            document.location.href = '/home';
+            document.location.href = '/home/investor';
             return;
           }
         }
       }
+      */
+    }
+
+    $scope.initCompany = function(cmps) {
+      $scope.companies = cmps;
+      if ( ! (cmps && cmps.length > 0) ) return; // no companies
+      var thiscmp = cmps[0]; // pick the first one in case none are marked selected
+      for (var i = 0; i < cmps.length; i++) {
+        if (cmps[i].current) {
+          thiscmp = cmps[i];
+          break;
+        }
+      }
+      if (thiscmp.current) {
+        navState.company = thiscmp.company;
+        navState.role = thiscmp.role;
+        navState.name = thiscmp.name;
+        $scope.patchThingsUp();
+        $route.reload();
+      } else {
+          SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
+              angular.forEach(data, function (comp) {
+                  if (thiscmp.company == comp.company && comp.current == true) {
+                    thiscmp.current = true;
+                    navState.company = thiscmp.company;
+                    navState.role = thiscmp.role;
+                    navState.name = thiscmp.name;
+                    $scope.patchThingsUp();
+                    $route.reload();
+                    return;
+                  }
+              });
+          });
+      }
+
     };
 
-    navState.isLoggedIn = true;
-
     SWBrijj.tblm('global.my_companies').then(function (x) {
+      navState.showLogin = false;
+      navState.isLoggedIn = true;
       $scope.initCompany(x);
     }).except(function (ignore) {
           void(ignore);
@@ -151,7 +159,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
     $scope.doLogin = function () {
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function (x) {
         if (x) {
-          navState.userid = $scope.username;
           document.location.href = x;
         } else {
           document.location.href = "/login/?error=" + $scope.username;

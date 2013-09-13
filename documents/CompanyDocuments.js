@@ -137,7 +137,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
         $scope.fileError = ""
         for (var i = 0; i < element.files.length; i++) {
             for(var j = 0;j<mimetypes.length;j++) {
-                console.log(element.files[i].size)
+                // console.log(element.files[i].size)
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 }
@@ -200,9 +200,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
     };
 
     $scope.gotoDoc = function (docid) {
-        console.log("here");
         var link = "/documents/company-view?doc=" + docid;
-        console.log(link);
         document.location.href=link;
     };
     }]);
