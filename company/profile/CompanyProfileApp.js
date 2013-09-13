@@ -244,9 +244,14 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, 
   SWBrijj.tblm('global.combined_investor_list', ['email', 'name']).then(function (x) {
       $scope.people = x;
       SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function (admins) {
+          var adminPeople = []
           angular.forEach(admins, function (admin) {
               admin.role = "issuer";
-              $scope.people.push(admin);
+              adminPeople.push(admin);
+          });
+          var cleanPeople = []
+          angular.forEach($scope.people, function(perp) {
+
           });
           SWBrijj.tblm('account.profile', ['email']).then(function (me) {
               angular.forEach($scope.people, function (person) {
