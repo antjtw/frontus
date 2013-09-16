@@ -1,12 +1,10 @@
 <div class="container" data-ng-init="init()">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-      <h1><a href="/documents/"><span data-icon="&#xe038;" style="font-size: 300%; padding-right: 0.3em;" aria-hidden="true"></span></a>{{document.docname  | lengthLimiter}}
-        <span class="documentStatus">{{document.signature_status}}</span>
-      </h1>
-
+        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname | lengthLimiter}}
+            <span class="documentStatus">{{document.signature_status}}</span>
+        </h1>
     </div>
-
   </div>
     <div ng-show="signable() || (tester && document.when_signed)" class="row-fluid">
         <div class="subnav-controls">
@@ -35,22 +33,17 @@
         <span data-icon="&#xe00d;" aria-hidden="true"></span>Confirm Electronic Signature
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
       </div>
-
-      <div class='modalText'>
-        <label>
+      <div class='modalText esign'>
           <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">
-          Do you wish to electonically sign this document?
-          <br>(This action is irreversible)
-        </label>
+          <span class="chkboxtext">
+              Do you wish to electonically sign this document?<br>(This action is irreversible)
+          </span>
       </div>
-
       <div class="dModalButtons">
         <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
         <button class="greenButton" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
       </div>
     </div>
   </div>
-
 </div>
 
-         

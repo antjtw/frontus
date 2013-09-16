@@ -132,7 +132,6 @@
         </div>   
  
 	 <div ng-show="lastupdated" class="span3 offset1">
-
         <div class="row-fluid">
             <div class="row-fluid">
                 <div class="subnav-controls">
@@ -161,10 +160,10 @@
                      <ul class="activityBlock">
                          <li ng-repeat="active in activity | orderBy:activityOrder">
                             <i class="{{active.icon}}"></i>
-                                    <div>
-                                        <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span><br>
-                                        <span class="time">{{active.timeAgo}}</span>
-                                    </div>
+                                <div>
+                                    <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span><br>
+                                    <span class="time">{{active.timeAgo}}</span>
+                                </div>
                          </li>
                      </ul>
                  </div>
