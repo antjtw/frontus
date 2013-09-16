@@ -324,8 +324,8 @@
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
-                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -336,8 +336,8 @@
             </tr>
             <!-- Unissued Rows -->
             <tr class="unissued-rows" ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
-                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td  class="viewName">{{row.name}}</td>
                 <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -348,8 +348,8 @@
             </tr>
             <!-- Un-editable diluted view -->
             <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
-                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
                 <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -360,8 +360,8 @@
             </tr>
             <!-- Undiluted footer -->
             <tr ng-show="toggleDilution();" class='tablefooter'>
-                <td><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
-                <td><input class="input-right" disabled value="100.00%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issuekeys" >
                     <span class="captablepair-box">
@@ -374,8 +374,8 @@
 
             <!-- Diluted footer -->
             <tr ng-hide="toggleDilution();" class='tablefooter'>
-                <td><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
-                <td><input class="input-right" disabled value="100.00%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                 <td></td>
                 <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
@@ -638,15 +638,6 @@
 
                                 <!-- Equity Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled pattern="[0-9]*(.[0-9]*)*"
-                                                                                                                                                                                      onkeydown="testForEnter();"
-                                                                                                                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                                      ng-model="tran.premoney"></p>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled
-                                                                                                                                                                                                                onkeydown="testForEnter();"
-                                                                                                                                                                                                                ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                                                                ng-model="tran.postmoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
                                                                                                                                                                        onkeydown="testForEnter();"
@@ -752,15 +743,6 @@
                                 </div>
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled pattern="[0-9]*(.[0-9]*)*"
-                                                                                                                                                                            onkeydown="testForEnter();"
-                                                                                                                                                                            ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                            ng-model="tran.premoney"></p>
-
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled
-                                                                                                                                                                                                      onkeydown="testForEnter();"
-                                                                                                                                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                                                      ng-model="tran.postmoney"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                                 onkeydown="testForEnter();"
@@ -840,7 +822,7 @@
 
                               <p ng-show="activeIssue.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="activeIssue.terms"></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input disabled ng-model="activeIssue.vestingbegins"></p>
+                              <p ng-show="activeIssue.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{activeIssue.vestingbegins | date:'shortDate'}}</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="activeIssue.vestcliff"></p>
 
@@ -893,9 +875,6 @@
 
                                 <!-- Equity Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
-                                    <p ng-show="tran.premoney" class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled ng-model="tran.premoney"></p>
-
-                                    <p ng-show="tran.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled ng-model="tran.postmoney"></p>
 
                                     <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input disabled ng-model="tran.ppshare"></p>
 
@@ -919,7 +898,7 @@
 
                                     <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
 
-                                    <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input disabled ng-model="tran.vestingbegins"></p>
+                                    <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
 
                                     <p ng-show="tran.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
 
@@ -929,9 +908,6 @@
                                 </div>
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
-                                    <p ng-show="tran.premoney" class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled ng-model="tran.premoney"></p>
-
-                                    <p ng-show="tran.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled ng-model="tran.postmoney"></p>
 
                                     <p ng-show="tran.interestrate" class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input disabled ng-model="tran.interestrate"></p>
 

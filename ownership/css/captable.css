@@ -360,7 +360,7 @@ div.rightTitle {
     text-transform: uppercase;
 }
 
-.rightTitle > input {
+.rightTitle > input, .rightTitle > span:last-child {
     width:92px;
     height: 22px;
     border: 0;

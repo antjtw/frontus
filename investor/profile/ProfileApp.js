@@ -168,10 +168,14 @@ app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', functi
         SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) { 
               $rootScope.notification.show("success", "Your password has been updated successfully.");
-              console.log("changed successfully");
+              $scope.currentPassword = "";
+              $scope.newPassword = "";
+              $scope.passwordConfirm = "";
             } else { 
               $rootScope.notification.show("fail", "There was an error updating your password.");
-              console.log("Oops.  Change failed");
+              $scope.currentPassword = "";
+              $scope.newPassword = "";
+              $scope.passwordConfirm = "";
             }
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };
