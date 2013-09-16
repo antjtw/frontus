@@ -268,6 +268,16 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', function($scope, 
               $scope.sort = col;
           }
       }
+
+    $scope.gotoPerson = function (person) {
+        if ($rootScope.userid != person.email) {
+            var link = '/company/profile/view?id='+person.email
+        }
+        else {
+            var link = '/investor/profile/';
+        }
+        document.location.href=link;
+    };
 }]);
 
 app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', function($scope, $rootScope, $routeParams, SWBrijj) {
@@ -297,7 +307,9 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', f
   SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(x) {
     $scope.docs = x;
       SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
-          $scope.level = access[0].level;
+          if (access[0]) {
+              $scope.level = access[0].level;
+          }
       }).except(function(err) {
               void(err);
               $scope.level = false;
