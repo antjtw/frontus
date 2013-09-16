@@ -1,0 +1,175 @@
+<div class="container">
+
+    <div modal="capAccess" close="close()" options="shareopts">
+        <div class="modalHeader">
+            <span data-icon="&#xe026;" aria-hidden="true"></span>Change Permissions
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
+        </div>
+        <div class="modalText">
+            <form class="capaccess-form">
+                <p>Shareholders only see their personal holdings by default,<br> non-shareholders will see the full table unless revoked.</p>
+                <div class="cf capaccess-drop">
+                    <span>CURRENT</span>
+                    <li class="dropdown standard pull-left">
+                        <a class="dropdown-toggle">
+                            {{selectedI.level}}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="selectVisibility('No View', selectedI)">None</a>
+                                <a ng-click="selectVisibility('Personal View', selectedI)">Personal View</a>
+                                <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+            </form>
+        </div>
+        <div class="modalButtons">
+            <div class="left"><button class="button subText blueButton left" ng-click="close()">Cancel</button></div>
+            <div class="right"><button class="button subText greenButton" ng-click="changeVisibility(selectedI); close();">Change</button></div>
+        </div>
+    </div>
+
+    <div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
+        <div class="modalHeader">
+            <span data-icon="&#xe027;" aria-hidden="true"></span>Edit this row's email?
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
+        </div>
+        <div class="modalText">
+            <p>Changing the email address of this row will invite a new email to view the captable. The account
+                associated with the old email will no longer be able to see it.
+            </p>
+            <div class="input-row">
+                <p>Email Address</p>
+                <input ng-model="newEmail">
+            </div>
+        </div>
+        <div class="modalButtons">
+            <div class="left"><button class="button subText greyButton left" ng-click="alterEmailModalClose()">Undo</button></div>
+            <div class="right">
+                <button class="button subText greenButton" ng-click="alterEmailModalClose(); alterEmail();">Update and Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+	<div class="row-fluid">      
+     <div class="span12">
+        <div class="headsection row-fluid">
+            <h1>{{selected.name}}</h1>
+
+            <div class="row-fluid">
+
+              <ul class="bodyText maintabs">
+                <a href="/ownership/company-captable"><li class="button">Ownership</li></a>
+                <a href="/ownership/company-grants"><li class="button">Grants</li></a>
+                <li class="selectedtab">Status</li>
+               </ul>
+            </div>
+          </div>
+     </div>
+     <div style="margin-left: 0;" class="span8 recipientInfo docLibrary statusBlock">
+
+          <div class="row-fluid">
+            <div class="subnav-controls">
+              <div>
+                <div class="pull-left">
+                  <h2>Shareholder Status</h2>
+                </div>
+              </div>
+              <div class="DivHelper"></div>
+            </div>
+          </div>
+        
+        <div class="row-fluid">
+         <table class="tableView bodyText">
+              <tr class="column-label status-columns">
+                <th>Shareholder</th>
+                <th>Email</th>
+                <th>Permission</th>
+                <th colspan="2">Status</th>
+              </tr>
+              <tr>
+                  <td ng-show="!userStatus[0]" colspan="5">You haven't shared the captable with anyone yet!</td>
+              </tr>
+              	<tbody ng-repeat="person in userStatus">
+                    <tr ng-class="{selectedrow:person.shown}" class="status-row">
+                        <td ng-click="(opendetails(person.email))">{{person.name}}</td>
+                        <td ng-click="(opendetails(person.email))">{{person.email}}</td>
+                            <td ng-click="(opendetails(person.email))">{{person.level}}</td>
+                            <td ng-click="(opendetails(person.email))">
+                                <span ng-hide="person.viewed">unviewed</span>
+                                <span ng-show="person.viewed">viewed</span>
+                            </td>
+                        <td class="button" ng-click="(opendetails(person.email))">
+                            <span ng-Hide="person.shown" data-icon="&#xe031;" aria-hidden="true"></span>
+                            <span ng-Show="person.shown" data-icon="&#xe034;" aria-hidden="true"></span>
+                        </td>
+                    </tr>
+                    <tr class="status-detail" ng-Show="person.shown">
+                        <td><span data-icon="&#xe024;" aria-hidden="true"></span>Delivered</td>
+                        <td colspan="4">
+                            {{person.received | date:'MMMM dd, yyyy, h:mm a'}}
+                            <span class="pointer" ng-hide="person.name" ng-click="alterEmailModalUp(person.email)">Edit and Resend</span>
+                        </td>
+                    </tr>
+                    <tr class="status-detail" ng-Show="person.shown">
+                        <td><span data-icon="&#xe026;" aria-hidden="true"></span><span ng-hide="person.lastlogin">Never Logged In</span><span ng-show="person.lastlogin">Last Logged In</span></td>
+                        <td colspan="4">{{person.lastlogin | date:'MMMM dd, yyyy, h:mm a'}}</td>
+                    </tr>
+                    <tr class="status-detail" ng-Show="person.shown">
+                        <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.viewed">Never Viewed</span><span ng-show="person.viewed">Last Viewed</span></td>
+                        <td colspan="4">
+                            {{person.viewed | date:'MMMM dd, yyyy, h:mm a'}}
+                            <span class="pointer" ng-click="modalUp(person);">Permissions</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+            </div>  
+        </div>   
+ 
+	 <div ng-show="lastupdated" class="span3 offset1">
+
+        <div class="row-fluid">
+            <div class="row-fluid">
+                <div class="subnav-controls">
+                    <div>
+                        <div class="pull-left">
+                            <h2>Information</h2>
+                        </div>
+                    </div>
+                    <div class="DivHelper"></div>
+                </div>
+            </div>
+            <ul class="information-pair">
+                <li>{{lastupdated | date:"mediumDate"}}</li>
+                <li>Last Edited</li>
+            </ul>  
+        </div>
+         
+         <div class="row-fluid activity-feed">
+             <div>
+                <h2>Activity Feed</h2>
+             </div>
+
+             <section class="statusFeed">
+                 <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+                 <div>
+                     <ul class="activityBlock">
+                         <li ng-repeat="active in activity | orderBy:activityOrder">
+                            <i class="{{active.icon}}"></i>
+                                    <div>
+                                        <span class="activity">{{active.activity}} <a ng-href="{{active.link}}">{{active.name}}</a></span><br>
+                                        <span class="time">{{active.timeAgo}}</span>
+                                    </div>
+                         </li>
+                     </ul>
+                 </div>
+             </section>
+         </div> 
+     </div>
+    </div>
+</div>

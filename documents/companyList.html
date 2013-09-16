@@ -1,0 +1,99 @@
+<div class="container">
+
+  <div modal="shareModal" modalshare></div>
+
+  <div class="row-fluid">
+  	<div class="headsection row-fluid"><h1>Documents</h1><span class="error-message">{{ errorMessage }}</span></div>
+
+    <!-- <uploadModal class="upload-modal" ng-show="uploadModal" close="uploadModalClose()" options="{dialogClass: 'modal upload-modal-positioning'}" >  </uploadModal> -->
+
+
+    <section class="docLibrary statusBlock" library>
+<!--         <div ng-show="listScrolls()">
+         <p class="searchBox" ng-show="listScrolls()">Search: <input ng-model="query"></p>
+         </div>-->
+            <div class="row-fluid">
+                <div class="subnav-controls">
+                    <div>
+                        <div class="pull-left">
+                          <label>
+                            <span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
+                            <input type="text" ng-model="query">
+                            </label>
+                        </div>
+                        <div class="pull-right">
+                            <div class="share-button">
+                                <button ng-click="documentUploadOpen();" class="btn">Add Document
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="DivHelper"></div>
+                </div>
+            </div>
+            <table class="doclib tableView bodyText">
+              <tr class="column-label status-columns">
+                <th class="button" ng-click="setOrder('docname')"><span class="title sortedDown">Name</span></th><th colspan="5" class="button" ng-click="setOrder('last_updated')"><span class="title">Last Updated</span></th>
+              </tr>
+              <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
+                <td>{{doc.docname}}</td>
+                <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
+                <!-- The four buttons for each row -->
+                <td class="button for-r0ml" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share icon-large"></i></span></td>
+                <td class="button for-r0ml" ng-click="delete(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-delete icon-large"></i></span></td>
+                <!--
+                  <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
+                -->
+                <td class="button"><a href="/documents/company-status?doc={{doc.doc_id}}"><span tooltip-placement="bottom" tooltip="Status"><i class="icon-search icon-large"></i></span></a></td>
+              </tr>
+
+              <!-- The template for showing files that are currently uploading -->
+<!--              <tr ng-show="progressVisible">
+                <td>{{uploading.docname}}</td>
+                <td><span class="uploadingText">Uploading Document<span id="dots">...</span></span></td>
+                <td colspan="3"></td>
+              </tr>
+              -->
+            </table>
+            <div ng-hide="documents">You have no documents.</div>
+    </section>
+
+
+
+  </div>
+</div>
+
+<div modal="documentUploadModal" close="documentUploadClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe00b;" aria-hidden="true"></span>Upload a document
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
+    </div>
+
+    <div class="modalText uploadModal">
+        <p>Currently we're only taking PDF files (20MB max)</p>
+        <form class="form-inline">
+            <fieldset>
+                <div ng-show="fileError" class="upload-errors">
+                    <span>{{fileError}}</span>
+                </div>
+                <div  class="fileinputs">
+                    <input ng-hide="showProgress || showProcessing" type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                    <div ng-hide="showProgress" class="fakefile">
+                        <span>CHOOSE FILE</span>
+                        <div ng-show="files.length">
+                            <span>{{files[0].name | fileLength}}</span>
+                        </div>
+                    </div>
+                    <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
+                </div>
+                <div ng-show="showProcessing" class="upload-errors">
+                    <span>Processing Document</span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modalButtons two">
+        <div class="left"><button class="button subText blueButton left" ng-click="documentUploadClose()">Cancel</button></div>
+        <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(files)">Upload</button></div>
+    </div>
+</div>

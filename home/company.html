@@ -1,26 +1,53 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
-
+<div class="headsection row-fluid">
+  <h1>{{company}}</h1>
+</div>
+<div class="hero-unit onboarding" ng-show="onboarding">
+  <button type="button" class="close" ng-click="close()"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
+  <div>
+    <h2>Welcome to Sharewave!</h2>
+  </div>
+  <div class="spacer20"></div>
+  <div class="row-fluid">
+      <a class="span4 onboardbox text-center" href="/ownership/company-captable">
+          <img src="/img/ownership.png"/>
+          <h2 class="onboard">Create Your Ownership Table</h2>
+          <p>Add all security types and share with anyone to <br> monitor their interactions.</p>
+      </a>
+      <a class="span4 onboardbox text-center" href="/documents/company-list">
+          <img src="/img/docs.png"/>
+          <h2 class="onboard">Upload a Document</h2>
+          <p>Upload, share and gather signatures on <br> your documents.</p>
+      </a>
+      <a class="span4 onboardbox text-center" href="/company/profile">
+          <img src="/img/shareholders.png"/>
+          <h2 class="onboard">Invite Administrators</h2>
+          <p>Give a colleague access to add information <br> to your company.</p>
+      </a>
+  </div>
+</div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1 ng-bind="company">Home</h1>
+      <div class="row-fluid">
+          <div class="subnav-controls">
+              <div>
+                  <div class="pull-left">
+                      <h2>Activity Feed</h2>
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
+      </div>
     <div class="row-fluid">
-      <div><p class="subText">Activity Feed</p></div>
-      <table>
-        <tr ng-repeat="active in activity | orderBy:activityOrder">
-          <td><i class="{{active.icon}} icon"></i></td>
-          <td>
-              <table>
-                <tr><td>{{active.activity}} <a href="{{active.link}}">{{active.name}}</a></td></tr>
-                    <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
-                </table>
-          </td>
-        </tr>
-      </table>
+          <ul class="activityBlock">
+              <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
+                  <i class="{{active.activity | icon}}"></i>
+                  <div>
+                      <span class="activity">{{active | description }}</span><br>
+                      <span class="time">{{active.time | fromNow}}</span>
+                  </div>
+              </li>
+          </ul>
+        <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+      </div>
     </div>
-  </div>
-
-  <div class="sidebar span4">
-    <h2>Notifications</h2>
-  </div>
 </div>

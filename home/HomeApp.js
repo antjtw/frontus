@@ -1,110 +1,92 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'brijj']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj']);
 
+/** @name $routeParams#msg
+ *  @type {string}
+ */
 //this is used to assign the correct template and controller for each URL path
 app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
-  // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:InvestorCtrl, templateUrl:'investor.html'}).
-      when('/company', {controller:CompanyCtrl, templateUrl:'company.html'}).
+      when('/', {controller: 'InvestorCtrl', templateUrl:'investor.html'}).
+      when('/company', {controller: 'CompanyCtrl', templateUrl:'company.html'}).
       otherwise({redirectTo:'/'});
 });
 
-app.controller("MainController", function($scope, $location) {
+app.controller("MainController", ['$scope','$location', function($scope, $location) {
+}]);
 
-} );
+app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
+  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
 
-app.run(function($rootScope) {
-  $rootScope.notification = {};
-  $rootScope.notification.color = "success";
-  $rootScope.notification.visible = false;
-  $rootScope.notification.message = "Notification Message";
+    if ($rootScope.selected.role == 'investor') {
+        $location.path('/');
+        return;
+    }
 
-  $rootScope.notification.show = function (color, message) {
-    $rootScope.notification.visible = true;
-    $rootScope.notification.color = color;
-    $rootScope.notification.message = message;
-    setTimeout(function() { $rootScope.notification.visible = false; $rootScope.$apply(); }, 5000);
-  };
-});
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    }
+  }
 
-function CompanyCtrl($scope, $rootScope, $route, SWBrijj) {
-  window.SWBrijj = SWBrijj;
-  
-  SWBrijj.tblm('account.my_company').then(function(x) {
-    $scope.company = x[0]["name"];
-  });
+  $scope.company = $rootScope.selected.name;
 
-  SWBrijj.tblm('account.my_company', ['name']).then(function(x) { 
-     $scope.name = x[0]['name'];
+  SWBrijj.tblm('account.onboarding').then(function(x) { 
+    $scope.onboarding = x[0].show_onboarding;
   }).except(initFail);
 
-  //TODO grab name from company_investors
-  $scope.activity = [];
-  SWBrijj.procm('document.get_company_activity').then(function(data) {
-    var i = 0;
-    console.log(data);
-    angular.forEach(data, function(x) {
-      if (x['doc_id'] > 0) { //Activity is a document activity
-        SWBrijj.procm('document.get_docdetail', x['doc_id']).then(function(y) {
-          $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], name: y[0]['docname'], link: '/company/documents/view?doc=' + x['doc_id']});
-          if ($scope.activity[i].activity == "shared") {
-            $scope.activity[i].activity = x['sender'] + " shared ";
-            $scope.activity[i].icon = "icon-edit";
-          }
-          else if ($scope.activity[i].activity == "viewed") {
-            $scope.activity[i].activity = x['sent_to'] + " viewed ";
-            $scope.activity[i].icon = "icon-eye-open";
-          }
-          else if ($scope.activity[i].activity == "reminder") {
-            $scope.activity[i].activity = x['sender'] + " reminded " ;
-            $scope.activity[i].icon = "icon-bullhorn";
-          }
-          else if ($scope.activity[i].activity == "signed") {
-            $scope.activity[i].activity = x['sent_to'] + " signed ";
-            $scope.activity[i].icon = "icon-ok-circle";
-          }
-        });
-      } else { //Activity is a profile activity
-        $scope.activity.push({activity: x['activity'], icon: null, when_sent: x['when_sent'], name: x['sender'], link: '/company/profile'});
-        if ($scope.activity[i].activity == "addinvestor") {
-          $scope.activity[i].activity = x['sent_to'] + " was added as a shareholder ";
-          $scope.activity[i].icon = "icon-plus-sign";
-        }
-        else if ($scope.activity[i].activity == "removeinvestor") {
-          $scope.activity[i].activity = x['sent_to'] + " was removed as a shareholder ";
-          $scope.activity[i].icon = "icon-minus-sign";
-        }
-        else if ($scope.activity[i].activity == "addadmin") {
-          $scope.activity[i].activity = x['sent_to'] + " was added as an admin " ;
-          $scope.activity[i].icon = "icon-plus-sign";
-        }
-        else if ($scope.activity[i].activity == "removeadmin") {
-          $scope.activity[i].activity = x['sent_to'] + " was removed as an admin ";
-          $scope.activity[i].icon = "icon-minus-sign";
-        }
+  $scope.close = function() {
+    $scope.onboarding = false;
+    SWBrijj.procm('account.onboarding_update', false);
+  };
+
+ $scope.activity = [];
+  SWBrijj.tblm('global.get_company_activity').then(function(data) {
+      $scope.activity = data;
+      if ($scope.activity.length == 0) {
+          $scope.noActivity = true;
       }
-      i++;
-    });
   });
 
   $scope.activityOrder = function(card) {
-     if (card.activity == "created") {
-       return 0;
-     } else {
-        return -card.when_sent;
-     }
+        return -card.time;
   };
+}]);
 
-}
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj',
+  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
 
-function InvestorCtrl($scope, $rootScope, $route, $routeParams, SWBrijj) {
-  $scope.company = $routeParams.company;
-}
+    if ($rootScope.selected.role == 'issuer') {
+        $location.path('/company');
+        return;
+    }
 
-function HomeCtrl($scope, $route) {
+  if ($routeParams.msg) {
+    if ($routeParams.msg == "resetPassword") {
+      $rootScope.notification.show("success", "You have successfully changed your password.");
+    }
+  }
+  //$scope.company = $routeParams.company;
+  $scope.company = $rootScope.selected.name;
+
+  $scope.activity = [];
+  SWBrijj.tblm('global.get_investor_activity').then(function(data) {
+      $scope.activity = data;
+      if ($scope.activity.length == 0) {
+          $scope.noActivity = true;
+      }
+  }).except(function(msg) {
+        console.log(msg.message);
+      });
+
+  $scope.activityOrder = function(card) {
+        return -card.time;
+  };
+}]);
+
+app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
   SWBrijj.tbl('account.companies').then(function(x) {
     console.log(x);
     if (x.length > 0) { //User is a CEO of a company
@@ -115,8 +97,9 @@ function HomeCtrl($scope, $route) {
       })
     }
   });  
-}
+}]);
 
+/*
 function initPage($scope, x, row) {
   if(typeof(row)==='undefined') row = 1;
   var y = x[0]; // the fieldnames
@@ -124,8 +107,107 @@ function initPage($scope, x, row) {
   
   for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
   $scope.$apply();
-}
+} */
 
 function initFail(x) {
-  document.location.href='/login';
+  void(x);
+  console.log('I would have redirected to login'); // document.location.href='/login';
 }
+
+/************************************************************
+ *  Filters
+ *  *********************************************************/
+
+/* Filter to format the activity time */
+angular.module('HomeApp').filter('fromNow', function() {
+    return function(date) {
+        return moment(date).fromNow();
+    }
+});
+
+/* Filter to select the activity icon for document status */
+angular.module('HomeApp').filter('icon', function() {
+    return function(activity) {
+        if (activity == "sent") return "icon-email";
+        else if (activity == "received") return "icon-email";
+        else if (activity == "viewed") return "icon-view";
+        else if (activity == "reminder") return "icon-redo";
+        else if (activity == "signed") return "icon-pen";
+        else if (activity == "uploaded") return "icon-star";
+        else if (activity == "rejected") return "icon-circle-delete";
+        else if (activity == "countersigned") return "icon-countersign";
+        else return "hunh?";
+    }
+});
+
+/* Filter to format the activity description on document status */
+angular.module('HomeApp').filter('description', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var person;
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "Ownership Table sent to " + person;
+            else if (activity == "viewed") return "Ownership Table viewed by "+person;
+          else return "Something with Ownership Table";
+        }
+        else {
+            var document = ac.docname;
+            if (activity == "sent") return "";
+            else if (activity == "viewed") return document + " viewed by "+person;
+            else if (activity == "reminder") return "Reminded "+person + " about " +document;
+            else if (activity == "signed") return document + " signed by "+person;
+            else if (activity == "uploaded") return document + " uploaded by "+person;
+            else if (activity == "received") return document + " sent to "+person;
+            else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
+            else if (activity == "countersigned") return document + " countersigned by "+person;
+            else return activity + " by "+person;
+        }
+    }
+});
+
+/* Filter to format the activity description on document status */
+angular.module('HomeApp').filter('investordescription', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var company = ac.company_name;
+        if (company == null) {
+            company = ac.company;
+        }
+        var person;
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "You received " + company + "'s captable";
+            else if (activity == "viewed") return "You received " + company + "'s captable";
+          else return "Something happened with "+company +"'s captable";
+        }
+        else if (type == "document") {
+            var document = ac.docname;
+            console.log(document);
+            if (activity == "received") return "You received " + document + " from " + company;
+            else if (activity == "viewed") return "You viewed " + document;
+            else if (activity == "reminder") return "You were reminded about" +document;
+            else if (activity == "signed") return "You signed "+document;
+            else if (activity == "rejected") return company + " rejected your signature on " +document;
+            else if (activity == "countersigned") return company + " countersigned "+document;
+            else  {
+                return activity + " by "+person;
+            }
+        }
+        else {
+            return "";
+        }
+    }
+});

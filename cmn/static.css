@@ -1,0 +1,142 @@
+/* Marketing Pages */
+
+.static {
+    padding-top: 65px;
+}
+
+.static p, .static a {
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.static p.title {
+    color: rgb(52, 73, 94);
+}
+
+.static a {
+    color: rgb(52, 152, 219);
+    text-decoration: none;
+}
+
+.static a:hover {
+    color: rgb(41, 128, 185)
+}
+
+.static a .accordian-toggle {
+    color: black;
+}
+
+.static img.award {
+    padding-top: 30px;
+}
+
+.static h2.name {
+    margin: 0 0 5px 0;
+}
+
+.static .caption p {
+    font-size: 10px;
+}
+
+
+/* Team */
+
+.static .social a {
+    text-decoration: none;
+    color: rgb(141, 141, 141);
+}
+
+.static .social a:hover {
+    color: rgb(102, 102, 102);
+}
+
+
+/* Careers */
+
+.careers .accordion-heading .accordion-toggle {
+    padding: 0 0 0 0;
+}
+
+.careers .accordion-group.ng-scope .accordion-heading .accordion-toggle{
+    background: url('/img/accordion-arrow-down.png') no-repeat right center;
+}
+
+.careers .accordion-group.ng-scope.active .accordion-heading .accordion-toggle {
+    background: url('/img/accordion-arrow-up.png') no-repeat right center;
+}
+
+.careers a, .careers a:hover{
+    color: rgb(141, 141, 141);
+}
+
+.careers .accordion-inner {
+    border: none;
+}
+
+.careers p.subtext {
+    color: rgb(52, 73, 94);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 10px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0;
+}
+
+.careers p {
+    line-height: 24px;
+}
+
+.careers .mail a {
+    color: rgb(52, 152, 219);
+    text-decoration: none;
+}
+
+.careers .mail a:hover {
+    color: rgb(41, 128, 185)
+}
+
+
+/* Press Page */
+
+address {
+    font-size: 14px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-weight: normal;
+}
+
+
+/* Privacy Policy */
+
+#iubenda_policy h1 {
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    font-size: 36px !important;
+    font-weight: normal !important;
+    color: rgb(30, 45, 61) !important;
+}
+
+#iubenda_policy h2 {
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-size: 24px !important;
+    line-height:21px !important;
+    font-weight: normal !important;
+    color: rgb(30, 45, 61) !important;
+}
+
+#iubenda_policy  h3, #iubenda_policy h4{
+    font-family: 'FS Elliot Web Regular', sans-serif !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: rgb(52, 73, 94);
+}
+
+
+/* Survey */
+
+#ss-form {
+    color: rgb(102, 102, 102);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}

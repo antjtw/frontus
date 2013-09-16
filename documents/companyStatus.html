@@ -1,0 +1,169 @@
+<div class="container">
+
+  <div modal="remModal" close="remclose()" options="remopts">
+    <div class="modalHeader">
+      <p class="subText">Send Reminder</p>
+    </div>
+
+    <div class="modalText">
+      Send a reminder to {{reminder}}.
+      <p>Message</p>
+      <label>
+        <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+      </label>
+    </div>
+
+    <div class="modalButtons">
+      <button class="button subText greyButton" ng-click="remclose();">Never Mind!</button>
+      <button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="headsection row-fluid">
+      <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{document.docname  | lengthLimiter}}</h1>
+
+      <div class="row-fluid">
+
+        <ul class="bodyText maintabs">
+          <li class="selectedtab">Status</li>
+          <li class="button"><a href="/documents/company-view?doc={{document.doc_id}}">
+            View
+          </a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+
+    <div class="span8 docLibrary">
+
+      <div class="row-fluid">
+        <div class="subnav-controls">
+          <div>
+            <h2>Shareholder Status</h2>
+          </div>
+          <div class="DivHelper"></div>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <table class="tableView bodyText">
+          <tr class="column-label status-columns">
+            <th><span>Shareholder</span></th>
+            <th><span>Email</span></th>
+            <th colspan="2"><span>Status</span></th>
+          </tr>
+          <tbody ng-repeat="person in docversions">
+          <tr class="status-row" ng-class="{selectedrow:person.shown}" ng-click="showStatusDetail(person)">
+            <td>{{person.name}}</td>
+            <td>{{person.investor}}</td>
+            <td>{{person.signature_status}}</td>
+            <td class="button" ng-click="(opendetails(person.email))">
+                <span ng-Hide="person.shown" data-icon="&#xe031;" aria-hidden="true"></span>
+                <span ng-Show="person.shown" data-icon="&#xe034;" aria-hidden="true"></span>
+            </td>
+          </tr>
+          <tr class="status-detail" ng-Show="person.shown">
+              <td><span data-icon="&#xe024;" aria-hidden="true"></span>Sent</td>
+              <td colspan="4">
+                  {{person.when_shared | date:'MMMM dd, yyyy, h:mm a'}}
+              </td>
+          </tr>
+          <tr class="status-detail" ng-Show="person.shown">
+              <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.last_viewed">Never Viewed</span><span ng-show="person.last_viewed">Last Logged In</span></td>
+              <td colspan="4">{{person.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+
+          <!-- Row hidden for now as deadline not being used -->
+          <tr class="status-detail for-r0ml" ng-Show="person.shown && person.signature_deadline">
+              <td><span data-icon="&#xe015;" aria-hidden="true"></span><span ng-hide="person.signature_deadline">No Signature Required</span><span ng-show="person.signature_deadline">Signature Deadline</span></td>
+              <td colspan="4">{{person.signature_deadline | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="person.shown && person.signature_deadline">
+              <td><span data-icon="&#xe00d;" aria-hidden="true"></span><span ng-hide="person.when_signed">Never Signed</span><span ng-show="person.when_signed">Signed</span></td>
+              <td colspan="4">{{person.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="person.shown && person.signature_deadline">
+              <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="person.when_confirmed">Not Countersigned</span><span ng-show="person.when_confirmed">Countersigned</span></td>
+              <td colspan="4">{{person.when_confirmed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+
+          </tbody>
+        </table>
+
+     <!--
+          <tr ng-show="person.shown" class="personDetails">
+            <td colspan="2">
+              <div><p>Delivered</p>
+
+                <p class="doubleTime">{{person.whensent | date:'MMMM dd, yyyy'}}</p>
+
+                <p>{{person.whensent | date:'h:mm a'}}</p></div>
+
+              <div>
+                <div ng-switch on="person.lastlogin">
+                  <span ng-switch-when="0"><span class="hltext">Never Logged In</span></span>
+                  <span ng-switch-default><p>Last Login</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd,
+                    yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
+                </div>
+              </div>
+
+              <div>
+                <div ng-switch on="person.lastviewed">
+                  <span ng-switch-when="0"><span class="hltext">Unviewed</span></span>
+                  <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{person.lastviewed | date:'MMMM dd,
+                    yyyy'}}</p><p>{{person.lastviewed | date:'h:mm a'}}</p></span>
+                </div>
+              </div>
+
+              <div>
+                <div ng-switch on="person.signed">
+                  <span ng-switch-when="0"><span class="hltext">Unsigned</span></span>
+                  <span ng-switch-default><p>Signed</p><p class="doubleTime">{{person.signed | date:'MMMM dd, yyyy'}}</p>
+                    <p>{{person.signed | date:'h:mm a'}}</p></span>
+                </div>
+              </div>
+         -->
+
+              <!--
+              <div>
+                <div ng-switch on="person.column5" >
+                  <p ng-switch-default="0"></p>
+                  <span ng-switch-when="2"><span>Revoked</span><span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</span></span>
+                  <span ng-switch-when="1">Resent<span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</span><span>{{person.reminder | date:'h:mm a'}}</span></span>
+                 </div>
+              </div> -->
+      </div>
+    </div>
+
+    <div class="span3 offset1">
+
+
+        <div class="row-fluid activity-feed">
+            <div class="subnav-controls">
+                <div>
+                    <h2>Activity Feed</h2>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+
+            <section class="statusFeed">
+                <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+                <div>
+                    <ul class="activityBlock">
+                        <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
+                            <i class="{{active.activity | icon}}"></i>
+                            <div>
+                                <span class="activity">{{active | description }}</span><br>
+                                <span class="time">{{active.event_time | fromNow}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<Files README.md>
+  Order Deny,Allow
+  Deny from all
+</Files>
+
+<Files .htaccess>
+  Order Deny,Allow
+  Deny from all
+</Files>
+
+<Files .gitmodules>
+  Order Deny,Allow
+  Deny from all
+</Files>
+
+<Files .gitignore>
+  Order Deny,Allow
+  Deny from all
+</Files>
+
