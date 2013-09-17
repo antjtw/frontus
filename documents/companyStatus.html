@@ -54,6 +54,9 @@
             <th><span>Email</span></th>
             <th colspan="2"><span>Status</span></th>
           </tr>
+          <tr>
+              <td ng-show="!docversions[0]" colspan="4">You haven't shared this document with anyone yet!</td>
+          </tr>
           <tbody ng-repeat="person in docversions">
           <tr class="status-row" ng-class="{selectedrow:person.shown}" ng-click="showStatusDetail(person)">
             <td>{{person.name}}</td>
