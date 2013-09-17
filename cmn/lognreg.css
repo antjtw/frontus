@@ -1,0 +1,121 @@
+/* Login & Register */
+
+.lognreg {
+    background-color: rgb(30, 45, 61);
+}
+
+.lognreg p strong{
+    font-family: 'FS Elliot Web Bold', sans-serif;;
+}
+
+.lognreg .caption {
+    padding-top: 10px;
+    font-size: 8px;
+    text-transform:uppercase;
+}
+
+.lognreg .caption a{
+    font-size: 8px;
+    text-transform:uppercase;
+    text-decoration: none;
+}
+
+.lognreg .teaser {
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: rgb(199, 199, 199);
+    display:inline;
+
+}
+
+.lognreg .loginInput {
+    width: 288px;
+    height: 24px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.lognreg input {
+    background-color: rgb(255, 255, 255);
+}
+
+input.loginInput:focus {
+    background-color: rgb(255, 255, 255);
+}
+
+input.loginInput:invalid:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.lognreg .greenButton.loginButton {
+    width: 300px;
+    height: 30px;
+    text-align:center;
+    padding: 0 0 0 0;
+    color: rgb(255, 255, 255);
+    background-color: rgb(26, 188, 150);
+}
+
+.lognreg .greenButton:disabled, .lognreg .greenButton:disabled:hover {
+    background-color: rgb(26, 188, 150);
+    color: rgb(255, 255, 255);
+    opacity: 0.5;
+}
+
+
+/* Password Reset */
+
+#forgot {
+    width:500px;
+    padding-top:10px;
+    margin-top:10px;
+}
+
+#cancelButton {
+    font-size: 12px;
+    margin-top:10px;
+    display: block;
+    color: rgb(52, 152, 219);
+}
+
+.resetLabel {
+    text-align:left;
+    margin-left: 76px;
+    margin-bottom:10px;
+}
+
+#resetConfirm {
+    margin-top:50px;
+}
+
+
+/* Upgrade Browser */
+
+.hero-unit.browserlist {
+    background-color: rgb(227, 227, 227);
+    padding: 30px 0 4px 32px;
+}
+
+.browserup {
+    background-color: rgb(255, 255, 255);
+    border: 4px solid rgb(255, 255, 255);
+    height: 180px;
+    width: 140px !important;
+    overflow:hidden;
+    padding: 20px 0 25px 0;
+}
+
+.browserup:hover{
+    border: 4px solid rgb(26, 188, 150);
+    position: relative;
+    cursor: pointer;
+}
+
+h2.browser {
+    font-size: 16px;
+    padding-top: 14px;
+    line-height: 4px;
+}
+

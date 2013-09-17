@@ -1,20 +1,32 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
 
-<div class="editProfileFP row-fluid">
+<div class="headsection row-fluid">
   <h1>People</h1>
-  <section class="recipientInfo statusBlock">
-    <input type="text" ng-model="filterText"> 
-    <table class="tableView bodyText">
-      <tr class="subText">
-        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
-        <th class="button" ng-click="sortBy('email')" colspan="2"><span class="title sortedDown">Email</th>
+</div>
+<div class="row-fluid">
+  <section class="statusBlock">
+      <div class="row-fluid">
+          <div class="subnav-controls">
+              <div>
+                  <div class="pull-left">
+                    <label><span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
+                      <input type="text" ng-model="filterText">
+                    </label>
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
+      </div>
+    <table class="docLibrary tableView bodyText people-table">
+      <tr class="column-label">
+        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
+        <th class="button" ng-click="sortBy('email')"><span class="title sortedDown">EMAIL ADDRESS</span></th>
       </tr>
-      <tbody ng-repeat="person in people | orderBy: sort | filter: filterText">
-        <tr>
-        <td><img src=""><a href="/company/profile/view?id={{person.email}}">{{person.name}}</a> <span class="label" ng-show="person.role=='issuer'">ADMIN</span></td> 
-        <td><img src="">{{person.email}}</td>
-        <td class="button" ng-click="(opendetails(person.noaction))"><i class="icon-cog"></i>
+      <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
+        <tr ng-click="gotoPerson(person)" class="pointer status-row">
+        <td>{{person.name}}
+          <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
+        </td> 
+        <td>{{person.email}}</td>
         </tr>
       </tbody>
     </table>

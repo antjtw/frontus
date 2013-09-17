@@ -1,33 +1,72 @@
 <div ng-init="init()">
 
-  <div class="annotation-control">
-  <div ng-switch on="signable" >
-    <span ng-switch-when="0"><p>Click below to sign this document</p>
-               <p>Sign here: <input type="checkbox" ng-model="signature"></p>
-               <button ng-click="submitSign(signature);">Send signature</button></span>
-    <span ng-switch-when="1">Thanks for the signature!</span>
-    <span ng-switch-default></span>
+  <div ng-class="{hidden: (!annotable() && docLength==1)}" class="row-fluid docViewerControls">
+      <div>
+        <div>
+            <span class="tools span4" ng-class="{hidden: !annotable()}">
+                <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
+                <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
+                <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
+            </span>
+        </div>
+        <div>
+            <div class="tools pageTurn span4">
+              <ul ng-class="{'hidden':docLength==1}" >
+                  <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span></li>
+                  <li>
+                    <label>
+                      <input ng-model="currentPage" ng-change="jumpPage(currentPage)"
+                             class="page-jumper">
+                    </label>
+                  </li>
+                  <li>/ {{docLength}}</li>
+                  <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span></li>
+              </ul>
+            </div>
+        </div>
+<!--        <div>
+            <span class="tools span1">
+                <button ng-class="{hidden: docLength==1}" ng-click="showPageBar=!showPageBar"><span data-icon="&#xe043;" aria-hidden="true"></span></button>
+            </span>
+        </div>-->
+      </div>
+      <div class="DivHelper"></div>
+
+        <!--
+        <ul class="subText pageJump cf">
+            <li ng-class="{curPage:page==currentPage, unsaved:unsaved(page), annotated:isAnnotated(page)}" style="cursor:pointer"
+                ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
+          </ul>
+          -->
+
+<!--  <div class="span4">
+        <div ng-hide="annotable()">
+          <button ng-click="saveNoteData()">Store</button>
+          <button ng-click="saveNotes($event)">Save</button>
+          <button ng-click="clearNotes($event)">Clear</button>
+          <button ng-click="clearAllNotes($event)">Clear All Pages</button>
+        </div>
+      </div>
+      -->
   </div>
 
   <div>
-    <button ng-click="clearNotes($event)">Clear annotations</button>
-    <span style="width:20px"></span>
-    <button ng-click="newCheck($event)">Attach checkbox</button>
-    <button ng-click="newBox($event)">Attach textbox</button>
-    <button ng-click="newPad($event)">Attach canvas</button>
-    <button ng-click="saveNotes($event)">Save annotations</button>
+    <ul class="page-bar" ng-show="showPageBar && docLength > 1 && annotable() " style="background-color: rgb(85,98,111);overflow: hidden; padding-top: 6px; padding-bottom: 6px; margin-left: 0; margin-bottom: 0;" >
+      <li ng-class="{hidden: pageScroll==0}" ng-click="pageBarLeft();"
+          style="margin-left: 0.5em; font-size: 150%;">
+        <span data-icon="&#xe032;"></span></li>
+      <li ng-repeat="page in showPages()"
+          ng-class="{curPage:page==currentPage}"
+          class="page-tabs"
+          ng-click="jumpPage(page)">
+        <span data-icon="{{isAnnotated(page)?'&#xe006;' : '&#xe009;'}}" aria-hidden="true"></span><span> Page {{page}}</span></li>
+      <li ng-show="morePages()"
+          style="float: right; margin-right:0.5em; font-size: 150%;">
+        <span ng-click="pageBarRight();" data-icon="&#xe033;"></span></li>
+    </ul>
   </div>
+  <div ng-show="docId" class="row-fluid docHolder" style="position:relative;">
+    <div class="docPanel" data-back-img="/photo/docpg?{{pageQueryString}}&page={{currentPage}}"></div>
   </div>
-
-  <ul class="subText pageTurn cf">
-    <li class="button" ng-show="currentPage>1" ng-click="previousPage(currentPage)">Previous</li>
-    <li><input ng-model="currentPage" ng-change="jumpPage(currentPage)" style="width:20px;"></li>
-    <li class="button" ng-show="currentPage<docLength" ng-click="nextPage(currentPage)">Next</li>
-  </ul>
-
-  <ul class="subText pageJump cf">
-    <li ng-class="{'curPage':page==currentPage}" style="cursor:pointer" ng-click="jumpPage(page)" ng-repeat="page in range(1,docLength+1)">{{page}}</li>
-  </ul>
-
-  <div class="docPanel" back-img="/photo/docpg?id={{docId}}&investor={{invq}}&page={{currentPage}}" ></div>
 </div>

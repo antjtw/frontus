@@ -1,120 +1,153 @@
-<!--Notification Bar-->
-<div ng-class="notification.color" ng-show="notification.visible">{{notification.message}}</div>
-
+<div class="headsection row-fluid">
+  <h1>{{name}}</h1>
+</div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <h1>{{name}}</h1>
     <div class="row-fluid">
-      <div class="span5"> <!-- Photo -->
+      <div class="span3"> <!-- Photo -->
         <form>
-          <div class="editProfilePhoto">
-            <img ng-src="/photo/user?id=company:{{company}}" style='width:250px; height:250px;' ng-click="pictureModalOpen()">
+          <div class="editProfilePhoto" ng-click="pictureModalOpen()">
+            <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
           </div>
         </form>
       </div>
       <div class="span7">
         <p>
-            <input type="text" ng-model="name" maxlength="32" ui-event="{blur: 'contactSave()'}">
+            <label><input class="name" ng-class="{'content':!name}" type="text" ng-model="name" maxlength="30" data-ui-event="{blur: 'contactSave()'}">
+            Company Name</label>
         </p>
         <p><button class="button subText greenButton" ng-click="adminModalOpen()">Add Admin</button></p>
       </div>
     </div>
     <div class="row-fluid">
     <section class="recipientInfo statusBlock">
-      <div><i class="icon-user icon-2x"></i><p class="subText">Admins</p></div>
+      <div><p class="title">Admins</p></div>
+      <p>Administrators can access and edit all data associated to your company.</p>
       <table class="tableView bodyText">
         <tr class="subText">
           <th class="button" colspan="2"><span class="title sortedDown">Name</span></th>
         </tr>
         <tbody ng-repeat="admin in admins">
           <tr>
-          <td><img src=""><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
-          <td class="button" ng-click="(opendetails(admin.noaction))"><i class="icon-cog"></i>
+          <td>{{admin.name}}</td>
+          <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" data-tooltip-placement="bottom" data-tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
       </table>
     </section>
     </div>
   </div>
+    <!--
+    <div class="sidebar span4">
+      <form>
+        <fieldset>
 
-  <div class="sidebar span4">
-    <form>
-      <fieldset>
-        <p>
-          <input type="text" ng-model="company" name="company" disabled>
-          <span class="label">Website</span>
-        </p>
-        <p>
-          <textarea ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-          <span class="label">Address</span>
-        </p>
+          <p>
+            <label><input disabled ng-class="{'content':!company}" type="text" ng-model="company" name="company">
+            Website</label>
+          </p>
+          <p>
+            <label><textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+            Address</label>
+          </p>
+
       </fieldset>
     </form>
+    -->
 
-    <section class="documentInfo statusBlock">
     <div>
-    <i class="icon-info-sign icon-2x"></i><p class="subText">Activity Feed</p>
+      <p class="activityFeed-header subText">Activity Feed</p>
     </div> 
-    <div class="activityBlock">
-      <table>
-        <tr ng-repeat="active in activity | orderBy:activityOrder">
-        <td><i class="{{active.icon}} icon"></i></td>
-        <td>
-            <table>
-              <tr><td>{{active.activity}} <a href="/company/documents/view?doc={{active.doc_id}}">{{active.docname}}</a></td></tr>
-                  <tr><td>{{active.when_sent | date:"MMMM d, y"}}</td></tr>
+    <section class="statusFeed">
+      <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
+      <div class="activityBlock">
+        <table>
+          <tr ng-repeat="active in activity | orderBy:activityOrder" >
+            <td><i class="{{active.icon}} icon"></i></td>
+            <td class="item">
+              <table>
+                  <tr>
+                    <td class="activity">{{active.email}} {{active.activity}}<a href="{{active.link}}">{{active.target}}</a> </td>
+                  </tr>
+                  <tr><td class="time">{{active.timeAgo}}</td></tr>
               </table>
           </td>
         </tr>
-      </table> 
+      </table>
+
     </div>   
     </section>
   </div>
 </div>
 
-<div modal="pictureModal" close="pictureModalClose()" options="opts" ng-controller="FileDNDCtrl">
-  <div class="modalHeader">
-    <p class="subText">Profile Picture</p>
-  </div>
+<div modal="pictureModal" close="pictureModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe00b;" aria-hidden="true"></span>Update company logo
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
+    </div>
+
   <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG file.</p>
+    <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
     <form class="form-inline">
       <fieldset>
-        <input class="bodyText button uploadButton" type="file" multiple onchange="angular.element(this).scope().setFiles(this)" />
+          <div class="fileinputs">
+              <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+              <div class="fakefile">
+                  <span>CHOOSE FILE</span>
+                  <div ng-show="files.length">
+                      <span>{{files[0].name | fileLength}}</span>
+                  </div>
+              </div>
+          </div>
       </fieldset>
     </form>
-
-    <div ng-show="files.length">
-        <div ng-repeat="file in files.slice(0)">
-            <span>{{file.webkitRelativePath || file.name}}</span>
-            (<span>{{fmtFileSize(file)}}</span>)
-        </div>
-    </div>
   </div>
+  <div class="modalButtons two">
+      <div class="left"><button class="button subText blueButton left" ng-click="pictureModalClose()">Cancel</button></div>
+      <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(); pictureModalClose();">Upload</button></div>
 
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />
+
+    <!--<input class="bodyText button uploadButton" type="button" ng-click="uploadFile(); pictureModalClose();" value="Upload" />-->
   </div>
 </div>
-<div modal="adminModal" close="adminModalClose()" options="opts">
-  <div class="modalHeader">
-    <p class="subText">Add an Administrator</p>
-  </div>
-  <div class="modalText">
+
+<div modal="adminModal" close="adminModalClose()" options="narrowopts">
+   <div class="modalHeader">
+        <span data-icon="&#xe026;" aria-hidden="true"></span>Add administrator
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
+    </div>
+
+   <div class="modalCopy">
     <form>
       <fieldset>
-        <div class="row-fluid">
-          <label class="bodyText">Email</label>  
-          <input type="text" ng-model="newEmail" />
-        </div>
-        <div class="row-fluid">
-          <label class="bodyText">Full Name</label>  
-          <input type="text" ng-model="newName" />
+        <div class="row-fluid field">
+          <label>Email
+          <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
+            </label>
         </div>
       </fieldset>
     </form>
   </div>
-  <div class="modalButtons">
-    <button class="button subText greyButton" ng-click="pictureModalClose()">Take Me Back</button> <input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Create Administrator" />
+
+
+  <div class="modalButtons two">
+      <div class="left"><button class="button subText blueButton left" ng-click="adminModalClose()">Cancel</button></div>
+      <div class="right"><button class="button subText greenButton" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button></div>
+      <!--<input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Send" />-->
+  </div>
+</div>
+
+<div modal="revokeModal" close="revokeModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span data-icon="&#xe026;" aria-hidden="true"></span>Remove admin
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="revokeModalClose()"></span>
+    </div>
+
+  <div class="modalText">
+    <p>Do you want to remove this person as an administrator?</p>
+  </div>
+    <div class="modalButtons two">
+        <div class="left"><button class="button subText blueButton left" ng-click="revokeModalClose()">Cancel</button></div>
+        <div class="right"><button class="button subText greenButton" ng-click="revokeAdmin(); revokeModalClose();">Remove</button></div>
   </div>
 </div>

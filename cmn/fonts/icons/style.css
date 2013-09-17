@@ -19,6 +19,10 @@
 	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
+<<<<<<< HEAD
+=======
+	-moz-osx-font-smoothing: grayscale;
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 
 /* Use the following CSS code if you want to have a class per icon */
@@ -27,7 +31,11 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
+<<<<<<< HEAD
 .icon-warning, .icon-view, .icon-arrow-down, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-doc2, .icon-doc-download, .icon-doc-upload, .icon-doc, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-delete2, .icon-delete3, .icon-cog, .icon-pie, .icon-circle-down, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-download, .icon-circle-upload, .icon-circle-delete, .icon-cicle-minus, .icon-untitled, .icon-magnify, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-check, .icon-email, .icon-calendar, .icon-key, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-lock, .icon-unlocked {
+=======
+.icon-warning, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-doc2, .icon-doc, .icon-doc-upload, .icon-doc-download, .icon-profile, .icon-profile-pic, .icon-delete, .icon-pen, .icon-pencil, .icon-magnify, .icon-key, .icon-delete3, .icon-delete2, .icon-cog, .icon-circle-upload, .icon-circle-download, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-down, .icon-circle-delete, .icon-cicle-minus, .icon-text, .icon-text-smaller, .icon-text-bigger, .icon-text-edit, .icon-lightening, .icon-star, .icon-graph2, .icon-graph1, .icon-pie, .icon-check, .icon-email, .icon-calendar, .icon-redo, .icon-chat, .icon-linkedin, .icon-tweeter, .icon-giter, .icon-twitter-bird, .icon-linkedin2, .icon-facebook-f, .icon-lock, .icon-unlocked, .icon-share, .icon-arrow-2up, .icon-arrow-2right, .icon-arrow-2left, .icon-arrow-2down, .icon-back, .icon-conversion, .icon-info, .icon-admin, .icon-grab, .icon-spam, .icon-countersign, .icon-view {
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 	font-family: 'sharewave';
 	speak: none;
 	font-style: normal;
@@ -38,6 +46,7 @@ you can use the generic selector below, but it's slower:
 	-webkit-font-smoothing: antialiased;
 }
 .icon-warning:before {
+<<<<<<< HEAD
 	content: "\e000";
 }
 .icon-view:before {
@@ -45,6 +54,9 @@ you can use the generic selector below, but it's slower:
 }
 .icon-arrow-down:before {
 	content: "\e002";
+=======
+	content: "\e0000";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-arrow-up:before {
 	content: "\e003";
@@ -55,17 +67,33 @@ you can use the generic selector below, but it's slower:
 .icon-arrow-left:before {
 	content: "\e005";
 }
+<<<<<<< HEAD
 .icon-doc2:before {
 	content: "\e006";
 }
 .icon-doc-download:before {
 	content: "\e007";
+=======
+.icon-arrow-down:before {
+	content: "\e002";
+}
+.icon-doc2:before {
+	content: "\e006";
+}
+.icon-doc:before {
+	content: "\e009";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-doc-upload:before {
 	content: "\e008";
 }
+<<<<<<< HEAD
 .icon-doc:before {
 	content: "\e009";
+=======
+.icon-doc-download:before {
+	content: "\e007";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-profile:before {
 	content: "\e00a";
@@ -82,12 +110,21 @@ you can use the generic selector below, but it's slower:
 .icon-pencil:before {
 	content: "\e00e";
 }
+<<<<<<< HEAD
 .icon-delete2:before {
 	content: "\e00f";
+=======
+.icon-magnify:before {
+	content: "\e01e";
+}
+.icon-key:before {
+	content: "\e026";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-delete3:before {
 	content: "\e010";
 }
+<<<<<<< HEAD
 .icon-cog:before {
 	content: "\e011";
 }
@@ -96,6 +133,19 @@ you can use the generic selector below, but it's slower:
 }
 .icon-circle-down:before {
 	content: "\e013";
+=======
+.icon-delete2:before {
+	content: "\e00f";
+}
+.icon-cog:before {
+	content: "\e011";
+}
+.icon-circle-upload:before {
+	content: "\e01a";
+}
+.icon-circle-download:before {
+	content: "\e019";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-circle-up:before {
 	content: "\e014";
@@ -112,11 +162,16 @@ you can use the generic selector below, but it's slower:
 .icon-circle-left:before {
 	content: "\e018";
 }
+<<<<<<< HEAD
 .icon-circle-download:before {
 	content: "\e019";
 }
 .icon-circle-upload:before {
 	content: "\e01a";
+=======
+.icon-circle-down:before {
+	content: "\e013";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-circle-delete:before {
 	content: "\e01b";
@@ -124,11 +179,25 @@ you can use the generic selector below, but it's slower:
 .icon-cicle-minus:before {
 	content: "\e01c";
 }
+<<<<<<< HEAD
 .icon-untitled:before {
 	content: "\e01d";
 }
 .icon-magnify:before {
 	content: "\e01e";
+=======
+.icon-text:before {
+	content: "\e01d";
+}
+.icon-text-smaller:before {
+	content: "\e040";
+}
+.icon-text-bigger:before {
+	content: "\e041";
+}
+.icon-text-edit:before {
+	content: "\e042";
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 .icon-lightening:before {
 	content: "\e01f";
@@ -142,6 +211,12 @@ you can use the generic selector below, but it's slower:
 .icon-graph1:before {
 	content: "\e022";
 }
+<<<<<<< HEAD
+=======
+.icon-pie:before {
+	content: "\e012";
+}
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 .icon-check:before {
 	content: "\e023";
 }
@@ -151,9 +226,12 @@ you can use the generic selector below, but it's slower:
 .icon-calendar:before {
 	content: "\e025";
 }
+<<<<<<< HEAD
 .icon-key:before {
 	content: "\e026";
 }
+=======
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 .icon-redo:before {
 	content: "\e027";
 }
@@ -169,9 +247,63 @@ you can use the generic selector below, but it's slower:
 .icon-giter:before {
 	content: "\e02b";
 }
+<<<<<<< HEAD
+=======
+.icon-twitter-bird:before {
+	content: "\e035";
+}
+.icon-linkedin2:before {
+	content: "\e036";
+}
+.icon-facebook-f:before {
+	content: "\e037";
+}
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 .icon-lock:before {
 	content: "\e02c";
 }
 .icon-unlocked:before {
 	content: "\e02d";
 }
+<<<<<<< HEAD
+=======
+.icon-share:before {
+	content: "\e030";
+}
+.icon-arrow-2up:before {
+	content: "\e034";
+}
+.icon-arrow-2right:before {
+	content: "\e033";
+}
+.icon-arrow-2left:before {
+	content: "\e032";
+}
+.icon-arrow-2down:before {
+	content: "\e031";
+}
+.icon-back:before {
+	content: "\e038";
+}
+.icon-conversion:before {
+	content: "\e039";
+}
+.icon-info:before {
+	content: "\e044";
+}
+.icon-admin:before {
+	content: "\e045";
+}
+.icon-grab:before {
+	content: "\e043";
+}
+.icon-spam:before {
+	content: "\e000";
+}
+.icon-countersign:before {
+	content: "\e02e";
+}
+.icon-view:before {
+	content: "\e001";
+}
+>>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731

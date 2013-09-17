@@ -1,0 +1,47 @@
+/* Regular font */
+@font-face {
+    font-family: 'FS Elliot Web Regular';
+    src:url('FSElliotWebRegular/fs_elliot_web-regular.eot');
+    src:url('FSElliotWebRegular/fs_elliot_web-regular.eot?#iefix') format('embedded-opentype'),
+    url('FSElliotWebRegular/fs_elliot_web-regular.woff') format('woff'),
+    url('FSElliotWebRegular/FS Elliot Pro-Regular.otf') format('opentype'),
+    url('FSElliotWebRegular/fs_elliot_web-regular.svg#fs_elliot_web-regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Bold */
+@font-face {
+    font-family: 'FS Elliot Web Bold';
+    src:url('FSElliotWebBold/fs_elliot_web-bold.eot');
+    src:url('FSElliotWebBold/fs_elliot_web-bold.eot?#iefix') format('embedded-opentype'),
+    url('FSElliotWebBold/fs_elliot_web-bold.woff') format('woff'),
+    url('FSElliotWebBold/FS Elliot Pro-Bold.otf') format('opentype'),
+    url('FSElliotWebBold/fs_elliot_web-bold.svg#fs_elliot_web-bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Thin */
+@font-face {
+    font-family: 'FS Elliot Web Thin';
+    src:url('FSElliotWebThin/fs_elliot_web-thin.eot');
+    src:url('FSElliotWebThin/fs_elliot_web-thin.eot?#iefix') format('embedded-opentype'),
+    url('FSElliotWebThin/fs_elliot_web-thin.woff') format('woff'),
+    url('FSElliotWebThin/FS Elliot Pro-Thin.otf') format('opentype'),
+    url('FSElliotWebThin/fs_elliot_web-thin.svg#fs_elliot_web-thin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Light */
+@font-face {
+    font-family: 'FS Elliot Web Light';
+    src:url('FSElliotWebLight/fs_elliot_web-light.eot');
+    src:url('FSElliotWebLight/fs_elliot_web-light.eot?#iefix') format('embedded-opentype'),
+    url('FSElliotWebLight/fs_elliot_web-light.woff') format('woff'),
+    url('FSElliotWebLight/FS Elliot Pro-Light.otf') format('opentype'),
+    url('FSElliotWebLight/fs_elliot_web-light.svg#fs_elliot_web-light') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

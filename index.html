@@ -1,364 +1,279 @@
 <!DOCTYPE HTML>
-<html>
-<head>
-<title>Sharewave: Feed your investors</title>
-<meta name="keywords" content="investors, private companies, cap tables, analytics, board books, e-sign, e-signatures, voting, communication, options management" />
-<meta name="description" content="Sharewave - a beautifully simple way to organize, visualize, and communicate with investors" />
-<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:site_name" content="sharewave" />
-<meta property="og:description" content="Sharewave - a beautifully simple way to organize, visualize, and communicate with investors"/>
-<meta property="og:title" content="sharewave"/>
-<meta property="og:type" content="website"/>
-<meta property="og:url" content="http://sharewave.com/"/>
-<meta property="og:image" content="http://www.sharewave.com/img/icon-200x200.png"/>
-<link rel="image_src" href="http://www.sharewave.com/img/icon-200x200.png"/>
-<link rel="icon" type="image/png" href="http://www.sharewave.com/img/favicon.png">
-<meta name="author" content="">
-<link href="/lib/bootstrap/bootstrap.css" rel="stylesheet" media="screen">
-<link href="/lib/bootstrap/bootstrap-responsive.css" rel="stylesheet">
-<link href="/cmn/sxsw.css" rel="stylesheet">
+<html ng-app="index">
+	<head>
+		<title>Sharewave</title>
+		<meta id="viewport" name="viewport" content ="width=device-width, initial-scale=1.0"/>
+        <!--{{/i/head_css.inc}}-->
+        <!--{{/i/head_js.inc}}-->
+        <link type="text/css" rel="stylesheet" href="/cmn/index.css">
+        <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
+      	<meta name="description" content="The best way to manage your shareholders">
+ 		<script src="index.js"></script>
+		<script>
+			$(document).ready(function(){
+			  $( "#inviteButton" ).click(function() {
+			    $('html, body').animate({
+			      scrollTop: $( "#CompanyRegister-form" ).offset().top - 20}, 600);
+			  });
+			  $( "#nextPage" ).click(function() {
+			    $('html, body').animate({
+			      scrollTop: $( "#comms" ).offset().top}, 600);
+			  });
+			});
+		</script>
+	</head>
 
-<script type="text/javascript">
+	<body>
+    <navbar></navbar>
+		<div class="wrap home" ng-controller="IndexCtrl">
+			<div class="videoModal" modal="video" close="close()" options="opts">			    
+			    <div>
+                    <iframe class="videoIframe" width="560" height="315" src="//www.youtube-nocookie.com/embed/wsJ_chk1IrY?rel=0&autoplay=1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
+			</div>
+			<span ng-view=""></span>
+			<div id="hero">
+				<img src="/img/white-down.png" id="nextPage" class="paginator hidden-phone" data-0="opacity:1"
+                     data-100="opacity:0">
+    			<div class="row-fluid">
+					<div class="span10 offset1"> 
+						<div class="spacer80"></div>
+						<h3>Introducing Sharewave</h3>
+						<h1>The best way to manage <br class="hidden-phone">your shareholders</h1>
+						<button class="button greenButton" id="inviteButton" type="submit">Request Invitation</button>
+					</div>
+				</div>
+ 			</div>
+ 			<div class="row-fluid">
+ 				<div class="videoRow" ng-click="modalUp();">
+ 					<img src="/img/ike.png">
+ 					<h2>Watch the Video</h2>
+ 					<span class="arrow-right"></span>
+ 				</div>
+ 			</div>
+			<div id="comms" class="even hidden-phone">
+				<div class="spacer110"></div>
+				<div class="row-fluid pad">
+					<div class="span10 offset1 text-center" >
+						<h2>Communication Made Easy</h2>
+						<p>Sharewave makes it easy to deliver company information to <br> your shareholders, employees, board and customers.</p>
+						<div class="spacer40"></div>
+                        <div class="comms">
+                            <img class="bkg" src="/img/graphic-color.png">
+                            <img class="ike" src="/img/graphic-1.png" data-bottom-center="opacity:1"
+                                 data--200-bottom-center="opacity:0">
+                            <img class="jet" src="/img/graphic-2.png" data--200-bottom-center="opacity:1"
+                                 data--225-bottom-center="opacity:0">
+                            <img class="check" src="/img/graphic-3.png" data--260-bottom-center="opacity:1"
+                                 data--285-bottom-center="opacity:0">
+                            <div class="dots"
+                                 data--100-bottom-center="width:50px;"
+                                 data--150-bottom-center="width:50px;"
+                                 data--225-bottom-center="width:350px;"
+                                 data--240-bottom-center="width:350px;"
+                                 data--270-bottom-center="width:550px;"  >
+                            </div>
+                        </div>
+					</div>
+				</div>
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-38866629-1']);
-  _gaq.push(['_setDomainName', 'sharewave.com']);
-  _gaq.push(['_trackPageview']);
+				<div class="container">
+					<div class="row-fluid">
+						<div class="span10 offset1"> 
+							<div class="row-fluid">
+								<div class="span4 text-center">
+									<p>Shareholders get info<br>on their time</p>
+								</div>
+								<div class="span4 text-center">
+									<p>Your time is focused<br>on your business</p>
+								</div>
+								<div class="span4 text-center">
+									<p>A complete audit trail<br>tracks everything </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="spacer100"></div>
+			</div>
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+			<div class="even visible-phone">
+				<div class="spacer110"></div>
+				<div class="row-fluid pad">
+					<div class="span10 offset1 text-center" >
+						<h2>Communication Made Easy</h2>
+						<p>Sharewave makes it easy to deliver company information to <br class="hidden-phone"> your shareholders, employees, board and customers so your time is focused on your business.
+						</p>
+						<div class="spacer40"></div>
+						<img src="/img/graphic-communication-mobile.png">
+					</div>
+				</div>
+				<div class="spacer100"></div>
+			</div>
 
-</script>
+			<div class="spacer110 hidden-phone"></div>
+			<div class="spacer70 visible-phone"></div>
+			<div class="container">			
+				<div class="row-fluid">
+					<div class="span10 offset1 text-center">
+						<div class="pad">
+							<h2>Understand Your Equity</h2><p>You shouldn't need an MBA to make sense of your company&apos;s capital structure. <br class="hidden-phone"> Our cap table is simple enough for a quick review of your ownership, yet flexible <br class="hidden-phone"> enough for more complex deals.</p> 
+						</div>
+						<div class="spacer40"></div>
+						<div ng-controller="CarouselCtrl">
+						  <carousel interval="myInterval">
+						    <slide ng-repeat="slide in slides" active="slide.active">
+						      <img ng-src="{{slide.image}}" style="margin:auto;">
+						    </slide>
+						  </carousel>
+							<div class="carouseltabs">						    
+								<div class="span4 text-center slideOptions" ng-repeat="slide in slides">
+							          <a class="btn btn-mini" ng-class="{'btn-info': !slide.active, 'btn-success': slide.active}" ng-disabled="slide.active" ng-click="slide.active = true"><strong>{{slide.headline}}</strong><br>{{slide.text}}</a>          
+							    </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="spacer100 hidden-phone"></div>
+			<div class="spacer50 visible-phone"></div>
+			
+			<div class="even hidden-phone">
+				<div class="container">
+					<div class="spacer120"></div>
+					<div class="row-fluid">
+						<div class="span10 offset2">
+							<div class="row-fluid">
+								<div class="span4 signature">
+                                    <img src="/img/sign1.png" alt="dottedline" class="dottedline">
+                                    <img src="/img/sign2.png" alt="sign" class="sign"
+                                         data-bottom-center="opacity:0;"
+                                         data--200-bottom-center="opacity:1;">
+                                    <img src="/img/sign3.png" alt="pen" class="pen"
+                                         data-bottom-center="left:-100px; top:-11px;"
+                                         data--200-bottom-center="left:30px; top:-11px;">
+                                </div>
+								<div class="span8">
+									<div class="spacer50 hidden-phone"></div>	
+									<h2>E-Signature</h2>
+							        <p class="lead">Stop chasing down signatures with our legally-binding <br class="hidden-phone">
+							        	e-signature technology. Send, review and sign <br class="hidden-phone">documents from anywhere.</p>
+								</div>	
+							</div>					
+						</div>
+					</div>		
+					<div class="spacer120"></div>	
+				</div>
+			</div>
 
-<script>
+			<div class="container hidden-phone">
+				<div class="spacer120"></div>
+				<div class="row-fluid">
+					<div class="span10 offset1">
+						<div class="row-fluid">
+							<div class="span6">
+								<div class="spacer50 hidden-phone"></div>
+								<h2>Permissioning</h2>
+		    					<p class="lead">Not all shareholders deserve the same view of your <br class="hidden-phone"> information. We make it easy to control access, from <br class="hidden-phone"> documents to rows on a table.
+							</div>	
+							<div class="span4 permission">
+                                <img src="/img/perm-bkg.png" alt="keyhole" class="keyhole">
+                                <img src="/img/perm-key.png" alt="key" class="key"
+                                     data-bottom-center="right:-100px;"
+                                     data--100-bottom-center="right:0px;">
+                            </div>
+						</div>										
+					</div>
+				</div>	
+				<div class="spacer120"></div>
+			</div>
 
-  function getParams() {
-  var params = document.location.search.substring(1).split('&');
-  for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
-    params[unescape(param[0])] = unescape(param[1]);
-  }
-  return params;
-}
+			<div class="even visible-phone">
+				<div class="container">
+					<div class="spacer60"></div>	
+					<div class="row-fluid iconMobile pad">
+						<div class="pull-left"><img class="featurette-image pull-left" src="/img/graphic-esign.png"></div>
+						<div class="pull-right">
+							<h2>E-Signature</h2>
+					        <p class="lead">Stop chasing down signatures with our legally-binding e-signature technology. Send, review and sign documents from anywhere.</p>
+						</div>	
+					</div>	
+					<div class="spacer40"></div>				
+				</div>
+			</div>
 
-  function retrievedRegister(x) {
-		document.getElementsByName('firstname')[0].value = x[1][0];
-		document.getElementsByName('lastname')[0].value = x[1][1];
-		document.getElementsByName('investoremail')[0].value = x[1][2];
-  }
+			<div class="container visible-phone">
+				<div class="spacer60"></div>
+				<div class="row-fluid">
+					<div class="span10 offset1">
+						<div class="row-fluid iconMobile pad">
+							<div class="pull-left">
+								<img class="featurette-image pull-right" src="/img/graphic-permission.png">
+							</div>	
+							<div class="pull-right">
+								<div class="spacer20 hidden-phone"></div>
+								<h2>Permissioning</h2>
+		    					<p class="lead">Not all shareholders deserve the same view of your information. We make it easy to control access, from documents to rows on a table.
+							</div>	
+						</div>										
+					</div>
+				</div>	
+				<div class="spacer40"></div>
+			</div>
 
-  function doLogin() {
-	var greeting = document.querySelector("#error-message");
-	greeting.innerHTML = "";
-	var username = document.querySelector("#betaLogin input[name=username]").value;
-	var password = document.querySelector("#betaLogin input[name=password]").value;
-	SWBrijj.betaLogin(username, password).then(didntLogin);
-  }
+			<div id="register" class="even">
+				<div class="spacer120 hidden-phone"></div>
+				<div class="spacer70 visible-phone"></div>
+				<div class="row-fluid">
+					<div class="span10 offset1 text-center">
+						 <div id="CompanyRegister-form">
+						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
+								<h2>Request Invite</h2>
+								<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>					
+								<div class="spacer30"></div>					
+								<form name="myForm">
+									<fieldset>
+										<input type="email" class="loginInput" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email"  ><br>
+										<input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" ><br>
+										<input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" ><br>
+										<div class="spacer40"></div>
+										<button type="submit" class="button greenButton" id="submitInvite" ng-disabled="fieldCheck()"
+                                                ng-click="toggle = !toggle; companyRequest();" >Request Invitation</button>
+									</fieldset>
+								</form>
+							</div>
 
-  function didntLogin(x) {
-	var greeting = document.querySelector("#error-message");
-	greeting.innerHTML = x;
-  }
+							<div class="box off" ng-hide="toggle" ng-animate="'box'">
+								<h2>Thanks for signing up to use Sharewave!</h2>
+								<div class="spacer10"></div>
+								<p>We appreciate your interest, and we're excited to get you on board as soon as possible.</p>
+								<div class="spacer30"></div>
+								<p>Spread the word to your fellow entrepreneurs:</p>
+								<a href="https://twitter.com/intent/tweet?text=Check%20out%20Sharewave%2C%20the%20best%20way%20for%20private%20companies%20to%20manage%20their%20shareholders&via=sharewaveteam&url=http://bit.ly/shwvtw&original_referer=http://sharewave.com/" target="_blank">
+									<button class="button socialbtn twitter" type="button"><span data-icon="&#xe035;" aria-hidden="true"></span><span>Share</span></button>
+								</a>
+								<a href="https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb" target="_blank">
+									<button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>	
+								</a>
+								<a href="http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+The+best+way+to+manage+your+shareholders&source=Sharewave&summary=Spend%20more%20time%20running%20your%20business%20and%20less%20time%20on%20it%27s%20administration%2C%20no%20matter%20if%20you%20have%20one%20investor%20or%20one%20thousand." target="_blank">
+									<button class="button socialbtn linkedin" type="button"><span data-icon="&#xe036;" aria-hidden="true"></span><span>Share</span></button>
+								</a>
+								<div class="spacer110"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="spacer90"></div>
+			</div>
+            <div id="skrollr-body"></div>
+	    	<div class="push"></div>
 
-  function displayRadio(value) {
-    var ids = [ '#login-form', '#forgot-form', '#signup-form', '#CompanyRegister-form' ];
-    for ( var i = 0; i < ids.length; i++) {
-      document.querySelector(ids[i]).style.display = value == i ? 'block'
-          : 'none';
-    }
-  }
-	
-  function buttonRadio(value) {
-    var ids = [ '#login-button', '#signup-button' ];
-    for ( var i = 0; i < ids.length; i++) {
-      var e = document.querySelector(ids[i]);
-      if (value == i) {
-        e.disabled = true;
-        e.className = 'btn btn-home';
-      } else {
-        e.disabled = false;
-        e.className = 'btn btn-home btn-success';
-      }
-    }
-  }
-
-  function loginForm() {
-    /* This hack is a workaround for the Chrome handling of required attributes */
-    var qs = document.querySelectorAll("#login-form input[requiredx]");
-    for ( var i = 0; i < qs.length; i++) {
-      qs[i].removeAttribute("requiredx");
-      qs[i].setAttribute("required", false);
-    }
-    displayRadio(0);
-    buttonRadio(0);
-  }
-
-  function forgotForm() {
-    /* This hack is a workaround for the Chrome handling of required attributes */
-    var qs = document.querySelectorAll("#login-form input[required]");
-    for ( var i = 0; i < qs.length; i++) {
-      qs[i].removeAttribute("required");
-      qs[i].setAttribute("requiredx", false);
-    }
-    displayRadio(1);
-    buttonRadio(2);
-  }
-
-  function signupForm() {
-    displayRadio(2);
-    buttonRadio(1);
-  }
-  
-  function registerForm() {
-    displayRadio(3);
-    buttonRadio(1);
-  }
-
-  function checkPassword() {
-
-    if (document.registerform.password.value != document.registerform.confirmpassword.value) {
-      document.registerform.confirmpassword
-          .setCustomValidity('Passwords must match.');
-    } else {
-      document.registerform.confirmpassword.setCustomValidity('');
-	  
-    }
-  }
-  
-  function doPreregister() {
-	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
-	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
-	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
-	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-	if (Domain.length == 0) {
-		Domain = "blank"
-	}
-    SWBrijj.companyPreregister(Domain, email, cName, pName).then(didPreregister).except(failedPreregister);
-  }
-  
-  function didPreregister(x) {
-	var fed = document.querySelector("#companyReserve");
-	var button = document.querySelector("#registerButton");
-	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-	$(button).addClass("hidden");
-	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='http://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
-	fed.innerHTML = string; 
-  }
-  
-  function failedPreregister(x) {
-	var fed = document.querySelector("#companyReserve");
-	var button = document.querySelector("#registerButton");
-	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-	$(button).addClass("hidden");
-	var string = "<p>" + pName + ",</p> <p>Thank you for submitting an invitation to Sharewave! We're working diligently on our product with early users, and are excited to soon get you on board.</p> <p>Want to stay in touch with our progress? Find us on twitter at <a href='http://twitter.com/sharewaveteam' target='_blank'>@sharewaveteam</a>.</p>"
-	fed.innerHTML = string; 
-  }
-</script>
-</head>
-<body>
-  <div class="bannerBar">
-    <div class="container">
-      <div class="row-fluid">
-        <section id="topbar">
-          <div class="span12" id="homenav">
-            <div class="pull-right">
-              <a id="topBlogButton" class="allCaps" data-toggle="modal" href='http://blog.sharewave.com' target='_self'>BLOG</a>
-              <a id="loginButton" class="allCaps" data-toggle="modal" href="#loginModal">LOGIN</a>
-            </div>
-          </div>
-        </section>
-      </div>
-    
-    
-     <div class="row-fluid pagination-centered headline">
-        <div>
-          <img id="homelogo" src="/img/homelogo.png" alt="Sharewave Logo">
-          <div class="tagline">
-          	<p style="margin-bottom:0px;" class="headerText">a beautifully simple way for private companies to</p>
-            <p style="margin-top:0px;" class="headerText">organize, visualize and share information with their investors</p>
-          </div>
-          <button id="inviteButton" type="submit" class="btn btn-sxsw" tabindex="5" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Top']);">Request an Invite</button>
-          <div style="position: relative; margin-top:50px;">
-          	<img id="monstersPic" src="/img/monsters.png" alt="The Sharewave Investors">
-            <a class="video" data-toggle="modal" href="#Video" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Video', 'Open']);"><img id="playbutton" src="/img/play-button.png" alt="Video Play Button"></a>
-          </div>
-        </div>
-     </div>
-   </div>
-   
-   </div>
-   
-   <div id="loginModal" class="modal hide fade">
-  <button type="button" class="close" data-dismiss="modal">&times;</button>
-  <div id="login" class="modal-body center">
-   <form id="betaLogin" class="center" method="post">
-            <fieldset id="loginForm">
-              <p style="height:20px;" id="error-message" class="text-error"></p>
-              <input placeholder="Username" required class="checkInput"  autocapitalize="off" name="username" type="email">
-              <br> 
-              <input placeholder="Password" required class="checkInput" id="login_password" name="password" type="password">			  <br>
-            </fieldset>
-            <button id="loginSubmitButton" type="button" onclick="doLogin(); return false;" class="btn btn-sxsw">Sign in</button>
-          </form>
-  </div>
-</div>
-
-<div id="Video" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-body" aria-hidden="true">
-    <iframe src="http://player.vimeo.com/video/60776538" style="width:100%; height:100%;" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-  </div>
-</div>
-   
-   <div class="container">
-    <div class="row-fluid iconRow">
-      <section>
-          <ul class="thumbnails">
-              <li class="span4 pagination-centered">
-                  <div>
-                      <img src="/img/icon-manage.png" alt="investor manage icon">
-                      <p class="standardText iconText">Easily Manage</p>
-                      <p class="standardText iconText" style="margin-top:-15px;">Your Cap Table</p>
-                      <p class="standardText iconText" style="margin-top:-15px;">& Employee Options</p>
-                  </div>
-              </li>
-              
-              <li class="span4 pagination-centered">
-                  <div>
-                      <img src="/img/icon-generate.png" alt="investor generate icon">
-                      <p class="standardText iconText">Quickly Build & Share</p>
-                      <p class="standardText iconText" style="margin-top:-15px;">Rich Board and</p>
-                      <p class="standardText iconText" style="margin-top:-15px;">Investor Presentations</p>
-                  </div>
-              </li>
-              
-              <li class="span4 pagination-centered">
-                  <div>
-                      <img src="/img/icon-signature.png" alt="investor signature icon">
-                      <p class="standardText iconText">Stop Chasing Signatures, </p>
-                      <p class="standardText iconText" style="margin-top:-15px;">with E-Sign and</p>
-                      <p class="standardText iconText" style="margin-top:-15px;">Audit Trails</p>
-                  </div>
-              </li>
-          </ul>
-      </section>
-    
-    </div>
-    
-
-    
-    
-    <div class="row-fluid">
-      <section>
-    
-
-        <div id="CompanyRegister-form" class="span12 pagination-centered">
-          <br>
-          <form id="registrationForm" action="" method="post" onsubmit="doPreregister(); return false;">
-          <div id="companyReserve">
-            <fieldset>
-              <p>Dear Sharewave,</p>
-
-              
-              <p style="margin-top:25px;"><span>My name is</span><input id="name" required class="loginInput" name="personalName" type="text"><span id="emailText">and my email is</span><input id="email" required class="loginInput" name="companyEmail" type="text"><span>.</span></p>
-              
-              <p><span>My company name is</span><input id="company" required class="loginInput" autocapitalize="off" name="companyName" type="text"><span>, and you can find us online at http://</span><input id="domain" class="loginInput" autocapitalize="off" name="companyDomain" type="text"></p>
-              
-              <p style="margin-top:25px;">Please let me know when Sharewave is ready.</p>
-            </fieldset>
-              <button disabled id="registerButton" type="submit" class="btn btn-sxsw" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Request Invite', 'Submit']);">Request an Invite</button>
-          </div>
-          </form>
-          </div>
-          <div id="registerBar" class="standardText">Spread the Word 
-          <a href="https://twitter.com/intent/tweet?text=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors+at&via=sharewaveteam&url=http://bit.ly/shwvtw"><img class="socialPlacement" src="/img/icon-twitter.png" alt="Twitter Icon"></a>
-          <img class="socialPlacement" src="/img/icon-facebook.png" alt="Facebook Icon" onClick="window.open('https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb&t=Sharewave%3A+Feed+Your+Investors','mywindow','width=500,height=300')">
-          <img class="socialPlacement" src="/img/icon-linkedin.png" alt="LinkedIn Icon" onClick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+Feed+Your+Investors&source=Sharewave&summary=A+beautifully+simple+way+to+organize%2C+visualize+and+communicate+with+investors','mywindow','width=500,height=400')"></div>
-        
-        
-      </section>
-    </div>
-  </div>
-  
-  <div style="margin-top:200px;" class="footerBar">
-    <div class="container">  
-      <div class="row-fluid">
-      <footer class="footer">
-          <div class="span12">
-            <a href="http://twitter.com/sharewaveteam"><img style="padding-right:10px;" class="socialPlacement" src="/img/icon-twitter.png" alt="Twitter Icon"></a><a id="blogButton" href='http://blog.sharewave.com' target='_self' class="allCaps footText">BLOG</a>
-            <div class="pull-right">
-             <span class="allCaps footText">&copy; 2013 SHAREWAVE, ALL RIGHTS RESERVED</span>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
-  </div>
-    
-
-  <script src="lib/jquery/jquery.js"></script>
-  <script src="lib/bootstrap/bootstrap.js"></script>
-  <script src="lib/bootstrap/bootstrap-tooltip.js"></script>
-  <script src="lib/bootstrap/bootstrap-lightbox.js"></script>
-  <script src="brijj/brijj.js"></script>
-  <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-  
-  <script>
-  
-//  $(document).ready(function () {
-//
-//    $( "#name" ).tooltip({'trigger':'hover', 'title': 'Enter your name'});
-//	$( "#email" ).tooltip({'trigger':'hover', 'title': 'Enter your email'});
-//	$( "#domain" ).tooltip({'trigger':'hover', 'title': "Enter your company's domain"});
-//	$( "#company" ).tooltip({'trigger':'hover', 'title': 'Enter you company'});
-//
-//});
-
-   // Check if string is a valid email address
-   
-// checks that an input string looks like a valid email address.
-var isEmail_re       = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-	
-	function isEmail (s) {
-   return String(s).search (isEmail_re) != -1;
-}
-
-
-  
-  
-   $( "#inviteButton" ).click(function() {
-     $('html, body').animate({
-         scrollTop: $( "#CompanyRegister-form" ).offset().top + 100
-     }, 600);
- });
- 
- 	$(".loginInput").keyup(function() {
-	var email = document.querySelector("#CompanyRegister-form input[name=companyEmail]").value;
-	var emailTest = isEmail(email);
-	var cName = document.querySelector("#CompanyRegister-form input[name=companyName]").value;
-	var Domain = document.querySelector("#CompanyRegister-form input[name=companyDomain]").value;
-	var pName = document.querySelector("#CompanyRegister-form input[name=personalName]").value;
-	if (email.length > 0 && cName.length > 0 && pName.length > 0 && emailTest === true) {
-		$("#registerButton").removeAttr('disabled');
-	}
-	else {
-		if ($("#registerButton").is(':disabled')){	
-		}
-		else {
-			$("#registerButton").attr('disabled', 'disabled');
-		}
-	}
-	});
-	
-	$(document).ready(function() {
-		$( "#Video").on('hidden', function () {
-		 vimeoWrap = $('#Video');
-  		 vimeoWrap.html( vimeoWrap.html() );
-	  })
-});
-  </script>
-</body>
+		</div>
+	    <!--{{/i/foot.inc}}-->
+        <script>
+            if (screen && screen.width > 1024)
+            document.write('<script type="text/javascript" src="/lib/skrollr/skrollr.min.js"><\/script>');
+            document.write('<script type="text/javascript"> window.onload = function() {skrollr.init({forceHeight: false,edgeStrategy: "set"});}<\/script>');
+        </script>
+    </body>
 </html>

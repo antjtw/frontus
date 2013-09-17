@@ -1,0 +1,349 @@
+/* Homepage */
+
+@media (max-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+    }
+}
+
+@media (min-height: 800px) {
+    .home .paginator{
+        position:absolute;
+        bottom:0;
+        left:50%;
+    }
+
+    .home #hero{
+        background: url(/img/top-image-1920-2.jpg) no-repeat center;
+        background-size:cover;
+        height: 800px;
+        position: relative;
+    }
+}
+
+.home h1 {
+    color: rgb(255, 255, 255);
+    font-family: 'FS Elliot Web Thin', sans-serif;
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: normal;
+}
+
+.home h2 {
+    color: rgb(30, 45, 61);
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: normal;
+}
+
+.home h3 {
+    color: rgb(255, 255, 255);
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 18px;
+    letter-spacing: 1px;
+}
+
+.home p {
+    color: rgb(141, 141, 141);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: normal;
+}
+
+.home input {
+    background-color: rgb(255, 255, 255);
+}
+
+.videoModal.modal {
+    width: 50%;
+    height: 400px;
+    margin-left: -25%;
+    left: 50%;
+}
+
+.videoIframe {
+    width: 100%;
+    height: 400px;
+}
+
+.home .videoRow {
+    text-align: center;
+    padding: 15px 0 15px 0;
+    cursor: pointer;
+}
+
+.home .videoRow > h2 {
+    margin-left: 10px;
+    display: inline;
+}
+
+.home .videoRow .arrow-right {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 30px solid rgb(26, 188, 150);
+}
+
+
+
+.home .btn-mini {
+    color: rgb(141, 141, 141);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    border: 0;
+    text-shadow: none;
+    box-shadow: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 84px;
+}
+
+.home .btn-mini strong {
+    color: rgb(30, 45, 61);
+}
+
+.home .btn-mini:hover {
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
+    padding-bottom: 10px;
+}
+
+.home .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled], .btn-mini:active {
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+
+.home .btn-success {
+    position: relative;
+    display: block;
+    color: rgb(141, 141, 141);
+    background-color: rgb(241, 241, 241);
+    opacity: 1;
+    height: 84px;
+}
+
+.home .btn-success:before {
+    content: " ";
+    position: absolute;
+    top:-10px;
+    right: 105px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgb(241, 241, 241);
+}
+
+.home .even {
+    background-color: rgb(241, 241, 241);
+}
+
+.home .button {
+    width: 222px;
+    height: 60px;
+    text-transform:capitalize;
+    border: 0;
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    letter-spacing: 1px;
+}
+
+.home .button.greenButton {
+    background-color: rgb(26, 188, 150);
+}
+
+.home .button.blueButton {
+    margin-left: 15px;
+    background-color: rgb(52, 152, 219);
+    width: 180px;
+}
+
+.home .button.socialbtn {
+    width: 140px;
+    height: 60px;
+    text-align:center;
+    padding: 0 0 0 0;
+    margin: 7px;
+    color: rgb(255, 255, 255);
+
+}
+
+.home .button.socialbtn > span:first-child {
+    display: inline-block;
+    margin: 0 6px 0 0;
+    font-size: 28px;
+    display: inline-block;
+    vertical-align:middle;
+}
+
+.home .button.socialbtn > span:last-child {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align:middle;
+}
+
+.home input {
+    width: 300px;
+    height: 30px;
+    border-radius: 0;
+    border: 0;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.home input:focus {
+    background-color: rgb(255, 255, 255);
+}
+
+.home input:focus:invalid {
+    color: rgb(102, 102, 102);
+}
+
+
+
+/* Homepage carousel */
+
+.carousel-indicators {
+    display: none;
+}
+
+.carousel-control.left{
+    background: url(/img/orange-left.png) no-repeat !important;
+}
+
+.carousel-control.right{
+    background: url(/img/orange-right.png) no-repeat !important;
+}
+.carousel-control {
+    border: 0;
+    font-weight: 100;
+    font-size: 1px;
+}
+
+.carousel-linked-nav,
+.item img {
+    display: block;
+    margin: 0 auto;
+}
+
+.carousel-linked-nav {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.carousel-inner {
+    border: 1px solid rgb(227, 227, 227);
+    width: 85%;
+    margin: auto;
+}
+
+.carouseltabs {
+    width:85%;
+    margin:auto;
+}
+
+
+/* Parallax Communication Graphics */
+
+.comms {
+    position: relative;
+    width: 820px;
+    margin: 0 auto 0 auto;
+}
+
+.comms img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.comms img.bkg {
+    z-index: 10;
+    position: relative;
+}
+
+.comms img.ike {
+    z-index: 20;
+}
+
+.comms img.jet {
+    z-index: 30;
+}
+
+.comms img.check {
+    z-index: 40;
+}
+
+.comms .dots {
+    position: relative;
+    z-index:0;
+    top:-120px;
+    left:70px;
+    width:100%;
+    height:7px;
+    background:url(/img/dot.png) repeat-x;
+}
+
+
+/* Parallax features */
+
+.signature {
+    position: relative;
+}
+
+.signature img {
+    position: absolute;
+}
+
+.signature img.dottedline {
+    z-index: 1;
+}
+
+.signature img.sign {
+    z-index: 2;
+}
+
+.signature img.pen {
+    z-index: 3;
+}
+
+.permission {
+    position: relative;
+}
+
+.permission img {
+    position: absolute;
+}
+
+.permission img.keyhole {
+    z-index: 0;
+}
+
+.signature img.key {
+    z-index: 1;
+}
+
+
+
