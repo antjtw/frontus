@@ -7,7 +7,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     }
 
     var company = navState.company;
-
     $scope.currentCompany = company;
     console.log(company);
 

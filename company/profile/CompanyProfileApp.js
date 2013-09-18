@@ -147,19 +147,19 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
         if (x.activity == "addadmin") {
           x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeadmin") {
           x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "an administrator";
+          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
           x.icon = "icon-circle-minus";
         } else if (x.activity == "addinvestor") {
           x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
           x.icon = "icon-circle-plus";
         } else if (x.activity == "removeinvestor") {
           x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " investors": "an investor";
+          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
           x.icon = "icon-circle-minus";
         }
 
@@ -268,6 +268,16 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', funct
               $scope.sort = col;
           }
       }
+
+    $scope.gotoPerson = function (person) {
+        if ($rootScope.userid != person.email) {
+            var link = '/company/profile/view?id='+person.email
+        }
+        else {
+            var link = '/investor/profile/';
+        }
+        document.location.href=link;
+    };
 }]);
 
 app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', 'navState',
@@ -298,7 +308,9 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
   SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(x) {
     $scope.docs = x;
       SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
-          $scope.level = access[0].level;
+          if (access[0]) {
+              $scope.level = access[0].level;
+          }
       }).except(function(err) {
               void(err);
               $scope.level = false;

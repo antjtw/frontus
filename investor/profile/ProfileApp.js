@@ -173,6 +173,14 @@ app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', functi
             } else { 
               $rootScope.notification.show("fail", "There was an error updating your password.");
               // console.log("Oops.  Change failed");
+              $scope.currentPassword = "";
+              $scope.newPassword = "";
+              $scope.passwordConfirm = "";
+            } else { 
+              $rootScope.notification.show("fail", "There was an error updating your password.");
+              $scope.currentPassword = "";
+              $scope.newPassword = "";
+              $scope.passwordConfirm = "";
             }
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };

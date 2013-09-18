@@ -61,18 +61,18 @@
 
               <accordion close-others="true">
                   <accordion-group heading="Grant Information">
-                      <p ng-show="tran.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="tran.optundersec"></p>
+                      <p ng-show="tran.optundersec" class="rightTitle"><span>Underlying Security</span><input disabled ng-model="tran.optundersec"></p>
 
-                      <p ng-show="tran.price" class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input disabled ng-model="tran.price"></p>
+                      <p ng-show="tran.price" class="rightTitle"><span>Strike Price</span><input disabled ng-model="tran.price"></p>
 
-                      <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
+                      <p ng-show="tran.terms" class="rightTitle"><span>Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
 
-                      <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
+                      <p ng-show="tran.vestingbegins" class="rightTitle"><span>Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
 
-                      <p ng-show="tran.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
+                      <p ng-show="tran.vestcliff" class="rightTitle"><span>Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
 
 
-                      <p ng-show="tran.vestfreq" class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span><input disabled ng-model="tran.vestfreq"></p>
+                      <p ng-show="tran.vestfreq" class="rightTitle"><span>Post Cliff Frequency</span><input disabled ng-model="tran.vestfreq"></p>
                   </accordion-group>
                   <accordion-group heading="Grant Activity">
                   <ul>
@@ -89,7 +89,7 @@
         </span>
 
         <span ng-switch-when="2">
-          <p>Investor Email <input disabled ng-model="activeInvestorName"></input></p>
+          <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
         </span>
         <span class="capGuide" ng-switch-default>
                 <h2>View your Grants</h2>

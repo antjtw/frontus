@@ -29,7 +29,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
   }
 
   $scope.company = navState.name;
-
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
   }).except(initFail);
@@ -55,7 +54,11 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
   function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState) {
 
+<<<<<<< HEAD
     if (navState.role == 'issuer') {
+=======
+    if (readCookie('role') == 'issuer') {
+>>>>>>> origin/walport
         $location.path('/company');
         return;
     }
@@ -66,7 +69,11 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     }
   }
   //$scope.company = $routeParams.company;
+<<<<<<< HEAD
   $scope.company = navState.name;
+=======
+  $scope.company = readCookie('company');
+>>>>>>> origin/walport
 
   $scope.activity = [];
   SWBrijj.tblm('global.get_investor_activity').then(function(data) {
@@ -196,8 +203,8 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "viewed") return "You viewed " + document;
             else if (activity == "reminder") return "You were reminded about" +document;
             else if (activity == "signed") return "You signed "+document;
-            else if (activity == "rejected") return company + " rejected your signature on " +document;
-            else if (activity == "countersigned") return company + " countersigned "+document;
+            else if (activity == "rejected") return person + " rejected your signature on " +document;
+            else if (activity == "countersigned") return person + " countersigned "+document;
             else  {
                 return activity + " by "+person;
             }

@@ -15,7 +15,8 @@ app.config(function($routeProvider, $locationProvider){
         });
     });
 
-function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
+app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
+    function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
   $scope.user = {};
   if ($routeParams.logout) {
     $scope.$emit('notification', 'success', 'You have successfully logged out');
@@ -61,7 +62,7 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
 
 
 
-}
+}]);
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';

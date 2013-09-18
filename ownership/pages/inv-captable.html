@@ -41,9 +41,9 @@
                 </td>
             </tr>
             <tr ng-repeat="row in rows | noUnissue">
-                <td><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                <td class="capsums-col" ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col" ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                 <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
@@ -66,7 +66,7 @@
             <!-- Extra row containing all the others -->
             <tr ng-hide="fullview">
                 <td><input disabled></td>
-                <td><input class="input-right" disabled value="{{everyone.percentage  | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{everyone.percentage  | number:3}}%"></td>
                 <td class="viewName">Other Investors</td>
                 <td ng-repeat="key in issuekeys">
                 </td>
@@ -142,7 +142,7 @@
 
                               <p ng-show="activeIssue.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="activeIssue.terms"></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input disabled ng-model="activeIssue.vestingbegins"></p>
+                              <p ng-show="activeIssue.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{activeIssue.vestingbegins | date:'shortDate'}}</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="activeIssue.vestcliff"></p>
 
@@ -229,7 +229,7 @@
 
                                     <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
 
-                                    <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input disabled ng-model="tran.vestingbegins"></p>
+                                    <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
 
                                     <p ng-show="tran.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
 

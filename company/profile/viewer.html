@@ -1,6 +1,6 @@
 
 <div class="headsection row-fluid">
-  <h1>{{user.name}}</h1>
+  <h1><a href="/company/profile/people/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{user.name}}</h1>
 </div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
@@ -23,7 +23,7 @@
       <section class="recipientInfo statusBlock">
       <div>
           <p class="title">Ownership Permissions</p>
-          <p>Shareholders will only see their personal holdings by default, unless you allow full permission here</p>
+          <p>Shareholders will only see their personal holdings by default, unless you allow full permission here.</p>
       </div>
       <div ng-show="level" class="cf permission-block">
         <div>
@@ -45,7 +45,7 @@
         </div>
         <div class="DivHelper"></div>
       </div>
-      <div style="display: none;" ng-hide="level">You've not shared your cap table with this person.</div>
+      <div style="display: none;" class="temp-text" ng-hide="level">You've not shared your cap table with this person.</div>
     </section>
     <br>
     <section class="recipientInfo docLibrary">
@@ -57,36 +57,37 @@
         <tr class="column-label subText" ng-hide="noDocs">
           <th class="button"><span class="title sortedDown">Name</span></th>
           <th colspan="2" class="button"><span class="title">Status</span></th>
+
         </tr>
           <tr class="noFeed" ng-show="docs.length == 0">
-              <td colspan="2">You've not shared any documents with this person.</td>
+              <td colspan="3">You've not shared any documents with this person.</td>
           </tr>
           <tbody ng-repeat="doc in docs">
-          <tr class="status-row" ng-class="{selectedrow:doc.shown}" ng-click="(opendetails(doc))">
+          <tr class="button status-row" ng-class="{selectedrow:doc.shown}" ng-click="(opendetails(doc))">
               <td style="width:50%;">{{doc.docname}}</td>
-              <td style="width:50%;">{{doc.event}}</td>
+              <td>{{doc.event}}</td>
+              <td class="button">
+                  <span ng-Hide="doc.shown" data-icon="&#xe031;" aria-hidden="true"></span>
+                  <span ng-Show="doc.shown" data-icon="&#xe034;" aria-hidden="true"></span>
+              </td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown">
               <td><span data-icon="&#xe024;" aria-hidden="true"></span>Sent</td>
-              <td>
+              <td colspan="2">
                   {{doc.when_shared | date:'MMMM dd, yyyy, h:mm a'}}
               </td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown">
               <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="doc.last_viewed">Never Viewed</span><span ng-show="doc.last_viewed">Last Logged In</span></td>
-              <td>{{doc.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
-          </tr>
-          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-              <td><span data-icon="&#xe015;" aria-hidden="true"></span><span ng-hide="doc.signature_deadline">No Signature Required</span><span ng-show="doc.signature_deadline">Signature Deadline</span></td>
-              <td>{{doc.signature_deadline | date:'MMMM dd, yyyy, h:mm a'}}</td>
+              <td colspan="2">{{doc.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
               <td><span data-icon="&#xe00d;" aria-hidden="true"></span><span ng-hide="doc.when_signed">Never Signed</span><span ng-show="doc.when_signed">Signed</span></td>
-              <td>{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+              <td colspan="2">{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
               <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="doc.when_confirmed">Not Countersigned</span><span ng-show="doc.when_confirmed">Countersigned</span></td>
-              <td>{{doc.when_confirmed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+              <td colspan="2">{{doc.when_confirmed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
 
           </tbody>
@@ -100,10 +101,6 @@
         <p>
           <label><input type="text" ng-model="user.email" disabled>
           Email</label>
-        </p>
-        <p>
-          <label><textarea ng-class="{'content':!user.street}"  ng-model="user.street" rows="3" disabled></textarea>
-          Address</label>
         </p>
       </fieldset>
     </form>
