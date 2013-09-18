@@ -150,67 +150,16 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
    * @type {int}
    */
   $scope.activity = [];
-  SWBrijj.procm('global.get_company_activity').then(function(data) {
-    angular.forEach(data, function(x) {
-      x.timeAgo = moment(x.time).fromNow();
-      if (x.type == 'account') {
-        x.link = (x.count > 1) ? "/company/profile/people" : "/company/profile/view?id=" + x.item_id;
-        if (x.activity == "addadmin") {
-          x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeadmin") {
-          x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " administrators": "as an administrator";
-          x.icon = "icon-circle-minus";
-        } else if (x.activity == "addinvestor") {
-          x.activity = "Added ";
-          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
-          x.icon = "icon-circle-plus";
-        } else if (x.activity == "removeinvestor") {
-          x.activity = "Removed ";
-          x.target = + (x.count > 1) ? x.count + " investors": "as an investor";
-          x.icon = "icon-circle-minus";
+    SWBrijj.tblm('global.get_company_activity').then(function(data) {
+        $scope.activity = data;
+        if ($scope.activity.length == 0) {
+            $scope.noActivity = true;
         }
-
-
-      } else if (x.type == 'document') {
-        x.link = "/documents/company-status?doc=" + x.item_id;
-        SWBrijj.tblm('document.my_company_library', ['docname'], 'doc_id', parseInt(x.item_id)).then(function(res){
-          x.target = res["docname"];
-        }); 
-        if (x.activity == "uploaded") {
-          x.activity = "Uploaded ";
-          x.icon = "icon-star";
-        } else if (x.activity == "sent") {
-          x.activity = "Shared ";
-          x.icon = "icon-redo";
-        }
-      } else if (x.type == 'ownership') {
-        x.link = "/company/ownership/";
-        x.target = "Ownership table";
-        if (x.activity == "shared") {
-          x.activity = "Shared ";
-          x.icon = "icon-redo";
-        } else if (x.activity == "viewed") {
-            x.activity = "Viewed ";
-            x.icon = "icon-view";
-        } else if (x.activity == "received") {
-            x.activity = "Received ";
-            x.icon = "icon-email";
-        }
-
-      }
     });
-    $scope.activity = data;
-    if ($scope.activity.length == 0) {
-      $scope.noActivity = true;
-    }
-  });
 
-  $scope.activityOrder = function(card) {
+    $scope.activityOrder = function(card) {
         return -card.time;
-  };
+    };
 
   $scope.uploadFile = function() {
       $scope.photoURL = "/img/image-loader-140.gif";
