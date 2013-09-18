@@ -45,7 +45,7 @@ navm.factory('navState', [function () {
     name: document.sessionState.name || document.sessionState.company,
     role: document.sessionState.role,
     userid: document.sessionState.userid,
-    tester: document.sessionState.userid && document.sessionState.userid.match(/sharewave.com/),
+    tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
     path: undefined
   }
 }]);
