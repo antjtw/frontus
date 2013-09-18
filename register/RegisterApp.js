@@ -29,7 +29,7 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
      * @param {string} code
      */
     SWBrijj.getInvitation($scope.code).then(function(x) {
-      console.log(x);
+      // console.log(x);
       initPage($scope, x);
       if ($scope.activated) {
         document.location.href="/login";
@@ -67,7 +67,7 @@ app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
     
     SWBrijj.getInvitation($scope.code).then(function(x) {
       initPage($scope, x);
-      console.log(x);
+      // console.log(x);
       if ($scope.activated) {
         if ($scope.redirect) {
           document.location.href = $scope.redirect;

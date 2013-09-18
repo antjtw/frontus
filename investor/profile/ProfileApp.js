@@ -59,7 +59,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
         return;
       }
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) {
-          console.log("saved: "+x);
+          // console.log("saved: "+x);
           $rootScope.notification.show("success", "Profile successfully updated");
           $scope.namekey = $scope.name;
       }).except(function(x) {
@@ -91,11 +91,11 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
      * @param {FormData}
      */
     SWBrijj.uploadImage(fd).then(function(x) {
-      console.log(x);
+      // console.log(x);
       $rootScope.notification.show("green", "Profile photo successfully updated");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
     }).except( function(x) {
-      console.log(x);
+      // console.log(x);
       $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
     });
@@ -169,10 +169,10 @@ app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', functi
         SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) { 
               $rootScope.notification.show("success", "Your password has been updated successfully.");
-              console.log("changed successfully");
+              // console.log("changed successfully");
             } else { 
               $rootScope.notification.show("fail", "There was an error updating your password.");
-              console.log("Oops.  Change failed");
+              // console.log("Oops.  Change failed");
             }
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };

@@ -38,6 +38,7 @@ body {
 
 .container {
 	width: 1024px;
+    clear:both;
 }
 
 label {
@@ -282,11 +283,11 @@ h2 {
 
 /* Navigation Bar at Top of Page */
 
-#navBar {
+.navBarLoggedIn {
 	height:70px;
 }
 
-#navBarLoggedOut {
+.navBarLoggedOut {
 	height:40px;
 }
 
@@ -2029,7 +2030,7 @@ form.inputs {
 }
 
 .for-r0ml {
-     /* display: none; */
+     display: none;
 }
 
 

@@ -163,13 +163,15 @@ function UploadController($scope, $rootScope, $route, SWBrijj) {
           $rootScope.errorMessage = arg;
           $scope.showProgress=false;
           $scope.$apply();
-          console.log(arg); });
+          // console.log(arg);
+          });
     $scope.$on(
         "upload:abort", function(evt, arg) {
           $rootScope.errorMessage = arg;
           $scope.showProgress=false;
           $scope.$apply();
-          console.log(evt); console.log(arg); });
+          // console.log(evt); console.log(arg);
+          });
 
     var fd = new FormData();
     for (var i=0;i<files.length;i++) fd.append("uploadedFile", files[i]);

@@ -76,7 +76,7 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
       $rootScope.notification.show("success", "Invitation sent");
       $scope.get_issuers();
     }).except(function(x) {
-      console.log(x);
+      // console.log(x);
       $rootScope.notification.show("fail", "Something went wrong, please try again later.");
     });
   };
@@ -87,7 +87,7 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
       $rootScope.notification.show("success", "Privileges updated");
       $scope.get_issuers();
     }).except(function (x) {
-          console.log(x);
+          // console.log(x);
           $rootScope.notification.show("fail", "Something went wrong, please try again later.");
         });
   };
@@ -102,12 +102,12 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         return;
       }
       SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) { 
-          console.log("saved: "+x);
+          // console.log("saved: "+x);
           $rootScope.notification.show("success", "Your company profile has been updated successfully.");
           $scope.namekey = $scope.name;
           $scope.companykey = $scope.company;
       }).except(function(x) {
-          console.log(x);
+          // console.log(x);
           $scope.namekey = $scope.name;
           $scope.companykey = $scope.company;
           $rootScope.notification.show("fail", "There was an error updating your company profile.");
@@ -208,10 +208,10 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
       for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
       SWBrijj.uploadLogo(fd).then(function(x) {
         $scope.photoURL = '/photo/user?id=company:' + $scope.company;
-        console.log(x);
+        // console.log(x);
         $rootScope.notification.show("green", "Company logo successfully updated");
       }).except( function(x) { 
-        console.log(x);
+        // console.log(x);
         $rootScope.notification.show("fail", "Company logo change was unsuccessful, please try again.");
         $scope.photoURL = '/photo/user?id=company:' + $scope.company;
       });
@@ -256,7 +256,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', funct
                       person.name = person.email;
               });
           });
-          console.log(x);
+          // console.log(x);
           $scope.sort = 'name';
       });
   });
@@ -311,11 +311,11 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
 
    SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(stuff) {
         $scope.activity = stuff;
-        console.log($scope.activity);
+        // console.log($scope.activity);
     });
 
   $scope.changeVisibility = function (value) {
-    console.log(value);
+    // console.log(value);
     $scope.level = value;
     SWBrijj.proc('ownership.update_investor_captable', userId, $scope.level).then(function (data) {
       void(data);

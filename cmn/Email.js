@@ -56,7 +56,7 @@ email.directive("emailTo", function() {
       void(attrs);
       void(elm);
       void(ctrl);
-      console.log(scope);
+      // console.log(scope);
     },
     scope: false,
     template: '<div class="multiEmail"><span>To: </span><span ng-repeat="recip in recipients">'+

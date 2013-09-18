@@ -1,15 +1,52 @@
 
+function getCSSRule(ruleName, deleteFlag) {               // Return requested style obejct
+  ruleName=ruleName.toLowerCase();                       // Convert test string to lower case.
+  if (document.styleSheets) {                            // If browser can play with stylesheets
+    for (var i=0; i<document.styleSheets.length; i++) { // For each stylesheet
+      var styleSheet=document.styleSheets[i];          // Get the current Stylesheet
+      var ii=0;                                        // Initialize subCounter.
+      var cssRule=false;                               // Initialize cssRule.
+      do {                                             // For each rule in stylesheet
+        if (styleSheet.cssRules) {                    // Browser uses cssRules?
+          cssRule = styleSheet.cssRules[ii];         // Yes --Mozilla Style
+        } else {                                      // Browser usses rules?
+          cssRule = styleSheet.rules[ii];            // Yes IE style.
+        }                                             // End IE check.
+        if (cssRule)  {                               // If we found a rule...
+          if (cssRule.selectorText && cssRule.selectorText.toLowerCase()==ruleName) { //  match ruleName?
+            if (deleteFlag=='delete') {             // Yes.  Are we deleteing?
+              if (styleSheet.cssRules) {           // Yes, deleting...
+                styleSheet.deleteRule(ii);        // Delete rule, Moz Style
+              } else {                             // Still deleting.
+                styleSheet.removeRule(ii);        // Delete rule IE style.
+              }                                    // End IE check.
+              return true;                         // return true, class deleted.
+            } else {                                // found and not deleting.
+              return cssRule;                      // return the style object.
+            }                                       // End delete Check
+          }                                          // End found rule name
+        }                                             // end found cssRule
+        ii++;                                         // Increment sub-counter
+      } while (cssRule)                                // end While loop
+    }                                                   // end For loop
+  }                                                      // end styleSheet ability check
+  return false;                                          // we found NOTHING!
+}                                                         // end getCSSRule
+
+
+
 var navm = angular.module('nav', ['ui.bootstrap'], function () {
 });
 
 navm.factory('navState', [function () {
+  if (!document.sessionState) document.sessionState = {};
   return {
-    company: undefined,
-    role: undefined,
-    userid: undefined,
-    isLoggedIn: false,
-    path: undefined,
-    loaded: false
+    company: document.sessionState.company,
+    name: document.sessionState.name || document.sessionState.company,
+    role: document.sessionState.role,
+    userid: document.sessionState.userid,
+    tester: document.sessionState.userid && document.sessionState.userid.match(/sharewave.com/),
+    path: undefined
   }
 }]);
 
@@ -27,20 +64,21 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
   function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
     $scope.companies = [];
 
-    $scope.nav = 'navBarLoggedOut';
-    var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/?logout=1"];
+    if (location.host=='share.wave' || navState.tester) {
+      var rr = getCSSRule('.for-r0ml');
+      if (rr) {
+        rr.style.display="inline";
+      }
+    }
+    var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/"];
     $scope.navState = navState;
-    $scope.showBothBars = false;
-    navState.isLoggedIn = false;
-    navState.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
-
+    navState.path = document.location.pathname;
+    $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
     $scope.isCollapsed = true;
-    navState.loaded = true; // ngShow on loaded to prevent login box from flashing on page load
 
     $scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
 
     $scope.switch = function (nc) {
-      navState.path = document.location.href.substring(document.location.href.indexOf(document.location.host)).replace(document.location.host, "");
       /** @name SWBrijj#switch_company
        * @function
        * @param {string} company
@@ -50,7 +88,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.initCompany(data);
       });
     };
-
+    $scope.toggleLogin = function() {
+      $scope.isCollapsed = !$scope.isCollapsed;
+    }
     $scope.patchThingsUp = function() {
       // FIXME:  all this stuff should be run after switch_company return above.
       if (navState.role == 'issuer') {
@@ -60,32 +100,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.people.link = $scope.people.investorlink;
         $scope.people.visible = false;
       }
-
-      if (singleBarPages.indexOf(navState.path) > -1) {
-        $scope.nav = 'navBarLoggedOut';
-        $scope.showBothBars = false;
-      } else {
-        $scope.nav = 'navBar';
-        $scope.showBothBars = true;
-      }
-
-      /*
-      if (navState.isLoggedIn) {
-        if (navState.role == 'issuer') { // If user does not belong in a company, the link will be the default homepage URL
-          $scope.logoLink = '/home/company';
-          if (navState.path == "/") {
-            document.location.href = '/home/company';
-            return;
-          }
-        } else {
-          $scope.logoLink = '/home';
-          if (navState.path == "/") {
-            document.location.href = '/home/investor';
-            return;
-          }
-        }
-      }
-      */
     }
 
     $scope.initCompany = function(cmps) {
@@ -98,7 +112,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
           break;
         }
       }
-      if (thiscmp.current) {
+      if (thiscmp.current || thiscmp.role=='sheriff') {
         navState.company = thiscmp.company;
         navState.role = thiscmp.role;
         navState.name = thiscmp.name;
@@ -123,32 +137,28 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
     };
 
     SWBrijj.tblm('global.my_companies').then(function (x) {
-      navState.showLogin = false;
-      navState.isLoggedIn = true;
       $scope.initCompany(x);
     }).except(function (ignore) {
           void(ignore);
-          $scope.nav = 'navBarLoggedOut';
-          navState.showLogin = true;
-          navState.isLoggedIn = false;
+          $scope.navState={}; // ?
         });
 
     // Notification code
-    $rootScope.notification = {visible: false};
+    $scope.notification = {visible: false};
 
-    $rootScope.notification.show = function (color, message, callback) {
-      $rootScope.notification.color = color;
-      $rootScope.notification.message = message;
-      $rootScope.notification.style = "notification " + color;
-      $rootScope.notification.visible = true;
+    $rootScope.$on('notification', function (event, color, message, callback) {
+      $scope.notification.color = color;
+      $scope.notification.message = message;
+      $scope.notification.style = "notification " + color;
+      $scope.notification.visible = true;
       setTimeout(function () {
-        $rootScope.notification.visible = false;
-        $rootScope.$apply();
+        $scope.notification.visible = false;
+        $scope.$apply();
         if (callback) {
           callback();
         }
       }, 3000);
-    };
+    });
 
     // Returns true (disabling the login button) until the fields are filled out
     $scope.fieldCheck = function () {
