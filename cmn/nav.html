@@ -28,7 +28,7 @@
     <div class="navbar topnav row-fluid">
       <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
         <ul class="nav pull-left nav-logo">
-          <li><a href="/" ng-href="{{logoLink}}"><img src="/img/logo.png"/></a></li>
+          <li><a ng-href="{{navState.userid ? (navState.role=='issuer' ? '/home/company' : '/home/investor') : '/'}}"><img src="/img/logo.png"/></a></li>
         </ul>
 
         <ul class="nav pull-right nav-item">
