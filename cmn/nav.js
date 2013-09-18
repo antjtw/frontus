@@ -146,7 +146,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
     // Notification code
     $scope.notification = {visible: false};
 
-    $rootScope.$on('notification', function (event, color, message, callback) {
+    $rootScope.$on('notification:success', function (event, message, callback) {
+      $scope.notiFn('success',message,callback);
+    });
+
+    $rootScope.$on('notification:fail', function (event, message, callback) {
+      $scope.notiFn('fail',message,callback);
+    });
+
+    $scope.notiFn = function(color, message, callback) {
       $scope.notification.color = color;
       $scope.notification.message = message;
       $scope.notification.style = "notification " + color;
@@ -158,7 +166,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
           callback();
         }
       }, 3000);
-    });
+    };
 
     // Returns true (disabling the login button) until the fields are filled out
     $scope.fieldCheck = function () {

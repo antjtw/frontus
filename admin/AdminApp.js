@@ -80,10 +80,10 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', funct
      */
     SWBrijj.procm('account.create_company', $scope.email.toLowerCase(), $scope.name, $scope.domain, $scope.companyName).then( function(x) {
       void(x);
-      $rootScope.notification.show("success", "Company created");
+      $scope.$emit("notification:success", "Company created");
       $scope.email = $scope.name = $scope.domain = $scope.companyName = "";
     }).except(function(x) {
-          $rootScope.notification.show("fail", "Error " + x.message);
+          $scope.$emit("notification:fail", "Error " + x.message);
         });
   };
     $scope.fmtFileSize = function (file) {

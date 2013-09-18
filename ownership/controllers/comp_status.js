@@ -6,7 +6,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     }
 
     SWBrijj.tblm('ownership.lastupdated').then(function (time) {
-        $scope.lastupdated = time[0].last_edited
+        $scope.lastupdated = time[0].last_edited;
     });
 
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
@@ -20,7 +20,8 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                 angular.forEach(activities, function (activity) {
                     if (activity.email == person.email) {
                         var act = activity.activity;
-                        var time = activity.event_time;
+                        var time;
+                      time = activity.event_time;
                         person[act] = time;
                     }
                 });
@@ -43,8 +44,9 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.shared_dates = [];
         for (var i = 0; i < $scope.activity.length; i++) {
             $scope.activity[i].timeAgo = moment($scope.activity[i].event_time).fromNow();
-            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2)
+            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2) {
                 $scope.activity[i].name = $scope.activity[i].email;
+            }
             $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
             if ($scope.activity[i].activity == "received") {
                 $scope.activity[i].activity = "Shared with ";
@@ -64,14 +66,9 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {
-            if (selected == name.email)
-                if (name.shown == true) {
-                    name.shown = false;
-                }
-                else {
-                    name.shown = true;
-                }
-            else {
+            if (selected == name.email) {
+                name.shown = name.shown != true;
+            } else {
                 name.shown = false;
             }
         });
@@ -79,18 +76,20 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.selectVisibility = function (value, person) {
         $scope.selectedI.level = value
-    }
+    };
 
     $scope.changeVisibility = function (person) {
         SWBrijj.proc('ownership.update_investor_captable', person.email, person.level).then(function (data) {
+          void(data);
             angular.forEach($scope.userStatus, function(peep) {
                 if (peep.email == person.email) {
                     peep.level = person.level
                 }
-            })
-            $rootScope.notification.show("success", "Changed ownership table access level");
+            });
+            $scope.$emit("notification:success", "Changed ownership table access level");
         }).except(function(x) {
-                $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+              void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
     };
 
@@ -126,17 +125,21 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     $scope.alterEmail = function() {
         if ($scope.newEmail != $scope.oldEmail) {
             SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
-                console.log(data);
-                $rootScope.notification.show("success", "Successfully Updated Email");
+              void(data);
+                // console.log(data);
+                $scope.$emit("notification:success", "Successfully Updated Email");
             }).except(function(x) {
-                    $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+                  void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
         else if ($scope.newEmail == $scope.oldEmail) {
             SWBrijj.proc('ownership.reshare', $scope.oldEmail).then(function (data) {
-                $rootScope.notification.show("success", "Successfully resent");
+              void(data);
+                $scope.$emit("notification:success", "Successfully resent");
             }).except(function(x) {
-                    $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+                  void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
     };

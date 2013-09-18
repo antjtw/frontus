@@ -23,17 +23,8 @@ function setCursor(cursor) {
   }
 }
 
-function calculateRedirect(ns) {
-  if (ns.role == 'issuer') {
-      return '/company-list';
-  }
-  else {
-      return '/investor-list';
-  }
-}
-
 var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
-    function($routeProvider, $locationProvider, $httpProvider) {
+    function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
       when('/company-list', {templateUrl: 'companyList.html',   controller: 'CompanyDocumentListController'}).
@@ -134,7 +125,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
 
     $scope.setFiles = function(element) {
         $scope.files = [];
-        $scope.fileError = ""
+        $scope.fileError = "";
         for (var i = 0; i < element.files.length; i++) {
             for(var j = 0;j<mimetypes.length;j++) {
                 // console.log(element.files[i].size)
@@ -191,6 +182,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
+              void(x);
                 $scope.fileError = "Oops, something went wrong. Please try again.";
                 $scope.files = [];
                 $scope.dropText = moreDocs;
@@ -200,7 +192,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
     };
 
     $scope.gotoDoc = function (docid) {
-        var link = "/documents/company-view?doc=" + docid;
+        var link;
+      link = "/documents/company-view?doc=" + docid;
         document.location.href=link;
     };
     }]);
@@ -230,7 +223,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.counterparty = !!$scope.urlInves;
   $scope.tester = false;
   $scope.signeeded = "No";
-  $scope.messageText = "Add an optional message..."
+  $scope.messageText = "Add an optional message...";
 
   // For Email sharing
   $scope.recipients = [];
@@ -393,10 +386,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
       else {
           $scope.messageText = "Add an optional message...";
       }
-  }
+  };
 
   $scope.share = function(message, email, sign) {
-      sign = (sign == "Yes") ? true : false;
+      sign = sign == "Yes";
       console.log(sign);
       if (sign) {
           console.log("here");
@@ -409,12 +402,14 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
           message = "";
       }
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
-          $rootScope.notification.show("success", "Document shared with " + email);
-          $scope.signeeded = "No"
+        void(data);
+          $scope.$emit("notification:success", "Document shared with " + email);
+          $scope.signeeded = "No";
           $route.reload();
       }).except(function(x) {
-          $rootScope.notification.show("fail", "Oops, something went wrong.");
-          $scope.signeeded = "No"
+            void(x);
+          $scope.$emit("notification:fail", "Oops, something went wrong.");
+          $scope.signeeded = "No";
           });
   };
 
@@ -424,8 +419,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 /*******************************************************************************************************************/
 
 docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj',
-    'navState',
-  function($scope, $routeParams, $rootScope, $location, SWBrijj, navState) {
+  function($scope, $routeParams, $rootScope, $location, SWBrijj) {
   if (x.role == 'investor') {
     $location.path('/investor-list');
     return;
@@ -725,7 +719,7 @@ angular.module('documentviews').filter('lengthLimiter', function () {
 
 angular.module('documentviews').filter('nameoremail', function () {
     return function (person) {
-        var word = ""
+        var word = "";
         if (person.name) {
             word = person.name;
         }

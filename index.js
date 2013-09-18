@@ -19,7 +19,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
     function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
   $scope.user = {};
   if ($routeParams.logout) {
-    $scope.$emit('notification', 'success', 'You have successfully logged out');
+    $scope.$emit('notification:success', 'You have successfully logged out');
     return;
   }
 

@@ -61,7 +61,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Initialize a few visible variables
     $scope.investorOrder = "name";
-    $scope.sideToggleName = "Hide"
+    $scope.sideToggleName = "Hide";
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
@@ -934,12 +934,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
             if (transaction.type == "Option" && transaction.units < 0) {
                 transaction.units = transaction.unitskey;
-                $rootScope.notification.show("fail", "Cannot have a negative number of shares");
+                $scope.$emit("notification:fail", "Cannot have a negative number of shares");
                 return
             }
             else if (transaction.amount < 0) {
                 transaction.amount = transaction.amountkey;
-                $rootScope.notification.show("fail", "Cannot have a negative amount for options");
+                $scope.$emit("notification:fail", "Cannot have a negative amount for options");
                 return
             }
             else {
@@ -948,13 +948,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     transaction['tran_id'] = '';
                 }
                 var partpref = $scope.strToBool(transaction['partpref']);
-                if (transaction['vestingbegins'] == undefined) {
-                    var vestcliffdate = null
-                }
-
-                else {
-                    var vestcliffdate = transaction['vestingbegins'];
-                }
+                var vestcliffdate = transaction['vestingbegins'] == undefined ? null : transaction['vestingbegins'];
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
                 transaction['amount'] = parseFloat(transaction['amount']);
@@ -969,7 +963,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if ((row.name == transaction.investor) && row.email) {
                         transaction.email = row.email;
                     }
-                })
+                });
                 if (!transaction.email) {
                     transaction.email = null
                 }
@@ -1354,7 +1348,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
             if (number < 0 && newTran.type == "Option") {
-                $rootScope.notification.show("fail", "Cannot have a negative amount for options");
+                $scope.$emit("notification:fail", "Cannot have a negative amount for options");
                 return;
             }
             $scope.trans.push(newTran);
@@ -1423,7 +1417,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             SWBrijj.proc('ownership.update_row_share', $scope.newEmail, $scope.oldEmail, $scope.activeInvestorName).then(function (data) {
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == $scope.activeInvestorName) {
-                        $rootScope.notification.show("success", "Email address updated");
+                        $scope.$emit("notification:success", "Email address updated");
                         row.email = $scope.newEmail;
                         row.emailkey = row.email;
                         $scope.activeInvestorEmail = $scope.newEmail;
@@ -1478,11 +1472,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
-                    $rootScope.notification.show("success", "Your table has been shared!");
+                    $scope.$emit("notification:success", "Your table has been shared!");
                     row.send = false;
                     row.emailkey = row.email;
                 }).except(function(err) {
-                        $rootScope.notification.show("fail", "Email : " + row.email + " failed to send");
+                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
                     });
             }
         });
@@ -1493,10 +1487,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (people.email) {
                     SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
                         SWBrijj.proc('ownership.update_investor_captable', people.email, 'Full View').then(function (data) {
-                            $rootScope.notification.show("success", "Your table has been shared!");
+                            $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $rootScope.notification.show("fail", "Email : " + people.email + " failed to send");
+                            $scope.$emit("notification:fail", "Email : " + people.email + " failed to send");
                         });
                 }
             });
@@ -1561,7 +1555,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
             return true
         }
-    }
+    };
 
     // Functions derived from services for use in the table
 
@@ -1641,7 +1635,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     trigger = true;
                 }
             }
-        })
+        });
         if (trigger)
             return 'There are rows without transactions. These will not be saved.';
     }
@@ -1656,4 +1650,4 @@ function testForEnter()
         event.cancelBubble = true;
         event.returnValue = false;
     }
-};
+}

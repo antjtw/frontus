@@ -24,7 +24,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
-      $rootScope.notification.show("success", "You have successfully changed your password.");
+      $scope.$emit("notification:success", "You have successfully changed your password.");
     }
   }
 
@@ -54,27 +54,18 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
   function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState) {
 
-<<<<<<< HEAD
     if (navState.role == 'issuer') {
-=======
-    if (readCookie('role') == 'issuer') {
->>>>>>> origin/walport
         $location.path('/company');
         return;
     }
 
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
-      $rootScope.notification.show("success", "You have successfully changed your password.");
+      $scope.$emit("notification:success", "You have successfully changed your password.");
     }
   }
   //$scope.company = $routeParams.company;
-<<<<<<< HEAD
   $scope.company = navState.name;
-=======
-  $scope.company = readCookie('company');
->>>>>>> origin/walport
-
   $scope.activity = [];
   SWBrijj.tblm('global.get_investor_activity').then(function(data) {
       $scope.activity = data;

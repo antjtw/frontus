@@ -21,8 +21,8 @@ app.controller("MainProfileController", ['$scope','$location', function($scope, 
       return p == x; };
 }] );
 
-app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
-  function($scope, $rootScope, SWBrijj, navState) {
+app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj',
+  function($scope, $rootScope, SWBrijj) {
 
   $scope.pictureModalOpen = function () {
     $scope.pictureModal = true;
@@ -54,18 +54,19 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
     if ($scope.detectChanges != $scope.name + $scope.street) {
       $scope.detectChanges = $scope.name + $scope.street;
       if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2) {
-        $rootScope.notification.show("fail", "Please enter a name more than 1 letter in length");
+        $scope.$emit("notification:fail", "Please enter a name more than 1 letter in length");
         $scope.name = $scope.namekey;
         return;
       }
       SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function (x) {
+        void(x);
           // console.log("saved: "+x);
-          $rootScope.notification.show("success", "Profile successfully updated");
+          $scope.$emit("notification:success", "Profile successfully updated");
           $scope.namekey = $scope.name;
       }).except(function(x) {
             void(x);
           $scope.namekey = $scope.name;
-          $rootScope.notification.show("fail", "Something went wrong, please try again later.");
+          $scope.$emit("notification:fail", "Something went wrong, please try again later.");
       });
     }
   };
@@ -91,12 +92,14 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj', 'navState',
      * @param {FormData}
      */
     SWBrijj.uploadImage(fd).then(function(x) {
+      void(x);
       // console.log(x);
-      $rootScope.notification.show("green", "Profile photo successfully updated");
+      $scope.$emit("notification:success", "Profile photo successfully updated");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
     }).except( function(x) {
+          void(x);
       // console.log(x);
-      $rootScope.notification.show("fail", "Profile photo change was unsuccessful, please try again.");
+      $scope.$emit("notification:fail", "Profile photo change was unsuccessful, please try again.");
       $scope.photoURL = '/photo/user?id=' + $scope.email;
     });
   };
@@ -168,16 +171,11 @@ app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', functi
     $scope.changePassword = function() {
         SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
             if (x[1][0]) { 
-              $rootScope.notification.show("success", "Your password has been updated successfully.");
+              $scope.$emit("notification:success", "Your password has been updated successfully.");
               // console.log("changed successfully");
             } else { 
-              $rootScope.notification.show("fail", "There was an error updating your password.");
+              $scope.$emit("notification:fail", "There was an error updating your password.");
               // console.log("Oops.  Change failed");
-              $scope.currentPassword = "";
-              $scope.newPassword = "";
-              $scope.passwordConfirm = "";
-            } else { 
-              $rootScope.notification.show("fail", "There was an error updating your password.");
               $scope.currentPassword = "";
               $scope.newPassword = "";
               $scope.passwordConfirm = "";
