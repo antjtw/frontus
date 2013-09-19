@@ -336,19 +336,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     };
 
+    //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
-        if (amount) {
-            var n = amount.toString().split(".");
-            //Comma-fies the first part
-            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            // Caps decimals to 3 places
-            if (n[1] && n[1].length > 4) {
-                n[1] = n[1].substring(0,3);
-            }
-            //Combines the two sections
-            amount = n.join(".");
-        }
-        return amount;
+        return calculate.funcformatAmount(amount);
     };
 
     $scope.formatDollarAmount = function(amount) {
