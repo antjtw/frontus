@@ -214,6 +214,11 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
   $scope.$on('event:reload', function(event) { void(event); $timeout(function(){ $route.reload(); }, 100); });
 
+  $scope.$on('updated:name', function() {
+    SWBrijj.update("document.my_company_library", {docname:$scope.document.docname}, {doc_id:$scope.document.doc_id});
+    // console.log('updated document name');
+  });
+
   // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
   var docKey = parseInt($routeParams.doc);
@@ -649,14 +654,14 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
 
 
   /* Filter to format the activity time */
-angular.module('documentviews').filter('fromNow', function() {
+docviews.filter('fromNow', function() {
 			return function(date) {
 			  return moment(date).fromNow();
 			}
 		  });
 
 /* Filter to select the activity icon for document status */
-angular.module('documentviews').filter('icon', function() {
+docviews.filter('icon', function() {
    return function(activity) {
      if (activity == "received") return "icon-email";
      else if (activity == "viewed") return "icon-view";
@@ -670,7 +675,7 @@ angular.module('documentviews').filter('icon', function() {
 });
 
 /* Filter to format the activity description on document status */
-angular.module('documentviews').filter('description', function() {
+docviews.filter('description', function() {
   return function(ac) {
     var activity = ac.activity;
     var person = ac.name;
@@ -689,7 +694,7 @@ angular.module('documentviews').filter('description', function() {
   }
 });
 
-angular.module('documentviews').filter('fileLength', function () {
+docviews.filter('fileLength', function () {
   return function (word) {
     if (word) {
       if (word.length > 21) {
@@ -703,35 +708,44 @@ angular.module('documentviews').filter('fileLength', function () {
   };
 });
 
-angular.module('documentviews').filter('lengthLimiter', function () {
-    return function (word) {
-        if (word) {
-            if (word.length > 58) {
-                return word.substring(0, 57) + "...";
-            }
-            else {
-                return word;
-            }
-        }
-        return '';
-    };
+docviews.filter('lengthLimiter', function () {
+    return function (word) { return word && word.length > 58 ? word.substring(0, 57) + "..." : word; }
 });
 
-angular.module('documentviews').filter('nameoremail', function () {
+docviews.filter('nameoremail', function () {
     return function (person) {
-        var word = "";
-        if (person.name) {
-            word = person.name;
-        }
-        else {
-            word = person.investor;
-        }
-        if (word.length > 24) {
-            return word.substring(0, 23) + "...";
-        }
-        else {
-            return word;
-        }
+        var word  = person.name || person.investor;
+        return word.length > 24 ? word.substring(0, 23) + "..." : word;
     };
 });
 
+docviews.directive('contenteditable', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      // view -> model
+      var ff = function() {
+        scope.$apply(function() {
+          ctrl.$setViewValue(elm.html());
+        });
+        scope.$emit('updated:name');
+      };
+
+      elm.on('blur', ff);
+      elm.bind("keydown keypress", function(event) {
+        if (event.which === 13) {
+          event.preventDefault();
+          event.currentTarget.blur();
+        }
+      });
+
+      // model -> view
+      ctrl.$render = function() {
+        elm.html(ctrl.$viewValue);
+      };
+
+      // load init value from DOM
+      ctrl.$setViewValue(elm.html());
+    }
+  };
+});
