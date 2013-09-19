@@ -22,7 +22,7 @@
         <th class="button" ng-click="sortBy('email')"><span class="title sortedDown">EMAIL ADDRESS</span></th>
       </tr>
       <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
-        <tr ng-click="gotoPerson(person)" class="pointer status-row">
+        <tr ng-click="gotoPerson(person)" ng-class="{'pointer status-row':person.name}">
         <td>{{person.name}}
           <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
         </td>
