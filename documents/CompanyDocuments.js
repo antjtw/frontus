@@ -423,9 +423,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
 /*******************************************************************************************************************/
 
-docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj',
-  function($scope, $routeParams, $rootScope, $location, SWBrijj) {
-  if (x.role == 'investor') {
+docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj', 'navState',
+  function($scope, $routeParams, $rootScope, $location, SWBrijj, navState) {
+  if (navState.role == 'investor') {
     $location.path('/investor-list');
     return;
   }
