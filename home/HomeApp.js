@@ -185,7 +185,7 @@ angular.module('HomeApp').filter('investordescription', function() {
         var type = ac.type;
         if (type == "ownership") {
             if (activity == "received") return "You received " + company + "'s captable";
-            else if (activity == "viewed") return "You received " + company + "'s captable";
+            else if (activity == "viewed") return "You viewed " + company + "'s captable";
           else return "Something happened with "+company +"'s captable";
         }
         else if (type == "document") {
