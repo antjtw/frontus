@@ -41,6 +41,48 @@ app.controller('ContactCtrl', ['$scope', '$rootScope','SWBrijj',
   $scope.passwordModalClose = function () {
     $scope.closeMsg = 'I was closed at: ' + new Date();
     $scope.passwordModal = false;
+    $scope.currentPassword="";
+    $scope.newPassword="";
+    $scope.passwordConfirm="";
+  };
+
+  // Password code
+  $scope.currentPassword="";
+  $scope.newPassword="";
+  $scope.passwordConfirm="";
+
+  $scope.validPasswordNot = function() {
+      return !($scope.currentPassword && $scope.passwordMatches());
+      // return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
+  };
+
+  $scope.regexPassword = function() {
+      var newP = $scope.newPassword;
+      if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}/)) return "";
+      else if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z]).{8,}/)) return "Missing a digit";
+      else if (newP.match(/(?=.*?[a-z])(?=.*?[0-9]).{8,}/)) return "Missing an uppercase letter";
+      else if (newP.match(/(?=.*?[0-9])(?=.*?[A-Z]).{8,}/)) return "Missing a lowercase letter";
+      else if (newP.length < 8) return "Must be at least eight characters";
+      else return "Must contain at least one lowercase letter, one uppercase letter, and one digit";
+  };
+
+  $scope.passwordMatches = function() {
+      return $scope.passwordConfirm && $scope.newPassword && $scope.passwordConfirm == $scope.newPassword ;
+  };
+
+  $scope.changePassword = function() {
+      SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
+          if (x[1][0]) {
+              $scope.$emit("notification:success", "Your password has been updated successfully.");
+              // console.log("changed successfully");
+          } else {
+              $scope.$emit("notification:fail", "There was an error updating your password.");
+              // console.log("Oops.  Change failed");
+              $scope.currentPassword = "";
+              $scope.newPassword = "";
+              $scope.passwordConfirm = "";
+          }
+      }).except(function(x) {alert("Oops.  Change failed: "+x); });
   };
 
   $scope.opts = {
@@ -142,46 +184,6 @@ app.controller('SocialCtrl', ['$scope','$location','SWBrijj', function($scope, $
       .then(function(x)  { $scope.dropboxFiles=x; $scope.$apply(); })
       .except( function(x) {} );
 
-}]);
-
-app.controller('PasswordCtrl', ['$scope','$route','$rootScope','SWBrijj', function($scope, $route, $rootScope, SWBrijj) {
-    $scope.currentPassword="";
-    $scope.newPassword="";
-    $scope.passwordConfirm="";
-    
-    $scope.validPasswordNot = function() { 
-        return !($scope.currentPassword && $scope.passwordMatches());
-        // return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
-    };
-
-    $scope.regexPassword = function() {
-        var newP = $scope.newPassword;
-    	if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}/)) return "";
-    	else if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z]).{8,}/)) return "Missing a digit";
-    	else if (newP.match(/(?=.*?[a-z])(?=.*?[0-9]).{8,}/)) return "Missing an uppercase letter";
-    	else if (newP.match(/(?=.*?[0-9])(?=.*?[A-Z]).{8,}/)) return "Missing a lowercase letter";
-    	else if (newP.length < 8) return "Must be at least eight characters";
-    	else return "Must contain at least one lowercase letter, one uppercase letter, and one digit";
-    };
-    
-    $scope.passwordMatches = function() {
-        return $scope.passwordConfirm && $scope.newPassword && $scope.passwordConfirm == $scope.newPassword ; 
-    };
-    
-    $scope.changePassword = function() {
-        SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
-            if (x[1][0]) { 
-              $scope.$emit("notification:success", "Your password has been updated successfully.");
-              // console.log("changed successfully");
-            } else { 
-              $scope.$emit("notification:fail", "There was an error updating your password.");
-              // console.log("Oops.  Change failed");
-              $scope.currentPassword = "";
-              $scope.newPassword = "";
-              $scope.passwordConfirm = "";
-            }
-        }).except(function(x) {alert("Oops.  Change failed: "+x); });
-    };
 }]);
 
 app.controller('PhotoCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {

@@ -45,7 +45,7 @@ navm.factory('navState', [function () {
     name: document.sessionState.name || document.sessionState.company,
     role: document.sessionState.role,
     userid: document.sessionState.userid,
-    tester: document.sessionState.userid && document.sessionState.userid.match(/sharewave.com/),
+    tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
     path: undefined
   }
 }]);
@@ -76,8 +76,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
     $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
     $scope.isCollapsed = true;
 
-    $scope.people = {visible: false, adminlink: '/company/profile/people', investorlink: '/investor/profile', link: ''};
-
     $scope.switch = function (nc) {
       /** @name SWBrijj#switch_company
        * @function
@@ -91,15 +89,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
     $scope.toggleLogin = function() {
       $scope.isCollapsed = !$scope.isCollapsed;
     }
-    $scope.patchThingsUp = function() {
-      // FIXME:  all this stuff should be run after switch_company return above.
-      if (navState.role == 'issuer') {
-        $scope.people.link = $scope.people.adminlink;
-        $scope.people.visible = true;
-      } else {
-        $scope.people.link = $scope.people.investorlink;
-        $scope.people.visible = false;
-      }
+
+    // Take the string from the database and parse it into a useable dictionary
+    $scope.initReasons = function(reasons) {
+          console.log(reasons);
+          var dictionary = {};
+          var temp = reasons.substring(1, reasons.length-1).split(",");
+          angular.forEach(temp, function(reason) {
+              dictionary[reason] = true;
+          });
+          return dictionary
     }
 
     $scope.initCompany = function(cmps) {
@@ -116,7 +115,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         navState.company = thiscmp.company;
         navState.role = thiscmp.role;
         navState.name = thiscmp.name;
-        $scope.patchThingsUp();
+        navState.reasons = $scope.initReasons(thiscmp.reasons);
         $route.reload();
       } else {
           SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
@@ -126,7 +125,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     navState.company = thiscmp.company;
                     navState.role = thiscmp.role;
                     navState.name = thiscmp.name;
-                    $scope.patchThingsUp();
+                    navState.reasons = $scope.initReasons(thiscmp.reasons);
                     $route.reload();
                     return;
                   }

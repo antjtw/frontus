@@ -28,7 +28,7 @@
     <div class="navbar topnav row-fluid">
       <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
         <ul class="nav pull-left nav-logo">
-          <li><a href="/" ng-href="{{logoLink}}"><img src="/img/logo.png"/></a></li>
+          <li><a ng-href="{{navState.userid ? (navState.role=='issuer' ? '/home/company' : '/home/investor') : '/'}}"><img src="/img/logo.png"/></a></li>
         </ul>
 
         <ul class="nav pull-right nav-item">
@@ -54,7 +54,7 @@
       <div class="navbounder">
         <ul class="menuHeaderText nav">
           <li ng-class="{dropdown: companies.length > 1}">
-            <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}" ng-href="{{{true: '#', false: ''}[companies.length > 1]}}">{{navState.name}}<span class='for-r0ml'> ({{navState.role}})</span></a>
+              <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}">{{navState.name}}<span class='for-r0ml'> ({{navState.role}})</span></a>
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
             <ul class="dropdown-menu" ng-show="companies.length > 1">
               <li class="dropdown-label"><span>INVESTMENTS</span></li>
@@ -68,9 +68,9 @@
             </ul>
           <li>
           <li ng-show="navState.role=='sheriff'" ng-class="{active: navState.path.indexOf('/admin') != -1}"><a class="button" href="/admin">Admin</a></li>
-          <li ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="/ownership">Ownership</a></li>
-          <li ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" href="/documents">Documents</a></li>
-          <li ng-show="people.visible" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="{{people.link}}">People</a></li>
+          <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="/ownership">Ownership</a></li>
+          <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" href="/documents">Documents</a></li>
+          <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="/company/profile/people">People</a></li>
         </ul>
       </div>
     </div>
