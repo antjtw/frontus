@@ -144,7 +144,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.saveGrant = function (grant) {
         console.log(grant);
-        if (isNaN(parseFloat(grant.unit))) {
+        if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
                     console.log("deleted");
