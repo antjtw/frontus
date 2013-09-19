@@ -22,9 +22,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     $scope.activeTran = []
 
     $scope.investorOrder = "name";
-
-    SWBrijj.procm('ownership.mark_viewed', company).then(function (x) {
-        $scope.level = x[0].mark_viewed;
+    SWBrijj.procm('ownership.return_status').then(function (x) {
+        $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
             document.location.href="/home/";
         }
@@ -177,7 +176,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                     $scope.rows.sort(sorting.basicrow());
 
-                    SWBrijj.procm('ownership.get_everyone_else', company).then(function (x) {
+                    SWBrijj.procm('ownership.get_everyone_else').then(function (x) {
                         $scope.everyone = {}
                         $scope.everyone.percentage = x[0].get_everyone_else;
                     });
