@@ -42,7 +42,7 @@ navm.factory('navState', [function () {
   if (!document.sessionState) document.sessionState = {};
   return {
     company: document.sessionState.company,
-    name: document.sessionState.name || document.sessionState.company,
+    name: document.sessionState.name,
     role: document.sessionState.role,
     userid: document.sessionState.userid,
     tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
