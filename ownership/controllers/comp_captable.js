@@ -1073,7 +1073,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Function for saving grant. Used on the captable when paid is updated from the captable on an option
     $scope.saveGrant = function (grant) {
-        if (grant.action == "" && isNaN(parseFloat(grant.unit))) {
+        if (grant.action == "" && (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0)) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
                     var index = $scope.grants.indexOf(grant);
