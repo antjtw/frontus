@@ -83,7 +83,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
        * @param {string} role
        */
       SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
-        $scope.initCompany(data);
+        document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
       });
     };
     $scope.toggleLogin = function() {
@@ -92,7 +92,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
     // Take the string from the database and parse it into a useable dictionary
     $scope.initReasons = function(reasons) {
-          console.log(reasons);
           var dictionary = {};
           var temp = reasons.substring(1, reasons.length-1).split(",");
           angular.forEach(temp, function(reason) {
@@ -126,7 +125,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     navState.role = thiscmp.role;
                     navState.name = thiscmp.name;
                     navState.reasons = $scope.initReasons(thiscmp.reasons);
-                    $route.reload();
+                    document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
                     return;
                   }
               });
