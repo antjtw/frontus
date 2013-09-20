@@ -232,8 +232,10 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', funct
 
     $scope.gotoPerson = function (person) {
         var link;
-      link = navState.userid != person.email ? '/company/profile/view?id='+person.email : '/investor/profile/';
-        document.location.href=link;
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
+        if (link) {
+            document.location.href=link;
+        }
     };
 }]);
 

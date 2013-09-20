@@ -210,7 +210,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
   // Set up event handlers
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
-  $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
+  $scope.$on('event:brijjError', function(event, msg) {
+      $scope.$emit("notification:fail", "Oops, something went wrong.");
+  });
 
   $scope.$on('event:reload', function(event) { void(event); $timeout(function(){ $route.reload(); }, 100); });
 
