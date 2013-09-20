@@ -9,16 +9,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     var company = navState.company;
     $scope.currentCompany = company;
 
-    /*    if ($rootScope.selected.isAdmin) {
-     if ($rootScope.path.indexOf('/investor/') > -1) {
-     document.location.href=$rootScope.path.replace("/investor/", "/company/");
-     }
-     } else {
-     if ($rootScope.path.indexOf('/company/') > -1) {
-     document.location.href=$rootScope.path.replace("/company/", "/investor/");
-     }
-     }*/
-
     // Set the view toggles to their defaults
     $scope.radioModel = "View";
     $scope.dilutionSwitch = true;
@@ -92,8 +82,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                     }
                 });
-
-
 
                 // Uses the grants to update the transactions with forfeited values
                 // Eliminates the need for further reference to forfeit grants
@@ -469,6 +457,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
 
+                    // Sorts out updating transactions if changes in issues need to be passed down
                     angular.forEach($scope.trans, function (tran) {
                         if (tran.issue == issue.key) {
                             tran[item] = issue[item];
@@ -499,6 +488,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
 
 
+                    // Recalculate the debt percentages
                     angular.forEach($scope.rows, function (row) {
                         if (row[issue.issue] != undefined) {
                             if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
@@ -938,7 +928,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 return
             }
             else if (transaction.amount < 0) {
-                transaction.amount = transaction.amountkey;
+                transaction.amount = transaction.paidkey;
                 $scope.$emit("notification:fail", "Cannot have a negative amount for options");
                 return
             }
