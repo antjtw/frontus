@@ -1187,61 +1187,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
 
-    // Generates the diluted rows
-    $scope.dilution = function () {
-        $scope.dilutedRows = [];
-        angular.forEach($scope.rows, function (row) {
-            if (row.name != undefined) {
-                var something = null;
-                var temprow = {"name": row.name, "email": row.email};
-                angular.forEach($scope.issues, function (issue) {
-                    if (issue.issue) {
-                        temprow[issue.issue] = {};
-                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
-                            temprow[issue.issue] = row[issue.issue];
-                            something = true;
-                        }
-                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row[issue.issue]['exercised'] && !row.vested) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                console.log("working");
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row.vested[issue.issue];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                    }
-                });
-                if (something) {
-                    $scope.dilutedRows.push(temprow);
-                }
-            }
-        });
-    };
-
-
     //Captable Delete Issue Modal
 
     $scope.dmodalUp = function (issue) {
@@ -1548,6 +1493,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     // Functions derived from services for use in the table
+
+    //switches the sidebar based on the type of the issue
+    $scope.dilution = function () {
+         $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
+    };
 
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
