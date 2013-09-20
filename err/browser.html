@@ -4,6 +4,7 @@
     <!--{{/i/head_css.inc}}-->
     <script src="/lib/bootstrap/bootstrap.js"></script>
     <link type="text/css" rel="stylesheet" href="/cmn/lognreg.css">
+    <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
     <title>Sharewave Browser Upgrade</title>
 </head>
 <body>
@@ -18,11 +19,14 @@
                 <div class="spacer40"></div>
 
                 <div class="span10 offset1 text-center line"></div>
-                <h2>Please upgrade your browser to use Sharewave</h2>
-                <p>You're using a web browser that we don't support.   <br>
+                <h2 class="hidden-phone">Please upgrade your browser to use Sharewave</h2>
+                <p class="hidden-phone">You're using a web browser that we don't support.   <br>
                     Try one of these modern browsers to improve your experience..</p>
 
-                <div class="hero-unit browserlist">
+                <h2 class="visible-phone">We're working on a mobile version of Sharewave</h2>
+                <p class="visible-phone">Please use a desktop for the time being.</p>
+
+                <div class="hero-unit browserlist hidden-phone">
                     <div class="row-fluid">
                         <a class="span3 browserup text-center" href="http://www.google.com/chrome/">
                             <img src="/img/browser-chrome.png"/>
