@@ -82,7 +82,7 @@ app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
           if ($scope.redirect) {
             document.location.href = $scope.redirect;
           } else {
-            document.location.href = x + "?msg=first";
+            document.location.href = y + "?msg=first";
           }
         });
     };
