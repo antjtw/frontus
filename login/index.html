@@ -3,6 +3,11 @@
 	<head>
     <!--{{/i/head_css.inc}}-->
     <!--{{/i/head_js.inc}}-->
+    <script>
+        if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            document.location.href = '/err/browser.html';
+        }
+    </script>
         <script src="LoginApp.js" type="text/javascript"></script>
         <link type="text/css" rel="stylesheet" href="/cmn/lognreg.css">
 	    <title>Sharewave Login</title>
