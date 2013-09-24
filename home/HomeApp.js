@@ -9,30 +9,26 @@ app.config(function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {controller: 'InvestorCtrl', templateUrl:'investor.html'}).
+      when('/investor', {controller: 'InvestorCtrl', templateUrl:'investor.html'}).
       when('/company', {controller: 'CompanyCtrl', templateUrl:'company.html'}).
-      otherwise({redirectTo:'/'});
+      otherwise({redirectTo:'/investor'});
 });
 
-app.controller("MainController", ['$scope','$location', function($scope, $location) {
-}]);
+app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState',
+  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState) {
 
-app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
-  function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
-
-    if ($rootScope.selected.role == 'investor') {
-        $location.path('/');
+    if (navState.role == 'investor') {
+        $location.path('/investor');
         return;
     }
 
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
-      $rootScope.notification.show("success", "You have successfully changed your password.");
+      $scope.$emit("notification:success", "You have successfully changed your password.");
     }
   }
 
-  $scope.company = $rootScope.selected.name;
-
+  $scope.company = navState.name;
   SWBrijj.tblm('account.onboarding').then(function(x) { 
     $scope.onboarding = x[0].show_onboarding;
   }).except(initFail);
@@ -55,22 +51,21 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
   };
 }]);
 
-app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj',
-  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj) {
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
+  function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (navState.role == 'issuer') {
         $location.path('/company');
         return;
     }
 
   if ($routeParams.msg) {
     if ($routeParams.msg == "resetPassword") {
-      $rootScope.notification.show("success", "You have successfully changed your password.");
+      $scope.$emit("notification:success", "You have successfully changed your password.");
     }
   }
   //$scope.company = $routeParams.company;
-  $scope.company = $rootScope.selected.name;
-
+  $scope.company = navState.name;
   $scope.activity = [];
   SWBrijj.tblm('global.get_investor_activity').then(function(data) {
       $scope.activity = data;
@@ -78,7 +73,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
           $scope.noActivity = true;
       }
   }).except(function(msg) {
-        console.log(msg.message);
+        // console.log(msg.message);
       });
 
   $scope.activityOrder = function(card) {
@@ -88,7 +83,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
 app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
   SWBrijj.tbl('account.companies').then(function(x) {
-    console.log(x);
+    // console.log(x);
     if (x.length > 0) { //User is a CEO of a company
       document.location.href="company";
     } else {
@@ -111,7 +106,7 @@ function initPage($scope, x, row) {
 
 function initFail(x) {
   void(x);
-  console.log('I would have redirected to login'); // document.location.href='/login';
+  // console.log('I would have redirected to login'); // document.location.href='/login';
 }
 
 /************************************************************
@@ -190,18 +185,17 @@ angular.module('HomeApp').filter('investordescription', function() {
         var type = ac.type;
         if (type == "ownership") {
             if (activity == "received") return "You received " + company + "'s captable";
-            else if (activity == "viewed") return "You received " + company + "'s captable";
+            else if (activity == "viewed") return "You viewed " + company + "'s captable";
           else return "Something happened with "+company +"'s captable";
         }
         else if (type == "document") {
             var document = ac.docname;
-            console.log(document);
             if (activity == "received") return "You received " + document + " from " + company;
             else if (activity == "viewed") return "You viewed " + document;
             else if (activity == "reminder") return "You were reminded about" +document;
             else if (activity == "signed") return "You signed "+document;
-            else if (activity == "rejected") return company + " rejected your signature on " +document;
-            else if (activity == "countersigned") return company + " countersigned "+document;
+            else if (activity == "rejected") return person + " rejected your signature on " +document;
+            else if (activity == "countersigned") return person + " countersigned "+document;
             else  {
                 return activity + " by "+person;
             }

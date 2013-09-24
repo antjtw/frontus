@@ -29,7 +29,7 @@
         </tr>
         <tbody ng-repeat="admin in admins">
           <tr>
-          <td><a href="/company/profile/view?id={{admin.email}}">{{admin.name}}</a></td>
+          <td>{{admin.name}}</td>
           <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock" data-tooltip-placement="bottom" data-tooltip-html-unsafe="Revoke admin privileges"></i>
           </tr>
         </tbody>
@@ -37,42 +37,38 @@
     </section>
     </div>
   </div>
+    <!--
+    <div class="sidebar span4">
+      <form>
+        <fieldset>
 
-  <div class="sidebar span4">
-    <form>
-      <fieldset>
-        <p>
-          <label><input ng-class="{'content':!company}" type="text" ng-model="company" name="company" ui-event="{blur: 'contactSave()'}">
-          Website</label>
-        </p>
-        <p>
-          <label><textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-          Address</label>
-        </p>
+          <p>
+            <label><input disabled ng-class="{'content':!company}" type="text" ng-model="company" name="company">
+            Website</label>
+          </p>
+          <p>
+            <label><textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+            Address</label>
+          </p>
+
       </fieldset>
     </form>
+    -->
 
     <div>
       <p class="activityFeed-header subText">Activity Feed</p>
     </div> 
     <section class="statusFeed">
       <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-      <div class="activityBlock">
-        <table>
-          <tr ng-repeat="active in activity | orderBy:activityOrder" >
-            <td><i class="{{active.icon}} icon"></i></td>
-            <td class="item">
-              <table>
-                  <tr>
-                    <td class="activity">{{active.email}} {{active.activity}}<a href="{{active.link}}">{{active.target}}</a> </td>
-                  </tr>
-                  <tr><td class="time">{{active.timeAgo}}</td></tr>
-              </table>
-          </td>
-        </tr>
-      </table>
-
-    </div>   
+        <ul class="activityBlock">
+            <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
+                <i class="{{active.activity | icon}}"></i>
+                <div>
+                    <span class="activity">{{active | description }}</span><br>
+                    <span class="time">{{active.time | fromNow}}</span>
+                </div>
+            </li>
+        </ul>
     </section>
   </div>
 </div>

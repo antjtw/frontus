@@ -1,12 +1,12 @@
-var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location) {
+var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location,
+    navState) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (navState.role == 'issuer') {
         $location.path('/company-captable');
         return;
     }
 
-    var company = $rootScope.selected.company;
-
+    var company = navState.company;
     $scope.currentCompany = company;
     console.log(company);
 
@@ -22,9 +22,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     $scope.activeTran = []
 
     $scope.investorOrder = "name";
-
-    SWBrijj.procm('ownership.mark_viewed', company).then(function (x) {
-        $scope.level = x[0].mark_viewed;
+    SWBrijj.procm('ownership.return_status').then(function (x) {
+        $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
             document.location.href="/home/";
         }
@@ -177,7 +176,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                     $scope.rows.sort(sorting.basicrow());
 
-                    SWBrijj.procm('ownership.get_everyone_else', company).then(function (x) {
+                    SWBrijj.procm('ownership.get_everyone_else').then(function (x) {
                         $scope.everyone = {}
                         $scope.everyone.percentage = x[0].get_everyone_else;
                     });
@@ -337,19 +336,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     };
 
+    //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
-        if (amount) {
-            var n = amount.toString().split(".");
-            //Comma-fies the first part
-            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            // Caps decimals to 3 places
-            if (n[1] && n[1].length > 4) {
-                n[1] = n[1].substring(0,3);
-            }
-            //Combines the two sections
-            amount = n.join(".");
-        }
-        return amount;
+        return calculate.funcformatAmount(amount);
     };
 
     $scope.formatDollarAmount = function(amount) {

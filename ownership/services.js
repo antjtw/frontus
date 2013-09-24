@@ -21,12 +21,14 @@ ownership.service('calculate', function () {
         var leftovers;
         angular.forEach(issues, function (issue) {
             if (issue.issue == issuename) {
-                leftovers = issue.totalauth;
-                angular.forEach(rows, function (row) {
-                    if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                        leftovers = leftovers - row[issue.issue]['u'];
-                    }
-                });
+                if (!isNaN(parseFloat(issue.totalauth))) {
+                    leftovers = issue.totalauth;
+                    angular.forEach(rows, function (row) {
+                        if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
+                            leftovers = leftovers - row[issue.issue]['u'];
+                        }
+                    });
+                }
             }
         });
 
@@ -366,6 +368,25 @@ ownership.service('calculate', function () {
         if (issues[issues.length-2]) {
             return issues[issues.length-2].postmoney;
         }
+    };
+
+    this.funcformatAmount = function (amount) {
+        if (amount) {
+            var n = amount.toString().split(".");
+            //Comma-fies the first part
+            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Caps decimals to 3 places
+            if (n[1] && n[1].length > 4) {
+                n[1] = n[1].substring(0,3);
+            }
+            // Takes a .x and makes it .x0
+            else if (n[1] && n[1].length == 1) {
+                n[1] = n[1] + "0"
+            }
+            //Combines the two sections
+            amount = n.join(".");
+        }
+        return amount;
     };
 });
 

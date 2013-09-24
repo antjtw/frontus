@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname | lengthLimiter}}</h1>
+        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a><span ng-model="document.docname" contenteditable title="Click to Edit">{{ document.docname | lengthLimiter}}</span></h1>
 
         <div class="row-fluid">
             <ul class="bodyText maintabs">
@@ -84,12 +84,11 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
       </div>
 
-      <div class='modalText'>
-        <label>
+      <div class='modalText esign'>
           <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">
-          Do you wish to electonically counter-sign this document?
-          <br>(This action is irreversible)
-        </label>
+          <span class="chkboxtext">
+              Do you wish to electonically counter-sign this document?<br>(This action is irreversible)
+          </span>
       </div>
 
       <div class="dModalButtons">

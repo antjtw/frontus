@@ -15,12 +15,12 @@ app.config(function($routeProvider, $locationProvider){
         });
     });
 
-function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
+app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj',
+    function($scope, $rootScope, $route, $location, $routeParams, SWBrijj) {
   $scope.user = {};
   if ($routeParams.logout) {
-    $rootScope.notification.show('success', 'You have successfully logged out', function() {
-      // $location.search('logout', null); $scope.$apply();
-    });
+    $scope.$emit('notification:success', 'You have successfully logged out');
+    return;
   }
 
 /*  if ($rootScope.isLoggedIn) {
@@ -62,7 +62,7 @@ function IndexCtrl($scope, $rootScope, $route, $location, $routeParams) {
 
 
 
-}
+}]);
 
 function CarouselCtrl($scope) {
   $scope.myInterval = 'false';

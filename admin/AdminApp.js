@@ -41,7 +41,7 @@ app.directive('ngModelOnblur', function() {
   };
 });
 
-app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $rootScope, SWBrijj) {
+app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', function($scope, $rootScope, SWBrijj, $location) {
 
     /** @name SWBrijj#proc
      * @function
@@ -54,10 +54,15 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $r
     /** @name Object#except
      * @type {function( function(!Object) )} */
 
+
   // var dropbox = $scope.$element.querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
 
+  $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
+  $scope.$on('event:brijjError', function(event, msg) {
+    console.log(msg);
+    $scope.errorMessage = msg; });
 
   $scope.createCompany = function() {
     if (!$scope.domain) {
@@ -70,10 +75,10 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $r
      */
     SWBrijj.procm('account.create_company', $scope.email.toLowerCase(), $scope.name, $scope.domain, $scope.companyName).then( function(x) {
       void(x);
-      $rootScope.notification.show("success", "Company created");
+      $scope.$emit("notification:success", "Company created");
       $scope.email = $scope.name = $scope.domain = $scope.companyName = "";
     }).except(function(x) {
-          $rootScope.notification.show("fail", "Error " + x.message);
+          $scope.$emit("notification:fail", "Error " + x.message);
         });
   };
     $scope.fmtFileSize = function (file) {
@@ -260,13 +265,14 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj',function($scope, $r
         }).except(function(x) {alert("Oops.  Change failed: "+x); });
     };
 
-  $scope.doSelect = function() {
+  $scope.doSelect = function(x) {
     /** @name SWBrijj#view
      * @function
      * @param {string}
      * @param {...}
      */
-    SWBrijj.view($scope.sql).then(function(x) {
+
+    SWBrijj.view(x || $scope.sql).then(function(x) {
       $scope.columns = x[0];
       $scope.data = x.slice(1);
     });

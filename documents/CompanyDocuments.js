@@ -23,12 +23,8 @@ function setCursor(cursor) {
   }
 }
 
-function calculateRedirect() {
-  return readCookie('role') == 'issuer' ? '/company-list' : '/investor-list';
-}
-
 var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives','brijj', 'ui.bootstrap.progressbar', 'email'],
-    function($routeProvider, $locationProvider, $httpProvider) {
+    function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
       when('/company-list', {templateUrl: 'companyList.html',   controller: 'CompanyDocumentListController'}).
@@ -36,8 +32,7 @@ var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'u
       when('/company-status', {templateUrl: 'companyStatus.html', controller: 'CompanyDocumentStatusController'}).
       when('/investor-list', {templateUrl: 'investorList.html', controller: 'InvestorDocumentListController'}).
       when('/investor-view', {templateUrl: 'investorViewer.html', controller: 'InvestorDocumentViewController'}).
-      otherwise({redirectTo: calculateRedirect() });
-  $httpProvider.responseInterceptors.push('errorHttpInterceptor');
+      otherwise({redirectTo: '/investor-list' });
 });
 
 docviews.directive('library', function() {
@@ -52,67 +47,6 @@ docviews.directive('library', function() {
   }
 });
 
-docviews.directive('modalshare', function($timeout, SWBrijj) {
-  return {
-    restrict: 'EA',
-    templateUrl: "modalShare.html",
-    scope: false,
-    link: function(scope, element, attrs) {
-      void(attrs);
-      void(element);
-      // initalized recipients can go here.
-      scope.nextRecip = "";
-      scope.share = function() {
-      	var sigdate = scope.signaturedate.toUTCString();
-        /** @name scope#messageText
-         * @type {string} */
-        /** @name scope#signeeded
-         * @type {boolean} */
-        /** @name scope#confirmSignature
-         * @type {boolean} */
-         	angular.forEach(scope.recipients, function(x) {
-      		SWBrijj.procm("document.share_document", scope.selectedDoc, x.toLowerCase(), scope.messageText, Boolean(scope.signeeded), sigdate).then(function(data) {
-			});
-      	});
-      };
-    },
-    replace:true,
-    priority: 20
-  }
-});
-
-docviews.factory('errorService', function() {
-  return {
-    errorMessage: null, setError: function(msg) {
-      this.errorMessage = msg; },
-    clear: function() { this.errorMessage = null;
-    } };
-});
-
-docviews.factory('errorHttpInterceptor',
-    function ($q, $location, $rootScope, errorService) { return function (promise) {
-      return promise.then(function (response) {
-        if (response.data[0]=='x') {
-          /** @type { {javaClassName: string, message: string } }*/
-          var errm = eval(response.data.substr(2));
-          if (errm.javaClassName == "net.r0kit.brijj.BrijjServlet$NotLoggedIn") {
-            $rootScope.$broadcast('event:loginRequired');
-            return response;
-          }
-          $rootScope.$broadcast('event:brijjError', errm.message);
-          return response;
-        } else
-        return response;
-      }, function (response) {
-        if (response.status === 401) {
-          $rootScope.$broadcast('event:loginRequired');
-        } else if (response.status >= 400 && response.status < 500) {
-          errorService.setError('Server was unable to find' +
-              ' what you were looking for... Sorry!!');
-        }
-        return $q.reject(response); });
-    }; });
-
 docviews.run(function($rootScope, $document) {
   $document.on('click', function(event) { void(event); delete $rootScope.errorMessage; });
 
@@ -122,20 +56,14 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$rootScope', '$route', 'SWBrijj',
-    function($scope, $modal, $q, $rootScope, $route, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
-    // $location.path('/investor-list?'); // goes into a bottomless recursion ?
-    document.location.href='/documents';  // this works
-    // $location.path('/');
-    return;
-  }
+docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '$location', '$rootScope', '$route', 'SWBrijj',
+    'navState',
+    function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj, navState) {
+    if (navState.role == 'investor') {
+      $location.path('/investor-list'); // goes into a bottomless recursion ?
+    }
 
   // Set up event handlers
-  SWBrijj.defaultErrorHandler = function(errm) {
-    //noinspection JSValidateTypes
-    $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn' ?
-        'event:loginRequired' : 'event:brijjErrror', errm.message); };
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
   $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
 
@@ -146,7 +74,6 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
 	SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
 		for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
 	});
-
 
 	$scope.loadDocuments = function () {
     SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function (data) {
@@ -170,26 +97,6 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
     /** @name obj#docname
      * @type { string} */
      return !$scope.query || re.test(obj.docname);
-  };
-
-  $scope.askShare = function(docid) {
-  $scope.selectedDoc = docid;
-  var modalPromise = $modal({template: 'modalShare.html', modalClass: 'shareModal', persist: true, show: false, backdrop: 'static', scope: $scope});
-  $q.when(modalPromise).then(function(eel) {
-      // for some reason, at this point, the element has "200" inserted as a text node.
-      var el = eel[0];
-      // if (el.childNodes[0] == "200")
-      el.removeChild(el.childNodes[0]);
-      eel.modal('show');
-  });
-  };
-
-  $scope.delete = function(docid) {
-    SWBrijj.procm("document.delete",docid).then(function(x) {
-      var i = x[0].delete;
-      $rootScope.errorMessage = i == 1 ? "Document deleted" : i+" documents deleted";
-      $route.reload();
-    });
   };
 
     // Document Upload pieces
@@ -218,10 +125,10 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
 
     $scope.setFiles = function(element) {
         $scope.files = [];
-        $scope.fileError = ""
+        $scope.fileError = "";
         for (var i = 0; i < element.files.length; i++) {
             for(var j = 0;j<mimetypes.length;j++) {
-                console.log(element.files[i].size)
+                // console.log(element.files[i].size)
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 }
@@ -275,6 +182,7 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
+              void(x);
                 $scope.fileError = "Oops, something went wrong. Please try again.";
                 $scope.files = [];
                 $scope.dropText = moreDocs;
@@ -284,9 +192,8 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
     };
 
     $scope.gotoDoc = function (docid) {
-        console.log("here");
-        var link = "/documents/company-view?doc=" + docid;
-        console.log(link);
+        var link;
+      link = "/documents/company-view?doc=" + docid;
         document.location.href=link;
     };
     }]);
@@ -294,20 +201,25 @@ docviews.controller('CompanyDocumentListController', ['$scope','$modal','$q', '$
 /*********************************************************************************************************************/
 
 docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$route','$rootScope','$timeout','$location','SWBrijj',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+    'navState',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState) {
+  if (navState.role == 'investor') {
     $location.path('/investor-view');
     return;
   }
 
   // Set up event handlers
-  SWBrijj.defaultErrorHandler = function(errm) { //noinspection JSValidateTypes
-    $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
-      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
-  $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
+  $scope.$on('event:brijjError', function(event, msg) {
+      $scope.$emit("notification:fail", "Oops, something went wrong.");
+  });
 
   $scope.$on('event:reload', function(event) { void(event); $timeout(function(){ $route.reload(); }, 100); });
+
+  $scope.$on('updated:name', function() {
+    SWBrijj.update("document.my_company_library", {docname:$scope.document.docname}, {doc_id:$scope.document.doc_id});
+    // console.log('updated document name');
+  });
 
   // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
@@ -316,9 +228,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   $scope.docKey = docKey;
   $scope.invq = false;
   $scope.counterparty = !!$scope.urlInves;
-  $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+  $scope.tester = false;
   $scope.signeeded = "No";
-  $scope.messageText = "Add an optional message..."
+  $scope.messageText = "Add an optional message...";
 
   // For Email sharing
   $scope.recipients = [];
@@ -481,10 +393,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
       else {
           $scope.messageText = "Add an optional message...";
       }
-  }
+  };
 
   $scope.share = function(message, email, sign) {
-      sign = (sign == "Yes") ? true : false;
+      sign = sign == "Yes";
       console.log(sign);
       if (sign) {
           console.log("here");
@@ -497,12 +409,14 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
           message = "";
       }
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
-          $rootScope.notification.show("success", "Document shared with " + email);
-          $scope.signeeded = "No"
+        void(data);
+          $scope.$emit("notification:success", "Document shared with " + email);
+          $scope.signeeded = "No";
           $route.reload();
       }).except(function(x) {
-          $rootScope.notification.show("fail", "Oops, something went wrong.");
-          $scope.signeeded = "No"
+            void(x);
+          $scope.$emit("notification:fail", "Oops, something went wrong.");
+          $scope.signeeded = "No";
           });
   };
 
@@ -511,18 +425,14 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
 /*******************************************************************************************************************/
 
-docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj',
-  function($scope, $routeParams, $rootScope, $location, SWBrijj) {
-  if ($rootScope.selected.role == 'investor') {
+docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams','$rootScope','$location', 'SWBrijj', 'navState',
+  function($scope, $routeParams, $rootScope, $location, SWBrijj, navState) {
+  if (navState.role == 'investor') {
     $location.path('/investor-list');
     return;
   }
 
   // Set up event handlers
-  SWBrijj.defaultErrorHandler = function(errm) {
-    //noinspection JSValidateTypes
-    $rootScope.$broadcast('net.r0kit.brijj.BrijjServlet$NotLoggedIn' == errm.javaClassName ?
-        'event:loginRequired' : 'event:brijjErrror', errm.message); };
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
   $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
 
@@ -536,7 +446,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams',
   SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
     $scope.docversions = data;
   });
-
 
 	SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
    		$scope.activity = data;
@@ -632,18 +541,15 @@ docviews.controller('CompanyDocumentStatusController', ['$scope','$routeParams',
   INVESTOR CONTROLLERS
 *************************************************************************************************/
 
-docviews.controller('InvestorDocumentListController',['$scope','SWBrijj','$location','$rootScope',
-  function($scope, SWBrijj, $location, $rootScope) {
-  if ($rootScope.selected.role == 'issuer') {
+docviews.controller('InvestorDocumentListController',['$scope','SWBrijj','$location','$rootScope', 'navState',
+  function($scope, SWBrijj, $location, $rootScope, navState) {
+  if (navState.role == 'issuer') {
     $location.path("/company-list");
     return;
   }
-  $scope.selectedCompany = $rootScope.selected.company;
+  $scope.selectedCompany = navState.company;
 
   // Set up event handlers
-  SWBrijj.defaultErrorHandler = function(errm) { //noinspection JSValidateTypes
-    $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
-      ? "event:loginRequired" : "event:brijjErrror", errm.message); };
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
   $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
 
@@ -672,16 +578,14 @@ docviews.controller('InvestorDocumentListController',['$scope','SWBrijj','$locat
 /*************************************************************************************************/
 
 docviews.controller('InvestorDocumentViewController',['$scope','$location','$route','$rootScope','$routeParams','$timeout','SWBrijj',
-  function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj) {
+    'navState',
+  function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState) {
   // Switch to company view if the role is issuer
     /** @name $routeParams#doc
      * @type {string} */
-  if ($rootScope.selected.role == 'issuer') { $location.path("/company-view"); return; }
+  if (navState.role == 'issuer') { $location.path("/company-view"); return; }
 
   // Set up event handlers
-  SWBrijj.defaultErrorHandler = function(errm) { //noinspection JSValidateTypes
-    $rootScope.$broadcast( errm.javaClassName == 'net.r0kit.brijj.BrijjServlet$NotLoggedIn'
-      ? 'event:loginRequired' : 'event:brijjErrror', errm.message); };
   $scope.$on('event:loginRequired', function() { document.location.href='/login'; });
   $scope.$on('event:brijjError', function(event, msg) {$rootScope.errorMessage = msg; });
 
@@ -694,11 +598,11 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
     $scope.thisPage = $routeParams.page ? parseInt($routeParams.page) : 1 ;
     $scope.library = "document.my_investor_library";
     $scope.pages = "document.my_investor_codex";
-    $scope.tester = $rootScope.userid.match(/sharewave.com$/);
+    $scope.tester = false;
     $scope.invq = true;
     $scope.confirmModalClose();
     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function (data) {
-      if ($rootScope.selected.company != data.company)  { $location.path("/investor-list?"); return; }
+      if (navState.company != data.company)  { $location.path("/investor-list?"); return; }
       $scope.document = data;
     }).except(function(x) { void(x); $location.path("/investor-list?"); } );
   };
@@ -752,14 +656,14 @@ docviews.controller('InvestorDocumentViewController',['$scope','$location','$rou
 
 
   /* Filter to format the activity time */
-angular.module('documentviews').filter('fromNow', function() {
+docviews.filter('fromNow', function() {
 			return function(date) {
 			  return moment(date).fromNow();
 			}
 		  });
 
 /* Filter to select the activity icon for document status */
-angular.module('documentviews').filter('icon', function() {
+docviews.filter('icon', function() {
    return function(activity) {
      if (activity == "received") return "icon-email";
      else if (activity == "viewed") return "icon-view";
@@ -773,7 +677,7 @@ angular.module('documentviews').filter('icon', function() {
 });
 
 /* Filter to format the activity description on document status */
-angular.module('documentviews').filter('description', function() {
+docviews.filter('description', function() {
   return function(ac) {
     var activity = ac.activity;
     var person = ac.name;
@@ -792,7 +696,7 @@ angular.module('documentviews').filter('description', function() {
   }
 });
 
-angular.module('documentviews').filter('fileLength', function () {
+docviews.filter('fileLength', function () {
   return function (word) {
     if (word) {
       if (word.length > 21) {
@@ -806,35 +710,44 @@ angular.module('documentviews').filter('fileLength', function () {
   };
 });
 
-angular.module('documentviews').filter('lengthLimiter', function () {
-    return function (word) {
-        if (word) {
-            if (word.length > 58) {
-                return word.substring(0, 57) + "...";
-            }
-            else {
-                return word;
-            }
-        }
-        return '';
-    };
+docviews.filter('lengthLimiter', function () {
+    return function (word) { return word && word.length > 58 ? word.substring(0, 57) + "..." : word; }
 });
 
-angular.module('documentviews').filter('nameoremail', function () {
+docviews.filter('nameoremail', function () {
     return function (person) {
-        var word = ""
-        if (person.name) {
-            word = person.name;
-        }
-        else {
-            word = person.investor;
-        }
-        if (word.length > 24) {
-            return word.substring(0, 23) + "...";
-        }
-        else {
-            return word;
-        }
+        var word  = person.name || person.investor;
+        return word.length > 24 ? word.substring(0, 23) + "..." : word;
     };
 });
 
+docviews.directive('contenteditable', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      // view -> model
+      var ff = function() {
+        scope.$apply(function() {
+          ctrl.$setViewValue(elm.html());
+        });
+        scope.$emit('updated:name');
+      };
+
+      elm.on('blur', ff);
+      elm.bind("keydown keypress", function(event) {
+        if (event.which === 13) {
+          event.preventDefault();
+          event.currentTarget.blur();
+        }
+      });
+
+      // model -> view
+      ctrl.$render = function() {
+        elm.html(ctrl.$viewValue);
+      };
+
+      // load init value from DOM
+      ctrl.$setViewValue(elm.html());
+    }
+  };
+});

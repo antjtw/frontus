@@ -1,3 +1,5 @@
+/* Investor Profile */
+
 textarea {
     resize: none;
 }
@@ -110,4 +112,10 @@ textarea {
     line-height: 30px;
     margin-right: 10px;
     text-transform: uppercase;
+}
+
+/* Company Profile */
+
+.recipientInfo .temp-text {
+    font-style: italic;
 }

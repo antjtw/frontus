@@ -54,6 +54,9 @@
             <th><span>Email</span></th>
             <th colspan="2"><span>Status</span></th>
           </tr>
+          <tr>
+              <td ng-show="!docversions[0]" colspan="4">You haven't shared this document with anyone yet!</td>
+          </tr>
           <tbody ng-repeat="person in docversions">
           <tr class="status-row" ng-class="{selectedrow:person.shown}" ng-click="showStatusDetail(person)">
             <td>{{person.name}}</td>
@@ -71,7 +74,7 @@
               </td>
           </tr>
           <tr class="status-detail" ng-Show="person.shown">
-              <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.last_viewed">Never Viewed</span><span ng-show="person.last_viewed">Last Logged In</span></td>
+              <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="person.last_viewed">Never Viewed</span><span ng-show="person.last_viewed">Last Viewed</span></td>
               <td colspan="4">{{person.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
 

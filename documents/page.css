@@ -9,12 +9,6 @@ div.maincontent {
     max-width: 1280px;
 }
 
-.back-icon {
-    font-size: 200%;
-    color: #1e2d3d;
-    line-height: 36px;
-}
-
 .button.subText {
     float: right;
     margin-left: 10px;
@@ -111,9 +105,9 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .dModalButtons {
     display: block;
-    padding: 0 0 45px 0;
-    margin-top: 5px;
+    padding: 0 0 20px 0;
 }
+
 
 .dModalButtons button {
     padding: 0 !important;
@@ -233,7 +227,7 @@ button.greyButton {
 }
 
 .sign-modal {
-    width: 400px;
+    width: 360px;
 }
 
 .sign-modal label {
@@ -249,10 +243,23 @@ button.greyButton {
     color: inherit;
     width: auto;
     float: none;
+    vertical-align: top;
+    margin-top: 4px;
 }
 
 .modalText.uploadModal p {
     margin-bottom: 10px;
+}
+
+.modalText.esign {
+    padding: 10px 0 0 0;
+    margin: 5px 0 20px 18px;
+    display: block;
+    text-align: left;
+}
+
+.chkboxtext {
+    display: inline-block;
 }
 
 .upload-errors {

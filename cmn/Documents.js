@@ -231,7 +231,7 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
        * @param {...}
        */
         // This is a synchronous save
-      console.log("saving note data (228): "+ndx);
+      // console.log("saving note data (228): "+ndx);
       /** @name $scope#lib#original
        * @type {int} */
       var res = SWBrijj._sync('SWBrijj','saveNoteData',[$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
@@ -245,7 +245,7 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
     void(oldUrl);
     // don't save note data if I'm being redirected to log in
     if (newUrl.match(/login([?]|$)/)) return;
-    console.log("saving note data (240) due to $locationChangeStart");
+    // console.log("saving note data (240) due to $locationChangeStart");
     $scope.saveNoteData();
   });
   }
@@ -660,7 +660,7 @@ docs.controller('DocumentViewController', ['$scope','$compile','$location','$rou
      * @param {boolean}
      * @param {json}
      */
-    console.log('saving note data (640): '+ nd);
+    // console.log('saving note data (640): '+ nd);
 
     SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function (data) {
       void(data);

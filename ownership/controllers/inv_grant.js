@@ -1,12 +1,12 @@
 // Grants page controller
-var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope) {
+var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope, navState) {
 
-    if ($rootScope.selected.role == 'issuer') {
+    if (navState.role == 'issuer') {
         $location.path('/company-grants');
         return;
     }
 
-    var company = $rootScope.selected.company;
+    var company = navState.company;
     $scope.currentCompany = company;
 
     $scope.rows = []
