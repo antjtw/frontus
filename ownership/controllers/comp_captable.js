@@ -1455,7 +1455,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     }
 
-    //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
     };
