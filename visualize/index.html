@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html ng-app="visualize">
+<head>
+    <title>Sharewave Visualize</title>
+    <!--{{/i/head_css.inc}}-->
+    <!--{{/i/head_js.inc}}-->
+    <script type="text/javascript" src="/lib/datejs/build/date.js"></script>
+    <script src="/lib/datepicker/bootstrap-datepicker.js"></script>
+    <script src="/visualize/visualize.js"></script>
+    <script src="/visualize/controllers/waterfall.js"></script>
+
+
+</head>
+
+<body>
+<div class="wrap">
+    <navbar></navbar>
+
+    <div class="maincontent">
+        <div ng-view></div>
+    </div>
+
+
+
+    <div class="minimumGap"></div>
+    <div class="push"></div>
+</div>
+
+<!--{{/i/foot.inc}}-->
+<!--{{/i/foot_js.inc}}-->
+
+
+</body>
+</html>
