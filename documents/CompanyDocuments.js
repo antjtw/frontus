@@ -182,8 +182,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
-              void(x);
-                $scope.fileError = "Oops, something went wrong. Please try again.";
+                if ($scope.tester === true) {
+                    $scope.fileError = x.message;
+                } else {
+                    $scope.fileError = "Oops, something went wrong. Please try again.";
+                }
                 $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress=false;
