@@ -1,5 +1,4 @@
 @font-face {
-<<<<<<< HEAD
 	font-family: 'logo';
 	src:url('sharewave.eot');
 	src:url('sharewave.eot?#iefix') format('embedded-opentype'),
@@ -8,21 +7,11 @@
 		url('sharewave.svg#sharewave') format('svg');
 	font-weight: normal;
 	font-style: normal;
-=======
-    font-family: 'logo';
-    src:url('fonts/sharewave.eot');
-    src:url('fonts/sharewave.eot?#iefix') format('embedded-opentype'),
-    url('fonts/sharewave.woff') format('woff'),
-    url('fonts/sharewave.ttf') format('truetype'),
-    url('fonts/sharewave.svg#sharewave') format('svg');
-    font-weight: normal;
-    font-style: normal;
->>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-logo]:before {
-<<<<<<< HEAD
+
 	font-family: 'logo';
 	content: attr(data-logo);
 	speak: none;
@@ -31,16 +20,6 @@
 	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
-=======
-    font-family: 'logo';
-    content: attr(data-logo);
-    speak: none;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
->>>>>>> cb9e43059c3fd5a9ee2a839453fcd77218110731
 }
 
 /* Use the following CSS code if you want to have a class per icon */
