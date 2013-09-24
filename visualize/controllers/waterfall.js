@@ -14,7 +14,9 @@ viz.controller('waterfallController',['$scope','$location','$route','$rootScope'
                 $scope.grants = grants;
 
                 // Calculate the capitalization
-                $scope.capitalization = capital.start($scope.issues, $scope.trans);
+                var corevalues = capital.start($scope.issues, $scope.trans);
+                $scope.capitalization = corevalues[0];
+                $scope.totalshares = corevalues[1];
                 console.log($scope.capitalization);
             });
         });
