@@ -114,6 +114,13 @@
 		padding: 20px 20px 0 20px;
 	}
 
+    /* Upgrade Browser page */
+
+    .gateway {
+        margin-top:10px;
+        padding-bottom: 30px;
+    }
+
 }
 
 @media (max-width: 480px) {

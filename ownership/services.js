@@ -235,6 +235,61 @@ ownership.service('calculate', function () {
         return rows
     };
 
+    // Generates the diluted rows
+    this.dilution = function (rows, issues) {
+        var dilutedRows = [];
+        angular.forEach(rows, function (row) {
+            if (row.name != undefined) {
+                var something = null;
+                var temprow = {"name": row.name, "email": row.email};
+                angular.forEach(issues, function (issue) {
+                    if (issue.issue) {
+                        temprow[issue.issue] = {};
+                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
+                            temprow[issue.issue] = row[issue.issue];
+                            something = true;
+                        }
+                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
+                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            }
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
+                        else if (row[issue.issue]['exercised'] && !row.vested) {
+                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                            }
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
+                        else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
+                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
+                                console.log("working");
+                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            }
+                            else {
+                                temprow[issue.issue]['u'] = row.vested[issue.issue];
+                            }
+                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            something = true;
+                        }
+                    }
+                });
+                if (something) {
+                    dilutedRows.push(temprow);
+                }
+            }
+        });
+        return dilutedRows;
+    };
+
 
 
 

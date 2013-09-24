@@ -796,13 +796,13 @@
                         </div>
                         <!-- Equity Tab -->
                         <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
-                            <p ng-show="activeIssue.premoney" class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled ng-model="activeIssue.premoney"></p>
+                            <p ng-show="activeIssue.premoney" class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span></p>
 
-                            <p ng-show="activeIssue.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled ng-model="activeIssue.postmoney"></p>
+                            <p ng-show="activeIssue.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span></p>
 
-                            <p ng-show="activeIssue.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input disabled ng-model="activeIssue.ppshare"></p>
+                            <p ng-show="activeIssue.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><span ng-bind="formatDollarAmount(activeIssue.ppshare)"></span></p>
 
-                            <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled ng-model="activeIssue.totalauth"></p>
+                            <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><span ng-bind="formatAmount(activeIssue.totalauth)"></span></p>
 
                             <p ng-show="activeIssue.liquidpref" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span><input disabled ng-model="activeIssue.liquidpref"></p>
 
@@ -813,12 +813,12 @@
                           <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
                               <p ng-show="activeIssue.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="activeIssue.optundersec"></p>
 
-                              <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input disabled ng-model="activeIssue.totalauth"></p>
+                              <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><span ng-bind="formatAmount(activeIssue.totalauth)"></span></p>
 
-                              <p ng-show="totalGranted(activeIssue.issue, trans)" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled value="{{totalGranted(activeIssue.issue, trans);}}">
+                              <p ng-show="totalGranted(activeIssue.issue, trans)" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span>
                               </p>
 
-                              <p ng-show="activeIssue.price"  class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input disabled ng-model="activeIssue.price"></p>
+                              <p ng-show="activeIssue.price"  class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><span ng-bind="formatDollarAmount(activeIssue.price)"></span></p>
 
                               <p ng-show="activeIssue.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="activeIssue.terms"></p>
 
@@ -832,9 +832,9 @@
                           <!-- Debt tab -->
                           <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input disabled ng-model="activeIssue.premoney"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input disabled ng-model="activeIssue.postmoney"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span></p>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input disabled ng-model="activeIssue.interestrate"></p>
 
@@ -856,9 +856,9 @@
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
                                 <div class="row-fluid trancore">
                                     <div>
-                                        <p ng-hide="tran.forfeited">Shares<input disabled ng-model="tran.units"></p>
+                                        <p ng-hide="tran.forfeited">Shares <span ng-bind="formatAmount(tran.units)"></span></p>
 
-                                        <p ng-show="tran.amount">Paid $<input disabled ng-model="tran.amount">
+                                        <p ng-show="tran.amount">Paid <span ng-bind="formatDollarAmount(tran.amount)"></span>
                                         </p>
 
                                     </div>
@@ -866,9 +866,9 @@
                                 </div>
                                 <div ng-show="tran.forfeited" class="row-fluid trancore">
                                     <div>
-                                        <p>Shares<input disabled ng-model="tran.units"></p>
+                                        <p>Shares<span ng-bind="formatAmount(tran.units)"></span></p>
 
-                                        <p>Forfeit<input disabled ng-model="tran.forfeited"></p>
+                                        <p>Forfeit<span ng-bind="formatAmount(tran.forfeited)"></span></p>
                                     </div>
                                     <div class="DivHelper"></div>
                                 </div>
@@ -876,7 +876,7 @@
                                 <!-- Equity Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
 
-                                    <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input disabled ng-model="tran.ppshare"></p>
+                                    <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><span ng-bind="formatDollarAmount(tran.ppshare)"></span></p>
 
                                     <p ng-show="tran.liquidpref" class="rightTitle">
                                         <span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
@@ -894,7 +894,7 @@
 
                                     <p ng-show="tran.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="tran.optundersec"></p>
 
-                                    <p ng-show="tran.price" class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input disabled ng-model="tran.price"></p>
+                                    <p ng-show="tran.price" class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><span ng-bind="formatDollarAmount(tran.price)"></span></p>
 
                                     <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
 
