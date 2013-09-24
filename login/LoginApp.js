@@ -36,7 +36,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
       SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
       if(x) {
 			document.location.href = x;
-			console.log("redirecting to: "+x);
+			// console.log("redirecting to: "+x);
 		  }
          else {
           $scope.showError = true;
@@ -99,7 +99,7 @@ app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $
         void(x);
         $location.path("/sent");
       }).except(function(x) { 
-        console.log(x);
+        // console.log(x);
         // $scope.fed = "There was an error. Please try again later."
         $location.path("/sent");
       });
@@ -138,7 +138,7 @@ app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
         } 
       });
     }).except(function(x) { 
-      console.log(x);
+      // console.log(x);
       $scope.fed = "There was an error. Please try again later."
     });
   }

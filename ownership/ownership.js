@@ -2,11 +2,12 @@
 
 /* App Module */
 
-function calculateRedirect() {
+/*function calculateRedirect() {
     var z = readCookie('role');
     console.log("calculating redirect: "+z);
     return z == 'issuer' ? '/company-captable' : '/investor-captable';
 }
+  */
 
 var owner = angular
     .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'ownerServices', 'ownerFilters'])
@@ -20,7 +21,7 @@ owner.config(function ($routeProvider, $locationProvider) {
         when('/company-status', {templateUrl: 'pages/comp-status.html', controller: statusController}).
         when('/investor-captable', {templateUrl: 'pages/inv-captable.html', controller: invCaptableController}).
         when('/investor-grants', {templateUrl: 'pages/inv-grant.html', controller: invGrantController}).
-        otherwise({redirectTo: calculateRedirect() });
+        otherwise({redirectTo: '/investor-captable' });
 });
 /*
 owner.factory('sharedData', function(SWBrijj, $q) {

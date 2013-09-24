@@ -238,7 +238,11 @@ button.greyButton {
 }
 
 .sign-modal {
+<<<<<<< HEAD
     width: 360px;
+=======
+    width: 380px;
+>>>>>>> 2fb262251f93e7390cf8bc192ae77fb12c420903
 }
 
 .sign-modal label {

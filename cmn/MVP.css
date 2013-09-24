@@ -38,6 +38,7 @@ body {
 
 .container {
 	width: 1024px;
+    clear:both;
 }
 
 label {
@@ -282,11 +283,11 @@ h2 {
 
 /* Navigation Bar at Top of Page */
 
-#navBar {
+.navBarLoggedIn {
 	height:70px;
 }
 
-#navBarLoggedOut {
+.navBarLoggedOut {
 	height:40px;
 }
 
@@ -487,6 +488,14 @@ h2 {
     line-height: 30px;
     text-align: center;
     padding: 0 20px 0 20px;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.bottomnav .nav > li.active > a:hover {
+    background-color: #C7C7C7;
     text-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -1329,6 +1338,19 @@ form.inputs {
 .btn {
     background: rgb(255, 255, 255) none;
     border: 1px solid rgb(227, 227, 227);
+}
+
+/* Back icon */
+
+.back-icon {
+    font-size: 200%;
+    color: #1e2d3d;
+    line-height: 36px;
+    padding-right: 10px;
+}
+
+.back-icon:hover {
+    color: #1ABC96;
 }
 
 /* Dropdown buttons */
