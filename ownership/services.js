@@ -1,4 +1,4 @@
-var ownership = angular.module('ownerServices', []);
+var ownership = angular.module('vizServices', []);
 
 // Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
 ownership.service('calculate', function () {
