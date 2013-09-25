@@ -1,0 +1,165 @@
+<div class="container">
+
+
+	<div class="row-fluid">
+        <div class="headsection row-fluid">
+            <h1>Visualize</h1>
+
+            <div class="row-fluid">
+
+              <ul class="bodyText maintabs">
+                <li class="selectedtab">Waterfall</li>
+               </ul>
+            </div>
+        </div>
+
+         <div class="row-fluid">
+             <div class="span8">
+                  <div class="row-fluid">
+                    <div class="subnav-controls">
+                      <div>
+                        <div class="pull-left">
+                          <h2>Liquidation</h2>
+                        </div>
+                      </div>
+                      <div class="DivHelper"></div>
+                    </div>
+                  </div>
+
+                  <div class="row-fluid">
+                      <div class="subnav-controls">
+                        <div>
+                          <div class="pull-left">
+                             <p class="pull-left">ACCELERATE UNVESTED OPTIONS/GRANTS</p>
+                             <input class="checkbox" ng-model="acceleratevesting" type="checkbox" ng-change="recalculate(exitvalue, priceincrement, acceleratevesting);">
+                          </div>
+                          <div class="pull-left">
+                              <p class="pull-left">EXIT VALUE</p>
+
+                              <input ng-model="exitvalue" type="text" ng-change="recalculate(exitvalue, priceincrement, acceleratevesting);">
+                          </div>
+                          <div class="pull-left">
+                              <p class="pull-left">INCREMENT</p>
+
+                              <input ng-model="priceincrement" type="text" ng-change="recalculate(exitvalue, priceincrement, acceleratevesting);">
+                          </div>
+                        </div>
+                        <div class="DivHelper"></div>
+                      </div>
+                  </div>
+
+                  <div class="row-fluid">
+                    <ul ng-style="gridheight" class="waterfall-grid">
+                        <li>
+                            <ul>
+                                <li>Exit Price</li>
+                                <li>Price per fully diluted share</li>
+                                <li ng-style="loopheight">
+                                    <ul ng-repeat="issue in issueblocks">
+                                        <li>
+                                            {{issue}} Liquidation Preference
+                                        </li>
+                                        <li>
+                                            Residual for others
+                                        </li>
+                                        <li>
+                                            Shares left after {{issue}} liquidation
+                                        </li>
+                                        <li>
+                                            Residual per share
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>Options/Grants</li>
+                            </ul>
+                        </li>
+                        <li ng-repeat="column in waterfall">
+                            <ul>
+                                <li ng-bind="formatDollarAmount(column.exitprice)"></li>
+                                <li ng-bind="formatDollarAmount(column.ppdilutedshare)"></li>
+                                <li ng-style="loopheight">
+                                <ul ng-repeat="issue in column.roundliquidation">
+                                    <li ng-bind="formatDollarAmount(issue.seriesliquid)"></li>
+                                    <li ng-bind="formatDollarAmount(issue.residualleft)"></li>
+                                    <li ng-bind="formatAmount(issue.sharesleft)"></li>
+                                    <li ng-bind="formatDollarAmount(issue.shareresidual)"></li>
+                                </ul>
+                                </li>
+                                <li ng-bind="formatAmount(column.options)"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                  </div>
+
+                  <div class="row-fluid">
+                      <ul ng-style="proceedheight" class="proceeds-grid">
+                          <li>
+                              <ul ng-repeat="(name, value) in waterfall[0].proceeds">
+                                  <li>
+                                      {{name}}
+                                  </li>
+                              </ul>
+                          </li>
+                          <li ng-repeat="column in waterfall">
+                              <ul ng-repeat="proceed in column.proceeds">
+                                  <li ng-bind="formatDollarAmount(proceed);"></li>
+                              </ul>
+                          </li>
+                      </ul>
+                  </div>
+             </div>
+
+             <div class="span3 offset1">
+                <div class="row-fluid">
+                    <div class="row-fluid">
+                        <div class="subnav-controls">
+                            <div>
+                                <div class="pull-left">
+                                    <h2>Capitalization</h2>
+                                </div>
+                            </div>
+                            <div class="DivHelper"></div>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                       <ul class="capital-list">
+                        <li ng-repeat="issue in capitalization">
+                            <ul>
+                                <li ng-click="(opendetails(issue.name))" ng-bind="issue.name"></li>
+                                <li>
+                                    <table ng-show="issue.shown">
+                                        <tr ng-show="issue.type == 'Equity' || issue.type == 'Option'">
+                                            <td ng-bind="formatAmount(issue.shares)"></td>
+                                            <td>Shares</td>
+                                        </tr>
+                                        <tr>
+                                            <td ng-bind="formatDollarAmount(issue.paid)"></td>
+                                            <td>Total Paid</td>
+                                        </tr>
+                                        <tr ng-show="issue.type == 'Equity'">
+                                            <td ng-bind="formatDollarAmount(issue.liquidpref)"></td>
+                                            <td>Liquidation Preference</td>
+                                        </tr>
+                                        <tr ng-show="issue.type == 'Equity'">
+                                            <td ng-bind="issue.partpref"></td>
+                                            <td>Participation Preferred</td>
+                                        </tr>
+                                        <tr ng-show="issue.type == 'Equity' || issue.type == 'Option'">
+                                            <td ng-bind="formatDollarAmount(issue.shareprice)"></td>
+                                            <td>Share Price</td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li><div d3-bars data="issue"></div></li>
+                                <li>{{formatAmount(issue.percent)}}% Ownership</li>
+                            </ul>
+                        </li>
+                       </ul>
+                    </div>
+                </div>
+
+             </div>
+         </div>
+    </div>
+</div>

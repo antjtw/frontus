@@ -2,20 +2,105 @@ var visualize = angular.module('vizServices', []);
 
 visualize.service('capital', function () {
 
-    // Function generates the capitalization of the captable at point of sale.
+    //
+    this.optionsgenerate = function(trans, grants) {
+        angular.forEach(grants, function (grant) {
+            angular.forEach(trans, function (tran) {
+                if (grant.tran_id == tran.tran_id) {
+                    if (grant.action == "forfeited") {
+                        tran.forfeited = tran.forfeited ? tran.forfeited = tran.forfeited + grant.unit : tran.forfeited = grant.unit;
+                    }
+                    if (grant.action == "exercised") {
+                        tran.exercised = tran.exercised ? tran.exercised = tran.exercised + grant.unit : tran.exercised = grant.unit;
+                    }
+                }
+            });
+        });
+       return trans
+    };
+
+    this.tranvested = function (trans, closedate) {
+        angular.forEach(trans, function (tran) {
+            var vestbegin = angular.copy(tran.vestingbegins)
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                if (Date.compare(closedate, vestbegin) > -1) {
+                    if (!isNaN(parseFloat(tran.vested))) {
+                        tran.vested = tran.vested + (tran.units * (tran.vestcliff / 100));
+                    }
+                    else {
+                        tran.vested = (tran.units * (tran.vestcliff / 100));
+                    }
+                    var cycleDate = angular.copy(tran.date);
+                    var remainingterm = angular.copy(tran.terms);
+                    while (Date.compare(vestbegin, cycleDate) > -1) {
+                        remainingterm = remainingterm - 1;
+                        cycleDate.addMonths(1);
+                    }
+                    remainingterm = remainingterm;
+                    var finalDate = vestbegin.addMonths(remainingterm);
+                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                    var x = 1;
+                    if (tran.vestfreq == "monthly") {
+                        x = 1
+                    }
+                    else if (tran.vestfreq == "weekly") {
+                        x = 0.25
+                    }
+                    else if (tran.vestfreq == "biweekly") {
+                        x = 0.5
+                    }
+                    else if (tran.vestfreq == "quarterly") {
+                        x = 3;
+                    }
+                    else if (tran.vestfreq == "yearly") {
+                        x = 12;
+                    }
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    while (Date.compare(closedate, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                        tran.vested = tran.vested + (x * ((monthlyperc / 100) * tran.units));
+                        if (x < 1) {
+                            cycleDate.addWeeks(x * 4);
+                        }
+                        else {
+                            cycleDate.addMonths(x);
+                        }
+                    }
+                }
+            }
+        });
+        return trans
+    };
+
+    // Function generates the capitalization of the captable at point of modeled sale.
     // See the sharewave spreadsheets for the origin of these fields.
-    this.start = function (issues, trans) {
+    this.start = function (issues, trans, accelerate) {
         var capital = {};
         var total = 0;
         angular.forEach(issues, function (issue) {
             capital[issue.issue] = {};
             capital[issue.issue]['type'] = issue.type;
             capital[issue.issue]['name'] = issue.issue;
+            capital[issue.issue]['shown'] = false;
             capital[issue.issue]['shareprice'] =  !isNaN(issue.ppshare) ? parseFloat(issue.ppshare) : 0;
             capital[issue.issue]['liquidpref'] = issue.liquidpref ? issue.liquidpref : 'None';
+            capital[issue.issue]['partpref'] = issue.partpref == true ? 'Yes' : 'No';
         });
         angular.forEach(trans, function(tran) {
-            var units = !isNaN(parseFloat(tran.units)) ? parseFloat(tran.units) : 0;
+            var units;
+            if (!accelerate && tran.type == 'Option') {
+                units = !isNaN(parseFloat(tran.vested)) ? parseFloat(tran.vested) : 0;
+                var maxunits = parseFloat(tran.units) - parseFloat(tran.forfeited);
+                units = units > maxunits ? maxunits : units;
+            }
+            else {
+                units = !isNaN(parseFloat(tran.units)) ? parseFloat(tran.units) : 0;
+                units = !isNaN(parseFloat(tran.forfeited)) ? (units - parseFloat(tran.forfeited)) : units;
+            }
             capital[tran.issue]['shares'] = capital[tran.issue]['shares'] ? capital[tran.issue]['shares'] + units : units;
             total += units;
             capital[tran.issue]['paid'] = capital[tran.issue]['shareprice'] * capital[tran.issue]['shares'];
@@ -42,6 +127,7 @@ visualize.service('capital', function () {
             totalCopy = angular.copy(total);
             exitCopy = column['exitprice'];
             column['ppdilutedshare'] = exitCopy / totalCopy;
+            column['proceeds'] = {}
             var issueblocks = []
             angular.forEach(capital, function(issue) {
                 if (issue.type == "Equity") {
@@ -57,6 +143,14 @@ visualize.service('capital', function () {
                      if (issueblockkeys.indexOf(issue.name) == -1) {
                          issueblockkeys.push(issue.name);
                      }
+                     if (seriesblock['seriesliquid'] > 0) {
+                         column['proceeds'][issue.name] = seriesblock['seriesliquid'];
+                     }
+                }
+            });
+            angular.forEach(capital, function(issue) {
+                if (!column['proceeds'][issue.name]) {
+                    column['proceeds'][issue.name] = exitCopy * (issue.shares/totalCopy)
                 }
             });
             column['options'] = exitCopy;

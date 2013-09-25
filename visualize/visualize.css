@@ -1,0 +1,42 @@
+ul.waterfall-grid {
+}
+
+ul.waterfall-grid > li {
+    float:left;
+    display: inline-block;
+    width: 100px;
+}
+
+ul.waterfall-grid > li > ul > li.repeated-list {
+    height: 200px;
+}
+
+ul.waterfall-grid > li:first-of-type {
+    width: 140px;
+}
+
+ul.waterfall-grid > li > ul > li {
+    height: 50px;
+}
+
+ul.waterfall-grid > li > ul > li > ul > li {
+    height: 50px;
+}
+
+ul.capital-list {
+
+}
+
+ul.proceeds-grid {
+    height: 200px;
+}
+
+ul.proceeds-grid > li {
+    float:left;
+    display: inline-block;
+    width: 100px;
+}
+
+ul.proceeds-grid > li:first-of-type {
+    width: 140px;
+}
