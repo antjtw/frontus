@@ -4,6 +4,9 @@
     background-color: rgb(30, 45, 61);
 }
 
+.lognreg .row-fluid .span5 {
+    min-width: 370px;
+}
 .lognreg p strong{
     font-family: 'FS Elliot Web Bold', sans-serif;;
 }
