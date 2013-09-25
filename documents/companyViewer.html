@@ -5,7 +5,7 @@
             <a href="/documents/">
                 <span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span>
             </a>
-            <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit">{{ document.docname | limitTo:58 }}</span>
+            <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:58 || ''"></span>
         </h1>
 
         <div class="row-fluid">
