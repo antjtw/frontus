@@ -636,6 +636,12 @@ li.selectedtab {
     color: rgb(166, 166, 166);
 }
 
+.doc-title {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 957px;
+}
 
 /* Left Block for split pages */
 
