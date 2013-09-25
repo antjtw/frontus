@@ -494,6 +494,14 @@ h2 {
     box-shadow: none;
 }
 
+.bottomnav .nav > li.active > a:hover {
+    background-color: #C7C7C7;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 .bottomnav .nav > li > a:hover {
 	background-color: rgb(241, 241, 241);
     color: rgb(102, 102, 102);

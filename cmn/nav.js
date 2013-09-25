@@ -115,7 +115,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         navState.role = thiscmp.role;
         navState.name = thiscmp.name;
         navState.reasons = $scope.initReasons(thiscmp.reasons);
-        $route.reload();
+        // We should take this out I think but need to double check this
+        //$route.reload();
       } else {
           SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
               angular.forEach(data, function (comp) {
