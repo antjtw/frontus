@@ -61,6 +61,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
     function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj, navState) {
     if (navState.role == 'investor') {
       $location.path('/investor-list'); // goes into a bottomless recursion ?
+      return;
     }
 
   // Set up event handlers
