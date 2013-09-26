@@ -648,7 +648,9 @@ li.selectedtab {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
-    width: 957px;
+    width: 974px;
+    font-size:20px;
+    float: right;
 }
 
 /* Left Block for split pages */
@@ -1356,7 +1358,7 @@ form.inputs {
 }
 
 .back-icon:hover {
-    color: #1ABC96;
+    color: #1CCAA1;
 }
 
 /* Dropdown buttons */

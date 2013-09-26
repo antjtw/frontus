@@ -10,14 +10,19 @@ div.maincontent {
 }
 
 .back-icon {
-    font-size: 200%;
-    color: #1e2d3d;
-    line-height: 36px;
-    padding-right: 10px;
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    line-height: 21px;
+    margin-left: 18px;
+    padding-right: 0px;
+    width: 20px;
+    height: 20px;
+    background: #1ABC96;
 }
 
 .back-icon:hover {
-    color: #1ABC96;
+    color: #1e2d3d;
 }
 
 .button.subText {
@@ -88,8 +93,12 @@ div.maincontent {
 }
 
 .documentStatus {
-  font-size: 50%;
-  padding-left: 4em;
+  font-family: 'FS Elliot Web Regular', sans-serif !important;
+  font-size: 10px;
+  color: #A6A6A6;
+  vertical-align: middle;
+  padding-left: 51px;
+  letter-spacing: 1px;
 }
 
 .activity-feed {
