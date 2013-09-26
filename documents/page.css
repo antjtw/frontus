@@ -9,22 +9,6 @@ div.maincontent {
     max-width: 1280px;
 }
 
-.back-icon {
-    display: inline-block;
-    font-size: 20px;
-    color: white;
-    line-height: 21px;
-    margin-left: 18px;
-    padding-right: 0px;
-    width: 20px;
-    height: 20px;
-    background: #1ABC96;
-}
-
-.back-icon:hover {
-    color: #1e2d3d;
-}
-
 .button.subText {
     float: right;
     margin-left: 10px;
