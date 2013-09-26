@@ -671,6 +671,7 @@ docviews.filter('icon', function() {
      if (activity == "received") return "icon-email";
      else if (activity == "viewed") return "icon-view";
      else if (activity == "reminder") return "icon-redo";
+     else if (activity == "edited") return "icon-pencil";
      else if (activity == "signed") return "icon-pen";
      else if (activity == "uploaded") return "icon-star";
      else if (activity == "rejected") return "icon-circle-delete";
@@ -690,6 +691,7 @@ docviews.filter('description', function() {
     if (activity == "sent") return "";
     else if (activity == "viewed") return "Viewed by "+person;
     else if (activity == "reminder") return "Reminded "+person;
+    else if (activity == "edited") return "Edited by "+person;
     else if (activity == "signed") return "Signed by "+person;
     else if (activity == "uploaded") return "Uploaded by "+person;
     else if (activity == "received") return "Sent to "+person;
