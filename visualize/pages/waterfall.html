@@ -91,21 +91,65 @@
                     </ul>
                   </div>
 
+
                   <div class="row-fluid">
-                      <ul ng-style="proceedheight" class="proceeds-grid">
+                      <div class="subnav-controls">
+                        <div>
+                          <div class="pull-left">Proceeds by</div>
+                          <div class="pull-left">
+                              <ul class="pull-left">
+                                    <li class="dropdown standard pull-left">
+                                        <a class="dropdown-toggle">
+                                            {{viewtype}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a ng-click="changeView('Security')">Security</a>
+                                                <a ng-click="changeView('Shareholder')">Shareholder</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                               </ul>
+                          </div>
+                        </div>
+                        <div class="DivHelper"></div>
+                      </div>
+                  </div>
+
+
+                  <div class="row-fluid">
+                      <ul ng-show="viewtype == 'Security'" ng-style="proceedheight" class="proceeds-grid">
                           <li>
-                              <ul ng-repeat="(name, value) in waterfall[0].proceeds">
+                              <ul ng-repeat="(name, value) in waterfall[0].securityproceeds">
                                   <li>
                                       {{name}}
                                   </li>
                               </ul>
                           </li>
                           <li ng-repeat="column in waterfall">
-                              <ul ng-repeat="proceed in column.proceeds">
+                              <ul ng-repeat="proceed in column.securityproceeds">
                                   <li ng-bind="formatDollarAmount(proceed);"></li>
                               </ul>
                           </li>
                       </ul>
+                      <ul ng-show="viewtype == 'Shareholder'" class="proceeds-grid">
+                        <li>
+                            <ul ng-repeat="(name, value) in waterfall[0].shareholderproceeds track by $id($index)">
+                              <li>
+                                  {{name}}
+                              </li>
+                            </ul>
+                        </li>
+                        <li ng-repeat="column in waterfall">
+                            <ul ng-repeat="proceed in column.shareholderproceeds track by $id($index)">
+                                <li ng-bind="formatDollarAmount(proceed);"></li>
+                            </ul>
+                        </li>
+                      </ul>
+                  </div>
+
+                  <div class="row-fluid">
+                       <div d3-linechart data="graphdata"></div>
                   </div>
              </div>
 
