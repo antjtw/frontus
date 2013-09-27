@@ -341,10 +341,14 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
   $scope.rejectSignature = function(cd, msg) {
     SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
+      $scope.$emit("notification:success", "Document signature rejected.");
       void(data);
       cd.when_signed = null;
       $route.reload();
-    })
+    }).except(function(x) {
+        void(x);
+        $scope.$emit("notification:fail", "Oops, something went wrong.");
+    });
   };
 
   $scope.confirmModalClose = function() {
