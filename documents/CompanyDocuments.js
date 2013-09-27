@@ -338,8 +338,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
     });
   };
 
-  $scope.rejectSignature = function(cd) {
-    SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
+  $scope.rejectSignature = function(cd, msg) {
+    console.log(msg);
+    SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
       void(data);
       cd.when_signed = null;
       $route.reload();
@@ -378,9 +379,19 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
         then(function(data) { void(data); $route.reload(); });
   };
 
+  // Rejecting modal functions
+
+  $scope.rejectDocOpen = function () {
+      $scope.rejectDocModal = true;
+  };
+
+  $scope.rejectDocClose = function () {
+      $scope.rejectDocModal = false;
+  };
+
   // Sharing modal functions
 
-  $scope.ShareDocOpen = function () {
+  $scope.shareDocOpen = function () {
         $scope.shareDocModal = true;
   };
 
