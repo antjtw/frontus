@@ -1,9 +1,17 @@
 ul.waterfall-grid {
+    color: #666666;
+    text-align: center;
+}
+
+ul.waterfall-grid .labels-column {
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 10px;
+    color: #a6a6a6;
 }
 
 ul.waterfall-grid > li {
     float:left;
-    display: inline-block;
     width: 100px;
 }
 
@@ -17,19 +25,63 @@ ul.waterfall-grid > li:first-of-type {
 
 ul.waterfall-grid > li > ul > li {
     height: 50px;
+    border-top: 1px solid #e3e3e3;
+}
+
+ul.waterfall-grid > li > ul.numbers-column > li, ul.waterfall-grid > li > ul.labels-column > li {
+    line-height: 50px;
+}
+
+ul.waterfall-grid > li > ul.labels-column > li.double-height {
+    padding-top: 13px;
+    line-height: 12px;
+    height: 37px
+}
+
+ul.waterfall-grid > li > ul.palegreen > li:first-of-type {
+    background-color: #c6EEE5;
+    font-size: 14px;
+}
+
+ul.waterfall-grid > li > ul.midgreen > li:first-of-type {
+    background-color: #8CDDCA;
+    font-size: 14px;
+}
+
+ul.waterfall-grid > li > ul.darkgreen > li:first-of-type {
+    background-color: #1abc96;
+    font-size: 14px;
 }
 
 ul.waterfall-grid > li > ul > li > ul > li {
     height: 50px;
+    border-top: 1px solid #e3e3e3;
 }
 
-ul.capital-list {
+ul.waterfall-grid > li > ul.numbers-column > li > ul > li, ul.waterfall-grid > li > ul.labels-column > li > ul > li {
+    line-height: 50px;
+}
 
+ul.waterfall-grid > li > ul.labels-column > li > ul > li.double-height {
+    padding-top: 13px;
+    line-height: 12px;
+    height: 37px
+}
+
+ul.waterfall-grid li.grey-row {
+   height: 10px;
+   background-color: #f1f1f1;
+}
+
+.subnav-controls {
+   border-top: 1px solid #e3e3e3;
 }
 
 ul.proceeds-grid {
     height: 200px;
+    text-align: center;
 }
+
 
 ul.proceeds-grid > li {
     float:left;
@@ -39,4 +91,106 @@ ul.proceeds-grid > li {
 
 ul.proceeds-grid > li:first-of-type {
     width: 140px;
+}
+
+ul.proceeds-grid > li > ul > li {
+    height: 30px;
+    border-top: 1px solid #e3e3e3;
+    line-height: 30px;
+}
+
+ul.proceeds-grid > li > ul > li:last-of-type {
+    border-bottom: 1px solid #e3e3e3;
+}
+
+ul.proceeds-grid > li > ul.labels-column > li {
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 10px;
+    color: #a6a6a6;
+}
+
+/* Capitalization Side Bar */
+
+ul.capital-list {
+
+}
+
+ul.capital-list li.percent-bar {
+    margin-top: 10px;
+}
+
+ul.capital-list li.percent-bar > div {
+    height: 20px;
+}
+
+ul.capital-list > li > ul {
+    margin-bottom: 35px;
+}
+
+ul.capital-list > li > ul > li:first-of-type {
+    font-size: 14px;
+    color: #34495e;
+}
+
+ul.capital-list > li > ul > li:last-of-type {
+    color: #34495e;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+ul.capital-list >li > ul > li > table {
+    margin: 15px 0 5px 0;
+}
+
+ul.capital-list >li > ul > li > table > tbody > tr > td:first-child {
+   color: #666666;
+   width: 60px;
+   padding-right: 10px;
+   text-align: right;
+}
+
+ul.capital-list >li > ul > li > table > tbody > tr > td:last-child {
+    color: #a6a6a6;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+/* D3 Styling for the security chart */
+
+.security-chart .y.ticks .tick line {
+    stroke: #e3e3e3;
+    stroke-width: 1;
+    opacity: 1;
+}
+
+.security-chart .axis {
+    stroke-width: 0.5;
+}
+
+.security-chart .axis .tick text {
+    color: #8d8d8d;
+    font-size: 10px;
+    stroke-width: 0.5;
+}
+
+.security-chart .axis .tick line {
+    display: none;
+}
+
+.security-chart .axis path {
+    display: none;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }

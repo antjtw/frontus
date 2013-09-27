@@ -139,7 +139,8 @@ visualize.service('capital', function () {
         var totalCopy;
         var exitCopy
         for (var i = -2; i <= 2; i++) {
-            table.push({'exitprice':(exit+(i*increment))});
+            var exitpricecheck = exit+(i*increment) > 0 ? exit+(i*increment) : 0;
+            table.push({'exitprice':(exitpricecheck)});
         }
         angular.forEach(table, function(column) {
             totalCopy = angular.copy(total);
@@ -154,6 +155,10 @@ visualize.service('capital', function () {
                      seriesblock['name'] = issue.name;
                      seriesblock['seriesliquid'] = (column.ppdilutedshare * issue.shares) > issue.liquidpref ? 0 : issue.liquidpref;
                      seriesblock['residualleft'] = exitCopy - seriesblock['seriesliquid'];
+                     if (seriesblock['residualleft'] < 0) {
+                         seriesblock['seriesliquid'] = seriesblock['seriesliquid'] + seriesblock['residualleft'];
+                         seriesblock['residualleft'] = 0;
+                     }
                      exitCopy = seriesblock['residualleft'];
                      seriesblock['sharesleft'] = seriesblock['seriesliquid'] > 0 ? totalCopy - issue['shares'] : totalCopy;
                      totalCopy = seriesblock['sharesleft'];

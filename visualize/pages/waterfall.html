@@ -51,18 +51,19 @@
                   <div class="row-fluid">
                     <ul ng-style="gridheight" class="waterfall-grid">
                         <li>
-                            <ul>
+                            <ul class="labels-column">
                                 <li>Exit Price</li>
-                                <li>Price per fully diluted share</li>
+                                <li class="double-height">Price per fully diluted share</li>
                                 <li ng-style="loopheight">
                                     <ul ng-repeat="issue in issueblocks">
-                                        <li>
+                                        <li class="grey-row"></li>
+                                        <li class="double-height">
                                             {{issue}} Liquidation Preference
                                         </li>
                                         <li>
                                             Residual for others
                                         </li>
-                                        <li>
+                                        <li class="double-height">
                                             Shares left after {{issue}} liquidation
                                         </li>
                                         <li>
@@ -70,21 +71,24 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="grey-row"></li>
                                 <li>Options/Grants</li>
                             </ul>
                         </li>
                         <li ng-repeat="column in waterfall">
-                            <ul>
+                            <ul ng-class="{'palegreen':column.exitprice == graphdata[1][0] || column.exitprice == graphdata[1][4], 'midgreen':column.exitprice == graphdata[1][1] || column.exitprice == graphdata[1][3], 'darkgreen':column.exitprice == graphdata[1][2]}" class="numbers-column">
                                 <li ng-bind="formatDollarAmount(column.exitprice)"></li>
                                 <li ng-bind="formatDollarAmount(column.ppdilutedshare)"></li>
                                 <li ng-style="loopheight">
                                 <ul ng-repeat="issue in column.roundliquidation">
+                                    <li class="grey-row"></li>
                                     <li ng-bind="formatDollarAmount(issue.seriesliquid)"></li>
                                     <li ng-bind="formatDollarAmount(issue.residualleft)"></li>
                                     <li ng-bind="formatAmount(issue.sharesleft)"></li>
                                     <li ng-bind="formatDollarAmount(issue.shareresidual)"></li>
                                 </ul>
                                 </li>
+                                <li class="grey-row"></li>
                                 <li ng-bind="formatAmount(column.options)"></li>
                             </ul>
                         </li>
@@ -95,8 +99,16 @@
                   <div class="row-fluid">
                       <div class="subnav-controls">
                         <div>
-                          <div class="pull-left">Proceeds by</div>
                           <div class="pull-left">
+                              <div class="edittoggle btn-group">
+                                  <button type="button" class="btn" ng-model="proceedsRadio" btn-radio="'table'"><span
+                                          data-icon="&#xe043;" aria-hidden="true"></span></button>
+                                  <button type="button" class="btn" ng-model="proceedsRadio" btn-radio="'graph'"><span
+                                          data-icon="&#xe021;" aria-hidden="true"></span></button>
+                              </div>
+                          </div>
+                          <div class="pull-left namedtoggle">
+                              <p class="pull-left">Proceeds by</p>
                               <ul class="pull-left">
                                     <li class="dropdown standard pull-left">
                                         <a class="dropdown-toggle">
@@ -117,39 +129,39 @@
                   </div>
 
 
-                  <div class="row-fluid">
+                  <div ng-show="proceedsRadio == 'table'" class="row-fluid">
                       <ul ng-show="viewtype == 'Security'" ng-style="proceedheight" class="proceeds-grid">
                           <li>
-                              <ul ng-repeat="(name, value) in waterfall[0].securityproceeds">
-                                  <li>
+                              <ul class="labels-column">
+                                  <li ng-repeat="(name, value) in waterfall[0].securityproceeds track by $id($index)">
                                       {{name}}
                                   </li>
                               </ul>
                           </li>
                           <li ng-repeat="column in waterfall">
-                              <ul ng-repeat="proceed in column.securityproceeds">
-                                  <li ng-bind="formatDollarAmount(proceed);"></li>
+                              <ul>
+                                  <li ng-repeat="proceed in column.securityproceeds track by $id($index)" ng-bind="formatDollarAmount(proceed);"></li>
                               </ul>
                           </li>
                       </ul>
                       <ul ng-show="viewtype == 'Shareholder'" class="proceeds-grid">
                         <li>
-                            <ul ng-repeat="(name, value) in waterfall[0].shareholderproceeds track by $id($index)">
-                              <li>
+                            <ul class="labels-column">
+                              <li ng-repeat="(name, value) in waterfall[0].shareholderproceeds track by $id($index)">
                                   {{name}}
                               </li>
                             </ul>
                         </li>
                         <li ng-repeat="column in waterfall">
-                            <ul ng-repeat="proceed in column.shareholderproceeds track by $id($index)">
-                                <li ng-bind="formatDollarAmount(proceed);"></li>
+                            <ul>
+                                <li ng-repeat="proceed in column.shareholderproceeds track by $id($index)" ng-bind="formatDollarAmount(proceed);"></li>
                             </ul>
                         </li>
                       </ul>
                   </div>
 
-                  <div class="row-fluid">
-                       <div d3-linechart data="graphdata"></div>
+                  <div ng-show="proceedsRadio == 'graph'" class="row-fluid">
+                       <div class="security-chart" d3-linechart data="graphdata"></div>
                   </div>
              </div>
 
@@ -195,7 +207,7 @@
                                         </tr>
                                     </table>
                                 </li>
-                                <li><div d3-bars data="issue"></div></li>
+                                <li class="percent-bar"><div d3-bars data="issue"></div></li>
                                 <li>{{formatAmount(issue.percent)}}% Ownership</li>
                             </ul>
                         </li>

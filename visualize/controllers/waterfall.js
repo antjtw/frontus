@@ -8,7 +8,8 @@ viz.controller('waterfallController',['$scope','$location','$route','$rootScope'
     $scope.exitvalue = 50000;
     $scope.priceincrement = 10000;
     $scope.closedate = Date.today();
-    $scope.viewtype = 'Security'
+    $scope.viewtype = 'Security';
+    $scope.proceedsRadio = 'table';
     $scope.acceleratevesting = false;
     $scope.fakedata = [4,5,6,7,4];
 
@@ -34,7 +35,7 @@ viz.controller('waterfallController',['$scope','$location','$route','$rootScope'
 
                 // Set heights for the lists
                 $scope.gridheight = {height: String($scope.waterfall[0].roundliquidation.length*200 + 150) + "px"}
-                $scope.loopheight = {height: String($scope.waterfall[0].roundliquidation.length*200) + "px"}
+                $scope.loopheight = {height: String($scope.waterfall[0].roundliquidation.length*215) + "px"}
                 $scope.proceedheight = {height: String(Object.keys($scope.waterfall[0].securityproceeds).length*50) + "px"}
             });
         });
