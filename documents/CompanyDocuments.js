@@ -339,7 +339,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   };
 
   $scope.rejectSignature = function(cd, msg) {
-    console.log(msg);
     SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
       void(data);
       cd.when_signed = null;
