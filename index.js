@@ -23,6 +23,10 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
     return;
   }
 
+  if ($routeParams.video) {
+    $scope.modalUp();
+  }
+
 /*  if ($rootScope.isLoggedIn) {
     if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
       document.location.href='/home/company';
