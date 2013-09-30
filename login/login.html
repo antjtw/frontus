@@ -1,31 +1,31 @@
 <div class="row-fluid">
-  <div class="span5 offset4 gateway text-center">
-    <div>
-      <a href="/"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></span></a>
-      <p class="tagline">the best way to manage your shareholders<p>
-    </div>
-    <div class="spacer30"></div> 
-    <div>
-    	<div ng-show="showError" class="textalert loginErrorBox text-center">
-  	     Invalid username/password <br> combination.
-      </div>
-    </div>
+    <div class="span5 offset4 gateway text-center">
+        <div>
+            <a href="/"><span class="logo" data-logo="&#xe02e;" aria-hidden="true"></span></a>
+            <p class="tagline">the best way to manage your shareholders<p>
+        </div>
+        <div class="spacer30"></div>
+        <div>
+            <div ng-show="showError" class="textalert loginErrorBox text-center">
+                Invalid username/password <br> combination.
+            </div>
+        </div>
 
-    <form id="login" class="text-center inputs" ng-submit="doLogin()">
-      <fieldset>
-        <label>
-        <input placeholder="USERNAME" class="loginInput" autocomplete="off" tabindex="1" data-autocapitalize="off" name="username"
-               type="text" ng-model="username"/>
-          </label>
-        <label><input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"
-               type="password" ng-model="password" />
-          </label>
-        <div class="spacer30"></div>             
-        <button type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" tabindex="3">Log in</button>  
-  	    <a id="forgotButton" class="button text-center" ng-href="forgot">Forgot Password?</a>
-  	  
-        <br>
-      </fieldset>
-    </form>
-  </div>
+        <form id="login" class="text-center inputs" ng-submit="doLogin()">
+            <fieldset>
+                <label>
+                    <input placeholder="USERNAME" class="loginInput" autocomplete="off" tabindex="1" data-autocapitalize="off" name="username"
+                           type="text" ng-model="username"/>
+                </label>
+                <label>
+                    <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"
+                           type="password" ng-model="password" />
+                </label>
+                <div class="spacer30"></div>
+                <button type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" tabindex="3">Log in</button>
+                <a id="forgotButton" class="button text-center" ng-href="forgot">Forgot Password?</a>
+                <br>
+            </fieldset>
+        </form>
+    </div>
 </div>

@@ -9,16 +9,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     var company = navState.company;
     $scope.currentCompany = company;
 
-    /*    if ($rootScope.selected.isAdmin) {
-     if ($rootScope.path.indexOf('/investor/') > -1) {
-     document.location.href=$rootScope.path.replace("/investor/", "/company/");
-     }
-     } else {
-     if ($rootScope.path.indexOf('/company/') > -1) {
-     document.location.href=$rootScope.path.replace("/company/", "/investor/");
-     }
-     }*/
-
     // Set the view toggles to their defaults
     $scope.radioModel = "View";
     $scope.dilutionSwitch = true;
@@ -92,8 +82,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                     }
                 });
-
-
 
                 // Uses the grants to update the transactions with forfeited values
                 // Eliminates the need for further reference to forfeit grants
@@ -469,6 +457,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
 
+                    // Sorts out updating transactions if changes in issues need to be passed down
                     angular.forEach($scope.trans, function (tran) {
                         if (tran.issue == issue.key) {
                             tran[item] = issue[item];
@@ -499,6 +488,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
 
 
+                    // Recalculate the debt percentages
                     angular.forEach($scope.rows, function (row) {
                         if (row[issue.issue] != undefined) {
                             if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
@@ -938,7 +928,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 return
             }
             else if (transaction.amount < 0) {
-                transaction.amount = transaction.amountkey;
+                transaction.amount = transaction.paidkey;
                 $scope.$emit("notification:fail", "Cannot have a negative amount for options");
                 return
             }
@@ -1184,61 +1174,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggleName = "Show"
             return true
         }
-    };
-
-
-    // Generates the diluted rows
-    $scope.dilution = function () {
-        $scope.dilutedRows = [];
-        angular.forEach($scope.rows, function (row) {
-            if (row.name != undefined) {
-                var something = null;
-                var temprow = {"name": row.name, "email": row.email};
-                angular.forEach($scope.issues, function (issue) {
-                    if (issue.issue) {
-                        temprow[issue.issue] = {};
-                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
-                            temprow[issue.issue] = row[issue.issue];
-                            something = true;
-                        }
-                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row[issue.issue]['exercised'] && !row.vested) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                console.log("working");
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
-                            }
-                            else {
-                                temprow[issue.issue]['u'] = row.vested[issue.issue];
-                            }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
-                            something = true;
-                        }
-                    }
-                });
-                if (something) {
-                    $scope.dilutedRows.push(temprow);
-                }
-            }
-        });
     };
 
 
@@ -1548,6 +1483,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     // Functions derived from services for use in the table
+
+    //switches the sidebar based on the type of the issue
+    $scope.dilution = function () {
+         $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
+    };
 
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
