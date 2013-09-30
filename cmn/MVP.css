@@ -880,6 +880,20 @@ form.inputs {
 	width:620px;
 }
 
+.topSortIcon {
+    position: static;
+    display: block;
+    height: 6px;
+    z-index: 1;
+};
+
+.bottomSortIcon {
+    position: static;
+    display: block;
+    height: 6px;
+    z-index: 2;
+};
+
 /* Table Designs for Doc Library and Captable (This is horrendous naming as docLibrary is not just for docs) */
 
 .docLibrary {
@@ -1624,6 +1638,8 @@ form.inputs {
     text-transform: uppercase;
     font-size: 12px;
     color: rgb(127, 140, 141);
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 .chooseButton {
