@@ -9,17 +9,6 @@ div.maincontent {
     max-width: 1280px;
 }
 
-.back-icon {
-    font-size: 200%;
-    color: #1e2d3d;
-    line-height: 36px;
-    padding-right: 10px;
-}
-
-.back-icon:hover {
-    color: #1ABC96;
-}
-
 .button.subText {
     float: right;
     margin-left: 10px;
@@ -88,8 +77,12 @@ div.maincontent {
 }
 
 .documentStatus {
-  font-size: 50%;
-  padding-left: 4em;
+  font-family: 'FS Elliot Web Regular', sans-serif !important;
+  font-size: 10px;
+  color: #A6A6A6;
+  vertical-align: middle;
+  padding-left: 51px;
+  letter-spacing: 1px;
 }
 
 .activity-feed {
@@ -238,11 +231,7 @@ button.greyButton {
 }
 
 .sign-modal {
-<<<<<<< HEAD
-    width: 360px;
-=======
     width: 380px;
->>>>>>> 2fb262251f93e7390cf8bc192ae77fb12c420903
 }
 
 .sign-modal label {

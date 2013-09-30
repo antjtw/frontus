@@ -183,8 +183,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal','$q', '
             $scope.$apply();
             $route.reload();
         }).except(function(x) {
-              void(x);
-                $scope.fileError = "Oops, something went wrong. Please try again.";
+                if ($scope.tester === true) {
+                    $scope.fileError = x.message;
+                } else {
+                    $scope.fileError = "Oops, something went wrong. Please try again.";
+                }
                 $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress=false;
@@ -336,12 +339,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
     });
   };
 
-  $scope.rejectSignature = function(cd) {
-    SWBrijj.procm("document.reject_signature",cd.doc_id).then(function(data) {
+  $scope.rejectSignature = function(cd, msg) {
+    SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
+      $scope.$emit("notification:success", "Document signature rejected.");
       void(data);
       cd.when_signed = null;
       $route.reload();
-    })
+    }).except(function(x) {
+        void(x);
+        $scope.$emit("notification:fail", "Oops, something went wrong.");
+    });
   };
 
   $scope.confirmModalClose = function() {
@@ -376,9 +383,19 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
         then(function(data) { void(data); $route.reload(); });
   };
 
+  // Rejecting modal functions
+
+  $scope.rejectDocOpen = function () {
+      $scope.rejectDocModal = true;
+  };
+
+  $scope.rejectDocClose = function () {
+      $scope.rejectDocModal = false;
+  };
+
   // Sharing modal functions
 
-  $scope.ShareDocOpen = function () {
+  $scope.shareDocOpen = function () {
         $scope.shareDocModal = true;
   };
 
@@ -669,6 +686,7 @@ docviews.filter('icon', function() {
      if (activity == "received") return "icon-email";
      else if (activity == "viewed") return "icon-view";
      else if (activity == "reminder") return "icon-redo";
+     else if (activity == "edited") return "icon-pencil";
      else if (activity == "signed") return "icon-pen";
      else if (activity == "uploaded") return "icon-star";
      else if (activity == "rejected") return "icon-circle-delete";
@@ -688,6 +706,7 @@ docviews.filter('description', function() {
     if (activity == "sent") return "";
     else if (activity == "viewed") return "Viewed by "+person;
     else if (activity == "reminder") return "Reminded "+person;
+    else if (activity == "edited") return "Edited by "+person;
     else if (activity == "signed") return "Signed by "+person;
     else if (activity == "uploaded") return "Uploaded by "+person;
     else if (activity == "received") return "Sent to "+person;
@@ -722,6 +741,49 @@ docviews.filter('nameoremail', function () {
     };
 });
 
+docviews.directive('restrictContentEditable', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      // view -> model
+      var ff = function() {
+        scope.$apply(function() {
+          ctrl.$setViewValue(elm.html());
+        });
+        scope.$emit('updated:name');
+      };
+
+      elm.on('blur', ff);
+      elm.bind("keydown keypress", function(event) {
+        var allowedKeys = [8,46,37,38,39,40,27];
+        // backspace, delete, up, down, left, right, esc
+        if (event.which === 13) {
+            // key = enter
+            event.preventDefault();
+            event.currentTarget.blur();
+        } else if (elm.html().length >= 58
+                   && allowedKeys.indexOf(event.which) === -1
+                   && !event.ctrlKey
+                   && !event.metaKey) {
+            // reached maxlength AND entered key is not allowed AND not key combination
+            event.preventDefault();
+        } else if (event.which === 86 && (event.ctrlKey || event.metaKey)) {
+            // disallow paste
+            event.preventDefault();
+        }
+      });
+
+      // model -> view
+      ctrl.$render = function() {
+        elm.html(ctrl.$viewValue);
+      };
+
+      // load init value from DOM
+      ctrl.$setViewValue(elm.html());
+    }
+  };
+});
+
 docviews.directive('contenteditable', function() {
   return {
     require: 'ngModel',
@@ -737,9 +799,10 @@ docviews.directive('contenteditable', function() {
       elm.on('blur', ff);
       elm.bind("keydown keypress", function(event) {
         if (event.which === 13) {
+          // key = enter
           event.preventDefault();
           event.currentTarget.blur();
-        }
+        } 
       });
 
       // model -> view
