@@ -131,9 +131,7 @@
                 </ul>
             </li>
         </ul>
-        <div class="messageSection">
-            <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
-        </div>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
     <div class="modalButtons">
         <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
@@ -145,21 +143,19 @@
 </div>
 
 <div modal="rejectDocModal" close="rejectDocClose()" options="opts">
-  <div class="sign-modal">
+  <div class="modalSize">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Reject Document
+        <span data-icon="&#xe01b;" aria-hidden="true"></span>Reject Document
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rejectDocClose()"></span>
     </div>
-    <div class="modalText dshare">
-        <div class="messageSection">
-            <textarea class="email-text" rows="4" cols=50 ng-model="messageText"></textarea>
-        </div>
+    <div class="messageSection">
+        <textarea class="messageText" rows="4" ng-model="messageText"></textarea>
     </div>
-    <div class="modalButtons">
-        <div class="left">
+    <div class="modal-buttons">
+        <div class="leftModalButton">
             <button class="button subText greyButton" ng-click="rejectDocClose()">Cancel</button>
         </div>
-        <div class="right">
+        <div class="rightModalButton">
             <button class="button subText greenButton" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
         </div>
     </div>
