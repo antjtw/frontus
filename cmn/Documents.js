@@ -297,18 +297,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         }
 
         $scope.annotable = function() {
-            // FIXME: annotations disabled
             if ($scope.lib == undefined) {
-                console.log($scope); // FIXME added for now
-                return true;
+                console.log($scope.lib); // TODO added for now, remove before releasing
+                return false; // TODO why was this true?
             } else {
                 return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline)
                     || issuerCanAnnotate($scope.invq, $scope.lib.original, $scope.lib.when_signed, $scope.lib.when_confirmed);
-                    // original id is there when it's not original
-               /* 
-                return ($scope.invq && (!$scope.lib.when_signed && $scope.lib.signature_deadline))
-                    || (!$scope.invq && (!$scope.lib.original || ($scope.lib.when_signed && !$scope.lib.when_confirmed)));
-                */
+                    // original id is there when the document being viewed is not the original
+                    // doc_id will refer to versions viewed at later stages in the workflow
             }
         };
 
@@ -374,9 +370,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                         });
                     }
                 } // json struct
-
-
-
             });
         };
 
@@ -623,15 +616,23 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             });
         };
 
+        // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
+        // TODO: determine precisely where this is necessary...i.e. when are images being stamped vs. notes json modified?
+        refreshDocImage = function() {
+            var docpanel = document.querySelector(".docPanel");
+            if (docpanel) {
+                var imgurl;
+                imgurl = docpanel.style.backgroundImage;
+                docpanel.style.backgroundImage = imgurl;
+            }
+        }
+
         $scope.clearNotes = function(event) {
             void(event);
             SWBrijj.procm($scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
                 $scope.docId, $scope.currentPage).then(function(x) {
                 void(x);
-                var docpanel = document.querySelector(".docPanel");
-                var imgurl;
-                imgurl = docpanel.style.backgroundImage;
-                docpanel.style.backgroundImage = imgurl;
+                refreshDocImage();
             });
         };
 
@@ -646,10 +647,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 SWBrijj.deletePage($scope.docId, i).then(function(x) {
                     void(x);
                     if (z = $scope.currentPage) {
-                        var docpanel = document.querySelector(".docPanel");
-                        var imgurl;
-                        imgurl = docpanel.style.backgroundImage;
-                        docpanel.style.backgroundImage = imgurl;
+                        refreshDocImage();
                     }
                 });
             }
@@ -717,16 +715,10 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
              * @param {boolean}
              * @param {json}
              */
-            // console.log('saving note data (640): '+ nd);
-
+            console.log('saving note data: '+ nd);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
-                var docpanel = document.querySelector(".docPanel");
-                if (docpanel) {
-                    var imgurl;
-                    imgurl = docpanel.style.backgroundImage;
-                    docpanel.style.backgroundImage = imgurl;
-                }
+                refreshDocImage();
             });
         };
     }
