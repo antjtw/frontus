@@ -1,3 +1,8 @@
+function pprint(annotation) {
+    // TODO build a description multidimensional array that shadows the shape of the annotation array, but provides titles
+    console.log("location: " + annotation[0][1]);
+};
+
 function getIntProperty(se, z) {
     var lh = getComputed(se, z);
     lh = parseFloat(lh.replace("px", ""));
@@ -5,9 +10,17 @@ function getIntProperty(se, z) {
 }
 
 function getComputed(se, z) {
-    return se.currentStyle ? se.currentStyle[z] : document.defaultView
-                                                          .getComputedStyle(se, null)
-                                                          .getPropertyValue(z);
+    var test = 1; // TODO: remove all this test code
+    if (test == 0) {
+        return se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+    } else if (test == 1) {
+        originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+        return originalAnswer? originalAnswer : 1337;
+    } else {
+        return se.currentStyle[z] ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+    }
+    /*
+    */
 }
 
 function getOffset(ev) {
@@ -26,6 +39,7 @@ function getOffset(ev) {
     return [offx, offy];
 }
 
+// FIXME this is returning [[null, null, 0, 0], [.., .., .., ..]] sometimes
 function getNoteBounds(nx) {
     var dp = document.querySelector('.docPanel');
     var dpo = [dp.offsetLeft, dp.offsetTop];
@@ -52,7 +66,9 @@ function getNoteBounds(nx) {
     ibds[0] -= dpo[0];
     ibds[1] -= dpo[1];
 
-    return [bds, ibds];
+    console.log(bds);
+    console.log(ibds);
+    return [bds, ibds]; // [coords, size]
 }
 
 function countCRs(str) {
@@ -231,7 +247,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                  * @param {...}
                  */
                 // This is a synchronous save
-                // console.log("saving note data (228): "+ndx);
+                console.log("saving note data (beforeunload): "+ndx);
                 /** @name $scope#lib#original
                  * @type {int} */
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
@@ -244,8 +260,10 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
                 void(oldUrl);
                 // don't save note data if I'm being redirected to log in
+                // TODO why?
                 if (newUrl.match(/login([?]|$)/)) return;
-                // console.log("saving note data (240) due to $locationChangeStart");
+
+                console.log("saving note data ($locationChangeStart)");
                 $scope.saveNoteData();
             });
         }
@@ -349,20 +367,57 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 // if there were notes left over, delete them
                 $scope.removeAllNotes();
 
+                // data structure contents
+                // aa -> [annot0...annotn-1]
+                // [i] annoti -> [position, type, value, style]
+                //
+                // [i][0]    position -> [page, coords, size, 700, 956]
+                //
+                // [i][0][0]        page -> 0...n-1
+                //
+                // [i][0][1]        coords -> [x, y, _, _]
+                // [i][0][1][0] x
+                // [i][0][1][1] y
+                // [i][0][1][2] ?
+                // [i][0][1][3] ?
+                //
+                // [i][0][2]        size -> [_, _, width, height]
+                // [i][0][2][0] ?
+                // [i][0][2][1] ?
+                // [i][0][2][2] width or horizontal offset
+                // [i][0][2][3] height or vertical offset
+                //
+                // [i][0][3] 700 dp.clientWidth
+                //
+                // [i][0][4] 956 dp.clientHeight
+                //
+                // [i][1]    type -> check or text or canvas
+                //
+                // [i][2]    value -> n/a or string or series of points/lines
+                //
+                // [i][3]    style -> font size -- anything else?
+ 
                 var aa = data['annotations'];
                 if (aa) {
                     // restoreNotes
-                    var annots = eval(aa);
+                    var annots = eval(aa); // TODO: is this really the best way to parse the annotations?
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
                         var annot = annots[i];
-                        if (annot[1] == 'check') {
-                            sticky = $scope.newCheckX(annot[0][0]);
-                        } else if (annot[1] == 'text') {
-                            sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
-                        } else if (annot[1] == 'canvas') {
-                            sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                        pprint(annot);
+                        console.log($scope.lib.annotations);
+                        switch (annot[1]) {
+                            case "check":
+                                sticky = $scope.newCheckX(annot[0][0]);
+                                break;
+                            case "text":
+                                sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
+                                break;
+                            case "canvas":
+                                sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                break;
                         }
+
                         // the notes were pushed in the newXXX function
                         sticky.css({
                             top: Math.max(0, annot[0][1][1]),
@@ -656,6 +711,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.getNoteData = function() {
             var noteData = [];
             var dp = document.querySelector(".docPanel");
+            console.log($scope.notes[0][0]);
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
@@ -706,8 +762,12 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.saveNoteData = function() {
             var nd = $scope.getNoteData();
             if ($scope.lib == undefined) return;
-            // This happens when the "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+            // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+
             if (nd == $scope.lib.annotations) return;
+            // When there are no changes
+            // TODO is this a deep comparison?
+
             /** @name SWBrijj#saveNoteData
              * @function
              * @param {int}
@@ -715,7 +775,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
              * @param {boolean}
              * @param {json}
              */
-            console.log('saving note data: '+ nd);
+            console.log('saving note data (func):\n'+ JSON.stringify(nd, undefined, 5));
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 refreshDocImage();
