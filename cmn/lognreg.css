@@ -13,14 +13,18 @@
 
 .lognreg .caption {
     padding-top: 10px;
-    font-size: 8px;
+    font-size: 10px;
     text-transform:uppercase;
 }
 
 .lognreg .caption a{
-    font-size: 8px;
+    font-size: 10px;
     text-transform:uppercase;
     text-decoration: none;
+    color: #3498DB;
+}
+.lognreg .caption a:hover{
+    color: #2980B9;
 }
 
 .lognreg .teaser {

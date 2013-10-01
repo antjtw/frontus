@@ -1277,15 +1277,52 @@ form.inputs {
 
 #copyrightBar {
 	border-top: solid 1px rgb(52, 73, 94);
-	padding-top: 20px;
+	padding-top: 10px;
 
 }
 
 .copyright {
-	color: rgb(141, 141, 141);
-	font-family: 'FS Elliot Web Regular', sans-serif;
-	font-size: 10px;
-	font-weight: normal;
+    color: rgb(141, 141, 141);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 10px;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.copyright.pull-right {
+    margin-right: 8px;
+}
+
+.copyright.pull-left {
+    margin-left: 8px;
+}
+
+.copyrightLinks {
+    display:inline-block;
+
+}
+
+.copyrightLinks ul {
+    list-style-type:none;
+    min-height: 20px;
+    color: rgb(141, 141, 141);
+}
+
+.copyrightLinks li {
+    display: inline;
+    padding: 0 8px;
+}
+
+.copyrightLinks li a {
+    color: rgb(141, 141, 141);
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 10px;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.copyrightLinks li:last-child {
+    border-right: 0;
 }
 
 /* Status */
