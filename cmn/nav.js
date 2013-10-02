@@ -70,7 +70,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         rr.style.display="inline";
       }
     }
-    var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/"];
+    var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms"];
     $scope.navState = navState;
     navState.path = document.location.pathname;
     $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
