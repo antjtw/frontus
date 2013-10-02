@@ -21,7 +21,12 @@
 
   <div class="row-fluid">
     <div class="headsection row-fluid">
-      <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{document.docname  | lengthLimiter}}</h1>
+        <h2>
+            <a href="/documents/">
+                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
+            </a>
+            <span class="doc-title" ng-bind="document.docname | lengthLimiter"></span>
+        </h2>
 
       <div class="row-fluid">
 

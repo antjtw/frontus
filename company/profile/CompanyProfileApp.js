@@ -330,9 +330,11 @@ app.filter('icon', function() {
         else if (activity == "received") return "icon-email";
         else if (activity == "viewed") return "icon-view";
         else if (activity == "reminder") return "icon-redo";
+        else if (activity == "edited") return "icon-pencil";
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
+        else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
     }
 });
@@ -358,6 +360,7 @@ app.filter('description', function() {
             if (activity == "sent") return document + " sent to "+person;
             else if (activity == "viewed") return document + " viewed by "+person;
             else if (activity == "reminder") return "Reminded "+person + " about " +document;
+            else if (activity == "edited") return "Edited by "+person;
             else if (activity == "signed") return document + " signed by "+person;
             else if (activity == "uploaded") return document + " uploaded by "+person;
             else if (activity == "received") return document + " sent to "+person;

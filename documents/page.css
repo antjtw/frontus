@@ -77,8 +77,12 @@ div.maincontent {
 }
 
 .documentStatus {
-  font-size: 50%;
-  padding-left: 4em;
+  font-family: 'FS Elliot Web Regular', sans-serif !important;
+  font-size: 10px;
+  color: #A6A6A6;
+  vertical-align: middle;
+  padding-left: 51px;
+  letter-spacing: 1px;
 }
 
 .activity-feed {
@@ -227,7 +231,7 @@ button.greyButton {
 }
 
 .sign-modal {
-    width: 360px;
+    width: 380px;
 }
 
 .sign-modal label {

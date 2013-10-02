@@ -494,6 +494,14 @@ h2 {
     box-shadow: none;
 }
 
+.bottomnav .nav > li.active > a:hover {
+    background-color: #C7C7C7;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 .bottomnav .nav > li > a:hover {
 	background-color: rgb(241, 241, 241);
     color: rgb(102, 102, 102);
@@ -636,6 +644,14 @@ li.selectedtab {
     color: rgb(166, 166, 166);
 }
 
+.doc-title {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 974px;
+    font-size:20px;
+    float: right;
+}
 
 /* Left Block for split pages */
 
@@ -1105,6 +1121,14 @@ form.inputs {
 	width:120px;
 }
 
+.personName {
+    display: inline-block;
+    vertical-align: top;
+    font-size:20px;
+    height: 21px;
+    margin-left: 9px;
+}
+
 .hltext {
 	color: orange;
 }
@@ -1333,16 +1357,20 @@ form.inputs {
 }
 
 /* Back icon */
-
 .back-icon {
-    font-size: 200%;
-    color: #1e2d3d;
-    line-height: 36px;
-    padding-right: 10px;
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    line-height: 21px;
+    margin-left: 18px;
+    padding-right: 0px;
+    width: 20px;
+    height: 20px;
+    background: #1ABC96;
 }
 
 .back-icon:hover {
-    color: #1ABC96;
+    color: #1e2d3d;
 }
 
 /* Dropdown buttons */
