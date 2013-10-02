@@ -18,8 +18,8 @@
                         <div class="pull-left">
                           <label>
                             <span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
-                            <input type="text" ng-model="query">
-                            </label>
+                            <input type="text" style="width: 140px; box-shadow: none; -webkit-box-shadow: none;" ng-model="query">
+                          </label>
                         </div>
                         <div class="pull-right">
                             <div class="share-button">
@@ -33,11 +33,24 @@
             </div>
             <table class="doclib tableView bodyText">
               <tr class="column-label status-columns">
-                <th class="button" ng-click="setOrder('docname')"><span class="title sortedDown">Name</span></th><th colspan="5" class="button" ng-click="setOrder('last_updated')"><span class="title">Last Updated</span></th>
+                  <th class="button" ng-click="setOrder('docname')">
+                      <span class="title sortedDown">Name</span>
+                      <div style="display: inline-block; vertical-align: middle; position: relative;">
+                          <span data-icon="&#xe034;" class="topSortIcon" ng-style="docOrder=='docname' && {'color': '#1ABC96'}" aria-hidden="true"></span>
+                          <span data-icon="&#xe031;" class="bottomSortIcon" ng-style="docOrder=='-docname' && {'color': '#1ABC96'}" aria-hidden="true"></span>
+                      </div>
+                  </th>
+                  <th colspan="5" class="button" ng-click="setOrder('last_updated')">
+                      <span class="title">Last Updated</span>
+                      <div style="display: inline-block; vertical-align: middle; position: relative;">
+                          <span data-icon="&#xe034;" class="topSortIcon" ng-style="docOrder=='last_updated' && {'color': '#1ABC96'}" aria-hidden="true"></span>
+                          <span data-icon="&#xe031;" class="bottomSortIcon" ng-style="docOrder=='-last_updated' && {'color': '#1ABC96'}" aria-hidden="true"></span>
+                      </div>
+                  </th>
               </tr>
               <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
                 <td>{{doc.docname}}</td>
-                <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
+                <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span></td>
                 <!-- The four buttons for each row -->
                 <td class="button for-r0ml" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share icon-large"></i></span></td>
                 <td class="button for-r0ml" ng-click="delete(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-delete icon-large"></i></span></td>

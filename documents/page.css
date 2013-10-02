@@ -14,6 +14,11 @@ div.maincontent {
     margin-left: 10px;
 }
 
+.buttonAddDoc {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+};
+
 .draggable textarea {
     font-family: Helvetica, sans-serif;
     /* letter-spacing: -0.09em; */
@@ -234,6 +239,11 @@ button.greyButton {
     width: 380px;
 }
 
+.modalSize {
+    width: 380px;
+    height: 229px;
+}
+
 .sign-modal label {
     display: inline;
     font-size: 10px;
@@ -249,6 +259,36 @@ button.greyButton {
     float: none;
     vertical-align: top;
     margin-top: 4px;
+}
+
+.messageSection {
+    margin-top: 20px;
+    height: 80px;
+}
+
+.messageText {
+    display: inline-block;
+    resize: none;
+    width: 326px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.modal-buttons {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.leftModalButton {
+    display: inline-block;
+    margin-left: 10px !important;
+}
+
+.rightModalButton {
+    display: inline-block;
+    margin-right: 20px !important;
+    float:right;
 }
 
 .modalText.uploadModal p {
