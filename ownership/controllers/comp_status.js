@@ -38,28 +38,6 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         })
     });
 
-    // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "event_time"]).then(function(data) {
-        $scope.activity = data;
-        $scope.shared_dates = [];
-        for (var i = 0; i < $scope.activity.length; i++) {
-            $scope.activity[i].timeAgo = moment($scope.activity[i].event_time).fromNow();
-            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2) {
-                $scope.activity[i].name = $scope.activity[i].email;
-            }
-            $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
-            if ($scope.activity[i].activity == "received") {
-                $scope.activity[i].activity = "Shared with ";
-                $scope.activity[i].icon = 'icon-redo';
-                $scope.shared_dates.push(new Date($scope.activity[i].whendone));
-            }
-            else if ($scope.activity[i].activity == "viewed") {
-                $scope.activity[i].activity = "Viewed by ";
-                $scope.activity[i].icon = 'icon-view';
-            }
-        }
-    });
-
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
