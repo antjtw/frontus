@@ -27,7 +27,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         SWBrijj.tblm('ownership.company_issue').then(function (data) {
             if (Object.keys(data).length > 0) {
-                $scope.captablestart = "Edit";
+                $scope.captablestart = "View";
             }
         });
 
