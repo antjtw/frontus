@@ -310,17 +310,24 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         }
 
         // Issuer can only annotate a document after the investor has signed and before the issuer has countersigned.
-        issuerCanAnnotate = function(investorQuery, docIsNotOriginal, signatureDate, countersignDate) {
+        // Issuer can annotate when:
+        //     1) it's not an investorQuery
+        //     2) has not been counter signed
+        //     3) 
+        issuerCanAnnotate = function(investorQuery, signatureDate, countersignDate) {
+            return !investorQuery && !countersignDate && signatureDate;
+            /*
             return !investorQuery && (docIsNotOriginal || (signatureDate && !countersignDate));
+            */
         }
 
         $scope.annotable = function() {
             if ($scope.lib == undefined) {
-                console.log($scope.lib); // TODO added for now, remove before releasing
                 return false; // TODO why was this true?
             } else {
+                console.log($scope.lib); // TODO added for now, remove before releasing
                 return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline)
-                    || issuerCanAnnotate($scope.invq, $scope.lib.original, $scope.lib.when_signed, $scope.lib.when_confirmed);
+                    || issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
                     // original id is there when the document being viewed is not the original
                     // doc_id will refer to versions viewed at later stages in the workflow
             }
