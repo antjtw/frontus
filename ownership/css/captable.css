@@ -11,6 +11,10 @@
     padding: 10px 0 0 20px;
 }
 
+.capGuide > .rightTitle:last-child {
+    margin-bottom: 0;
+}
+
 .capcontainer {
     overflow: auto;
 }
@@ -249,7 +253,7 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 }
 
 .span4.capright.button-offset {
-    margin-top: -28px;
+    margin-top: -19px;
 }
 
 .span4.capright > button {
@@ -277,6 +281,7 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 
 .capright .headsection {
     padding-left: 20px;
+    border-bottom: 1px solid #F1F1F1;
 }
 
 .capright .headsection h2 input {
@@ -295,13 +300,19 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 }
 
 .capright .issue-delete {
-    border: 1px solid #E3E3E3;
+    background-color: #F1F1F1;
     vertical-align: middle;
     display: inline-block;
     margin-left: 20px;
-    font-size: 18px;
-    padding: 2px 2px 0 2px;
-    color: #8D8D8D;
+    width: 24px;
+    font-size: 20px;
+    padding: 4px 0 3px 6px;
+    color: rgb(141, 141, 141);
+    border-radius: 3px;
+}
+
+.capright .issue-delete:hover {
+    background-color: #E3E3E3;
 }
 
 .capright .date-selection input {
@@ -390,6 +401,14 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 div.rightTitle {
     height: 30px;
     margin: 0 0 10px 0;
+}
+
+div.rightTitle.double > span, p.rightTitle.double > span {
+    line-height: 14px;
+}
+
+div.rightTitle.double > ul, p.rightTitle.double > input {
+    vertical-align: top;
 }
 
 .rightTitle > span:first-child {
@@ -624,7 +643,7 @@ a.oldschool-link  {
 /* ios button thingy */
 
 .onoffswitch {
-    margin: 4px 0 0 0;
+    margin: 2px 0 0 0;
     position: relative; width: 50px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
@@ -635,8 +654,7 @@ a.oldschool-link  {
 
 .onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
-    border: 1px solid #999999; border-radius: 20px;
-    box-shadow:         inset 0 0 5px #A6A6A6;
+    border-radius: 20px;
 }
 
 .onoffswitch-inner {
@@ -647,36 +665,37 @@ a.oldschool-link  {
 }
 
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+    float: left; width: 50%; height: 26px; padding: 0; line-height: 26px;
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
 
 .onoffswitch-inner:before {
     content: "ON";
-    font-size: 10px;
+    font-size: 12px;
     padding-left: 8px;
-    color: #1ABC96;
+    color: #FFFFFF;
+    background-color: #1ABC96;
 }
 
 .onoffswitch-inner:after {
     content: "OFF";
-    font-size: 10px;
+    font-size: 12px;
     padding-right: 6px;
-    color: #999999;
+    color: #FFFFFF;
     text-align: right;
+    background-color: #C7C7C7;
 }
 
 .onoffswitch-switch {
-    width: 18px;
-    background: #C7C7C7;
-    box-shadow:         1px 1px 1px 1px #A6A6A6;
+    width: 14px;
+    background: #F1F1F1;
     border-radius: 18px;
     position: absolute;
-    top: 0;
+    top: 4px;
     margin: 2px 0 0 0;
     bottom: 0;
-    height: 18px;
-    right: 30px;
+    height: 14px;
+    right: 32px;
     -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
 }
@@ -686,5 +705,5 @@ a.oldschool-link  {
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0;
+    right: 5px;
 }
