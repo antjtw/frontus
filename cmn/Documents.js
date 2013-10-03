@@ -39,7 +39,6 @@ function getOffset(ev) {
     return [offx, offy];
 }
 
-// FIXME this is returning [[null, null, 0, 0], [.., .., .., ..]] sometimes
 function getNoteBounds(nx) {
     var dp = document.querySelector('.docPanel');
     var dpo = [dp.offsetLeft, dp.offsetTop];
@@ -309,23 +308,18 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             return investorQuery && !signatureDate && signatureDeadline;
         }
 
-        // Issuer can only annotate a document after the investor has signed and before the issuer has countersigned.
         // Issuer can annotate when:
         //     1) it's not an investorQuery
         //     2) has not been counter signed
-        //     3) 
+        //     3) has been signed by the investor
         issuerCanAnnotate = function(investorQuery, signatureDate, countersignDate) {
             return !investorQuery && !countersignDate && signatureDate;
-            /*
-            return !investorQuery && (docIsNotOriginal || (signatureDate && !countersignDate));
-            */
         }
 
         $scope.annotable = function() {
             if ($scope.lib == undefined) {
                 return false; // TODO why was this true?
             } else {
-                console.log($scope.lib); // TODO added for now, remove before releasing
                 return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline)
                     || issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
                     // original id is there when the document being viewed is not the original
@@ -378,17 +372,17 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 // aa -> [annot0...annotn-1]
                 // [i] annoti -> [position, type, value, style]
                 //
-                // [i][0]    position -> [page, coords, size, 700, 956]
+                // [i][0] position -> [page, coords, size, 700, 956]
                 //
-                // [i][0][0]        page -> 0...n-1
+                // [i][0][0] page -> 0...n-1
                 //
-                // [i][0][1]        coords -> [x, y, _, _]
+                // [i][0][1] coords -> [x, y, _, _]
                 // [i][0][1][0] x
                 // [i][0][1][1] y
                 // [i][0][1][2] ?
                 // [i][0][1][3] ?
                 //
-                // [i][0][2]        size -> [_, _, width, height]
+                // [i][0][2] size -> [_, _, width, height]
                 // [i][0][2][0] ?
                 // [i][0][2][1] ?
                 // [i][0][2][2] width or horizontal offset
@@ -398,11 +392,11 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 //
                 // [i][0][4] 956 dp.clientHeight
                 //
-                // [i][1]    type -> check or text or canvas
+                // [i][1] type -> check or text or canvas
                 //
-                // [i][2]    value -> n/a or string or series of points/lines
+                // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
                 //
-                // [i][3]    style -> font size -- anything else?
+                // [i][3] style -> font size -- anything else?
  
                 var aa = data['annotations'];
                 if (aa) {
@@ -718,7 +712,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.getNoteData = function() {
             var noteData = [];
             var dp = document.querySelector(".docPanel");
-            console.log($scope.notes[0][0]);
+            // console.log($scope.notes[0][0]);
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
