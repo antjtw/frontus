@@ -119,12 +119,52 @@ directive('draggable', ['$document',
 
                     dragicon.bind('mousedown', $scope.mousedown);
 
+                    topLocation = function(elementHeight, mouseY) {
+                        if (mouseY < 20) {
+                            return 20;
+                        } else if (mouseY > 976 - elementHeight) {
+                            return (976 - elementHeight);
+                        } else {
+                            return mouseY;
+                        };
+                    };
+
+                    leftLocation = function(elementWidth, mouseX) {
+                        if (mouseX < 31) {
+                            return 31;
+                        } else if (mouseX > 731 - elementWidth) {
+                            return (731 - elementWidth);
+                        } else {
+                            return mouseX;
+                        };
+                    };
+
+                    topFromBottomLocation = function(elementHeight, currBottom) {
+                        if (currBottom > 976) {
+                            return 976 - elementHeight;
+                        } else {
+                            return currBottom - elementHeight;
+                        };
+                    };
+
+                    leftFromRightLocation = function(elementWidth, currRight) {
+                        if (currRight > 731) {
+                            return 731 - elementWidth;
+                        } else {
+                            return currRight - elementWidth;
+                        };
+                    };
+                    
+
+
                     $scope.mousemove = function($event) {
                         var dx = $event.clientX - $scope.initialMouseX;
                         var dy = $event.clientY - $scope.initialMouseY;
+                        var mousex = $scope.startX + dx;
+                        var mousey = $scope.startY + dy;
                         $element.css({
-                            top: (Math.max(0, $scope.startY + dy)) + 'px',
-                            left: (Math.max(0, $scope.startX + dx)) + 'px'
+                            top: (topLocation($element.height(), mousey)) + 'px',
+                            left: (leftLocation($element.width(), mousex)) + 'px'
                         });
                         return false;
                     };
@@ -504,6 +544,12 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             bb.rows = crs + 2;
             bb.style.height = "auto";
             bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
+            // TODO can this be any prettier?
+            enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
+            currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
+            currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
+            enclosingElement.style['top'] = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
+            enclosingElement.style['left'] = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
         };
 
         $scope.newBoxX = function(page, val, style) {
