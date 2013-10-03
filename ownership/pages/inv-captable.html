@@ -3,17 +3,13 @@
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
 
-    <div class="headsection row-fluid">
-        <h1>Ownership</h1>
 
-        <div class="row-fluid">
-            <ul class="bodyText maintabs">
-                <li class="selectedtab">Ownership</li>
-                <a ng-show="grantsview" href="/ownership/investor-grants">
-                    <li class="button">Grants</li>
-                </a>
-            </ul>
-        </div>
+    <div class="headsection row-fluid">
+
+        <ul class="maintabs head-text">
+            <li class="selectedtab">Ownership</li>
+            <li ng-show="grantsview"><a href="/ownership/investor-grants">Grants</a></li>
+        </ul>
     </div>
 
     <div class="row-fluid">

@@ -8,7 +8,7 @@
 
 .capGuide {
     display: block;
-    padding: 10px 0 20px 20px;
+    padding: 10px 0 0 20px;
 }
 
 .capcontainer {
@@ -89,6 +89,19 @@
     -webkit-text-fill-color: #8D8D8D;
 }
 
+.tableView.captable .total-row {
+    border-bottom: none;
+    vertical-align: bottom;
+}
+
+.tableView.captable .total-row > td {
+    text-align: right;
+    padding-right: 5px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
 .tableView.captable th > input {
     background-color: #FFFFFF;
     padding: 0 0 0 6px;
@@ -110,6 +123,24 @@
 .captablepair-box {
     position: relative;
     display: block;
+}
+
+.tableView.captable .total-row {
+    height: 65px;
+    background-color: #FFFFFF;
+}
+
+.tableView.captable .tablefooter {
+    height: 40px;
+    border-top: 1px solid rgb(227, 227, 227);
+    border-bottom: 1px solid rgb(227, 227, 227);
+    background-color: #FFFFFF;
+}
+
+.tableView.captable .tablefooter input:disabled {
+}
+
+.tableView.captable .tablefooter td {
 }
 
 .tableView.captable .output {
@@ -210,7 +241,7 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
     margin-left: 0;
     width: 350px;
     min-height: 700px;
-    border-left: 1px solid #E3E3E3;
+    border-left: 6px solid #E3E3E3;
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
     -webkit-transition: all 0.25s; /* Safari and Chrome */
@@ -235,6 +266,7 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
     background-color: #E3E3E3;
     box-shadow: none;
     width: 108px;
+    line-height: 10px;
     text-transform: uppercase;
     font-size: 12px;
 }
@@ -356,24 +388,45 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 }
 
 div.rightTitle {
-    height: 22px;
+    height: 30px;
     margin: 0 0 10px 0;
 }
 
 .rightTitle > span:first-child {
     display: inline-block;
-    width: 160px;
-    margin-right: 40px;
+    width: 100px;
+    margin-right: 10px;
+    text-align: right;
     text-transform: uppercase;
 }
 
 .rightTitle > input, .rightTitle > span:last-child {
-    width:92px;
-    height: 22px;
+    width:140px;
+    height: 30px;
     border: 0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
     padding: 0 0 0 10px;
     margin: 0 0 0 2px;
     box-shadow: none;
+}
+
+.rightTitle > span:last-child.delete-icon {
+    display: inline-block;
+    width: 24px;
+    height: 26px;
+    vertical-align: middle;
+    font-size: 20px;
+    padding-left: 6px;
+    padding-top: 4px;
+    margin-left: 10px;
+    background-color: #F1F1F1;
+    cursor: pointer;
+}
+
+.rightTitle > span:last-child.delete-icon:hover {
+    background-color: #E3E3E3;
 }
 
 .rightTitle > select {

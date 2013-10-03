@@ -90,7 +90,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 }
 
 textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    background-color: rgb(241, 241, 241);
+    background-color: #F1F1F1;
     border-radius: 0;
 }
 
@@ -164,17 +164,17 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 
 h1 {
-	font-family: 'FS Elliot Web Thin', sans-serif !important;
-	font-size: 36px;
-    line-height: 36px;
+	font-family: 'FS Elliot Web Light', sans-serif !important;
+	font-size: 20px;
+    line-height: 24px;
 	font-weight: normal;	
 	color: rgb(30, 45, 61);
 }
 
 h2 {
 	font-family: 'FS Elliot Web Light', sans-serif !important;
-	font-size: 24px;
-	line-height:21px;
+	font-size: 14px;
+	line-height:20px;
 	font-weight: normal;
 	color: rgb(30, 45, 61);
 }
@@ -573,9 +573,8 @@ h2 {
 /* Head Section */
 
 .headsection {
-	height: 122px;
+	height: 100px;
 	position: relative;
-	border-bottom: 1px solid rgb(227, 227, 227);
 }
 
 .headsection > h1 {
@@ -589,34 +588,46 @@ h2 {
 }
 
 .maintabs {
-	height: 24px;
-	vertical-align: bottom;
-	position: absolute;
-	bottom: 0;
-	margin: 0 0 3px 0;
+	height: 100px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.maintabs li, .maintabs li > a {
+    font-size: 20px;
+    color: #A6A6A6;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 .maintabs li {
 	float: left;
 	display: inline;
-	margin: 0 20px -20px 0;
-	padding: 3px 5px 3px 5px;
-	width: 85px;
+	padding: 3px 15px 3px 15px;
 	text-align: center;
+    border-right: 1px solid #A6A6A6;
+}
+
+.maintabs li:last-of-type {
+    border-right: none;
+}
+
+.maintabs li > a:hover {
+    color: #8D8D8D;
 }
 
 li.selectedtab {
-	color: rgb(26, 188, 150);
-	border-bottom: 2px solid rgb(26, 188, 150);
-    padding: 3px 0 3px 0;
+	color: #1E2D3D;
 }
 
 .subnav-controls {
-	height: 82px;
+	height: 60px;
 	white-space: nowrap;
+    margin-bottom: 20px;
+    background-color: #F1F1F1;
 }
 
 .subnav-controls > div:first-child {
+    margin-left: 15px;
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;
@@ -899,20 +910,6 @@ form.inputs {
 
 .docLibrary .capsums-col {
 	background: none;
-}
-
-.docLibrary .tablefooter {
-	height: 70px;
-	background-color: rgb(241, 241, 241);
-	border-bottom: 1px solid rgb(227, 227, 227);
-}
-
-.docLibrary .tablefooter input:disabled {
-	background-color: rgb(241, 241, 241);
-}
-
-.docLibrary .tablefooter td {
-	background-color: rgb(241, 241, 241);
 }
 
 .docLibrary input {
@@ -1312,11 +1309,11 @@ form.inputs {
 }
 
 .leftFullTableBlock {
-	width: 1023px !important;
+	width: 1017px !important;
 }
 
 .rightNoTableBlock {
-    margin-right:-349px;
+    margin-right:-343px;
 }
 
 /* Company People */
@@ -1337,7 +1334,28 @@ form.inputs {
 
 .btn {
     background: rgb(255, 255, 255) none;
-    border: 1px solid rgb(227, 227, 227);
+    border: none;
+    text-shadow: none;
+}
+
+/* New Standard Button as of 10/03/13 */
+
+.standard-button > button {
+    border-radius: 3px;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #1ABC96;
+    width: 130px;
+}
+
+.standard-button > button:hover {
+    background-color: #15A085;
+    color: #FFFFFF;
+}
+
+.standard-button > button:disabled {
+    background-color: #8CDDCA;
+    color: #FFFFFF;
 }
 
 /* Back icon */
@@ -1372,15 +1390,15 @@ form.inputs {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    height: 30px;
-    width: 140px;
+    width: 150px;
     cursor: pointer;
-    outline: 1px solid rgb(227, 227, 227);
     position: relative;
     text-align: left;
-    padding-left: 20px;
+    padding-left: 10px;
     line-height: 30px;
     height: 30px;
+    background-color: #F1F1F1;
+    border-radius: 3px;
     margin: 0;
 }
 
@@ -1389,12 +1407,11 @@ form.inputs {
     position: absolute;
     padding: 0;
     margin: 0;
-    right:-21px;
+    right: 3px;
     content: " ";
     background: url('/img/down-arrow-20x30.png');
     width:20px;
     height:30px;
-    outline: 1px solid rgb(227, 227, 227);
 
 }
 
@@ -1408,14 +1425,20 @@ form.inputs {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 0;
-    margin: 0;
-    border-radius: 0;
+    margin: 10px 0 0 0;
+    border-radius: 3px;
     box-shadow: none;
     border: 0;
-    outline: 1px solid rgb(227, 227, 227);
-    width: 161px;
+    width: 150px;
+    background-color: #F1F1F1;
+    min-width: 150px;
     cursor: pointer;
     z-index: 1000;
+}
+
+.standard .dropdown-menu > li > a {
+    padding-left: 10px;
+    line-height: 24px;
 }
 
 .standard.small .dropdown-toggle {
@@ -1454,16 +1477,30 @@ form.inputs {
     color: rgb(141, 141, 141);
 }
 
-.dropdown-toggle .invisible-drop {
-    visibility: hidden;
+.standard .dropdown-menu > li:first-of-type > a:hover {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
 }
 
-.edittoggle > .btn {
-	border-radius: 0 !important;
-	color: rgb(166, 166, 166);
-	height: 30px;
-	width: 30px;
-	padding: 0 0 0 0;
+.standard .dropdown-menu > li:last-of-type > a:hover {
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.dropdown-toggle .invisible-drop {
+    visibility: hidden;
 }
 
 .minidrop > .btn {
@@ -1481,8 +1518,59 @@ form.inputs {
 	width: 30px;
 }
 
+.edittoggle > .btn {
+    height: 30px;
+    width: 30px;
+    padding: 0 0 0 0;
+}
+
+.edittoggle > button {
+    box-shadow: none;
+}
+
+.edittoggle > button {
+    background-color: #E3E3E3;
+    color: #666666;
+}
+
+.edittoggle > button:hover {
+    background-color: #C7C7C7;
+    color: #666666;
+}
+
+.edittoggle > button:first-child {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.edittoggle > button:last-child {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.btn-group > .btn + .btn {
+    margin-left: 0px;
+}
+
 .edittoggle > .btn.active {
-	color: rgb(21, 160, 133);
+	color: #FFFFFF;
+    background-color: #1ABC96;
+    box-shadow: none;
+}
+
+.edittoggle > .btn:active {
     box-shadow: none;
 }
 
@@ -1597,13 +1685,6 @@ form.inputs {
 .button.saveButton:hover {
 	background-color: rgb(41, 128, 185);
 	color: rgb(255, 255, 255);
-}
-
-.share-button > button {
-    border-radius: 0;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: rgb(127, 140, 141);
 }
 
 .chooseButton {
