@@ -48,25 +48,21 @@ function getNoteBounds(nx) {
     if (ntyp == 'text') {
         var t = nx.querySelector('textarea');
         z = t.offset;
-        ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] += t.offsetLeft; // + getIntProperty(t,'padding-left');
-        ibds[1] += t.offsetTop; // + getIntProperty(t,'padding-top');
+        ibds = [2*z[0], 2*z[1], z[2], z[3]];
+        ibds[0] -= dpo[0];
+        ibds[1] -= dpo[1];
     } else if (ntyp == 'canvas') {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] += c.offsetLeft; // + getIntProperty(t,'padding-left');
-        ibds[1] += c.offsetTop; // + getIntProperty(t,'padding-top');
+        ibds[0] -= dpo[0];
+        ibds[1] -= dpo[1];
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
-        //    ibds[0]+= t.offsetLeft + getIntProperty(t,'padding-left');
-        //    ibds[1]+= t.offsetTop + getIntProperty(t,'padding-top');
+        ibds[0] -= dpo[0];
+        ibds[1] -= dpo[1];
     }
-    ibds[0] -= dpo[0];
-    ibds[1] -= dpo[1];
 
-    console.log(bds);
-    console.log(ibds);
     return [bds, ibds]; // [coords, size]
 }
 
@@ -416,13 +412,13 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 //
                 // [i][0][0] page -> 0...n-1
                 //
-                // [i][0][1] coords -> [x, y, _, _]
+                // [i][0][1] coords (bds) -> [x, y, _, _]
                 // [i][0][1][0] x
                 // [i][0][1][1] y
                 // [i][0][1][2] ?
                 // [i][0][1][3] ?
                 //
-                // [i][0][2] size -> [_, _, width, height]
+                // [i][0][2] size (ibds) -> [_, _, width, height]
                 // [i][0][2][0] ?
                 // [i][0][2][1] ?
                 // [i][0][2][2] width or horizontal offset
@@ -544,10 +540,12 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             bb.rows = crs + 2;
             bb.style.height = "auto";
             bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
+
             // TODO can this be any prettier?
             enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
             currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
             currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
+
             enclosingElement.style['top'] = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
             enclosingElement.style['left'] = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
         };
@@ -611,7 +609,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             var z = aa.find('canvas')[0];
             z.width = (aa.width() - 8);
             z.height = (aa.height() - 27);
-            z.offset = [getComputed(z, 'offsetTop'), getComputed(z, 'offsetLeft'), z.offsetWidth, z.offsetHeight];
+            z.offset = [z.offsetLeft, z.offsetTop, z.offsetWidth, z.offsetHeight];
             var strokes = z.strokes;
             var ctx = z.getContext('2d');
             ctx.lineCap = 'round';
@@ -758,7 +756,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.getNoteData = function() {
             var noteData = [];
             var dp = document.querySelector(".docPanel");
-            // console.log($scope.notes[0][0]);
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
@@ -813,7 +810,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             if (nd == $scope.lib.annotations) return;
             // When there are no changes
-            // TODO is this a deep comparison?
 
             /** @name SWBrijj#saveNoteData
              * @function
