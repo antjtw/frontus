@@ -5,28 +5,19 @@ function getIntProperty(se, z) {
 }
 
 function getComputed(se, z) {
-    var test = 1; // TODO: remove all this test code
-    if (test == 0) {
-        return se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-    } else if (test == 1) {
-        originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-        return originalAnswer? originalAnswer : 1337;
-    } else {
-        return se.currentStyle[z] ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-    }
-    /*
-    */
+    originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+    return originalAnswer? originalAnswer : 1337;
 }
 
 function getOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
-        // offx = ev.pageX - ev.target.offsetLeft;
-        // offy = ev.pageY - ev.target.offsetTop;
-
+        offx = ev.pageX-$('canvas').offset().left;
+        offy = ev.pageY-$('canvas').offset().top;
+        /*
         offx = ev.originalEvent.layerX;
         offy = ev.originalEvent.layerY;
-
+        */
     } else {
         offx = ev.offsetX;
         offy = ev.offsetY;
@@ -156,6 +147,13 @@ directive('draggable', ['$document',
                         } else {
                             return currRight - elementWidth;
                         }
+                    };
+
+                    boundBoxByPage = function(element) {
+                        var docPanel = document.querySelector('.docPanel');
+                        element.style["max-width"] = (docPanel.offsetWidth - 22) + 'px';
+                        element.style["max-height"] = (docPanel.offsetHeight - 35) + 'px';
+                        console.log(element.style);
                     };
 
                     $scope.mousemove = function($event) {
@@ -439,7 +437,9 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 var aa = data.annotations;
                 if (aa) {
                     // restoreNotes
-                    var annots = eval(aa); // TODO: is this really the best way to parse the annotations?
+                    // var annots = eval(aa);
+                    // TODO does this work instead of eval?
+                    var annots = JSON.parse(aa);
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
                         var annot = annots[i];
@@ -541,13 +541,15 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             bb.style.height = "auto";
             bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
 
-            // TODO can this be any prettier?
+            // if the box is now off the page, move it over
             enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
             currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
             currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
 
             enclosingElement.style.top = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
             enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
+
+            // TODO: if the box reached max width, hard wrap?
         };
 
         $scope.newBoxX = function(page, val, style) {
@@ -557,11 +559,22 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
+
             var bb = aa[0].querySelector("textarea");
+
+            boundBoxByPage(bb);
+
             bb.addEventListener('input', function(e) {
                 void(e);
                 $scope.fixBox(bb);
             });
+
+            /*
+            bb.addEventListener('mousemove', function(e) {
+                if (e.which !== 0) $scope.fixBox(bb);
+            });
+            */
+
             var ta = aa.find('textarea');
             ta.scope().annotext = val;
             ta.width(ta.width());
@@ -605,11 +618,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             aa.scope().initdrag(event);
         };
 
+        // TODO is this really slow? it looks really slow.
         $scope.fixPad = function(aa) {
             var z = aa.find('canvas')[0];
             z.width = (aa.width() - 8);
             z.height = (aa.height() - 27);
             z.offset = [z.offsetLeft, z.offsetTop, z.offsetWidth, z.offsetHeight];
+            aa.css('max-width', ($scope.maxPadWidth(aa[0].offsetLeft)) + 'px');
+            aa.css('max-height', ($scope.maxPadHeight(aa[0].offsetTop)) + 'px');
             var strokes = z.strokes;
             var ctx = z.getContext('2d');
             ctx.lineCap = 'round';
@@ -753,6 +769,16 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             }
         };
 
+        $scope.maxPadWidth = function(currLeft) {
+            var docPanel = document.querySelector('.docPanel');
+            return docPanel.offsetLeft + docPanel.offsetWidth - currLeft;
+        };
+
+        $scope.maxPadHeight = function(currTop, bottomEdge) {
+            var docPanel = document.querySelector('.docPanel');
+            return docPanel.offsetTop + docPanel.offsetHeight - currTop;
+        };
+
         $scope.getNoteData = function() {
             var noteData = [];
             var dp = document.querySelector(".docPanel");
@@ -792,6 +818,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
                 }
+
                 noteData.push(ndx);
             }
 
