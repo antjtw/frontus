@@ -1,8 +1,3 @@
-function pprint(annotation) {
-    // TODO build a description multidimensional array that shadows the shape of the annotation array, but provides titles
-    console.log("location: " + annotation[0][1]);
-};
-
 function getIntProperty(se, z) {
     var lh = getComputed(se, z);
     lh = parseFloat(lh.replace("px", ""));
@@ -116,42 +111,52 @@ directive('draggable', ['$document',
                     dragicon.bind('mousedown', $scope.mousedown);
 
                     topLocation = function(elementHeight, mouseY) {
-                        if (mouseY < 20) {
-                            return 20;
-                        } else if (mouseY > 976 - elementHeight) {
-                            return (976 - elementHeight);
+                        var docPanel = document.querySelector('.docPanel');
+                        var topEdge = docPanel.offsetTop;
+                        var panelHeight = docPanel.offsetHeight;
+                        var bottomEdge = topEdge + panelHeight;
+                        if (mouseY < topEdge) {
+                            return topEdge;
+                        } else if (mouseY > bottomEdge - elementHeight) {
+                            return (bottomEdge - elementHeight);
                         } else {
                             return mouseY;
-                        };
+                        }
                     };
 
                     leftLocation = function(elementWidth, mouseX) {
-                        if (mouseX < 31) {
-                            return 31;
-                        } else if (mouseX > 731 - elementWidth) {
-                            return (731 - elementWidth);
+                        var docPanel = document.querySelector('.docPanel');
+                        var leftEdge = docPanel.offsetLeft;
+                        var panelWidth = docPanel.offsetWidth;
+                        var rightEdge = leftEdge + panelWidth;
+                        if (mouseX < leftEdge) {
+                            return leftEdge;
+                        } else if (mouseX > rightEdge - elementWidth) {
+                            return (rightEdge - elementWidth);
                         } else {
                             return mouseX;
-                        };
+                        }
                     };
 
                     topFromBottomLocation = function(elementHeight, currBottom) {
-                        if (currBottom > 976) {
-                            return 976 - elementHeight;
+                        var docPanel = document.querySelector('.docPanel');
+                        var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;
+                        if (currBottom > bottomEdge) {
+                            return bottomEdge - elementHeight;
                         } else {
                             return currBottom - elementHeight;
-                        };
+                        }
                     };
 
                     leftFromRightLocation = function(elementWidth, currRight) {
-                        if (currRight > 731) {
-                            return 731 - elementWidth;
+                        var docPanel = document.querySelector('.docPanel');
+                        var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
+                        if (currRight > rightEdge) {
+                            return rightEdge - elementWidth;
                         } else {
                             return currRight - elementWidth;
-                        };
+                        }
                     };
-                    
-
 
                     $scope.mousemove = function($event) {
                         var dx = $event.clientX - $scope.initialMouseX;
@@ -192,7 +197,7 @@ directive('draggable', ['$document',
                         void(ev);
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
-                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2)) + 2);
+                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2), 10) + 2);
                         $scope.fixBox(elem[0]);
                     };
 
@@ -200,7 +205,7 @@ directive('draggable', ['$document',
                         void(ev);
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
-                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2)) - 2);
+                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2), 10) - 2);
                         $scope.fixBox(elem[0]);
                     };
                 }
@@ -230,7 +235,7 @@ docs.directive('backImg', function() {
                 });
             });
         }
-    }
+    };
 });
 
 docs.directive('docViewer', function() {
@@ -243,20 +248,20 @@ docs.directive('docViewer', function() {
         },
         templateUrl: '/cmn/docViewer.html',
         controller: 'DocumentViewController'
-    }
+    };
 });
 
 docs.filter('fromNow', function() {
     return function(date) {
         return moment(date).fromNow();
-    }
+    };
 });
 
 docs.directive('icon', function() {
     return {
         restrict: 'E',
         template: '<button><span data-icon="&#xe00d;" aria-hidden="true"></span></button>'
-    }
+    };
 });
 
 docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
@@ -282,7 +287,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                  * @param {...}
                  */
                 // This is a synchronous save
-                console.log("saving note data (beforeunload): "+ndx);
                 /** @name $scope#lib#original
                  * @type {int} */
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
@@ -297,8 +301,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 // don't save note data if I'm being redirected to log in
                 // TODO why?
                 if (newUrl.match(/login([?]|$)/)) return;
-
-                console.log("saving note data ($locationChangeStart)");
                 $scope.saveNoteData();
             });
         }
@@ -342,7 +344,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         // Investor can annotate after a document has been shared with the investor and before the investor has signed.
         investorCanAnnotate = function(investorQuery, signatureDate, signatureDeadline) {
             return investorQuery && !signatureDate && signatureDeadline;
-        }
+        };
 
         // Issuer can annotate when:
         //     1) it's not an investorQuery
@@ -350,14 +352,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         //     3) has been signed by the investor
         issuerCanAnnotate = function(investorQuery, signatureDate, countersignDate) {
             return !investorQuery && !countersignDate && signatureDate;
-        }
+        };
 
         $scope.annotable = function() {
-            if ($scope.lib == undefined) {
+            if ($scope.lib === undefined) {
                 return false; // TODO why was this true?
             } else {
-                return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline)
-                    || issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
+                return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline) ||
+                       issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
                     // original id is there when the document being viewed is not the original
                     // doc_id will refer to versions viewed at later stages in the workflow
             }
@@ -370,7 +372,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             $scope.showPageBar = true;
 
             if ($routeParams.page) {
-                $scope.currentPage = parseInt($routeParams.page);
+                $scope.currentPage = parseInt($routeParams.page, 10);
             } else if (!$scope.currentPage) {
                 $scope.currentPage = 1;
             }
@@ -433,16 +435,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
                 //
                 // [i][3] style -> font size -- anything else?
- 
-                var aa = data['annotations'];
+
+                var aa = data.annotations;
                 if (aa) {
                     // restoreNotes
                     var annots = eval(aa); // TODO: is this really the best way to parse the annotations?
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
                         var annot = annots[i];
-                        pprint(annot);
-                        console.log($scope.lib.annotations);
                         switch (annot[1]) {
                             case "check":
                                 sticky = $scope.newCheckX(annot[0][0]);
@@ -546,14 +546,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
             currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
 
-            enclosingElement.style['top'] = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
-            enclosingElement.style['left'] = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
+            enclosingElement.style.top = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
+            enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
         };
 
         $scope.newBoxX = function(page, val, style) {
             $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"	 class="row-fluid draggable" >' +
-                '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable" >' +
+                              '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
@@ -584,7 +584,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
         $scope.newCheckX = function(page) {
             $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"	 class="row-fluid draggable">' +
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
                 '<span class="check-annotation" data-icon="&#xe023;"></i>' +
                 '</div>')($scope);
             aa.scope().ntype = 'check';
@@ -622,14 +622,14 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 ctx.beginPath();
                 ctx.moveTo(line[1], line[2]);
                 ctx.lineTo(line[3], line[4]);
-                ctx.strokeStyle = line[0];
+                //ctx.strokeStyle = line[0];
                 ctx.stroke();
             }
         };
 
         $scope.newPadX = function(page, lines) {
             $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"	 class="row-fluid draggable">' +
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
                 '<canvas style="background-color:white"></canvas></div>')($scope);
             aa.scope().ntype = 'canvas';
             aa[0].notetype = 'canvas';
@@ -645,7 +645,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 $scope.resizeDown = false;
             });
             aa[0].addEventListener('mousemove', function(e) {
-                if (e.which != 0)
+                if (e.which !== 0)
                     $scope.fixPad(aa);
             });
             // I don't, in fact, get the mousedown event
@@ -653,9 +653,9 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             var canvas = aa[0].querySelector('canvas');
             var ctx = canvas.getContext('2d');
             ctx.lineCap = 'round';
-            ctx.color = 'blue';
+            ctx.color = "blue";
             ctx.lineWidth = 2;
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = "white";
             // ctx.setAlpha(0);
             ctx.fillRect(0, 0, 200, 200);
             // ctx.setAlpha(0.5);
@@ -690,7 +690,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                     ctx.moveTo(canvas.X, canvas.Y);
                     var offs = getOffset(e);
                     ctx.lineTo(offs[0], offs[1]);
-                    ctx.strokeStyle = this.color;
+                    // ctx.strokeStyle = this.color;
                     canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
                     ctx.stroke();
                     canvas.X = offs[0];
@@ -725,7 +725,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 imgurl = docpanel.style.backgroundImage;
                 docpanel.style.backgroundImage = imgurl;
             }
-        }
+        };
 
         $scope.clearNotes = function(event) {
             void(event);
@@ -746,7 +746,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                  */
                 SWBrijj.deletePage($scope.docId, i).then(function(x) {
                     void(x);
-                    if (z = $scope.currentPage) {
+                    if (z === $scope.currentPage) {
                         refreshDocImage();
                     }
                 });
@@ -805,7 +805,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
         $scope.saveNoteData = function() {
             var nd = $scope.getNoteData();
-            if ($scope.lib == undefined) return;
+            if ($scope.lib === undefined) return;
             // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
 
             if (nd == $scope.lib.annotations) return;
@@ -818,7 +818,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
              * @param {boolean}
              * @param {json}
              */
-            console.log('saving note data (func):\n'+ JSON.stringify(nd, undefined, 5));
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 refreshDocImage();
