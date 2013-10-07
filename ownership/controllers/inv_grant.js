@@ -85,7 +85,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         $scope.sideBar = 1;
         $scope.activeTran = [];
         $scope.activeInvestor = currenttran;
-        var first = 0
+        var first = 0;
         for (var i = 0, l = $scope.trans.length; i < l; i++) {
             if ($scope.trans[i].investor == currenttran) {
                 if (first == 0) {
@@ -95,7 +95,6 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                 $scope.activeTran.push($scope.trans[i]);
             }
         }
-        ;
 
         angular.forEach($scope.rows, function (row) {
             if (row.name == currenttran) {
@@ -113,11 +112,21 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                 if ($scope.activeTran[i].tran_id == $scope.grants[j].tran_id) {
                     activeAct.push($scope.grants[j]);
                 }
-                ;
             }
-            ;
             $scope.activeTran[i].activeAct = activeAct;
         }
-        ;
+    };
+
+    //switches the sidebar based on the type of the issue
+    $scope.formatAmount = function (amount) {
+        return calculate.funcformatAmount(amount);
+    };
+
+    $scope.formatDollarAmount = function(amount) {
+        var output = $scope.formatAmount(amount);
+        if (output) {
+            output = "$" + output
+        }
+        return (output);
     };
 };

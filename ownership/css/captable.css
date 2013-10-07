@@ -8,7 +8,22 @@
 
 .capGuide {
     display: block;
-    padding: 10px 0 0 20px;
+    padding: 0 0 0 20px;
+}
+
+.capGuide.top10 {
+   margin-top: 10px;
+}
+
+.capGuide.global {
+    margin-top: 20px;
+}
+
+.capGuide.grants {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #E3E3E3;
+
 }
 
 .capGuide > .rightTitle:last-child {
@@ -39,6 +54,7 @@
 .tableView.captable  {
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
+    margin-bottom: 20px;
 }
 
 .tableView.captable td {
@@ -59,8 +75,8 @@
 }
 
 .tableView th:first-of-type {
-    padding-left: 5px;
-    width: 180px;
+    padding-left: 20px;
+    width: 165px;
 }
 
 .tableView th.staticHeaders {
@@ -93,15 +109,14 @@
     -webkit-text-fill-color: #8D8D8D;
 }
 
-.tableView.captable .total-row {
+.tableView .total-row {
     border-bottom: none;
     vertical-align: bottom;
 }
 
-.tableView.captable .total-row > td {
-    text-align: right;
-    padding-right: 5px;
-    padding-bottom: 10px;
+.tableView .total-row > td {
+    text-align: left;
+    padding: 0 5px 10px 20px;
     font-size: 14px;
     color: #1E2D3D;
 }
@@ -129,12 +144,12 @@
     display: block;
 }
 
-.tableView.captable .total-row {
-    height: 65px;
+.tableView .total-row {
+    height: 55px;
     background-color: #FFFFFF;
 }
 
-.tableView.captable .tablefooter {
+.tableView .tablefooter {
     height: 40px;
     border-top: 1px solid rgb(227, 227, 227);
     border-bottom: 1px solid rgb(227, 227, 227);
@@ -405,6 +420,7 @@ div.rightTitle {
 
 div.rightTitle.double > span, p.rightTitle.double > span {
     line-height: 14px;
+    margin-top: 2px;
 }
 
 div.rightTitle.double > ul, p.rightTitle.double > input {
@@ -415,6 +431,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     display: inline-block;
     width: 100px;
     margin-right: 10px;
+    font-size: 10px;
     text-align: right;
     text-transform: uppercase;
 }
@@ -451,6 +468,24 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
 .rightTitle > select {
     width: 100px;
     height: 25px;
+}
+
+p.belowTitle {
+    display: inline-block;
+    width: 160px;
+    float: left;
+}
+
+.belowTitle > span:first-child {
+   display: block;
+   color: #656565;
+}
+
+.belowTitle > span:last-of-type {
+    display: block;
+    width: auto;
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
 input.content, textarea.content {
@@ -506,20 +541,34 @@ tr.rowSelected, tr.rowSelected:hover {
 
 /* Status Page */
 
+.info-box {
+   border: 1px solid #E2E2E2;
+}
+
+.info-box > .head-box {
+    padding: 5px 0 5px 0;
+    margin: 0 0 0 0;
+    background-color: #F1F1F1;
+    width: 100%;
+}
+
+.info-box > .head-box > h2 {
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+
+.info-box > .body-box {
+    height: 80px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+
 a.oldschool-link  {
     color: #3498db;
 }
 
 .overflow-tab > div.accordion-body {
     overflow-y: visible;
-}
-
-.information-pair {
-    margin-bottom: 30px;
-}
-
-.information-pair > li:first-child {
-    color: #666666;
 }
 
 .activity-feed {

@@ -333,7 +333,7 @@ h2 {
 }
 
 .topnav .nav.nav-logo > li > a {
-   padding: 0 0 0 15px;
+   padding: 0 0 0 20px;
 }
 
 .topnav .nav.nav-item > li > a:hover {
@@ -478,7 +478,7 @@ h2 {
 
 
 .bottomnav .nav > li:first-child > a {
-    padding: 0 0 0 15px;
+    padding: 0 0 0 20px;
     line-height: 30px;
     text-align: left;
     width: 225px;
@@ -603,6 +603,10 @@ h2 {
     border-right: 1px solid #A6A6A6;
 }
 
+.maintabs li:first-of-type {
+    padding-left: 20px;
+}
+
 .maintabs li:last-of-type {
     border-right: none;
 }
@@ -623,7 +627,7 @@ li.selectedtab {
 }
 
 .subnav-controls > div:first-child {
-    margin-left: 15px;
+    margin-left: 20px;
 	display: inline-block;
 	vertical-align: middle;
 	white-space: normal;

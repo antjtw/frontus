@@ -307,5 +307,18 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     };
 
+    //switches the sidebar based on the type of the issue
+    $scope.formatAmount = function (amount) {
+        return calculate.funcformatAmount(amount);
+    };
+
+    $scope.formatDollarAmount = function(amount) {
+        var output = $scope.formatAmount(amount);
+        if (output) {
+            output = "$" + output
+        }
+        return (output);
+    };
+
 
 };
