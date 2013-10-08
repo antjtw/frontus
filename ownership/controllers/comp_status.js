@@ -38,6 +38,24 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         })
     });
 
+    SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
+        var originalfeed = feed;
+        //Generate the groups for the activity feed
+        $scope.eventGroups = {};
+        var uniqueGroups = []
+        angular.forEach(originalfeed, function(event) {
+            var timegroup = moment(event.event_time).fromNow();
+            if (uniqueGroups.indexOf(timegroup) > -1) {
+                $scope.eventGroups[timegroup].push(event);
+            }
+            else {
+                $scope.eventGroups[timegroup] = [event];
+                uniqueGroups.push(timegroup);
+            }
+        });
+        console.log(uniqueGroups);
+    });
+
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
