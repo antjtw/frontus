@@ -28,10 +28,10 @@ var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'u
   $locationProvider.html5Mode(true).hashPrefix('');
   $routeProvider.
       when('/company-list', {templateUrl: 'companyList.html',   controller: 'CompanyDocumentListController'}).
-      when('/company-view', {templateUrl: 'companyViewer.html', controller: 'CompanyDocumentViewController'}).
+      when('/company-view', {templateUrl: 'companyViewer.html', controller: 'CompanyDocumentViewController', reloadOnSearch: false}).
       when('/company-status', {templateUrl: 'companyStatus.html', controller: 'CompanyDocumentStatusController'}).
       when('/investor-list', {templateUrl: 'investorList.html', controller: 'InvestorDocumentListController'}).
-      when('/investor-view', {templateUrl: 'investorViewer.html', controller: 'InvestorDocumentViewController'}).
+      when('/investor-view', {templateUrl: 'investorViewer.html', controller: 'InvestorDocumentViewController', reloadOnSearch: false}).
       otherwise({redirectTo: '/investor-list' });
 });
 
