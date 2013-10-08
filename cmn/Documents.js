@@ -195,7 +195,7 @@ directive('draggable', ['$document',
                         void(ev);
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
-                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2), 10) + 2);
+                        elem.css('font-size', restrictFontSize(parseInt(fs.substr(0, fs.length - 2), 10) + 2));
                         $scope.fixBox(elem[0]);
                     };
 
@@ -203,8 +203,18 @@ directive('draggable', ['$document',
                         void(ev);
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
-                        elem.css('font-size', parseInt(fs.substr(0, fs.length - 2), 10) - 2);
+                        elem.css('font-size', restrictFontSize(parseInt(fs.substr(0, fs.length - 2), 10) - 2));
                         $scope.fixBox(elem[0]);
+                    };
+
+                    restrictFontSize = function(proposedSize) {
+                        if (proposedSize > 24) {
+                            return 24;
+                        } else if (proposedSize < 8) {
+                            return 8;
+                        } else {
+                            return proposedSize;
+                        }
                     };
                 }
             ]
@@ -354,7 +364,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
         $scope.annotable = function() {
             if ($scope.lib === undefined) {
-                return false; // TODO why was this true?
+                return false;
             } else {
                 return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline) ||
                        issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
@@ -383,7 +393,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
              */
             SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
                 $scope.docLength = data.length;
-                // does scaling happen here?
 
                 $scope.annotated = new Array(data.length);
                 for (var i = 0; i < data.length; i++) {
@@ -396,9 +405,10 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
              * @param {string}
              * @param {...}
              */
-            // This gets called twice because init gets called twice.
-            // That doubles up the notes, so -- until I figure out why init gets called twice,
-            // need to delete all the notes that init created the first time around
+            // This gets called twice because init gets called twice
+            // because Angular verifies the data has stabilized.
+            // That doubles up the notes, so we need to delete
+            // all the notes that init created the first time around.
             SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
                 $scope.lib = data;
                 // if there were notes left over, delete them
@@ -437,8 +447,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 var aa = data.annotations;
                 if (aa) {
                     // restoreNotes
-                    // var annots = eval(aa);
-                    // TODO does this work instead of eval?
                     var annots = JSON.parse(aa);
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
@@ -618,9 +626,9 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             aa.scope().initdrag(event);
         };
 
-        // TODO is this really slow? it looks really slow.
         $scope.fixPad = function(aa) {
             var z = aa.find('canvas')[0];
+            // width() and height() fns are very slow
             z.width = (aa.width() - 8);
             z.height = (aa.height() - 27);
             z.offset = [z.offsetLeft, z.offsetTop, z.offsetWidth, z.offsetHeight];
