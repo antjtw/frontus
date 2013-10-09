@@ -916,14 +916,14 @@ form.inputs {
     display: block;
     height: 6px;
     z-index: 1;
-};
+}
 
 .bottomSortIcon {
     position: static;
     display: block;
     height: 6px;
     z-index: 2;
-};
+}
 
 /* Table Designs for Doc Library and Captable (This is horrendous naming as docLibrary is not just for docs) */
 
