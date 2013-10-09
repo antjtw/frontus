@@ -22,13 +22,13 @@
                 </th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
-            <tr class="descriptionRow">
+            <tr class="descriptionRow viewmode">
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues">
                     <span>SHARES</span>
-                    <span>PAID</span>
+                    <span>TOTAL PAID</span>
                 </td>
             </tr>
             <tr ng-repeat="row in rows | noUnissue">
