@@ -81,6 +81,21 @@ ownership.filter('maxLength', function () {
     };
 });
 
+// Sorts the new activity feed with groups of from now
+ownership.filter('fromNowSort', function () {
+    return function (events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if(a[1] > b[1]) return -1;
+                if(a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+
+        return events
+    };
+});
+
 ownership.filter('uneditIssue', function () {
     return function (word) {
         if (word) {

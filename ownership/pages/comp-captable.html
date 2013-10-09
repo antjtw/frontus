@@ -249,13 +249,13 @@
         </tr>
 
         <!-- Descriptive row viewable from all modes -->
-        <tr class="descriptionRow">
+        <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
             <td class="input-right">Shares</td>
             <td class="input-right">%</td>
             <td></td>
             <td ng-repeat="one in issues | issueviewList">
                 <span>SHARES</span>
-                <span>PAID</span>
+                <span>TOTAL PAID</span>
             </td>
         </tr>
         <!-- Editable rows -->

@@ -208,6 +208,11 @@ h2 {
 	color: rgb(255, 0, 0);
 }
 
+.capital-text {
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
 .spacer {
   min-height: 20px;
 }
@@ -638,11 +643,21 @@ li.selectedtab {
 	margin-right: 20px;
 }
 
+.subnav-controls > div > div.pull-right {
+    margin-right: 40px;
+}
+
 .subnav-controls input {
     border: 0;
     border-radius: 0;
     background-color: rgb(241, 241, 241);
     height: 16px;
+}
+
+.subnav-controls input.search-box {
+    background-color: #FFFFFF;
+    height: 22px;
+    margin-bottom: 0;
 }
 
 .subnav-controls h2 {

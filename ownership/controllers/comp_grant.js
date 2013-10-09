@@ -42,7 +42,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             tran.datekey = tran['date'].toUTCString();
             if ($scope.uniquerows.indexOf(tran.investor) == -1) {
                 $scope.uniquerows.push(tran.investor);
-                $scope.rows.push({"state": false, "name": tran.investor, "namekey": tran.investor, "editable": "yes", "granted": null, "forfeited": null, "issue": tran.issue});
+                $scope.rows.push({"state": false, "name": tran.investor, "namekey": tran.investor, "emailkey": tran.email,  "editable": "yes", "granted": null, "forfeited": null, "issue": tran.issue});
             }
         });
 
@@ -318,6 +318,37 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             output = "$" + output
         }
         return (output);
+    };
+
+    // Captable Sharing Modal
+    $scope.modalUp = function () {
+        $scope.capShare = true;
+    };
+
+    $scope.close = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.capShare = false;
+    };
+
+    $scope.shareopts = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'capshareModal mini modal'
+    };
+
+    // Send the share invites from the share modal
+    $scope.sendInvites = function () {
+        angular.forEach($scope.rows, function (row) {
+            if (row.send == true) {
+                SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
+                    $scope.$emit("notification:success", "Your table has been shared!");
+                    row.send = false;
+                    row.emailkey = row.email;
+                }).except(function(err) {
+                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                    });
+            }
+        });
     };
 
 

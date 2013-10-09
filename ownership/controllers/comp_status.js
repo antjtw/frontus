@@ -41,19 +41,22 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
         var originalfeed = feed;
         //Generate the groups for the activity feed
-        $scope.eventGroups = {};
-        var uniqueGroups = []
+        $scope.eventGroups = [];
+        var uniqueGroups = [];
         angular.forEach(originalfeed, function(event) {
             var timegroup = moment(event.event_time).fromNow();
             if (uniqueGroups.indexOf(timegroup) > -1) {
-                $scope.eventGroups[timegroup].push(event);
+                console.log(uniqueGroups.indexOf(timegroup));
+                $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
             }
             else {
-                $scope.eventGroups[timegroup] = [event];
+                $scope.eventGroups[$scope.eventGroups.length] = [];
+                $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
+                $scope.eventGroups[$scope.eventGroups.length-1].push(event);
                 uniqueGroups.push(timegroup);
             }
         });
-        console.log(uniqueGroups);
     });
 
     $scope.activityOrder = function(card) {
@@ -137,6 +140,14 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                   void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
+        }
+    };
+
+    $scope.gotoPerson = function (person) {
+        var link;
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
+        if (link) {
+            document.location.href=link;
         }
     };
 

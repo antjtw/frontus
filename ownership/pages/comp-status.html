@@ -69,15 +69,12 @@
             <div class="row-fluid">
                 <div class="subnav-controls">
                     <div>
+
                         <div class="pull-left">
+                            <span>Search</span>
+                            <input type="text" class="search-box" ng-model="filterPeople">
                         </div>
 
-                        <div class="pull-right">
-                            <div class="standard-button">
-                                <button class="btn">Share</span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -96,27 +93,38 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="person in userStatus">
+                    <tbody ng-repeat="person in userStatus  | filter: filterPeople">
                     <tr class="empty-row"></tr>
                     <tr ng-class="{selectedrow:person.shown}">
                         <td class="status-toggle" ng-class="{'status-toggle-on': person.shown}" ng-click="(opendetails(person.email))">
-                            <span data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-hide="person.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="person.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column">{{person.name}}</td>
+                        <td class="shareholder-column">{{person | nameoremail}}</td>
                         <td>{{person.level}}</td>
                         <td>
                             <span ng-hide="person.viewed">unviewed</span>
                             <span ng-show="person.viewed">viewed</span>
                         </td>
-                        <td class="button">
-                            <span data-icon="&#xe011;" aria-hidden="true"></span>
+                        <td>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="modalUp(person);">Edit Permissions</li>
+                                        <li ng-hide="person.name" ng-click="alterEmailModalUp(person.email)">Edit and Resend</li>
+                                        <li ng-click="gotoPerson(person);">View Profile</li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </td>
                     </tr>
                     <tr class="sub-table" ng-Show="person.shown">
                         <td colspan="5">
                             <table>
-                                <tr></tr>
-                                <tr><td>Action</td><td>Date</td></tr>
+                                <tr class="capital-text"><td>Action</td><td>Date</td></tr>
                                 <tr>
                                     <td>Delivered</td>
                                     <td>
@@ -133,7 +141,6 @@
                                         {{person.viewed | date:'MMMM dd, yyyy, h:mm a'}}
                                     </td>
                                 </tr>
-                                <tr></tr>
                             </table>
                         </td>
                     </tr>
@@ -167,10 +174,10 @@
                     </div>
                     <div class="body-box">
                         <ul class="activity-feed2">
-                            <li ng-repeat="(date, events) in eventGroups">
-                                <span>{{date}}</span>
+                            <li ng-repeat="events in eventGroups | fromNowSort">
+                                <span>{{events[0]}}</span>
                                 <ul>
-                                    <li ng-repeat="event in events">
+                                    <li ng-repeat="event in events.slice(2)">
                                         <i class="{{event.activity | icon}}"></i>
                                         {{event | nameoremail}} {{event.activity}} the captable.
                                     </li>

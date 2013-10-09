@@ -51,6 +51,12 @@
     width: 68px;
 }
 
+.descriptionRow.viewmode span {
+    width: 60px;
+    text-align: right;
+    padding: 0 12px 0 0;
+}
+
 .tableView.captable  {
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
@@ -81,6 +87,7 @@
 
 .tableView th.staticHeaders {
     padding: 0 0 0 6px;
+    text-align: center;
 }
 
 .tableView.captable input {
@@ -167,7 +174,7 @@
     pointer-events: none;
     overflow-x: hidden;
     width: 67px;
-    padding: 0 0 0 6px;
+    text-align: right;
 }
 
 .tableView.captable .output.clickable {
@@ -568,6 +575,7 @@ tr.rowSelected, tr.rowSelected:hover {
     width: 54px;
     text-align: center;
     font-size: 14px;
+    border-right: 1px solid transparent;
 }
 
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
@@ -582,6 +590,7 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .status-table > tbody > tr > td.shareholder-column {
     width: 300px;
+    padding-left: 10px;
 }
 
 .status-table .sub-table {
@@ -590,8 +599,9 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .status-table .sub-table > td > table {
     width: 462px;
-    margin: 30px 0 30px 54px;
+    margin: 20px 0 20px 54px;
     background-color: #FFFFFF;
+    border: 1px solid #E1E1E1;
 }
 
 .status-table .sub-table > td > table > tbody > tr {
@@ -600,10 +610,16 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .status-table .sub-table > td > table > tbody > tr > td {
     padding-left: 20px;
+    color: #656565;
 }
 
-.status-table .sub-table > td > table > tbody > tr:nth-child(1) > td {
-    text-transform: uppercase;
+.status-table .sub-table > td > table > tbody > tr:first-child > td {
+    padding-top: 15px;
+    color: #A5A5A5;
+}
+
+.status-table .sub-table > td > table > tbody > tr:last-child > td {
+    padding-bottom: 15px;
 }
 
 .info-box {
@@ -677,11 +693,10 @@ ul.last-edited > li:last-child {
 .activity-feed2 > li > ul > li {
     overflow: hidden;
     box-sizing: border-box;
-    height: 40px;
     width: 288px;
     border: 1px solid #F1F1F1;
     display: inline-block;
-    padding: 8px 0 0 10px;
+    padding: 8px 0 10px 10px;
     color: #656565;
 }
 
@@ -728,6 +743,10 @@ ul.last-edited > li:last-child {
     margin-left: -250px;
     width:499px;
     height:463px;
+}
+
+.capshareModal.mini {
+    height: 393px;
 }
 
 .capshareModal p {
@@ -803,6 +822,61 @@ ul.last-edited > li:last-child {
     margin: 5px 0 0 0;
 }
 
+/* Drop down menus built on top of the custom selects */
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
+    width: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 14px;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
+    background: none;
+    width: 0;
+    height: 0;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+    margin-left: -120px;
+}
+
+.standard.menu-drop .dropdown-menu > li {
+    padding: 3px 0 3px 10px;
+    line-height: 24px;
+}
+
+.standard.menu-drop .dropdown-menu > li {
+    color: rgb(141, 141, 141);
+}
+
+.standard.menu-drop .dropdown-menu > li:hover {
+    background: #C7C7C7;
+    color: rgb(141, 141, 141);
+}
+
+.standard.menu-drop .dropdown-menu > li:first-of-type:hover {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.standard.menu-drop .dropdown-menu > li:last-of-type:hover {
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 
 /* ios button thingy */
 
@@ -837,8 +911,8 @@ ul.last-edited > li:last-child {
     content: "ON";
     font-size: 12px;
     padding-left: 8px;
-    color: #FFFFFF;
-    background-color: #1ABC96;
+    color: #8D8D8D;
+    background-color: #E3E3E3;
 }
 
 .onoffswitch-inner:after {
