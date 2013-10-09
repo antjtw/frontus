@@ -426,7 +426,7 @@ ownership.service('calculate', function () {
     };
 
     this.funcformatAmount = function (amount) {
-        if (amount) {
+        if (amount && !isNaN(amount)) {
             var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -440,6 +440,9 @@ ownership.service('calculate', function () {
             }
             //Combines the two sections
             amount = n.join(".");
+        }
+        else {
+            amount = null;
         }
         return amount;
     };
