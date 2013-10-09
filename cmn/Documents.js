@@ -140,6 +140,7 @@ directive('draggable', ['$document',
                     leftFromRightLocation = function(elementWidth, currRight) {
                         var docPanel = document.querySelector('.docPanel');
                         var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
+                        console.log("rightEdge: " + rightEdge);
                         if (currRight > rightEdge) {
                             return rightEdge - elementWidth;
                         } else {
@@ -543,6 +544,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             if (bb.clientWidth < bb.scrollWidth) {
                 // pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb, 'padding-right');
                 bb.style.width = (bb.scrollWidth + 10) + "px";
+                console.log("old left: " + enclosingElement.offsetLeft);
             }
             bb.fontSize = getIntProperty(bb, 'font-size');
             bb.lineHeight = Math.floor(bb.fontSize * 1.4);
@@ -594,6 +596,22 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 if (bb.offsetWidth) $scope.fixBox(bb);
             }, 850);
 
+            return aa;
+        };
+
+        $scope.newSignature = function(event) {
+            var aa = $scope.newSignatureX($scope.currentPage, '', null);
+            aa.scope().initdrag(event);
+        };
+
+        $scope.newSignatureX = function(page, val, style) {
+            // TODO refactor to create a newPad with the image piped in as initial contents
+            $scope.restoredPage = page;
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
+                              '<img src="http://www.couponingtodisney.com/wp-content/uploads/2012/12/Mickey-Mouse-Signature.jpg" width="100"/></div>')($scope);
+            aa.scope().ntype = 'signature';
+            aa[0].notetype = 'signature';
+            aa.scope().growable = true;
             return aa;
         };
 
@@ -709,10 +727,22 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             canvas.addEventListener('mousemove', function(e) {
                 if (canvas.down) {
-                    var inProgress, cp1x, cp1y, cp2x, cp2y;
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.X, canvas.Y);
+                    var offs = getCanvasOffset(e);
+                    ctx.lineTo(offs[0], offs[1]);
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
+                }
+                /* BEZIER CURVES?
+                if (canvas.down) {
+                    var inProgress, offs, cp1x, cp1y, cp2x, cp2y;
                     if (!inProgress) {
                         ctx.beginPath();
                         ctx.moveTo(canvas.X, canvas.Y);
+                        offs = getCanvasOffset(e);
                         inProgress = true;
                         skip1 = true;
                         skip2 = false;
@@ -729,13 +759,17 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                             skip1 = false;
                             skip2 = false;
                         } else {
-                            ctz.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
+                            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
                             skip1 = true;
                             skip2 = false;
                         }
                     }
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
                     ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
                 }
+                */
             }, true); // cancel bubble
             canvas.strokes = lines;
             $scope.fixPad(aa);
