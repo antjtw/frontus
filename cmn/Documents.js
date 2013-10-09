@@ -23,6 +23,7 @@ function getCanvasOffset(ev) {
 }
 
 function getNoteBounds(nx) {
+    // [LEFT, TOP, WIDTH, HEIGHT]
     var dp = document.querySelector('.docPanel');
     var dpo = [dp.offsetLeft, dp.offsetTop];
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
@@ -148,6 +149,7 @@ directive('draggable', ['$document',
 
                     boundBoxByPage = function(element) {
                         var docPanel = document.querySelector('.docPanel');
+                        // FIXME does not work in firefox because position:absolute
                         element.style["max-width"] = (docPanel.offsetWidth - 22) + 'px';
                         element.style["max-height"] = (docPanel.offsetHeight - 35) + 'px';
                     };
@@ -707,16 +709,32 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             canvas.addEventListener('mousemove', function(e) {
                 if (canvas.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.X, canvas.Y);
-                    var offs = getCanvasOffset(e);
-                    // TODO implement bezier or quadratic curve instead of lines
-                    ctx.lineTo(offs[0], offs[1]);
-                    // ctx.strokeStyle = this.color;
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    var inProgress, cp1x, cp1y, cp2x, cp2y;
+                    if (!inProgress) {
+                        ctx.beginPath();
+                        ctx.moveTo(canvas.X, canvas.Y);
+                        inProgress = true;
+                        skip1 = true;
+                        skip2 = false;
+                    } else {
+                        if (skip1) {
+                            cp1x = canvas.X;
+                            cp1y = canvas.Y;
+                            skip1 = false;
+                            skip2 = true;
+                        }
+                        if (skip2) {
+                            cp2x = canvas.X;
+                            cp2y = canvas.Y;
+                            skip1 = false;
+                            skip2 = false;
+                        } else {
+                            ctz.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
+                            skip1 = true;
+                            skip2 = false;
+                        }
+                    }
                     ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
                 }
             }, true); // cancel bubble
             canvas.strokes = lines;
