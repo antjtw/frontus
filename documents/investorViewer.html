@@ -1,9 +1,13 @@
 <div class="container" data-ng-init="init()">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{ document.docname | lengthLimiter}}
-            <span class="documentStatus">{{document.signature_status}}</span>
-        </h1>
+        <h2>
+            <a href="/documents/">
+                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
+            </a>
+            <span class="doc-title" ng-bind="document.docname | lengthLimiter"></span>
+            <span class="documentStatus">{{document.signature_status | uppercase}}</span>
+        </h2>
     </div>
   </div>
     <div ng-show="signable() || (tester && document.when_signed)" class="row-fluid">

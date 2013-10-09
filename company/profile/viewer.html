@@ -1,6 +1,11 @@
 
 <div class="headsection row-fluid">
-  <h1><a href="/company/profile/people/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a>{{user.name}}</h1>
+    <h2>
+        <a href="/company/profile/people/">
+            <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
+        </a>
+        <span class="personName">{{user.name}}</span>
+    </h2>
 </div>
 <div class="editProfileFP row-fluid">
   <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
@@ -65,7 +70,7 @@
           <tbody ng-repeat="doc in docs">
           <tr class="button status-row" ng-class="{selectedrow:doc.shown}" ng-click="(opendetails(doc))">
               <td style="width:50%;">{{doc.docname}}</td>
-              <td>{{doc.event}}</td>
+              <td>{{doc.signature_status}}</td>
               <td class="button">
                   <span ng-Hide="doc.shown" data-icon="&#xe031;" aria-hidden="true"></span>
                   <span ng-Show="doc.shown" data-icon="&#xe034;" aria-hidden="true"></span>

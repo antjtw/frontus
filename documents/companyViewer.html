@@ -1,7 +1,12 @@
 <div class="container">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h1><a href="/documents/"><span class="back-icon" data-icon="&#xe038;" aria-hidden="true"></span></a><span ng-model="document.docname" contenteditable title="Click to Edit">{{ document.docname | lengthLimiter}}</span></h1>
+        <h2>
+            <a href="/documents/">
+                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
+            </a>
+            <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:58 || ''"></span>
+        </h2>
 
         <div class="row-fluid">
             <ul class="bodyText maintabs">
@@ -53,7 +58,7 @@
                     </div>
                     <div class="pull-right">
                         <div class="share-button">
-                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectSignature(currentDoc)">Reject Signature</button>
+                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectDocOpen()">Reject Signature</button>
                         </div>
                     </div>
                     <div class="pull-right">
@@ -63,7 +68,7 @@
                     </div>
                     <div class="pull-right">
                         <div class="share-button">
-                                <button ng-hide="counterparty" class="btn" ng-click="ShareDocOpen()">Share Document</button>
+                                <button ng-hide="counterparty" class="btn" ng-click="shareDocOpen()">Share Document</button>
                         </div>
                     </div>
                 </div>
@@ -126,9 +131,7 @@
                 </ul>
             </li>
         </ul>
-        <div class="messageSection">
-            <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
-        </div>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
     <div class="modalButtons">
         <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
@@ -137,4 +140,24 @@
             </button>
         </div>
     </div>
+</div>
+
+<div modal="rejectDocModal" close="rejectDocClose()" options="opts">
+  <div class="modalSize">
+    <div class="modalHeader">
+        <span data-icon="&#xe01b;" aria-hidden="true"></span>Reject Document
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rejectDocClose()"></span>
+    </div>
+    <div class="messageSection">
+        <textarea class="messageText" rows="4" ng-model="messageText"></textarea>
+    </div>
+    <div class="modal-buttons">
+        <div class="leftModalButton">
+            <button class="button subText greyButton" ng-click="rejectDocClose()">Cancel</button>
+        </div>
+        <div class="rightModalButton">
+            <button class="button subText greenButton" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
+        </div>
+    </div>
+  </div>
 </div>
