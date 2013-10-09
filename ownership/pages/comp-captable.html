@@ -407,7 +407,7 @@
 
                         <!-- Global Tab -->
                         <div class="capGuide global">
-                            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+                            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                                           ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
                                                                           onkeydown="testForEnter();"></p>
 
@@ -522,7 +522,7 @@
                                                                                                                                                                                     onkeydown="testForEnter();"></p>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                                                                                                                 id="{{activeIssue.$$hashKey}}"
+                                                                                                                                                                                 id="vestingbegins{{activeIssue.$$hashKey}}"
                                                                                                                                                                                  ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
                                                                                                                                                                                  ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
                                                                                                                                                                                  type="text"
@@ -602,7 +602,7 @@
                                 <!-- Global Tab -->
                                 <div class="capGuide global">
 
-                                    <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="{{tran.$$hashKey}}"
+                                    <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
                                                                                   ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
                                                                                   ng-change="saveTranDate(tran, 'date')"
                                                                                   type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
@@ -705,7 +705,7 @@
                                                                                                                                                                                           ng-model="tran.terms"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                                                                                                                       id="{{tran.$$hashKey}}"
+                                                                                                                                                                                       id="vestingbegins{{tran.$$hashKey}}"
                                                                                                                                                                                        ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\', $event)', blur:'saveTranDate(tran, \'vestingbegins\', \'blur\')'}"
                                                                                                                                                                                        ng-change="saveTranDate(tran, 'vestingbegins')"
                                                                                                                                                                                        type="text"
