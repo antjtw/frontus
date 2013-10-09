@@ -26,6 +26,11 @@ body {
 }
 
 /* includes the 50 pixels from the nav bar */
+:focus {
+  outline-color: transparent !important;
+  outline-style: none !important;
+}
+
 .wrap-nav {
   min-height: 100%;
   height: auto !important;
