@@ -9,15 +9,12 @@ function getComputed(se, z) {
     return originalAnswer? originalAnswer : 1337;
 }
 
-function getOffset(ev) {
+function getCanvasOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
+        // this only works for finding offsets in canvas elements
         offx = ev.pageX-$('canvas').offset().left;
         offy = ev.pageY-$('canvas').offset().top;
-        /*
-        offx = ev.originalEvent.layerX;
-        offy = ev.originalEvent.layerY;
-        */
     } else {
         offx = ev.offsetX;
         offy = ev.offsetY;
@@ -26,6 +23,7 @@ function getOffset(ev) {
 }
 
 function getNoteBounds(nx) {
+    // [LEFT, TOP, WIDTH, HEIGHT]
     var dp = document.querySelector('.docPanel');
     var dpo = [dp.offsetLeft, dp.offsetTop];
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
@@ -151,12 +149,15 @@ directive('draggable', ['$document',
 
                     boundBoxByPage = function(element) {
                         var docPanel = document.querySelector('.docPanel');
+                        // FIXME does not work in firefox because position:absolute
                         element.style["max-width"] = (docPanel.offsetWidth - 22) + 'px';
                         element.style["max-height"] = (docPanel.offsetHeight - 35) + 'px';
-                        console.log(element.style);
                     };
 
                     $scope.mousemove = function($event) {
+                        // absolute mouse location (current): $event.clientX, $event.clientY
+                        // absolute change in mouse location: dx, dy
+                        // relative mouse location: mousex, mousey
                         var dx = $event.clientX - $scope.initialMouseX;
                         var dy = $event.clientY - $scope.initialMouseY;
                         var mousex = $scope.startX + dx;
@@ -174,16 +175,16 @@ directive('draggable', ['$document',
                         return false;
                     };
 
+                    // Set startX/Y and initialMouseX/Y attributes.
+                    // Bind mousemove and mousedown event callbacks.
+                    //
                     $scope.initdrag = function(ev) {
                         var dp = document.querySelector(".docPanel");
-                        var dpr = dp.getBoundingClientRect();
-                        var dprl = dpr.left - dp.offsetLeft;
-                        var dprt = dpr.top - dp.offsetTop;
-
-                        // Do I need to add in document.scrollTop ?
-                        var offs = getOffset(ev);
-                        $scope.startX = ev.clientX - dprl - offs[0];
-                        $scope.startY = ev.clientY - dprt - offs[1];
+                        var dpr = dp.getBoundingClientRect(); // top/left of docPanel
+                        var dprl = dpr.left - dp.offsetLeft; // left of document itself
+                        var dprt = dpr.top - dp.offsetTop; // top of document itself
+                        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
+                        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
                         $scope.mousemove(ev);
@@ -531,6 +532,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
         $scope.fixBox = function(bb) {
             var pad;
+            var enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
             bb.style.width = '30px';
             bb.style.height = '20px';
             var crs = countCRs(bb.value);
@@ -550,19 +552,16 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
 
             // if the box is now off the page, move it over
-            enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
             currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
             currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
 
             enclosingElement.style.top = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
             enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
-
-            // TODO: if the box reached max width, hard wrap?
         };
 
         $scope.newBoxX = function(page, val, style) {
             $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable" >' +
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
                               '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
@@ -577,11 +576,11 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 $scope.fixBox(bb);
             });
 
-            /*
             bb.addEventListener('mousemove', function(e) {
-                if (e.which !== 0) $scope.fixBox(bb);
+                if (e.which !== 0) {
+                    boundBoxByPage(bb);
+                }
             });
-            */
 
             var ta = aa.find('textarea');
             ta.scope().annotext = val;
@@ -686,7 +685,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             canvas.addEventListener('mousedown', function(e) {
                 canvas.down = true;
-                var offs = getOffset(e);
+                var offs = getCanvasOffset(e);
                 canvas.X = offs[0];
                 canvas.Y = offs[1];
             }, false);
@@ -710,15 +709,32 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             canvas.addEventListener('mousemove', function(e) {
                 if (canvas.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.X, canvas.Y);
-                    var offs = getOffset(e);
-                    ctx.lineTo(offs[0], offs[1]);
-                    // ctx.strokeStyle = this.color;
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    var inProgress, cp1x, cp1y, cp2x, cp2y;
+                    if (!inProgress) {
+                        ctx.beginPath();
+                        ctx.moveTo(canvas.X, canvas.Y);
+                        inProgress = true;
+                        skip1 = true;
+                        skip2 = false;
+                    } else {
+                        if (skip1) {
+                            cp1x = canvas.X;
+                            cp1y = canvas.Y;
+                            skip1 = false;
+                            skip2 = true;
+                        }
+                        if (skip2) {
+                            cp2x = canvas.X;
+                            cp2y = canvas.Y;
+                            skip1 = false;
+                            skip2 = false;
+                        } else {
+                            ctz.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
+                            skip1 = true;
+                            skip2 = false;
+                        }
+                    }
                     ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
                 }
             }, true); // cancel bubble
             canvas.strokes = lines;
@@ -764,6 +780,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             void(event);
             for (var i = 1; i <= $scope.docLength; i++) {
                 var z = i;
+                // TODO i don't believe SWBrijj.deletePage exists
                 /** @name SWBrijj#deletePage
                  * @function
                  * @param {int}
