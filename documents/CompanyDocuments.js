@@ -415,15 +415,13 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
 
   $scope.share = function(message, email, sign) {
       sign = sign == "Yes";
-      console.log(sign);
       if (sign) {
-          console.log("here");
           var date = Date.parse('22 November 2113');
       }
       else {
           date = null;
       }
-      if (message == "Add an optional message...") {
+      if (message === "Add an optional message...") {
           message = "";
       }
       SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
@@ -748,7 +746,7 @@ docviews.directive('restrictContentEditable', function() {
       // view -> model
       var ff = function() {
         scope.$apply(function() {
-          ctrl.$setViewValue(elm.html());
+          ctrl.$setViewValue(elm.text());
         });
         scope.$emit('updated:name');
       };
@@ -775,11 +773,11 @@ docviews.directive('restrictContentEditable', function() {
 
       // model -> view
       ctrl.$render = function() {
-        elm.html(ctrl.$viewValue);
+        elm.text(ctrl.$viewValue);
       };
 
       // load init value from DOM
-      ctrl.$setViewValue(elm.html());
+      ctrl.$setViewValue(elm.text());
     }
   };
 });
