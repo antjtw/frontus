@@ -64,7 +64,7 @@
 </div>
 
 <div modal="capMulti" close="mclose(); mReset();" options="opts">
-   <div class="modalHeader">
+    <div class="modalHeader">
         <span data-icon="&#xe0000;" aria-hidden="true"></span>Is this a new transaction?
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="mclose(); mReset();"></span>
     </div>
@@ -182,96 +182,88 @@
 
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
-    <div class="headsection row-fluid">
-        <h1>Ownership</h1>
+<div class="headsection row-fluid">
 
-        <div class="row-fluid">
+    <ul class="maintabs head-text">
+        <li class="selectedtab">Ownership</li>
+        <li><a href="/ownership/company-grants">Grants</a></li>
+        <li><a href="/ownership/company-status">Status</a></li>
+    </ul>
+</div>
 
-            <ul class="bodyText maintabs">
-                <li class="selectedtab">Ownership</li>
-                <a href="/ownership/company-grants">
-                    <li class="button">Grants</li>
-                </a>
-                <a href="/ownership/company-status">
-                    <li class="button">Status</li>
-                </a>
-            </ul>
-        </div>
-    </div>
-
-    <div class="row-fluid">
-        <div class="subnav-controls">
-            <div data-step="5" data-intro="Switch between editing & viewing your table in its finished form, and easily share with others">
-                <div class="pull-left">
-                    <div class="edittoggle btn-group">
-                        <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'View'"><span
-                                data-icon="&#xe001;" aria-hidden="true"></span></button>
-                        <button type="button" class="btn btn" ng-model="radioModel" btn-radio="'Edit'"><span
-                                data-icon="&#xe00e;" aria-hidden="true"></span></button>
-                    </div>
-                </div>
-                <div ng-show="toggleView();" class="pull-left namedtoggle">
-                    <p class="pull-left">DILUTION</p>
-
-                    <div class="pull-left onoffswitch">
-                        <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();"
-                               ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox"
-                               id="myonoffswitch" checked>
-                        <label class="onoffswitch-label" for="myonoffswitch">
-                            <div class="onoffswitch-inner"></div>
-                            <div class="onoffswitch-switch"></div>
-                        </label>
-                    </div>
-                </div>
-                <div class="pull-left">
-                    <div class="share-button">
-                        <button ng-click="modalUp();" class="btn">Share</span>
-                        </button>
-                    </div>
+<div class="row-fluid">
+    <div class="subnav-controls">
+        <div data-step="5" data-intro="Switch between editing & viewing your table in its finished form, and easily share with others">
+            <div class="pull-left">
+                <div class="edittoggle btn-group">
+                    <button type="button" class="btn" ng-model="radioModel" btn-radio="'View'"><span
+                            data-icon="&#xe001;" aria-hidden="true"></span></button>
+                    <button type="button" class="btn" ng-model="radioModel" btn-radio="'Edit'"><span
+                            data-icon="&#xe00e;" aria-hidden="true"></span></button>
                 </div>
             </div>
-            <div class="DivHelper"></div>
+            <div ng-show="toggleView();" class="pull-left namedtoggle">
+                <p class="pull-left">DILUTION</p>
+
+                <div class="pull-left onoffswitch">
+                    <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();"
+                           ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox"
+                           id="myonoffswitch" checked>
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="pull-left">
+                <div class="standard-button">
+                    <button ng-click="modalUp();" class="btn">Share</span>
+                    </button>
+                </div>
+            </div>
         </div>
+        <div class="DivHelper"></div>
     </div>
+</div>
 
 
-    <div class="row-fluid capcontainer">
-        <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
-            <!-- Editable headers -->
-            <tr ng-hide="toggleView();" class="column-label">
-                <th class="longrow" colspan="2">Ownership</th>
-                <th class="longrow">Shareholder</th>
-                <th  ng-repeat="one in issues">
-                    <input placeholder="add security" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
-                           onkeydown="testForEnter();" data-step="2" data-intro="Add securities as columns, and define their terms in the rail">
-                </th>
-            </tr>
-            <!-- Uneditable headers -->
-            <tr ng-show="toggleView();" class="column-label">
-                <th class="longrow" colspan="2">Ownership</th>
-                <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue | uneditIssue}}</span>
-                </th>
-            </tr>
+<div class="row-fluid capcontainer">
+    <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
+        <!-- Editable headers -->
+        <tr ng-hide="toggleView();" class="column-label">
+            <th class="longrow" colspan="2">Ownership</th>
+            <th class="longrow">Shareholder</th>
+            <th  ng-repeat="one in issues">
+                <input placeholder="add security" class="capEditHeaders"
+                       ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
+                       onkeydown="testForEnter();" data-step="2" data-intro="Add securities as columns, and define their terms in the rail">
+            </th>
+        </tr>
+        <!-- Uneditable headers -->
+        <tr ng-show="toggleView();" class="column-label">
+            <th class="longrow" colspan="2">Ownership</th>
+            <th class="longrow">Shareholder</th>
+            <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
+                <span>{{one.issue | uneditIssue}}</span>
+            </th>
+        </tr>
 
-            <!-- Descriptive row viewable from all modes -->
-            <tr class="descriptionRow">
-                <td class="input-right">Shares</td>
-                <td class="input-right">%</td>
-                <td></td>
-                <td ng-repeat="one in issues | issueviewList">
-                    <span>SHARES</span>
-                    <span>PAID</span>
-                </td>
-            </tr>
-            <!-- Editable rows -->
-            <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
-                    <td data-step="4" data-intro="View the total ownership for each shareholder across all securities" class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                    <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
-                    </td>
-                <td>
+        <!-- Descriptive row viewable from all modes -->
+        <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
+            <td class="input-right">Shares</td>
+            <td class="input-right">%</td>
+            <td></td>
+            <td ng-repeat="one in issues | issueviewList">
+                <span>SHARES</span>
+                <span>TOTAL PAID</span>
+            </td>
+        </tr>
+        <!-- Editable rows -->
+        <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
+            <td data-step="4" data-intro="View the total ownership for each shareholder across all securities" class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%">
+            </td>
+            <td>
               <span ng-switch on="row.nameeditable">
                 <span ng-switch-default>
                   <input placeholder="ADD NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
@@ -284,8 +276,8 @@
                          onkeydown="testForEnter();">
                 </span>
               </span>
-                </td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
+            </td>
+            <td ng-repeat="key in issuekeys | orderBy:issueSort">
               <span ng-switch on="row.editable">
                 <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                   <input class="captablepair" maxlength="18"
@@ -307,160 +299,164 @@
                          onkeydown="testForEnter();">
                 </span>
               </span>
-                </td>
-            </tr>
-            <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-hide="toggleView()" ng-repeat="row in rows | unissuedrowviewList">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
+            </td>
+        </tr>
+        <!-- Unissued Rows -->
+        <tr class="unissued-rows" ng-hide="toggleView()" ng-repeat="row in rows | unissuedrowviewList">
+            <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+            <td  class="viewName">{{row.name}}</td>
+            <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
                     </span>
-                </td>
-            </tr>
-            <!-- Un-editable view -->
-            <!-- Regular Rows -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
+            </td>
+        </tr>
+        <!-- Un-editable view -->
+        <!-- Regular Rows -->
+        <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
+            <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+            <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+            <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
                     </span>
-                </td>
-            </tr>
-            <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
+            </td>
+        </tr>
+        <!-- Unissued Rows -->
+        <tr class="unissued-rows" ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
+            <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+            <td  class="viewName">{{row.name}}</td>
+            <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
                     </span>
-                </td>
-            </tr>
-            <!-- Un-editable diluted view -->
-            <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
-                <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
+            </td>
+        </tr>
+        <!-- Un-editable diluted view -->
+        <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
+            <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
+            <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+            <td ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
                     </span>
-                </td>
-            </tr>
-            <!-- Undiluted footer -->
-            <tr ng-show="toggleDilution();" class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                <td></td>
-                <td ng-repeat="one in issuekeys" >
+            </td>
+        </tr>
+        <!-- Footer Total Row -->
+        <tr class="total-row">
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td ng-repeat="one in issuekeys" ></td>
+        </tr>
+        <!-- Undiluted footer -->
+        <tr ng-show="toggleDilution();" class='tablefooter'>
+            <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
+            <td></td>
+            <td ng-repeat="one in issuekeys" >
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
 
                         <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" class="output second footer"></div>
                     </span>
-                </td>
-            </tr>
+            </td>
+        </tr>
 
-            <!-- Diluted footer -->
-            <tr ng-hide="toggleDilution();" class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                <td></td>
-                <td ng-repeat="one in issuekeys">
+        <!-- Diluted footer -->
+        <tr ng-hide="toggleDilution();" class='tablefooter'>
+            <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
+            <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
+            <td></td>
+            <td ng-repeat="one in issuekeys">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one, dilutedRows, 'u'))" class="output footer"></div>
                         <div ng-bind="formatDollarAmount(colTotal(one, dilutedRows, 'a'))" class="output second footer"></div>
                     </span>
-                </td>
-            </tr>
-        </table>
-    </div>
+            </td>
+        </tr>
+    </table>
+</div>
 </div>
 
 <div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
 </button>
-        <div class="row-fluid">
-            <div ng-switch on="sideBar">
-                    <!-- Issues Side Bar when Editable -->
+<div class="row-fluid">
+<div ng-switch on="sideBar">
+<!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
                         <div class="headsection row-fluid">
                             <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
                                        ng-model="activeIssue.issue"
                                        onkeydown="testForEnter();">
                                 <span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
-                                                                          ng-click="deleteIssueButton(activeIssue);" aria-hidden="true"></span>
+                                      ng-click="deleteIssueButton(activeIssue);" aria-hidden="true"></span>
                             </h2>
 
                             <p>Customize terms for this issue</p>
                         </div>
-                        <div class="row-fluid trancore">
-                            <div class="date-selection">
-                                <p>Date <input ng-disabled="toggleView();" id="{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
-                                               ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
-                                               onkeydown="testForEnter();">
-                                </p>
-                            </div>
-                            <div class="DivHelper"></div>
-                        </div>
-                        <div class="row-fluid trancore">
-                            <div class="capGuide">
-                                <div class="rightTitle"><span>Security Type</span>
+
+                        <!-- Global Tab -->
+                        <div class="capGuide global">
+                            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+                                                                          ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                                                                          onkeydown="testForEnter();"></p>
+
+                            <div class="rightTitle"><span>Security Type</span>
                                     <span ng-show="typeLocked(activeIssue);">
-                                        <li class="dropdown standard small">
-                                            <a class="dropdown-toggle">
-                                                {{activeIssue.type}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                <li ng-repeat="i in issuetypes">
-                                                    <a ng-click="saveIssueAssign(activeIssue, 'type', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{activeIssue.type}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul ng-hide="toggleView();" class="dropdown-menu">
+                                                    <li ng-repeat="i in issuetypes">
+                                                        <a ng-click="saveIssueAssign(activeIssue, 'type', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
                                     </span>
                                     <span ng-hide="typeLocked(activeIssue);">
                                         {{activeIssue.type}}
                                     </span>
-                                </div>
                             </div>
-                            <div class="DivHelper"></div>
                         </div>
                         <!-- Equity Tab -->
-                        <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
-                                <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                   pattern="[0-9]*(.[0-9]*)*"
-                                                                                   ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
-                                                                                   ng-model="activeIssue.premoney"
-                                                                                   onkeydown="testForEnter();"></p>
+                        <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
+                            <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                     pattern="[0-9]*(.[0-9]*)*"
+                                                                                                                                                                                     ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
+                                                                                                                                                                                     ng-model="activeIssue.premoney"
+                                                                                                                                                                                     onkeydown="testForEnter();"></p>
 
-                                <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                    ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
-                                                                                    ng-model="activeIssue.postmoney"
-                                                                                    onkeydown="testForEnter();"></p>
+                            <p class="rightTitle double"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                               ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
+                                                                                                                                                                                                               ng-model="activeIssue.postmoney"
+                                                                                                                                                                                                               onkeydown="testForEnter();"></p>
 
-                                <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
-                                                                                         ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
-                                                                                         ng-model="activeIssue.ppshare"
-                                                                                         onkeydown="testForEnter();"></p>
+                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
+                                                                                                                                                               ui-event="{blur : 'saveIssueCheck(activeIssue, \'ppshare\')'}"
+                                                                                                                                                               ng-model="activeIssue.ppshare"
+                                                                                                                                                               onkeydown="testForEnter();"></p>
 
-                                <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
-                                                                                          ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
-                                                                                          ng-model="activeIssue.totalauth"
-                                                                                          onkeydown="testForEnter();"></p>
+                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
+                                                                                                                                                                        ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                                                                                                                        ng-model="activeIssue.totalauth"
+                                                                                                                                                                        onkeydown="testForEnter();"></p>
 
-                                <div class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is guaranteed on a liquidity event">Liquidation Preference</span>
-                                    <li class="dropdown standard small">
+                            <div class="rightTitle double"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is guaranteed on a liquidity event">Liquidation Preference</span>
+                                <ul class="dropdown-list">
+                                    <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.liquidpref}}<span class="invisible-drop">'</span>
                                         </a>
@@ -470,10 +466,12 @@
                                             </li>
                                         </ul>
                                     </li>
-                                </div>
+                                </ul>
+                            </div>
 
-                                <div class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
-                                    <li class="dropdown standard small">
+                            <div class="rightTitle double"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
+                                <ul class="dropdown-list">
+                                    <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.partpref | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
@@ -483,171 +481,163 @@
                                             </li>
                                         </ul>
                                     </li>
-                                </div>
+                                </ul>
+                            </div>
 
-                          </div>
+                        </div>
                           <!-- Options Tab -->
-                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
-                            <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                                <li class="dropdown standard small">
-                                    <a class="dropdown-toggle">
-                                        {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-repeat="i in allowKeys">
-                                            <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </div>
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Option');">
+                              <div class="rightTitle double"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
+                                  <ul class="dropdown-list">
+                                      <li class="dropdown standard">
+                                          <a class="dropdown-toggle">
+                                              {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
+                                          </a>
+                                          <ul ng-hide="toggleView();" class="dropdown-menu">
+                                              <li ng-repeat="i in allowKeys">
+                                                  <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
+                                              </li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                              </div>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
-                                                                                        ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
-                                                                                        ng-model="activeIssue.totalauth"
-                                                                                        onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><input ng-disabled="toggleView();"
+                                                                                                                                                                          ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                                                                                                                          ng-model="activeIssue.totalauth"
+                                                                                                                                                                          onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled
-                                                                             value="{{totalGranted(activeIssue.issue, trans);}}">
-                            </p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><input disabled
+                                                                                                                                                       value="{{totalGranted(activeIssue.issue, trans);}}">
+                              </p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
-                                                                             ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
-                                                                             ng-model="activeIssue.price"
-                                                                             onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                                                                                                                                   ng-model="activeIssue.price"
+                                                                                                                                                                                   onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
-                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
-                                                                                   ng-model="activeIssue.terms"
-                                                                                   onkeydown="testForEnter();"></p>
+                              <p class="rightTitle double"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
+                                                                                                                                                                                    ng-model="activeIssue.terms"
+                                                                                                                                                                                    onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                        id="{{activeIssue.$$hashKey}}"
-                                                                                        ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')" 
-                                                                                        ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
-                                                                                        type="text"
-                                                                                        ng-model="activeIssue.vestingbegins"
-                                                                                        data-date-format="mm/dd/yyyy"
-                                                                                        bs-datepicker></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                 id="vestingbegins{{activeIssue.$$hashKey}}"
+                                                                                                                                                                                 ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
+                                                                                                                                                                                 ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
+                                                                                                                                                                                 type="text"
+                                                                                                                                                                                 ng-model="activeIssue.vestingbegins"
+                                                                                                                                                                                 data-date-format="mm/dd/yyyy"
+                                                                                                                                                                                 bs-datepicker></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
-                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
-                                                                                     ng-model="activeIssue.vestcliff"
-                                                                                     onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                       ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
+                                                                                                                                                                                                       ng-model="activeIssue.vestcliff"
+                                                                                                                                                                                                       onkeydown="testForEnter();"></p>
 
-                            <div class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                                <li class="dropdown standard small">
-                                    <a class="dropdown-toggle">
-                                        {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-repeat="i in freqtypes">
-                                            <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </div>
+                              <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                                  <ul class="dropdown-list">
+                                      <li class="dropdown standard">
+                                          <a class="dropdown-toggle">
+                                              {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
+                                          </a>
+                                          <ul ng-hide="toggleView();" class="dropdown-menu">
+                                              <li ng-repeat="i in freqtypes">
+                                                  <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
+                                              </li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                              </div>
                           </div>
 
                           <!-- Debt tab -->
-                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Debt');">
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                           pattern="[0-9]*(.[0-9]*)*"
-                                                                                           ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
-                                                                                           ng-model="activeIssue.premoney"
-                                                                                           onkeydown="testForEnter();"></p>
+                              <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                       pattern="[0-9]*(.[0-9]*)*"
+                                                                                                                                                                                       ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
+                                                                                                                                                                                       ng-model="activeIssue.premoney"
+                                                                                                                                                                                       onkeydown="testForEnter();"></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
-                                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
-                                                                                            ng-model="activeIssue.postmoney"
-                                                                                            onkeydown="testForEnter();"></p>
+                              <p class="rightTitle double"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                                 ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
+                                                                                                                                                                                                                 ng-model="activeIssue.postmoney"
+                                                                                                                                                                                                                 onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
-                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
-                                                                                   ng-model="activeIssue.interestrate"
-                                                                                   onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                                                                                                                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
+                                                                                                                                                                          ng-model="activeIssue.interestrate"
+                                                                                                                                                                          onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
-                                                                                   ng-model="activeIssue.valcap"
-                                                                                   onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                                 ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
+                                                                                                                                                                                                 ng-model="activeIssue.valcap"
+                                                                                                                                                                                                 onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
-                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
-                                                                              ng-model="activeIssue.discount"
-                                                                              onkeydown="testForEnter();"></p>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
+                                                                                                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
+                                                                                                                                                                    ng-model="activeIssue.discount"
+                                                                                                                                                                    onkeydown="testForEnter();"></p>
 
-                            <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
-                                                                          ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
-                                                                          ng-model="activeIssue.term"
-                                                                          onkeydown="testForEnter();"></p>
-                        </div>
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                                                                              ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
+                                                                                                                                                              ng-model="activeIssue.term"
+                                                                                                                                                              onkeydown="testForEnter();"></p>
+                          </div>
                       </span>
 
-                    <!-- Options Side Bar when Editable -->
+<!-- Options Side Bar when Editable -->
                       <span ng-switch-when="2">
                         <div class="tabbed headsection row-fluid">
-                            <h2>{{activeInvestor}}<span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
+                            <h1>{{activeInvestor}}<span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
                                                         ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
-                            </h2>
+                            </h1>
 
                             <p>Customize terms for this shareholder</p>
                         </div>
                         <tabset class="trantabs">
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
-                                <div class="row-fluid trancore">
-                                    <div class="date-selection" ng-hide="toggleView();">
-                                        <p>Date <input ng-disabled="toggleView();" id="{{tran.$$hashKey}}" ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}" ng-change="saveTranDate(tran, 'date')" type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
-                                        </p>
-                                        <span data-icon="&#xe00c;"
+
+                                <!-- Global Tab -->
+                                <div class="capGuide global">
+
+                                    <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
+                                                                                  ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
+                                                                                  ng-change="saveTranDate(tran, 'date')"
+                                                                                  type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <span class="delete-icon" data-icon="&#xe00c;"
                                               ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
-                                    </div>
-                                    <div ng-show="toggleView();">
-                                        <p>Date {{tran.date | date:'shortDate'}}
-                                        </p>
-                                    </div>
-                                    <div class="DivHelper"></div>
+
+                                    </p>
+
+                                    <p class="rightTitle"><span>Shares</span><input ng-disabled="toggleView();"
+                                                                                    maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
+                                                                                    ng-model="tran.units" onkeydown="testForEnter();"></p>
+
+                                    <p class="rightTitle"><span>Paid</span><input ng-disabled="toggleView();"
+                                                                                  maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
                                 </div>
-                                <div class="row-fluid trancore">
-                                    <div>
-                                        <p ng-hide="tran.forfeited">Shares<input ng-disabled="toggleView();"
-                                                                                 class="signless"
-                                                                                 ui-event="{blur : 'saveTran(tran)'}"
-                                                                                 ng-model="tran.units"
-                                                                                 onkeydown="testForEnter();"></p>
 
-                                        <p>Paid $<input ng-disabled="toggleView();" ng-class="{'content':!tran.amount}"
-                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();">
-                                        </p>
+                                <div class="CapGuide">
 
-                                    </div>
-                                    <div class="DivHelper"></div>
-                                </div>
-                                <div ng-show="tran.forfeited" class="row-fluid trancore">
-                                    <div>
-                                        <p>Shares<input ng-disabled="toggleView();"
-                                                        maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
-                                                        ng-model="tran.units" onkeydown="testForEnter();"></p>
+                                    <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                                                                                              ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
 
-                                        <p>Forfeit<input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
-                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
-
-                                    </div>
-                                    <div class="DivHelper"></div>
                                 </div>
 
                                 <!-- Equity Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
                                                                                                                                                                        onkeydown="testForEnter();"
-                                                                                                                                                                           ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                           ng-model="tran.ppshare"></p>
+                                                                                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                                                                       ng-model="tran.ppshare"></p>
 
 
-                                    <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
                                         <ul class="dropdown-list">
-                                            <li class="dropdown standard small">
+                                            <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.liquidpref}}<span class="invisible-drop">'</span>
                                                 </a>
@@ -665,9 +655,9 @@
                                         <input disabled ng-model="tran.liquidpref">
                                     </p>
 
-                                    <div ng-hide="toggleView();" class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                         <ul class="dropdown-list">
-                                            <li class="dropdown standard small">
+                                            <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
                                                 </a>
@@ -687,19 +677,21 @@
 
                                 </div>
                                 <!-- Option Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
 
-                                    <div class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                                        <li class="dropdown standard small">
-                                            <a class="dropdown-toggle">
-                                                {{tran.optundersec  | maxLength}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in allowKeys">
-                                                    <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i  | maxLength}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                    <div class="rightTitle double"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.optundersec  | maxLength}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in allowKeys">
+                                                        <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i  | maxLength}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
@@ -707,13 +699,13 @@
                                                                                                                                                                                          ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                          ng-model="tran.price"></p>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
-                                                                                                                                                                                   onkeydown="testForEnter();"
-                                                                                                                                                                                   ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                                   ng-model="tran.terms"></p>
+                                    <p class="rightTitle double"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                                                                                                          onkeydown="testForEnter();"
+                                                                                                                                                                                          ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                                                                                          ng-model="tran.terms"></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                                                                                                                       id="{{tran.$$hashKey}}"
+                                                                                                                                                                                       id="vestingbegins{{tran.$$hashKey}}"
                                                                                                                                                                                        ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\', $event)', blur:'saveTranDate(tran, \'vestingbegins\', \'blur\')'}"
                                                                                                                                                                                        ng-change="saveTranDate(tran, 'vestingbegins')"
                                                                                                                                                                                        type="text"
@@ -727,22 +719,24 @@
                                                                                                                                                                                                              ng-model="tran.vestcliff"></p>
 
 
-                                    <div class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                                        <li class="dropdown standard small">
-                                            <a class="dropdown-toggle">
-                                                {{tran.vestfreq}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in freqtypes">
-                                                    <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                    <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.vestfreq}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in freqtypes">
+                                                        <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                 </div>
                                 <!-- Debt Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                                 onkeydown="testForEnter();"
@@ -769,153 +763,126 @@
                         </tabset>
                       </span>
 
-                    <!-- Issues Side Bar when UnEditable -->
+<!-- Issues Side Bar when UnEditable -->
                       <span ng-switch-when="5">
                         <div class="headsection row-fluid">
-                            <h2>{{activeIssue.issue}}
-                            </h2>
+                            <h1>{{activeIssue.issue}}
+                            </h1>
+                        </div>
 
-                            <p>Customize terms for this issue</p>
-                        </div>
-                        <div class="row-fluid trancore">
-                            <div class="date-selection">
-                                <p>Date {{activeIssue.date  | date:'shortDate'}}
-                                </p>
+                        <!-- Global Tab -->
+                            <div class="capGuide global">
+                                <p class="belowTitle"><span ng-bind="activeIssue.date  | date:'shortDate'"></span><span>DATE</span></p>
+
+                                <p class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
                             </div>
-                            <div class="DivHelper"></div>
-                        </div>
-                        <div class="row-fluid trancore">
-                            <div class="capGuide">
-                                <div class="rightTitle"><span>Security Type</span>
-                                    <span>
-                                        {{activeIssue.type}}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="DivHelper"></div>
-                        </div>
                         <!-- Equity Tab -->
                         <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
-                            <p ng-show="activeIssue.premoney" class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span></p>
+                            <p ng-show="activeIssue.premoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
-                            <p ng-show="activeIssue.postmoney" class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span></p>
+                            <p ng-show="activeIssue.postmoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
 
-                            <p ng-show="activeIssue.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><span ng-bind="formatDollarAmount(activeIssue.ppshare)"></span></p>
+                            <p ng-show="activeIssue.ppshare" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.ppshare)"></span><span tooltip-placement="top" tooltip="The price at which each share was purchased">SHARE PRICE</span></p>
 
-                            <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><span ng-bind="formatAmount(activeIssue.totalauth)"></span></p>
+                            <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
 
-                            <p ng-show="activeIssue.liquidpref" class="rightTitle"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span><input disabled ng-model="activeIssue.liquidpref"></p>
+                            <p ng-show="activeIssue.liquidpref" class="belowTitle"><span ng-bind="activeIssue.liquidpref"></span><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">LIQUIDATION PREFERENCE</span></p>
 
-                            <p ng-show="activeIssue.partpref"  class="rightTitle"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span><input disabled ng-model="activeIssue.partpref"></p>
+                            <p ng-show="activeIssue.partpref"  class="belowTitle"><span ng-bind="activeIssue.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">PARTICIPATING PREFERRED</span></p>
 
                         </div>
                           <!-- Options Tab -->
                           <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
-                              <p ng-show="activeIssue.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="activeIssue.optundersec"></p>
+                              <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
 
-                              <p ng-show="activeIssue.totalauth" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">Total Authorized</span><span ng-bind="formatAmount(activeIssue.totalauth)"></span></p>
+                              <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
 
-                              <p ng-show="totalGranted(activeIssue.issue, trans)" class="rightTitle"><span tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span>
+                              <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
                               </p>
 
-                              <p ng-show="activeIssue.price"  class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><span ng-bind="formatDollarAmount(activeIssue.price)"></span></p>
+                              <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span></p>
 
-                              <p ng-show="activeIssue.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="activeIssue.terms"></p>
+                              <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{activeIssue.vestingbegins | date:'shortDate'}}</span></p>
+                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:'shortDate'"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
 
-                              <p ng-show="activeIssue.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="activeIssue.vestcliff"></p>
+                              <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
-                              <p ng-show="activeIssue.vestfreq" class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span><input disabled ng-model="activeIssue.vestfreq"></p>
+                              <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span></p>
                           </div>
 
                           <!-- Debt tab -->
                           <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span></p>
+                              <p class="belowTitle" ng-show="activeIssue.premoney"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span></p>
+                              <p class="belowTitle" ng-show="activeIssue.postmoney"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input disabled ng-model="activeIssue.interestrate"></p>
+                              <p class="belowTitle" ng-show="activeIssue.interestrate"><span ng-bind="activeIssue.interestrate"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE</span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input disabled ng-model="activeIssue.valcap"></p>
+                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="activeIssue.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input disabled ng-model="activeIssue.discount"></p>
+                              <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">DISCOUNT</span></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input disabled ng-model="activeIssue.term"></p>
+                              <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">TERM (MONTHS)</span></p>
                           </div>
                       </span>
 
-                    <!-- Transactions Side Bar when UnEditable -->
+<!-- Transactions Side Bar when UnEditable -->
                       <span ng-switch-when="4">
                         <div class="tabbed headsection row-fluid">
-                            <h2>{{activeInvestor}}
-                            </h2>
+                            <h1>{{activeInvestor}}
+                            </h1>
                         </div>
                         <tabset class="trantabs">
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
-                                <div class="row-fluid trancore">
-                                    <div>
-                                        <p ng-hide="tran.forfeited">Shares <span ng-bind="formatAmount(tran.units)"></span></p>
 
-                                        <p ng-show="tran.amount">Paid <span ng-bind="formatDollarAmount(tran.amount)"></span>
-                                        </p>
+                                <!-- Global Tab -->
+                                <div class="capGuide global">
+                                    <p class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
 
-                                    </div>
-                                    <div class="DivHelper"></div>
-                                </div>
-                                <div ng-show="tran.forfeited" class="row-fluid trancore">
-                                    <div>
-                                        <p>Shares<span ng-bind="formatAmount(tran.units)"></span></p>
+                                    <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
-                                        <p>Forfeit<span ng-bind="formatAmount(tran.forfeited)"></span></p>
-                                    </div>
-                                    <div class="DivHelper"></div>
+                                    <p ng-show="tran.amount" class="belowTitle"><span ng-bind="formatDollarAmount(tran.amount)"></span><span>Paid</span></p>
                                 </div>
 
                                 <!-- Equity Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
 
-                                    <p ng-show="tran.ppshare" class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><span ng-bind="formatDollarAmount(tran.ppshare)"></span></p>
+                                    <p ng-show="tran.ppshare" class="belowTitle"><span ng-bind="formatDollarAmount(tran.ppshare)"></span><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span></p>
 
-                                    <p ng-show="tran.liquidpref" class="rightTitle">
-                                        <span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
-                                        <input disabled ng-model="tran.liquidpref">
-                                    </p>
+                                    <p ng-show="tran.liquidpref" class="belowTitle"><span ng-bind="tran.liquidpref"></span><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span></p>
 
-                                    <p ng-show="tran.partpref" class="rightTitle">
-                                        <span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
-                                        <input disabled ng-model="tran.partpref">
-                                    </p>
+                                    <p ng-show="tran.partpref" class="belowTitle"><span ng-bind="tran.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span></p>
 
                                 </div>
                                 <!-- Option Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
 
-                                    <p ng-show="tran.optundersec" class="rightTitle"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span><input disabled ng-model="tran.optundersec"></p>
+                                    <p ng-show="tran.optundersec" class="belowTitle"><span ng-bind="tran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
 
-                                    <p ng-show="tran.price" class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><span ng-bind="formatDollarAmount(tran.price)"></span></p>
+                                    <p ng-show="tran.price" class="belowTitle"><span ng-bind="formatDollarAmount(tran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span></p>
 
-                                    <p ng-show="tran.terms" class="rightTitle"><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span><input disabled ng-model="tran.terms"></p>
+                                    <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbegins" class="rightTitle"><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span><span>{{tran.vestingbegins | date:'shortDate'}}</span></p>
+                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:'shortDate'"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
 
-                                    <p ng-show="tran.vestcliff" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input disabled ng-model="tran.vestcliff"></p>
+                                    <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
 
-                                    <p ng-show="tran.vestfreq" class="rightTitle"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span><input disabled ng-model="tran.vestfreq"></p>
+                                    <p ng-show="tran.vestfreq" class="belowTitle"><span ng-bind="tran.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span></p>
 
                                 </div>
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
 
-                                    <p ng-show="tran.interestrate" class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input disabled ng-model="tran.interestrate"></p>
+                                    <p ng-show="tran.interestrate" class="belowTitle"><span ng-bind="tran.interestrate"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span></p>
 
-                                    <p ng-show="tran.valcap" class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input disabled ng-model="tran.valcap"></p>
+                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="tran.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
 
-                                    <p ng-show="tran.discount" class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input disabled ng-model="tran.discount"></p>
+                                    <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span></p>
 
-                                    <p ng-show="tran.term" class="rightTitle"><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span><input disabled ng-model="tran.term"></p>
+                                    <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span></p>
                                 </div>
                             </tab>
                         </tabset>
@@ -923,7 +890,7 @@
 
                       <span ng-switch-when="3">
                         <div class="headsection row-fluid">
-                            <h2>{{activeInvestorName}}</h2>
+                            <h1>{{activeInvestorName}}</h1>
 
                             <p>Info on this shareholder</p>
                         </div>
@@ -940,7 +907,7 @@
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
                             <div class="captour" data-step="1" data-intro="Let's take a quick tour of your ownership table">
-                                <h2 >Understand your Ownership</h2>
+                                <h1>Understand your Ownership</h1>
                                 <p> This ownership table, often referred to as a cap table, will show you exactly what percentage
                                     of your company each shareholder owns.</p>
                                 <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
@@ -954,7 +921,7 @@
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">
-                                <h2>Summary</h2>
+                                <h1>Summary</h1>
                             </div>
 
                             <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
@@ -965,8 +932,8 @@
                             <p ng-show="numShareholders()"><span>{{numShareholders()}}</span> Shareholders</p>
                         </span>
                       </span>
-            </div>
-        </div>
+</div>
+</div>
 </div>
 </div>
 </div>

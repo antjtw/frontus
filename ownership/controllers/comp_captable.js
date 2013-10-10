@@ -371,7 +371,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (evt) { // User is typing
             if (evt != 'blur')
                 keyPressed = true;
-            var dateString = angular.element('#' + issue.$$hashKey).val();
+            var dateString = angular.element(field + '#' + issue.$$hashKey).val();
             var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
@@ -826,7 +826,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (evt) { // User is typing
             if (evt != 'blur')
                 keyPressed = true;
-            var dateString = angular.element('#' + transaction.$$hashKey).val();
+            var dateString = angular.element(field + '#' + transaction.$$hashKey).val();
             var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
