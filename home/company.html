@@ -1,5 +1,7 @@
 <div class="headsection row-fluid">
-  <h1>{{navState.name}}</h1>
+    <ul class="maintabs head-text">
+        <li class="selectedtab">{{navState.name}}</li>
+    </ul>
 </div>
 <div class="hero-unit onboarding" ng-show="onboarding">
   <button type="button" class="close" ng-click="close()"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
@@ -25,8 +27,8 @@
       </a>
   </div>
 </div>
-<div class="editProfileFP row-fluid">
-  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+<div class="editProfileFP leftTabWindow row-fluid">
+  <div id="detailsEdit" class="span12"> <!-- detailsEdit = Vertical line -->
       <div class="row-fluid">
           <div class="subnav-controls">
               <div>
