@@ -784,6 +784,7 @@ docviews.directive('restrictContentEditable', function() {
   };
 });
 
+
 docviews.directive('contenteditable', function() {
   return {
     require: 'ngModel',
@@ -791,7 +792,7 @@ docviews.directive('contenteditable', function() {
       // view -> model
       var ff = function() {
         scope.$apply(function() {
-          ctrl.$setViewValue(elm.html());
+          ctrl.$setViewValue(elm.text());
         });
         scope.$emit('updated:name');
       };
@@ -807,11 +808,11 @@ docviews.directive('contenteditable', function() {
 
       // model -> view
       ctrl.$render = function() {
-        elm.html(ctrl.$viewValue);
+        elm.text(ctrl.$viewValue);
       };
 
       // load init value from DOM
-      ctrl.$setViewValue(elm.html());
+      ctrl.$setViewValue(elm.text());
     }
   };
 });
