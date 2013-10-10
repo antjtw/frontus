@@ -13,14 +13,14 @@
             <div>
                 <div class="tools pageTurn span4">
                     <ul ng-class="{'hidden':docLength==1}">
-                        <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span>
+                        <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe003;" aria-hidden="true"></span></li>
                         <li>
                             <label>
                                 <input ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
                             </label>
                         </li>
                         <li>/ {{docLength}}</li>
-                        <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe002;" aria-hidden="true"></span></li>
+                        <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span>
 
                         </li>
                     </ul>
