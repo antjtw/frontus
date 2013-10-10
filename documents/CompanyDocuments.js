@@ -280,6 +280,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
  		$scope.docId = doc.doc_id;
     $scope.library = "document.my_counterparty_library";
     $scope.pages = "document.my_counterparty_codex";
+    // TODO modifiedPages is taking too long to load. Can we only store the page# here?
     $scope.modifiedPages = [];
 
     SWBrijj.tblmm("document.my_counterparty_codex", ["page", "annotated"], "doc_id", doc.doc_id).then(function(x) {
@@ -293,6 +294,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
     z['investor']=doc.investor;
     $location.search(z);
 	};
+
+    $scope.jumpToPage = function(pg) {
+        $rootScope.$broadcast("setPage", pg);
+    };
 
 	$scope.getOriginal = function () {
     $scope.invq = false;

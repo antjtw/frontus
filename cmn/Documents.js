@@ -283,8 +283,8 @@ docs.directive('icon', function() {
     };
 });
 
-docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
-    function($scope, $compile, $location, $routeParams, $window, SWBrijj) {
+docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
         $scope.features = {
             annotations: true
         };
@@ -497,6 +497,8 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 }
             }
         };
+
+        $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
 
         $scope.setPage = function(n) {
             $scope.currentPage = n;
