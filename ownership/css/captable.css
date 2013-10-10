@@ -172,7 +172,6 @@
 .tableView.captable .output {
     position: absolute;
     pointer-events: none;
-    overflow-x: hidden;
     width: 67px;
     text-align: right;
 }
