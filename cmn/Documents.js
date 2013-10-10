@@ -69,7 +69,16 @@ directive('draggable', ['$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div class="sticky">' + '<ul>' + '<li ng-click="dragMe($event)"><span data-icon="&#xe043;"</span></li>' + '<li ng-show="growable" ng-click="biggerMe($event)"><span data-icon="&#xe041;" aria-hidden="true"/></li>' + '<li ng-show="growable" ng-click="smallerMe($event)"><span data-icon="&#xe040;" aria-hidden="true"/></li>' + '<li></li>' + '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li></ul>' + '<span ng-transclude></span>' + '</div>',
+            template: '<div class="sticky">' +
+                        '<ul>' +
+                            '<li ng-click="dragMe($event)" style="padding-right:10px"><span data-icon="&#xe043;"</span></li>' +
+                            '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
+                            '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
+                            '<li></li>' +
+                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' + 
+                        '</ul>' +
+                        '<span ng-transclude></span>' +
+                      '</div>',
             link: function(scope, elm, attrs) {
                 // the elm[0] is to unwrap the angular element
                 void(attrs);
@@ -140,6 +149,7 @@ directive('draggable', ['$document',
                     leftFromRightLocation = function(elementWidth, currRight) {
                         var docPanel = document.querySelector('.docPanel');
                         var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
+                        console.log("rightEdge: " + rightEdge);
                         if (currRight > rightEdge) {
                             return rightEdge - elementWidth;
                         } else {
@@ -533,8 +543,8 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.fixBox = function(bb) {
             var pad;
             var enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
-            bb.style.width = '30px';
-            bb.style.height = '20px';
+            bb.style.width = '140px';
+            bb.style.height = '40px';
             var crs = countCRs(bb.value);
             if (bb.clientHeight < bb.scrollHeight) {
                 pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb, 'padding-bottom');
@@ -594,6 +604,22 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 if (bb.offsetWidth) $scope.fixBox(bb);
             }, 850);
 
+            return aa;
+        };
+
+        $scope.newSignature = function(event) {
+            var aa = $scope.newSignatureX($scope.currentPage, '', null);
+            aa.scope().initdrag(event);
+        };
+
+        $scope.newSignatureX = function(page, val, style) {
+            // TODO refactor to create a newPad with the image piped in as initial contents
+            $scope.restoredPage = page;
+            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
+                              '<img src="http://www.couponingtodisney.com/wp-content/uploads/2012/12/Mickey-Mouse-Signature.jpg" width="100"/></div>')($scope);
+            aa.scope().ntype = 'signature';
+            aa[0].notetype = 'signature';
+            aa.scope().growable = true;
             return aa;
         };
 
@@ -709,10 +735,22 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
             canvas.addEventListener('mousemove', function(e) {
                 if (canvas.down) {
-                    var inProgress, cp1x, cp1y, cp2x, cp2y;
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.X, canvas.Y);
+                    var offs = getCanvasOffset(e);
+                    ctx.lineTo(offs[0], offs[1]);
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
+                }
+                /* BEZIER CURVES?
+                if (canvas.down) {
+                    var inProgress, offs, cp1x, cp1y, cp2x, cp2y;
                     if (!inProgress) {
                         ctx.beginPath();
                         ctx.moveTo(canvas.X, canvas.Y);
+                        offs = getCanvasOffset(e);
                         inProgress = true;
                         skip1 = true;
                         skip2 = false;
@@ -729,13 +767,17 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                             skip1 = false;
                             skip2 = false;
                         } else {
-                            ctz.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
+                            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
                             skip1 = true;
                             skip2 = false;
                         }
                     }
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
                     ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
                 }
+                */
             }, true); // cancel bubble
             canvas.strokes = lines;
             $scope.fixPad(aa);
@@ -820,25 +862,15 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
                 if (typ == 'text') {
                     se = nx.querySelector("textarea");
-                    lh = getIntProperty(se, 'line-height');
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
-
-                    // var lho = Math.floor( (1/1.4) * lh);
-                    // ndx[0][2][1]+=lho;
-
-                    ndx[0][2][0] += 3;
-                    ndx[0][2][1] -= 5;
-
+                    ndx[0][2][0] += 5;
+                    ndx[0][2][1] -= 6;
                 } else if (typ == 'check') {
                     se = nx.querySelector("span.check-annotation");
                     lh = getIntProperty(se, 'line-height');
                     style.push(getIntProperty(se, 'font-size'));
-                    ndx[0][2][1] += Math.floor((1 / 1.4) * lh);
-
-                    // ndx[0][2][0]+=2;
-                    ndx[0][2][1] -= 4;
-
+                    ndx[0][2][1] += 6;
                 } else if (typ == 'canvas') {
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
