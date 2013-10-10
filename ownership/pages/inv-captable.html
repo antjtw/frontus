@@ -62,14 +62,21 @@
                 <td ng-repeat="key in issuekeys">
                 </td>
             </tr>
+            <!-- Footer Total Row -->
+            <tr ng-show="fullview" class="total-row">
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td ng-repeat="one in issuekeys" ></td>
+            </tr>
             <tr ng-show="fullview" class='tablefooter'>
-                <td><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
-                <td><input class="input-right" disabled value="100%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="100%"></td>
                 <td></td>
                 <td ng-repeat="one in issues">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one.issue, rows, 'u'))" class="output footer"></div>
-                        <div ng-bind="formatAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one.issue, rows, 'a'))" class="output second footer"></div>
                     </span>
                 </td>
             </tr>

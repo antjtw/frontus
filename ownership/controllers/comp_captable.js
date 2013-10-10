@@ -1556,7 +1556,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (row.name && row.editable == "yes") {
                 var check = true;
                 angular.forEach($scope.issuekeys, function(issue) {
-                    if (row[issue]['u'] || row[issue]['a']) {
+                    if (row[issue]['u'] != null || row[issue]['a'] != null) {
                         check = false;
                     }
                 });
