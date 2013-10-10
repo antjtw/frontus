@@ -1446,7 +1446,7 @@ form.inputs {
     color: #FFFFFF;
 }
 
-.standard-button > button.red {
+.standard-button.red > button {
     background-color: #E74C3C;
 }
 

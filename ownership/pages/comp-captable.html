@@ -307,8 +307,8 @@
             <td  class="viewName">{{row.name}}</td>
             <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                        <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
+                        <div ng-bind="formatAmount(row[key]['u'])" class="editview output clickable"></div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])" class="editview output second clickable"></div>
                     </span>
             </td>
         </tr>
@@ -363,9 +363,9 @@
             <td></td>
             <td ng-repeat="one in issuekeys" >
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" class="output footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
-                        <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" class="output second footer"></div>
+                        <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
                     </span>
             </td>
         </tr>
