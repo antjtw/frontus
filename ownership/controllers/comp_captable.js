@@ -1486,6 +1486,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     //switches the sidebar based on the type of the issue
     $scope.dilution = function () {
+        $scope.sideBar = 9;
          $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
     };
 
