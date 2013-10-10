@@ -325,8 +325,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         }
 
         $scope.refreshPageBar = function(pg) {
-            var temp = (Math.floor(pg/$scope.pageBarSize) * $scope.pageBarSize);
-            $scope.pageScroll = pg % $scope.pageBarSize === 0 ? temp - 1 : temp;
+            if (pg > $scope.pageScroll + $scope.pageBarSize - 1 || pg <= $scope.pageScroll) {
+                var temp = (Math.floor(pg/$scope.pageBarSize) * $scope.pageBarSize);
+                $scope.pageScroll = pg % $scope.pageBarSize === 0 ? temp - 1 : temp;
+            }
         };
 
         $scope.showPages = function() {
