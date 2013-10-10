@@ -326,7 +326,7 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 }
 
 .capright .tab-content {
-    min-height: 500px;
+    min-height: 550px;
 }
 
 .capright .issue-delete {
