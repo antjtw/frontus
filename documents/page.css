@@ -17,7 +17,7 @@ div.maincontent {
 .buttonAddDoc {
     box-shadow: none;
     -webkit-box-shadow: none;
-};
+}
 
 .draggable textarea {
     font-family: Helvetica, sans-serif;
@@ -26,6 +26,10 @@ div.maincontent {
 
 .companyDocViewer {
     border-left: 1px solid #E3E3E3;
+}
+
+.subnav-controls.flush-controls {
+    margin-bottom: 0px;
 }
 
 .docVersiontab > ul {
