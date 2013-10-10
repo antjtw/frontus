@@ -340,6 +340,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope','$routeParams','$
   };
 
   $scope.rejectSignature = function(cd, msg) {
+    if (msg === "Add an optional message...") {
+        msg = "";
+    }
     SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
       $scope.$emit("notification:success", "Document signature rejected.");
       void(data);
