@@ -862,25 +862,15 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
 
                 if (typ == 'text') {
                     se = nx.querySelector("textarea");
-                    lh = getIntProperty(se, 'line-height');
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
-
-                    // var lho = Math.floor( (1/1.4) * lh);
-                    // ndx[0][2][1]+=lho;
-
-                    ndx[0][2][0] += 3;
-                    ndx[0][2][1] -= 5;
-
+                    ndx[0][2][0] += 5;
+                    ndx[0][2][1] -= 6;
                 } else if (typ == 'check') {
                     se = nx.querySelector("span.check-annotation");
                     lh = getIntProperty(se, 'line-height');
                     style.push(getIntProperty(se, 'font-size'));
-                    ndx[0][2][1] += Math.floor((1 / 1.4) * lh);
-
-                    // ndx[0][2][0]+=2;
-                    ndx[0][2][1] -= 4;
-
+                    ndx[0][2][1] += 6;
                 } else if (typ == 'canvas') {
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
