@@ -324,6 +324,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         }
 
+        $scope.refreshPageBar = function(pg) {
+            $scope.pageScroll = Math.floor(pg/$scope.pageBarSize) * $scope.pageBarSize;
+        };
 
         $scope.showPages = function() {
             return $scope.range($scope.pageScroll + 1, Math.min($scope.pageScroll + $scope.pageBarSize, $scope.docLength + 1));
@@ -505,6 +508,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            $scope.refreshPageBar(n);
         };
 
         $scope.nextPage = function(value) {
