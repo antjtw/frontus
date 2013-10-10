@@ -381,6 +381,12 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
     margin: 0 0 0 0;
 }
 
+.nav-tabs > li > a {
+    border-radius: 0;
+    margin-right: 0px;
+    cursor: pointer;
+}
+
 .trancore {
     height: 44px;
     border-bottom: 1px solid #E3E3E3;
@@ -394,7 +400,6 @@ td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranView
 
 .trancore p {
     padding-left: 20px;
-    text-transform: uppercase;
     display: block;
     float: left;
     height:12px;
