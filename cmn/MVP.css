@@ -1446,6 +1446,10 @@ form.inputs {
     color: #FFFFFF;
 }
 
+.standard-button > button.red {
+    background-color: #E74C3C;
+}
+
 /* Back icon */
 .back-icon {
     display: inline-block;

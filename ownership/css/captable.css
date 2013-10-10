@@ -175,6 +175,10 @@
     width: 67px;
     text-align: right;
 }
+.tableView.captable .output.editview {
+    text-align: left;
+    padding: 0 0 0 6px;
+}
 
 .tableView.captable .output.clickable {
     pointer-events: auto;
