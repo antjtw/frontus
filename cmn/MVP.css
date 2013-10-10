@@ -715,6 +715,13 @@ form.inputs {
 	padding-top: 20px;
 }
 
+.docLibrary input {
+    border: 0;
+    padding: 0;
+    margin-right: 5px;
+    width: 67px;
+}
+
 
 
 #forgotLink {
