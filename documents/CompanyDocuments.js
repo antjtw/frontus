@@ -592,6 +592,12 @@ docviews.controller('InvestorDocumentListController',['$scope','SWBrijj','$locat
   $scope.time = function (doc) {
     return doc.when_signed || doc.signature_deadline;
   };
+
+  $scope.gotoDoc = function (docid) {
+      var link;
+      link = "/documents/investor-view?doc=" + docid;
+      document.location.href=link;
+  };
 }]);
 
 /*************************************************************************************************/
