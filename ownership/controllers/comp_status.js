@@ -64,6 +64,10 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         return -card.event_time;
     };
 
+    $scope.peopleOrder = 'email'
+
+    $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
+
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {
             if (selected == name.email) {
