@@ -663,6 +663,7 @@ li.selectedtab {
     background-color: #FFFFFF;
     height: 22px;
     margin-bottom: 0;
+    border-radius: 3px;
 }
 
 .subnav-controls h2 {
@@ -679,7 +680,6 @@ li.selectedtab {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
-    width: 974px;
     font-size:20px;
     float: right;
 }
@@ -952,13 +952,6 @@ form.inputs {
 
 .docLibrary .capsums-col {
 	background: none;
-}
-
-.docLibrary input {
-	border: 0;
-	padding: 0;
-    margin-right: 5px;
-	width: 67px;
 }
 
 /* Placeholder text color */

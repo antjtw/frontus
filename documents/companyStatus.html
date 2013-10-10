@@ -21,37 +21,31 @@
 
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h2>
-            <a href="/documents/">
-                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
-            </a>
-            <span class="doc-title" ng-bind="document.docname | lengthLimiter"></span>
-        </h2>
+
+        <ul class="maintabs head-text">
+            <li><a href="/documents/company-list">Documents</a></li>
+            <li><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | lengthLimiter"></span></a></li>
+            <li class="selectedtab">Status</li>
+        </ul>
+
+    </div>
 
       <div class="row-fluid">
-
-        <ul class="bodyText maintabs">
-          <li class="selectedtab">Status</li>
-          <li class="button"><a href="/documents/company-view?doc={{document.doc_id}}">
-            View
-          </a></li>
-        </ul>
+          <div class="subnav-controls">
+              <div>
+                  <div class="pull-left">
+                      <span>Search</span>
+                      <input type="text" class="search-box" ng-model="query">
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
       </div>
-    </div>
   </div>
 
   <div class="row-fluid">
 
     <div class="span8 docLibrary">
-
-      <div class="row-fluid">
-        <div class="subnav-controls">
-          <div>
-            <h2>Shareholder Status</h2>
-          </div>
-          <div class="DivHelper"></div>
-        </div>
-      </div>
       <div class="row-fluid">
         <table class="tableView bodyText">
           <tr class="column-label status-columns">
@@ -62,7 +56,7 @@
           <tr>
               <td ng-show="!docversions[0]" colspan="4">You haven't shared this document with anyone yet!</td>
           </tr>
-          <tbody ng-repeat="person in docversions">
+          <tbody ng-repeat="person in docversions | filter: query">
           <tr class="status-row" ng-class="{selectedrow:person.shown}" ng-click="showStatusDetail(person)">
             <td>{{person.name}}</td>
             <td>{{person.investor}}</td>
@@ -149,12 +143,6 @@
 
 
         <div class="row-fluid activity-feed">
-            <div class="subnav-controls">
-                <div>
-                    <h2>Activity Feed</h2>
-                </div>
-                <div class="DivHelper"></div>
-            </div>
 
             <section class="statusFeed">
                 <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
