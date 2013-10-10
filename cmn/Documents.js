@@ -69,7 +69,16 @@ directive('draggable', ['$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div class="sticky">' + '<ul>' + '<li ng-click="dragMe($event)"><span data-icon="&#xe043;"</span></li>' + '<li ng-show="growable" ng-click="biggerMe($event)"><span data-icon="&#xe041;" aria-hidden="true"/></li>' + '<li ng-show="growable" ng-click="smallerMe($event)"><span data-icon="&#xe040;" aria-hidden="true"/></li>' + '<li></li>' + '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li></ul>' + '<span ng-transclude></span>' + '</div>',
+            template: '<div class="sticky">' +
+                        '<ul>' +
+                            '<li ng-click="dragMe($event)" style="padding-right:10px"><span data-icon="&#xe043;"</span></li>' +
+                            '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
+                            '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
+                            '<li></li>' +
+                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' + 
+                        '</ul>' +
+                        '<span ng-transclude></span>' +
+                      '</div>',
             link: function(scope, elm, attrs) {
                 // the elm[0] is to unwrap the angular element
                 void(attrs);
@@ -534,8 +543,8 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
         $scope.fixBox = function(bb) {
             var pad;
             var enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
-            bb.style.width = '30px';
-            bb.style.height = '20px';
+            bb.style.width = '140px';
+            bb.style.height = '40px';
             var crs = countCRs(bb.value);
             if (bb.clientHeight < bb.scrollHeight) {
                 pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb, 'padding-bottom');
@@ -544,7 +553,6 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             if (bb.clientWidth < bb.scrollWidth) {
                 // pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb, 'padding-right');
                 bb.style.width = (bb.scrollWidth + 10) + "px";
-                console.log("old left: " + enclosingElement.offsetLeft);
             }
             bb.fontSize = getIntProperty(bb, 'font-size');
             bb.lineHeight = Math.floor(bb.fontSize * 1.4);
