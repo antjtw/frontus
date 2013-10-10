@@ -172,9 +172,12 @@
 .tableView.captable .output {
     position: absolute;
     pointer-events: none;
-    overflow-x: hidden;
     width: 67px;
     text-align: right;
+}
+.tableView.captable .output.editview {
+    text-align: left;
+    padding: 0 0 0 6px;
 }
 
 .tableView.captable .output.clickable {

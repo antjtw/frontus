@@ -23,17 +23,21 @@
                         <td>
                             <input disabled style="width:180px;" ng-model="row.name">
                         </td>
-                        <td>{{row.granted}}</td>
-                        <td>{{row.vested}}</td>
-                        <td>{{row.forfeited}}</td>
-                        <td>{{row.exercised}}</td>
+                        <td>{{formatAmount(row.granted)}}</td>
+                        <td>{{formatAmount(row.vested)}}</td>
+                        <td>{{formatAmount(row.forfeited)}}</td>
+                        <td>{{formatAmount(row.exercised)}}</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td colspan="4"></td>
                     </tr>
                     <tr ng-show="rows.length > 1" class='tablefooter'>
                         <td></td>
-                        <td><input disabled value="{{totalTranAction('granted', trans)}}"></td>
-                        <td><input disabled value="{{totalVestedAction(rows);}}"></td>
-                        <td><input disabled value="{{totalGrantAction('forfeited', grants)}}"></td>
-                        <td><input disabled value="{{totalGrantAction('exercised', grants);}}"></td>
+                        <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
+                        <td><input disabled value="{{formatAmount(totalVestedAction(rows))}}"></td>
+                        <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
+                        <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
                     </tr>
                 </table>
             </div>

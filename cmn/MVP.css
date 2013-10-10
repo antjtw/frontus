@@ -431,7 +431,7 @@ h2 {
 	box-shadow: none;
 	padding: 0 0 0 0;
 	margin-top: 0;
-	width: 240px;
+	width: 245px;
     border-top: 1px solid rgb(227, 227, 227);
 }
 
@@ -610,11 +610,12 @@ h2 {
 	display: inline;
 	padding: 3px 15px 3px 15px;
 	text-align: center;
-    border-right: 1px solid #A6A6A6;
+    border-left: 1px solid #A6A6A6;
 }
 
 .maintabs li:first-of-type {
     padding-left: 20px;
+    border-left: none;
 }
 
 .maintabs li:last-of-type {
@@ -663,6 +664,7 @@ li.selectedtab {
     background-color: #FFFFFF;
     height: 22px;
     margin-bottom: 0;
+    border-radius: 3px;
 }
 
 .subnav-controls h2 {
@@ -679,7 +681,6 @@ li.selectedtab {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
-    width: 974px;
     font-size:20px;
     float: right;
 }
@@ -713,6 +714,13 @@ li.selectedtab {
 
 form.inputs {
 	padding-top: 20px;
+}
+
+.docLibrary input {
+    border: 0;
+    padding: 0;
+    margin-right: 5px;
+    width: 67px;
 }
 
 
@@ -952,13 +960,6 @@ form.inputs {
 
 .docLibrary .capsums-col {
 	background: none;
-}
-
-.docLibrary input {
-	border: 0;
-	padding: 0;
-    margin-right: 5px;
-	width: 67px;
 }
 
 /* Placeholder text color */
@@ -1443,6 +1444,10 @@ form.inputs {
 .standard-button > button:disabled {
     background-color: #8CDDCA;
     color: #FFFFFF;
+}
+
+.standard-button > button.red {
+    background-color: #E74C3C;
 }
 
 /* Back icon */
