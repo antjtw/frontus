@@ -316,7 +316,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.pickInvestor = function(doc, clicked) {
-            if (!$scope.counterparty) {
+            if (clicked) {
                 angular.element(".docPanel").scope().saveNoteData();
             }
             $scope.invq = false;
