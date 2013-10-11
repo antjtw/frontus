@@ -498,7 +498,7 @@ p.belowTitle {
 
 .belowTitle > span:first-child {
    display: block;
-   color: #656565;
+   color: #1E2D3D;
 }
 
 .belowTitle > span:last-of-type {
@@ -506,6 +506,7 @@ p.belowTitle {
     width: auto;
     text-transform: uppercase;
     font-size: 10px;
+    color: #8D8D8D;
 }
 
 input.content, textarea.content {

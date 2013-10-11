@@ -923,12 +923,14 @@
                                 <h1>Summary</h1>
                             </div>
 
-                            <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
-                            <p ng-show="false"><span>{{lastIssue() | date:'shortDate'}}</span> Date of last valuation</p>
-                            <p ng-show="pricePerShare()"><span>{{pricePerShare()}}</span> Price-per-share</p>
-                            <p ng-show="totalPaid(rows)"><span>{{totalPaid(rows)}}</span> Total Paid</p>
-                            <p ng-show="totalShares(rows)"><span>{{totalShares(rows)}}</span> Fully Diluted Units</p>
-                            <p ng-show="numShareholders()"><span>{{numShareholders()}}</span> Shareholders</p>
+                            <div class="capGuide">
+                                <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Post Money Valuation</span></p>
+                                <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:'shortDate'"></span><span>Date of last valuation</span></p>
+                                <p ng-show="pricePerShare()" class="belowTitle"><span ng-bind="pricePerShare()"></span><span>Price-per-share</span></p>
+                                <p ng-show="totalPaid(rows)" class="belowTitle"><span ng-bind="totalPaid(rows)"></span><span>Total Paid</span></p>
+                                <p ng-show="totalShares(rows)" class="belowTitle"><span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span></p>
+                                <p ng-show="numShareholders()" class="belowTitle"><span ng-bind="numShareholders()"></span><span>Shareholders</span></p>
+                            </div>
                         </span>
                       </span>
 </div>
