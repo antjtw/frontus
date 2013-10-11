@@ -85,8 +85,8 @@
 }
 
 .tableView th:first-of-type {
-    padding-left: 20px;
     width: 165px;
+    text-align: center;
 }
 
 .tableView th.staticHeaders {
