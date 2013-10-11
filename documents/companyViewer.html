@@ -75,9 +75,9 @@
           <span class="unselectable">Original</span>
           <span class="tab-arrow" data-icon="&#xe033;"></span>
         </li>
-        <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
+        <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc, true);" >
           <span class="unselectable" >{{doc | nameoremail}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
-          <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
+          <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages track by $id($index)">
              <li ng-click="jumpToPage(pp);">Page {{ pp }}</li>
           </ul>
         </li>

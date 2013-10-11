@@ -315,9 +315,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             }
         });
 
-        $scope.pickInvestor = function(doc) {
+        $scope.pickInvestor = function(doc, clicked) {
             if (!$scope.counterparty) {
-                console.log('saving note data: (CompanyDocuments (348)');
                 angular.element(".docPanel").scope().saveNoteData();
             }
             $scope.invq = false;
@@ -345,6 +344,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             var z = $location.search();
             z['investor'] = doc.investor;
             $location.search(z);
+            if (clicked) {
+                $route.reload();
+            }
         };
 
         $scope.jumpToPage = function(pg) {
