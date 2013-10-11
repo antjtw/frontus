@@ -25,6 +25,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                         person[act] = time;
                     }
                 });
+                person.viewedbool = person.viewed ? "viewed" : "unviewed";
             });
         });
         SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
@@ -62,6 +63,10 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
+
+    $scope.peopleOrder = 'email'
+
+    $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {

@@ -87,13 +87,13 @@
                 <table class="status-table">
                     <tbody>
                     <tr>
-                        <th colspan="2">Shareholder</th>
-                        <th>Permission</th>
-                        <th>Status</th>
+                        <th colspan="2" ng-click="setOrder('email')">Shareholder</th>
+                        <th ng-click="setOrder('level')">Permission</th>
+                        <th ng-click="setOrder('viewedbool')">Status</th>
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="person in userStatus  | filter: filterPeople">
+                    <tbody ng-repeat="person in userStatus  | filter: filterPeople  | orderBy: peopleOrder">
                     <tr class="empty-row"></tr>
                     <tr ng-class="{selectedrow:person.shown}">
                         <td class="status-toggle" ng-class="{'status-toggle-on': person.shown}" ng-click="(opendetails(person.email))">
