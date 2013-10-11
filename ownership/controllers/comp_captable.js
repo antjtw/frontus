@@ -1115,6 +1115,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.canHover = function (row) {
+        if (row['u'] || row['a']) {
+            return true
+        }
+        else {
+            return false
+        }
+    };
+
 
     // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
