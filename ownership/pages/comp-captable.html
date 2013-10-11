@@ -614,7 +614,7 @@
                                                                                     maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                     ng-model="tran.units" onkeydown="testForEnter();"></p>
 
-                                    <p class="rightTitle"><span>Paid</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
                                                                                   maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
                                 </div>
 
@@ -842,7 +842,7 @@
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
-                                    <p ng-show="tran.amount" class="belowTitle"><span ng-bind="formatDollarAmount(tran.amount)"></span><span>Paid</span></p>
+                                    <p ng-show="tran.amount" class="belowTitle"><span ng-bind="formatDollarAmount(tran.amount)"></span><span>Total Paid</span></p>
                                 </div>
 
                                 <!-- Equity Tab -->
