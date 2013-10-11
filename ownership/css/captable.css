@@ -569,6 +569,10 @@ tr.rowSelected, tr.rowSelected:hover {
 .status-table > tbody:first-child > tr {
     border: 1px solid #E2E2E2;
     height: 30px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Bold', sans-serif;
 }
 
 .status-table > tbody:first-child > tr > th:first-child {
