@@ -55,10 +55,6 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', 'navS
     /** @name Object#except
      * @type {function( function(!Object) )} */
 
-    if (! (navState.role == 'sheriff')) {
-      document.location.href=('/home');
-      return;
-    }
   // var dropbox = $scope.$element.querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';
     $scope.files = [];
