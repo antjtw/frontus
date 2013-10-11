@@ -862,7 +862,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
-                var pos = [nx.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
