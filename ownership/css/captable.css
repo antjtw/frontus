@@ -6,6 +6,10 @@
 
 /* Captable */
 
+.right-bar-header {
+    margin-top: 37px;
+}
+
 .capGuide {
     display: block;
     padding: 0 0 0 20px;
