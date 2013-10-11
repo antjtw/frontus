@@ -220,8 +220,9 @@ p.captablepair {
     margin: 0 0 0 0;
 }
 
-.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields:hover {
+.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {
     background-color: rgba(26, 188, 150, 0.1);
+    cursor: pointer;
 }
 
 .tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
@@ -258,13 +259,13 @@ p.captablepair {
     -webkit-text-fill-color: #F1F1F1;
 }
 
-td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranViewSelected:hover {
+td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
     -webkit-text-fill-color: #F1F1F1;
 }
 
-.tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected:hover, .tableView.captable th.tranViewSelected, .tableView.captable th.tranViewSelected:hover {
+.tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected.hoverable:hover, .tableView.captable th.tranViewSelected, .tableView.captable th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
     -webkit-text-fill-color: #F1F1F1;
