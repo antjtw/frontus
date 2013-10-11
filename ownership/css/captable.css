@@ -542,6 +542,15 @@ textarea {
 
 /* Grants Table */
 
+.tableView.grant-table td {
+    padding: 0;
+}
+
+.tableView.grant-table tr > td:first-child {
+    padding-left: 20px;
+    text-align: left;
+}
+
 tr.rowSelected, tr.rowSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
