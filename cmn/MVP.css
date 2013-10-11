@@ -1450,6 +1450,10 @@ form.inputs {
     background-color: #E74C3C;
 }
 
+.standard-button.red > button:hover {
+    background-color: #C44032;
+}
+
 /* Back icon */
 .back-icon {
     display: inline-block;
