@@ -54,7 +54,8 @@
           <tabset class="trantabs">
               <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
 
-                  <div class="capGuide global">
+                  <div class="capGuide global" style="overflow: auto">
+                      <h2>Information</h2>
 
                       <p ng-show="tran.optundersec" class="belowTitle"><span ng-bind="tran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
 
@@ -71,13 +72,21 @@
 
                   </div>
 
-                  <ul>
-                      <li class="grant-list" ng-repeat="act in tran.activeAct">
-                          <p class="rightTitle"><span>Action</span><input disabled ng-model="act.action"></p>
-                          <p class="rightTitle"><span>Date</span><span>{{act.date | date:'shortDate'}}</span></p>
-                          <p class="rightTitle"><span>Shares</span><input disabled ng-model="act.unit"></p>
-                      </li>
-                  </ul>
+                  <div class="grant-list-table" ng-show="tran.activeAct.length > 0">
+                      <h2>Grant Activity</h2>
+                      <table>
+                          <tr>
+                              <td>Date</td>
+                              <td>Activity</td>
+                              <td>Shares</td>
+                          </tr>
+                          <tr ng-repeat="act in tran.activeAct">
+                              <td class="rightTitle">{{act.date | date:'shortDate'}}</td>
+                              <td class="rightTitle">{{act.action}}</td>
+                              <td class="rightTitle">{{formatAmount(act.unit)}}</td>
+                          </tr>
+                      </table>
+                  </div>
 
               </tab>
           </tabset>

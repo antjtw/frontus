@@ -546,18 +546,26 @@ tr.rowSelected, tr.rowSelected:hover {
     background-color: transparent;
 }
 
-.grant-list {
-    list-style: none;
-    border-bottom: 1px solid #E3E3E3;
-    padding-top: 10px;
+.grant-list-table {
+    border-top: 1px solid #E3E3E3;
+    padding: 10px 0 0 20px;
+    width: 100%;
 }
 
-.grant-list:first-of-type {
-    padding-top: 0;
+.grant-list-table > table {
+    width: 250px;
 }
 
-.grant-list:last-of-type {
-    border-bottom: none;
+.grant-list-table > table > tbody > tr:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    padding-bottom: 10px;
+    color: #8D8D8D;
+}
+
+.grant-list-table > table > tbody > tr {
+    color: #1E2D3D;
+    height: 25px;
 }
 
 /* Status Page */
