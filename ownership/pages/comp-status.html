@@ -87,7 +87,7 @@
                 <table class="status-table">
                     <tbody>
                     <tr>
-                        <th colspan="2" ng-click="setOrder('email')">Shareholder</th>
+                        <th colspan="2" ng-click="setOrder('name')">Shareholder</th>
                         <th ng-click="setOrder('level')">Permission</th>
                         <th ng-click="setOrder('viewedbool')">Status</th>
                         <th></th>
@@ -100,7 +100,7 @@
                             <span ng-hide="person.shown" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="person.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column">{{person | nameoremail}}</td>
+                        <td class="shareholder-column">{{person.name}}</td>
                         <td>{{person.level}}</td>
                         <td>
                             <span ng-hide="person.viewed">unviewed</span>

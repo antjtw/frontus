@@ -13,6 +13,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
+            $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
             console.log(activities);
@@ -64,7 +65,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         return -card.event_time;
     };
 
-    $scope.peopleOrder = 'email'
+    $scope.peopleOrder = 'name'
 
     $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
