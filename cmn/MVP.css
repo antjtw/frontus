@@ -682,6 +682,7 @@ li.selectedtab {
     white-space: nowrap;
     overflow: hidden;
     font-size:20px;
+    line-height: 24px;
     float: right;
 }
 
@@ -1448,6 +1449,10 @@ form.inputs {
 
 .standard-button.red > button {
     background-color: #E74C3C;
+}
+
+.standard-button.red > button:hover {
+    background-color: #C44032;
 }
 
 /* Back icon */

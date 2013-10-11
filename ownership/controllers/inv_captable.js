@@ -336,6 +336,15 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     };
 
+    $scope.canHover = function (row) {
+        if (row['u'] || row['a']) {
+            return true
+        }
+        else {
+            return false
+        }
+    };
+
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);

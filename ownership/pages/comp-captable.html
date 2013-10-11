@@ -317,8 +317,8 @@
         <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
             <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
             <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-            <td ng-class="{tranViewSelected:row.state}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-            <td class="tableFields" ng-class="{tranViewSelected:row[key].state}" ng-repeat="key in issuekeys | orderBy:issueSort">
+            <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+            <td class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" ng-click="getActiveTransaction(row.name, key)" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])" ng-click="getActiveTransaction(row.name, key)" class="output second clickable"></div>
@@ -614,7 +614,7 @@
                                                                                     maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                     ng-model="tran.units" onkeydown="testForEnter();"></p>
 
-                                    <p class="rightTitle"><span>Paid</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
                                                                                   maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
                                 </div>
 
@@ -842,7 +842,7 @@
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
-                                    <p ng-show="tran.amount" class="belowTitle"><span ng-bind="formatDollarAmount(tran.amount)"></span><span>Paid</span></p>
+                                    <p ng-show="tran.amount" class="belowTitle"><span ng-bind="formatDollarAmount(tran.amount)"></span><span>Total Paid</span></p>
                                 </div>
 
                                 <!-- Equity Tab -->
@@ -906,7 +906,7 @@
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
                             <div class="captour" data-step="1" data-intro="Let's take a quick tour of your ownership table">
-                                <h1>Understand your Ownership</h1>
+                                <h1 class="right-bar-header">Understand your Ownership</h1>
                                 <p> This ownership table, often referred to as a cap table, will show you exactly what percentage
                                     of your company each shareholder owns.</p>
                                 <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
@@ -923,12 +923,14 @@
                                 <h1>Summary</h1>
                             </div>
 
-                            <p ng-show="lastPostMoney()"><span>{{lastPostMoney()}}</span> Post Money Valuation</p>
-                            <p ng-show="false"><span>{{lastIssue() | date:'shortDate'}}</span> Date of last valuation</p>
-                            <p ng-show="pricePerShare()"><span>{{pricePerShare()}}</span> Price-per-share</p>
-                            <p ng-show="totalPaid(rows)"><span>{{totalPaid(rows)}}</span> Total Paid</p>
-                            <p ng-show="totalShares(rows)"><span>{{totalShares(rows)}}</span> Fully Diluted Units</p>
-                            <p ng-show="numShareholders()"><span>{{numShareholders()}}</span> Shareholders</p>
+                            <div class="capGuide">
+                                <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Post Money Valuation</span></p>
+                                <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:'shortDate'"></span><span>Date of last valuation</span></p>
+                                <p ng-show="false" class="belowTitle"><span ng-bind="pricePerShare()"></span><span>Price-per-share</span></p>
+                                <p ng-show="totalPaid(rows)" class="belowTitle"><span ng-bind="totalPaid(rows)"></span><span>Total Invested</span></p>
+                                <p ng-show="totalShares(rows)" class="belowTitle"><span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span></p>
+                                <p ng-show="numShareholders()" class="belowTitle"><span ng-bind="numShareholders()"></span><span>Shareholders</span></p>
+                            </div>
                         </span>
                       </span>
 </div>

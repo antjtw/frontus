@@ -6,6 +6,10 @@
 
 /* Captable */
 
+.right-bar-header {
+    margin-top: 37px;
+}
+
 .capGuide {
     display: block;
     padding: 0 0 0 20px;
@@ -83,6 +87,11 @@
 .tableView th:first-of-type {
     padding-left: 20px;
     width: 165px;
+}
+
+.tableView.captable th:first-of-type {
+    padding-left: 0;
+    text-align: center;
 }
 
 .tableView th.staticHeaders {
@@ -220,8 +229,9 @@ p.captablepair {
     margin: 0 0 0 0;
 }
 
-.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields:hover {
+.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {
     background-color: rgba(26, 188, 150, 0.1);
+    cursor: pointer;
 }
 
 .tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
@@ -258,13 +268,13 @@ p.captablepair {
     -webkit-text-fill-color: #F1F1F1;
 }
 
-td.tranViewSelected, td.tranViewSelected:hover, th.tranViewSelected, th.tranViewSelected:hover {
+td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
     -webkit-text-fill-color: #F1F1F1;
 }
 
-.tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected:hover, .tableView.captable th.tranViewSelected, .tableView.captable th.tranViewSelected:hover {
+.tableView.captable td.tranViewSelected, .tableView.captable td.tranViewSelected.hoverable:hover, .tableView.captable th.tranViewSelected, .tableView.captable th.tranViewSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
     -webkit-text-fill-color: #F1F1F1;
@@ -498,7 +508,7 @@ p.belowTitle {
 
 .belowTitle > span:first-child {
    display: block;
-   color: #656565;
+   color: #1E2D3D;
 }
 
 .belowTitle > span:last-of-type {
@@ -506,6 +516,7 @@ p.belowTitle {
     width: auto;
     text-transform: uppercase;
     font-size: 10px;
+    color: #8D8D8D;
 }
 
 input.content, textarea.content {
@@ -531,6 +542,15 @@ textarea {
 
 /* Grants Table */
 
+.tableView.grant-table td {
+    padding: 0;
+}
+
+.tableView.grant-table tr > td:first-child {
+    padding-left: 20px;
+    text-align: left;
+}
+
 tr.rowSelected, tr.rowSelected:hover {
     background-color: #8D8D8D;
     color: #F1F1F1;
@@ -545,18 +565,26 @@ tr.rowSelected, tr.rowSelected:hover {
     background-color: transparent;
 }
 
-.grant-list {
-    list-style: none;
-    border-bottom: 1px solid #E3E3E3;
-    padding-top: 10px;
+.grant-list-table {
+    border-top: 1px solid #E3E3E3;
+    padding: 10px 0 0 20px;
+    width: 100%;
 }
 
-.grant-list:first-of-type {
-    padding-top: 0;
+.grant-list-table > table {
+    width: 250px;
 }
 
-.grant-list:last-of-type {
-    border-bottom: none;
+.grant-list-table > table > tbody > tr:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    padding-bottom: 10px;
+    color: #8D8D8D;
+}
+
+.grant-list-table > table > tbody > tr {
+    color: #1E2D3D;
+    height: 25px;
 }
 
 /* Status Page */
@@ -569,6 +597,10 @@ tr.rowSelected, tr.rowSelected:hover {
 .status-table > tbody:first-child > tr {
     border: 1px solid #E2E2E2;
     height: 30px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Bold', sans-serif;
 }
 
 .status-table > tbody:first-child > tr > th:first-child {
