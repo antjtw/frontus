@@ -343,6 +343,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
             var z = $location.search();
             z['investor'] = doc.investor;
+            z.page = 1;
             $location.search(z);
             if (clicked) {
                 $route.reload();
@@ -353,7 +354,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $rootScope.$broadcast("setPage", pg);
         };
 
-        $scope.getOriginal = function() {
+        $scope.getOriginal = function(clicked) {
+            if (clicked) {
+                angular.element(".docPanel").scope().saveNoteData();
+            }
             $scope.invq = false;
             $scope.counterparty = false;
             $scope.currentDoc = $scope.document;
@@ -362,7 +366,11 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.pages = "document.my_company_codex";
             var z = $location.search();
             delete z['investor'];
+            z.page = 1;
             $location.search(z);
+            if (clicked) {
+                $route.reload();
+            }
         };
 
         $scope.pageQueryString = function() {
