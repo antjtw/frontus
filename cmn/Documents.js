@@ -12,9 +12,8 @@ function getComputed(se, z) {
 function getCanvasOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
-        // this only works for finding offsets in canvas elements
-        offx = ev.pageX-$('canvas').offset().left;
-        offy = ev.pageY-$('canvas').offset().top;
+        offx = ev.layerX-ev.target.offsetLeft;
+        offy = ev.layerY-ev.target.offsetTop;
     } else {
         offx = ev.offsetX;
         offy = ev.offsetY;
