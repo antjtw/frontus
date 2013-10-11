@@ -52,7 +52,7 @@
             <li ng-class="{hidden: pageScroll==0}" ng-click="pageBarLeft();" style="margin-left: 0.5em; font-size: 150%;"> <span data-icon="&#xe032;"></span>
 
             </li>
-            <li ng-repeat="page in showPages()" ng-class="{curPage:page==currentPage}" class="page-tabs"
+            <li ng-repeat="page in showPages() track by $id($index)" ng-class="{curPage:page==currentPage}" class="page-tabs"
             ng-click="jumpPage(page)"> <span data-icon="{{isAnnotated(page)?'&#xe006;' : '&#xe009;'}}" aria-hidden="true"></span>
  <span> Page {{page}}</span>
 
