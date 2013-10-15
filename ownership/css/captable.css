@@ -671,56 +671,12 @@ tr.rowSelected, tr.rowSelected:hover {
     padding-bottom: 15px;
 }
 
-.info-box {
-   border: 1px solid #E2E2E2;
-   margin-bottom: 20px;
-}
-
-.body-box {
-    height: auto;
-}
-
-.info-box > .head-box {
-    padding: 5px 0 5px 0;
-    margin: 0 0 0 0;
-    background-color: #F1F1F1;
-    width: 100%;
-}
-
-.info-box > .head-box > h2 {
-    padding: 0 0 0 0;
-    margin: 0 0 0 20px;
-}
-
-.info-box > .body-box {
-    padding: 0 0 0 0;
-    margin: 0 0 0 20px;
-}
-
 a.oldschool-link  {
     color: #3498db;
 }
 
 .overflow-tab > div.accordion-body {
     overflow-y: visible;
-}
-
-ul.last-edited {
-    display: inline-block;
-    padding: 20px 0 20px 0;
-}
-
-ul.last-edited > li {
-    line-height: 14px;
-}
-
-ul.last-edited > li:first-child {
-    color: #656565;
-}
-
-ul.last-edited > li:last-child {
-    text-transform: uppercase;
-    font-size: 10px;
 }
 
 .activity-feed2 {

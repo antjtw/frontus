@@ -94,55 +94,54 @@
 
           </tbody>
         </table>
-
-     <!--
-          <tr ng-show="person.shown" class="personDetails">
-            <td colspan="2">
-              <div><p>Delivered</p>
-
-                <p class="doubleTime">{{person.whensent | date:'MMMM dd, yyyy'}}</p>
-
-                <p>{{person.whensent | date:'h:mm a'}}</p></div>
-
-              <div>
-                <div ng-switch on="person.lastlogin">
-                  <span ng-switch-when="0"><span class="hltext">Never Logged In</span></span>
-                  <span ng-switch-default><p>Last Login</p><p class="doubleTime">{{person.lastlogin | date:'MMMM dd,
-                    yyyy'}}</p><p>{{person.lastlogin | date:'h:mm a'}}</p></span>
-                </div>
-              </div>
-
-              <div>
-                <div ng-switch on="person.lastviewed">
-                  <span ng-switch-when="0"><span class="hltext">Unviewed</span></span>
-                  <span ng-switch-default><p>Viewed</p><p class="doubleTime">{{person.lastviewed | date:'MMMM dd,
-                    yyyy'}}</p><p>{{person.lastviewed | date:'h:mm a'}}</p></span>
-                </div>
-              </div>
-
-              <div>
-                <div ng-switch on="person.signed">
-                  <span ng-switch-when="0"><span class="hltext">Unsigned</span></span>
-                  <span ng-switch-default><p>Signed</p><p class="doubleTime">{{person.signed | date:'MMMM dd, yyyy'}}</p>
-                    <p>{{person.signed | date:'h:mm a'}}</p></span>
-                </div>
-              </div>
-         -->
-
-              <!--
-              <div>
-                <div ng-switch on="person.column5" >
-                  <p ng-switch-default="0"></p>
-                  <span ng-switch-when="2"><span>Revoked</span><span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</p><p>{{person.reminder | date:'h:mm a'}}</span></span>
-                  <span ng-switch-when="1">Resent<span class="doubleTime">{{person.reminder | date:'MMMM dd, yyyy'}}</span><span>{{person.reminder | date:'h:mm a'}}</span></span>
-                 </div>
-              </div> -->
       </div>
     </div>
 
-    <div class="span3 offset1">
+<div class="span4">
+        <div class="row-fluid">
 
+            <div class="info-box">
+                <div class="head-box">
+                    <h2>Information</h2>
+                </div>
+                <div class="body-box">
+                    <ul class="last-edited spaced-list">
+                        <li>{{lastsent | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>Sent</li>
+                        <li>{{lastedit | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>Last Edited</li>
+                        <li>{{lastdeadline | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>Deadline</li>
+                    </ul>
+                    <div class="standard-button">
+                        <button ng-click="viewOriginal()" class="btn">View Original</button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- 
+            <div class="info-box">
+                <div class="head-box">
+                    <h2>Activity</h2>
+                </div>
+                <div class="body-box">
+                    <ul class="activity-feed2">
+                        <li ng-repeat="events in eventGroups | fromNowSort">
+                            <span>{{events[0]}}</span>
+                            <ul>
+                                <li ng-repeat="event in events.slice(2)">
+                                    <i class="{{event.activity | icon}}"></i>
+                                    {{event | nameoremail}} {{event.activity}} the captable.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <!--OLD ACTIVITY FEED
         <div class="row-fluid activity-feed">
 
             <section class="statusFeed">
@@ -160,6 +159,7 @@
                 </div>
             </section>
         </div>
+        -->
 
     </div>
   </div>

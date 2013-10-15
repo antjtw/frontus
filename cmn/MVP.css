@@ -1035,6 +1035,61 @@ form.inputs {
 }
 /* Document Viewer */
 
+/* Information Boxes */
+.info-box {
+   border: 1px solid #E2E2E2;
+   margin-bottom: 20px;
+}
+
+.body-box {
+    height: auto;
+}
+
+.info-box > .head-box {
+    padding: 5px 0 5px 0;
+    margin: 0 0 0 0;
+    background-color: #F1F1F1;
+    width: 100%;
+}
+
+.info-box > .head-box > h2 {
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+
+.info-box > .body-box {
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+.info-box > .body-box > .standard-button{
+    padding: 0 0 20px 0;
+}
+ul.last-edited {
+    display: inline-block;
+    padding: 20px 0 20px 0;
+}
+
+ul.last-edited > li {
+    line-height: 14px;
+}
+
+ul.last-edited > li:nth-child(odd) {
+    color: #656565;
+}
+
+ul.last-edited > li:nth-child(even) {
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+ul.spaced-list > li:first-child {
+    padding-top: 0px !important;
+}
+ul.spaced-list > li:nth-child(odd) {
+    padding-top: 14px;
+}
+
+
 /* Document Status */
  .documentInfo {
     float: right;

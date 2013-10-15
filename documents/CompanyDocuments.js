@@ -537,11 +537,59 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
             $scope.docversions = data;
+            if ($scope.docversions) {$scope.setLastDeadline();}
         });
 
         SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
             $scope.activity = data;
+            $scope.setLastUpdates();
         });
+
+        $scope.initInfoVar = function(infoVar, eventTime) {
+            if(!infoVar || eventTime > infoVar) {infoVar = eventTime;}
+        };
+        $scope.initLastSent = function(act) {
+            if (!$scope.lastsent) {
+                $scope.lastsent = act.event_time;
+            } else if (act.event_time > $scope.lastsent) {
+                $scope.lastsent = act.event_time;
+            }
+        };
+        $scope.initLastEdit = function(act) {
+            if (!$scope.lastedit) {
+                $scope.lastedit = act.event_time;
+            } else if (act.event_time > $scope.lastedit) {
+                $scope.lastedit = act.event_time;
+            }
+        };
+        $scope.initLastDeadline = function(act) {
+            $scope.initInfoVar($scope.lastdeadline, act.event_time);
+        };
+        $scope.setLastDeadline = function() {
+            var lastdeadline = $scope.docversions[0].signature_deadline;
+            for (var i=0; i++; i<$scope.docversions.length-1) {
+                if ($scope.docversions[i].signature_deadline > lastdeadline) {
+                    lastdeadline = $scope.docversions[i].signature_deadline;
+                }
+            }
+            $scope.lastdeadline = lastdeadline;
+        };
+        $scope.setLastUpdates = function() {
+            var i = 0;
+            while ((!$scope.lastsent || !$scope.lastedit) &&
+                    i < $scope.activity.length-1) {
+                switch ($scope.activity[i].activity) {
+                    case "received":
+                    case "reminder":
+                        $scope.initLastSent($scope.activity[i]);
+                        break;
+                    case "edited":
+                        $scope.initLastEdit($scope.activity[i]);
+                        break;
+                }
+                i++;
+            }
+        };
 
         $scope.activityOrder = function(card) {
             if (card.activity == "Uploaded by ") {
@@ -569,6 +617,10 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             SWBrijj.procm("document.title_change", docId, newname).then(function(data) {
                 console.log(data);
             });
+        };
+
+        $scope.viewOriginal = function() {
+            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1");
         };
 
         $scope.rejectSignature = function(cd) {
