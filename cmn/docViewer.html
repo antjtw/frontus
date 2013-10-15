@@ -16,7 +16,7 @@
                         <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe003;" aria-hidden="true"></span></li>
                         <li>
                             <label>
-                                <input ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
+                                <input ng-pattern="/^[0-9]+$/" ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
                             </label>
                         </li>
                         <li>/ {{docLength}}</li>
