@@ -74,7 +74,7 @@ directive('draggable', ['$document',
                             '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
                             '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
                             '<li></li>' +
-                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' + 
+                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' +
                         '</ul>' +
                         '<span ng-transclude></span>' +
                       '</div>',
@@ -148,7 +148,6 @@ directive('draggable', ['$document',
                     leftFromRightLocation = function(elementWidth, currRight) {
                         var docPanel = document.querySelector('.docPanel');
                         var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
-                        console.log("rightEdge: " + rightEdge);
                         if (currRight > rightEdge) {
                             return rightEdge - elementWidth;
                         } else {
@@ -515,18 +514,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.nextPage = function(value) {
             if ($scope.currentPage < $scope.docLength) {
-                $scope.setPage(value + 1);
+                $scope.setPage(parseInt(value, 10) + 1);
             }
         };
 
         $scope.previousPage = function(value) {
             if ($scope.currentPage > 1) {
-                $scope.setPage(value - 1);
+                $scope.setPage(parseInt(value, 10) - 1);
             }
         };
 
         $scope.jumpPage = function(value) {
-            $scope.setPage(value);
+            $scope.setPage(parseInt(value, 10));
         };
 
         $scope.range = function(start, stop, step) {
