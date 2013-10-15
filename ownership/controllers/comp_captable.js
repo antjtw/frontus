@@ -1115,6 +1115,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.canHover = function (row) {
+        if (row['u'] || row['a']) {
+            return true
+        }
+        else {
+            return false
+        }
+    };
+
 
     // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
@@ -1486,6 +1495,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     //switches the sidebar based on the type of the issue
     $scope.dilution = function () {
+        $scope.sideBar = 9;
          $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
     };
 
@@ -1556,7 +1566,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (row.name && row.editable == "yes") {
                 var check = true;
                 angular.forEach($scope.issuekeys, function(issue) {
-                    if (row[issue]['u'] || row[issue]['a']) {
+                    if (row[issue]['u'] != null || row[issue]['a'] != null) {
                         check = false;
                     }
                 });

@@ -1,12 +1,19 @@
 <div class="container">
   <div class="row-fluid">
-    <div class="headsection row-fluid"><h1>Documents</h1></div>
+    <div class="headsection row-fluid">
+        <ul class="maintabs head-text">
+            <li class="selectedtab">Documents</li>
+        </ul>
+    </div>
+
     <div class="row-fluid">
       <div class="subnav-controls">
-        <div><p class="searchBox"><label>
-          Search:
-          <input ng-model="query">
-        </label></p></div>
+        <div>
+            <div class="pull-left">
+                <span>Search</span>
+                <input type="text" class="search-box" ng-model="query">
+            </div>
+        </div>
         <div class="DivHelper"></div>
       </div>
     </div>
@@ -20,8 +27,8 @@
               class="title">Last Updated</span></th>
           <th class="button" style="width:30%;"><span class="title">Status</span></th>
         </tr>
-        <tr class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
-          <td><a href="/documents/investor-view?doc={{doc.doc_id}}">{{doc.docname}}</a></td>
+        <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
+          <td>{{doc.docname}}</td>
           <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
           <td>{{doc.signature_status}}</td>
         </tr>

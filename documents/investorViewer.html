@@ -1,25 +1,23 @@
 <div class="container" data-ng-init="init()">
   <div class="row-fluid">
-    <div class="headsection row-fluid">
-        <h2>
-            <a href="/documents/">
-                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
-            </a>
-            <span class="doc-title" ng-bind="document.docname | lengthLimiter"></span>
-            <span class="documentStatus">{{document.signature_status | uppercase}}</span>
-        </h2>
+    <div class="headsection head-border-bottom row-fluid">
+
+        <ul class="maintabs head-text">
+            <li class="selectedtab"><a href="/documents/investor-list">Documents</a></li>
+            <li class="selectedtab"><span class="doc-title" ng-bind="document.docname | lengthLimiter"></span></li>
+        </ul>
     </div>
   </div>
     <div ng-show="signable() || (tester && document.when_signed)" class="row-fluid">
         <div class="subnav-controls">
             <div>
                 <div class="pull-right">
-                    <div class="share-button">
+                    <div class="standard-button">
                         <button ng-click="confirmModal=true" ng-show="signable();" class="btn">Sign Document</button>
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div class="share-button">
+                    <div class="standard-button">
                         <button class="btn" ng-show="tester && document.when_signed" ng-click="unSign(document)">UnSign</button>
                     </div>
                 </div>

@@ -12,9 +12,8 @@ function getComputed(se, z) {
 function getCanvasOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
-        // this only works for finding offsets in canvas elements
-        offx = ev.pageX-$('canvas').offset().left;
-        offy = ev.pageY-$('canvas').offset().top;
+        offx = ev.layerX-ev.target.offsetLeft;
+        offy = ev.layerY-ev.target.offsetTop;
     } else {
         offx = ev.offsetX;
         offy = ev.offsetY;
@@ -75,7 +74,7 @@ directive('draggable', ['$document',
                             '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
                             '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
                             '<li></li>' +
-                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' + 
+                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' +
                         '</ul>' +
                         '<span ng-transclude></span>' +
                       '</div>',
@@ -149,7 +148,6 @@ directive('draggable', ['$document',
                     leftFromRightLocation = function(elementWidth, currRight) {
                         var docPanel = document.querySelector('.docPanel');
                         var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
-                        console.log("rightEdge: " + rightEdge);
                         if (currRight > rightEdge) {
                             return rightEdge - elementWidth;
                         } else {
@@ -283,8 +281,8 @@ docs.directive('icon', function() {
     };
 });
 
-docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
-    function($scope, $compile, $location, $routeParams, $window, SWBrijj) {
+docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
         $scope.features = {
             annotations: true
         };
@@ -324,6 +322,12 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             });
         }
 
+        $scope.refreshPageBar = function(pg) {
+            if (pg > $scope.pageScroll + $scope.pageBarSize - 1 || pg <= $scope.pageScroll) {
+                var temp = (Math.floor(pg/$scope.pageBarSize) * $scope.pageBarSize);
+                $scope.pageScroll = pg % $scope.pageBarSize === 0 ? temp - 1 : temp;
+            }
+        };
 
         $scope.showPages = function() {
             return $scope.range($scope.pageScroll + 1, Math.min($scope.pageScroll + $scope.pageBarSize, $scope.docLength + 1));
@@ -498,27 +502,30 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
             }
         };
 
+        $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
+
         $scope.setPage = function(n) {
             $scope.currentPage = n;
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            $scope.refreshPageBar(n);
         };
 
         $scope.nextPage = function(value) {
             if ($scope.currentPage < $scope.docLength) {
-                $scope.setPage(value + 1);
+                $scope.setPage(parseInt(value, 10) + 1);
             }
         };
 
         $scope.previousPage = function(value) {
             if ($scope.currentPage > 1) {
-                $scope.setPage(value - 1);
+                $scope.setPage(parseInt(value, 10) - 1);
             }
         };
 
         $scope.jumpPage = function(value) {
-            $scope.setPage(value);
+            $scope.setPage(parseInt(value, 10));
         };
 
         $scope.range = function(start, stop, step) {
@@ -853,7 +860,7 @@ docs.controller('DocumentViewController', ['$scope', '$compile', '$location', '$
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
-                var pos = [nx.page, bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];

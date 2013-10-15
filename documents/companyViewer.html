@@ -1,13 +1,20 @@
 <div class="container">
   <div class="row-fluid">
     <div class="headsection row-fluid">
-        <h2>
+<!--        <h2>
             <a href="/documents/">
                 <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
             </a>
             <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:58 || ''"></span>
-        </h2>
+        </h2>-->
 
+        <ul class="maintabs head-text">
+            <li class="selectedtab"><a href="/documents/company-list">Documents</a></li>
+            <li class="selectedtab"><span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:48 || ''"></span></li>
+            <li><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
+        </ul>
+
+        <!--
         <div class="row-fluid">
             <ul class="bodyText maintabs">
                 <li class="button">
@@ -18,63 +25,65 @@
                 <li class="selectedtab">View</li>
             </ul>
         </div>
+        -->
     </div>
+
+      <div class="row-fluid">
+          <div class="subnav-controls flush-controls">
+              <div>
+                  <div class="pull-right">
+                      <div class="standard-button">
+                          <button class="btn" ng-show="tester && currentDoc.original" ng-click="retract(currentDoc)">Retract share</button>
+                      </div>
+                  </div>
+                  <div class="pull-right">
+                      <div class="standard-button">
+                          <button class="btn" ng-show="tester && !(currentDoc.when_signed || currentDoc.original == currentDoc.docId)" ng-click="fakeSign(currentDoc)">Fake Sign</button>
+                      </div>
+                  </div>
+                  <div class="pull-right">
+                      <div class="standard-button">
+                          <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="confirmModal=true">Countersign</button>
+                      </div>
+                  </div>
+                  <div class="pull-right">
+                      <div class="standard-button red">
+                          <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectDocOpen()">Reject Signature</button>
+                      </div>
+                  </div>
+                  <div class="pull-right">
+                      <div class="standard-button">
+                          <button class="btn" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
+                      </div>
+                  </div>
+                  <div class="pull-right">
+                      <div class="standard-button">
+                          <button ng-hide="counterparty" class="btn" ng-click="shareDocOpen()">Share Document</button>
+                      </div>
+                  </div>
+              </div>
+              <div class="DivHelper"></div>
+          </div>
+      </div>
   </div>
 
 
   <div class="row-fluid">
     <div class="span3 docVersiontab leftBlock">
       <ul>
-        <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal();">
+        <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal(true);">
           <span class="unselectable">Original</span>
           <span class="tab-arrow" data-icon="&#xe033;"></span>
         </li>
-        <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc);" >
+        <li ng-repeat="doc in docversions" ng-class="{thisone: docId == doc.doc_id, thatone:true}" ng-click="pickInvestor(doc, true);" >
           <span class="unselectable" >{{doc | nameoremail}}<span class="for-r0ml">[{{ doc.doc_id }}]</span><span class="tab-arrow" data-icon="&#xe033;"></span><span class="smallDate for-r0ml">({{doc.investor}})</span></span>
-          <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages">
-             <li>Page {{ pp }}</li>
+          <ul style="padding-left: 3em;" ng-show="doc.doc_id==docId" ng-repeat="pp in modifiedPages track by $id($index)">
+             <li ng-click="jumpToPage(pp);">Page {{ pp }}</li>
           </ul>
         </li>
       </ul>
     </div>
     <div class="span9 companyDocViewer">
-        <div class="row-fluid">
-            <div class="subnav-controls">
-                <div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                            <button class="btn" ng-show="tester && currentDoc.original" ng-click="retract(currentDoc)">Retract share</button>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                            <button class="btn" ng-show="tester && !(currentDoc.when_signed || currentDoc.original == currentDoc.docId)" ng-click="fakeSign(currentDoc)">Fake Sign</button>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="confirmModal=true">Countersign</button>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                            <button class="btn" ng-show="currentDoc.when_signed && !currentDoc.when_confirmed" ng-click="rejectDocOpen()">Reject Signature</button>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                            <button class="btn" ng-show="tester && currentDoc.when_confirmed" ng-click="renege(currentDoc)">Renege Countersignature</button>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div class="share-button">
-                                <button ng-hide="counterparty" class="btn" ng-click="shareDocOpen()">Share Document</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="DivHelper"></div>
-            </div>
-        </div>
         <div class="row-fluid">
          <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false"></doc-viewer>
         </div>
@@ -92,7 +101,7 @@
       <div class='modalText esign'>
           <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">
           <span class="chkboxtext">
-              Do you wish to electonically counter-sign this document?<br>(This action is irreversible)
+              Do you wish to electonically countersign this document?<br>(This action is irreversible)
           </span>
       </div>
 

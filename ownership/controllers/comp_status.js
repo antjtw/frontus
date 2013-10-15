@@ -13,6 +13,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
+            $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
             console.log(activities);
@@ -25,6 +26,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                         person[act] = time;
                     }
                 });
+                person.viewedbool = person.viewed ? "viewed" : "unviewed";
             });
         });
         SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
@@ -62,6 +64,10 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
+
+    $scope.peopleOrder = 'name'
+
+    $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {

@@ -1,5 +1,5 @@
 <div ng-init="init()">
-    <div ng-class="{hidden: (!annotable() && docLength==1)}" class="row-fluid docViewerControls">
+    <div class="row-fluid docViewerControls">
         <div>
             <div>
                 <span class="tools span4" ng-class="{hidden: !annotable()}">
@@ -12,15 +12,15 @@
             </div>
             <div>
                 <div class="tools pageTurn span4">
-                    <ul ng-class="{'hidden':docLength==1}">
-                        <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe003;" aria-hidden="true"></span>
+                    <ul>
+                        <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe003;" aria-hidden="true"></span></li>
                         <li>
                             <label>
-                                <input ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
+                                <input ng-pattern="/^[0-9]+$/" ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
                             </label>
                         </li>
                         <li>/ {{docLength}}</li>
-                        <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe002;" aria-hidden="true"></span></li>
+                        <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)"><span data-icon="&#xe002;" aria-hidden="true"></span>
 
                         </li>
                     </ul>
@@ -52,7 +52,7 @@
             <li ng-class="{hidden: pageScroll==0}" ng-click="pageBarLeft();" style="margin-left: 0.5em; font-size: 150%;"> <span data-icon="&#xe032;"></span>
 
             </li>
-            <li ng-repeat="page in showPages()" ng-class="{curPage:page==currentPage}" class="page-tabs"
+            <li ng-repeat="page in showPages() track by $id($index)" ng-class="{curPage:page==currentPage}" class="page-tabs"
             ng-click="jumpPage(page)"> <span data-icon="{{isAnnotated(page)?'&#xe006;' : '&#xe009;'}}" aria-hidden="true"></span>
  <span> Page {{page}}</span>
 
