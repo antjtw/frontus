@@ -295,6 +295,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     else if (String(tran['partpref']) == "false") {
                         tran.partpref = $scope.tf[1];
                     }
+                    if (String(tran['dragalong']) == "true") {
+                        tran.dragalong = $scope.tf[0];
+                    }
+                    else if (String(tran['dragalong']) == "false") {
+                        tran.dragalong = $scope.tf[1];
+                    }
+                    if (String(tran['tagalong']) == "true") {
+                        tran.tagalong = $scope.tf[0];
+                    }
+                    else if (String(tran['tagalong']) == "false") {
+                        tran.tagalong = $scope.tf[1];
+                    }
                     $scope.activeTran.push(tran);
                 }
             }
@@ -350,6 +362,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         else if (String($scope.activeIssue.partpref) == "false") {
             $scope.activeIssue.partpref = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.dragalong) == "true") {
+            $scope.activeIssue.dragalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.dragalong) == "false") {
+            $scope.activeIssue.dragalong = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.tagalong) == "true") {
+            $scope.activeIssue.tagalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.tagalong) == "false") {
+            $scope.activeIssue.tagalong = $scope.tf[1];
         }
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
@@ -435,6 +459,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var dateconvert = new Date(issue['date']);
                 var d1 = dateconvert.toUTCString();
                 var partpref = $scope.strToBool(issue['partpref']);
+                var dragalong = $scope.strToBool(issue['dragalong']);
+                var tagalong = $scope.strToBool(issue['tagalong']);
 
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
@@ -442,7 +468,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 else {
                     var vestcliffdate = issue['vestingbegins']
                 }
-                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong).then(function (data) {
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
                         angular.forEach($scope.rows, function (row) {
@@ -938,6 +964,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     transaction['tran_id'] = '';
                 }
                 var partpref = $scope.strToBool(transaction['partpref']);
+                var dragalong = $scope.strToBool(transaction['dragalong']);
+                var tagalong = $scope.strToBool(transaction['tagalong']);
                 var vestcliffdate = transaction['vestingbegins'] == undefined ? null : transaction['vestingbegins'];
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
@@ -957,7 +985,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (!transaction.email) {
                     transaction.email = null
                 }
-                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), dragalong, tagalong).then(function (data) {
                     var tempunits = 0;
                     var tempamount = 0;
                     angular.forEach($scope.rows, function (row) {
@@ -1144,9 +1172,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         tran.vestfreq = issue.vestfreq;
         tran.debtundersec = issue.debtundersec;
         tran.interestrate = issue.interestrate;
+        tran.interestratefreq = issue.interestratefreq;
         tran.valcap = issue.valcap;
         tran.discount = issue.discount;
         tran.term = issue.term;
+        tran.dragalong = issue.dragalong;
+        tran.tagalong = issue.tagalong;
         return tran
     };
 
