@@ -625,6 +625,11 @@ tr.rowSelected, tr.rowSelected:hover {
     text-align: center;
     font-size: 14px;
     border-right: 1px solid transparent;
+    cursor: pointer;
+}
+
+.status-table > tbody > tr > td.status-toggle:hover {
+    color: #666666;
 }
 
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
