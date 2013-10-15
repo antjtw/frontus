@@ -720,6 +720,13 @@ li.selectedtab {
     line-height: 24px;
     float: right;
 }
+.doc-title:active, .doc-title:focus {
+    background-color: #E3E3E3;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
 /* Left Block for split pages */
  .row-fluid .span8.leftBlock {
     float: left;
