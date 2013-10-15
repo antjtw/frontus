@@ -543,6 +543,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
             $scope.activity = data;
             $scope.setLastUpdates();
+            $scope.makeEventGroups();
         });
 
         $scope.initInfoVar = function(infoVar, eventTime) {
@@ -589,6 +590,22 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
                 }
                 i++;
             }
+        };
+        $scope.makeEventGroups = function() {
+            $scope.eventGroups = [];
+            var uniqueGroups = [];
+            angular.forEach($scope.activity, function(event) {
+                var timeGroup = moment(event.event_time).fromNow();
+                if (uniqueGroups.indexOf(timeGroup) != -1) {
+                    $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
+                } else {
+                    $scope.eventGroups[$scope.eventGroups.length] = [];
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(timeGroup);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                    uniqueGroups.push(timeGroup);
+                }
+            });
         };
 
         $scope.activityOrder = function(card) {
@@ -833,7 +850,20 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 docviews.filter('fromNow', function() {
     return function(date) {
         return moment(date).fromNow();
-    }
+    };
+});
+
+docviews.filter('fromNowSort', function() {
+    return function(events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if (a[1] > b[1]) return -1;
+                if (a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+        return events;
+    };
 });
 
 /* Filter to select the activity icon for document status */
@@ -848,28 +878,29 @@ docviews.filter('icon', function() {
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
-    }
+    };
 });
 
 /* Filter to format the activity description on document status */
+// TODO: reconcile this with Alison
 docviews.filter('description', function() {
     return function(ac) {
         var activity = ac.activity;
         var person = ac.name;
-        if (person == "") {
+        if (person === "") {
             person = ac.person;
         }
         if (activity == "sent") return "";
-        else if (activity == "viewed") return "Viewed by " + person;
-        else if (activity == "reminder") return "Reminded " + person;
-        else if (activity == "edited") return "Edited by " + person;
-        else if (activity == "signed") return "Signed by " + person;
-        else if (activity == "uploaded") return "Uploaded by " + person;
-        else if (activity == "received") return "Sent to " + person;
-        else if (activity == "rejected") return "Rejected by " + person;
-        else if (activity == "countersigned") return "Countersigned by " + person;
-        else return activity + " by " + person;
-    }
+        else if (activity == "viewed") return "viewed Document";
+        else if (activity == "reminder") return "reminded Document";
+        else if (activity == "edited") return "edited Document";
+        else if (activity == "signed") return "signed Document";
+        else if (activity == "uploaded") return "uploaded Document";
+        else if (activity == "received") return "sent Document";
+        else if (activity == "rejected") return "rejected Document";
+        else if (activity == "countersigned") return "countersigned Document";
+        else return activity + "ed Document";
+    };
 });
 
 docviews.filter('fileLength', function() {

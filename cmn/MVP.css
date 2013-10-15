@@ -1089,6 +1089,38 @@ ul.spaced-list > li:nth-child(odd) {
     padding-top: 14px;
 }
 
+.activity-feed2 {
+    margin-top: 10px;
+    height: auto;
+}
+
+.activity-feed2 > li > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+.activity-feed2 > li > ul {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.activity-feed2 > li > ul > li {
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 288px;
+    border: 1px solid #F1F1F1;
+    display: inline-block;
+    padding: 8px 0 10px 10px;
+    color: #656565;
+}
+
+.activity-feed2 > li:last-of-type {
+    margin-bottom: 10px;
+}
+
+.activity-feed2 > li > ul > li > i {
+}
 
 /* Document Status */
  .documentInfo {

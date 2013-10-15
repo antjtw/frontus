@@ -119,7 +119,6 @@
                 </div>
             </div>
 
-            <!-- 
             <div class="info-box">
                 <div class="head-box">
                     <h2>Activity</h2>
@@ -131,36 +130,14 @@
                             <ul>
                                 <li ng-repeat="event in events.slice(2)">
                                     <i class="{{event.activity | icon}}"></i>
-                                    {{event | nameoremail}} {{event.activity}} the captable.
+                                    {{event | nameoremail}} {{event | description}}
                                 </li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
-            -->
         </div>
-
-        <!--OLD ACTIVITY FEED
-        <div class="row-fluid activity-feed">
-
-            <section class="statusFeed">
-                <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-                <div>
-                    <ul class="activityBlock">
-                        <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
-                            <i class="{{active.activity | icon}}"></i>
-                            <div>
-                                <span class="activity">{{active | description }}</span><br>
-                                <span class="time">{{active.event_time | fromNow}}</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-        </div>
-        -->
-
     </div>
   </div>
 </div>
