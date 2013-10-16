@@ -1281,10 +1281,32 @@ ul.spaced-list > li:nth-child(odd) {
     border-right: 1px solid transparent;
 }
 
+.status-toggle > .circle {
+    width: 14px;
+    height: 14px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    color: white;
+    font-size: 10px;
+}
+
+.circle.yellow {
+    background: #FFBB00;
+}
+
+.circle.green {
+    background: #1ABC96;
+}
+
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
     background-color: #F1F1F1;
     border-bottom: none;
     border-right: 1px solid #E2E2E2;
+}
+
+.status-table > tbody > tr.sub-row {
+    background-color: #F1F1F1;
 }
 
 .status-table > tbody > tr > td.status-toggle > span {
@@ -1578,6 +1600,13 @@ a.oldschool-link  {
 .small-standard-button > button {
     width: 68px;
 }
+.small-standard-button.gray > button {
+    color: #666666;
+    background-color: #F1F1F1;
+}
+.small-standard-button.gray > button:hover {
+    background-color: #E3E3E3;
+}
 .icon-standard-button > span {
     display: block;
     border-radius: 3px;
@@ -1615,6 +1644,14 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     padding-left: 8px;
     padding-right: 8px;
     font-size: 14px;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
+    background-color: #E3E3E3;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark:hover {
+    background-color: #C7C7C7;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {

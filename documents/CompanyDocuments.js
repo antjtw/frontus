@@ -105,32 +105,30 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
         });
 
-        $scope.loadDocuments = function() {
-            SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
-                $scope.documents = data;
-                if ($scope.documents.length == 0) {
-                    $scope.noDocs = true;
-                }
-            });
-        };
-
-        $scope.loadDocuments();
+        SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
+            $scope.documents = data;
+            if ($scope.documents.length == 0) {
+                $scope.noDocs = true;
+            } else {
+                $scope.loadDocumentVersions();
+            }
+        });
 
         $scope.loadDocumentVersions = function () {
-            SWBrijj.tblmm("document.my_counterparty_library", "original", docid).then(function(data) {
-                angular.forEach(data, function(version) {
-                    angular.forEach($scope.documents, function(doc) {
+            angular.forEach($scope.documents, function(doc) {
+                doc.versions = [];
+                SWBrijj.tblmm("document.my_counterparty_library", "original", doc.doc_id).then(function(data) {
+                    angular.forEach(data, function(version) {
                         if (doc.doc_id === version.original) {
-                            //do stuff
+                            doc.versions.push(version);
                         }
                     });
                 });
             });
-            console.log("TODO implement loadDocumentVersions");
-            /* For each document, get all the versions of that document and add as an array to each item in $scope.documents */
         };
 
-        //$scope.loadDocumentVersions();
+
+
 
         $scope.docOrder = 'docname';
         $scope.selectedDoc = 0;
@@ -251,7 +249,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.opendetails = function(selected) {
-            console.log(selected);
             $scope.documents.forEach(function(doc) {
                 if (selected.doc_id == doc.doc_id) {
                     doc.shown = doc.shown !== true;
@@ -261,12 +258,41 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
 
-        $scope.versionsOf = function(doc) {
-            console.log("TODO implement versionOf");
+        $scope.momentFromNow = function(date) {
+            return moment(date).fromNow();
         };
+
+        $scope.versionStatus = function(version) {
+            console.log("TODO implement versionStatus");
+        };
+
+        $scope.docStatus = function(doc) {
+            console.log("TODO implement docStatus");
+        };
+
 
         $scope.shareDocOpen = function(doc) {
             console.log("TODO implement shareDocOpen");
+        };
+
+        $scope.versionIsComplete = function(version) {
+            console.log("TODO implement versionIsComplete");
+        };
+        
+        $scope.viewOriginal = function(doc) {
+            $location.url("/company-view?doc=" + doc.doc_id + "&page=1");
+        };
+
+        $scope.viewInvestorCopy = function(doc, version) {
+            $location.url("/company-view?doc=" + doc.doc_id + "&page=1" + "&investor=" + version.investor);
+        };
+
+        $scope.renameDocument = function(doc) {
+            console.log("TODO implement renameDocument");
+        };
+
+        $scope.deleteDocument = function(doc) {
+            console.log("TODO implement deleteDocument");
         };
     }
 ]);

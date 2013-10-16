@@ -32,8 +32,8 @@
             <table class="status-table">
                 <tbody>
                     <tr>
-                        <th colspan="2" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2">Status</th><!--TODO: sort by status?-->
+                        <th colspan="2" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" style="width:40%">Status</th><!--TODO: sort by status?-->
                         <th></th>
                         <th></th>
                     </tr>
@@ -52,8 +52,8 @@
                             </ul>
                         </td>
                         <td class="status-toggle">
-                            <span ng-show="docIsComplete(doc)" data-icon="&#xe023;" aria-hidden="true"></span>
-                            <span ng-hide="docIsComplete(doc)" data-icon="&#xe012;" aria-hidden="true"></span>
+                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>
                         </td>
                         <td class="shareholder-column">
                             <ul>
@@ -61,7 +61,7 @@
                                 <li>Summary goes here{{docStatusSummary(doc)}}</li>
                             </ul>
                         </td>
-                        <td><div class="standard-button small-standard-button"><button class="btn" ng-click="shareDocOpen(doc)">Share</button></div></td>
+                        <td><div class="standard-button small-standard-button gray"><button class="btn" ng-click="shareDocOpen(doc)">Share</button></div></td>
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -76,29 +76,29 @@
                                 </li>
                           </ul>
                     </tr>
-                    <tr ng-show="doc.shown" ng-repeat="version in versionsOf(doc)">
+                    <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions">
                         <td class="status-toggle"></td>
                         <td class="shareholder-column">
                             <ul>
                                 <li>{{version.investor}}</li>
-                                <li>{{formatDocStatus(version)}}</li>
+                                <li>something{{formatDocStatus(version)}}</li>
                             </ul>
                         </td>
                         <td class="status-toggle">
-                            <span ng-show="versionIsComplete(version)" data-icon="&#xe023;" aria-hidden="true"></span>
-                            <span ng-hide="versionIsComplete(version)" data-icon="&#xe012;" aria-hidden="true"></span>
+                            <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
                         <td class="shareholder-column">
                             <ul>
-                                <li>Version status goes here{{version.status}}</li>
-                                <li>Version last updated{{version.lastupdated}}</li>
+                                <li>something{{versionStatus(version)}}</li>
+                                <li>something{{dateOfStatus(version)}}</li>
                             </ul>
                         </td>
-                        <td><div class="standard-button small-standard-button"><butotn class="btn">Remind</button></div></td>
+                        <td><div class="standard-button small-standard-button"><button class="btn">Remind</button></div></td>
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
+                                    <a class="dropdown-toggle dark" ng-click="viewInvestorCopy(doc, version)">
                                         <span data-icon="&#xe009;" aria-hidden="true"></span>
                                     </a>
                                 </li>
