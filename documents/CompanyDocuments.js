@@ -513,8 +513,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
 /*******************************************************************************************************************/
 
-docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$location', 'SWBrijj', 'navState',
-    function($scope, $routeParams, $rootScope, $location, SWBrijj, navState) {
+docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState',
+    function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState) {
         if (navState.role == 'investor') {
             $location.path('/investor-list');
             return;
@@ -537,11 +537,91 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
             $scope.docversions = data;
+            if ($scope.docversions) {
+                $scope.setLastLogins();
+                $scope.setLastDeadline();
+            }
         });
+
+        $scope.setLastLogins = function() {
+            SWBrijj.tblm("document.user_tracker").then(function (logins) {
+                angular.forEach($scope.docversions, function (person) {
+                    angular.forEach(logins, function (login) {
+                        if (login.email === person.investor) {
+                            person.lastlogin = login.logintime;
+                        }
+                    });
+                });
+            });
+        };
 
         SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
             $scope.activity = data;
+            $scope.setLastUpdates();
+            $scope.makeEventGroups();
         });
+
+        $scope.initInfoVar = function(infoVar, eventTime) {
+            if(!infoVar || eventTime > infoVar) {infoVar = eventTime;}
+        };
+        $scope.initLastSent = function(act) {
+            if (!$scope.lastsent) {
+                $scope.lastsent = act.event_time;
+            } else if (act.event_time > $scope.lastsent) {
+                $scope.lastsent = act.event_time;
+            }
+        };
+        $scope.initLastEdit = function(act) {
+            if (!$scope.lastedit) {
+                $scope.lastedit = act.event_time;
+            } else if (act.event_time > $scope.lastedit) {
+                $scope.lastedit = act.event_time;
+            }
+        };
+        $scope.initLastDeadline = function(act) {
+            $scope.initInfoVar($scope.lastdeadline, act.event_time);
+        };
+        $scope.setLastDeadline = function() {
+            var lastdeadline = $scope.docversions[0].signature_deadline;
+            for (var i=0; i++; i<$scope.docversions.length-1) {
+                if ($scope.docversions[i].signature_deadline > lastdeadline) {
+                    lastdeadline = $scope.docversions[i].signature_deadline;
+                }
+            }
+            $scope.lastdeadline = lastdeadline;
+        };
+        $scope.setLastUpdates = function() {
+            var i = 0;
+            while ((!$scope.lastsent || !$scope.lastedit) &&
+                    i < $scope.activity.length-1) {
+                switch ($scope.activity[i].activity) {
+                    case "received":
+                    case "reminder":
+                        $scope.initLastSent($scope.activity[i]);
+                        break;
+                    case "edited":
+                        $scope.initLastEdit($scope.activity[i]);
+                        break;
+                }
+                i++;
+            }
+        };
+        $scope.makeEventGroups = function() {
+            $scope.eventGroups = [];
+            var uniqueGroups = [];
+            angular.forEach($scope.activity, function(event) {
+                var timeGroup = moment(event.event_time).fromNow();
+                if (uniqueGroups.indexOf(timeGroup) != -1) {
+                    $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
+                } else {
+                    $scope.eventGroups[$scope.eventGroups.length] = [];
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(timeGroup);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                    uniqueGroups.push(timeGroup);
+                }
+            });
+        };
 
         $scope.activityOrder = function(card) {
             if (card.activity == "Uploaded by ") {
@@ -571,13 +651,33 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             });
         };
 
+        $scope.viewOriginal = function() {
+            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1");
+        };
+
+        $scope.viewInvestorCopy = function(investor) {
+            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1" + "&investor=" + investor);
+        };
+
         $scope.rejectSignature = function(cd) {
             SWBrijj.procm("document.reject_signature", cd.doc_id).then(function(data) {
                 void(data);
                 cd.when_signed = null;
                 //$scope.$apply();
                 $scope.$$childHead.init();
-            })
+            });
+        };
+
+        $scope.formatLastLogin = function(lastlogin) {
+            return "Last Login " + moment(lastlogin).fromNow();
+        };
+
+        $scope.formatDate = function(date, fallback) {
+            if (!date) {
+                return fallback ? fallback : "ERROR";
+            } else {
+                return "" + $filter('date')(date, 'mediumDate') + "\n" + $filter('date')(date, 'shortTime');
+            }
         };
 
         $scope.share = function(message, email, sign) {
@@ -781,7 +881,20 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 docviews.filter('fromNow', function() {
     return function(date) {
         return moment(date).fromNow();
-    }
+    };
+});
+
+docviews.filter('fromNowSort', function() {
+    return function(events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if (a[1] > b[1]) return -1;
+                if (a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+        return events;
+    };
 });
 
 /* Filter to select the activity icon for document status */
@@ -796,28 +909,29 @@ docviews.filter('icon', function() {
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
-    }
+    };
 });
 
 /* Filter to format the activity description on document status */
+// TODO: reconcile this with Alison
 docviews.filter('description', function() {
     return function(ac) {
         var activity = ac.activity;
         var person = ac.name;
-        if (person == "") {
+        if (person === "") {
             person = ac.person;
         }
         if (activity == "sent") return "";
-        else if (activity == "viewed") return "Viewed by " + person;
-        else if (activity == "reminder") return "Reminded " + person;
-        else if (activity == "edited") return "Edited by " + person;
-        else if (activity == "signed") return "Signed by " + person;
-        else if (activity == "uploaded") return "Uploaded by " + person;
-        else if (activity == "received") return "Sent to " + person;
-        else if (activity == "rejected") return "Rejected by " + person;
-        else if (activity == "countersigned") return "Countersigned by " + person;
-        else return activity + " by " + person;
-    }
+        else if (activity == "viewed") return "viewed Document";
+        else if (activity == "reminder") return "reminded Document";
+        else if (activity == "edited") return "edited Document";
+        else if (activity == "signed") return "signed Document";
+        else if (activity == "uploaded") return "uploaded Document";
+        else if (activity == "received") return "sent Document";
+        else if (activity == "rejected") return "rejected Document";
+        else if (activity == "countersigned") return "countersigned Document";
+        else return activity + "ed Document";
+    };
 });
 
 docviews.filter('fileLength', function() {

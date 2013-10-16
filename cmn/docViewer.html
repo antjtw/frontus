@@ -1,5 +1,5 @@
 <div ng-init="init()">
-    <div ng-class="{hidden: (!annotable() && docLength==1)}" class="row-fluid docViewerControls">
+    <div class="row-fluid docViewerControls">
         <div>
             <div>
                 <span class="tools span4" ng-class="{hidden: !annotable()}">
@@ -12,11 +12,11 @@
             </div>
             <div>
                 <div class="tools pageTurn span4">
-                    <ul ng-class="{'hidden':docLength==1}">
+                    <ul>
                         <li ng-class="{'locked':currentPage<=1}" class="button" ng-click="previousPage(currentPage)"> <span data-icon="&#xe003;" aria-hidden="true"></span></li>
                         <li>
                             <label>
-                                <input ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
+                                <input ng-pattern="/^[0-9]+$/" ng-model="currentPage" ng-change="jumpPage(currentPage)" class="page-jumper">
                             </label>
                         </li>
                         <li>/ {{docLength}}</li>
