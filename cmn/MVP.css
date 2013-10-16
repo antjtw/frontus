@@ -1508,6 +1508,21 @@ form.inputs {
     display: inline-block;
 }
 
+/* Icon Box styling */
+
+button.icon-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    border: none;
+    background-color: #F1F1F1;
+    color: #666666;
+}
+
+button.icon-button:hover {
+    background-color: #E3E3E3;
+}
+
 /* Dropdown button and menus */
 
 .dropdown-list {
