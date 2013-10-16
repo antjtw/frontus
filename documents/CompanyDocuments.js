@@ -537,7 +537,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
             $scope.docversions = data;
-            if ($scope.docversions) {
+            if ($scope.docversions && $scope.docversions[0]) {
                 $scope.setLastLogins();
                 $scope.setLastDeadline();
             }
