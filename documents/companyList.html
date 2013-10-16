@@ -10,13 +10,111 @@
         </ul>
     </div>
 
+    <div style="margin-left: 0;" class="span12 recipientInfo docLibrary statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+
+                    <div class="pull-left">
+                        <span>Search</span>
+                        <input type="text" class="search-box" ng-model="query">
+                    </div>
+
+                    <div class="pull-right">
+                        <div class="standard-button">
+                            <button ng-click="documentUploadOpen();" class="btn">Upload Document
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <table class="status-table">
+                <tbody>
+                    <tr>
+                        <th colspan="2" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2">Status</th><!--TODO: sort by status?-->
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tbody>
+                <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+                    <tr class="empty-row"></tr>
+                    <tr ng-class="{selectedrow:doc.shown}"> 
+                        <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}" ng-click="(opendetails(doc))">
+                            <span ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                        </td>
+                        <td class="shareholder-column">
+                            <ul>
+                                <li>{{doc.docname}}</li>
+                                <li>{{formatDocStatus(doc)}}</li>
+                            </ul>
+                        </td>
+                        <td class="status-toggle">
+                            <span ng-show="docIsComplete(doc)" data-icon="&#xe023;" aria-hidden="true"></span>
+                            <span ng-hide="docIsComplete(doc)" data-icon="&#xe012;" aria-hidden="true"></span>
+                        </td>
+                        <td class="shareholder-column">
+                            <ul>
+                                <li>Status goes here{{doc.status}}</li>
+                                <li>Summary goes here{{docStatusSummary(doc)}}</li>
+                            </ul>
+                        </td>
+                        <td><div class="standard-button small-standard-button"><button class="btn" ng-click="shareDocOpen(doc)">Share</button></div></td>
+                        <td>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-click="renameDocument(doc)">Rename</li>
+                                        <li ng-click="deleteDoc(doc)">Delete</li>
+                                    </ul>
+                                </li>
+                          </ul>
+                    </tr>
+                    <tr ng-show="doc.shown" ng-repeat="version in versionsOf(doc)">
+                        <td class="status-toggle"></td>
+                        <td class="shareholder-column">
+                            <ul>
+                                <li>{{version.investor}}</li>
+                                <li>{{formatDocStatus(version)}}</li>
+                            </ul>
+                        </td>
+                        <td class="status-toggle">
+                            <span ng-show="versionIsComplete(version)" data-icon="&#xe023;" aria-hidden="true"></span>
+                            <span ng-hide="versionIsComplete(version)" data-icon="&#xe012;" aria-hidden="true"></span>
+                        </td>
+                        <td class="shareholder-column">
+                            <ul>
+                                <li>Version status goes here{{version.status}}</li>
+                                <li>Version last updated{{version.lastupdated}}</li>
+                            </ul>
+                        </td>
+                        <td><div class="standard-button small-standard-button"><butotn class="btn">Remind</button></div></td>
+                        <td>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
+                                        <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- <uploadModal class="upload-modal" ng-show="uploadModal" close="uploadModalClose()" options="{dialogClass: 'modal upload-modal-positioning'}" >  </uploadModal> -->
 
 
+    <!--
     <section class="statusBlock" library>
-<!--         <div ng-show="listScrolls()">
-         <p class="searchBox" ng-show="listScrolls()">Search: <input ng-model="query"></p>
-         </div>-->
             <div class="row-fluid">
                 <div class="subnav-controls">
                     <div>
@@ -56,15 +154,14 @@
               <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
                 <td>{{doc.docname}}</td>
                 <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span></td>
-                <!-- The four buttons for each row -->
                 <td class="button for-r0ml" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share icon-large"></i></span></td>
                 <td class="button for-r0ml" ng-click="delete(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-delete icon-large"></i></span></td>
-                <!--
-                  <td class="button"><span tooltip-placement="bottom" tooltip="Download"><i class="icon-download-alt icon-large"></i></span></td>
-                -->
                 <td></td>
               </tr>
-
+            </table>
+            <div ng-hide="documents">You have no documents.</div>
+    </section>
+    -->
               <!-- The template for showing files that are currently uploading -->
 <!--              <tr ng-show="progressVisible">
                 <td>{{uploading.docname}}</td>
@@ -72,10 +169,6 @@
                 <td colspan="3"></td>
               </tr>
               -->
-            </table>
-            <div ng-hide="documents">You have no documents.</div>
-    </section>
-
 
 
   </div>
@@ -94,7 +187,7 @@
                 <div ng-show="fileError" class="upload-errors">
                     <span>{{fileError}}</span>
                 </div>
-                <div  class="fileinputs">
+                <div class="fileinputs">
                     <input ng-hide="showProgress || showProcessing" type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
                     <div ng-hide="showProgress" class="fakefile">
                         <span>CHOOSE FILE</span>

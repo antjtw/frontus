@@ -113,7 +113,24 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             });
         };
+
         $scope.loadDocuments();
+
+        $scope.loadDocumentVersions = function () {
+            SWBrijj.tblmm("document.my_counterparty_library", "original", docid).then(function(data) {
+                angular.forEach(data, function(version) {
+                    angular.forEach($scope.documents, function(doc) {
+                        if (doc.doc_id === version.original) {
+                            //do stuff
+                        }
+                    });
+                });
+            });
+            console.log("TODO implement loadDocumentVersions");
+            /* For each document, get all the versions of that document and add as an array to each item in $scope.documents */
+        };
+
+        //$scope.loadDocumentVersions();
 
         $scope.docOrder = 'docname';
         $scope.selectedDoc = 0;
@@ -231,6 +248,25 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var link;
             link = "/documents/company-view?doc=" + docid;
             document.location.href = link;
+        };
+
+        $scope.opendetails = function(selected) {
+            console.log(selected);
+            $scope.documents.forEach(function(doc) {
+                if (selected.doc_id == doc.doc_id) {
+                    doc.shown = doc.shown !== true;
+                } else {
+                    doc.shown = false;
+                }
+            });
+        };
+
+        $scope.versionsOf = function(doc) {
+            console.log("TODO implement versionOf");
+        };
+
+        $scope.shareDocOpen = function(doc) {
+            console.log("TODO implement shareDocOpen");
         };
     }
 ]);
@@ -537,7 +573,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
             $scope.docversions = data;
-            if ($scope.docversions) {
+            if ($scope.docversions && $scope.docversions[0]) {
                 $scope.setLastLogins();
                 $scope.setLastDeadline();
             }
