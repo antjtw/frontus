@@ -1472,7 +1472,43 @@ form.inputs {
     color: #1e2d3d;
 }
 
-/* Dropdown buttons */
+/* Checkbox styling */
+
+.check-box-button {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E3;
+}
+
+.check-box-button > span {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    display: none;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.check-box-button:hover {
+    background-color: #E3E3E3;
+}
+
+.check-box-button:hover > span {
+    display: inline-block;
+}
+
+.check-box-button.selected, .check-box-button.selected:hover {
+    background-color: #1ABC96;
+}
+
+.check-box-button.selected > span {
+    display: inline-block;
+}
+
+/* Dropdown button and menus */
 
 .dropdown-list {
     -moz-box-sizing: border-box;
@@ -1540,6 +1576,7 @@ form.inputs {
 .standard .dropdown-menu > li > a {
     padding-left: 10px;
     line-height: 24px;
+    min-height: 24px;
 }
 
 .standard.small .dropdown-toggle {

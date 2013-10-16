@@ -288,7 +288,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     float: right;
     margin-left: 0;
     width: 350px;
-    min-height: 700px;
+    min-height: 800px;
     border-left: 6px solid #E3E3E3;
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
@@ -389,6 +389,24 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .capright .in-brief span {
     display: block;
 }
+
+.paripassu-list > div.rightTitle > span {
+    visibility: hidden;
+}
+
+.paripassu-list > div.rightTitle:first-child > span {
+    visibility: visible;
+}
+
+.paripassu-list > div.rightTitle > button {
+    display: none;
+}
+
+.paripassu-list > div.rightTitle:last-child > button {
+    display: block;
+    margin: 10px 0 0 115px;
+}
+
 
 .trantabs .nav.nav-tabs {
     padding: 0 0 0 0;

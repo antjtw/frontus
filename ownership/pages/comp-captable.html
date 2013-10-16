@@ -432,6 +432,9 @@
                         </div>
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
+
+                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
+
                             <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                                                                                                      pattern="[0-9]*(.[0-9]*)*"
                                                                                                                                                                                      ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
@@ -483,6 +486,7 @@
                                 </ul>
                             </div>
 
+
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">Drag Along</span>
                                 <ul class="dropdown-list">
                                     <li class="dropdown standard">
@@ -512,6 +516,24 @@
                                     </li>
                                 </ul>
                             </div>
+
+                            <span class="paripassu-list">
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="All preferred shareholders share the same rights and privileges, liquidation proceeds are distributed in proportion to each series’ share of preference.">Pari Passu With</span>
+                                    <ul class="dropdown-list">
+                                        <li class="dropdown standard">
+                                            <a class="dropdown-toggle">
+                                                {{item.pariwith | maxLength}}<span class="invisible-drop">'</span>
+                                            </a>
+                                            <ul ng-hide="toggleView();" class="dropdown-menu">
+                                                <li ng-repeat="i in availableKeys(allowKeys, activeIssue.paripassu)">
+                                                    <a ng-click="saveIssuePari(i, item, activeIssue.paripassu)">{{i | maxLength}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <button ng-click="addIssuePari(activeIssue.paripassu)">Add</button>
+                                </div>
+                            </span>
 
                         </div>
                           <!-- Options Tab -->
