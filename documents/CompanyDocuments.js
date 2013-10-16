@@ -513,8 +513,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
 /*******************************************************************************************************************/
 
-docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$location', 'SWBrijj', 'navState',
-    function($scope, $routeParams, $rootScope, $location, SWBrijj, navState) {
+docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState',
+    function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState) {
         if (navState.role == 'investor') {
             $location.path('/investor-list');
             return;
@@ -537,8 +537,23 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
             $scope.docversions = data;
-            if ($scope.docversions) {$scope.setLastDeadline();}
+            if ($scope.docversions) {
+                $scope.setLastLogins();
+                $scope.setLastDeadline();
+            }
         });
+
+        $scope.setLastLogins = function() {
+            SWBrijj.tblm("document.user_tracker").then(function (logins) {
+                angular.forEach($scope.docversions, function (person) {
+                    angular.forEach(logins, function (login) {
+                        if (login.email === person.investor) {
+                            person.lastlogin = login.logintime;
+                        }
+                    });
+                });
+            });
+        };
 
         SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
             $scope.activity = data;
@@ -640,13 +655,29 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1");
         };
 
+        $scope.viewInvestorCopy = function(investor) {
+            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1" + "&investor=" + investor);
+        };
+
         $scope.rejectSignature = function(cd) {
             SWBrijj.procm("document.reject_signature", cd.doc_id).then(function(data) {
                 void(data);
                 cd.when_signed = null;
                 //$scope.$apply();
                 $scope.$$childHead.init();
-            })
+            });
+        };
+
+        $scope.formatLastLogin = function(lastlogin) {
+            return "Last Login " + moment(lastlogin).fromNow();
+        };
+
+        $scope.formatDate = function(date, fallback) {
+            if (!date) {
+                return fallback ? fallback : "ERROR";
+            } else {
+                return "" + $filter('date')(date, 'mediumDate') + "\n" + $filter('date')(date, 'shortTime');
+            }
         };
 
         $scope.share = function(message, email, sign) {

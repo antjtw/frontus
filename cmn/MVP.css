@@ -96,6 +96,9 @@ input:focus, textarea:focus {
     background-color: rgb(30, 45, 61);
     border-radius: 0;
 }
+.tooltip-date > .tooltip-inner {
+    max-width: 50px;
+}
 .tooltip.in {
     opacity: 1;
 }
@@ -1209,6 +1212,119 @@ ul.spaced-list > li:nth-child(odd) {
     padding-bottom: 0;
 }
 /* Status Pages */
+.status-table {
+    width: 100%;
+    text-align: left;
+}
+
+.status-table > tbody:first-child > tr {
+    border: 1px solid #E2E2E2;
+    height: 30px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+.status-table > tbody:first-child > tr > th:first-child {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.status-table > tbody > tr.empty-row {
+    height: 10px;
+}
+
+.status-table > tbody > tr {
+    border: 1px solid #E2E2E2;
+    height: 60px;
+}
+.status-table > tbody > tr > th {
+    text-align: center;
+}
+
+.status-table > tbody > tr > td {
+    font-size: 10px;
+    color: #A6A6A6;
+    text-align: center;
+}
+
+.status-table > tbody > tr > td > span.status-icon {
+    font-size: 14px;
+}
+
+.status-table > tbody > tr > td.status-toggle {
+    width: 54px;
+    text-align: center;
+    font-size: 14px;
+    border-right: 1px solid transparent;
+}
+
+.status-table > tbody > tr > td.status-toggle.status-toggle-on {
+    background-color: #F1F1F1;
+    border-bottom: none;
+    border-right: 1px solid #E2E2E2;
+}
+
+.status-table > tbody > tr > td.status-toggle > span {
+    vertical-align: middle;
+}
+
+.status-table > tbody > tr > td.shareholder-column {
+    width: 200px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.status-table > tbody > tr > td.shareholder-column > ul > li.shareholder-name {
+    font-size: 12px;
+    color: #666666;
+}
+
+.status-table > tbody > tr > td.shareholder-column > ul > li.shareholder-status {
+}
+
+.status-table .sub-table {
+    background-color: #F1F1F1;
+}
+
+.status-table .sub-table > td > table {
+    width: 462px;
+    margin: 20px 0 20px 54px;
+    background-color: #FFFFFF;
+    border: 1px solid #E1E1E1;
+}
+
+.status-table .sub-table > td > table > tbody > tr {
+    height: 20px;
+}
+
+.status-table .sub-table > td > table > tbody > tr > td {
+    padding-left: 20px;
+    color: #656565;
+}
+
+.status-table .sub-table > td > table > tbody > tr:first-child > td {
+    padding-top: 15px;
+    color: #A5A5A5;
+}
+
+.status-table .sub-table > td > table > tbody > tr:last-child > td {
+    padding-bottom: 15px;
+}
+
+a.oldschool-link  {
+    color: #3498db;
+}
+
+.overflow-tab > div.accordion-body {
+    overflow-y: visible;
+}
+
+
+.status-columns.column-label > th {
+    padding-left: 10px;
+}
  .status-row td {
     background-color: transparent;
 }
@@ -1433,6 +1549,23 @@ ul.spaced-list > li:nth-child(odd) {
 .standard-button.red > button:hover {
     background-color: #C44032;
 }
+.small-standard-button > button {
+    width: 68px;
+}
+.icon-standard-button > span {
+    display: block;
+    border-radius: 3px;
+    background-color: #F1F1F1;
+    text-align: center;
+    vertical-align: middle;
+    background-position: center;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+}
+.icon-standard-button > span:hover {
+    background-color: #E3E3E3;
+}
 /* Back icon */
  .back-icon {
     display: inline-block;
@@ -1448,6 +1581,62 @@ ul.spaced-list > li:nth-child(odd) {
 .back-icon:hover {
     color: #1e2d3d;
 }
+
+/* Drop down menus built on top of the custom selects */
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
+    width: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 14px;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
+    background: none;
+    width: 0;
+    height: 0;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+    margin-left: -120px;
+}
+
+.standard.menu-drop .dropdown-menu > li {
+    padding: 3px 0 3px 10px;
+    line-height: 24px;
+}
+
+.standard.menu-drop .dropdown-menu > li {
+    color: rgb(141, 141, 141);
+}
+
+.standard.menu-drop .dropdown-menu > li:hover {
+    background: #C7C7C7;
+    color: rgb(141, 141, 141);
+}
+
+.standard.menu-drop .dropdown-menu > li:first-of-type:hover {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.standard.menu-drop .dropdown-menu > li:last-of-type:hover {
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 /* Dropdown buttons */
  .dropdown-list {
     -moz-box-sizing: border-box;
