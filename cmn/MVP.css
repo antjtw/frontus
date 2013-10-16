@@ -1238,6 +1238,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody:first-child > tr > th:last-child {
+    padding-right: 20px;
 }
 
 .status-table > tbody > tr.empty-row {
@@ -1249,7 +1250,8 @@ ul.spaced-list > li:nth-child(odd) {
     height: 60px;
 }
 .status-table > tbody > tr > th {
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
 }
 

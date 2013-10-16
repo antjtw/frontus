@@ -42,13 +42,13 @@
           <table class="status-table">
               <tbody>
                   <tr>
-                      <th ng-click="setOrder('name')">Shareholder</th>
-                      <th ng-click="setOrder('sent')">Sent</th>
-                      <th ng-click="setOrder('viewed')">Viewed</th>
-                      <th ng-click="setOrder('signed')">Signed</th>
-                      <th ng-click="setOrder('countersigned')">Countersigned</th>
+                      <th>Shareholder</th>
+                      <th>Sent</th>
+                      <th>Viewed</th>
+                      <th>Signed</th>
+                      <th>Countersigned</th>
                       <th></th>
-                      <th style="width:70px;"></th>
+                      <th style="width:50px;"></th>
                   </tr>
               </tbody>
               <tbody ng-repeat="person in docversions | filter: query">
@@ -82,6 +82,7 @@
                           </span>
                           <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
+                      <!-- TODO Switch button action / label based on document status-->
                       <td><div class="standard-button small-standard-button"><button class="btn">Remind</button></div></td>
                       <td>
                           <ul class="dropdown-list">
