@@ -43,12 +43,12 @@
               <tbody>
                   <tr>
                       <th ng-click="setOrder('name')">Shareholder</th>
-                      <th style="width:30px;" ng-click="setOrder('sent')">Sent</th>
-                      <th style="width:60px;" ng-click="setOrder('viewed')">Viewed</th>
-                      <th style="width:60px;" ng-click="setOrder('signed')">Signed</th>
-                      <th style="width:100px;" ng-click="setOrder('countersigned')">Countersigned</th>
-                      <th colspan="1" style="width:108px;"></th>
-                      <th colspan="1" style="width:70px;"></th>
+                      <th ng-click="setOrder('sent')">Sent</th>
+                      <th ng-click="setOrder('viewed')">Viewed</th>
+                      <th ng-click="setOrder('signed')">Signed</th>
+                      <th ng-click="setOrder('countersigned')">Countersigned</th>
+                      <th></th>
+                      <th style="width:70px;"></th>
                   </tr>
               </tbody>
               <tbody ng-repeat="person in docversions | filter: query">
@@ -56,29 +56,29 @@
                   <tr ng-class="{selectedrow:person.shown}">
                       <td class="shareholder-column" >
                           <ul>
-                              <li style="shareholder-name">{{person.name}}</li>
-                              <li style="shareholder-status">{{formatLastLogin(person.lastlogin)}}</li>
+                              <li>{{person.name}}</li>
+                              <li>{{formatLastLogin(person.lastlogin)}}</li>
                           </ul>
                       </td>
-                      <td>
+                      <td class="tooltip-date">
                           <span tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
-                              <span style="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                       </td>
                       <td class="tooltip-date">
                           <span ng-show="person.last_viewed" tooltip-placement="top" tooltip="{{formatDate(person.last_viewed)}}" class="ng-scope">
-                              <span style="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                       </td>
-                      <td>
+                      <td class="tooltip-date">
                           <span ng-show="person.when_signed" tooltip-placement="top" tooltip="{{formatDate(person.when_signed)}}" class="ng-scope">
-                              <span style="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                           <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
-                      <td>
+                      <td class="tooltip-date">
                           <span ng-show="person.when_confirmed" tooltip-placement="top" tooltip="{{formatDate(person.when_confirmed)}}" class="ng-scope">
-                              <span style="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                           <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
