@@ -404,7 +404,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
 
             var z = $location.search();
-            z['investor'] = doc.investor;
+            z.investor = doc.investor;
             z.page = 1;
             $location.search(z);
             if (clicked) {
