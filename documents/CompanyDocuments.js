@@ -800,11 +800,19 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             });
         };
 
+        $scope.$watch('document.docname', function(newValue, oldValue) {
+            if (newValue === "") {
+                return "Untitled";
+            } else {
+                return oldValue;
+            }
+        });
+
         $scope.activityOrder = function(card) {
             if (card.activity == "Uploaded by ") {
-                return 0
+                return 0;
             } else {
-                return -card.event_time
+                return -card.event_time;
             }
         };
 
@@ -1127,7 +1135,7 @@ docviews.filter('fileLength', function() {
 docviews.filter('lengthLimiter', function() {
     return function(word) {
         return word && word.length > 58 ? word.substring(0, 57) + "..." : word;
-    }
+    };
 });
 
 docviews.filter('nameoremail', function() {
