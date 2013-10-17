@@ -32,8 +32,8 @@
             <table class="status-table">
                 <tbody>
                     <tr>
-                        <th colspan="2" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2" style="width:40%">Status</th><!--TODO: sort by status?-->
+                        <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left" style="width:40%">Status</th><!--TODO: sort by status?-->
                         <th></th>
                         <th></th>
                     </tr>
@@ -41,11 +41,11 @@
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                     <tr class="empty-row"></tr>
                     <tr ng-class="{selectedrow:doc.shown}"> 
-                        <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}" ng-click="(opendetails(doc))">
-                            <span ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                            <span ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                        <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}">
+                            <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" ng-click="(opendetails(doc))" aria-hidden="true"></span>
+                            <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" ng-click="(opendetails(doc))" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column docname-column">
                             <ul>
                                 <li>{{doc.docname}}</li>
                                 <li>{{formatDocStatus(doc)}}</li>
@@ -55,7 +55,7 @@
                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column status-column">
                             <ul>
                                 <li>Status goes here{{doc.status}}</li>
                                 <li>Summary goes here{{docStatusSummary(doc)}}</li>
@@ -78,7 +78,7 @@
                     </tr>
                     <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions">
                         <td class="status-toggle"></td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column docname-column">
                             <ul>
                                 <li>{{version.investor}}</li>
                                 <li>something{{formatDocStatus(version)}}</li>
@@ -88,7 +88,7 @@
                             <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column status-column">
                             <ul>
                                 <li>something{{versionStatus(version)}}</li>
                                 <li>something{{dateOfStatus(version)}}</li>
