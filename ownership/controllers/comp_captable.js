@@ -70,6 +70,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             // Get the company's Grants
             SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                 $scope.grants = grants;
+
+
                 for (var i = 0, l = $scope.issues.length; i < l; i++) {
                     $scope.issues[i].key = $scope.issues[i].issue;
                     $scope.issuekeys.push($scope.issues[i].key);
@@ -177,6 +179,22 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         }
                     });
+                });
+
+                // Get the company's Paripassu's on issues
+                SWBrijj.tblm('ownership.company_paripassu').then(function (links) {
+                    var links = links;
+                    angular.forEach($scope.issues, function(issue) {
+                        issue.paripassu = [];
+                        angular.forEach(links, function(pari) {
+                            if (pari.issue == issue.issue) {
+                                issue.paripassu.push(pari);
+                            }
+                        });
+                        if (issue.paripassu.length == 0) {
+                            issue.paripassu.push({"company":issue.company, "issue": issue.issue, "pariwith": null});
+                        }
+                    })
                 });
 
 
@@ -295,6 +313,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     else if (String(tran['partpref']) == "false") {
                         tran.partpref = $scope.tf[1];
                     }
+                    if (String(tran['dragalong']) == "true") {
+                        tran.dragalong = $scope.tf[0];
+                    }
+                    else if (String(tran['dragalong']) == "false") {
+                        tran.dragalong = $scope.tf[1];
+                    }
+                    if (String(tran['tagalong']) == "true") {
+                        tran.tagalong = $scope.tf[0];
+                    }
+                    else if (String(tran['tagalong']) == "false") {
+                        tran.tagalong = $scope.tf[1];
+                    }
                     $scope.activeTran.push(tran);
                 }
             }
@@ -351,8 +381,30 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else if (String($scope.activeIssue.partpref) == "false") {
             $scope.activeIssue.partpref = $scope.tf[1];
         }
+        if (String($scope.activeIssue.dragalong) == "true") {
+            $scope.activeIssue.dragalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.dragalong) == "false") {
+            $scope.activeIssue.dragalong = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.tagalong) == "true") {
+            $scope.activeIssue.tagalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.tagalong) == "false") {
+            $scope.activeIssue.tagalong = $scope.tf[1];
+        }
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
+        }
+        if ($scope.activeIssue.common) {
+            $scope.commonshow = true;
+        }
+        else {
+            var comtoggle = false;
+            angular.forEach($scope.issues, function(iss) {
+                comtoggle = iss.common || comtoggle ? true : false;
+            });
+            $scope.commonshow = comtoggle ? false : true;
         }
         // Set Freq Value for Angularjs Select
         var index = $scope.freqtypes.indexOf(issue.vestfreq);
@@ -419,7 +471,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
     $scope.saveIssue = function (issue, item) {
-        console.log("saving issue");
         if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
             return
         }
@@ -435,6 +486,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var dateconvert = new Date(issue['date']);
                 var d1 = dateconvert.toUTCString();
                 var partpref = $scope.strToBool(issue['partpref']);
+                var dragalong = $scope.strToBool(issue['dragalong']);
+                var tagalong = $scope.strToBool(issue['tagalong']);
+                var common = $scope.strToBool(issue['common']);
 
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
@@ -442,7 +496,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 else {
                     var vestcliffdate = issue['vestingbegins']
                 }
-                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     var oldissue = issue['key'];
                     if (issue['issue'] != issue.key) {
                         angular.forEach($scope.rows, function (row) {
@@ -576,6 +630,50 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
+    $scope.saveIssuePari = function (pari, item, items) {
+        var allpari = "";
+        var index;
+        angular.forEach(items, function(picked) {
+            if (picked.$$hashKey == item.$$hashKey) {
+                picked.pariwith = pari;
+            }
+            if (picked.pariwith == "") {
+                index = items.indexOf(picked);
+            } else {
+                allpari = allpari + picked.pariwith + ",";
+            }
+        });
+        if (index) {
+            items.splice(index, 1);
+        }
+        SWBrijj.proc('ownership.update_paris', item.company, item.issue, allpari.substring(0, allpari.length-1)).then(function (data) {
+        });
+    };
+
+    $scope.addIssuePari = function(items) {
+        items.push({"company": items[0].company, "issue": items[0].issue, "pariwith": null});
+    };
+
+    $scope.availableKeys = function(issues, paripassu) {
+        var list = [];
+        var used = [];
+        list.push("");
+        angular.forEach(paripassu, function(pari) {
+            used.push(pari.pariwith);
+        })
+        angular.forEach(issues, function(issue) {
+            if (used.indexOf(issue) == -1) {
+                list.push(issue)
+            }
+        });
+        return list
+    }
+
+    $scope.toggleCommon = function(issue) {
+        issue.common = issue.common && issue.type == 'Equity' ? false : true;
+        $scope.saveIssue(issue);
+    };
+
     $scope.tranChangeU = function (value, issue) {
         angular.forEach($scope.issues, function (x) {
             $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
@@ -594,7 +692,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveInvestor = function (investor) {
-        console.log(investor);
         $scope.sideBar = 3;
 
         angular.forEach($scope.rows, function (row) {
@@ -851,7 +948,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Save transaction function
     $scope.saveTran = function (transaction) {
-        console.log(transaction);
         //Triggers the multi modal if more than one transaction exists
         if (transaction.length > 1) {
             angular.forEach($scope.rows, function (row) {
@@ -896,7 +992,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (transaction.amount) {
             transaction.amount = String(transaction.amount).replace(/\,/g,'');
         }
-        console.log(transaction.units);
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             console.log("there are letters")
             transaction.units = transaction.unitskey;
@@ -938,6 +1033,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     transaction['tran_id'] = '';
                 }
                 var partpref = $scope.strToBool(transaction['partpref']);
+                var dragalong = $scope.strToBool(transaction['dragalong']);
+                var tagalong = $scope.strToBool(transaction['tagalong']);
                 var vestcliffdate = transaction['vestingbegins'] == undefined ? null : transaction['vestingbegins'];
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
@@ -957,7 +1054,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (!transaction.email) {
                     transaction.email = null
                 }
-                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term'])).then(function (data) {
+                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), dragalong, tagalong).then(function (data) {
                     var tempunits = 0;
                     var tempamount = 0;
                     angular.forEach($scope.rows, function (row) {
@@ -1005,16 +1102,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
 
                     if (transaction.type == "Option" && !isNaN(parseFloat(transaction.amount))) {
-                        console.log("creating a grant");
                         var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
                         var previousTotal = 0
                         angular.forEach($scope.grants, function(grant) {
                             if (transaction.tran_id == grant.tran_id && grant.action == "exercised") {
                                 previousTotal = previousTotal + grant.unit;
-                                console.log(grant);
                             }
                         });
-                        console.log(previousTotal);
                         var units = transaction.amount - (previousTotal * transaction.price);
                         modGrant.unit = (units / transaction.price);
                         angular.forEach($scope.grants, function (grant) {
@@ -1022,13 +1116,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 var offset = grant.date.getTimezoneOffset();
                                 var today = Date.today().addMinutes(-offset).toUTCString();
                                 if (grant.date.toUTCString() == today) {
-                                    console.log("should be updating");
                                     modGrant.unit = modGrant.unit + grant.unit;
                                     modGrant.grant_id = grant.grant_id;
                                 }
                             }
                         });
-                        console.log(modGrant);
                         $scope.saveGrant(modGrant);
                     }
 
@@ -1058,7 +1150,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 });
             };
         }
-        console.log("done saving");
     };
 
     // Function for saving grant. Used on the captable when paid is updated from the captable on an option
@@ -1144,9 +1235,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         tran.vestfreq = issue.vestfreq;
         tran.debtundersec = issue.debtundersec;
         tran.interestrate = issue.interestrate;
+        tran.interestratefreq = issue.interestratefreq;
         tran.valcap = issue.valcap;
         tran.discount = issue.discount;
         tran.term = issue.term;
+        tran.dragalong = issue.dragalong;
+        tran.tagalong = issue.tagalong;
         return tran
     };
 
@@ -1571,7 +1665,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 });
                 if (check) {
-                    console.log(row);
                     trigger = true;
                 }
             }

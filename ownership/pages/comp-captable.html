@@ -432,6 +432,9 @@
                         </div>
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
+
+                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
+
                             <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                                                                                                      pattern="[0-9]*(.[0-9]*)*"
                                                                                                                                                                                      ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
@@ -482,6 +485,55 @@
                                     </li>
                                 </ul>
                             </div>
+
+
+                            <div class="rightTitle"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">Drag Along</span>
+                                <ul class="dropdown-list">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.dragalong | falseCheck}}<span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul ng-hide="toggleView();" class="dropdown-menu">
+                                            <li ng-repeat="i in tf">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'dragalong', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="rightTitle"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">Tag Along</span>
+                                <ul class="dropdown-list">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{activeIssue.tagalong | falseCheck}}<span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul ng-hide="toggleView();" class="dropdown-menu">
+                                            <li ng-repeat="i in tf">
+                                                <a ng-click="saveIssueAssign(activeIssue, 'tagalong', i)">{{i}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <span class="paripassu-list">
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="All preferred shareholders share the same rights and privileges, liquidation proceeds are distributed in proportion to each series’ share of preference.">Pari Passu With</span>
+                                    <ul class="dropdown-list">
+                                        <li class="dropdown standard">
+                                            <a class="dropdown-toggle">
+                                                {{item.pariwith | maxLength}}<span class="invisible-drop">'</span>
+                                            </a>
+                                            <ul ng-hide="toggleView();" class="dropdown-menu">
+                                                <li ng-repeat="i in availableKeys(allowKeys, activeIssue.paripassu)">
+                                                    <a ng-click="saveIssuePari(i, item, activeIssue.paripassu)">{{i | maxLength}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <button class="icon-button" ng-click="addIssuePari(activeIssue.paripassu)"><span data-icon="&#xe029;" aria-hidden="true"></span></button>
+                                </div>
+                            </span>
 
                         </div>
                           <!-- Options Tab -->
@@ -564,10 +616,25 @@
                                                                                                                                                                                                                  ng-model="activeIssue.postmoney"
                                                                                                                                                                                                                  onkeydown="testForEnter();"></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
                                                                                                                                                                           ng-model="activeIssue.interestrate"
                                                                                                                                                                           onkeydown="testForEnter();"></p>
+
+                              <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequence that the interest rate is applied at">Interest Rate Frequency</span>
+                                  <ul class="dropdown-list">
+                                      <li class="dropdown standard">
+                                          <a class="dropdown-toggle">
+                                              {{activeIssue.interestratefreq}}<span class="invisible-drop">'</span>
+                                          </a>
+                                          <ul class="dropdown-menu">
+                                              <li ng-repeat="i in freqtypes">
+                                                  <a ng-click="saveIssueAssign(activeIssue, 'interestratefreq', i)">{{i}}</a>
+                                              </li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                              </div>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                                                                                                  ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
@@ -586,7 +653,7 @@
                           </div>
                       </span>
 
-<!-- Options Side Bar when Editable -->
+<!-- Transaction Side Bar when Editable -->
                       <span ng-switch-when="2">
                         <div class="tabbed headsection row-fluid">
                             <h1>{{activeInvestor}}<span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
@@ -649,11 +716,6 @@
                                         </ul>
                                     </div>
 
-                                    <p ng-show="toggleView();" class="rightTitle">
-                                        <span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
-                                        <input disabled ng-model="tran.liquidpref">
-                                    </p>
-
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard">
@@ -669,10 +731,35 @@
                                         </ul>
                                     </div>
 
-                                    <p ng-show="toggleView();" class="rightTitle">
-                                        <span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
-                                        <input disabled ng-model="tran.partpref">
-                                    </p>
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">Drag Along</span>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.dragalong  | falseCheck}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf">
+                                                        <a ng-click="saveTranAssign(tran, 'dragalong', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">Tag Along</span>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.tagalong  | falseCheck}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf">
+                                                        <a ng-click="saveTranAssign(tran, 'tagalong', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                 </div>
                                 <!-- Option Tab -->
@@ -737,10 +824,26 @@
                                 <!-- Debt Tab -->
                                 <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                                 onkeydown="testForEnter();"
                                                                                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                 ng-model="tran.interestrate"></p>
+
+
+                                    <div class="rightTitle double"><span tooltip-placement="top" tooltip="that the interest rate is applied at">Interest Rate Frequency</span>
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.interestratefreq}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in freqtypes">
+                                                        <a ng-click="saveTranAssign(tran, 'interestratefreq', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                                                                                                        onkeydown="testForEnter();"
@@ -789,6 +892,9 @@
 
                             <p ng-show="activeIssue.partpref"  class="belowTitle"><span ng-bind="activeIssue.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">PARTICIPATING PREFERRED</span></p>
 
+                            <p ng-show="activeIssue.dragalong"  class="belowTitle"><span ng-bind="activeIssue.dragalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">DRAG ALONG</span></p>
+
+                            <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">TAG ALONG</span></p>
                         </div>
                           <!-- Options Tab -->
                           <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
@@ -818,6 +924,8 @@
                               <p class="belowTitle" ng-show="activeIssue.postmoney"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.interestrate"><span ng-bind="activeIssue.interestrate"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.interestratefreq"><span ng-bind="activeIssue.interestratefreq"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE FREQUENCY</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="activeIssue.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
 
@@ -854,6 +962,10 @@
 
                                     <p ng-show="tran.partpref" class="belowTitle"><span ng-bind="tran.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span></p>
 
+                                    <p ng-show="tran.dragalong"  class="belowTitle"><span ng-bind="tran.dragalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">DRAG ALONG</span></p>
+
+                                    <p ng-show="tran.tagalong"  class="belowTitle"><span ng-bind="tran.tagalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">TAG ALONG</span></p>
+
                                 </div>
                                 <!-- Option Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
@@ -875,7 +987,9 @@
                                 <!-- Debt Tab -->
                                 <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
 
-                                    <p ng-show="tran.interestrate" class="belowTitle"><span ng-bind="tran.interestrate"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">Interest Rate</span></p>
+                                    <p ng-show="tran.interestrate" class="belowTitle"><span ng-bind="tran.interestrate"></span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span></p>
+
+                                    <p ng-show="tran.interestratefreq" class="belowTitle"><span ng-bind="tran.interestratefreq"></span><span tooltip-placement="top" tooltip="The frequency with which the interest is applied">Interest Rate Frequency</span></p>
 
                                     <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="tran.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
 
