@@ -1279,17 +1279,16 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.status-toggle {
-    width: 24px;
-    text-align: left;
     font-size: 14px;
     border-right: 1px solid transparent;
-}
-
-.status-table > tbody > tr > td:first-child.status-toggle {
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
     width: 44px;
+}
+
+.status-table > tbody > tr > td.status-toggle.status-icon {
+    width: 14px; 
 }
 
 .status-toggle > .circle {
@@ -1300,6 +1299,10 @@ ul.spaced-list > li:nth-child(odd) {
     border-radius: 50%;
     color: white;
     font-size: 10px;
+}
+
+.sub-row > .status-toggle > .circle {
+    color: #F1F1F1;
 }
 
 .circle.yellow {
@@ -1359,6 +1362,9 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 10px;
 }
 
+.status-table > tbody > tr > td.shareholder-column.status-column > ul > li:first-child {
+    text-transform: capitalize;
+}
 
 .status-table .sub-table {
     background-color: #F1F1F1;
