@@ -394,6 +394,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1");
         };
 
+        $scope.viewStatus = function(doc) {
+            $location.url("/company-status?doc=" + doc.doc_id);
+        };
+
         $scope.viewInvestorCopy = function(doc, version) {
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1" + "&investor=" + version.investor);
         };

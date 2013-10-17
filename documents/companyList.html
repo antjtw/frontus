@@ -40,12 +40,12 @@
                 </tbody>
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                     <tr class="empty-row"></tr>
-                    <tr ng-class="{selectedrow:doc.shown}"> 
+                    <tr ng-class="{selectedrow:doc.shown}">
                         <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}" ng-click="!doc.versions[0] || opendetails(doc)">
                             <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column docname-column">
+                        <td class="shareholder-column docname-column" ng-click="viewOriginal(doc)">
                             <ul>
                                 <li>{{doc.docname}}</li>
                                 <li>{{docStatus(doc)}}</li>
@@ -55,7 +55,7 @@
                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>
                         </td>
-                        <td class="shareholder-column status-column">
+                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortDocStatus(doc)}}</li>
                                 <li>{{docStatusRatio(doc)}}</li>
