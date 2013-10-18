@@ -42,16 +42,16 @@
           <table class="status-table">
               <tbody>
                   <tr>
-                      <th>Shareholder</th>
-                      <th>Sent</th>
-                      <th>Viewed</th>
-                      <th>Signed</th>
-                      <th>Countersigned</th>
+                      <th ng-click="setOrder('name')">Shareholder</th>
+                      <th ng-click="setOrder('when_shared')">Sent</th>
+                      <th ng-click="setOrder('last_viewed')">Viewed</th>
+                      <th ng-click="setOrder('when_signed')">Signed</th>
+                      <th ng-click="setOrder('when_confirmed')">Countersigned</th>
                       <th></th>
                       <th style="width:50px;"></th>
                   </tr>
               </tbody>
-              <tbody ng-repeat="person in docversions | filter: query">
+              <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
                   <tr class="empty-row"/>
                   <tr ng-class="{selectedrow:person.shown}">
                       <td class="shareholder-column" >
@@ -61,7 +61,7 @@
                           </ul>
                       </td>
                       <td class="tooltip-date">
-                          <span tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
+                          <span ng-show="person.when_shared" tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                       </td>

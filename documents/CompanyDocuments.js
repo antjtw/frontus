@@ -324,7 +324,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions.length === 0) {
-                return "N/A";
+                return "Uploaded";
             } else if (doc.signature_required && $scope.docIsComplete(doc)) {
                 return "Signed";
             } else if (!doc.signature_required && $scope.docIsComplete(doc)) {
@@ -338,7 +338,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docStatusRatio = function(doc) {
             if (doc.versions.length === 0) {
-                return "0 / 0";
+                return "1 / 1 documents";
             } else if (doc.signature_required) {
                 return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
             } else {
@@ -372,7 +372,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docIsComplete = function(doc) {
             if (doc.versions.length === 0) {
-                return 0;
+                return false;
             } else { 
                 return doc.versions.length == doc.versions.filter($scope.versionIsComplete).length;
             }
@@ -384,10 +384,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.defaultDocStatus = function (doc) {
             return "Uploaded " + moment(doc.last_updated).fromNow();
-        };
-
-        $scope.shareDocOpen = function(doc) {
-            console.log("TODO implement shareDocOpen");
         };
 
         $scope.viewOriginal = function(doc) {
@@ -863,6 +859,13 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             } else {
                 return "" + $filter('date')(date, 'mediumDate') + "\n" + $filter('date')(date, 'shortTime');
             }
+        };
+
+        $scope.investorOrder = 'investor';
+
+        $scope.setOrder = function(field) {
+            console.log(field);
+            $scope.investorOrder = ($scope.investorOrder == field) ? '-' + field : field;
         };
 
         $scope.share = function(message, email, sign) {
