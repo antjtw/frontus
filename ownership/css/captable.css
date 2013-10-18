@@ -613,6 +613,181 @@ tr.rowSelected, tr.rowSelected:hover {
     height: 25px;
 }
 
+/* Status Page */
+
+.status-table {
+    width: 100%;
+    text-align: left;
+}
+
+.status-table > tbody:first-child > tr {
+    border: 1px solid #E2E2E2;
+    height: 30px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+}
+
+.status-table > tbody:first-child > tr > th:first-child {
+    padding-left: 20px;
+}
+
+.status-table > tbody > tr.empty-row {
+    height: 10px;
+}
+
+.status-table > tbody > tr {
+    border: 1px solid #E2E2E2;
+    height: 60px;
+}
+
+.status-table > tbody > tr > td.status-toggle {
+    width: 54px;
+    text-align: center;
+    font-size: 14px;
+    border-right: 1px solid transparent;
+    cursor: pointer;
+}
+
+.status-table > tbody > tr > td.status-toggle:hover {
+    color: #666666;
+}
+
+.status-table > tbody > tr > td.status-toggle.status-toggle-on {
+    background-color: #F1F1F1;
+    border-bottom: none;
+    border-right: 1px solid #E2E2E2;
+}
+
+.status-table > tbody > tr > td.status-toggle > span {
+    vertical-align: middle;
+}
+
+.status-table > tbody > tr > td.shareholder-column {
+    width: 300px;
+    padding-left: 10px;
+}
+
+.status-table .sub-table {
+    background-color: #F1F1F1;
+}
+
+.status-table .sub-table > td > table {
+    width: 462px;
+    margin: 20px 0 20px 54px;
+    background-color: #FFFFFF;
+    border: 1px solid #E1E1E1;
+}
+
+.status-table .sub-table > td > table > tbody > tr {
+    height: 20px;
+}
+
+.status-table .sub-table > td > table > tbody > tr > td {
+    padding-left: 20px;
+    color: #656565;
+}
+
+.status-table .sub-table > td > table > tbody > tr:first-child > td {
+    padding-top: 15px;
+    color: #A5A5A5;
+}
+
+.status-table .sub-table > td > table > tbody > tr:last-child > td {
+    padding-bottom: 15px;
+}
+
+.info-box {
+   border: 1px solid #E2E2E2;
+   margin-bottom: 20px;
+}
+
+.body-box {
+    height: auto;
+}
+
+.info-box > .head-box {
+    padding: 5px 0 5px 0;
+    margin: 0 0 0 0;
+    background-color: #F1F1F1;
+    width: 100%;
+}
+
+.info-box > .head-box > h2 {
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+
+.info-box > .body-box {
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
+}
+
+a.oldschool-link  {
+    color: #3498db;
+}
+
+.overflow-tab > div.accordion-body {
+    overflow-y: visible;
+}
+
+ul.last-edited {
+    display: inline-block;
+    padding: 20px 0 20px 0;
+}
+
+ul.last-edited > li {
+    line-height: 14px;
+}
+
+ul.last-edited > li:first-child {
+    color: #656565;
+}
+
+ul.last-edited > li:last-child {
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.activity-feed2 {
+    margin-top: 10px;
+    height: auto;
+}
+
+.activity-feed2 > li > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+.activity-feed2 > li > ul {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.activity-feed2 > li > ul > li {
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 288px;
+    border: 1px solid #F1F1F1;
+    display: inline-block;
+    padding: 8px 0 10px 10px;
+    color: #656565;
+}
+
+.activity-feed2 > li:last-of-type {
+    margin-bottom: 10px;
+}
+
+.activity-feed2 > li > ul > li > i {
+}
+
+
+.status-columns.column-label > th {
+    padding-left: 10px;
+}
+
 /* Specialized Modals */
 
 .capaccess-form {

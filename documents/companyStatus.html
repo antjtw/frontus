@@ -82,8 +82,12 @@
                           </span>
                           <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
-                      <!-- TODO Switch button action / label based on document status-->
-                      <td><div class="standard-button small-standard-button"><button class="btn">Remind</button></div></td>
+                      <td>
+                          <div class="standard-button small-standard-button">
+                              <button ng-hide="person.when_signed || person.when_confirmed" class="btn">Remind</button>
+                              <button ng-show="person.when_signed && !person.when_confirmed" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign Now</button>
+                          </div>
+                      </td>
                       <td>
                           <ul class="dropdown-list">
                               <li class="dropdown standard menu-drop">

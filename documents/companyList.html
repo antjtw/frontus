@@ -32,36 +32,40 @@
             <table class="status-table">
                 <tbody>
                     <tr>
-                        <th colspan="2" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2">Status</th><!--TODO: sort by status?-->
+                        <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left" style="width:40%">Status</th><!--TODO: sort by status?-->
                         <th></th>
                         <th></th>
                     </tr>
                 </tbody>
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                     <tr class="empty-row"></tr>
-                    <tr ng-class="{selectedrow:doc.shown}"> 
-                        <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}" ng-click="(opendetails(doc))">
-                            <span ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                            <span ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    <tr ng-class="{selectedrow:doc.shown}">
+                        <td class="status-toggle" ng-class="{'status-toggle-on': doc.shown}" ng-click="!doc.versions[0] || opendetails(doc)">
+                            <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column docname-column" ng-click="viewOriginal(doc)">
                             <ul>
                                 <li>{{doc.docname}}</li>
-                                <li>{{formatDocStatus(doc)}}</li>
+                                <li>{{docStatus(doc)}}</li>
                             </ul>
                         </td>
-                        <td class="status-toggle">
-                            <span ng-show="docIsComplete(doc)" data-icon="&#xe023;" aria-hidden="true"></span>
-                            <span ng-hide="docIsComplete(doc)" data-icon="&#xe012;" aria-hidden="true"></span>
+                        <td class="status-toggle status-icon">
+                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
                             <ul>
-                                <li>Status goes here{{doc.status}}</li>
-                                <li>Summary goes here{{docStatusSummary(doc)}}</li>
+                                <li>{{shortDocStatus(doc)}}</li>
+                                <li>{{docStatusRatio(doc)}}</li>
                             </ul>
                         </td>
-                        <td><div class="standard-button small-standard-button"><button class="btn" ng-click="shareDocOpen(doc)">Share</button></div></td>
+                        <td>
+                            <div class="standard-button small-standard-button gray">
+                                <button class="btn" ng-click="shareDocOpen(doc)">Share</button>
+                            </div>
+                        </td>
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -76,29 +80,34 @@
                                 </li>
                           </ul>
                     </tr>
-                    <tr ng-show="doc.shown" ng-repeat="version in versionsOf(doc)">
+                    <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions">
                         <td class="status-toggle"></td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column docname-column">
                             <ul>
-                                <li>{{version.investor}}</li>
-                                <li>{{formatDocStatus(version)}}</li>
+                                <li>{{version.name || version.investor}}</li>
+                                <li>{{versionStatus(version)}}</li>
                             </ul>
                         </td>
-                        <td class="status-toggle">
-                            <span ng-show="versionIsComplete(version)" data-icon="&#xe023;" aria-hidden="true"></span>
-                            <span ng-hide="versionIsComplete(version)" data-icon="&#xe012;" aria-hidden="true"></span>
+                        <td class="status-toggle status-icon">
+                            <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
-                        <td class="shareholder-column">
+                        <td class="shareholder-column status-column">
                             <ul>
-                                <li>Version status goes here{{version.status}}</li>
-                                <li>Version last updated{{version.lastupdated}}</li>
+                                <li>{{version.last_event.activity}}</li>
+                                <li>{{momentFromNow(version.last_event.event_time)}}</li>
                             </ul>
                         </td>
-                        <td><div class="standard-button small-standard-button"><butotn class="btn">Remind</button></div></td>
+                        <td>
+                            <div class="standard-button small-standard-button">
+                                <button ng-show="isPendingSignature(version)" class="btn">Remind</button>
+                                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign Now</button>
+                            </div>
+                        </td>
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
+                                    <a class="dropdown-toggle dark" ng-click="viewInvestorCopy(doc, version)">
                                         <span data-icon="&#xe009;" aria-hidden="true"></span>
                                     </a>
                                 </li>

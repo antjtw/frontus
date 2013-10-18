@@ -10,7 +10,7 @@
 
         <ul class="maintabs head-text">
             <li class="selectedtab"><a href="/documents/company-list">Documents</a></li>
-            <li class="selectedtab"><span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:48 || ''"></span></li>
+            <li class="selectedtab"><span restrict-content-editable contentEditable="true" required class="doc-title" ng-model="document.docname" data-placeholder="Click to Edit" ng-bind="document.docname || 'Untitled' | limitTo:48"></span></li>
             <li><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
         </ul>
 
