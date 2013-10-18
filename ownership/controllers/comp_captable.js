@@ -1284,7 +1284,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.convertSharesUp = function(trans) {
         $scope.convertTran = {};
-        $scope.convertTran.tran = trans[0]
+        $scope.convertTran.tran = trans[0];
+        $scope.convertTran.newtran = {}
+        $scope.convertTran.step = '1';
         $scope.convertTransOptions = trans;
         $scope.convertModal = true;
     };
@@ -1293,12 +1295,23 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertModal = false;
     };
 
+    $scope.convertgoto = function(number) {
+        $scope.convertTran.step = number;
+        if (number == '2') {
+            $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
+            console.log($scope.convertTran);
+            $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
+            $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
+        }
+    }
+
     $scope.convertopts = {
         backdropFade: true,
         dialogFade: true,
         dialogClass: 'convertModal modal'
     };
 
+    // Filters the dropdown to only equity issues
     $scope.justEquity = function(issues, tran) {
         var list = [];
         angular.forEach(issues, function(issue) {
@@ -1308,6 +1321,41 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
         return list;
     };
+
+    // Performs the assignment for the dropdown selectors
+    $scope.assignConvert = function(field, value) {
+        $scope.convertTran[field] = value;
+        if (field == "toissue") {
+            $scope.convertTran.method = null;
+        }
+    };
+
+    // Date grabber
+    $scope.dateConvert = function (evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('converttrandate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.convertTran.date = date;
+                    var offset = $scope.convertTran.date.getTimezoneOffset();
+                    $scope.convertTran.date = $scope.convertTran.date.addMinutes(offset);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if ($scope.convertTran.date instanceof Date) {
+                var offset = $scope.convertTran.date.getTimezoneOffset();
+                $scope.convertTran.date = $scope.convertTran.date.addMinutes(offset);
+                keyPressed = false;
+            }
+        }
+    };
+
 
 
     //Captable Delete Issue Modal

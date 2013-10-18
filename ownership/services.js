@@ -33,9 +33,9 @@ ownership.service('calculate', function () {
         });
 
         angular.forEach(issues, function(issue) {
-             if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
-                   leftovers = leftovers - issue.totalauth;
-             }
+            if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
+                leftovers = leftovers - issue.totalauth;
+            }
         });
 
         var shares = {"u": leftovers, "ukey": leftovers, "x": null};
@@ -152,7 +152,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-       angular.forEach(rows, function (row) {
+        angular.forEach(rows, function (row) {
             if (!isNaN(vesting[row.name])) {
                 var result =Math.round(vesting[row.name]*1000)/1000
                 row.vested = result;
@@ -446,6 +446,24 @@ ownership.service('calculate', function () {
         }
         return amount;
     };
+
+    this.conversion = function(convertTran) {
+        if (convertTran.method == "Valuation") {
+            if (isNaN(parseFloat(convertTran.tran.valcap))) {
+                if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
+                    var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? parseFloat(convertTran.tran.discount) : 0;
+                    convertTran.newtran.ppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
+                    convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.newtran.ppshare;
+                }
+            }
+            return convertTran.newtran;
+        }
+        else if (convertTran.method == "Price Per Share") {
+            convertTran.newtran.ppshare = convertTran.ppshare;
+            convertTran.newtran.units = convertTran.ppshare * parseFloat(convertTran.tran.amount);
+        }
+        return convertTran.newtran;
+    }
 });
 
 ownership.service('switchval', function () {
@@ -521,42 +539,42 @@ ownership.service('sorting', function () {
         return 0;
     };
 
-/*    // Sorts the rows by issue type from earliest to latest
-    this.row = function (prop) {
-        return function (a, b) {
-            var i = 0;
-            // Working for the earliest issue to the latest
-            while (i < prop.length) {
+    /*    // Sorts the rows by issue type from earliest to latest
+     this.row = function (prop) {
+     return function (a, b) {
+     var i = 0;
+     // Working for the earliest issue to the latest
+     while (i < prop.length) {
 
-                // Filters out the unissued shares lines
-                if (a['nameeditable'] == 0) {
-                    if (b['nameeditable'] == 0) {
-                        if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-                            return 1;
-                        if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-                            return -1;
-                    }
-                    return -1
-                }
-                if (b['nameeditable'] == 0) {
-                    if (a['nameeditable'] == 0) {
-                        if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-                            return -1;
-                        if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-                            return 1;
-                    }
-                    return -1
-                }
-                // Ranks the adjacent rows and returns the order for the pair
-                if (a[prop[i]]['u'] < b[prop[i]]['u'])
-                    return 1;
-                if (a[prop[i]]['u'] > b[prop[i]]['u'])
-                    return -1;
-                i++
-            }
-            return 0;
-        }
-    };*/
+     // Filters out the unissued shares lines
+     if (a['nameeditable'] == 0) {
+     if (b['nameeditable'] == 0) {
+     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
+     return 1;
+     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
+     return -1;
+     }
+     return -1
+     }
+     if (b['nameeditable'] == 0) {
+     if (a['nameeditable'] == 0) {
+     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
+     return -1;
+     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
+     return 1;
+     }
+     return -1
+     }
+     // Ranks the adjacent rows and returns the order for the pair
+     if (a[prop[i]]['u'] < b[prop[i]]['u'])
+     return 1;
+     if (a[prop[i]]['u'] > b[prop[i]]['u'])
+     return -1;
+     i++
+     }
+     return 0;
+     }
+     };*/
 
     // Sorts the rows by greatest ownership
     this.basicrow = function () {

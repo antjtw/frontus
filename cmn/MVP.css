@@ -1897,10 +1897,16 @@ button.icon-button:hover {
     cursor: pointer;
     z-index: 1000;
 }
-.standard .dropdown-menu > li > a {
+.standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     padding-left: 10px;
     line-height: 24px;
     min-height: 24px;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    color: #333333;
+    white-space: nowrap;
 }
 .standard.small .dropdown-toggle {
     width: 79px;
@@ -1924,14 +1930,14 @@ button.icon-button:hover {
 .standard.small .dropdown-menu > li > a {
     padding-left: 10px;
 }
-.standard .dropdown-menu > li > a {
+.standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     color: rgb(141, 141, 141);
 }
-.standard .dropdown-menu > li > a:hover {
+.standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;
     color: rgb(141, 141, 141);
 }
-.standard .dropdown-menu > li:first-of-type > a:hover {
+.standard .dropdown-menu > li:first-of-type > a:hover, .standard .dropdown-menu > li:first-of-type > span:hover {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
     -moz-border-radius-topright: 3px;
@@ -1939,7 +1945,7 @@ button.icon-button:hover {
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
 }
-.standard .dropdown-menu > li:last-of-type > a:hover {
+.standard .dropdown-menu > li:last-of-type > a:hover, .standard .dropdown-menu > li:last-of-type > span:hover {
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
     -moz-border-radius-bottomright: 3px;

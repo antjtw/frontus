@@ -185,7 +185,7 @@
         <span>Convert Shares</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
     </div>
-    <div class="modalText">
+    <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
         <div>
             <span>Convert From</span>
             <ul class="dropdown-list">
@@ -206,23 +206,23 @@
             <ul class="dropdown-list">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
-                        {{convertTran.toissue | maxLength}}<span class="invisible-drop">'</span>
+                        {{convertTran.toissue.issue | maxLength}}<span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="i in justEquity(issues, convertTransOptions[0])">
-                            <a>{{i.issue | maxLength}}</a>
+                            <span ng-click="assignConvert('toissue', i);">{{i.issue | maxLength}}</span>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <div>
+        <div ng-show="convertTran.toissue.issue">
             <span>Date</span>
-            <input id="converttrandate" type="text"
+            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
                    ng-model="convertTran.date" data-date-format="mm/dd/yyyy" bs-datepicker
                    onkeydown="testForEnter();">
         </div>
-        <div class="pull-right">
+        <div ng-show="convertTran.toissue.issue" class="pull-right">
             <span>Method</span>
             <ul class="dropdown-list">
                 <li class="dropdown standard">
@@ -230,22 +230,66 @@
                         {{convertTran.method}}<span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-click="conversionSelect('Valuation')">Valuation</li>
+                        <li ng-click="conversionSelect('Valuation')">
+                            <span ng-show="convertTran.toissue.ppshare" ng-click="assignConvert('method', 'Valuation')">Valuation</span>
+                            <span ng-click="assignConvert('method', 'Price Per Share')">Price Per Share</span>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <div class="pull-right">
+        <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
             <span class="double">Conversion PPS</span>
-            <input ng-model="convertTran.pps" onkeydown="testForEnter();">
+            <input ng-model="convertTran.ppshare" onkeydown="testForEnter();">
+        </div>
+    </div>
+    <div ng-show="convertTran.step == '2'" class="modalText">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{convertTran.tran.issue}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.tran.discount">{{convertTran.tran.discount}}</li>
+                <li ng-show="convertTran.tran.discount">Discount</li>
+                <li ng-show="convertTran.tran.valcap">{{convertTran.tran.valcap}}</li>
+                <li ng-show="convertTran.tran.valcap">Cap</li>
+            </ul>
+        </div>
+        <div class="convert-listing">
+            <span>To</span>
+            <ul>
+                <li>{{convertTran.toissue.issue}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.toissue.premoney">{{convertTran.toissue.premoney}}</li>
+                <li ng-show="convertTran.toissue.premoney">Valuation</li>
+                <li ng-show="convertTran.toissue.ppshare">{{convertTran.toissue.ppshare}}</li>
+                <li ng-show="convertTran.toissue.ppshare">PPS</li>
+            </ul>
+        </div>
+        <div class="convert-summary">
+            <span>Summary</span>
+            <ul>
+                <li><span>{{convertTran.tran.amount}} Debt</span><span>To Be Converted</span></li>
+                <li><span>{{convertTran.newtran.ppshare}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.units}}</span><span>After Conversion</span></li>
+            </ul>
         </div>
     </div>
     <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        <div ng-show="convertTran.step == '1'" class="pull-left standard-button gray">
+          <button class="btn" ng-click="convertSharesClose();">Cancel</button>
         </div>
-        <div class="standard-button blue arrow-right">
-            <button class="btn" ng-click="convertSharesClose();">Review and Submit</button>
+        <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
+            <button class="btn" ng-click="convertgoto('2');">Review and Submit</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
+            <button class="btn" ng-click="convertgoto('1');">Back</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button">
+            <button class="btn" ng-click="">Submit</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button small-standard-button gray">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
         </div>
     </div>
 </div>
@@ -740,7 +784,7 @@
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-click="convertSharesUp(activeTran);">Convert Shares</li>
+                                            <li ng-show="activeTran[0].type == 'Debt'" ng-click="convertSharesUp(activeTran);">Convert Shares</li>
                                             <li ng-click="deletePersonButton(activeInvestor);">Delete</li>
                                         </ul>
                                     </li>
