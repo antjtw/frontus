@@ -33,7 +33,7 @@
                 <tbody>
                     <tr>
                         <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2" class="left" style="width:40%">Status</th><!--TODO: sort by status?-->
+                        <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -58,7 +58,7 @@
                         <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortDocStatus(doc)}}</li>
-                                <li>{{docStatusRatio(doc)}}</li>
+                                <li>{{formatDocStatusRatio(doc)}}</li>
                             </ul>
                         </td>
                         <td>
@@ -80,7 +80,7 @@
                                 </li>
                           </ul>
                     </tr>
-                    <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions">
+                    <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
                         <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(doc, version)">
                             <ul>
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <div class="standard-button small-standard-button">
-                                <button ng-show="isPendingSignature(version)" class="btn">Remind</button>
+                                <button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn">Remind</button>
                                 <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign Now</button>
                             </div>
                         </td>
@@ -215,5 +215,43 @@
     <div class="modalButtons two">
         <div class="left"><button class="button subText blueButton left" ng-click="documentUploadClose()">Cancel</button></div>
         <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(files)">Upload</button></div>
+    </div>
+</div>
+<div modal="shareDocModal" close="shareDocClose()" options="opts">
+    <div class="modalHeader">
+        <span data-icon="&#xe027;" aria-hidden="true"></span>Share "{{docToShare.docname}}"
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
+    </div>
+    <div class="modalText dshare">
+        <ul>
+            <li>
+                <span>Email Address</span>
+                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+            </li>
+            <li>
+                <span>Get Signature?</span>
+                <ul class="dropdown-list">
+                    <li class="dropdown standard small">
+                        <a class="dropdown-toggle">
+                            {{signeeded}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="changeSig('No')">No</a>
+                                <a ng-click="changeSig('Yes')">Yes</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+    </div>
+    <div class="modalButtons">
+        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
+        <div class="right">
+            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
+            </button>
+        </div>
     </div>
 </div>

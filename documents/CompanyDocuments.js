@@ -124,14 +124,23 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                         }
                     });
                     $scope.loadDocumentActivity(doc);
+                    $scope.setDocumentStatusRatio(doc);
                 });
             });
         };
- 
+
+        $scope.setDocumentStatusRatio = function(doc) {
+            doc.statusRatio = $scope.docStatusRatio(doc);
+        };
+
         $scope.setSigRequired = function(doc) {
             if (doc.versions.filter(function(el) {return el.signature_deadline;}).length > 0) {
                doc.signature_required = true;
             }
+        };
+
+        $scope.setVersionStatusRank = function(version) {
+            version.statusRank = $scope.eventRank(version.last_event);
         };
 
         $scope.loadDocumentActivity = function (doc) {
@@ -139,7 +148,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 SWBrijj.tblmm("document.company_activity", "doc_id", version.doc_id).then(function(data) {
                     // This works assuming data is in descending chronological order.
                     version.last_event = data.sort($scope.compareEvents)[0];
-                    version.last_viewed = data.filter(function(el) {return el.person === version.investor && el.activity === "viewed";})[0].event_time;
+                    var versionActivities = data.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
+                    version.last_viewed = versionActivities.length > 0 ? versionActivities[0].event_time : null;
+                    $scope.setVersionStatusRank(version);
                 });
             });
             $scope.setSigRequired(doc);
@@ -154,8 +165,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             switch (ev.activity) {
                 case "countersigned":
                     return 6;
+                // signed or rejected can come either before or after each other depending on chronological ordering.
+                // ambiguity is resolve in $scope.compareEvents
                 case "signed":
-                    return 4;
                 case "rejected":
                     return 4;
                 case "viewed":
@@ -170,10 +182,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docOrder = 'docname';
+        $scope.versionOrder = 'statusRank';
         $scope.selectedDoc = 0;
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
+        $scope.signeeded = "No";
+        $scope.messageText = "Add an optional message...";
 
+        // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
@@ -336,14 +352,58 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
-        $scope.docStatusRatio = function(doc) {
+        $scope.docStatusNumComplete = function(doc) {
+            if (doc.signature_required) {
+                return $scope.versionsSigned(doc).length;
+            } else {
+                return $scope.versionsViewed(doc).length;
+            }
+        };
+
+        $scope.docStatusNumVersions = function(doc) {
+            if (doc.signature_required) {
+                return $scope.versionsReqSig(doc).length;
+            } else {
+                return $scope.versionsReqView(doc).length;
+            }
+        };
+
+        $scope.formatDocStatusRatio = function(doc) {
             if (doc.versions.length === 0) {
                 return "1 / 1 documents";
-            } else if (doc.signature_required) {
-                return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
             } else {
-                return $scope.versionsViewed(doc).length + " / " + $scope.versionsShared(doc).length + " views";
+                // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
+                var signatureRatio = $scope.docSignatureRatio(doc);
+                var viewRatio = $scope.docViewRatio(doc);
+                if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
+                    return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
+                } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
+                    return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
+                } else {
+                    return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
+                           (doc.signature_required ? " signatures" : " views");
+                }
             }
+        };
+
+        $scope.docSignatureRatio = function(doc) {
+            var initRatio = ($scope.versionsSigned(doc).length / $scope.versionsReqSig(doc).length) || 0;
+            if (initRatio === Infinity) {initRatio = 0;}
+            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+        };
+
+        $scope.docViewRatio = function(doc) {
+            var initRatio = ($scope.versionsViewed(doc).length / $scope.versionsReqView(doc).length) || 0;
+            if (initRatio === Infinity) {initRatio = 1;}
+            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+        };
+ 
+        $scope.docStatusRatio = function(doc) {
+            var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) || 0;
+            // This ensure documents with no versions appear before completed documents.
+            // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed.
+            if (initRatio === Infinity) {initRatio = 0;}
+            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
         };
 
         $scope.versionsSigned = function(doc) {
@@ -355,11 +415,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.versionsViewed = function(doc) {
-            return doc.versions.filter(function(el) {return el.last_viewed;});
+            return doc.versions.filter(function(el) {return el.last_viewed && !el.signature_deadline;});
         };
 
-        $scope.versionsShared = function(doc) {
-            return doc.versions.length;
+        $scope.versionsReqView = function(doc) {
+            return doc.versions.filter($scope.isPendingView);
+        };
+
+        $scope.isPendingView = function(version) {
+            return !version.signature_deadline && !version.last_viewed;
         };
 
         $scope.isPendingSignature = function(version) {
@@ -373,7 +437,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.docIsComplete = function(doc) {
             if (doc.versions.length === 0) {
                 return false;
-            } else { 
+            } else {
                 return doc.versions.length == doc.versions.filter($scope.versionIsComplete).length;
             }
         };
@@ -396,6 +460,48 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.viewInvestorCopy = function(doc, version) {
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1" + "&investor=" + version.investor);
+        };
+
+        // Sharing modal functions
+
+        $scope.shareDocOpen = function(doc) {
+            $scope.docToShare = doc;
+            $scope.shareDocModal = true;
+        };
+
+        $scope.shareDocClose = function() {
+            $scope.shareDocModal = false;
+        };
+
+        $scope.changeSig = function(value) {
+            $scope.signeeded = value;
+            if (value == "Yes") {
+                $scope.messageText = "Hi, Your signature is requested";
+            } else {
+                $scope.messageText = "Add an optional message...";
+            }
+        };
+
+        $scope.share = function(message, email, sign) {
+            sign = sign == "Yes";
+            if (sign) {
+                var date = Date.parse('22 November 2113');
+            } else {
+                date = null;
+            }
+            if (message === "Add an optional message...") {
+                message = "";
+            }
+            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document shared with " + email);
+                $scope.signeeded = "No";
+                $route.reload();
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.signeeded = "No";
+            });
         };
 
         $scope.renameDocument = function(doc) {
@@ -502,7 +608,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.docId = doc.doc_id;
             $scope.library = "document.my_counterparty_library";
             $scope.pages = "document.my_counterparty_codex";
-            // TODO modifiedPages is taking too long to load. Can we only store the page# here?
             $scope.modifiedPages = [];
 
             SWBrijj.tblmm("document.my_counterparty_codex", ["page", "annotated"], "doc_id", doc.doc_id).then(function(x) {
@@ -864,7 +969,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.investorOrder = 'investor';
 
         $scope.setOrder = function(field) {
-            console.log(field);
             $scope.investorOrder = ($scope.investorOrder == field) ? '-' + field : field;
         };
 

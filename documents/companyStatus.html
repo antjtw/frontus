@@ -56,7 +56,7 @@
                   <tr ng-class="{selectedrow:person.shown}">
                       <td class="shareholder-column" >
                           <ul>
-                              <li>{{person.name}}</li>
+                              <li>{{person.name || person.investor}}</li>
                               <li>{{formatLastLogin(person.lastlogin)}}</li>
                           </ul>
                       </td>
@@ -135,7 +135,7 @@
                             <ul>
                                 <li ng-repeat="event in events.slice(2)">
                                     <i class="{{event.activity | icon}}"></i>
-                                    {{event | nameoremail}} {{event | description}}
+                                    {{event.name || event.person}} {{event | description}}
                                 </li>
                             </ul>
                         </li>
