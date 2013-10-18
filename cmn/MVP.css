@@ -62,7 +62,7 @@ input.loginInput:focus, textarea:focus, select:focus {
     color: black;
 }
 .modal-backdrop {
-    background-color: rgb(255, 255, 255);
+    background-color: #1E2D3D;
 }
 [class^="icon-"], [class*=" icon-"] {
     background:none;
@@ -1560,6 +1560,8 @@ a.oldschool-link  {
     color: #FFFFFF;
     background-color: #1ABC96;
     width: 130px;
+    min-height: 30px;
+    position: relative;
 }
 .standard-button > button:hover {
     background-color: #15A085;
@@ -1569,12 +1571,48 @@ a.oldschool-link  {
     background-color: #8CDDCA;
     color: #FFFFFF;
 }
+
+.standard-button.arrow-right > button:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 14px solid #3498DB;
+    top: 1px;
+    right: -13px;
+}
+
 .standard-button.red > button {
     background-color: #E74C3C;
 }
 .standard-button.red > button:hover {
     background-color: #C44032;
 }
+
+.standard-button.blue > button {
+    background-color: #3498DB;
+}
+.standard-button.blue > button:hover {
+    background-color: #2980B9;
+}
+
+.standard-button.blue.arrow-right > button:hover:after {
+    border-left: 14px solid #2980B9;
+}
+
+.standard-button.gray > button {
+    background-color: #F1F1F1;
+    color: #666666;
+}
+
+.standard-button.gray > button:hover {
+    background-color: #E3E3E3;
+    color: #666666;
+}
+
 .small-standard-button > button {
     width: 68px;
 }
@@ -2053,17 +2091,15 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     text-align: left;
     padding: 16px 0 16px 22px;
     margin: 0;
-    background-color: rgb(33, 178, 137);
-    color: rgb(255, 255, 255);
     vertical-align: middle;
     font-size: 14px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    font-weight: lighter;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #1E2D3D;
 }
 .modalHeader > span {
-    font-size: 20px;
     vertical-align: middle;
     padding-right: 8px;
+    text-transform: uppercase;
 }
 .modalHeader p {
     color: rgb(255, 255, 255);
@@ -2077,6 +2113,14 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     color: rgb(0, 71, 51);
     font-size: 20px;
 }
+
+.modal-footer {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
 .modal .emailSection {
     min-height: 40px;
     border-bottom: 1px solid rgb(227, 227, 227);
@@ -2090,6 +2134,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 .modal input {
     border: 0;
+    border-radius: 3px;
     box-shadow: none !important;
     margin: 0 20px 0 0;
     color: rgb(102, 102, 102);

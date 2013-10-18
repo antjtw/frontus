@@ -1271,12 +1271,42 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Toggles sidebar back and forth
     $scope.toggleSide = function () {
         if (!$scope.sideToggle) {
-            $scope.sideToggleName = "Hide"
+            $scope.sideToggleName = "Hide";
             return false
         } else {
-            $scope.sideToggleName = "Show"
+            $scope.sideToggleName = "Show";
             return true
         }
+    };
+
+
+    // Captable Conversion Modal
+
+    $scope.convertSharesUp = function(trans) {
+        $scope.convertTran = {};
+        $scope.convertTran.tran = trans[0]
+        $scope.convertTransOptions = trans;
+        $scope.convertModal = true;
+    };
+
+    $scope.convertSharesClose = function() {
+        $scope.convertModal = false;
+    };
+
+    $scope.convertopts = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'convertModal modal'
+    };
+
+    $scope.justEquity = function(issues, tran) {
+        var list = [];
+        angular.forEach(issues, function(issue) {
+            if (issue.type == "Equity" && issue.issue != tran.issue) {
+                list.push(issue);
+            }
+        });
+        return list;
     };
 
 
@@ -1590,7 +1620,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     //switches the sidebar based on the type of the issue
     $scope.dilution = function () {
         $scope.sideBar = 9;
-         $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
+        $scope.dilutedRows = calculate.dilution($scope.rows, $scope.issues);
     };
 
     //switches the sidebar based on the type of the issue

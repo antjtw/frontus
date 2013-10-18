@@ -180,6 +180,79 @@
     </div>
 </div>
 
+<div modal="convertModal" close="convertSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Convert Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
+    </div>
+    <div class="modalText">
+        <div>
+            <span>Convert From</span>
+            <ul class="dropdown-list">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.tran.date | date:'short'}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in convertTransOptions">
+                            <a>{{i.date | date:'short'}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right">
+            <span>Convert To</span>
+            <ul class="dropdown-list">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.toissue | maxLength}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in justEquity(issues, convertTransOptions[0])">
+                            <a>{{i.issue | maxLength}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <span>Date</span>
+            <input id="converttrandate" type="text"
+                   ng-model="convertTran.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                   onkeydown="testForEnter();">
+        </div>
+        <div class="pull-right">
+            <span>Method</span>
+            <ul class="dropdown-list">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.method}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-click="conversionSelect('Valuation')">Valuation</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right">
+            <span class="double">Conversion PPS</span>
+            <input ng-model="convertTran.pps" onkeydown="testForEnter();">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+        <div class="standard-button blue arrow-right">
+            <button class="btn" ng-click="convertSharesClose();">Review and Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Captable From Here Down -->
+
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
 <div class="headsection row-fluid">
@@ -656,8 +729,22 @@
 <!-- Transaction Side Bar when Editable -->
                       <span ng-switch-when="2">
                         <div class="tabbed headsection row-fluid">
-                            <h1>{{activeInvestor}}<span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
-                                                        ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>
+                            <h1>{{activeInvestor}}
+
+<!--                                <span ng-hide="toggleView();" class="pull-right issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
+                                                        ng-click="deletePersonButton(activeInvestor);" aria-hidden="true"></span>-->
+
+                                <ul class="dropdown-list transaction-icon pull-right">
+                                    <li class="dropdown standard menu-drop">
+                                        <a class="dropdown-toggle">
+                                            <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                        </a>
+                                        <ul ng-hide="toggleView();" class="dropdown-menu">
+                                            <li ng-click="convertSharesUp(activeTran);">Convert Shares</li>
+                                            <li ng-click="deletePersonButton(activeInvestor);">Delete</li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </h1>
 
                             <p>Customize terms for this shareholder</p>

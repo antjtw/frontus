@@ -343,6 +343,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     min-height: 550px;
 }
 
+.capright .transaction-icon {
+    margin-right: 20px;
+}
+
 .capright .issue-delete {
     background-color: #F1F1F1;
     vertical-align: middle;
@@ -631,6 +635,57 @@ tr.rowSelected, tr.rowSelected:hover {
     line-height: 30px;
     margin-right: 20px;
 }
+
+.convertModal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.convertModal > div.modalText {
+    overflow: visible;
+    margin-left: 22px;
+    height: 120px;
+}
+
+.convertModal > div.modalText > div {
+    float: left;
+    width: 240px;
+    margin-bottom: 10px;
+}
+
+.convertModal > div.modalText > div.pull-right {
+    float: right;
+    margin-right: 30px;
+}
+
+.convertModal > div.modalText > div > span:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    width: 80px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 5px;
+}
+
+
+.convertModal > div.modalText > div > span:first-child.double {
+    line-height: 12px;
+    vertical-align: middle;
+}
+
+.convertModal > div.modalText > div > input {
+    box-sizing: border-box;
+    width: 150px;
+    height: 30px;
+    float: none;
+    margin: 0;
+}
+
+.convertModal .modal-footer > div.arrow-right {
+    margin-right: 20px;
+}
+
+
 
 .capshareModal input, .capshareModal span {
     float: left;
