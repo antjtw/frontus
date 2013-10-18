@@ -1313,6 +1313,10 @@ ul.spaced-list > li:nth-child(odd) {
     background: #1ABC96;
 }
 
+.circle.gray {
+    background: #F1F1F1;
+}
+
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
     background-color: #F1F1F1;
     border-bottom: none;
