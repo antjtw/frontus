@@ -6,35 +6,65 @@
         </ul>
     </div>
 
-    <div class="row-fluid">
-      <div class="subnav-controls">
-        <div>
-            <div class="pull-left">
-                <span>Search</span>
-                <input type="text" class="search-box" ng-model="query">
+    <div style="margin-left: 0;" class="span12 recipientInfo statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left">
+                        <span>Search</span>
+                        <input type="Text" class="search-box" ng-model="query">
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
             </div>
+            <table class="status-table">
+                <tbody>
+                    <tr>
+                        <th colspan="1" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRank')">Status</th>
+                        <th/>
+                        <th/>
+                    </tr>
+                </tbody>
+                <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+                    <tr class="empty-row"/>
+                    <tr ng-class="{selectedrow:doc.shown}">
+                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc.doc_id)">
+                            <ul>
+                                <li>{{doc.docname}}</li>
+                                <li>{{docStatus(doc)}}</li>
+                            </ul>
+                        </td>
+                        <td class="status-toggle status-icon">
+                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
+                        </td>
+                        <td class="shareholder-column status-column">
+                            <ul>
+                                <li>{{doc.last_event.activity}}</li>
+                                <li>{{momentFromNow(doc.last_event.event_time)}}</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="standard-button small-standard-button">
+                                <button ng-show="isPendingCountersignature(doc)" class="btn">Remind</button>
+                                <button ng-show="isPendingSignature(doc)" class="btn">Sign Now</button>
+                            </div>
+                        </td>
+                        <td>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle" ng-click="gotoDoc(doc.doc_id)">
+                                        <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="display:none;" ng-show="documents.length===0">You have no documents.</div>
         </div>
-        <div class="DivHelper"></div>
-      </div>
     </div>
-
-    <section class="docLibrary statusBlock">
-      <table class="tableView bodyText">
-        <tr class="column-label status-columns">
-          <th class="button" ng-click="setOrder('docname')" style="width:40%;"><span
-              class="title sortedDown">Name</span></th>
-          <th class="button" ng-click="setOrder('last_updated')" style="width:30%;"><span
-              class="title">Last Updated</span></th>
-          <th class="button" style="width:30%;"><span class="title">Status</span></th>
-        </tr>
-        <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
-          <td>{{doc.docname}}</td>
-          <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span>{{doc.last_updated | date:'shortTime'}}</td>
-          <td>{{doc.signature_status}}</td>
-        </tr>
-      </table>
-      <div style="display: none;" ng-show="documents.length == 0">You have no documents.</div>
-    </section>
-
   </div>
 </div>

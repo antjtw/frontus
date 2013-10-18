@@ -1045,7 +1045,52 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         SWBrijj.tblm("document.this_investor_library").then(function(data) {
             $scope.documents = data;
+            $scope.loadDocumentActivity();
         });
+
+        $scope.loadDocumentActivity = function() {
+            angular.forEach($scope.documents, function(doc) {
+                SWBrijj.tblmm("document.investor_activity", "doc_id", doc.doc_id).then(function(data) {
+                    doc.last_event = data.sort($scope.compareEvents)[0];
+                    var docActivities = data.filter(function(el) {return el.person === doc.investor && el.activity==="viewed";});
+                    doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_tiem : null;
+                    $scope.setDocStatusRank(doc);
+                });
+            });
+        };
+
+        $scope.compareEvents = function(a, b) {
+            var initRank = $scope.eventRank(b) - $scope.eventRank(a);
+            return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+        };
+        
+        $scope.eventRank = function (ev) {
+            switch (ev.activity) {
+                case "countersigned":
+                    return 6;
+                // signed or rejected can come either before or after each other depending on chronological ordering.
+                // ambiguity is resolve in $scope.compareEvents
+                case "signed":
+                case "rejected":
+                    return 4;
+                case "viewed":
+                    return 3;
+                case "received":
+                    return 2;
+                case "uploaded":
+                    return 1;
+                default:
+                    return 0;
+            }
+        };
+        
+        $scope.setDocStatusRank = function(doc) {
+            doc.statusRank = $scope.eventRank(doc.last_event);
+        };
+
+        $scope.momentFromNow = function(date) {
+            return moment(date).fromNow();
+        };
 
         $scope.docOrder = 'docname';
 
@@ -1067,6 +1112,34 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             link = "/documents/investor-view?doc=" + docid;
             document.location.href = link;
         };
+
+        $scope.docStatus = function(doc) {
+            if (doc.last_event) {
+                return doc.last_event.activity +
+                       " by " + (doc.last_event.name || doc.investor) +
+                       " " + moment(doc.last_event.event_time).fromNow();
+            } else {
+                return "";
+            }
+        };
+
+        $scope.isPendingCountersignature = function(doc) {
+            return doc.when_signed && !doc.when_confirmed;
+        };
+
+        $scope.isPendingSignature = function(doc) {
+            return doc.signature_deadline && !doc.when_signed;
+        };
+
+        $scope.isPendingView = function(doc) {
+            return !doc.signature_deadline && !doc.last_viewed;
+        };
+
+        $scope.docIsComplete = function(doc) {
+            return (doc.signature_deadline && doc.when_confirmed) ||
+                   (!doc.signature_deadline && doc.last_viewed);
+        };
+
     }
 ]);
 

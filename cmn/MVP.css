@@ -1261,9 +1261,14 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td {
     font-size: 10px;
-    color: #A6A6A6;
+    color: #666666;
     text-align: center;
-    padding-right: 20px;
+}
+
+.status-table > tbody > tr > td:last-child {
+    font-size: 12px;
+    padding-right: 12px;
+    padding-left: 2px;
 }
 
 .status-table > tbody > tr > td:hover {
@@ -1682,6 +1687,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     padding-left: 8px;
     padding-right: 8px;
     font-size: 14px;
+    color: #666666;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
@@ -1702,18 +1708,18 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     margin-left: -120px;
 }
 
-.standard.menu-drop .dropdown-menu > li {
-    padding: 3px 0 3px 10px;
-    line-height: 24px;
+ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+    color : #666666;
 }
 
 .standard.menu-drop .dropdown-menu > li {
-    color: rgb(141, 141, 141);
+    padding: 3px 0 3px 10px;
+    line-height: 24px;
+    text-align: left;
 }
 
 .standard.menu-drop .dropdown-menu > li:hover {
     background: #C7C7C7;
-    color: rgb(141, 141, 141);
 }
 
 .standard.menu-drop .dropdown-menu > li:first-of-type:hover {
@@ -1831,7 +1837,6 @@ button.icon-button:hover {
 }
 .standard .dropdown-toggle:hover {
     background-color: rgb(227, 227, 227);
-    color: rgb(141, 141, 141);
 }
 .standard .dropdown-menu {
     -moz-box-sizing: border-box;
