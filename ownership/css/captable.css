@@ -343,6 +343,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     min-height: 550px;
 }
 
+.capright .transaction-icon {
+    margin-right: 20px;
+}
+
 .capright .issue-delete {
     background-color: #F1F1F1;
     vertical-align: middle;
@@ -806,6 +810,111 @@ ul.last-edited > li:last-child {
     line-height: 30px;
     margin-right: 20px;
 }
+
+.convertModal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.convertModal > div.modalText {
+    overflow: visible;
+    margin: 0 22px 0 22px;
+    height: 120px;
+}
+
+.convertModal > div.modalText > div {
+    float: left;
+    width: 240px;
+    margin-bottom: 10px;
+}
+
+.convertModal > div.modalText.convert-step-one > div.pull-right {
+    float: right;
+}
+
+.convertModal > div.modalText.convert-step-one > div > span:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    width: 80px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 5px;
+}
+
+
+.convertModal > div.modalText.convert-step-one > div > span:first-child.double {
+    line-height: 12px;
+    vertical-align: middle;
+}
+
+.convertModal > div.modalText.convert-step-one > div > input {
+    box-sizing: border-box;
+    width: 150px;
+    height: 30px;
+    float: none;
+    margin: 0;
+}
+
+.convertModal > div.modalText > div.convert-listing > span {
+    float: left;
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.convertModal > div.modalText > div.convert-listing > ul {
+    margin-left: 65px;
+    text-align: left;
+}
+
+.convertModal > div.modalText > div.convert-listing > ul > li:nth-child(odd) {
+}
+
+.convertModal > div.modalText > div.convert-listing > ul > li:nth-child(even) {
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.convertModal > div.modalText > div.convert-summary {
+    width: 100%;
+    font-size: 14px;
+    color: #1E2D3D;
+    margin-bottom: 40px;
+}
+
+.convertModal >div.modalText > div.convert-summary > span {
+    text-align: left;
+    display: block;
+    width: 100%;
+}
+
+.convertModal >div.modalText > div.convert-summary > ul {
+    height: 70px;
+    background-color: #F1F1F1;
+}
+
+.convertModal >div.modalText > div.convert-summary > ul > li {
+    float: left;
+    height: 100%;
+    width: 33.33333%;
+}
+
+.convertModal >div.modalText > div.convert-summary > ul > li > span:first-child {
+    display: block;
+
+}
+
+.convertModal >div.modalText > div.convert-summary > ul > li > span:last-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #A6A6A6;
+}
+
+.convertModal .modal-footer > div.arrow-right {
+    margin-right: 20px;
+}
+
+
 
 .capshareModal input, .capshareModal span {
     float: left;

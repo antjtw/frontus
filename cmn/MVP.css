@@ -62,7 +62,7 @@ input.loginInput:focus, textarea:focus, select:focus {
     color: black;
 }
 .modal-backdrop {
-    background-color: rgb(255, 255, 255);
+    background-color: #1E2D3D;
 }
 [class^="icon-"], [class*=" icon-"] {
     background:none;
@@ -1626,6 +1626,8 @@ a.oldschool-link  {
     color: #FFFFFF;
     background-color: #1ABC96;
     width: 130px;
+    min-height: 30px;
+    position: relative;
 }
 .standard-button > button:hover {
     background-color: #15A085;
@@ -1635,12 +1637,48 @@ a.oldschool-link  {
     background-color: #8CDDCA;
     color: #FFFFFF;
 }
+
+.standard-button.arrow-right > button:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 14px solid #3498DB;
+    top: 1px;
+    right: -13px;
+}
+
 .standard-button.red > button {
     background-color: #E74C3C;
 }
 .standard-button.red > button:hover {
     background-color: #C44032;
 }
+
+.standard-button.blue > button {
+    background-color: #3498DB;
+}
+.standard-button.blue > button:hover {
+    background-color: #2980B9;
+}
+
+.standard-button.blue.arrow-right > button:hover:after {
+    border-left: 14px solid #2980B9;
+}
+
+.standard-button.gray > button {
+    background-color: #F1F1F1;
+    color: #666666;
+}
+
+.standard-button.gray > button:hover {
+    background-color: #E3E3E3;
+    color: #666666;
+}
+
 .small-standard-button > button {
     width: 76px;
 }
@@ -1665,6 +1703,7 @@ a.oldschool-link  {
 .icon-standard-button > span:hover {
     background-color: #E3E3E3;
 }
+
 /* Back icon */
  .back-icon {
     display: inline-block;
@@ -1679,6 +1718,21 @@ a.oldschool-link  {
 }
 .back-icon:hover {
     color: #1e2d3d;
+}
+
+/* Icon Box styling */
+
+button.icon-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    border: none;
+    background-color: #F1F1F1;
+    color: #666666;
+}
+
+button.icon-button:hover {
+    background-color: #E3E3E3;
 }
 
 /* Drop down menus built on top of the custom selects */
@@ -1744,7 +1798,8 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
 }
-=======
+
+
 /* Checkbox styling */
 
 .check-box-button {
@@ -1798,7 +1853,6 @@ button.icon-button:hover {
 
 /* Dropdown button and menus */
 
-/* Dropdown buttons */
  .dropdown-list {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -1854,10 +1908,16 @@ button.icon-button:hover {
     cursor: pointer;
     z-index: 1000;
 }
-.standard .dropdown-menu > li > a {
+.standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     padding-left: 10px;
     line-height: 24px;
     min-height: 24px;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    color: #333333;
+    white-space: nowrap;
 }
 .standard.small .dropdown-toggle {
     width: 79px;
@@ -1881,14 +1941,14 @@ button.icon-button:hover {
 .standard.small .dropdown-menu > li > a {
     padding-left: 10px;
 }
-.standard .dropdown-menu > li > a {
+.standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     color: rgb(141, 141, 141);
 }
-.standard .dropdown-menu > li > a:hover {
+.standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;
     color: rgb(141, 141, 141);
 }
-.standard .dropdown-menu > li:first-of-type > a:hover {
+.standard .dropdown-menu > li:first-of-type > a:hover, .standard .dropdown-menu > li:first-of-type > span:hover {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
     -moz-border-radius-topright: 3px;
@@ -1896,7 +1956,7 @@ button.icon-button:hover {
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
 }
-.standard .dropdown-menu > li:last-of-type > a:hover {
+.standard .dropdown-menu > li:last-of-type > a:hover, .standard .dropdown-menu > li:last-of-type > span:hover {
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
     -moz-border-radius-bottomright: 3px;
@@ -2136,17 +2196,15 @@ button.icon-button:hover {
     text-align: left;
     padding: 16px 0 16px 22px;
     margin: 0;
-    background-color: rgb(33, 178, 137);
-    color: rgb(255, 255, 255);
     vertical-align: middle;
     font-size: 14px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    font-weight: lighter;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #1E2D3D;
 }
 .modalHeader > span {
-    font-size: 20px;
     vertical-align: middle;
     padding-right: 8px;
+    text-transform: uppercase;
 }
 .modalHeader p {
     color: rgb(255, 255, 255);
@@ -2160,6 +2218,14 @@ button.icon-button:hover {
     color: rgb(0, 71, 51);
     font-size: 20px;
 }
+
+.modal-footer {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
 .modal .emailSection {
     min-height: 40px;
     border-bottom: 1px solid rgb(227, 227, 227);
@@ -2173,6 +2239,7 @@ button.icon-button:hover {
 }
 .modal input {
     border: 0;
+    border-radius: 3px;
     box-shadow: none !important;
     margin: 0 20px 0 0;
     color: rgb(102, 102, 102);

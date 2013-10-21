@@ -955,7 +955,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.formatLastLogin = function(lastlogin) {
-            return "Last Login " + moment(lastlogin).fromNow();
+            return lastlogin ? "Last Login " + moment(lastlogin).fromNow() : "Never Logged In";
         };
 
         $scope.formatDate = function(date, fallback) {
