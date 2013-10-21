@@ -714,6 +714,7 @@ li.selectedtab {
     height: 22px;
     margin-bottom: 0;
     border-radius: 3px;
+    margin-left: 10px;
 }
 .subnav-controls h2 {
     margin-left: 10px;
@@ -1369,7 +1370,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
-    padding-left: 10px;
+    padding-left: 20px;
 }
 
 .status-table > tbody > tr > td.shareholder-column.status-column > ul > li:first-child {

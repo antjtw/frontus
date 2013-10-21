@@ -1053,7 +1053,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 SWBrijj.tblmm("document.investor_activity", "doc_id", doc.doc_id).then(function(data) {
                     doc.last_event = data.sort($scope.compareEvents)[0];
                     var docActivities = data.filter(function(el) {return el.person === doc.investor && el.activity==="viewed";});
-                    doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_tiem : null;
+                    doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_time : null;
                     $scope.setDocStatusRank(doc);
                 });
             });
