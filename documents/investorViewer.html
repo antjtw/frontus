@@ -41,10 +41,14 @@
               Do you wish to electonically sign this document?<br>(This action is irreversible)
           </span>
       </div>
-      <div class="dModalButtons">
-        <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
-        <button class="greenButton" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
-      </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
+            </div>
+        </div>
     </div>
   </div>
 </div>
