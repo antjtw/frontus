@@ -1,33 +1,16 @@
 <div class="container">
   <div class="row-fluid">
+    <!--
     <div class="headsection row-fluid">
-<!--        <h2>
-            <a href="/documents/">
-                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
-            </a>
-            <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:58 || ''"></span>
-        </h2>-->
-
         <ul class="maintabs head-text">
             <li class="selectedtab"><a href="/documents/company-list">Documents</a></li>
             <li class="selectedtab"><span restrict-content-editable contentEditable="true" required class="doc-title" ng-model="document.docname" data-placeholder="Click to Edit" ng-bind="document.docname || 'Untitled' | limitTo:48"></span></li>
             <li><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
         </ul>
-
-        <!--
-        <div class="row-fluid">
-            <ul class="bodyText maintabs">
-                <li class="button">
-                  <a href="/documents/company-status?doc={{docKey}}">
-                    Status
-                </a>
-              </li>
-                <li class="selectedtab">View</li>
-            </ul>
-        </div>
-        -->
     </div>
+    -->
 
+    <!--
       <div class="row-fluid">
           <div class="subnav-controls flush-controls">
               <div>
@@ -65,10 +48,12 @@
               <div class="DivHelper"></div>
           </div>
       </div>
+      -->
   </div>
 
 
   <div class="row-fluid">
+    <!--
     <div class="span3 docVersiontab leftBlock">
       <ul>
         <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal(true);">
@@ -83,6 +68,7 @@
         </li>
       </ul>
     </div>
+    -->
     <div class="span9 companyDocViewer">
         <div class="row-fluid">
          <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false"></doc-viewer>
