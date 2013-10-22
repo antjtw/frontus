@@ -195,7 +195,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="i in convertTransOptions">
-                            <a>{{i.date | date:'short'}}</a>
+                            <span ng-click="assignConvertFrom(i);">{{i.date | date:'short'}}</span>
                         </li>
                     </ul>
                 </li>
@@ -230,7 +230,7 @@
                         {{convertTran.method}}<span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-click="conversionSelect('Valuation')">
+                        <li>
                             <span ng-show="convertTran.toissue.ppshare" ng-click="assignConvert('method', 'Valuation')">Valuation</span>
                             <span ng-click="assignConvert('method', 'Price Per Share')">Price Per Share</span>
                         </li>
@@ -251,7 +251,7 @@
                 <li>Security</li>
                 <li ng-show="convertTran.tran.discount">{{convertTran.tran.discount}}</li>
                 <li ng-show="convertTran.tran.discount">Discount</li>
-                <li ng-show="convertTran.tran.valcap">{{convertTran.tran.valcap}}</li>
+                <li ng-show="convertTran.tran.valcap">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
                 <li ng-show="convertTran.tran.valcap">Cap</li>
             </ul>
         </div>
@@ -260,18 +260,19 @@
             <ul>
                 <li>{{convertTran.toissue.issue}}</li>
                 <li>Security</li>
-                <li ng-show="convertTran.toissue.premoney">{{convertTran.toissue.premoney}}</li>
+                <li ng-show="convertTran.toissue.premoney">{{formatDollarAmount(convertTran.toissue.premoney)}}</li>
                 <li ng-show="convertTran.toissue.premoney">Valuation</li>
-                <li ng-show="convertTran.toissue.ppshare">{{convertTran.toissue.ppshare}}</li>
+                <li ng-show="convertTran.toissue.ppshare">{{formatDollarAmount(convertTran.toissue.ppshare)}}</li>
                 <li ng-show="convertTran.toissue.ppshare">PPS</li>
             </ul>
         </div>
         <div class="convert-summary">
             <span>Summary</span>
             <ul>
-                <li><span>{{convertTran.tran.amount}} Debt</span><span>To Be Converted</span></li>
-                <li><span>{{convertTran.newtran.ppshare}}</span><span>Effective PPS</span></li>
-                <li><span>{{convertTran.newtran.units}}</span><span>After Conversion</span></li>
+                <li><span>{{convertTran.date | date:'shortDate'}}</span><span>Date</span></li>
+                <li><span>{{formatDollarAmount(convertTran.tran.amount)}} Debt</span><span>To Be Converted</span></li>
+                <li><span>{{formatDollarAmount(convertTran.newtran.ppshare)}}</span><span>Effective PPS</span></li>
+                <li><span>{{formatAmount(convertTran.newtran.units)}}</span><span>After Conversion</span></li>
             </ul>
         </div>
     </div>
@@ -286,10 +287,101 @@
             <button class="btn" ng-click="convertgoto('1');">Back</button>
         </div>
         <div ng-show="convertTran.step == '2'" class="pull-right standard-button">
-            <button class="btn" ng-click="">Submit</button>
+            <button class="btn" ng-click="performConvert(convertTran); convertSharesClose();">Submit</button>
         </div>
         <div ng-show="convertTran.step == '2'" class="pull-right standard-button small-standard-button gray">
             <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div modal="splitModal" close="splitSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Split Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="splitSharesClose()"></span>
+    </div>
+    <div class="modalText">
+        <div>
+            <span>Converting</span>
+            <span>{{splitIssue.issue}}</span>
+        </div>
+        <div>
+            <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+                   ng-model="splitIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                   onkeydown="testForEnter();">
+        </div>
+        <div>
+            <span>Ratio</span>
+            <input ng-model="splitIssue.ratioa" onkeydown="testForEnter();">
+            <input ng-model="splitIssue.ratiob" onkeydown="testForEnter();">
+        </div>
+        <div class="convert-summary">
+            <span>Summary</span>
+            <ul>
+                <li><span>{{formatAmount(totalinissue(splitIssue))}}</span><span>Pre-split shares</span></li>
+                <li><span>{{formatAmount(splitvalue(splitIssue))}}</span><span>Post-split shares</span></li>
+                <li><span>{{formatDollarAmount(splitppshare(splitIssue))}}</span><span>new price per share</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button">
+            <button class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
+        </div>
+        <div class="pull-right standard-button small-standard-button gray">
+            <button class="btn" ng-click="splitSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div modal="transferModal" close="transferSharesClose();" options="transferopts">
+    <div class="modalHeader">
+        <span>Transfer Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="transferSharesClose()"></span>
+    </div>
+    <div class="modalText">
+        <div class="full-width">
+            <input id="transferdate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+                   ng-model="transfer.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                   onkeydown="testForEnter();">
+        </div>
+
+        <div class="docLibrary full-width">
+            <table class="captable tableView modal-table">
+                <tr class="column-label">
+                    <th>Transaction</th>
+                    <th>Shares</th>
+                    <th>Transfer</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="tran in transfer.trans">
+                    <td>{{tran.date | date:'shortDate'}}</td>
+                    <td>{{formatAmount(tran.units)}}</td>
+                    <td><input type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
+                    <td>
+                        <ul class="dropdown-list">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{tran.transferto}}<span class="invisible-drop">'</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="row in rows | otherinvestors: tran.investor">
+                                        <span ng-click="trantorow(tran, row.namekey)">{{row.namekey}}</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button">
+            <button class="btn" ng-click="performTransfer(); transferSharesClose();">Submit</button>
+        </div>
+        <div class="pull-left standard-button small-standard-button gray">
+            <button class="btn" ng-click="transferSharesClose();">Cancel</button>
         </div>
     </div>
 </div>
@@ -514,8 +606,18 @@
                             <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
                                        ng-model="activeIssue.issue"
                                        onkeydown="testForEnter();">
-                                <span ng-hide="toggleView();" class="issue-delete pointer" ng-disabled="toggleView();" data-icon="&#xe00c;"
-                                      ng-click="deleteIssueButton(activeIssue);" aria-hidden="true"></span>
+
+                                <ul class="dropdown-list transaction-icon pull-right">
+                                    <li class="dropdown standard menu-drop">
+                                        <a class="dropdown-toggle">
+                                            <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                        </a>
+                                        <ul ng-hide="toggleView();" class="dropdown-menu">
+                                            <li ng-show="activeIssue.type == 'Equity'" ng-click="splitSharesUp(activeIssue);">Split Shares</li>
+                                            <li ng-click="deleteIssueButton(activeIssue);">Delete</li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </h2>
 
                             <p>Customize terms for this issue</p>
@@ -784,7 +886,8 @@
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-show="activeTran[0].type == 'Debt'" ng-click="convertSharesUp(activeTran);">Convert Shares</li>
+                                            <li ng-show="activeTran[0].type == 'Debt'" ng-click="convertSharesUp(activeTran);">Convert Debt</li>
+                                            <li ng-show="activeTran[0].type == 'Options' || activeTran[0].type == 'Equity'" ng-click="transferSharesUp(activeTran);">Transfer Shares</li>
                                             <li ng-click="deletePersonButton(activeInvestor);">Delete</li>
                                         </ul>
                                     </li>
@@ -1004,13 +1107,13 @@
                         </div>
 
                         <!-- Global Tab -->
-                            <div class="capGuide global">
+                            <div class="capGuide cap-overflow global">
                                 <p class="belowTitle"><span ng-bind="activeIssue.date  | date:'shortDate'"></span><span>DATE</span></p>
 
                                 <p class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
                             </div>
                         <!-- Equity Tab -->
-                        <div class="capGuide" ng-show="trantype(activeIssue.type, 'Equity');">
+                        <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Equity');">
                             <p ng-show="activeIssue.premoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
                             <p ng-show="activeIssue.postmoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
@@ -1028,7 +1131,7 @@
                             <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">TAG ALONG</span></p>
                         </div>
                           <!-- Options Tab -->
-                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Option');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Option');">
                               <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
 
                               <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
@@ -1048,7 +1151,7 @@
                           </div>
 
                           <!-- Debt tab -->
-                          <div class="capGuide" ng-show="trantype(activeIssue.type, 'Debt');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Debt');">
 
                               <p class="belowTitle" ng-show="activeIssue.premoney"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
@@ -1076,7 +1179,7 @@
                             <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
 
                                 <!-- Global Tab -->
-                                <div class="capGuide global">
+                                <div class="capGuide cap-overflow global">
                                     <p class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
@@ -1085,7 +1188,7 @@
                                 </div>
 
                                 <!-- Equity Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Equity');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Equity');">
 
                                     <p ng-show="tran.ppshare" class="belowTitle"><span ng-bind="formatDollarAmount(tran.ppshare)"></span><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span></p>
 
@@ -1099,7 +1202,7 @@
 
                                 </div>
                                 <!-- Option Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Option');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Option');">
 
                                     <p ng-show="tran.optundersec" class="belowTitle"><span ng-bind="tran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
 
@@ -1116,7 +1219,7 @@
 
                                 </div>
                                 <!-- Debt Tab -->
-                                <div class="capGuide" ng-show="trantype(tran.type, 'Debt');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Debt');">
 
                                     <p ng-show="tran.interestrate" class="belowTitle"><span ng-bind="tran.interestrate"></span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span></p>
 
@@ -1127,6 +1230,17 @@
                                     <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span></p>
 
                                     <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span></p>
+                                </div>
+                                <div class="capGuide conversion-activity" ng-show="tran.convert.length > 0">
+
+                                    <h2>Activity</h2>
+                                    <ul>
+                                        <li ng-repeat="convert in tran.convert">
+                                            <span>{{convert.date | date:'shortDate'}}</span>
+                                            <span ng-show="convert.method == 'Valuation' || convert.method == 'Price Per Share'">Converted from {{convert.issuefrom}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
+                                            <span ng-show="convert.method == 'Split'">Split {{convert.split.numerator}} to {{convert.split.denominator}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
+                                        </li>
+                                    </ul>
                                 </div>
                             </tab>
                         </tabset>

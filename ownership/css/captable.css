@@ -23,6 +23,10 @@
     margin-top: 20px;
 }
 
+.capGuide.cap-overflow {
+    overflow: auto;
+}
+
 .capGuide.grants {
     margin-top: 10px;
     padding-top: 10px;
@@ -33,6 +37,7 @@
 .capGuide > .rightTitle:last-child {
     margin-bottom: 0;
 }
+
 
 .summary-bar > p.belowTitle {
    width: 250px;
@@ -545,6 +550,27 @@ p.belowTitle {
     color: #8D8D8D;
 }
 
+.capGuide.conversion-activity {
+    border-top: 1px solid #E3E3E3;
+}
+
+.capGuide.conversion-activity > ul {
+    overflow: auto;
+}
+
+.capGuide.conversion-activity > ul > li > span {
+    color: #1E2D3D;
+}
+
+.capGuide.conversion-activity > ul > li > span:first-of-type {
+
+}
+
+.capGuide.conversion-activity > ul > li > span:last-of-type {
+    float: right;
+    width: 250px;
+}
+
 input.content, textarea.content {
     background-color: #F1F1F1;
     border-radius: 0px;
@@ -896,11 +922,13 @@ ul.last-edited > li:last-child {
 .convertModal >div.modalText > div.convert-summary > ul > li {
     float: left;
     height: 100%;
-    width: 33.33333%;
+    width: 33.3333%;
 }
 
 .convertModal >div.modalText > div.convert-summary > ul > li > span:first-child {
     display: block;
+    margin-top: 18px;
+    line-height: 15px;
 
 }
 
@@ -908,6 +936,7 @@ ul.last-edited > li:last-child {
     text-transform: uppercase;
     font-size: 10px;
     color: #A6A6A6;
+    line-height: 12px;
 }
 
 .convertModal .modal-footer > div.arrow-right {
@@ -984,6 +1013,15 @@ ul.last-edited > li:last-child {
 .capshareModal .button.greenButton {
     display: block;
     margin: 0 auto 0 auto;
+}
+
+.transferModal {
+    margin-left: -360px;
+    width:720px;
+}
+
+.transferModal .tableView.modal-table th {
+    width: auto;
 }
 
 .modal .input-row {
