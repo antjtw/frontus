@@ -322,7 +322,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return version.last_event.activity +
                        " by " + (version.last_event.name || version.investor) +
                        " " + moment(version.last_event.event_time).fromNow() +
-                       version.last_event.activity==='signed' ? " (awaiting countersign)" : "";
+                       (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
             } else {
                 return "";
             }
@@ -581,6 +581,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
             $scope.docversions = data;
+            $scope.loadDocumentActivity();
             if ($scope.counterparty) {
                 for (var i = 0; i < data.length; i++) {
                     var doc = data[i];
@@ -593,6 +594,62 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.getOriginal();
             }
         });
+
+        $scope.loadDocumentActivity = function() {
+            angular.forEach($scope.docversions, function(version) {
+                SWBrijj.tblmm("document.company_activity", "doc_id", version.doc_id).then(function(data) {
+                    version.last_event = data.sort($scope.compareEvents)[0];
+                    var versionActivities = data.filter(function(el) {return el.person===version.investor && el.activity==='viewed';});
+                    version.last_viewed = versionActivities.length > 0 ? versionActivities[0].event_time : null;
+                    $scope.setVersionStatusRank(version);
+                });
+            });
+        };
+        
+        $scope.$on("reqVersionStatus", function(event, doc_id) {
+            var doc = $scope.docversions.filter(function(el){return el.doc_id==doc_id;})[0];
+            $scope.$broadcast("retVersionStatus", $scope.versionStatus(doc));
+        });
+
+        $scope.versionStatus = function(version) {
+            if (version && version.last_event) {
+                return "" + version.last_event.activity +
+                       " by " + (version.last_event.name || version.investor) +
+                       " " + moment(version.last_event.event_time).fromNow() +
+                       (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
+            } else {
+                return "";
+            }
+        };
+        
+        $scope.compareEvents = function(a, b) {
+              var initRank = $scope.eventRank(b) - $scope.eventRank(a);
+              return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+        };
+
+        $scope.setVersionStatusRank = function(version) {
+            version.statusRank = $scope.eventRank(version.last_event);
+        };
+
+        $scope.eventRank = function (ev) {
+            switch (ev.activity) {
+                case "countersigned":
+                    return 6;
+                // signed or rejected can come either before or after each other depending on chronological ordering.
+                // ambiguity is resolve in $scope.compareEvents
+                case "signed":
+                case "rejected":
+                    return 4;
+                case "viewed":
+                    return 3;
+                case "received":
+                    return 2;
+                case "uploaded":
+                    return 1;
+                default:
+                    return 0;
+            }
+        };
 
         $scope.pickInvestor = function(doc, clicked) {
             if (clicked) {
@@ -739,6 +796,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.rejectDocOpen = function() {
             $scope.rejectDocModal = true;
         };
+
+        $scope.$on('rejectDocOpen', function(event) {
+            $scope.rejectDocOpen();
+        });
 
         $scope.rejectDocClose = function() {
             $scope.rejectDocModal = false;

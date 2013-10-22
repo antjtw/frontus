@@ -1,14 +1,13 @@
-
-
-.docHolder {
-    padding: 20px 0 20px 0;
-    background-color: rgb(241, 241, 241);
+.docViewer {
+    z-index: 1041 !important;
+    position: relative;
+    left: 162px;
+    width: 700px;
+    height: 1045px;
+    background-color: white;
 }
 
-.selectedPill {
-    background-color: rgb(255, 255, 255);
-    border-radius: 18px;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+.docViewerHeader {
 }
 
 ul>li.curPage {
@@ -16,115 +15,157 @@ ul>li.curPage {
     /*background-color: lightcyan; */
 }
 
-/*
-.curPage.unsaved {
-    background-color: lightseagreen;
-}
-
-.curPage.annotated {
-    background-color: lavender;
-}
-
-.unsaved {
-    background-color: lightcoral;
-}
-.annotated {
-    background-color: lavender;
-}
-*/
-
-.tools {
-    display: inline-block;
-    height: 30px;
-}
-
 .tools > button {
-    background: none;
     border: none;
     font-size: 20px;
-    margin: 0 0 0 20px;
+    color: #666666;
 }
 
 .pageTurn {
-    border-left: 1px solid rgb(227, 227, 227);
-    border-right: 1px solid rgb(227, 227, 227);
-    float:left;
-    width:100%;
-    overflow:hidden;
-    position:relative;
+    width: 100%;
+    padding-top:15px;
+    margin-left: 251px;
 }
 
 .pageTurn > ul {
-    clear:left;
-    float:left;
-    margin:0;
-    padding:0;
-    position:relative;
-    left:50%;
-    text-align:center;
+    float: left;
+    text-align: center;
+    position: relative;
 }
 
 .pageTurn > ul > li {
-    height: 24px;
-    display:block;
-    float:left;
-    list-style:none;
-    margin:0 5px 0 0;
-    padding:0;
-    position:relative;
-    right:50%;
+    display: block;
+    float: left;
+    vertical-align: middle;
+    padding-top: 6px;
 }
 
-.pageTurn .locked {
+.docViewerControls > .pageTurn > ul > li:first-child {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 3px;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+}
+
+.docViewerControls > .pageTurn > ul > li:last-child {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 3px;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+}
+
+.pageTurn > ul > li > span.locked {
     opacity: 0.3;
+}
+
+.docAction {
+    display: inline;
+}
+
+.page-bar {
+    background-color: white;
+    overflow: hidden;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-left: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.page-bar > li:first-child {
+    padding-left: 20px;
+}
+
+.page-bar > li:last-child {
+    padding-right: 20px;
 }
 
 .page-bar > li.page-tabs {
     padding-left: 2.2em;
 }
 
+.page-bar > li {
+    list-style: none;
+    float: left;
+    color:rgb(196,196,196);
+    display: inline;
+}
+
+.page-bar > li > span {
+    cursor: pointer;
+}
+
 .page-jumper {
-    width: 24px;
     border: none;
     text-align: right;
     height: 12px;
     margin-bottom: 1px;
     line-height: 12px;
-}
-
-.pageJump {
-    margin: 0 0 5px 5px;
-}
-
-.pageJump li {
-    float:left;
-    display: inline;
-    margin: 0 10px 0 0;
-    padding: 1px 3px 0 3px;
-    text-align: center;
-    border: solid 1px dimgray;
+    padding-right: 4px;
+    padding-left: 0px;
 }
 
 .docViewerControls {
-    white-space: nowrap;
-    height: 82px;
+    display: inline-block;
+    height: 60px;
+    background-color: #F1F1F1;
+    overflow: hidden;
 }
 
-.docViewerControls > div:first-child {
+.docViewerTitle {
+    height: 60px;
     display: inline-block;
     vertical-align: middle;
-    white-space: normal;
-    width: 100%;
+}
+
+.docViewerTitle > div {
+    width: 300px;
+}
+
+.docViewerTitle > div > .docName {
+    margin-top: 14px;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #1E2D3D
+}
+
+.docViewerTitle > div > .docStatus {
+    margin-left: 20px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.docViewerTitle > .lastUpdated {
+    margin-top: 20px;
+    margin-right: 20px;
+    text-transform: uppercase;
+    text-align: right;
+    font-size: 10px;
+}
+
+.docViewerTitle > .lastUpdated > button {
+    border: none;
+    background-color: white;
+    color: #1E2D3D;
+    padding-left: 20px;
+    font-size: 16px;
 }
 
 .docPanel {
-    width: 700px;
-    height: 906px;
+    width: 100%;
+    height: 925.2px;
     margin: 0 auto 0 auto;
-    overflow: auto;
 }
 
-
+.docPanelContainer {
+    overflow-y:auto;
+}
 
 .draggable {
     border: 0 solid red;
@@ -194,7 +235,6 @@ ul>li.curPage {
 
 .draggable div > textarea {
     margin-bottom: 0;
-    white-space: nowrap;
     word-wrap: normal;
     overflow: hidden;
     line-height: normal;
@@ -205,13 +245,4 @@ ul>li.curPage {
     visibility: hidden;
 }
 
-.page-bar > li {
-    list-style: none;
-    float: left;
-    color:rgb(196,196,196);
-    display: inline;
-}
 
-.page-bar > li > span {
-    cursor: pointer;
-}
