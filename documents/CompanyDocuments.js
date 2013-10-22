@@ -321,7 +321,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (version.last_event) {
                 return version.last_event.activity +
                        " by " + (version.last_event.name || version.investor) +
-                       " " + moment(version.last_event.event_time).fromNow();
+                       " " + moment(version.last_event.event_time).fromNow() +
+                       version.last_event.activity==='signed' ? " (awaiting countersign)" : "";
             } else {
                 return "";
             }
@@ -545,14 +546,13 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             }, {
                 doc_id: $scope.document.doc_id
             });
-            // console.log('updated document name');
         });
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
         var docKey = parseInt($routeParams.doc);
-        $scope.urlInves = $routeParams.investor;
         $scope.docKey = docKey;
+        $scope.urlInves = $routeParams.investor;
         $scope.invq = false;
         $scope.counterparty = !! $scope.urlInves;
         $scope.tester = false;
