@@ -1,8 +1,8 @@
 .docViewer {
     z-index: 1041 !important;
     position: relative;
-    left: 162px;
-    width: 700px;
+    left: 62px;
+    width: 900px;
     height: 1045px;
     background-color: white;
 }
@@ -15,16 +15,28 @@ ul>li.curPage {
     /*background-color: lightcyan; */
 }
 
+.tools {
+    margin-left: 20px;
+    padding-top: 15px;
+}
+
 .tools > button {
     border: none;
+    border-radius: 3px;
     font-size: 20px;
     color: #666666;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
 }
 
 .pageTurn {
-    width: 100%;
     padding-top:15px;
-    margin-left: 251px;
+    position: absolute;
+    left: 50%;
+    margin-left: -110px;
 }
 
 .pageTurn > ul {
@@ -64,8 +76,15 @@ ul>li.curPage {
     opacity: 0.3;
 }
 
-.docAction {
+.docActions {
     display: inline;
+    padding-top: 15px;
+    margin-right: 20px;
+}
+
+.docActions > div > button {
+    display: block;
+    margin-left: 20px;
 }
 
 .page-bar {
@@ -114,6 +133,7 @@ ul>li.curPage {
 .docViewerControls {
     display: inline-block;
     height: 60px;
+    width: 100%;
     background-color: #F1F1F1;
     overflow: hidden;
 }
@@ -125,7 +145,7 @@ ul>li.curPage {
 }
 
 .docViewerTitle > div {
-    width: 300px;
+    width: 430px;
 }
 
 .docViewerTitle > div > .docName {

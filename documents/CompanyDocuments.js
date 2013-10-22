@@ -755,10 +755,33 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
+        
+        $scope.$on('open_modal', function(event, modal) {
+            switch (modal) {
+                case 'reject':
+                    $scope.rejectDocOpen();
+                    break;
+                case 'share':
+                    $scope.shareDocOpen();
+                    break;
+                case 'confirm':
+                    $scope.confirmDocOpen();
+                    break;
+            }
+        });
+
+        $scope.broadcastModalClose = function() {
+            $scope.$broadcast('close_modal');
+        };
+
+        $scope.confirmDocOpen = function() {
+            $scope.confirmModal = true;
+        };
 
         $scope.confirmModalClose = function() {
             setCursor('default');
             $scope.processing = false;
+            $scope.broadcastModalClose();
             $scope.confirmModal = false;
         };
 
@@ -797,11 +820,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.rejectDocModal = true;
         };
 
-        $scope.$on('rejectDocOpen', function(event) {
-            $scope.rejectDocOpen();
-        });
-
         $scope.rejectDocClose = function() {
+            $scope.broadcastModalClose();
             $scope.rejectDocModal = false;
         };
 
@@ -812,6 +832,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.shareDocClose = function() {
+            $scope.broadcastModalClose();
             $scope.shareDocModal = false;
         };
 
@@ -1253,10 +1274,27 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 $location.path("/investor-list?");
             });
         };
+        
+        $scope.$on('open_modal', function(event, modal) {
+            switch (modal) {
+                case 'confirm':
+                    $scope.confirmDocOpen();
+                    break;
+            }
+        });
+
+        $scope.broadcastModalClose = function() {
+            $scope.$broadcast('modal_close');
+        };
+
+        $scope.confirmDocOpen = function() {
+            $scope.confirmModal = true;
+        };
 
         $scope.confirmModalClose = function() {
             setCursor('default');
             $scope.processing = false;
+            $scope.broadcastModalClose();
             $scope.confirmModal = false;
         };
         $scope.pageQueryString = function() {

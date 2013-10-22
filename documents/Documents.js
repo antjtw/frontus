@@ -303,6 +303,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.saveNoteData();
         });
 
+        $scope.leave = function(event) {
+            if ($scope.invq) {
+                $location.path('/investor-list').search({});
+            } else {
+                delete $location.$$search.page;
+                $location.path('/company-status');
+            }
+        };
+
         $scope.showPages = function() {
             return $scope.range($scope.pageScroll, 
                                 Math.min($scope.pageScroll + $scope.pageBarSize,
@@ -367,6 +376,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.init = function() {
+            $scope.hidePage = false;
             $scope.notes = [];
             $scope.annotatedPages = [];
             $scope.pageScroll = 0;
@@ -805,9 +815,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.doc_status = message;
         });
 
-        $scope.rejectDocOpen = function() {
-            $scope.$emit('rejectDocOpen');
+        $scope.openModal = function(modal) {
+            $scope.hidePage = true;
+            $scope.$emit('open_modal', modal);
         };
+
+        $scope.$on('close_modal', function(event) {
+            $scope.hidePage = false;
+        });
 
         $scope.clearNotes = function(event) {
             void(event);

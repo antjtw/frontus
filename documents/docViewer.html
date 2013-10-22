@@ -1,6 +1,6 @@
-<div class="modal-backdrop"></div>
+<div class="modal-backdrop" style="opacity:0.9;"></div>
 <div class="row-fluid" style="height:60px;"></div>
-<div ng-init="init()" class="docViewer">
+<div ng-init="init()" class="docViewer" ng-hide="hidePage">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
             <div class="pull-left">
@@ -9,7 +9,7 @@
             </div>
             <div class="lastUpdated pull-right">
                 Last Updated {{lib.last_updated | fromNow}}
-                <button ng-click="goback($event)"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
+                <button ng-click="leave($event)"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
             </div>
         </div>
         <div class="row-fluid docViewerControls">
@@ -38,19 +38,19 @@
             </div>
             <div class="docActions pull-right" ng-class="{hidden: !annotable()}">
                 <div class="small-standard-button gray pull-left">
-                    <button class="btn" ng-click="goback()">Cancel</button>
+                    <button class="btn" ng-click="leave($event)">Cancel</button>
                 </div>
-                <div class="small-standard-button blue pull-right">
+                <div class="small-standard-button blue pull-left">
                     <button class="btn" ng-click="saveNoteData()">Save</button>
                 </div>
-                <div class="standard-button red">
-                    <button class="btn" ng-show="lib.when_signed && !lib.when_confirmed" ng-click="rejectDocOpen()">Reject</button>
+                <div class="standard-button red pull-left">
+                    <button class="btn" ng-show="lib.when_signed && !lib.when_confirmed" ng-click="openModal('reject')">Reject</button>
                 </div>
-                <div class="standard-button pull-right">
-                    <button class="btn" ng-show="lib.when_signed && !lib.when_confirmed" ng-click="confirmModal=true">Countersign</button>
+                <div class="small-standard-button pull-left">
+                    <button class="btn" ng-show="lib.when_signed && !lib.when_confirmed" ng-click="openModal('confirm')">Countersign</button>
                 </div>
-                <div class="standard-button pull-right">
-                    <button class="btn" ng-show="lib.signature_deadline && !lib.when_signed" ng-click="confirmModal=true">Sign</button>
+                <div class="small-standard-button pull-left">
+                    <button class="btn" ng-show="lib.signature_deadline && !lib.when_signed" ng-click="openModal('confirm')">Sign</button>
                 </div>
             </div>
             <div class="DivHelper"></div>
