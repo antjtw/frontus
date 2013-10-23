@@ -90,11 +90,14 @@
               Do you wish to electonically countersign this document?<br>(This action is irreversible)
           </span>
       </div>
-
-      <div class="dModalButtons">
-        <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
-        <button class="greenButton" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument(currentDoc);">Sign</button>
-      </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument(currentDoc);">Sign</button>
+            </div>
+        </div>
     </div>
   </div>
 
@@ -128,11 +131,12 @@
         </ul>
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
-            </button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="shareDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share</button>
         </div>
     </div>
 </div>
@@ -146,13 +150,14 @@
     <div class="messageSection">
         <textarea class="messageText" rows="4" ng-model="messageText"></textarea>
     </div>
-    <div class="modal-buttons">
-        <div class="leftModalButton">
-            <button class="button subText greyButton" ng-click="rejectDocClose()">Cancel</button>
-        </div>
-        <div class="rightModalButton">
-            <button class="button subText greenButton" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
-        </div>
-    </div>
+      <div class="modal-footer">
+          <div class="pull-left standard-button gray">
+              <button class="btn" ng-click="rejectDocClose()">Cancel</button>
+          </div>
+          <div class="standard-button green">
+              <button class="btn" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
+          </div>
+      </div>
+
   </div>
 </div>

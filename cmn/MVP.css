@@ -2144,8 +2144,6 @@ button.icon-button:hover {
  .modal div.fileinputs {
     position: relative;
     height: 50px;
-    border-bottom: 1px solid rgb(227, 227, 227);
-    border-top: 1px solid rgb(227, 227, 227);
 }
 .modal div.fakefile {
     position: absolute;
@@ -2215,7 +2213,7 @@ button.icon-button:hover {
 .modalHeader > .close {
     float: right;
     padding-right: 20px;
-    color: rgb(0, 71, 51);
+    color: #a6a6a6;
     font-size: 20px;
 }
 
@@ -2250,7 +2248,6 @@ button.icon-button:hover {
     width: 30px;
 }
 .modalCopy .field {
-    border-bottom: 1px solid rgb(227, 227, 227);
     padding: 6px 0 6px 0;
 }
 .modalCopy .editPasswordBlock .field:nth-child(3) {

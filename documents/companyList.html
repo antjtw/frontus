@@ -213,9 +213,13 @@
             </fieldset>
         </form>
     </div>
-    <div class="modalButtons two">
-        <div class="left"><button class="button subText blueButton left" ng-click="documentUploadClose()">Cancel</button></div>
-        <div class="right"><button value="Upload" class="button subText greenButton" ng-click="uploadFile(files)">Upload</button></div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="documentUploadClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="uploadFile(files)">Upload</button>
+        </div>
     </div>
 </div>
 <div modal="shareDocModal" close="shareDocClose()" options="opts">

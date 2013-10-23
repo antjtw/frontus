@@ -65,7 +65,7 @@
 
 <div modal="adminModal" close="adminModalClose()" options="narrowopts">
     <div class="modalHeader">
-        <span data-icon="&#xe026;" aria-hidden="true"></span>Add administrator
+        <span>Add administrator</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
     </div>
 
@@ -81,10 +81,13 @@
         </form>
     </div>
 
-
-    <div class="modalButtons two">
-        <div class="left"><button class="button subText blueButton left" ng-click="adminModalClose()">Cancel</button></div>
-        <div class="right"><button class="button subText greenButton" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button></div>
-        <!--<input class="button subText greenButton" type="button" ng-click="create_admin(); adminModalClose();" value="Send" />-->
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="adminModalClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button>
+        </div>
     </div>
+
 </div>
