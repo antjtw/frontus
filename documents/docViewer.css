@@ -3,11 +3,29 @@
     position: relative;
     left: 62px;
     width: 900px;
-    height: 1045px;
     background-color: white;
 }
 
-.docViewerHeader {
+.docViewerHeader.affix {
+    position: fixed;
+    left: 149px;
+    top: 0px;
+    margin: 0 auto;
+    width: 900px;
+}
+
+.affix + .docPanelContainer {
+    padding-top: 120px;
+    // TODO make dynamic (sometimes 120, sometimes 160)
+}
+
+.docViewerHeader.affix-top {
+    left: 62px;
+}
+
+.docViewerHeader.affix-bottom {
+    left: 62px;
+    bottom: 0;
 }
 
 .tools {
@@ -30,8 +48,7 @@
 .pageTurn {
     padding-top:15px;
     position: absolute;
-    left: 50%;
-    margin-left: -110px;
+    left: 40%;
 }
 
 .pageTurn > ul {
@@ -150,6 +167,7 @@
 }
 
 .docViewerTitle {
+    background-color: white;
     height: 60px;
     display: inline-block;
     vertical-align: middle;
@@ -190,12 +208,11 @@
 
 .docPanel {
     width: 100%;
-    height: 925.2px;
+    height: 1190px;
     margin: 0 auto 0 auto;
 }
 
 .docPanelContainer {
-    overflow-y:auto;
 }
 
 .draggable {
