@@ -43,13 +43,13 @@
                     </td>
                     <td><span ng-show="person.role=='issuer'">Admin</span></td>
                     <td style="width:50px;">
-                        <ul class="dropdown-list">
+                        <ul ng-show="person.lastlogin" class="dropdown-list">
                             <li class="dropdown standard menu-drop">
                                 <a class="dropdown-toggle">
                                     <span data-icon="&#xe011;" aria-hidden="true"></span>
                                 </a>
                                 <ul ng-hide="toggleView();" class="dropdown-menu">
-                                    <li ng-click="modalUp(person);">Change Role</li>
+                                    <li ng-show="" ng-click="modalUp(person);">Change Role</li>
                                     <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
                                 </ul>
                             </li>
