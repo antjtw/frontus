@@ -42,26 +42,26 @@
           <table class="status-table">
               <tbody>
                   <tr>
-                      <th>Shareholder</th>
-                      <th>Sent</th>
-                      <th>Viewed</th>
-                      <th>Signed</th>
-                      <th>Countersigned</th>
+                      <th ng-click="setOrder('name')">Shareholder</th>
+                      <th ng-click="setOrder('when_shared')">Sent</th>
+                      <th ng-click="setOrder('last_viewed')">Viewed</th>
+                      <th ng-click="setOrder('when_signed')">Signed</th>
+                      <th ng-click="setOrder('when_confirmed')">Countersigned</th>
                       <th></th>
                       <th style="width:50px;"></th>
                   </tr>
               </tbody>
-              <tbody ng-repeat="person in docversions | filter: query">
+              <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
                   <tr class="empty-row"/>
                   <tr ng-class="{selectedrow:person.shown}">
                       <td class="shareholder-column" >
                           <ul>
-                              <li>{{person.name}}</li>
+                              <li>{{person.name || person.investor}}</li>
                               <li>{{formatLastLogin(person.lastlogin)}}</li>
                           </ul>
                       </td>
                       <td class="tooltip-date">
-                          <span tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
+                          <span ng-show="person.when_shared" tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
                       </td>
@@ -84,12 +84,12 @@
                       </td>
                       <td>
                           <div class="standard-button small-standard-button">
-                              <button ng-hide="person.when_signed || person.when_confirmed" class="btn">Remind</button>
-                              <button ng-show="person.when_signed && !person.when_confirmed" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign Now</button>
+                              <button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>
+                              <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign Now</button>
                           </div>
                       </td>
                       <td>
-                          <ul class="dropdown-list">
+                          <ul class="dropdown-list page-button">
                               <li class="dropdown standard menu-drop">
                                   <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
                                       <span data-icon="&#xe009;" aria-hidden="true"></span>
@@ -135,7 +135,7 @@
                             <ul>
                                 <li ng-repeat="event in events.slice(2)">
                                     <i class="{{event.activity | icon}}"></i>
-                                    {{event | nameoremail}} {{event | description}}
+                                    {{event.name || event.person}} {{event | description}}
                                 </li>
                             </ul>
                         </li>

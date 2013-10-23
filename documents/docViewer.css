@@ -1,0 +1,296 @@
+.docViewer {
+    z-index: 1041 !important;
+    position: relative;
+    left: 62px;
+    width: 900px;
+    background-color: white;
+}
+
+.docViewerHeader.affix {
+    position: fixed;
+    left: 149px;
+    top: 0px;
+    margin: 0 auto;
+    width: 900px;
+}
+
+.affix + .docPanelContainer {
+    padding-top: 120px;
+    // TODO make dynamic (sometimes 120, sometimes 160)
+}
+
+.docViewerHeader.affix-top {
+    left: 62px;
+}
+
+.docViewerHeader.affix-bottom {
+    left: 62px;
+    bottom: 0;
+}
+
+.tools {
+    margin-left: 20px;
+    padding-top: 15px;
+}
+
+.tools > button {
+    border: none;
+    border-radius: 3px;
+    font-size: 20px;
+    color: #666666;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+}
+
+.pageTurn {
+    padding-top:15px;
+    position: absolute;
+    left: 40%;
+}
+
+.pageTurn > ul {
+    float: left;
+    text-align: center;
+    position: relative;
+}
+
+.pageTurn > ul > li {
+    display: block;
+    float: left;
+    vertical-align: middle;
+    padding-top: 6px;
+}
+
+.docViewerControls {
+    height: 60px;
+    width: 100%;
+    background-color: #F1F1F1;
+}
+
+.docViewerControls > .pageTurn > ul > li:first-child {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 3px;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+}
+
+.docViewerControls > .pageTurn > ul > li:last-child {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 3px;
+    background-color: #E3E3E3;
+    background-position: top;
+    width: 30px;
+    height: 30px;
+}
+
+.pageTurn > ul > li > span.locked {
+    opacity: 0.3;
+}
+
+.docActions {
+    display: inline;
+    padding-top: 15px;
+    margin-right: 20px;
+}
+
+.docActions > div > button {
+    display: block;
+    margin-left: 10px;
+}
+
+.page-bar {
+    background-color: white;
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin-left: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.page-bar > ul > li:first-child {
+    padding-left: 20px;
+}
+
+.page-bar > ul > li:last-child {
+    padding-right: 20px;
+}
+
+.page-bar > ul > li {
+    float: left;
+}
+
+.page-bar > ul > li.page-icons {
+    padding-top: 10px;
+}
+
+.page-bar > ul > li.page-icons.button {
+    padding-left: 40px;
+    padding-right: 10px;
+}
+
+.page-bar > ul > li.page-tabs {
+    padding-top: 5px;
+    padding-left: 6px;
+    padding-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 6px;
+    border-radius: 3px;
+    background-color: #E3E3E3;
+    background-position: top;
+    color: #666666;
+    height: 30px;
+    overflow: hidden;
+}
+
+.page-bar > ul > li.page-tabs.cur-page {
+    background-color: #1ABC96 !important;
+    color: #FFFFFF !important;
+}
+
+.page-jumper {
+    border: none;
+    text-align: right;
+    height: 12px;
+    margin-bottom: 1px;
+    line-height: 12px;
+    padding-right: 4px;
+    padding-left: 0px;
+}
+
+.docViewerTitle {
+    background-color: white;
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.docViewerTitle > div {
+    width: 430px;
+}
+
+.docViewerTitle > div > .docName {
+    margin-top: 14px;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #1E2D3D
+}
+
+.docViewerTitle > div > .docStatus {
+    margin-left: 20px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.docViewerTitle > .lastUpdated {
+    margin-top: 20px;
+    margin-right: 20px;
+    text-transform: uppercase;
+    text-align: right;
+    font-size: 10px;
+}
+
+.docViewerTitle > .lastUpdated > button {
+    border: none;
+    background-color: white;
+    color: #1E2D3D;
+    padding-left: 20px;
+    font-size: 16px;
+}
+
+.docPanel {
+    width: 100%;
+    height: 1190px;
+    margin: 0 auto 0 auto;
+}
+
+.docPanelContainer {
+}
+
+.draggable {
+    border: 0 solid red;
+    position:absolute;
+    background-color: rgb(162,226,209);
+    opacity: 0.7;
+    cursor: default;
+    width: auto;
+    height: auto;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    /*resize: both;
+    overflow: hidden;
+      */
+}
+
+.draggable li > span {
+    color: rgb(31,176,130);
+}
+
+.draggable ul {
+    display:block;
+    margin: 0;
+    list-style-type:none;
+    cursor:pointer
+}
+
+.draggable li {
+    float: left;
+    display:table;
+    padding-top: 2px;
+    padding-left: 1px;
+}
+
+.draggable ul > li:first-child {
+    cursor: move;
+    padding-left: 4px;
+}
+
+.draggable ul > li:last-child {
+    float: right;
+    padding-right: 4px;
+}
+.draggable > span {
+    display: block;
+    margin-left: 4px;
+    margin-right: 4px;
+    /* Don't know why -- but this needs to be -5px instead of 4px */
+    margin-bottom: 4px;
+    padding: 0;
+    clear: both;
+    box-sizing: border-box;
+}
+
+.draggable .check-annotation {
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.draggable span > canvas {
+    box-sizing: border-box;
+    margin-bottom: -4px;
+    cursor: crosshair;
+}
+
+.draggable div > textarea {
+    margin-bottom: 0;
+    word-wrap: normal;
+    overflow: hidden;
+    line-height: normal;
+    resize: both;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+

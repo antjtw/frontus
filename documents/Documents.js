@@ -92,11 +92,6 @@ directive('draggable', ['$document',
 
             controller: ["$scope", "$element",
                 function($scope, $element) {
-       /*           $transclude(function(clone, scope) {
-                        $scope.annotation = scope;
-                     // $element.prepend(clone);
-                    });
-       */
                     var dragicon = $element.find("ul>li:first-child");
 
                     /* This is the drag - code -- its been moved to work on the drag widget */
@@ -230,14 +225,6 @@ directive('draggable', ['$document',
         };
     }
 ])
-/*.directive('checkbox', function() {
-      return {
-        restrict: 'A',
-        template: '<i class="button icon-ok icon-2x" background-color:white"></i>'
-      }}) */
-;
-
-
 
 var docs = angular.module('documents', ['ui.bootstrap', 'brijj', 'draggable'], function() {});
 
@@ -263,7 +250,7 @@ docs.directive('docViewer', function() {
             invq: '=invq',
             pageQueryString: '=pageQueryString'
         },
-        templateUrl: '/cmn/docViewer.html',
+        templateUrl: 'docViewer.html',
         controller: 'DocumentViewController'
     };
 });
@@ -283,66 +270,66 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
-        $scope.features = {
-            annotations: true
-        };
+        $window.addEventListener('beforeunload', function(event) {
+            void(event);
+            var ndx = $scope.getNoteData();
+            /** @name $scope#lib#annotations
+             * @type {[Object]}
+             */
+            if ((!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
 
-        if ($scope.features.annotations) {
-            $window.addEventListener('beforeunload', function(event) {
-                void(event);
-                var ndx = $scope.getNoteData();
-                /** @name $scope#lib#annotations
-                 * @type {[Object]}
-                 */
-                if ((!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
+            /** @name SWBrijj#_sync
+             * @function
+             * @param {string}
+             * @param {string}
+             * @param {string}
+             * @param {...}
+             */
+            // This is a synchronous save
+            /** @name $scope#lib#original
+             * @type {int} */
+            var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+            // I expect this returns true (meaning updated).  If not, the data is lost
+            if (!res) alert('failed to save annotations');
+        });
 
-                /** @name SWBrijj#_sync
-                 * @function
-                 * @param {string}
-                 * @param {string}
-                 * @param {string}
-                 * @param {...}
-                 */
-                // This is a synchronous save
-                /** @name $scope#lib#original
-                 * @type {int} */
-                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
-                // I expect this returns true (meaning updated).  If not, the data is lost
-                if (!res) alert('failed to save annotations');
-            });
+        /* Save the notes when navigating away */
+        // There seems to be a race condition with using $locationChangeStart or Success
+        $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+            void(oldUrl);
+            // don't save note data if I'm being redirected to log in
+            // TODO why?
+            if (newUrl.match(/login([?]|$)/)) return;
+            $scope.saveNoteData();
+        });
 
-            /* Save the notes when navigating away */
-            // There seems to be a race condition with using $locationChangeStart or Success
-            $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-                void(oldUrl);
-                // don't save note data if I'm being redirected to log in
-                // TODO why?
-                if (newUrl.match(/login([?]|$)/)) return;
-                $scope.saveNoteData();
-            });
-        }
-
-        $scope.refreshPageBar = function(pg) {
-            if (pg > $scope.pageScroll + $scope.pageBarSize - 1 || pg <= $scope.pageScroll) {
-                var temp = (Math.floor(pg/$scope.pageBarSize) * $scope.pageBarSize);
-                $scope.pageScroll = pg % $scope.pageBarSize === 0 ? temp - 1 : temp;
+        $scope.leave = function(event) {
+            if ($scope.invq) {
+                $location.path('/investor-list').search({});
+            } else {
+                delete $location.$$search.page;
+                $location.path('/company-status');
             }
         };
 
         $scope.showPages = function() {
-            return $scope.range($scope.pageScroll + 1, Math.min($scope.pageScroll + $scope.pageBarSize, $scope.docLength + 1));
+            return $scope.range($scope.pageScroll, 
+                                Math.min($scope.pageScroll + $scope.pageBarSize,
+                                         $scope.annotatedPages.length)
+                                ).map(function(i){return $scope.annotatedPages[i];});
         };
 
         $scope.morePages = function() {
-            return $scope.docLength > $scope.pageScroll + $scope.pageBarSize;
+            return $scope.annotatedPages.length > $scope.pageScroll + $scope.pageBarSize + 1;
         };
 
         $scope.pageBarRight = function() {
-            $scope.pageScroll = Math.min($scope.docLength - $scope.pageBarSize + 1, $scope.pageScroll + ($scope.pageBarSize - 1));
+            $scope.pageScroll = Math.min($scope.annotatedPages.length - $scope.pageBarSize,
+                                         $scope.pageScroll + $scope.pageBarSize);
         };
 
         $scope.pageBarLeft = function() {
-            $scope.pageScroll = Math.max(0, $scope.pageScroll - ($scope.pageBarSize - 1));
+            $scope.pageScroll = Math.max(0, $scope.pageScroll - $scope.pageBarSize);
         };
 
         $scope.unsaved = function(page) {
@@ -389,9 +376,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.init = function() {
+            $scope.hidePage = false;
             $scope.notes = [];
+            $scope.annotatedPages = [];
             $scope.pageScroll = 0;
-            $scope.pageBarSize = 9;
+            $scope.pageBarSize = 10;
             $scope.showPageBar = true;
 
             if ($routeParams.page) {
@@ -408,11 +397,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
                 $scope.docLength = data.length;
-
+                $scope.length_digits = data.length.toString().length * 8;
                 $scope.annotated = new Array(data.length);
+                $scope.annotatedPages = [];
                 for (var i = 0; i < data.length; i++) {
                     $scope.annotated[data[i].page - 1] = data[i].annotated;
+                    if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
                 }
+                $scope.annotatedPages.sort(function(a,b){return a-b});
             });
 
             /** @name SWBrijj#tblm
@@ -428,6 +420,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.lib = data;
                 // if there were notes left over, delete them
                 $scope.removeAllNotes();
+                $scope.reqDocStatus($scope.docId);
 
                 // data structure contents
                 // aa -> [annot0...annotn-1]
@@ -509,7 +502,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var s = $location.search();
             s.page = n;
             $location.search(s);
-            $scope.refreshPageBar(n);
         };
 
         $scope.nextPage = function(value) {
@@ -806,7 +798,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
-        // TODO: determine precisely where this is necessary...i.e. when are images being stamped vs. notes json modified?
         refreshDocImage = function() {
             var docpanel = document.querySelector(".docPanel");
             if (docpanel) {
@@ -815,6 +806,23 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 docpanel.style.backgroundImage = imgurl;
             }
         };
+
+        $scope.reqDocStatus = function(doc_id) {
+            if (doc_id) {$scope.$emit('reqVersionStatus', doc_id);}
+        };
+
+        $scope.$on('retVersionStatus', function(event, message) {
+            $scope.doc_status = message;
+        });
+
+        $scope.openModal = function(modal) {
+            $scope.hidePage = true;
+            $scope.$emit('open_modal', modal);
+        };
+
+        $scope.$on('close_modal', function(event) {
+            $scope.hidePage = false;
+        });
 
         $scope.clearNotes = function(event) {
             void(event);

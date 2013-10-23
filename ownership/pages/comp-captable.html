@@ -5,7 +5,7 @@
 
 <div modal="capShare" close="close()" options="shareopts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share Ownership Table
+        <span>Share Ownership Table</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
     </div>
     <div>
@@ -33,15 +33,19 @@
             </ul>
         </form>
     </div>
-    <div class="modalButtons">
-        <button ng-disabled="checkInvites();" class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
-
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="close();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
+        </div>
     </div>
 </div>
 
 <div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Edit this row's email?
+        <span>Edit this row's email?</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
     </div>
     <div class="modalText">
@@ -54,18 +58,19 @@
             <input ng-model="newEmail">
         </div>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="alterEmailModalClose()">Cancel</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="alterEmailModalClose(); alterEmail();">Change
-            </button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="alterEmailModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="alterEmailModalClose(); alterEmail();">Change</button>
         </div>
     </div>
 </div>
 
 <div modal="capMulti" close="mclose(); mReset();" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe0000;" aria-hidden="true"></span>Is this a new transaction?
+        <span>Is this a new transaction?</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="mclose(); mReset();"></span>
     </div>
     <div class="modalText">
@@ -94,19 +99,20 @@
             </div>
         </form>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="mclose(); mReset();">Undo</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="mclose(); mComplete(changedTransactions, pickTran, changedNum, changedType);">Complete
-            </button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="mclose(); mReset();">Undo</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="mclose(); mComplete(changedTransactions, pickTran, changedNum, changedType);">Complete</button>
         </div>
     </div>
 </div>
 
 <div modal="issueModal" close="iclose();" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe0000;" aria-hidden="true"></span>Updating Issue?
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose()"></span>
+        <span>Updating Issue?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose(); irevert(changedIssue);"></span>
     </div>
     <div class="modalText">
         <form>
@@ -114,19 +120,20 @@
                 you sure you<br> want to continue?</p>
         </form>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="iclose(); irevert(changedIssue);">No</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="iclose(); saveIssue(changedIssue, changedIssueField);">Yes
-            </button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="iclose(); irevert(changedIssue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="iclose(); saveIssue(changedIssue, changedIssueField);">Yes</button>
         </div>
     </div>
 </div>
 
 <div modal="capDelete" close="dclose(); revertIssue(missue);" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose()"></span>
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose(); revertIssue(missue);"></span>
     </div>
     <div class="modalText">
         <form>
@@ -134,18 +141,20 @@
             <br>
         </form>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="dclose(); revertIssue(missue);">No</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="dclose(); deleteIssue(missue);">Yes</button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="dclose(); revertIssue(missue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="dclose(); deleteIssue(missue);">Yes</button>
         </div>
     </div>
 </div>
 
 <div modal="rowDelete" close="rclose(); revertPerson(minvestor);" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rclose()"></span>
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rclose(); revertPerson(minvestor);"></span>
     </div>
     <div class="modalText">
         <form>
@@ -153,18 +162,20 @@
             <br>
         </form>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="rclose(); revertPerson(minvestor);">No</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="rclose(); deletePerson(minvestor);">Yes</button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="rclose(); revertPerson(minvestor);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="rclose(); deletePerson(minvestor);">Yes</button>
         </div>
     </div>
 </div>
 
 <div modal="tranDelete" close="deleteclose();" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe0000;" aria-hidden="true"></span>Delete?
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="deleteclose()"></span>
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="deleteclose(); revertTran(deleteTran);"></span>
     </div>
     <div class="modalText">
         <form>
@@ -172,10 +183,12 @@
             <br>
         </form>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="deleteclose(); revertTran(deleteTran);">No</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="deleteclose(); revertTran(deleteTran);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
         </div>
     </div>
 </div>
@@ -1293,7 +1306,7 @@
                             </div>
 
                             <div class="summary-bar">
-                                <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Post Money Valuation</span></p>
+                                <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Latest Post-Money Valuation</span></p>
                                 <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:'shortDate'"></span><span>Date of last valuation</span></p>
                                 <p ng-show="false" class="belowTitle"><span ng-bind="pricePerShare()"></span><span>Price-per-share</span></p>
                                 <p ng-show="totalPaid(rows)" class="belowTitle"><span ng-bind="totalPaid(rows)"></span><span>Total Invested</span></p>

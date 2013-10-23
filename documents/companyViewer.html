@@ -1,33 +1,16 @@
 <div class="container">
   <div class="row-fluid">
+    <!--
     <div class="headsection row-fluid">
-<!--        <h2>
-            <a href="/documents/">
-                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
-            </a>
-            <span restrict-content-editable contentEditable="true" class="doc-title" ng-model="document.docname" title="Click to Edit" ng-bind="document.docname | limitTo:58 || ''"></span>
-        </h2>-->
-
         <ul class="maintabs head-text">
             <li class="selectedtab"><a href="/documents/company-list">Documents</a></li>
             <li class="selectedtab"><span restrict-content-editable contentEditable="true" required class="doc-title" ng-model="document.docname" data-placeholder="Click to Edit" ng-bind="document.docname || 'Untitled' | limitTo:48"></span></li>
             <li><a href="/documents/company-status?doc={{docKey}}">Status</a></li>
         </ul>
-
-        <!--
-        <div class="row-fluid">
-            <ul class="bodyText maintabs">
-                <li class="button">
-                  <a href="/documents/company-status?doc={{docKey}}">
-                    Status
-                </a>
-              </li>
-                <li class="selectedtab">View</li>
-            </ul>
-        </div>
-        -->
     </div>
+    -->
 
+    <!--
       <div class="row-fluid">
           <div class="subnav-controls flush-controls">
               <div>
@@ -65,10 +48,12 @@
               <div class="DivHelper"></div>
           </div>
       </div>
+      -->
   </div>
 
 
   <div class="row-fluid">
+    <!--
     <div class="span3 docVersiontab leftBlock">
       <ul>
         <li ng-class="{thisone: docId==docKey, thatone:true}" ng-click="getOriginal(true);">
@@ -83,6 +68,7 @@
         </li>
       </ul>
     </div>
+    -->
     <div class="span9 companyDocViewer">
         <div class="row-fluid">
          <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false"></doc-viewer>
@@ -94,7 +80,7 @@
   <div modal="confirmModal" close="confirmModalClose()" options="opts">
     <div class="sign-modal">
       <div class="modalHeader">
-        <span data-icon="&#xe00d;" aria-hidden="true"></span>Confirm Electronic Countersignature
+        <span>Confirm Electronic Countersignature</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
       </div>
 
@@ -104,17 +90,20 @@
               Do you wish to electonically countersign this document?<br>(This action is irreversible)
           </span>
       </div>
-
-      <div class="dModalButtons">
-        <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
-        <button class="greenButton" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument(currentDoc);">Sign</button>
-      </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument(currentDoc);">Sign</button>
+            </div>
+        </div>
     </div>
   </div>
 
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share Document
+        <span>Share Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
@@ -142,11 +131,12 @@
         </ul>
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
-            </button>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="shareDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share</button>
         </div>
     </div>
 </div>
@@ -154,19 +144,20 @@
 <div modal="rejectDocModal" close="rejectDocClose()" options="opts">
   <div class="modalSize">
     <div class="modalHeader">
-        <span data-icon="&#xe01b;" aria-hidden="true"></span>Reject Document
+        <span>Reject Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rejectDocClose()"></span>
     </div>
     <div class="messageSection">
         <textarea class="messageText" rows="4" ng-model="messageText"></textarea>
     </div>
-    <div class="modal-buttons">
-        <div class="leftModalButton">
-            <button class="button subText greyButton" ng-click="rejectDocClose()">Cancel</button>
-        </div>
-        <div class="rightModalButton">
-            <button class="button subText greenButton" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
-        </div>
-    </div>
+      <div class="modal-footer">
+          <div class="pull-left standard-button gray">
+              <button class="btn" ng-click="rejectDocClose()">Cancel</button>
+          </div>
+          <div class="standard-button green">
+              <button class="btn" ng-click="rejectDocClose(); rejectSignature(currentDoc, messageText);">Reject</button>
+          </div>
+      </div>
+
   </div>
 </div>

@@ -2,7 +2,7 @@
 
 <div modal="capShare" close="close()" options="shareopts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share Ownership Table
+        <span>Share Ownership Table</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
     </div>
     <div>
@@ -25,9 +25,13 @@
             </ul>
         </form>
     </div>
-    <div class="modalButtons">
-        <button ng-disabled="checkInvites();" class="button subText greenButton" ng-click="close(); sendInvites();">Submit</button>
-
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="close();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
+        </div>
     </div>
 </div>
 
