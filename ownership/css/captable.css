@@ -531,6 +531,29 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     height: 25px;
 }
 
+p.rightTitle.interest-rate {
+    float: left;
+}
+
+p.rightTitle.interest-rate > input {
+    width: 40px;
+}
+
+div.rightTitle.interest-rate {
+    width: 100px;
+    float: left;
+    margin-left: 10px;
+}
+
+.rightTitle.interest-rate .standard .dropdown-toggle {
+    width: 90px;
+}
+
+.rightTitle.interest-rate .standard .dropdown-menu {
+    width: 90px;
+    min-width: 90px;
+}
+
 p.belowTitle {
     display: inline-block;
     width: 160px;

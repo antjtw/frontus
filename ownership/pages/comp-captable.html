@@ -856,12 +856,12 @@
                                                                                                                                                                                                                  ng-model="activeIssue.postmoney"
                                                                                                                                                                                                                  onkeydown="testForEnter();"></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                              <p class="rightTitle interest-rate"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'interestrate\')'}"
                                                                                                                                                                           ng-model="activeIssue.interestrate"
                                                                                                                                                                           onkeydown="testForEnter();"></p>
 
-                              <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequence that the interest rate is applied at">Interest Rate Frequency</span>
+                              <div class="rightTitle interest-rate">
                                   <ul class="dropdown-list">
                                       <li class="dropdown standard">
                                           <a class="dropdown-toggle">
@@ -1079,13 +1079,13 @@
                                 <!-- Debt Tab -->
                                 <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle interest-rate"><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                                                                                                 onkeydown="testForEnter();"
                                                                                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                 ng-model="tran.interestrate"></p>
 
 
-                                    <div class="rightTitle double"><span tooltip-placement="top" tooltip="that the interest rate is applied at">Interest Rate Frequency</span>
+                                    <div class="rightTitle interest-rate">
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
