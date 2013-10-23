@@ -262,10 +262,10 @@
             <ul>
                 <li>{{convertTran.tran.issue}}</li>
                 <li>Security</li>
-                <li ng-show="convertTran.tran.discount && method != 'Price Per Share'">{{convertTran.tran.discount}}%</li>
-                <li ng-show="convertTran.tran.discount && method != 'Price Per Share'">Discount</li>
-                <li ng-show="convertTran.tran.valcap && method != 'Price Per Share'">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
-                <li ng-show="convertTran.tran.valcap && method != 'Price Per Share'">Cap</li>
+                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">{{convertTran.tran.discount}}%</li>
+                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">Discount</li>
+                <li ng-show="convertTran.tran.valcap && convertTran.method != 'Price Per Share'">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
+                <li ng-show="convertTran.tran.valcap && convertTran.method != 'Price Per Share'">Cap</li>
             </ul>
         </div>
         <div class="convert-listing">
