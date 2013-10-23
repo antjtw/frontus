@@ -673,7 +673,7 @@
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
 
-                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
+                            <p class="rightTitle common-toggle" ng-show="commonshow"><span tooltip-placement="top" tooltip="Indicates that a security is common stock, and can only be applied to one security">Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
 
                             <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                                                                                                      pattern="[0-9]*(.[0-9]*)*"
@@ -727,7 +727,7 @@
                             </div>
 
 
-                            <div class="rightTitle"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">Drag Along</span>
+                            <div class="rightTitle"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">Drag Along</span>
                                 <ul class="dropdown-list">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -742,7 +742,7 @@
                                 </ul>
                             </div>
 
-                            <div class="rightTitle"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">Tag Along</span>
+                            <div class="rightTitle"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">Tag Along</span>
                                 <ul class="dropdown-list">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -758,7 +758,7 @@
                             </div>
 
                             <span class="paripassu-list">
-                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="All preferred shareholders share the same rights and privileges, liquidation proceeds are distributed in proportion to each series’ share of preference.">Pari Passu With</span>
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
                                     <ul class="dropdown-list">
                                         <li class="dropdown standard">
                                             <a class="dropdown-toggle">
@@ -986,7 +986,7 @@
                                         </ul>
                                     </div>
 
-                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">Drag Along</span>
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">Drag Along</span>
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
@@ -1001,7 +1001,7 @@
                                         </ul>
                                     </div>
 
-                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">Tag Along</span>
+                                    <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">Tag Along</span>
                                         <ul class="dropdown-list">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
@@ -1147,9 +1147,9 @@
 
                             <p ng-show="activeIssue.partpref"  class="belowTitle"><span ng-bind="activeIssue.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">PARTICIPATING PREFERRED</span></p>
 
-                            <p ng-show="activeIssue.dragalong"  class="belowTitle"><span ng-bind="activeIssue.dragalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">DRAG ALONG</span></p>
+                            <p ng-show="activeIssue.dragalong"  class="belowTitle"><span ng-bind="activeIssue.dragalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">DRAG ALONG</span></p>
 
-                            <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">TAG ALONG</span></p>
+                            <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">TAG ALONG</span></p>
                         </div>
                           <!-- Options Tab -->
                           <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Option');">
@@ -1178,7 +1178,7 @@
 
                               <p class="belowTitle" ng-show="activeIssue.postmoney"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
 
-                              <p class="belowTitle" ng-show="activeIssue.interestrate"><span ng-bind="activeIssue.interestrate"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE</span></p>
+                              <p class="belowTitle" ng-show="activeIssue.interestrate"><span ng-bind="activeIssue.interestrate"></span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">INTEREST RATE</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.interestratefreq"><span ng-bind="activeIssue.interestratefreq"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE FREQUENCY</span></p>
 
@@ -1217,9 +1217,9 @@
 
                                     <p ng-show="tran.partpref" class="belowTitle"><span ng-bind="tran.partpref"></span><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span></p>
 
-                                    <p ng-show="tran.dragalong"  class="belowTitle"><span ng-bind="tran.dragalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders are forced to join the transaction">DRAG ALONG</span></p>
+                                    <p ng-show="tran.dragalong"  class="belowTitle"><span ng-bind="tran.dragalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">DRAG ALONG</span></p>
 
-                                    <p ng-show="tran.tagalong"  class="belowTitle"><span ng-bind="tran.tagalong"></span><span tooltip-placement="top" tooltip="If a majority shareholder sells their stake, minority shareholders have the right to join the transaction">TAG ALONG</span></p>
+                                    <p ng-show="tran.tagalong"  class="belowTitle"><span ng-bind="tran.tagalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">TAG ALONG</span></p>
 
                                 </div>
                                 <!-- Option Tab -->
