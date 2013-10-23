@@ -1294,6 +1294,10 @@ ul.spaced-list > li:nth-child(odd) {
     width: 44px;
 }
 
+.status-table > tbody > tr > td.status-toggle.pointer {
+    cursor: pointer;
+}
+
 .status-table > tbody > tr > td.status-toggle.status-icon {
     width: 14px; 
 }
