@@ -14,6 +14,19 @@ ownership.filter('noUnissue', function () {
     };
 });
 
+// Returns the rows not including the selected investor
+ownership.filter('otherinvestors', function () {
+    return function (rows, investor) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.name != "" && row.name != investor) {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
 
 // Returns the list of rows that have not yet had shares
 ownership.filter('shareList', function () {

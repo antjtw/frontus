@@ -23,6 +23,10 @@
     margin-top: 20px;
 }
 
+.capGuide.cap-overflow {
+    overflow: auto;
+}
+
 .capGuide.grants {
     margin-top: 10px;
     padding-top: 10px;
@@ -33,6 +37,7 @@
 .capGuide > .rightTitle:last-child {
     margin-bottom: 0;
 }
+
 
 .summary-bar > p.belowTitle {
    width: 250px;
@@ -526,6 +531,29 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     height: 25px;
 }
 
+p.rightTitle.interest-rate {
+    float: left;
+}
+
+p.rightTitle.interest-rate > input {
+    width: 40px;
+}
+
+div.rightTitle.interest-rate {
+    width: 100px;
+    float: left;
+    margin-left: 10px;
+}
+
+.rightTitle.interest-rate .standard .dropdown-toggle {
+    width: 90px;
+}
+
+.rightTitle.interest-rate .standard .dropdown-menu {
+    width: 90px;
+    min-width: 90px;
+}
+
 p.belowTitle {
     display: inline-block;
     width: 160px;
@@ -543,6 +571,28 @@ p.belowTitle {
     text-transform: uppercase;
     font-size: 10px;
     color: #8D8D8D;
+}
+
+.capGuide.conversion-activity {
+    border-top: 1px solid #E3E3E3;
+}
+
+.capGuide.conversion-activity > ul {
+    overflow: auto;
+}
+
+.capGuide.conversion-activity > ul > li > span {
+    color: #1E2D3D;
+}
+
+.capGuide.conversion-activity > ul > li > span:first-of-type {
+    float:left;
+    width: 60px;
+}
+
+.capGuide.conversion-activity > ul > li > span {
+    float: right;
+    width: 250px;
 }
 
 input.content, textarea.content {
@@ -652,12 +702,6 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .status-table > tbody > tr > td.status-toggle:hover {
     color: #666666;
-}
-
-.status-table > tbody > tr > td.status-toggle.status-toggle-on {
-    background-color: #F1F1F1;
-    border-bottom: none;
-    border-right: 1px solid #E2E2E2;
 }
 
 .status-table > tbody > tr > td.status-toggle > span {
@@ -867,12 +911,39 @@ ul.last-edited > li:last-child {
 }
 
 .convertModal > div.modalText > div.convert-listing > ul > li:nth-child(odd) {
+    color: rgb(102, 102, 102);
 }
 
 .convertModal > div.modalText > div.convert-listing > ul > li:nth-child(even) {
     text-transform: uppercase;
     font-size: 10px;
     margin-bottom: 10px;
+}
+
+.convertModal > div.modalText.splitting {
+    height: 200px;
+}
+
+.convertModal > div.modalText > div.split-input > div:first-child {
+    margin-bottom: 10px;
+    overflow: auto;
+}
+
+.convertModal > div.modalText > div.split-input > div > span {
+    float: left;
+    line-height: 28px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.convertModal > div.modalText > div.split-input > div.ratio-input > input {
+    float: left;
+    margin: 0 10px 0 10px;
+    width: 63px;
+}
+
+.convertModal > div.modalText > div.split-input > div.ratio-input > input:first-of-type {
+    margin: 0 10px 0 17px;
 }
 
 .convertModal > div.modalText > div.convert-summary {
@@ -896,11 +967,17 @@ ul.last-edited > li:last-child {
 .convertModal >div.modalText > div.convert-summary > ul > li {
     float: left;
     height: 100%;
-    width: 33.33333%;
+    width: 25%;
+}
+
+.convertModal >div.modalText > div.convert-summary.three > ul > li {
+    width: 33.333333%;
 }
 
 .convertModal >div.modalText > div.convert-summary > ul > li > span:first-child {
     display: block;
+    margin-top: 18px;
+    line-height: 15px;
 
 }
 
@@ -908,6 +985,7 @@ ul.last-edited > li:last-child {
     text-transform: uppercase;
     font-size: 10px;
     color: #A6A6A6;
+    line-height: 12px;
 }
 
 .convertModal .modal-footer > div.arrow-right {
@@ -984,6 +1062,44 @@ ul.last-edited > li:last-child {
 .capshareModal .button.greenButton {
     display: block;
     margin: 0 auto 0 auto;
+}
+
+.transferModal {
+    margin-left: -360px;
+    width:720px;
+}
+
+.transferModal > div.modalText > div.transfer-date-field {
+    margin-bottom: 30px;
+    overflow: auto;
+}
+
+.transferModal > div.modalText > div.transfer-date-field > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    float: left;
+    padding: 0 15px 0 32px;
+    line-height: 28px;
+}
+
+.transferModal > div.modalText > div.transfer-date-field > input {
+    float:left;
+}
+
+.transferModal .tableView.modal-table {
+    margin: 0 22px 0 22px;
+    width: 676px;
+}
+
+.transferModal .tableView.modal-table th {
+    width: auto;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.transferModal .tableView.modal-table td {
+    text-align: left;
+    padding-left: 10px;
 }
 
 .modal .input-row {

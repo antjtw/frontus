@@ -308,7 +308,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
                 document.location.href="/investor/profile";
         });
 
-        SWBrijj.tblm('global.combined_investor_list', 'email', userId).then(function(x) {
+        SWBrijj.tblm('global.user_list', 'email', userId).then(function(x) {
 
             if (!x.name) {
                 history.back();

@@ -197,6 +197,37 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     })
                 });
 
+                SWBrijj.tblm('ownership.company_conversion').then(function (convert) {
+                    SWBrijj.tblm('ownership.company_transfer').then(function (transfer) {
+                        angular.forEach($scope.trans, function (tran) {
+                            tran.convert = [];
+                            angular.forEach(convert, function(con) {
+                                if (con.tranto == tran.tran_id) {
+                                    if (con.method == "Split") {
+                                        con.split = new Fraction(con.split);
+                                    }
+                                    tran.convert.push(con);
+                                }
+                            });
+
+                            angular.forEach(transfer, function(transf) {
+                                if (transf.tranto == tran.tran_id) {
+                                    var final = angular.copy(transf);
+                                    final.direction = "To";
+                                    tran.convert.push(final);
+                                }
+                                else if (transf.tranfrom == tran.tran_id) {
+                                    var final = angular.copy(transf);
+                                    final.direction = "From";
+                                    tran.convert.push(final);
+                                }
+                            });
+                        });
+                    });
+                });
+
+
+
 
                 // Debt calculation for any rows with paid but no shares
                 angular.forEach($scope.rows, function (row) {
@@ -1303,7 +1334,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         }
-    }
+    };
 
     $scope.convertopts = {
         backdropFade: true,
@@ -1321,6 +1352,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
         return list;
     };
+
+    $scope.assignConvert = function(tran) {
+        $scope.convertTran.tran = tran;
+    }
 
     // Performs the assignment for the dropdown selectors
     $scope.assignConvert = function(field, value) {
@@ -1356,7 +1391,406 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.performConvert = function (tranConvert) {
+         console.log(tranConvert);
+        var newtran = tranConvert.newtran;
+        SWBrijj.proc('ownership.conversion', newtran.tran_id, newtran.issue, tranConvert.date, tranConvert.method, parseFloat(newtran.ppshare), parseFloat(newtran.units)).then(function (tranid) {
+            var oldid = angular.copy(newtran.tran_id);
+            newtran.tran_id = tranid[1][0];
+            newtran.key = newtran.issue;
+            newtran.unitskey = newtran.units;
+            newtran.paidkey = newtran.amount;
+            newtran.convert = [{"issuefrom": tranConvert.tran.issue, "tranto": newtran.tran_id, "company": newtran.company, "effectivepps": newtran.ppshare, "method": tranConvert.method, "date": tranConvert.date, "tranfrom": oldid}]
+            var tempunits = 0;
+            var tempamount = 0;
+            var index;
+            var decrement = {};
+            angular.forEach($scope.trans, function (tran) {
+                if (tran.tran_id == oldid) {
+                    index = $scope.trans.indexOf(tran);
+                    decrement.issue = tran.issue;
+                    decrement.units = tran.units;
+                    decrement.amount = tran.amount;
+                    decrement.investor = tran.investor;
 
+                }
+            });
+            $scope.trans.splice(index, 1);
+            $scope.trans.push(newtran);
+
+            angular.forEach($scope.rows, function (row) {
+                if (row[decrement.issue] && row.name == decrement.investor) {
+                    row[decrement.issue].u = row[decrement.issue].u - decrement.units;
+                    row[decrement.issue]['a'] = row[decrement.issue]['a'] - decrement.amount;
+                }
+                angular.forEach($scope.trans, function (tran) {
+                    if (row.name == tran.investor) {
+                        if (tran.investor == newtran.investor && tran.issue == newtran.issue) {
+                            tempunits = calculate.sum(tempunits, tran.units);
+                            tempamount = calculate.sum(tempamount, tran.amount);
+                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                            }
+                            row[tran.issue]['u'] = tempunits;
+                            row[tran.issue]['ukey'] = tempunits;
+                            row[tran.issue]['a'] = tempamount;
+                            row[tran.issue]['akey'] = tempamount;
+
+                            if (row[tran.issue]['u'] == 0) {
+                                row[tran.issue]['u'] = null;
+                                row[tran.issue]['akey'] = null;
+                            }
+                            if (row[tran.issue]['a'] == 0) {
+                                row[tran.issue]['a'] = null;
+                                row[tran.issue]['akey'] = null;
+                            }
+                            row[tran.issue]['x'] = 0;
+                        }
+                    }
+                });
+            });
+
+            angular.forEach($scope.issues, function (x) {
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+            });
+
+            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(newtran.issue));
+
+
+            angular.forEach($scope.rows, function (row) {
+                angular.forEach($scope.issues, function (issue) {
+                    if (row[issue.issue] != undefined) {
+                        if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                            row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                        }
+                    }
+                });
+            });
+
+            //Calculate the total vested for each row
+            $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
+
+            // Make sure we have a clean slate for everyone (including any new unissued rows
+            angular.forEach($scope.rows, function (row) {
+                angular.forEach($scope.issuekeys, function (issuekey) {
+                    if (issuekey in row) {
+                    }
+                    else {
+                        row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    }
+                });
+            });
+        });
+    };
+
+    // Captable Split Modal
+
+    $scope.splitSharesUp = function(issue) {
+        $scope.splitIssue = angular.copy(issue);
+        $scope.splitIssue.ratioa = 1;
+        $scope.splitIssue.ratiob = 1;
+        $scope.splitModal = true;
+    };
+
+    $scope.splitSharesClose = function() {
+        $scope.splitModal = false;
+    };
+
+    // Date grabber
+    $scope.dateSplit = function (evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('splitissuedate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.splitIssue.date = date;
+                    var offset = $scope.splitIssue.date.getTimezoneOffset();
+                    $scope.splitIssue.date = $scope.splitIssue.date.addMinutes(offset);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if ($scope.splitIssue.date instanceof Date) {
+                var offset = $scope.splitIssue.date.getTimezoneOffset();
+                $scope.splitIssue.date = $scope.splitIssue.date.addMinutes(offset);
+                keyPressed = false;
+            }
+        }
+    };
+
+    $scope.totalinissue = function(issue) {
+        var total = 0;
+        angular.forEach($scope.trans, function(tran) {
+            if (tran.issue == issue.issue) {
+                total += tran.units;
+                if (tran.forfeited) {
+                    total -= tran.forfeited
+                }
+            }
+        });
+        return total;
+    };
+
+    $scope.splitvalue = function(issue) {
+        var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
+        if (!isNaN(ratio)) {
+            return ($scope.totalinissue(issue) / ratio);
+        }
+    };
+
+    $scope.splitppshare = function(issue) {
+        var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
+        if (!isNaN(ratio)) {
+            return (issue.ppshare * ratio);
+        }
+    };
+
+    $scope.performSplit = function(issue) {
+        var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
+        if (!isNaN(ratio)) {
+            SWBrijj.proc('ownership.split', issue.issue, ratio, issue.date).then(function (data) {
+                 angular.forEach($scope.trans, function(tran) {
+                     if (tran.issue == issue.issue) {
+                         tran.units = tran.units / ratio;
+                         tran.ppshare = tran.ppshare * ratio;
+                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id});
+
+                     }
+                 });
+                angular.forEach($scope.rows, function (row) {
+                    var tempunits = 0;
+                    var tempamount = 0;
+                    angular.forEach($scope.trans, function (tran) {
+                        if (row.name == tran.investor) {
+                            if (tran.issue == issue.issue) {
+                                tempunits = calculate.sum(tempunits, tran.units);
+                                tempamount = calculate.sum(tempamount, tran.amount);
+                                if (!isNaN(parseFloat(tran.forfeited))) {
+                                    tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                                }
+                                row[tran.issue]['u'] = tempunits;
+                                row[tran.issue]['ukey'] = tempunits;
+                                row[tran.issue]['a'] = tempamount;
+                                row[tran.issue]['akey'] = tempamount;
+
+                                if (row[tran.issue]['u'] == 0) {
+                                    row[tran.issue]['u'] = null;
+                                    row[tran.issue]['akey'] = null;
+                                }
+                                if (row[tran.issue]['a'] == 0) {
+                                    row[tran.issue]['a'] = null;
+                                    row[tran.issue]['akey'] = null;
+                                }
+                                row[tran.issue]['x'] = 0;
+                            }
+                        }
+                    });
+                });
+
+                angular.forEach($scope.issues, function (x) {
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    if (x.issue = issue.issue) {
+                        x.ppshare = x.ppshare * ratio;
+                    }
+                });
+
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
+
+
+                angular.forEach($scope.rows, function (row) {
+                    angular.forEach($scope.issues, function (issue) {
+                        if (row[issue.issue] != undefined) {
+                            if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                            }
+                        }
+                    });
+                });
+
+                //Calculate the total vested for each row
+                $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
+
+                // Make sure we have a clean slate for everyone (including any new unissued rows
+                angular.forEach($scope.rows, function (row) {
+                    angular.forEach($scope.issuekeys, function (issuekey) {
+                        if (issuekey in row) {
+                        }
+                        else {
+                            row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                        }
+                    });
+                });
+            });
+        }
+    };
+
+    // Captable Split Modal
+
+    $scope.transferSharesUp = function(activetran) {
+        $scope.transferModal = true;
+        $scope.transfer = {};
+        $scope.transfer.trans = angular.copy(activetran);
+        $scope.transfer.date = new Date.today();
+        for (var i=0; i < $scope.transfer.trans.length; i++) {
+            $scope.transfer.trans[i].transferunits = 0;
+
+            // This watch caps the amount you can transfer to the units available
+            // This seems depressingly long winded, definitely worth looking into further
+            $scope.$watch('transfer.trans['+i+']', function(newval, oldval) {
+                if (parseFloat(newval.transferunits) > parseFloat(oldval.units) || newval.transferunits == "-" || parseFloat(newval.transferunits) < 0) {
+                    for (var x=0; x < $scope.transfer.trans.length; x++) {
+                        if ($scope.transfer.trans[x].tran_id == newval.tran_id) {
+                            $scope.transfer.trans[x].transferunits = oldval.transferunits;
+                        }
+                    }
+                }
+            }, true);
+        }
+    };
+
+    $scope.transferSharesClose = function() {
+        $scope.transferModal = false;
+    };
+
+    $scope.transferopts = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'transferModal modal'
+    };
+
+    $scope.performTransfer = function() {
+        angular.forEach($scope.transfer.trans, function(tran) {
+            var transferunits = parseFloat(tran.transferunits);
+            if (tran.transferto && !isNaN(tran.transferunits)) {
+                SWBrijj.proc('ownership.transfer', tran.tran_id, tran.transferto, transferunits, $scope.transfer.date).then(function (data) {
+                    var newtran = angular.copy(tran);
+                    newtran.tran_id = data[1][0];
+                    newtran.investor = tran.transferto;
+                    newtran.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "To", "date": $scope.transfer.date});
+                    var tempunits = 0;
+                    var tempamount = 0;
+                    var index;
+                    var decrement = {};
+                    angular.forEach($scope.trans, function (x) {
+                        if (x.tran_id == tran.tran_id) {
+                            index = $scope.trans.indexOf(x);
+                            x.convert.push({"investor_to": tran.transferto, "investor_fron": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
+                            decrement.issue = x.issue;
+                            decrement.units = transferunits;
+                            decrement.amount = x.amount * (transferunits/x.units);
+                            decrement.investor = x.investor;
+
+                        }
+                    });
+                    if (tran.units - transferunits == 0) {
+                        $scope.trans.splice(index, 1);
+                    }
+                    newtran.units = decrement.units;
+                    newtran.amount = decrement.amount;
+                    $scope.trans.push(newtran);
+
+                    angular.forEach($scope.rows, function (row) {
+                        if (row[decrement.issue] && row.name == decrement.investor) {
+                            row[decrement.issue].u = row[decrement.issue].u - decrement.units;
+                            row[decrement.issue]['a'] = row[decrement.issue]['a'] - decrement.amount;
+                        }
+                        angular.forEach($scope.trans, function (tran) {
+                            if (row.name == tran.investor) {
+                                if (tran.investor == newtran.investor && tran.issue == newtran.issue) {
+                                    tempunits = calculate.sum(tempunits, tran.units);
+                                    tempamount = calculate.sum(tempamount, tran.amount);
+                                    if (!isNaN(parseFloat(tran.forfeited))) {
+                                        tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                                    }
+                                    row[tran.issue]['u'] = tempunits;
+                                    row[tran.issue]['ukey'] = tempunits;
+                                    row[tran.issue]['a'] = tempamount;
+                                    row[tran.issue]['akey'] = tempamount;
+
+                                    if (row[tran.issue]['u'] == 0) {
+                                        row[tran.issue]['u'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    if (row[tran.issue]['a'] == 0) {
+                                        row[tran.issue]['a'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    row[tran.issue]['x'] = 0;
+                                }
+                            }
+                        });
+                    });
+
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    });
+
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(newtran.issue));
+
+
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issues, function (issue) {
+                            if (row[issue.issue] != undefined) {
+                                if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                    row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                }
+                            }
+                        });
+                    });
+
+                    //Calculate the total vested for each row
+                    $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
+
+                    // Make sure we have a clean slate for everyone (including any new unissued rows)
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issuekeys, function (issuekey) {
+                            if (issuekey in row) {
+                            }
+                            else {
+                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            }
+                        });
+                    });
+                });
+            }
+        });
+    };
+
+
+    // Date grabber
+    $scope.dateTransfer = function (evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('transferdate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.transfer.date = date;
+                    var offset = $scope.transfer.date.getTimezoneOffset();
+                    $scope.transfer.date = $scope.transfer.date.addMinutes(offset);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if ($scope.transfer.date instanceof Date) {
+                var offset = $scope.transfer.date.getTimezoneOffset();
+                $scope.transfer.date = $scope.transfer.date.addMinutes(offset);
+                keyPressed = false;
+            }
+        }
+    };
+
+
+    $scope.trantorow = function(tran, name) {
+        tran.transferto = name;
+    };
 
     //Captable Delete Issue Modal
 

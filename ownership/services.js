@@ -449,18 +449,21 @@ ownership.service('calculate', function () {
 
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {
-            if (isNaN(parseFloat(convertTran.tran.valcap))) {
-                if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
-                    var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? parseFloat(convertTran.tran.discount) : 0;
-                    convertTran.newtran.ppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-                    convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.newtran.ppshare;
-                }
+            var valcapppshare = 10000000;
+            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
+                valcapppshare = parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney);
+            }
+            if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
+                var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? parseFloat(convertTran.tran.discount) : 0;
+                var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
+                convertTran.newtran.ppshare = regularppshare < valcapppshare ? regularppshare : valcapppshare;
+                convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.newtran.ppshare;
             }
             return convertTran.newtran;
         }
         else if (convertTran.method == "Price Per Share") {
             convertTran.newtran.ppshare = convertTran.ppshare;
-            convertTran.newtran.units = convertTran.ppshare * parseFloat(convertTran.tran.amount);
+            convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.ppshare;
         }
         return convertTran.newtran;
     }
