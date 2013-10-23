@@ -134,6 +134,10 @@ input:focus, textarea:focus {
     line-height: 18px;
     color: rgb(141, 141, 141);
 }
+
+ input {
+     color: rgb(102, 102, 102);
+ }
 a:hover {
     text-decoration: none;
 }
@@ -1754,6 +1758,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
+    font-size: 12px;
 }
 
 .standard.menu-drop .dropdown-menu > li {
@@ -1866,6 +1871,7 @@ button.icon-button:hover {
     background-color: #F1F1F1;
     border-radius: 3px;
     margin: 0;
+    color: rgb(102, 102, 102);
 }
 .standard .dropdown-toggle::before {
     display: block;
@@ -1931,11 +1937,11 @@ button.icon-button:hover {
     padding-left: 10px;
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
-    color: rgb(141, 141, 141);
+    color: rgb(102, 102, 102);
 }
 .standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;
-    color: rgb(141, 141, 141);
+    color: rgb(102, 102, 102);
 }
 .standard .dropdown-menu > li:first-of-type > a:hover, .standard .dropdown-menu > li:first-of-type > span:hover {
     -webkit-border-top-right-radius: 3px;
@@ -2212,6 +2218,7 @@ button.icon-button:hover {
     border: none;
     border-radius: 0;
     box-shadow: none;
+    padding: 0 22px 14px 22px;
 }
 
 .modal .emailSection {

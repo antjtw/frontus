@@ -240,7 +240,7 @@
         </div>
         <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
             <span class="double">Conversion PPS</span>
-            <input ng-model="convertTran.ppshare" onkeydown="testForEnter();">
+            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter();">
         </div>
     </div>
     <div ng-show="convertTran.step == '2'" class="modalText">
@@ -281,7 +281,7 @@
           <button class="btn" ng-click="convertSharesClose();">Cancel</button>
         </div>
         <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
-            <button class="btn" ng-click="convertgoto('2');">Review and Submit</button>
+            <button class="btn" ng-disabled="!convertTran.tran.issue || !convertTran.toissue.issue || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review and Submit</button>
         </div>
         <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
             <button class="btn" ng-click="convertgoto('1');">Back</button>
@@ -300,22 +300,29 @@
         <span>Split Shares</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="splitSharesClose()"></span>
     </div>
-    <div class="modalText">
-        <div>
-            <span>Converting</span>
-            <span>{{splitIssue.issue}}</span>
+    <div class="modalText splitting">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{splitIssue.issue}}</li>
+                <li>Security</li>
+            </ul>
         </div>
-        <div>
-            <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
-                   ng-model="splitIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
-                   onkeydown="testForEnter();">
+        <div class="split-input">
+            <div>
+                <span>Date</span>
+                <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+                       ng-model="splitIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                       onkeydown="testForEnter();">
+            </div>
+            <div class="ratio-input">
+                <span>Ratio</span>
+                <input type="text" ng-model="splitIssue.ratioa" onkeydown="testForEnter();">
+                <span>:</span>
+                <input type="text" ng-model="splitIssue.ratiob" onkeydown="testForEnter();">
+            </div>
         </div>
-        <div>
-            <span>Ratio</span>
-            <input ng-model="splitIssue.ratioa" onkeydown="testForEnter();">
-            <input ng-model="splitIssue.ratiob" onkeydown="testForEnter();">
-        </div>
-        <div class="convert-summary">
+        <div class="convert-summary three">
             <span>Summary</span>
             <ul>
                 <li><span>{{formatAmount(totalinissue(splitIssue))}}</span><span>Pre-split shares</span></li>
@@ -328,7 +335,7 @@
         <div class="pull-right standard-button">
             <button class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
         </div>
-        <div class="pull-right standard-button small-standard-button gray">
+        <div class="pull-left standard-button small-standard-button gray">
             <button class="btn" ng-click="splitSharesClose();">Cancel</button>
         </div>
     </div>
@@ -340,8 +347,9 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="transferSharesClose()"></span>
     </div>
     <div class="modalText">
-        <div class="full-width">
-            <input id="transferdate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+        <div class="transfer-date-field">
+            <span>Date</span>
+            <input id="transferdate" ng-change="dateTransfer()" ui-event="{keydown:'dateTransfer($event)', blur:'dateTransfer(\'blur\')'}" type="text"
                    ng-model="transfer.date" data-date-format="mm/dd/yyyy" bs-datepicker
                    onkeydown="testForEnter();">
         </div>
@@ -887,7 +895,7 @@
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
                                             <li ng-show="activeTran[0].type == 'Debt'" ng-click="convertSharesUp(activeTran);">Convert Debt</li>
-                                            <li ng-show="activeTran[0].type == 'Options' || activeTran[0].type == 'Equity'" ng-click="transferSharesUp(activeTran);">Transfer Shares</li>
+                                            <li ng-show="activeTran[0].type == 'Equity'" ng-click="transferSharesUp(activeTran);">Transfer Shares</li>
                                             <li ng-click="deletePersonButton(activeInvestor);">Delete</li>
                                         </ul>
                                     </li>
@@ -1239,6 +1247,8 @@
                                             <span>{{convert.date | date:'shortDate'}}</span>
                                             <span ng-show="convert.method == 'Valuation' || convert.method == 'Price Per Share'">Converted from {{convert.issuefrom}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
                                             <span ng-show="convert.method == 'Split'">Split {{convert.split.numerator}} to {{convert.split.denominator}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
+                                            <span ng-show="convert.direction == 'To'">Transferred {{convert.units}} from {{convert.investor_from}}</span>
+                                            <span ng-show="convert.direction == 'From'">Transferred {{convert.units}} to {{convert.investor_to}}</span>
                                         </li>
                                     </ul>
                                 </div>

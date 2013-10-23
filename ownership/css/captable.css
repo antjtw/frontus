@@ -563,10 +563,11 @@ p.belowTitle {
 }
 
 .capGuide.conversion-activity > ul > li > span:first-of-type {
-
+    float:left;
+    width: 60px;
 }
 
-.capGuide.conversion-activity > ul > li > span:last-of-type {
+.capGuide.conversion-activity > ul > li > span {
     float: right;
     width: 250px;
 }
@@ -893,12 +894,39 @@ ul.last-edited > li:last-child {
 }
 
 .convertModal > div.modalText > div.convert-listing > ul > li:nth-child(odd) {
+    color: rgb(102, 102, 102);
 }
 
 .convertModal > div.modalText > div.convert-listing > ul > li:nth-child(even) {
     text-transform: uppercase;
     font-size: 10px;
     margin-bottom: 10px;
+}
+
+.convertModal > div.modalText.splitting {
+    height: 200px;
+}
+
+.convertModal > div.modalText > div.split-input > div:first-child {
+    margin-bottom: 10px;
+    overflow: auto;
+}
+
+.convertModal > div.modalText > div.split-input > div > span {
+    float: left;
+    line-height: 28px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.convertModal > div.modalText > div.split-input > div.ratio-input > input {
+    float: left;
+    margin: 0 10px 0 10px;
+    width: 63px;
+}
+
+.convertModal > div.modalText > div.split-input > div.ratio-input > input:first-of-type {
+    margin: 0 10px 0 17px;
 }
 
 .convertModal > div.modalText > div.convert-summary {
@@ -922,7 +950,11 @@ ul.last-edited > li:last-child {
 .convertModal >div.modalText > div.convert-summary > ul > li {
     float: left;
     height: 100%;
-    width: 33.3333%;
+    width: 25%;
+}
+
+.convertModal >div.modalText > div.convert-summary.three > ul > li {
+    width: 33.333333%;
 }
 
 .convertModal >div.modalText > div.convert-summary > ul > li > span:first-child {
@@ -1020,8 +1052,37 @@ ul.last-edited > li:last-child {
     width:720px;
 }
 
+.transferModal > div.modalText > div.transfer-date-field {
+    margin-bottom: 30px;
+    overflow: auto;
+}
+
+.transferModal > div.modalText > div.transfer-date-field > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    float: left;
+    padding: 0 15px 0 32px;
+    line-height: 28px;
+}
+
+.transferModal > div.modalText > div.transfer-date-field > input {
+    float:left;
+}
+
+.transferModal .tableView.modal-table {
+    margin: 0 22px 0 22px;
+    width: 676px;
+}
+
 .transferModal .tableView.modal-table th {
     width: auto;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.transferModal .tableView.modal-table td {
+    text-align: left;
+    padding-left: 10px;
 }
 
 .modal .input-row {

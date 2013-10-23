@@ -198,19 +198,35 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 });
 
                 SWBrijj.tblm('ownership.company_conversion').then(function (convert) {
-                    $scope.convert = convert;
-                    angular.forEach($scope.trans, function (tran) {
-                        tran.convert = [];
-                        angular.forEach($scope.convert, function(con) {
-                            if (con.tranto == tran.tran_id) {
-                                if (con.method == "Split") {
-                                    con.split = new Fraction(con.split);
+                    SWBrijj.tblm('ownership.company_transfer').then(function (transfer) {
+                        angular.forEach($scope.trans, function (tran) {
+                            tran.convert = [];
+                            angular.forEach(convert, function(con) {
+                                if (con.tranto == tran.tran_id) {
+                                    if (con.method == "Split") {
+                                        con.split = new Fraction(con.split);
+                                    }
+                                    tran.convert.push(con);
                                 }
-                                tran.convert.push(con);
-                            }
-                        })
-                    })
+                            });
+
+                            angular.forEach(transfer, function(transf) {
+                                if (transf.tranto == tran.tran_id) {
+                                    var final = angular.copy(transf);
+                                    final.direction = "To";
+                                    tran.convert.push(final);
+                                }
+                                else if (transf.tranfrom == tran.tran_id) {
+                                    var final = angular.copy(transf);
+                                    final.direction = "From";
+                                    tran.convert.push(final);
+                                }
+                            });
+                        });
+                    });
                 });
+
+
 
 
                 // Debt calculation for any rows with paid but no shares
@@ -1651,7 +1667,94 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             var transferunits = parseFloat(tran.transferunits);
             if (tran.transferto && !isNaN(tran.transferunits)) {
                 SWBrijj.proc('ownership.transfer', tran.tran_id, tran.transferto, transferunits, $scope.transfer.date).then(function (data) {
-                     console.log(data);
+                    var newtran = angular.copy(tran);
+                    newtran.tran_id = data[1][0];
+                    newtran.investor = tran.transferto;
+                    newtran.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "To", "date": $scope.transfer.date});
+                    var tempunits = 0;
+                    var tempamount = 0;
+                    var index;
+                    var decrement = {};
+                    angular.forEach($scope.trans, function (x) {
+                        if (x.tran_id == tran.tran_id) {
+                            index = $scope.trans.indexOf(x);
+                            x.convert.push({"investor_to": tran.transferto, "investor_fron": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
+                            decrement.issue = x.issue;
+                            decrement.units = transferunits;
+                            decrement.amount = x.amount * (transferunits/x.units);
+                            decrement.investor = x.investor;
+
+                        }
+                    });
+                    if (tran.units - transferunits == 0) {
+                        $scope.trans.splice(index, 1);
+                    }
+                    newtran.units = decrement.units;
+                    newtran.amount = decrement.amount;
+                    $scope.trans.push(newtran);
+
+                    angular.forEach($scope.rows, function (row) {
+                        if (row[decrement.issue] && row.name == decrement.investor) {
+                            row[decrement.issue].u = row[decrement.issue].u - decrement.units;
+                            row[decrement.issue]['a'] = row[decrement.issue]['a'] - decrement.amount;
+                        }
+                        angular.forEach($scope.trans, function (tran) {
+                            if (row.name == tran.investor) {
+                                if (tran.investor == newtran.investor && tran.issue == newtran.issue) {
+                                    tempunits = calculate.sum(tempunits, tran.units);
+                                    tempamount = calculate.sum(tempamount, tran.amount);
+                                    if (!isNaN(parseFloat(tran.forfeited))) {
+                                        tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                                    }
+                                    row[tran.issue]['u'] = tempunits;
+                                    row[tran.issue]['ukey'] = tempunits;
+                                    row[tran.issue]['a'] = tempamount;
+                                    row[tran.issue]['akey'] = tempamount;
+
+                                    if (row[tran.issue]['u'] == 0) {
+                                        row[tran.issue]['u'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    if (row[tran.issue]['a'] == 0) {
+                                        row[tran.issue]['a'] = null;
+                                        row[tran.issue]['akey'] = null;
+                                    }
+                                    row[tran.issue]['x'] = 0;
+                                }
+                            }
+                        });
+                    });
+
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    });
+
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(newtran.issue));
+
+
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issues, function (issue) {
+                            if (row[issue.issue] != undefined) {
+                                if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                    row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                }
+                            }
+                        });
+                    });
+
+                    //Calculate the total vested for each row
+                    $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
+
+                    // Make sure we have a clean slate for everyone (including any new unissued rows)
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issuekeys, function (issuekey) {
+                            if (issuekey in row) {
+                            }
+                            else {
+                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            }
+                        });
+                    });
                 });
             }
         });
