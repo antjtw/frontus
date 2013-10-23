@@ -1762,12 +1762,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .standard.menu-drop .dropdown-menu > li {
-    color: rgb(141, 141, 141);
+    color: rgb(102, 102, 102);
 }
 
 .standard.menu-drop .dropdown-menu > li:hover {
     background: #C7C7C7;
-    color: rgb(141, 141, 141);
+    color: rgb(102, 102, 102);
 }
 
 .standard.menu-drop .dropdown-menu > li:first-of-type:hover {
