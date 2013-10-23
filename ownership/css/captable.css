@@ -704,12 +704,6 @@ tr.rowSelected, tr.rowSelected:hover {
     color: #666666;
 }
 
-.status-table > tbody > tr > td.status-toggle.status-toggle-on {
-    background-color: #F1F1F1;
-    border-bottom: none;
-    border-right: 1px solid #E2E2E2;
-}
-
 .status-table > tbody > tr > td.status-toggle > span {
     vertical-align: middle;
 }

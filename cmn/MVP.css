@@ -1265,7 +1265,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td {
-    font-size: 10px;
     color: #666666;
     text-align: center;
 }
@@ -1330,7 +1329,6 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
     background-color: #F1F1F1;
-    border-bottom: none;
     border-right: 1px solid #E2E2E2;
     border-bottom: 1px solid #F1F1F1;
 }

@@ -100,7 +100,12 @@
                             <span ng-hide="person.shown" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="person.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column">{{person.name}}</td>
+                        <td class="shareholder-column">
+                            <ul>
+                                <li>{{person.name}}</li>
+                                <li>{{person.lastlogin | date:'MMMM dd, yyyy, h:mm a'}}</li>
+                            </ul>
+                        </td>
                         <td>{{person.level}}</td>
                         <td>
                             <span ng-hide="person.viewed">unviewed</span>
