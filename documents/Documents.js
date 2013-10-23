@@ -380,7 +380,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.notes = [];
             $scope.annotatedPages = [];
             $scope.pageScroll = 0;
-            $scope.pageBarSize = 8;
+            $scope.pageBarSize = 10;
             $scope.showPageBar = true;
 
             if ($routeParams.page) {

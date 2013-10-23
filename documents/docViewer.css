@@ -10,11 +10,6 @@
 .docViewerHeader {
 }
 
-ul>li.curPage {
-    color: rgb(29,186,151);
-    /*background-color: lightcyan; */
-}
-
 .tools {
     margin-left: 20px;
     padding-top: 15px;
@@ -53,11 +48,9 @@ ul>li.curPage {
 }
 
 .docViewerControls {
-  //  display: inline-block;
     height: 60px;
     width: 100%;
     background-color: #F1F1F1;
- //   overflow: hidden;
 }
 
 .docViewerControls > .pageTurn > ul > li:first-child {
@@ -92,7 +85,7 @@ ul>li.curPage {
 
 .docActions > div > button {
     display: block;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .page-bar {
@@ -121,6 +114,11 @@ ul>li.curPage {
     padding-top: 10px;
 }
 
+.page-bar > ul > li.page-icons.button {
+    padding-left: 40px;
+    padding-right: 10px;
+}
+
 .page-bar > ul > li.page-tabs {
     padding-top: 5px;
     padding-left: 6px;
@@ -129,11 +127,16 @@ ul>li.curPage {
     margin-bottom: 5px;
     margin-right: 6px;
     border-radius: 3px;
-    background-color: #1ABC96;
+    background-color: #E3E3E3;
     background-position: top;
-    color: #FFFFFF;
+    color: #666666;
     height: 30px;
     overflow: hidden;
+}
+
+.page-bar > ul > li.page-tabs.cur-page {
+    background-color: #1ABC96 !important;
+    color: #FFFFFF !important;
 }
 
 .page-jumper {

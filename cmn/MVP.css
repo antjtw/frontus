@@ -1689,6 +1689,25 @@ a.oldschool-link  {
 .small-standard-button.gray > button:hover {
     background-color: #E3E3E3;
 }
+.small-standard-button.darkgray > button {
+    color: #666666;
+    background-color: #E3E3E3;
+}
+.small-standard-button.darkgray > button:hover {
+    background-color: #C7C7C7;
+}
+.small-standard-button.blue > button {
+    background-color: #3498DB;
+}
+.small-standard-button.blue > button:hover {
+    background-color: #2980B9;
+}
+.small-standard-button.red > button {
+    background-color: #E74C3C;
+}
+.small-standard-button.red > button:hover {
+    background-color: #C44032;
+}
 .icon-standard-button > span {
     display: block;
     border-radius: 3px;

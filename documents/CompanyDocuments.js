@@ -1284,7 +1284,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         });
 
         $scope.broadcastModalClose = function() {
-            $scope.$broadcast('modal_close');
+            $scope.$broadcast('close_modal');
         };
 
         $scope.confirmDocOpen = function() {
