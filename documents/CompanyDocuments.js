@@ -1297,6 +1297,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
         };
+        
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=true";
         };
