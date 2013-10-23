@@ -16,7 +16,10 @@
 
 .affix + .docPanelContainer {
     padding-top: 120px;
-    // TODO make dynamic (sometimes 120, sometimes 160)
+}
+
+.affix + .docPanelContainer.annotable {
+    padding-top: 160px;
 }
 
 .docViewerHeader.affix-top {
