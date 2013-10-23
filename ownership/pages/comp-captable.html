@@ -200,7 +200,7 @@
     </div>
     <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
         <div>
-            <span>Convert From</span>
+            <span>Transaction</span>
             <ul class="dropdown-list">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
@@ -262,10 +262,10 @@
             <ul>
                 <li>{{convertTran.tran.issue}}</li>
                 <li>Security</li>
-                <li ng-show="convertTran.tran.discount">{{convertTran.tran.discount}}</li>
-                <li ng-show="convertTran.tran.discount">Discount</li>
-                <li ng-show="convertTran.tran.valcap">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
-                <li ng-show="convertTran.tran.valcap">Cap</li>
+                <li ng-show="convertTran.tran.discount && method != 'Price Per Share'">{{convertTran.tran.discount}}%</li>
+                <li ng-show="convertTran.tran.discount && method != 'Price Per Share'">Discount</li>
+                <li ng-show="convertTran.tran.valcap && method != 'Price Per Share'">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
+                <li ng-show="convertTran.tran.valcap && method != 'Price Per Share'">Cap</li>
             </ul>
         </div>
         <div class="convert-listing">
@@ -274,18 +274,18 @@
                 <li>{{convertTran.toissue.issue}}</li>
                 <li>Security</li>
                 <li ng-show="convertTran.toissue.premoney">{{formatDollarAmount(convertTran.toissue.premoney)}}</li>
-                <li ng-show="convertTran.toissue.premoney">Valuation</li>
+                <li ng-show="convertTran.toissue.premoney">Pre-Money Valuation</li>
                 <li ng-show="convertTran.toissue.ppshare">{{formatDollarAmount(convertTran.toissue.ppshare)}}</li>
-                <li ng-show="convertTran.toissue.ppshare">PPS</li>
+                <li ng-show="convertTran.toissue.ppshare">Security PPS</li>
             </ul>
         </div>
         <div class="convert-summary">
             <span>Summary</span>
             <ul>
                 <li><span>{{convertTran.date | date:'shortDate'}}</span><span>Date</span></li>
-                <li><span>{{formatDollarAmount(convertTran.tran.amount)}} Debt</span><span>To Be Converted</span></li>
+                <li><span>{{formatDollarAmount(convertTran.tran.amount)}}</span><span>To Be Converted</span></li>
                 <li><span>{{formatDollarAmount(convertTran.newtran.ppshare)}}</span><span>Effective PPS</span></li>
-                <li><span>{{formatAmount(convertTran.newtran.units)}}</span><span>After Conversion</span></li>
+                <li><span>{{formatAmount(convertTran.newtran.units)}}</span><span>Resulting Shares</span></li>
             </ul>
         </div>
     </div>
