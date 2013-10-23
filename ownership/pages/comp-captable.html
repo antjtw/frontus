@@ -294,7 +294,7 @@
           <button class="btn" ng-click="convertSharesClose();">Cancel</button>
         </div>
         <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
-            <button class="btn" ng-disabled="!convertTran.tran.issue || !convertTran.toissue.issue || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review and Submit</button>
+            <button class="btn" ng-disabled="!convertTran.tran.issue || !convertTran.toissue.issue || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review</button>
         </div>
         <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
             <button class="btn" ng-click="convertgoto('1');">Back</button>
