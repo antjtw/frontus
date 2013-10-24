@@ -55,7 +55,7 @@
                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
                         </td>
-                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortDocStatus(doc)}}</li>
                                 <li>{{formatDocStatusRatio(doc)}}</li>
@@ -74,8 +74,8 @@
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="viewOriginal(doc)">View Original</li>
-                                        <li ng-click="renameDocument(doc)">Rename</li>
-                                        <li ng-click="deleteDoc(doc)">Delete</li>
+                                        <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
+                                        <!--<li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>-->
                                     </ul>
                                 </li>
                           </ul>
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <div class="standard-button small-standard-button">
-                                <button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn">Remind</button>
+                                <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
                                 <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign Now</button>
                             </div>
                         </td>
@@ -120,68 +120,6 @@
             <div style="display:none;" ng-show="documents.length===0">You have no documents.</div>
         </div>
     </div>
-
-    <!-- <uploadModal class="upload-modal" ng-show="uploadModal" close="uploadModalClose()" options="{dialogClass: 'modal upload-modal-positioning'}" >  </uploadModal> -->
-
-
-    <!--
-    <section class="statusBlock" library>
-            <div class="row-fluid">
-                <div class="subnav-controls">
-                    <div>
-
-                        <div class="pull-left">
-                            <span>Search</span>
-                            <input type="text" class="search-box" ng-model="query">
-                        </div>
-
-                        <div class="pull-right">
-                            <div class="standard-button">
-                                <button ng-click="documentUploadOpen();" class="btn">Upload Document
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="DivHelper"></div>
-                </div>
-            </div>
-            <table class="docLibrary doclib tableView bodyText">
-              <tr class="column-label status-columns">
-                  <th class="button" ng-click="setOrder('docname')">
-                      <span class="title sortedDown">Name</span>
-                      <div style="display: none; vertical-align: middle; position: relative;">
-                          <span data-icon="&#xe034;" class="topSortIcon" ng-style="docOrder=='docname' && {'color': '#1E2D3D'}" aria-hidden="true"></span>
-                          <span data-icon="&#xe031;" class="bottomSortIcon" ng-style="docOrder=='-docname' && {'color': '#1E2D3D'}" aria-hidden="true"></span>
-                      </div>
-                  </th>
-                  <th colspan="5" class="button" ng-click="setOrder('last_updated')">
-                      <span class="title">Last Updated</span>
-                      <div style="display: none; vertical-align: middle; position: relative;">
-                          <span data-icon="&#xe034;" class="topSortIcon" ng-style="docOrder=='last_updated' && {'color': '#1E2D3D'}" aria-hidden="true"></span>
-                          <span data-icon="&#xe031;" class="bottomSortIcon" ng-style="docOrder=='-last_updated' && {'color': '#1E2D3D'}" aria-hidden="true"></span>
-                      </div>
-                  </th>
-              </tr>
-              <tr ng-click="gotoDoc(doc.doc_id)" class="pointer status-row" ng-repeat="doc in documents  | filter:searchFilter  | orderBy:docOrder">
-                <td>{{doc.docname}}</td>
-                <td><span class="dateFormatting">{{doc.last_updated | fromNow}}</span></td>
-                <td class="button for-r0ml" ng-click="askShare(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Share"><i class="icon-share icon-large"></i></span></td>
-                <td class="button for-r0ml" ng-click="delete(doc.doc_id)"><span tooltip-placement="bottom" tooltip="Delete"><i class="icon-delete icon-large"></i></span></td>
-                <td></td>
-              </tr>
-            </table>
-            <div ng-hide="documents">You have no documents.</div>
-    </section>
-    -->
-              <!-- The template for showing files that are currently uploading -->
-<!--              <tr ng-show="progressVisible">
-                <td>{{uploading.docname}}</td>
-                <td><span class="uploadingText">Uploading Document<span id="dots">...</span></span></td>
-                <td colspan="3"></td>
-              </tr>
-              -->
-
-
   </div>
 </div>
 
@@ -259,5 +197,32 @@
             <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
             </button>
         </div>
+    </div>
+</div>
+<div modal="updateTitleModal" close="updateTitleClose()" options="opts" class="updateTitleModal">
+    <div class="modalHeader">
+        <span>Rename Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTitleClose()"></span>
+    </div>
+    <div class="modalText updateTitleModal">
+        <input ng-model="docForModal.docname" type="text"></input>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
+        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
+    </div>
+</div>
+<div modal="deleteDocModal" close="deleteDocClose()" options="opts" class="updateTitleModal">
+    <div class="modalHeader">
+        <span>Delete Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="deleteDocClose()"></span>
+    </div>
+    <div class="modalText deleteDocModal">
+        <span>Are you sure you want to delete </span><br>
+        <span>{{docForModal.docname}}?</span>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray"><button class="btn" ng-click="deleteDocClose()">Cancel</button></div>
+        <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button</div>
     </div>
 </div>

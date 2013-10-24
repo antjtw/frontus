@@ -236,7 +236,7 @@ button.greyButton {
 }
 
 .modal {
-  margin-left: -180px;
+  margin-left: -160px;
   width: auto;
   background-color: #FFFFFF;
   border: 0;
@@ -301,6 +301,22 @@ button.greyButton {
 
 .modalText.uploadModal p {
     margin-bottom: 10px;
+}
+
+.modalText.updateTitleModal > input {
+    display: inline-block;
+    width: 300px;
+    margin: 0 25px 0 0;
+}
+
+.modalText.updateTitleModal {
+    float: none;
+    margin-bottom:60px;
+}
+
+.modalText.deleteDocModal {
+    width: 360px;
+    margin-bottom: 40px;
 }
 
 .modalText.esign {

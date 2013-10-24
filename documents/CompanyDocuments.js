@@ -302,6 +302,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             link = "/documents/company-view?doc=" + docid;
             document.location.href = link;
         };
+        
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
+        };
 
         $scope.opendetails = function(selected) {
             $scope.documents.forEach(function(doc) {
@@ -329,6 +339,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatus = function(doc) {
+            return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
+                                                 doc.versions[0].last_event.event_time : 
+                                                 doc.last_updated)).fromNow();
+            /*
             if (doc.versions.length > 0) {
                 var set = doc.versions.filter(function (el) {return el.last_event && el.last_event.event_time;});
                 if (set.length === 0) {return $scope.defaultDocStatus(doc);}
@@ -337,15 +351,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 return $scope.defaultDocStatus(doc);
             }
+            */
         };
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions.length === 0) {
                 return "Uploaded";
             } else if (doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Signed";
+                return "Complete";
             } else if (!doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Viewed";
+                return "Complete";
             } else if (!$scope.docIsComplete(doc)) {
                 return "Pending";
             } else {
@@ -373,6 +388,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (doc.versions.length === 0) {
                 return "1 / 1 documents";
             } else {
+                /*
                 // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
                 var signatureRatio = $scope.docSignatureRatio(doc);
                 var viewRatio = $scope.docViewRatio(doc);
@@ -384,6 +400,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
                            (doc.signature_required ? " signatures" : " views");
                 }
+                */
+                return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
+                       " / " +
+                       doc.versions.length +
+                       " documents"; 
             }
         };
 
@@ -505,12 +526,24 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
 
-        $scope.renameDocument = function(doc) {
-            console.log("TODO implement renameDocument");
+        $scope.updateTitleOpen = function(doc) {
+            $scope.docForModal = doc;
+            $scope.updateTitleModal = true;
         };
 
-        $scope.deleteDocument = function(doc) {
-            console.log("TODO implement deleteDocument");
+        $scope.updateTitleClose = function(doc) {
+            $scope.updateTitleModal = false;
+            $scope.docForModal = null;
+        };
+
+        $scope.deleteDocOpen = function(doc) {
+            $scope.docForModal = doc;
+            $scope.deleteDocModal = true;
+        };
+
+        $scope.deleteDocClose = function(docToDelete) {
+            // TODO implement
+            $scope.deleteDocModal = false;
         };
     }
 ]);
@@ -814,6 +847,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
         };
 
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
+        };
+
         // Rejecting modal functions
 
         $scope.rejectDocOpen = function() {
@@ -1060,11 +1103,12 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             });
         };
 
-        $scope.remind = function(message, email) {
+        /*$scope.remind = function(message, email) {
             SWBrijj.procm("document.remind_document", docId, email.toLowerCase(), message).then(function(data) {
                 console.log(data);
             });
         };
+        */
 
         $scope.showStatusDetail = function(person) {
             $scope.docversions.forEach(function(name) {
@@ -1193,6 +1237,16 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             var link;
             link = "/documents/investor-view?doc=" + docid;
             document.location.href = link;
+        };
+        
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
         };
 
         $scope.docStatus = function(doc) {
