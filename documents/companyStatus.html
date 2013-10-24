@@ -84,7 +84,7 @@
                       </td>
                       <td>
                           <div class="standard-button small-standard-button">
-                              <button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>
+                              <!--<button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>-->
                               <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign Now</button>
                           </div>
                       </td>

@@ -45,7 +45,7 @@
                             <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column docname-column" ng-click="viewOriginal(doc)">
+                        <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{doc.docname}}</li>
                                 <li>{{docStatus(doc)}}</li>
@@ -73,6 +73,7 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="viewStatus(doc)">View Status</li>
                                         <li ng-click="viewOriginal(doc)">View Original</li>
                                         <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
                                         <!--<li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>-->
@@ -94,7 +95,7 @@
                         </td>
                         <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
                             <ul>
-                                <li>{{version.last_event.activity}}</li>
+                                <li>{{shortVersionStatus(version)}}</li>
                                 <li>{{momentFromNow(version.last_event.event_time)}}</li>
                             </ul>
                         </td>
@@ -116,6 +117,11 @@
                     </tr>
                 </tbody>
                 <tr class="empty-row" style="height:100px"></tr>
+            </table>
+            <table class="status-table empty-table" ng-show="documents.length===0">
+                <tbody>
+                    <tr><td><span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span></td></tr>
+                </tbody>
             </table>
             <div style="display:none;" ng-show="documents.length===0">You have no documents.</div>
         </div>
