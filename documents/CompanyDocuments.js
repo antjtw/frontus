@@ -1103,6 +1103,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.noSent = function(events) {
+            console.log(events);
             var nosentlist = []
             angular.forEach(events, function(event) {
                 if (event) {
