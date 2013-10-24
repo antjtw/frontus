@@ -503,11 +503,11 @@ ownership.service('calculate', function () {
             console.log("discount is" + discount);
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
             if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.toissue.postmoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
-                var premoneypercent = (1-parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney));
-                if (premoneypercent > (discount/100)) {
-                    var postmoneypercent = parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.postmoney);
+                var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
+                if (premoneypercent > (discount)) {
+                    var postmoneypercent = (1- (parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.postmoney)));
                     console.log("post money discount is " + postmoneypercent);
-                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (postmoneypercent);
+                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-postmoneypercent);
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
