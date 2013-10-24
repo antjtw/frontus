@@ -1024,15 +1024,17 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             $scope.eventGroups = [];
             var uniqueGroups = [];
             angular.forEach($scope.activity, function(event) {
-                var timeGroup = moment(event.event_time).fromNow();
-                if (uniqueGroups.indexOf(timeGroup) != -1) {
-                    $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
-                } else {
-                    $scope.eventGroups[$scope.eventGroups.length] = [];
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(timeGroup);
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                    uniqueGroups.push(timeGroup);
+                if (event.activity != "sent") {
+                    var timeGroup = moment(event.event_time).fromNow();
+                    if (uniqueGroups.indexOf(timeGroup) != -1) {
+                        $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
+                    } else {
+                        $scope.eventGroups[$scope.eventGroups.length] = [];
+                        $scope.eventGroups[$scope.eventGroups.length-1].push(timeGroup);
+                        $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
+                        $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                        uniqueGroups.push(timeGroup);
+                    }
                 }
             });
         };
@@ -1423,13 +1425,7 @@ docviews.filter('fromNowSortandFilter', function() {
                 return 0;
             });
         }
-        var nosentlist = []
-        angular.forEach(events, function(event) {
-            if (event.activity != "sent") {
-               nosentlist.push(event);
-            }
-        })
-        return nosentlist;
+        return events;
     };
 });
 
