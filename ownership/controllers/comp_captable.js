@@ -783,7 +783,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Creates a new blank transaction with today's date
     $scope.createTrantab = function () {
-        if ($scope.activeTran[0].go) {
+        if ($scope.activeTran[0] && $scope.activeTran[0].go) {
             var inIssue = $scope.activeTran[0].issue
             var newTran = {};
             newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
