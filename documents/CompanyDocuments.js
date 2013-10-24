@@ -1426,6 +1426,7 @@ docviews.filter('fromNowSortandFilter', function() {
         var nosentlist = []
         angular.forEach(events, function(event) {
             if (event.activity != "sent") {
+               console.log(event.activity);
                nosentlist.push(event);
             }
         })
