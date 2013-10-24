@@ -15,7 +15,7 @@
 
     <div class="modalButtons">
       <button class="button subText greyButton" ng-click="remclose();">Never Mind!</button>
-      <button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>
+      <!--<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>-->
     </div>
   </div>
 
@@ -74,13 +74,13 @@
                           <span ng-show="person.when_signed" tooltip-placement="top" tooltip="{{formatDate(person.when_signed)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
-                          <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                          <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
                       <td class="tooltip-date">
                           <span ng-show="person.when_confirmed" tooltip-placement="top" tooltip="{{formatDate(person.when_confirmed)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
-                          <span ng-show="!person.sig_requested && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                          <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                       </td>
                       <td>
                           <div class="standard-button small-standard-button">
