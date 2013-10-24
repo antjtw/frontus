@@ -1376,7 +1376,12 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 0px;
 }
 
+.status-table > tbody > tr > td.shareholder-column.status-column.pointer {
+    cursor: pointer;
+}
+
 .status-table > tbody > tr > td.shareholder-column.docname-column {
+    cursor:pointer;
     padding-left: 20px;
 }
 

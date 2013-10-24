@@ -55,7 +55,7 @@
                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
                         </td>
-                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortDocStatus(doc)}}</li>
                                 <li>{{formatDocStatusRatio(doc)}}</li>
