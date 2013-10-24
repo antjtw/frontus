@@ -302,6 +302,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             link = "/documents/company-view?doc=" + docid;
             document.location.href = link;
         };
+        
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
+        };
 
         $scope.opendetails = function(selected) {
             $scope.documents.forEach(function(doc) {
@@ -516,12 +526,24 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
 
-        $scope.renameDocument = function(doc) {
-            console.log("TODO implement renameDocument");
+        $scope.updateTitleOpen = function(doc) {
+            $scope.docForModal = doc;
+            $scope.updateTitleModal = true;
         };
 
-        $scope.deleteDocument = function(doc) {
-            console.log("TODO implement deleteDocument");
+        $scope.updateTitleClose = function(doc) {
+            $scope.updateTitleModal = false;
+            $scope.docForModal = null;
+        };
+
+        $scope.deleteDocOpen = function(doc) {
+            $scope.docForModal = doc;
+            $scope.deleteDocModal = true;
+        };
+
+        $scope.deleteDocClose = function(docToDelete) {
+            // TODO implement
+            $scope.deleteDocModal = false;
         };
     }
 ]);
@@ -825,6 +847,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
         };
 
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
+        };
+
         // Rejecting modal functions
 
         $scope.rejectDocOpen = function() {
@@ -1071,11 +1103,12 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             });
         };
 
-        $scope.remind = function(message, email) {
+        /*$scope.remind = function(message, email) {
             SWBrijj.procm("document.remind_document", docId, email.toLowerCase(), message).then(function(data) {
                 console.log(data);
             });
         };
+        */
 
         $scope.showStatusDetail = function(person) {
             $scope.docversions.forEach(function(name) {
@@ -1204,6 +1237,16 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             var link;
             link = "/documents/investor-view?doc=" + docid;
             document.location.href = link;
+        };
+        
+        $scope.remind = function(doc_id, user_email) {
+            console.log(doc_id);
+            console.log(user_email);
+            /*
+            SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+                $scope.emit('event:remind');
+            });
+            */
         };
 
         $scope.docStatus = function(doc) {
