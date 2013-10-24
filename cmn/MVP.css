@@ -1269,6 +1269,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr.empty-row {
     height: 10px;
+    border: none;
 }
 
 .status-table > tbody > tr {
