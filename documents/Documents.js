@@ -31,19 +31,19 @@ function getNoteBounds(nx) {
     if (ntyp == 'text') {
         var t = nx.querySelector('textarea');
         z = t.offset;
-        ibds = [2*z[0], 2*z[1], z[2], z[3]];
-        ibds[0] -= dpo[0];
-        ibds[1] -= dpo[1];
+        ibds = [z[0], z[1], z[2], z[3]];
+        ibds[0] -= dpo[0]+56;
+        ibds[1] -= dpo[1]+166;
     } else if (ntyp == 'canvas') {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= dpo[0];
-        ibds[1] -= dpo[1];
+        ibds[0] -= dpo[0]+26;
+        ibds[1] -= dpo[1]+136;
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
-        ibds[0] -= dpo[0];
-        ibds[1] -= dpo[1];
+        ibds[0] -= dpo[0]+56;
+        ibds[1] -= dpo[1]+166;
     }
 
     return [bds, ibds]; // [coords, size]
@@ -868,7 +868,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 700, 956];
+                //var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
