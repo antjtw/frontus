@@ -263,7 +263,7 @@
                 <li>{{convertTran.tran.issue}}</li>
                 <li>Security</li>
                 <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">{{convertTran.tran.discount}}%</li>
-                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">Discount</li>
+                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">Percent Discount</li>
                 <li ng-show="convertTran.tran.valcap && convertTran.method != 'Price Per Share'">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
                 <li ng-show="convertTran.tran.valcap && convertTran.method != 'Price Per Share'">Cap</li>
             </ul>
@@ -881,7 +881,7 @@
                                                                                                                                                                                                  ng-model="activeIssue.valcap"
                                                                                                                                                                                                  onkeydown="testForEnter();"></p>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
+                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span><input ng-disabled="toggleView();"
                                                                                                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
                                                                                                                                                                     ng-model="activeIssue.discount"
                                                                                                                                                                     onkeydown="testForEnter();"></p>
@@ -1105,7 +1105,7 @@
                                                                                                                                                                                                        ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                        ng-model="tran.valcap"></p>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span><input ng-disabled="toggleView();"
                                                                                                                                                                           onkeydown="testForEnter();"
                                                                                                                                                                           ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                           ng-model="tran.discount"></p>
@@ -1182,9 +1182,9 @@
 
                               <p class="belowTitle" ng-show="activeIssue.interestratefreq"><span ng-bind="activeIssue.interestratefreq"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE FREQUENCY</span></p>
 
-                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="activeIssue.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
+                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
 
-                              <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">DISCOUNT</span></p>
+                              <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">TERM (MONTHS)</span></p>
                           </div>
@@ -1201,7 +1201,7 @@
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
-                                    <p class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
+                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
@@ -1246,9 +1246,9 @@
 
                                     <p ng-show="tran.interestratefreq" class="belowTitle"><span ng-bind="tran.interestratefreq"></span><span tooltip-placement="top" tooltip="The frequency with which the interest is applied">Interest Rate Frequency</span></p>
 
-                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="tran.valcap"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
+                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
 
-                                    <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Discount</span></p>
+                                    <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span></p>
 
                                     <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span></p>
                                 </div>
