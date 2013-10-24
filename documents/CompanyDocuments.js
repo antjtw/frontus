@@ -1414,7 +1414,7 @@ docviews.filter('fromNow', function() {
     };
 });
 
-docviews.filter('fromNowSort', function() {
+docviews.filter('fromNowSortandFilter', function() {
     return function(events) {
         if (events) {
             events.sort(function (a, b) {
@@ -1423,7 +1423,13 @@ docviews.filter('fromNowSort', function() {
                 return 0;
             });
         }
-        return events;
+        var nosentlist = []
+        angular.forEach(events, function(event) {
+            if (event.activity != "sent") {
+               nosentlist.push(event);
+            }
+        })
+        return nosentlist;
     };
 });
 
@@ -1457,7 +1463,7 @@ docviews.filter('description', function() {
         else if (activity == "edited") return "edited Document";
         else if (activity == "signed") return "signed Document";
         else if (activity == "uploaded") return "uploaded Document";
-        else if (activity == "received") return "sent Document";
+        else if (activity == "received") return "received Document";
         else if (activity == "rejected") return "rejected Document";
         else if (activity == "countersigned") return "countersigned Document";
         else return activity + "ed Document";
