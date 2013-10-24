@@ -8,7 +8,8 @@
 
 .docViewerHeader.affix {
     position: fixed;
-    left: 149px;
+    left: 0px;
+    right: 0px;
     top: 0px;
     margin: 0 auto;
     width: 900px;
@@ -216,6 +217,9 @@
 }
 
 .docPanelContainer {
+    left: 0px;
+    right: 0px;
+    margin: 0px auto;
 }
 
 .draggable {
