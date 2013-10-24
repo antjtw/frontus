@@ -531,10 +531,21 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.updateTitleModal = true;
         };
 
-        $scope.updateTitleClose = function(doc) {
+        $scope.updateTitleClose = function() {
             $scope.updateTitleModal = false;
+            $scope.$emit('updated:name', $scope.docForModal);
             $scope.docForModal = null;
         };
+
+        $scope.$on('updated:name', function(ev, doc) {
+            if (doc) {
+                SWBrijj.update("document.my_company_library", {
+                    docname: doc.docname
+                }, {
+                    doc_id: doc.doc_id
+                });
+            }
+        });
 
         $scope.deleteDocOpen = function(doc) {
             $scope.docForModal = doc;
