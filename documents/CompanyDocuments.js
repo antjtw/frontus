@@ -396,7 +396,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.formatDocStatusRatio = function(doc) {
             if (doc.versions.length === 0) {
-                return "1 / 1 documents";
+                return "";
             } else {
                 /*
                 // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.

@@ -1235,12 +1235,13 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: left;
 }
 
-.status-table > tbody.empty-table > tr {
+.status-table > tbody.empty-table:first-child > tr {
     height: 180px;
 }
 
 .status-table > tbody.empty-table > tr > td > span {
     font-size: 14px;
+    text-transform:none;
 }
 
 .status-table > tbody.empty-table > tr > td > span.link {
