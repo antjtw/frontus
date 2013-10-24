@@ -29,16 +29,16 @@
                 </div>
                 <div class="DivHelper"></div>
             </div>
-            <table class="status-table" ng-show="documents.length===0">
+            <table class="status-table" ng-show="documents.length!==0">
                 <tbody class="empty-table">
                     <tr>
-                        <td colspan="6">
+                        <td>
                             <span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <table class="status-table" ng-show="documents.length!==0">
+            <table class="status-table" ng-show="documents.length===0">
                 <tbody>
                     <tr>
                         <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
