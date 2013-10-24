@@ -190,6 +190,7 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
 app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$route', function($scope, $rootScope, SWBrijj, navState, $route) {
 
     if (navState.role == 'investor') {
+        console.log("here");
         document.location.href="/home";
         return;
     }

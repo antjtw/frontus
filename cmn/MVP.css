@@ -430,6 +430,11 @@ h2 {
     overflow-x: auto;
     margin: 0 auto 0 auto;
 }
+
+.maincontent.openflow {
+    overflow: visible;
+}
+
 .topnav {
     height: 40px;
     width: 100%;
