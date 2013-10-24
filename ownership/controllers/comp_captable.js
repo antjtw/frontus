@@ -1595,7 +1595,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 angular.forEach($scope.issues, function (x) {
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
-                    if (x.issue = issue.issue) {
+                    if (x.issue == issue.issue) {
                         x.ppshare = x.ppshare * ratio;
                     }
                 });
