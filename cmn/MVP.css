@@ -1235,15 +1235,15 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: left;
 }
 
-.status-table.empty-table {
+.status-table > tbody.empty-table > tr {
     height: 180px;
 }
 
-.status-table.empty-table > tbody:first-child > tr > td {
-    text-transform: none;
+.status-table > tbody.empty-table > tr > td > span {
+    font-size: 14px;
 }
 
-.status-table.empty-table > tbody:first-child > tr > td > span.link {
+.status-table > tbody.empty-table > tr > td > span.link {
     color:#3498DB;
     cursor:pointer;
 }
