@@ -2174,6 +2174,10 @@ button.icon-button:hover {
     background-color: rgb(148, 163, 166);
     color: rgb(0, 0, 0);
 }
+.updateTitleModal {
+    width: 360px;
+    display: inline-block;
+}
 /* Styling file uploads with fake overlay */
  .modal div.fileinputs {
     position: relative;
@@ -2255,7 +2259,7 @@ button.icon-button:hover {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    padding: 0 22px 14px 22px;
+    padding: 0 22px 22px 22px;
 }
 
 .modal .emailSection {
