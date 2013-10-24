@@ -202,12 +202,15 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         hidePopover();
     });
 
-    SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function (x) {
+    SWBrijj.tblm('global.user_list', ['email', 'name']).then(function (x) {
         $scope.people = x;
         SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function (admins) {
             angular.forEach(admins, function (admin) {
-                admin.role = "issuer";
-                $scope.people.push(admin);
+                angular.forEach($scope.people, function(person) {
+                    if (person.email = admin.email) {
+                        person.role = "issuer";
+                    }
+                });
             });
             SWBrijj.tblm('account.profile', ['email']).then(function (me) {
                 angular.forEach($scope.people, function (person) {
