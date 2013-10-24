@@ -130,7 +130,7 @@
                 </div>
                 <div class="body-box">
                     <ul class="activity-feed2">
-                        <li ng-repeat="events in noSent(eventGroups) | fromNowSortandFilter">
+                        <li ng-repeat="events in eventGroups | fromNowSortandFilter">
                             <span>{{events[0]}}</span>
                             <ul>
                                 <li ng-repeat="event in events.slice(2)">
