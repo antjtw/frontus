@@ -1277,7 +1277,6 @@ ul.spaced-list > li:nth-child(odd) {
     height: 60px;
 }
 .status-table > tbody > tr > th {
-    text-align: center;
 }
 
 .status-table > tbody > tr > th.left {
@@ -1286,7 +1285,6 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td {
     color: #666666;
-    text-align: center;
     border-bottom: 1px solid #E2E2E2;
 }
 
