@@ -1330,8 +1330,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = number;
         if (number == '2') {
             $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            console.log($scope.convertTran);
+            console.log(angular.copy($scope.convertTran.newtran.amount));
             $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
+            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
+            console.log($scope.convertTran.newtran.amount);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         }
     };
@@ -1392,9 +1394,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.performConvert = function (tranConvert) {
-         console.log(tranConvert);
+        console.log(tranConvert);
         var newtran = tranConvert.newtran;
-        SWBrijj.proc('ownership.conversion', newtran.tran_id, newtran.issue, tranConvert.date, tranConvert.method, parseFloat(newtran.ppshare), parseFloat(newtran.units)).then(function (tranid) {
+        SWBrijj.proc('ownership.conversion', newtran.tran_id, newtran.issue, tranConvert.date, tranConvert.method, parseFloat(newtran.ppshare), parseFloat(newtran.units), parseFloat(newtran.amount)).then(function (tranid) {
             var oldid = angular.copy(newtran.tran_id);
             newtran.tran_id = tranid[1][0];
             newtran.key = newtran.issue;

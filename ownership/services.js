@@ -124,7 +124,7 @@ ownership.service('calculate', function () {
                     else if (tran.vestfreq == "weekly") {
                         x = 0.25
                     }
-                    else if (tran.vestfreq == "biweekly") {
+                    else if (tran.vestfreq == "bi-weekly") {
                         x = 0.5
                     }
                     else if (tran.vestfreq == "quarterly") {
@@ -194,7 +194,7 @@ ownership.service('calculate', function () {
                     else if (tran.vestfreq == "weekly") {
                         x = 0.25
                     }
-                    else if (tran.vestfreq == "biweekly") {
+                    else if (tran.vestfreq == "bi-weekly") {
                         x = 0.5
                     }
                     else if (tran.vestfreq == "quarterly") {
@@ -447,6 +447,56 @@ ownership.service('calculate', function () {
         return amount;
     };
 
+    this.debtinterest = function(convertTran) {
+        if (convertTran.date && convertTran.tran.date && convertTran.tran.interestrate && convertTran.tran.interestratefreq && convertTran.tran.amount) {
+            var x =1;
+            switch (convertTran.tran.interestratefreq)
+            {
+                case 'monthly':
+                    x=1;
+                    break;
+                case 'weekly':
+                    x=0.25;
+                    break;
+                case 'bi-weekly':
+                    x=0.5;
+                    break;
+                case 'quarterly':
+                    x=3;
+                    break;
+                case 'yearly':
+                    x=12;
+                    break;
+                default:
+                    x=1;
+            }
+            var cycleDate = angular.copy(convertTran.tran.date);
+            var length = 500;
+            if (convertTran.tran.term) {
+               length = parseInt(convertTran.tran.term)
+            }
+            if (x < 1) {
+                cycleDate.addWeeks(x * 4);
+            }
+            else {
+                cycleDate.addMonths(x);
+            }
+            var finalDate = angular.copy(convertTran.tran.date).addMonths(length);
+            while (Date.compare(convertTran.date, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                convertTran.newtran.amount = parseFloat(convertTran.newtran.amount) + ((parseFloat(convertTran.tran.interestrate)/100) * parseFloat(convertTran.newtran.amount));
+                if (x < 1) {
+                    cycleDate.addWeeks(x * 4);
+                }
+                else {
+                    cycleDate.addMonths(x);
+                }
+            }
+        }
+        return convertTran.newtran.amount;
+    };
+
+
+
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {
             var valcapppshare = 10000000;
@@ -457,16 +507,16 @@ ownership.service('calculate', function () {
                 var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? parseFloat(convertTran.tran.discount) : 0;
                 var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
                 convertTran.newtran.ppshare = regularppshare < valcapppshare ? regularppshare : valcapppshare;
-                convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.newtran.ppshare;
+                convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.newtran.ppshare;
             }
             return convertTran.newtran;
         }
         else if (convertTran.method == "Price Per Share") {
             convertTran.newtran.ppshare = convertTran.ppshare;
-            convertTran.newtran.units = parseFloat(convertTran.tran.amount) / convertTran.ppshare;
+            convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.ppshare;
         }
         return convertTran.newtran;
-    }
+    };
 });
 
 ownership.service('switchval', function () {
