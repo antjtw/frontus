@@ -138,6 +138,51 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         });
                     });
 
+                    // Get the company's Paripassu's on issues
+                    SWBrijj.tblm('ownership.this_company_paripassu').then(function (links) {
+                        var links = links;
+                        angular.forEach($scope.issues, function(issue) {
+                            issue.paripassu = [];
+                            angular.forEach(links, function(pari) {
+                                if (pari.issue == issue.issue) {
+                                    issue.paripassu.push(pari);
+                                }
+                            });
+                            if (issue.paripassu.length == 0) {
+                                issue.paripassu.push({"company":issue.company, "issue": issue.issue, "pariwith": null});
+                            }
+                        })
+                    });
+
+                    SWBrijj.tblm('ownership.this_company_conversion').then(function (convert) {
+                        SWBrijj.tblm('ownership.this_company_transfer').then(function (transfer) {
+                            angular.forEach($scope.trans, function (tran) {
+                                tran.convert = [];
+                                angular.forEach(convert, function(con) {
+                                    if (con.tranto == tran.tran_id) {
+                                        if (con.method == "Split") {
+                                            con.split = new Fraction(con.split);
+                                        }
+                                        tran.convert.push(con);
+                                    }
+                                });
+
+                                angular.forEach(transfer, function(transf) {
+                                    if (transf.tranto == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "To";
+                                        tran.convert.push(final);
+                                    }
+                                    else if (transf.tranfrom == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "From";
+                                        tran.convert.push(final);
+                                    }
+                                });
+                            });
+                        });
+                    });
+
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issues, function (issue) {
                             if (row[issue.issue] != undefined) {
