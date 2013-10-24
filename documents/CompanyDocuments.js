@@ -368,6 +368,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.shortVersionStatus = function(version) {
+            if (version.last_event.activity==='signed') {
+                return 'signed, awaiting countersign';
+            } else {
+                return version.last_event.activity;
+            }
+        };
+
         $scope.docStatusNumComplete = function(doc) {
             if (doc.signature_required) {
                 return $scope.versionsSigned(doc).length;
