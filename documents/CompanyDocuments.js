@@ -329,6 +329,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatus = function(doc) {
+            return "Last Updated " + moment((doc.versions[0] ?
+                                                 doc.versions[0].last_event.event_time : 
+                                                 doc.last_updated)).fromNow();
+            /*
             if (doc.versions.length > 0) {
                 var set = doc.versions.filter(function (el) {return el.last_event && el.last_event.event_time;});
                 if (set.length === 0) {return $scope.defaultDocStatus(doc);}
@@ -337,6 +341,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 return $scope.defaultDocStatus(doc);
             }
+            */
         };
 
         $scope.shortDocStatus = function(doc) {
