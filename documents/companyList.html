@@ -118,6 +118,11 @@
                 </tbody>
                 <tr class="empty-row" style="height:100px"></tr>
             </table>
+            <table class="status-table empty-table" ng-show="documents.length===0">
+                <tbody>
+                    <tr><td><span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span></td></tr>
+                </tbody>
+            </table>
             <div style="display:none;" ng-show="documents.length===0">You have no documents.</div>
         </div>
     </div>
