@@ -308,7 +308,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $location.path('/investor-list').search({});
             } else {
                 delete $location.$$search.page;
-                $location.path('/company-status');
+                $location.path('/company-list');
             }
         };
 
