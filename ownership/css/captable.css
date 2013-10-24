@@ -899,22 +899,28 @@ ul.last-edited > li:last-child {
     margin: 0;
 }
 
-.convertModal > div.modalText > div.convert-listing > span {
+div.modalText > div.convert-listing.solo {
+    width: 200px;
+    float: left;
+    margin-left: 22px;
+}
+
+div.modalText > div.convert-listing > span {
     float: left;
     font-size: 14px;
     color: #1E2D3D;
 }
 
-.convertModal > div.modalText > div.convert-listing > ul {
+div.modalText > div.convert-listing > ul {
     margin-left: 65px;
     text-align: left;
 }
 
-.convertModal > div.modalText > div.convert-listing > ul > li:nth-child(odd) {
+div.modalText > div.convert-listing > ul > li:nth-child(odd) {
     color: rgb(102, 102, 102);
 }
 
-.convertModal > div.modalText > div.convert-listing > ul > li:nth-child(even) {
+div.modalText > div.convert-listing > ul > li:nth-child(even) {
     text-transform: uppercase;
     font-size: 10px;
     margin-bottom: 10px;
@@ -1070,8 +1076,9 @@ ul.last-edited > li:last-child {
 }
 
 .transferModal > div.modalText > div.transfer-date-field {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     overflow: auto;
+    float: right;
 }
 
 .transferModal > div.modalText > div.transfer-date-field > span {

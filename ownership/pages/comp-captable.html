@@ -360,6 +360,13 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="transferSharesClose()"></span>
     </div>
     <div class="modalText">
+        <div class="convert-listing solo">
+            <span>From</span>
+            <ul>
+                <li>{{transfer.trans[0].investor}}</li>
+                <li>Shareholder</li>
+            </ul>
+        </div>
         <div class="transfer-date-field">
             <span>Date</span>
             <input id="transferdate" ng-change="dateTransfer()" ui-event="{keydown:'dateTransfer($event)', blur:'dateTransfer(\'blur\')'}" type="text"
