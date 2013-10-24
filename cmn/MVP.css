@@ -1389,9 +1389,15 @@ ul.spaced-list > li:nth-child(odd) {
     cursor:pointer;
     padding-left: 20px;
 }
+.status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
+    color:#1E2D3D !important;
+}
 
 .status-table > tbody > tr > td.shareholder-column.status-column > ul > li:first-child {
     text-transform: capitalize;
+}
+.status-table > tbody > tr > td.shareholder-column.status-column:hover > ul > li {
+    color:#1E2D3D !important;
 }
 
 .status-table .sub-table {
