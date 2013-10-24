@@ -1102,6 +1102,17 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             }
         };
 
+        $scope.noSent = function(events) {
+            var nosentlist = []
+            angular.forEach(events, function(event) {
+                if (event) {
+                    console.log(event.activity);
+                    nosentlist.push(event);
+                }
+            });
+            return nosentlist;
+        };
+
         $scope.investorOrder = 'investor';
 
         $scope.setOrder = function(field) {
@@ -1423,14 +1434,7 @@ docviews.filter('fromNowSortandFilter', function() {
                 return 0;
             });
         }
-        var nosentlist = []
-        angular.forEach(events, function(event) {
-            if (event) {
-               console.log(event.activity);
-               nosentlist.push(event);
-            }
-        })
-        return nosentlist;
+        return events;
     };
 });
 
