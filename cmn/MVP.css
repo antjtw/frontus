@@ -428,8 +428,10 @@ h2 {
 .maincontent {
     width: 100%;
     overflow-x: auto;
+    overflow-y: visible;
     margin: 0 auto 0 auto;
 }
+
 .topnav {
     height: 40px;
     width: 100%;
