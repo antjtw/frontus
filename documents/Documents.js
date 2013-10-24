@@ -246,9 +246,9 @@ docs.directive('docViewer', function() {
     return {
         restrict: 'EA',
         scope: {
-            docId: '=docId',
-            invq: '=invq',
-            pageQueryString: '=pageQueryString'
+            docId: '=',
+            invq: '=',
+            pageQueryString: '='
         },
         templateUrl: 'docViewer.html',
         controller: 'DocumentViewController'
@@ -270,6 +270,120 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        //if (!$scope.docId) return;
+
+        $scope.hidePage = false;
+        $scope.notes = [];
+        $scope.annotatedPages = [];
+        $scope.pageScroll = 0;
+        $scope.pageBarSize = 10;
+        $scope.showPageBar = true;
+
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
+
+        $scope.loadPages = function () {
+            /** @name SWBrijj#tblmm * @function
+             * @param {string}
+             * @param {...}
+             */
+            SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+                $scope.docLength = data.length;
+                $scope.length_digits = data.length.toString().length * 8;
+                $scope.annotated = new Array(data.length);
+                $scope.annotatedPages = [];
+                for (var i = 0; i < data.length; i++) {
+                    $scope.annotated[data[i].page - 1] = data[i].annotated;
+                    if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
+                }
+                $scope.annotatedPages.sort(function(a,b){return a-b});
+
+                $scope.isAnnotatble = $scope.annotable();
+                $scope.loadAnnotations();
+            });
+        };
+
+        window.setTimeout($scope.loadPages, 100);
+
+        $scope.loadAnnotations = function() {
+            /** @name SWBrijj#tblm
+             * @function
+             * @param {string}
+             * @param {...}
+             */
+            // This gets called twice because init gets called twice
+            // because Angular verifies the data has stabilized.
+            // That doubles up the notes, so we need to delete
+            // all the notes that init created the first time around.
+            SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
+                $scope.lib = data;
+                // if there were notes left over, delete them
+                //$scope.removeAllNotes();
+                $scope.reqDocStatus($scope.docId);
+
+                // data structure contents
+                // aa -> [annot0...annotn-1]
+                // [i] annoti -> [position, type, value, style]
+                //
+                // [i][0] position -> [page, coords, size, 700, 956]
+                //
+                // [i][0][0] page -> 0...n-1
+                //
+                // [i][0][1] coords (bds) -> [x, y, _, _]
+                // [i][0][1][0] x
+                // [i][0][1][1] y
+                // [i][0][1][2] ?
+                // [i][0][1][3] ?
+                //
+                // [i][0][2] size (ibds) -> [_, _, width, height]
+                // [i][0][2][0] ?
+                // [i][0][2][1] ?
+                // [i][0][2][2] width or horizontal offset
+                // [i][0][2][3] height or vertical offset
+                //
+                // [i][0][3] 700 dp.clientWidth
+                //
+                // [i][0][4] 956 dp.clientHeight
+                //
+                // [i][1] type -> check or text or canvas
+                //
+                // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
+                //
+                // [i][3] style -> font size -- anything else?
+
+                var aa = data.annotations;
+                if (aa) {
+                    // restoreNotes
+                    var annots = JSON.parse(aa);
+                    var sticky;
+                    for (var i = 0; i < annots.length; i++) {
+                        var annot = annots[i];
+                        switch (annot[1]) {
+                            case "check":
+                                sticky = $scope.newCheckX(annot[0][0]);
+                                break;
+                            case "text":
+                                sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
+                                break;
+                            case "canvas":
+                                sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                break;
+                        }
+
+                        // the notes were pushed in the newXXX function
+                        sticky.css({
+                            top: Math.max(0, annot[0][1][1]),
+                            left: Math.max(0, annot[0][1][0])
+                        });
+                    }
+                } // json struct
+            });
+        };
+        
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             var ndx = $scope.getNoteData();
@@ -364,6 +478,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return !investorQuery && !countersignDate && signatureDate;
         };
 
+
         $scope.annotable = function() {
             if ($scope.lib === undefined) {
                 return false;
@@ -373,112 +488,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     // original id is there when the document being viewed is not the original
                     // doc_id will refer to versions viewed at later stages in the workflow
             }
-        };
-
-        $scope.init = function() {
-            $scope.hidePage = false;
-            $scope.notes = [];
-            $scope.annotatedPages = [];
-            $scope.pageScroll = 0;
-            $scope.pageBarSize = 10;
-            $scope.showPageBar = true;
-
-            if ($routeParams.page) {
-                $scope.currentPage = parseInt($routeParams.page, 10);
-            } else if (!$scope.currentPage) {
-                $scope.currentPage = 1;
-            }
-            if (!$scope.docId) return;
-
-            /** @name SWBrijj#tblmm
-             * @function
-             * @param {string}
-             * @param {...}
-             */
-            SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
-                $scope.docLength = data.length;
-                $scope.length_digits = data.length.toString().length * 8;
-                $scope.annotated = new Array(data.length);
-                $scope.annotatedPages = [];
-                for (var i = 0; i < data.length; i++) {
-                    $scope.annotated[data[i].page - 1] = data[i].annotated;
-                    if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
-                }
-                $scope.annotatedPages.sort(function(a,b){return a-b});
-            });
-
-            /** @name SWBrijj#tblm
-             * @function
-             * @param {string}
-             * @param {...}
-             */
-            // This gets called twice because init gets called twice
-            // because Angular verifies the data has stabilized.
-            // That doubles up the notes, so we need to delete
-            // all the notes that init created the first time around.
-            SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
-                $scope.lib = data;
-                // if there were notes left over, delete them
-                $scope.removeAllNotes();
-                $scope.reqDocStatus($scope.docId);
-
-                // data structure contents
-                // aa -> [annot0...annotn-1]
-                // [i] annoti -> [position, type, value, style]
-                //
-                // [i][0] position -> [page, coords, size, 700, 956]
-                //
-                // [i][0][0] page -> 0...n-1
-                //
-                // [i][0][1] coords (bds) -> [x, y, _, _]
-                // [i][0][1][0] x
-                // [i][0][1][1] y
-                // [i][0][1][2] ?
-                // [i][0][1][3] ?
-                //
-                // [i][0][2] size (ibds) -> [_, _, width, height]
-                // [i][0][2][0] ?
-                // [i][0][2][1] ?
-                // [i][0][2][2] width or horizontal offset
-                // [i][0][2][3] height or vertical offset
-                //
-                // [i][0][3] 700 dp.clientWidth
-                //
-                // [i][0][4] 956 dp.clientHeight
-                //
-                // [i][1] type -> check or text or canvas
-                //
-                // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
-                //
-                // [i][3] style -> font size -- anything else?
-
-                var aa = data.annotations;
-                if (aa) {
-                    // restoreNotes
-                    var annots = JSON.parse(aa);
-                    var sticky;
-                    for (var i = 0; i < annots.length; i++) {
-                        var annot = annots[i];
-                        switch (annot[1]) {
-                            case "check":
-                                sticky = $scope.newCheckX(annot[0][0]);
-                                break;
-                            case "text":
-                                sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
-                                break;
-                            case "canvas":
-                                sticky = $scope.newPadX(annot[0][0], annot[2][0]);
-                                break;
-                        }
-
-                        // the notes were pushed in the newXXX function
-                        sticky.css({
-                            top: Math.max(0, annot[0][1][1]),
-                            left: Math.max(0, annot[0][1][0])
-                        });
-                    }
-                } // json struct
-            });
         };
 
         $scope.$watch("docId", $scope.init);
