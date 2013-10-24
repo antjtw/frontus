@@ -329,7 +329,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatus = function(doc) {
-            return "Last Updated " + moment((doc.versions[0] ?
+            return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
                                                  doc.versions[0].last_event.event_time : 
                                                  doc.last_updated)).fromNow();
             /*
@@ -348,9 +348,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (doc.versions.length === 0) {
                 return "Uploaded";
             } else if (doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Signed";
+                return "Complete";
             } else if (!doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Viewed";
+                return "Complete";
             } else if (!$scope.docIsComplete(doc)) {
                 return "Pending";
             } else {
@@ -378,6 +378,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (doc.versions.length === 0) {
                 return "1 / 1 documents";
             } else {
+                /*
                 // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
                 var signatureRatio = $scope.docSignatureRatio(doc);
                 var viewRatio = $scope.docViewRatio(doc);
@@ -389,6 +390,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
                            (doc.signature_required ? " signatures" : " views");
                 }
+                */
+                return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
+                       " / " +
+                       doc.versions.length +
+                       " documents"; 
             }
         };
 
