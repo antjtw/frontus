@@ -18,7 +18,7 @@
                 <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                 <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
                 <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
-                <!-- <button ng-click="newSignature($event)"><span data-icon="&#xe02e;" aria-hidden="true"></span></button>  --!>
+                <!-- <button ng-click="newSignature($event)"><span data-icon="&#xe02e;" aria-hidden="true"></span></button>  -->
             </div>
             <div class="pageTurn pull-left">
                 <ul ng-class="{'hidden':docLength==1}">
@@ -30,8 +30,7 @@
                             <input ng-pattern="/^[0-9]+$/"
                                    ng-model="currentPage"
                                    ng-change="jumpPage(currentPage)"
-                                   class="page-jumper"
-                                   style="width: {{length_digits}}px !important">
+                                   class="page-jumper">
                         </label>
                     </li>
                     <li>
