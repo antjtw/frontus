@@ -405,22 +405,22 @@ ownership.service('calculate', function () {
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.pricePerShare = function (issues) {
-        if (issues[issues.length-2]) {
+    this.pricePerShare = function (issues, finishedsorting) {
+        if (finishedsorting && issues[issues.length-2]) {
             return issues[issues.length-2].ppshare;
         }
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.lastIssue = function (issues) {
-        if (issues[issues.length-2]) {
+    this.lastIssue = function (issues, finishedsorting) {
+        if (finishedsorting && issues[issues.length-2]) {
             return issues[issues.length-2].date;
         }
     };
 
     //Returns the post money valuation for the most recent issue assuming such a value is given
-    this.lastPostMoney = function (issues) {
-        if (issues[issues.length-2]) {
+    this.lastPostMoney = function (issues, finishedsorting) {
+        if (finishedsorting && issues[issues.length-2]) {
             return issues[issues.length-2].postmoney;
         }
     };
