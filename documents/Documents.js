@@ -38,8 +38,8 @@ function getNoteBounds(nx) {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= dpo[0]+26;
-        ibds[1] -= dpo[1]+136;
+        ibds[0] -= dpo[0]+56;
+        ibds[1] -= dpo[1]+166;
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
         ibds[0] -= dpo[0]+56;
@@ -245,11 +245,7 @@ docs.directive('backImg', function() {
 docs.directive('docViewer', function() {
     return {
         restrict: 'EA',
-        scope: {
-            docId: '=',
-            invq: '=',
-            pageQueryString: '='
-        },
+        scope: true,
         templateUrl: 'docViewer.html',
         controller: 'DocumentViewController'
     };
@@ -270,7 +266,19 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
-        //if (!$scope.docId) return;
+        console.log("docviewcontroller loaded");
+
+        $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
+            if (!docId) return;
+            console.log("initDocView message received!");
+            $scope.docId = docId;
+            $scope.invq = invq;
+            $scope.library = library;
+            $scope.pageQueryString = pageQueryString;
+            $scope.pages = pages;
+            refreshDocImage();
+            $scope.loadPages();
+        });
 
         $scope.hidePage = false;
         $scope.notes = [];
@@ -278,6 +286,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.pageScroll = 0;
         $scope.pageBarSize = 10;
         $scope.showPageBar = true;
+        $scope.isAnnotable = true;
 
         if ($routeParams.page) {
             $scope.currentPage = parseInt($routeParams.page, 10);
@@ -285,13 +294,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.currentPage = 1;
         }
 
-
         $scope.loadPages = function () {
+            console.log("loadPages");
             /** @name SWBrijj#tblmm * @function
              * @param {string}
              * @param {...}
              */
-            SWBrijj.tblmm($scope.$parent.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+            SWBrijj.tblmm($scope.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+                console.log(data);
                 $scope.docLength = data.length;
                 $scope.length_digits = data.length.toString().length * 8;
                 $scope.annotated = new Array(data.length);
@@ -300,30 +310,32 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     $scope.annotated[data[i].page - 1] = data[i].annotated;
                     if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
                 }
-                $scope.annotatedPages.sort(function(a,b){return a-b});
-
-                $scope.isAnnotatble = $scope.annotable();
+                $scope.annotatedPages.sort(function(a,b){return a-b;});
                 $scope.loadAnnotations();
             });
+       };
+        
+        $scope.setAnnotable = function() {
+                $scope.isAnnotable = $scope.annotable();
         };
-
-        window.setTimeout($scope.loadPages, 100);
-
+       
         $scope.loadAnnotations = function() {
+            if ($scope.lib) {
+                console.log("help!!!");
+                $scope.removeAllNotes();
+                return;
+            }
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
-            // This gets called twice because init gets called twice
-            // because Angular verifies the data has stabilized.
-            // That doubles up the notes, so we need to delete
-            // all the notes that init created the first time around.
-            SWBrijj.tblm($scope.$parent.library, "doc_id", $scope.docId).then(function(data) {
+            SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                console.log("loadAnnotations data");
+                console.log(data);
                 $scope.lib = data;
-                // if there were notes left over, delete them
-                //$scope.removeAllNotes();
                 $scope.reqDocStatus($scope.docId);
+
 
                 // data structure contents
                 // aa -> [annot0...annotn-1]
@@ -359,6 +371,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (aa) {
                     // restoreNotes
                     var annots = JSON.parse(aa);
+                    if (annots.length > 100) {
+                        console.log("Error, too many notes.");
+                        //$scope.removeAllNotes();
+                        return;
+                    }
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
                         var annot = annots[i];
@@ -381,8 +398,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         });
                     }
                 } // json struct
+                $scope.setAnnotable();
             });
         };
+
         
         $window.addEventListener('beforeunload', function(event) {
             void(event);
@@ -480,17 +499,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
 
         $scope.annotable = function() {
-            if ($scope.lib === undefined) {
-                return false;
-            } else {
-                return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline) ||
-                       issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
-                    // original id is there when the document being viewed is not the original
-                    // doc_id will refer to versions viewed at later stages in the workflow
-            }
+            return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline) ||
+                   issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
+                // original id is there when the document being viewed is not the original
+                // doc_id will refer to versions viewed at later stages in the workflow
         };
-
-        $scope.$watch("docId", $scope.init);
 
         $scope.closeMe = function(ev) {
             var z = ev.currentTarget;
@@ -792,10 +805,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return aa;
         };
 
-        $scope.showPageBar = function(evt) {
-
-        };
-
         $scope.acceptSign = function(sig) {
             void(sig);
             SWBrijj.procm("document.countersign", $scope.docId).then(function(data) {
@@ -805,6 +814,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 window.location.reload();
             });
         };
+
+        $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
 
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
@@ -903,12 +914,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
                 noteData.push(ndx);
             }
-
-            /*
-    notData.sort(function(x,y) { if (x[0][0] == y[0][0]) {
-
-    } else return x[0][0] < y[0][0] });
-  */
             return JSON.stringify(noteData);
         };
 
