@@ -214,7 +214,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                             angular.forEach(transfer, function(transf) {
                                 var offset = transf.date.getTimezoneOffset();
-                                transf.date = con.date.addMinutes(offset);
+                                transf.date = transf.date.addMinutes(offset);
                                 if (transf.tranto == tran.tran_id) {
                                     var final = angular.copy(transf);
                                     final.direction = "To";
