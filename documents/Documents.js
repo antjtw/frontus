@@ -6,12 +6,14 @@ function getIntProperty(se, z) {
 
 function getComputed(se, z) {
     originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+    console.log(z + " " + originalAnswer);
     return originalAnswer? originalAnswer : 1337;
 }
 
 function getCanvasOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
+        console.log("firefox code");
         offx = ev.layerX-ev.target.offsetLeft;
         offy = ev.layerY-ev.target.offsetTop;
     } else {
@@ -38,13 +40,17 @@ function getNoteBounds(nx) {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= dpo[0]+56;
-        ibds[1] -= dpo[1]+166;
+        ibds[0] -= (dpo[0]+200);
+        ibds[0] = (700/900)*ibds[0];
+        ibds[1] -= (dpo[1]+166);
+        console.log(dpo);
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
         ibds[0] -= dpo[0]+56;
         ibds[1] -= dpo[1]+166;
     }
+    console.log("bds: " + bds);
+    console.log("ibds: " + ibds);
 
     return [bds, ibds]; // [coords, size]
 }
@@ -269,6 +275,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         console.log("docviewcontroller loaded");
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
+            console.log("initDocView message received!");
             if (!docId) return;
             console.log("initDocView message received!");
             $scope.docId = docId;
