@@ -38,8 +38,8 @@ function getNoteBounds(nx) {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= dpo[0]+26;
-        ibds[1] -= dpo[1]+136;
+        ibds[0] -= dpo[0]+56;
+        ibds[1] -= dpo[1]+166;
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
         ibds[0] -= dpo[0]+56;
@@ -245,16 +245,7 @@ docs.directive('backImg', function() {
 docs.directive('docViewer', function() {
     return {
         restrict: 'EA',
-        scope: true
-            /*
-        {
-            docId: '=',
-            invq: '=',
-            library: '=',
-            pageQueryString: '=',
-            pages: '='
-        }
-        */,
+        scope: true,
         templateUrl: 'docViewer.html',
         controller: 'DocumentViewController'
     };
@@ -275,6 +266,7 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        console.log("docviewcontroller loaded");
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
             if (!docId) return;
@@ -284,6 +276,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.library = library;
             $scope.pageQueryString = pageQueryString;
             $scope.pages = pages;
+            refreshDocImage();
             $scope.loadPages();
         });
 
@@ -323,25 +316,26 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
        };
         
         $scope.setAnnotable = function() {
-        //        $scope.isAnnotable = $scope.annotable();
+                $scope.isAnnotable = $scope.annotable();
         };
        
         $scope.loadAnnotations = function() {
-            console.log("loadAnnotations");
+            if ($scope.lib) {
+                console.log("help!!!");
+                $scope.removeAllNotes();
+                return;
+            }
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
-            // This gets called twice because init gets called twice
-            // because Angular verifies the data has stabilized.
-            // That doubles up the notes, so we need to delete
-            // all the notes that init created the first time around.
             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                 console.log("loadAnnotations data");
                 console.log(data);
                 $scope.lib = data;
                 $scope.reqDocStatus($scope.docId);
+
 
                 // data structure contents
                 // aa -> [annot0...annotn-1]
@@ -377,6 +371,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (aa) {
                     // restoreNotes
                     var annots = JSON.parse(aa);
+                    if (annots.length > 100) {
+                        console.log("Error, too many notes.");
+                        //$scope.removeAllNotes();
+                        return;
+                    }
                     var sticky;
                     for (var i = 0; i < annots.length; i++) {
                         var annot = annots[i];
@@ -815,6 +814,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 window.location.reload();
             });
         };
+
+        $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
 
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {

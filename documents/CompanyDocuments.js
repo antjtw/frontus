@@ -614,13 +614,15 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+            console.log("document.my_counterparty_library");
+            console.log(data);
             if ($scope.counterparty) {
                 for (var i = 0; i < data.length; i++) {
                     var doc = data[i];
                     if (doc.investor == $scope.urlInves) {
                         $scope.version = doc;
                         $scope.getVersion(doc);
-                        break;
+                        return;
                     }
                 }
             } else {
@@ -651,6 +653,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.getOriginal = function() {
+            console.log("this doens't work");
             $scope.invq = false;
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
@@ -686,6 +689,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
         };
 
+        /*
         $scope.retract = function(cd) {
             SWBrijj.procm('document.retract_share', cd.doc_id).then(function(data) {
                 void(data);
@@ -701,6 +705,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $route.reload();
             });
         };
+        */
         
         $scope.loadDocumentActivity = function() {
             console.log("loadDocumentActivity");
@@ -758,14 +763,15 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
 
-        $scope.rejectSignature = function(cd, msg) {
+        $scope.rejectSignature = function(msg) {
             if (msg === "Add an optional message...") {
                 msg = "";
             }
-            SWBrijj.procm("document.reject_signature", cd.doc_id, msg).then(function(data) {
+            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document signature rejected.");
                 void(data);
-                cd.when_signed = null;
+                // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
+                //cd.when_signed = null;
                 $route.reload();
             }).except(function(x) {
                 void(x);
@@ -802,7 +808,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.confirmModal = false;
         };
 
-        $scope.countersignDocument = function(doc) {
+        $scope.countersignDocument = function() {
             if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
             setCursor('wait');
@@ -810,24 +816,17 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", doc.doc_id, dce.getNoteData()).then(function(data) {
-                doc.when_signed = data;
+            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData()).then(function(data) {
+                //doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('event:reload');
+                $scope.$emit('refreshDocImage');
 
             }).except(function(x) {
                 void(x);
                 $scope.confirmModalClose();
-            });
-        };
-
-        $scope.shareWith = function(doc, cp, msg, sig, dline) {
-            SWBrijj.procm("document.share_document", doc.doc_id, cp.toLowerCase(), msg, Boolean(sig), dline).
-            then(function(data) {
-                void(data);
-                $route.reload();
             });
         };
 
@@ -1295,25 +1294,38 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
-        $scope.init = function() {
-            $scope.docId = parseInt($routeParams.doc);
-            $scope.thisPage = $routeParams.page ? parseInt($routeParams.page) : 1;
-            $scope.library = "document.my_investor_library";
-            $scope.pages = "document.my_investor_codex";
-            $scope.tester = false;
-            $scope.invq = true;
-            $scope.confirmModalClose();
+        $scope.docId = parseInt($routeParams.doc, 10);
+        $scope.thisPage = $routeParams.page ? parseInt($routeParams.page, 10) : 1;
+        $scope.library = "document.my_investor_library";
+        $scope.pages = "document.my_investor_codex";
+        $scope.tester = false;
+        $scope.invq = true;
+        //$scope.confirmModalClose();
+        $scope.pageQueryString = function() {
+            return "id=" + $scope.docId + "&investor=" + $scope.invq;
+        };
+
+        $scope.initDocView = function() {
+            console.log("initDocView");
+            console.log($scope.docId);
+            console.log($scope.pageQueryString());
+            $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
+        };
+       
+        $scope.getData = function () {
             SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
                 if (navState.company != data.company) {
                     $location.path("/investor-list?");
                     return;
                 }
                 $scope.document = data;
+                $scope.initDocView();
             }).except(function(x) {
                 void(x);
                 $location.path("/investor-list?");
             });
         };
+        $scope.getData();
         
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
@@ -1338,14 +1350,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.confirmModal = false;
         };
         
-        $scope.pageQueryString = function() {
-            return "id=" + $scope.docId + "&investor=true";
-        };
-
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
 
+        // TODO this isn't working.
         $scope.signDocument = function(doc) {
             if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
@@ -1354,12 +1363,15 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", doc.doc_id, dce.getNoteData()).then(function(data) {
+            console.log("signing");
+            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData()).then(function(data) {
+                console.log("sign succeeded");
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('event:reload');
+                $scope.$emit('refreshDocImage');
 
             }).except(function(x) {
                 void(x);
