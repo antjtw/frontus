@@ -706,7 +706,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
         return list
-    }
+    };
+
+    $scope.showPari = function(list) {
+        return (list.length > 0)
+    };
 
     $scope.toggleCommon = function(issue) {
         issue.common = issue.common && issue.type == 'Equity' ? false : true;
