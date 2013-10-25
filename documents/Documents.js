@@ -40,9 +40,14 @@ function getNoteBounds(nx) {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= (dpo[0]+200);
+        ibds[0] -= (dpo[0]+166);
         ibds[0] = (700/900)*ibds[0];
         ibds[1] -= (dpo[1]+166);
+        ibds[1] = (956/1230)*ibds[1];
+        ibds[2] -= 200;
+        ibds[2] = (700/900)*ibds[2];
+        ibds[3] -= 166;
+        ibds[3] = (956/1230)*ibds[3];
         console.log(dpo);
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
