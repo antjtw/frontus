@@ -946,6 +946,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
+                $scope.$emit("notification:success", "Saved Annotations");
                 refreshDocImage();
             });
         };
