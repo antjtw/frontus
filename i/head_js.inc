@@ -24,3 +24,4 @@
 <meta property="og:image" content="https://s3.amazonaws.com/sharewave/www/images/ike-social.png" />
 <meta property="og:title" content="Sharewave" />
 <meta property="og:description" content="The best way to manage your shareholders" />
+<meta property="og:url" content="https://sharewave.com" />
