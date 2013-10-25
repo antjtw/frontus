@@ -341,7 +341,13 @@
         <div class="convert-summary three">
             <span>Summary</span>
             <ul>
-                <li><span>{{formatAmount(totalinissue(splitIssue))}}</span><span>Pre-split shares</span></li>
+                <li>
+                    <span>
+                        <span ng-show="totalinissue(splitIssue)">{{formatAmount(totalinissue(splitIssue))}}</span>
+                        <span ng-hide="totalinissue(splitIssue)">No Shares</span>
+                    </span>
+                    <span>Pre-split shares</span>
+                </li>
                 <li>
                     <span>
                         <span ng-show="splitvalue(splitIssue)">{{formatAmount(splitvalue(splitIssue))}}</span>
