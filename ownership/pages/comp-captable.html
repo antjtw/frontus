@@ -388,7 +388,7 @@
                 <tr ng-repeat="tran in transfer.trans">
                     <td>{{tran.date | date:'shortDate'}}</td>
                     <td>{{formatAmount(tran.units)}}</td>
-                    <td><input type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
+                    <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
                     <td>
                         <ul class="dropdown-list">
                             <li class="dropdown standard">
@@ -626,7 +626,7 @@
         </div>
     </div>
 
-        <div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+        <div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
             <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
             </button>
             <div class="row-fluid">

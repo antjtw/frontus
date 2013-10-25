@@ -1075,6 +1075,15 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width:720px;
 }
 
+.transferModal input.transfer-shares-input {
+    background-color: #F1F1F1;
+    padding: 5px 0 5px 6px;
+}
+
+.transferModal input.transfer-shares-input:focus {
+    background-color: #F1F1F1;
+}
+
 .transferModal > div.modalText > div.transfer-date-field {
     margin-bottom: 40px;
     overflow: auto;
