@@ -1322,6 +1322,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = '1';
         $scope.convertTransOptions = trans;
         $scope.convertModal = true;
+
+        $scope.$watch('convertTran.ppshare', function(newval, oldval) {
+            if (isNaN(newval) && !null) {
+                $scope.convertTran.ppshare = oldval;
+            }
+        }, true);
     };
 
     $scope.convertSharesClose = function() {
@@ -1332,10 +1338,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = number;
         if (number == '2') {
             $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            console.log(angular.copy($scope.convertTran.newtran.amount));
             $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
             $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
-            console.log($scope.convertTran.newtran.amount);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         }
     };
