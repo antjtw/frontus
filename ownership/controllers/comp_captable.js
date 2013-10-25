@@ -1514,6 +1514,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.splitIssue = angular.copy(issue);
         $scope.splitIssue.ratioa = 1;
         $scope.splitIssue.ratiob = 1;
+        $scope.splitIssue.date = new Date.today();
         $scope.splitModal = true;
     };
 
@@ -1582,7 +1583,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                      if (tran.issue == issue.issue) {
                          tran.units = tran.units / ratio;
                          tran.ppshare = tran.ppshare * ratio;
-                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id});
+                         var fraction = new Fraction(ratio)
+                         console.log(ratio);
+                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id, "split" : fraction});
 
                      }
                  });
