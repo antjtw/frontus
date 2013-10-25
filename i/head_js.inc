@@ -21,3 +21,5 @@
         window.console.log = window.console.log || function() {};
 </script>
 
+<meta property="og:image" content="https://s3.amazonaws.com/sharewave/www/images/ike-social.png" />
+<meta property="og:image" content="https://s3.amazonaws.com/sharewave/www/images/ike-social.png" />
