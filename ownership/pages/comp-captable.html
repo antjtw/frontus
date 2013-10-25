@@ -782,7 +782,7 @@
                                 </ul>
                             </div>
 
-                            <span class="paripassu-list">
+                            <span ng-show="availableKeys(allowKeys, activeIssue.paripassu).length > 1" class="paripassu-list">
                                 <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
                                     <ul class="dropdown-list">
                                         <li class="dropdown standard">
