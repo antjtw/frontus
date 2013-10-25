@@ -1484,7 +1484,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 });
             });
-        });
+            $scope.$emit("notification:success", "Conversion Successful");
+        }).except(function(err) {
+                $scope.$emit("notification:fail", "Conversion Failed");
+            });
     };
 
     // Captable Split Modal
@@ -1628,11 +1631,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         }
                     });
                 });
-            });
+                $scope.$emit("notification:success", "Split Successful");
+            }).except(function(err) {
+                    $scope.$emit("notification:fail", "Split Failed");
+                });
         }
     };
 
-    // Captable Split Modal
+    // Captable Transfer Modal
 
     $scope.transferSharesUp = function(activetran) {
         $scope.transferModal = true;
@@ -1759,7 +1765,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         });
                     });
-                });
+                    $scope.$emit("notification:success", "Transfer Successful");
+                }).except(function(err) {
+                        $scope.$emit("notification:fail", "Transfer failed");
+                    });
             }
         });
     };
