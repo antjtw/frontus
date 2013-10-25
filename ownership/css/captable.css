@@ -683,10 +683,6 @@ tr.rowSelected, tr.rowSelected:hover {
     padding-left: 20px;
 }
 
-.status-table > tbody > tr.empty-row {
-    height: 10px;
-}
-
 .status-table > tbody > tr {
     border: 1px solid #E2E2E2;
     height: 60px;

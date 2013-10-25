@@ -506,7 +506,7 @@ ownership.service('calculate', function () {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
                 if (premoneypercent > (discount)) {
                     var postmoneypercent = (1- (parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.postmoney)));
-                    console.log("post money discount is " + postmoneypercent);
+                    convertTran.newtran.valcappercentage = String(postmoneypercent*100);
                     regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-postmoneypercent);
                 }
             }
