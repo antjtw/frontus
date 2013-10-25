@@ -1332,6 +1332,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             });
         };
         $scope.getData();
+
+        $scope.$on('initview', function(event) {$scope.getData();});
         
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
