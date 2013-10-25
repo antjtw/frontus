@@ -1308,7 +1308,9 @@
                                 <p><span class="captips" tooltip-placement="top" tooltip="This represents the total outstanding shares if all debt is converted & options/grants are exercised">What does dilution mean?</span></p>
                             </div>
                             <br>
-                            <a ng-hide="hideTour" class="button lightBlueButton" href="javascript:void(0);" onclick="javascript:introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();">Take a Tour</a>
+                            <div class="standard-button blue">
+                                <button ng-hide="hideTour" class="btn" href="javascript:void(0);" onclick="javascript:introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();">Take a Tour</button>
+                            </div>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">
