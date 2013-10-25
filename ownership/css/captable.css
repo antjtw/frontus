@@ -581,6 +581,10 @@ p.belowTitle {
     overflow: auto;
 }
 
+.capGuide.conversion-activity > ul > li {
+    overflow: auto;
+}
+
 .capGuide.conversion-activity > ul > li > span {
     color: #1E2D3D;
 }
@@ -591,8 +595,8 @@ p.belowTitle {
 }
 
 .capGuide.conversion-activity > ul > li > span {
-    float: right;
     width: 250px;
+    display: inline-block;
 }
 
 input.content, textarea.content {
