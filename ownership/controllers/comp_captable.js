@@ -291,6 +291,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
 
+
+    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
+    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+        $scope.stretchheight = newValue
+    });
+
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
             if (picked == row) {
