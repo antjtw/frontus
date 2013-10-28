@@ -6,14 +6,12 @@ function getIntProperty(se, z) {
 
 function getComputed(se, z) {
     originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-    console.log(z + " " + originalAnswer);
     return originalAnswer? originalAnswer : 1337;
 }
 
 function getCanvasOffset(ev) {
     var offx, offy;
     if (ev.offsetX === undefined) { // Firefox code
-        console.log("firefox code");
         offx = ev.layerX-ev.target.offsetLeft;
         offy = ev.layerY-ev.target.offsetTop;
     } else {
@@ -25,37 +23,22 @@ function getCanvasOffset(ev) {
 
 function getNoteBounds(nx) {
     // [LEFT, TOP, WIDTH, HEIGHT]
-    var dp = document.querySelector('.docPanel');
-    var dpo = [dp.offsetLeft, dp.offsetTop];
-    var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
+    var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top') - 161, 0, 0];
+    // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
+    // this could be set as a static value during other pad calculations
     var ntyp = nx.notetype;
     var z, ibds;
     if (ntyp == 'text') {
         var t = nx.querySelector('textarea');
         z = t.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= dpo[0]+56;
-        ibds[1] -= dpo[1]+166;
     } else if (ntyp == 'canvas') {
         var c = nx.querySelector('canvas');
         z = c.offset;
         ibds = [z[0], z[1], z[2], z[3]];
-        ibds[0] -= (dpo[0]+166);
-        ibds[0] = (700/900)*ibds[0];
-        ibds[1] -= (dpo[1]+166);
-        ibds[1] = (956/1230)*ibds[1];
-        ibds[2] -= 200;
-        ibds[2] = (700/900)*ibds[2];
-        ibds[3] -= 166;
-        ibds[3] = (956/1230)*ibds[3];
-        console.log(dpo);
     } else if (ntyp == 'check') {
         ibds = [12, 27, 14, 14];
-        ibds[0] -= dpo[0]+56;
-        ibds[1] -= dpo[1]+166;
     }
-    console.log("bds: " + bds);
-    console.log("ibds: " + ibds);
 
     return [bds, ibds]; // [coords, size]
 }
@@ -277,12 +260,9 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
-        console.log("docviewcontroller loaded");
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
-            console.log("initDocView message received!");
             if (!docId) return;
-            console.log("initDocView message received!");
             $scope.docId = docId;
             $scope.invq = invq;
             $scope.library = library;
@@ -307,13 +287,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         }
 
         $scope.loadPages = function () {
-            console.log("loadPages");
             /** @name SWBrijj#tblmm * @function
              * @param {string}
              * @param {...}
              */
             SWBrijj.tblmm($scope.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
-                console.log(data);
                 $scope.docLength = data.length;
                 $scope.length_digits = data.length.toString().length * 8;
                 $scope.annotated = new Array(data.length);
@@ -333,7 +311,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
        
         $scope.loadAnnotations = function() {
             if ($scope.lib) {
-                console.log("help!!!");
+                console.log("Error. This has already been called.");
                 $scope.removeAllNotes();
                 return;
             }
@@ -343,8 +321,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {...}
              */
             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                console.log("loadAnnotations data");
-                console.log(data);
                 $scope.lib = data;
                 $scope.reqDocStatus($scope.docId);
 
@@ -895,13 +871,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.getNoteData = function() {
             var noteData = [];
-            var dp = document.querySelector(".docPanel");
+            
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 700, 956];
-                //var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 900, 1165];
+                // var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
+                // dp.clientWidth and dp.clientHeight are hard-coded because docPanel is not available
+                // when notes are saved right before stamping.
+                // these values could be set as static attributes on docPanel during other calculations
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
@@ -912,18 +891,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     se = nx.querySelector("textarea");
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
-                    ndx[0][2][0] += 5;
-                    ndx[0][2][1] -= 6;
                 } else if (typ == 'check') {
                     se = nx.querySelector("span.check-annotation");
-                    lh = getIntProperty(se, 'line-height');
                     style.push(getIntProperty(se, 'font-size'));
-                    ndx[0][2][1] += 6;
                 } else if (typ == 'canvas') {
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
                 }
-
+                
                 noteData.push(ndx);
             }
             return JSON.stringify(noteData);

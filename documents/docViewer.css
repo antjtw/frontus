@@ -212,7 +212,8 @@
 
 .docPanel {
     width: 100%;
-    height: 1230px;
+    height: 1165px;
+    background-size: contain !important;
     margin: 0 auto 0 auto;
 }
 

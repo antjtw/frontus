@@ -230,7 +230,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
                 for (var j = 0; j < mimetypes.length; j++) {
-                    // console.log(element.files[i].size)
                     if (element.files[i].size > 20000000) {
                         $scope.fileError = "Please choose a smaller file";
                     } else if (element.files[i].type != mimetypes[j]) {
@@ -304,8 +303,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         
         $scope.remind = function(doc_id, user_email) {
-            console.log(doc_id);
-            console.log(user_email);
             /*
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
                 $scope.emit('event:remind');
@@ -614,8 +611,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
-            console.log("document.my_counterparty_library");
-            console.log(data);
             if ($scope.counterparty) {
                 for (var i = 0; i < data.length; i++) {
                     var doc = data[i];
@@ -653,7 +648,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.getOriginal = function() {
-            console.log("this doens't work");
             $scope.invq = false;
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
@@ -708,10 +702,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         */
         
         $scope.loadDocumentActivity = function() {
-            console.log("loadDocumentActivity");
             SWBrijj.tblmm("document.company_activity", "doc_id", $scope.version.doc_id).then(function(data) {
-                console.log("loadDocumentActivity returned");
-                console.log(data);
                 $scope.version.last_event = data.sort($scope.compareEvents)[0];
                 var versionViews = data.filter(function(el) {return el.person===$scope.version.investor && el.activity==='viewed';});
                 $scope.version.last_viewed = versionViews.length > 0 ? versionViews[0].event_time : null;
@@ -831,8 +822,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.remind = function(doc_id, user_email) {
-            console.log(doc_id);
-            console.log(user_email);
             /*
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
                 $scope.emit('event:remind');
@@ -1043,7 +1032,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             $scope.page_title = newname;
             $scope.disableEditor();
             SWBrijj.procm("document.title_change", docId, newname).then(function(data) {
-                console.log(data);
             });
         };
 
@@ -1084,13 +1072,11 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         $scope.share = function(message, email, sign) {
             SWBrijj.procm("document.share_document", docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
-                console.log(data);
             });
         };
 
         /*$scope.remind = function(message, email) {
             SWBrijj.procm("document.remind_document", docId, email.toLowerCase(), message).then(function(data) {
-                console.log(data);
             });
         };
         */
@@ -1225,8 +1211,6 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
         
         $scope.remind = function(doc_id, user_email) {
-            console.log(doc_id);
-            console.log(user_email);
             /*
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
                 $scope.emit('event:remind');
@@ -1306,9 +1290,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.initDocView = function() {
-            console.log("initDocView");
-            console.log($scope.docId);
-            console.log($scope.pageQueryString());
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
        
@@ -1365,9 +1346,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            console.log("signing");
             SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData()).then(function(data) {
-                console.log("sign succeeded");
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
