@@ -9,6 +9,12 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.lastupdated = time[0].last_edited;
     });
 
+    SWBrijj.tblm('account.my_company_settings').then(function (x) {
+        $scope.settings = x[0];
+        $scope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+        $scope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+    });
+
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {

@@ -20,6 +20,12 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         });
     });
 
+    SWBrijj.tblm('account.my_company_settings').then(function (x) {
+        $scope.settings = x[0];
+        $scope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+        $scope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+    });
+
     // Initialisation. Get the transactions and the grants
     SWBrijj.tblm('ownership.this_company_options').then(function (data) {
 
@@ -123,10 +129,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = $scope.formatAmount(amount);
-        if (output) {
-            output = "$" + output
-        }
-        return (output);
+        var output = calculate.formatMoneyAmount(memformatamount(amount), $scope.settings);
+        return output;
     };
 };

@@ -84,7 +84,7 @@
                             {{newtransaction}}
                         </span>
                         <span ng-hide="newtransction">
-                            {{pickTran.date | date:'mediumDate'}}
+                            {{pickTran.date | date:settings.formatdate}}
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -92,7 +92,7 @@
                             <a ng-click="pickOddOption('New Transaction')">New Transaction</a>
                         </li>
                         <li ng-repeat="i in dateoptions(changedTransactions);">
-                            <a ng-click="pickmOption(i)">{{i.date | date:'mediumDate'}}</a>
+                            <a ng-click="pickmOption(i)">{{i.date | date:settings.formatdate}}</a>
                         </li>
                     </ul>
                 </li>
@@ -204,11 +204,11 @@
             <ul class="dropdown-list">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
-                        {{convertTran.tran.date | date:'shortDate'}}<span class="invisible-drop">'</span>
+                        {{convertTran.tran.date | date:settings.shortdate}}<span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="i in convertTransOptions">
-                            <span ng-click="assignConvertFrom(i);">{{i.date | date:'shortDate'}}</span>
+                            <span ng-click="assignConvertFrom(i);">{{i.date | date:settings.shortdate}}</span>
                         </li>
                     </ul>
                 </li>
@@ -232,7 +232,7 @@
         <div ng-show="convertTran.toissue.issue">
             <span>Date</span>
             <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
-                   ng-model="convertTran.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                    onkeydown="testForEnter();">
         </div>
         <div ng-show="convertTran.toissue.issue" class="pull-right">
@@ -285,7 +285,7 @@
         <div class="convert-summary">
             <span>Summary</span>
             <ul>
-                <li><span>{{convertTran.date | date:'shortDate'}}</span><span>Date</span></li>
+                <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
                 <li><span>{{formatDollarAmount(convertTran.newtran.amount)}}</span><span>Debt + Interest</span></li>
                 <li><span>{{formatDollarAmount(convertTran.newtran.ppshare)}}</span><span>Effective PPS</span></li>
                 <li><span>{{formatAmount(convertTran.newtran.units)}}</span><span>Resulting Shares</span></li>
@@ -328,7 +328,7 @@
             <div>
                 <span>Date</span>
                 <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
-                       ng-model="splitIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                        onkeydown="testForEnter();">
             </div>
             <div class="ratio-input">
@@ -394,7 +394,7 @@
         <div class="transfer-date-field">
             <span>Date</span>
             <input id="transferdate" ng-change="dateTransfer()" ui-event="{keydown:'dateTransfer($event)', blur:'dateTransfer(\'blur\')'}" type="text"
-                   ng-model="transfer.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                   ng-model="transfer.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                    onkeydown="testForEnter();">
         </div>
 
@@ -407,7 +407,7 @@
                     <th></th>
                 </tr>
                 <tr ng-repeat="tran in transfer.trans">
-                    <td>{{tran.date | date:'shortDate'}}</td>
+                    <td>{{tran.date | date:settings.shortdate}}</td>
                     <td>{{formatAmount(tran.units)}}</td>
                     <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
                     <td>
@@ -678,7 +678,7 @@
                         <!-- Global Tab -->
                         <div class="capGuide global">
                             <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
-                                                                          ng-model="activeIssue.date" data-date-format="mm/dd/yyyy" bs-datepicker
+                                                                          ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                                                                           onkeydown="testForEnter();"></p>
 
                             <div class="rightTitle"><span>Security Type</span>
@@ -849,7 +849,7 @@
                                                                                                                                                                                  ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
                                                                                                                                                                                  type="text"
                                                                                                                                                                                  ng-model="activeIssue.vestingbegins"
-                                                                                                                                                                                 data-date-format="mm/dd/yyyy"
+                                                                                                                                                                                 data-date-format={{settings.lowercasedate}}
                                                                                                                                                                                  bs-datepicker></p>
 
                               <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
@@ -945,7 +945,7 @@
                             <p>Customize terms for this shareholder</p>
                         </div>
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                                 <!-- Global Tab -->
                                 <div class="capGuide global">
@@ -953,7 +953,7 @@
                                     <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
                                                                                   ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
                                                                                   ng-change="saveTranDate(tran, 'date')"
-                                                                                  type="text" ng-model="tran.date" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                                                                  type="text" ng-model="tran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
                                         <span class="delete-icon" data-icon="&#xe00c;"
                                               ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
 
@@ -1078,7 +1078,7 @@
                                                                                                                                                                                        ng-change="saveTranDate(tran, 'vestingbegins')"
                                                                                                                                                                                        type="text"
                                                                                                                                                                                        ng-model="tran.vestingbegins"
-                                                                                                                                                                                       data-date-format="mm/dd/yyyy"
+                                                                                                                                                                                       data-date-format={{settings.lowercasedate}}
                                                                                                                                                                                        bs-datepicker></p>
 
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span><input ng-disabled="toggleView();"
@@ -1127,7 +1127,7 @@
                                         </ul>
                                     </div>
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
+                                    <p style="display:inline-block" class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                                                                                                        onkeydown="testForEnter();"
                                                                                                                                                                                                        ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                                                                                                        ng-model="tran.valcap"></p>
@@ -1156,7 +1156,7 @@
 
                         <!-- Global Tab -->
                             <div class="capGuide cap-overflow global">
-                                <p class="belowTitle"><span ng-bind="activeIssue.date  | date:'shortDate'"></span><span>DATE</span></p>
+                                <p class="belowTitle"><span ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
 
                                 <p ng-show="activeIssue.type" class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
                             </div>
@@ -1195,7 +1195,7 @@
 
                               <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:'shortDate'"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
@@ -1228,7 +1228,7 @@
                             </h1>
                         </div>
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
@@ -1262,7 +1262,7 @@
 
                                     <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:'shortDate'"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
 
                                     <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
@@ -1288,7 +1288,7 @@
                                     <h2>Activity</h2>
                                     <ul>
                                         <li ng-repeat="convert in tran.convert">
-                                            <span>{{convert.date | date:'shortDate'}}</span>
+                                            <span>{{convert.date | date:settings.shortdate}}</span>
                                             <span ng-show="convert.method == 'Valuation' || convert.method == 'Price Per Share'">Converted from {{convert.issuefrom}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
                                             <span ng-show="convert.method == 'Split'">Split {{convert.split.numerator}} to {{convert.split.denominator}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
                                             <span ng-show="convert.direction == 'To'">Transferred {{convert.units}} from {{convert.investor_from}}</span>
@@ -1340,7 +1340,7 @@
 
                             <div class="summary-bar">
                                 <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Latest Post-Money Valuation</span></p>
-                                <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:'shortDate'"></span><span>Date of last valuation</span></p>
+                                <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:settings.shortdate"></span><span>Date of last valuation</span></p>
                                 <p ng-show="false" class="belowTitle"><span ng-bind="pricePerShare()"></span><span>Price-per-share</span></p>
                                 <p ng-show="totalPaid(rows)" class="belowTitle"><span ng-bind="totalPaid(rows)"></span><span>Total Invested</span></p>
                                 <p ng-show="totalShares(rows)" class="belowTitle"><span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span></p>

@@ -87,11 +87,8 @@
             <fieldset>
                 <div class="fileinputs">
                     <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
-                    <div class="fakefile">
+                    <div class="profile-fakefile">
                         <span>CHOOSE FILE</span>
-                        <div ng-show="files.length">
-                            <span>{{files[0].name | fileLength}}</span>
-                        </div>
                     </div>
                 </div>
             </fieldset>

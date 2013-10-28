@@ -20,6 +20,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
 
+
     $scope.extraPeople = [
         {"email": ""}
     ];
@@ -35,6 +36,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.freqtypes.push(result['get_freqtypes']);
         });
     });
+
+    SWBrijj.tblm('account.my_company_settings').then(function (x) {
+        $scope.settings = x[0];
+        $scope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+        $scope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+    });
+
 
     // Empty variables for issues
     $scope.issuekeys = [];
@@ -2115,10 +2123,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = memformatamount(amount);
-        if (output) {
-            output = "$" + output
-        }
+        var output = calculate.formatMoneyAmount(memformatamount(amount), $scope.settings);
         return (output);
     };
 

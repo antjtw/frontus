@@ -102,7 +102,7 @@
               <p>Terms from the ownership table</p>
           </div>
           <tabset class="trantabs">
-              <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+              <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                   <div class="capGuide global">
 
@@ -134,7 +134,7 @@
                                                                                   ng-change="saveTranDate(tran, \'vestingbegins\')"
                                                                                   type="text"
                                                                                   ng-model="tran.vestingbegins"
-                                                                                  data-date-format="mm/dd/yyyy"
+                                                                                  data-date-format={{settings.lowercasedate}}
                                                                                   bs-datepicker></p>
 
                       <p class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(tran)'}"
@@ -178,7 +178,7 @@
                                       </li>
                                   </ul>
                               </div>
-                              <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act)" ng-model="act.date" data-date-format="mm/dd/yyyy" bs-datepicker></p>
+                              <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act)" ng-model="act.date" data-date-format={{settings.lowercasedate}} bs-datepicker></p>
                               <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act)'}" ng-model="act.unit">
                           </li>
                       </ul>

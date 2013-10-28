@@ -17,18 +17,25 @@ app.config(function($routeProvider, $locationProvider){
 app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState',
     function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState) {
 
+        $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+        $scope.currencies = ['United States Dollars (USD)', 'Great British Pound (GBP)', 'Euro (EUR)'];
+        $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
+
         if (navState.role == 'investor') {
             $location.path('/investor');
             return;
         }
 
-        //Variable for setting the messages on the onboarding
-        $scope.captablestart = "Create";
-
-        SWBrijj.tblm('ownership.company_issue').then(function (data) {
-            if (Object.keys(data).length > 0) {
-                $scope.captablestart = "View";
-            }
+        SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
+            console.log(x[0]);
+            $scope.company = x[0];
+            angular.forEach($scope.currencies, function(c) {
+               if (c.indexOf($scope.company.currency) !== -1) {
+                   $scope.company.longcurrency = c;
+               }
+            });
+            $scope.company.dateformat = $scope.company.dateformat == 'MM/dd/yyyy' ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
+            $scope.photoURL = '/photo/user?id=company:' + x[0].company;
         });
 
         if ($routeParams.msg) {
@@ -57,6 +64,95 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         $scope.activityOrder = function(card) {
             return -card.time;
+        };
+
+
+        // Profile Change modal
+
+        $scope.profileModalOpen = function () {
+            $scope.profileModal = true;
+            $scope.editcompany = angular.copy($scope.company);
+        };
+
+        $scope.profileModalClose = function () {
+            $scope.profileModal = false;
+        };
+
+        $scope.profileopts = {
+            backdropFade: true,
+            dialogFade:true,
+            dialogClass: 'profile-modal modal'
+        };
+
+        $scope.setFiles = function(element) {
+            $scope.files = [];
+            for (var i = 0; i < element.files.length; i++) {
+                $scope.files.push(element.files[i]);
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL($scope.files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    document.getElementById("updateImage").src = oFREvent.target.result;
+                };
+                $scope.$apply();
+            }
+        };
+
+        $scope.profileUpdate = function (company) {
+            SWBrijj.proc("account.company_update", company.name, company.address, company.city, company.state, company.zipcode).then(function (x) {
+                void(x);
+                var fd = new FormData();
+                if ($scope.files) {
+                    for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
+                    SWBrijj.uploadLogo(fd).then(function(x) {
+                        void(x);
+                        console.log("here");
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company;
+                        $scope.$emit("notification:success", "Company profile successfully updated");
+                        $scope.company = company;
+                    }).except( function(x) {
+                            void(x);
+                            $scope.$emit("notification:fail", "Company logo change was unsuccessful, please try again.");
+                        });
+                }
+                else {
+                    $scope.company = company;
+                    $scope.$emit("notification:success", "Company profile successfully updated");
+                }
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "There was an error updating your company profile.");
+                });
+        };
+
+        // Settings Change modal
+
+        $scope.settingModalOpen = function () {
+            $scope.settingModal = true;
+            $scope.editcompany = angular.copy($scope.company);
+        };
+
+        $scope.settingModalClose = function () {
+            $scope.settingModal = false;
+        };
+
+        $scope.setCurrency = function(currency) {
+            $scope.editcompany.longcurrency = currency;
+            $scope.editcompany.currency = currency.match(/\(...\)/)[0].substring(1,4);
+        };
+
+        $scope.setDateFormat = function(dateformat) {
+            $scope.editcompany.dateformat = dateformat;
+        }
+
+        $scope.saveSettings = function(company) {
+            var dateformat = company.dateformat == 'MM/DD/YYYY' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+            SWBrijj.proc("account.company_settings_update", company.currency, dateformat).then(function (x) {
+                void(x);
+                $scope.company.longcurrency = company.longcurrency;
+                $scope.company.currency = company.currency;
+                $scope.company.dateformat = company.dateformat;
+            });
         };
     }]);
 

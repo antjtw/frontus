@@ -500,7 +500,6 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
 .rightTitle > input, .rightTitle > span:last-child {
     width:140px;
     height: 30px;
-    border: 0;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;

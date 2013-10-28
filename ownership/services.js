@@ -447,6 +447,14 @@ ownership.service('calculate', function () {
         return amount;
     };
 
+    var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
+    this.formatMoneyAmount = function (amount, settings) {
+        var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+        if (amount) {
+            return symbol + amount;
+        }
+    };
+
     this.debtinterest = function(convertTran) {
         if (convertTran.date && convertTran.tran.date && convertTran.tran.interestrate && convertTran.tran.interestratefreq && convertTran.tran.amount) {
             var x =1;

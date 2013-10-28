@@ -52,7 +52,7 @@
               <p>Terms from the ownership table</p>
           </div>
           <tabset class="trantabs">
-              <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:'shortDate'}}" active="tran.active">
+              <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                   <div class="capGuide global" style="overflow: auto">
                       <h2>Information</h2>
@@ -63,7 +63,7 @@
 
                       <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                      <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:'shortDate'"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+                      <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
 
                       <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
@@ -81,7 +81,7 @@
                               <td>Shares</td>
                           </tr>
                           <tr ng-repeat="act in tran.activeAct">
-                              <td class="rightTitle">{{act.date | date:'shortDate'}}</td>
+                              <td class="rightTitle">{{act.date | date:settings.shortdate}}</td>
                               <td class="rightTitle">{{act.action}}</td>
                               <td class="rightTitle">{{formatAmount(act.unit)}}</td>
                           </tr>
