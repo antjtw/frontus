@@ -280,6 +280,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.showPageBar = true;
         $scope.isAnnotable = true;
 
+        $scope.$emit('docViewerReady');
+
         if ($routeParams.page) {
             $scope.currentPage = parseInt($routeParams.page, 10);
         } else if (!$scope.currentPage) {

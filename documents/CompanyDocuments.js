@@ -597,6 +597,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             }, 100);
         });
 
+        $scope.$on('docViewerReady', function(event) {
+            if ($scope.docId) {$route.reload();}
+        });
+
         $scope.docKey = parseInt($routeParams.doc, 10);
         $scope.urlInves = $routeParams.investor;
         $scope.invq = false;
