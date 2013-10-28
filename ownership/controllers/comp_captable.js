@@ -279,6 +279,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
+
+                $scope.finishedsorting = true;
                 if ($scope.radioModel == "Edit") {
                     setTimeout(function() {
                         introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();
@@ -2155,17 +2157,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
-        return $scope.formatDollarAmount(calculate.pricePerShare($scope.issues));
+        return $scope.formatDollarAmount(calculate.pricePerShare($scope.issues, $scope.finishedsorting));
     };
 
     // Last issue date for the sidebar In Brief section
     $scope.lastIssue = function() {
-        return calculate.lastIssue($scope.issues);
+        return calculate.lastIssue($scope.issues, $scope.finishedsorting);
     };
 
     // Last issue date for the sidebar In Brief section
     $scope.lastPostMoney = function() {
-        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
+        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues, $scope.finishedsorting));
     };
 
     window.onbeforeunload = function() {
