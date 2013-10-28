@@ -304,6 +304,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.loadAnnotations();
             });
        };
+
+        $scope.pageImageUrl = function() {
+            if ($scope.pageQueryString && $scope.currentPage) {
+                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.currentPage;
+            } else {
+                return '';
+            }
+        };
         
         $scope.setAnnotable = function() {
                 $scope.isAnnotable = $scope.annotable();
