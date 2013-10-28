@@ -166,8 +166,19 @@
     height: 12px;
     margin-bottom: 1px;
     line-height: 12px;
-    padding-right: 4px;
-    padding-left: 0px;
+    padding: 4px 0 4px 0;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    border: 1px solid #E3E3E3;
+    margin-right: 3px;
+    width: 30px;
+    height: 22px;
+    margin-top: -7px;
+    text-align: center;
+}
+
+.page-jumper:focus {
+    background-color: #FFFFFF;
 }
 
 .docViewerTitle {

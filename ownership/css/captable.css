@@ -581,6 +581,10 @@ p.belowTitle {
     overflow: auto;
 }
 
+.capGuide.conversion-activity > ul > li {
+    overflow: auto;
+}
+
 .capGuide.conversion-activity > ul > li > span {
     color: #1E2D3D;
 }
@@ -591,8 +595,8 @@ p.belowTitle {
 }
 
 .capGuide.conversion-activity > ul > li > span {
-    float: right;
     width: 250px;
+    display: inline-block;
 }
 
 input.content, textarea.content {
@@ -1069,6 +1073,15 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .transferModal {
     margin-left: -360px;
     width:720px;
+}
+
+.transferModal input.transfer-shares-input {
+    background-color: #F1F1F1;
+    padding: 5px 0 5px 6px;
+}
+
+.transferModal input.transfer-shares-input:focus {
+    background-color: #F1F1F1;
 }
 
 .transferModal > div.modalText > div.transfer-date-field {

@@ -428,11 +428,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
  
         $scope.docStatusRatio = function(doc) {
-            var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) || 0;
+            var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
             // This ensure documents with no versions appear before completed documents.
-            // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed.
+            // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
+            if (doc.versions.length > 0 && initRatio == 0) {
+                initRatio = (1 / doc.versions.length)
+            }
+            if (initRatio == 2) {
+                initRatio += (doc.versions.length)
+            }
             if (initRatio === Infinity) {initRatio = 0;}
-            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+            return initRatio;
         };
 
         $scope.versionsSigned = function(doc) {

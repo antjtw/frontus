@@ -160,6 +160,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 tran.convert = [];
                                 angular.forEach(convert, function(con) {
                                     if (con.tranto == tran.tran_id) {
+                                        var offset = con.date.getTimezoneOffset();
+                                        con.date = con.date.addMinutes(offset);
                                         if (con.method == "Split") {
                                             con.split = new Fraction(con.split);
                                         }
@@ -168,6 +170,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 });
 
                                 angular.forEach(transfer, function(transf) {
+                                    var offset = transf.date.getTimezoneOffset();
+                                    transf.date = transf.date.addMinutes(offset);
                                     if (transf.tranto == tran.tran_id) {
                                         var final = angular.copy(transf);
                                         final.direction = "To";

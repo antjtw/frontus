@@ -203,6 +203,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             tran.convert = [];
                             angular.forEach(convert, function(con) {
                                 if (con.tranto == tran.tran_id) {
+                                    var offset = con.date.getTimezoneOffset();
+                                    con.date = con.date.addMinutes(offset);
                                     if (con.method == "Split") {
                                         con.split = new Fraction(con.split);
                                     }
@@ -211,6 +213,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             });
 
                             angular.forEach(transfer, function(transf) {
+                                var offset = transf.date.getTimezoneOffset();
+                                transf.date = transf.date.addMinutes(offset);
                                 if (transf.tranto == tran.tran_id) {
                                     var final = angular.copy(transf);
                                     final.direction = "To";
@@ -291,6 +295,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
 
+
+    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
+    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 19) + "px"}
+    });
+
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
             if (picked == row) {
@@ -364,7 +374,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
         if ($scope.activeTran.length < 1) {
             var anewTran = {};
-            anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined'};
+            anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue == currentcolumn) {
                     anewTran = $scope.tranInherit(anewTran, issue);
@@ -700,7 +710,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
         return list
-    }
+    };
+
+    $scope.showPari = function(list) {
+        return (list.length > 0)
+    };
 
     $scope.toggleCommon = function(issue) {
         issue.common = issue.common && issue.type == 'Equity' ? false : true;
@@ -788,7 +802,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if ($scope.activeTran[0] && $scope.activeTran[0].go) {
             var inIssue = $scope.activeTran[0].issue
             var newTran = {};
-            newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined"};
+            newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined", "convert": []};
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue == inIssue) {
                     newTran = $scope.tranInherit(newTran, issue);
@@ -1322,6 +1336,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = '1';
         $scope.convertTransOptions = trans;
         $scope.convertModal = true;
+
+        $scope.$watch('convertTran.ppshare', function(newval, oldval) {
+            if (isNaN(newval) && !null) {
+                $scope.convertTran.ppshare = oldval;
+            }
+        }, true);
     };
 
     $scope.convertSharesClose = function() {
@@ -1332,10 +1352,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = number;
         if (number == '2') {
             $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            console.log(angular.copy($scope.convertTran.newtran.amount));
             $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
             $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
-            console.log($scope.convertTran.newtran.amount);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         }
     };
@@ -1484,7 +1502,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 });
             });
-        });
+            $scope.$emit("notification:success", "Conversion Successful");
+        }).except(function(err) {
+                $scope.$emit("notification:fail", "Conversion Failed");
+            });
     };
 
     // Captable Split Modal
@@ -1493,6 +1514,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.splitIssue = angular.copy(issue);
         $scope.splitIssue.ratioa = 1;
         $scope.splitIssue.ratiob = 1;
+        $scope.splitIssue.date = new Date.today();
         $scope.splitModal = true;
     };
 
@@ -1561,7 +1583,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                      if (tran.issue == issue.issue) {
                          tran.units = tran.units / ratio;
                          tran.ppshare = tran.ppshare * ratio;
-                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id});
+                         var fraction = new Fraction(ratio)
+                         console.log(ratio);
+                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id, "split" : fraction});
 
                      }
                  });
@@ -1628,11 +1652,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         }
                     });
                 });
-            });
+                $scope.$emit("notification:success", "Split Successful");
+            }).except(function(err) {
+                    $scope.$emit("notification:fail", "Split Failed");
+                });
         }
     };
 
-    // Captable Split Modal
+    // Captable Transfer Modal
 
     $scope.transferSharesUp = function(activetran) {
         $scope.transferModal = true;
@@ -1759,7 +1786,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         });
                     });
-                });
+                    $scope.$emit("notification:success", "Transfer Successful");
+                }).except(function(err) {
+                        $scope.$emit("notification:fail", "Transfer failed");
+                    });
             }
         });
     };
@@ -1891,10 +1921,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         var inIssue = transactions[0].issue;
         if (!picked) {
             if (type == "u") {
-                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": number, "paid": null, "unitskey": number, "paidkey": null, "key": undefined};
+                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": number, "paid": null, "unitskey": number, "paidkey": null, "key": undefined, "convert": []};
             }
             else {
-                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": number, "unitskey": null, "paidkey": number, "key": undefined};
+                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": number, "unitskey": null, "paidkey": number, "key": undefined, "convert": []};
             }
             angular.forEach($scope.issues, function (issue) {
                 if (issue.issue == inIssue) {

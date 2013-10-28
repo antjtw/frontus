@@ -341,15 +341,36 @@
         <div class="convert-summary three">
             <span>Summary</span>
             <ul>
-                <li><span>{{formatAmount(totalinissue(splitIssue))}}</span><span>Pre-split shares</span></li>
-                <li><span>{{formatAmount(splitvalue(splitIssue))}}</span><span>Post-split shares</span></li>
-                <li><span>{{formatDollarAmount(splitppshare(splitIssue))}}</span><span>new price per share</span></li>
+                <li>
+                    <span>
+                        <span ng-show="totalinissue(splitIssue)">{{formatAmount(totalinissue(splitIssue))}}</span>
+                        <span ng-hide="totalinissue(splitIssue)">No Shares</span>
+                    </span>
+                    <span>Pre-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitvalue(splitIssue)">{{formatAmount(splitvalue(splitIssue))}}</span>
+                        <span ng-hide="splitvalue(splitIssue)">Invalid Ratio</span>
+                    </span>
+                    <span>Post-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitppshare(splitIssue)">{{formatDollarAmount(splitppshare(splitIssue))}}</span>
+                        <span ng-hide="splitppshare(splitIssue)">
+                            <span ng-show="splitvalue(splitIssue)">Share Price Not Set</span>
+                            <span ng-hide="splitvalue(splitIssue)">Invalid Ratio</span>
+                        </span>
+                    </span>
+                    <span>new price per share</span>
+                </li>
             </ul>
         </div>
     </div>
     <div class="modal-footer">
         <div class="pull-right standard-button">
-            <button class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
+            <button ng-disabled="!splitvalue(splitIssue) || splitvalue(splitIssue) == 'Infinity'" class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
         </div>
         <div class="pull-left standard-button small-standard-button gray">
             <button class="btn" ng-click="splitSharesClose();">Cancel</button>
@@ -388,7 +409,7 @@
                 <tr ng-repeat="tran in transfer.trans">
                     <td>{{tran.date | date:'shortDate'}}</td>
                     <td>{{formatAmount(tran.units)}}</td>
-                    <td><input type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
+                    <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
                     <td>
                         <ul class="dropdown-list">
                             <li class="dropdown standard">
@@ -626,7 +647,7 @@
         </div>
     </div>
 
-        <div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+        <div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
             <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
             </button>
             <div class="row-fluid">
@@ -767,7 +788,7 @@
                                 </ul>
                             </div>
 
-                            <span class="paripassu-list">
+                            <span ng-show="showPari(allowKeys)" class="paripassu-list">
                                 <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
                                     <ul class="dropdown-list">
                                         <li class="dropdown standard">
@@ -1137,7 +1158,7 @@
                             <div class="capGuide cap-overflow global">
                                 <p class="belowTitle"><span ng-bind="activeIssue.date  | date:'shortDate'"></span><span>DATE</span></p>
 
-                                <p class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
+                                <p ng-show="activeIssue.type" class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
                             </div>
                         <!-- Equity Tab -->
                         <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Equity');">
@@ -1308,7 +1329,9 @@
                                 <p><span class="captips" tooltip-placement="top" tooltip="This represents the total outstanding shares if all debt is converted & options/grants are exercised">What does dilution mean?</span></p>
                             </div>
                             <br>
-                            <a ng-hide="hideTour" class="button lightBlueButton" href="javascript:void(0);" onclick="javascript:introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();">Take a Tour</a>
+                            <div class="standard-button blue">
+                                <button ng-hide="hideTour" class="btn" href="javascript:void(0);" onclick="javascript:introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();">Take a Tour</button>
+                            </div>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">
