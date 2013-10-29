@@ -1081,6 +1081,7 @@ form.inputs {
 .info-box > .head-box > h2 {
     padding: 0 0 0 0;
     margin: 0 0 0 20px;
+    display: inline-block;
 }
 
 .info-box > .body-box {

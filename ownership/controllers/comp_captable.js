@@ -37,12 +37,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
 
-    SWBrijj.tblm('account.my_company_settings').then(function (x) {
-        $scope.settings = x[0];
-        $scope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
-        $scope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
-    });
-
 
     // Empty variables for issues
     $scope.issuekeys = [];

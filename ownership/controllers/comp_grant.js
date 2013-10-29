@@ -31,12 +31,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
     });
 
-    SWBrijj.tblm('account.my_company_settings').then(function (x) {
-        $scope.settings = x[0];
-        $scope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
-        $scope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
-    });
-
     // Initialisation. Get the transactions and the grants
     SWBrijj.tblm('ownership.company_options').then(function (data) {
 

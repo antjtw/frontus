@@ -18,8 +18,10 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
     function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState) {
 
         $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-        $scope.currencies = ['United States Dollars (USD)', 'Great British Pound (GBP)', 'Euro (EUR)'];
+        $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
         $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
+        $scope.flipped1 = false;
+        $scope.flipped2 = false;
 
         if (navState.role == 'investor') {
             $location.path('/investor');
@@ -55,15 +57,34 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         };
 
         $scope.activity = [];
-        SWBrijj.tblm('global.get_company_activity').then(function(data) {
-            $scope.activity = data;
-            if ($scope.activity.length == 0) {
-                $scope.noActivity = true;
-            }
+        SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+            var originalfeed = feed;
+            //Generate the groups for the activity feed
+            $scope.eventGroups = [];
+            var uniqueGroups = [];
+            angular.forEach(originalfeed, function(event) {
+                var timegroup = moment(event.time).fromNow();
+                if (uniqueGroups.indexOf(timegroup) > -1) {
+                    $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
+                }
+                else {
+                    $scope.eventGroups[$scope.eventGroups.length] = [];
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                    uniqueGroups.push(timegroup);
+                }
+            });
         });
 
         $scope.activityOrder = function(card) {
             return -card.time;
+        };
+
+        // Flipping tiles functionality
+
+        $scope.flipTile = function(x) {
+            $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
         };
 
 
@@ -263,7 +284,7 @@ angular.module('HomeApp').filter('description', function() {
             if (activity == "sent") return "";
             else if (activity == "viewed") return document + " viewed by "+person;
             else if (activity == "reminder") return "Reminded "+person + " about " +document;
-            else if (activity == "edited") return "Edited by "+person;
+            else if (activity == "edited") return document + " edited by "+person;
             else if (activity == "signed") return document + " signed by "+person;
             else if (activity == "uploaded") return document + " uploaded by "+person;
             else if (activity == "received") return document + " sent to "+person;
@@ -312,3 +333,5 @@ angular.module('HomeApp').filter('investordescription', function() {
         }
     }
 });
+
+// Filters
