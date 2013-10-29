@@ -598,7 +598,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.$on('docViewerReady', function(event) {
-            if ($scope.docId) {$route.reload();}
+            if ($scope.docId) $scope.getData();//{$route.reload();}
         });
 
         $scope.docKey = parseInt($routeParams.doc, 10);
@@ -620,20 +620,24 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.library = $scope.urlInves ? "document.my_counterparty_library" : "document.my_company_library";
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
 
-        SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
-            if ($scope.counterparty) {
-                for (var i = 0; i < data.length; i++) {
-                    var doc = data[i];
-                    if (doc.investor == $scope.urlInves) {
-                        $scope.version = doc;
-                        $scope.getVersion(doc);
-                        return;
+        $scope.getData = function() {
+            SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+                if ($scope.counterparty) {
+                    for (var i = 0; i < data.length; i++) {
+                        var doc = data[i];
+                        if (doc.investor == $scope.urlInves) {
+                            $scope.version = doc;
+                            $scope.getVersion(doc);
+                            return;
+                        }
                     }
+                } else {
+                    $scope.getOriginal();
                 }
-            } else {
-                $scope.getOriginal();
-            }
-        });
+            });
+        };
+
+        $scope.getData();
         
         $scope.getVersion = function(doc) {
             $scope.invq = false;
@@ -1274,6 +1278,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
         });
+
         $scope.$on('event:brijjError', function(event, msg) {
             $rootScope.errorMessage = msg;
         });
@@ -1283,6 +1288,10 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $timeout(function() {
                 $route.reload();
             }, 100);
+        });
+        
+        $scope.$on('docViewerReady', function(event) {
+            if ($scope.docId) $scope.getData();
         });
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
@@ -1315,9 +1324,10 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 $location.path("/investor-list?");
             });
         };
+        
         $scope.getData();
 
-        $scope.$on('initview', function(event) {$scope.getData();});
+        //$scope.$on('initview', function(event) {$scope.getData();});
         
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
@@ -1368,6 +1378,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 $scope.confirmModalClose();
             });
         };
+
         $scope.unSign = function(cd) {
             SWBrijj.procm('document.unsign', cd.doc_id).then(function(data) {
                 void(data);

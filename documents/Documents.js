@@ -260,6 +260,16 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        
+        // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
+        refreshDocImage = function() {
+            var docpanel = document.querySelector(".docPanel");
+            if (docpanel) {
+                var imgurl;
+                imgurl = docpanel.style.backgroundImage;
+                docpanel.style.backgroundImage = imgurl;
+            }
+        };
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
             if (!docId) return;
@@ -814,16 +824,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
-
-        // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
-        refreshDocImage = function() {
-            var docpanel = document.querySelector(".docPanel");
-            if (docpanel) {
-                var imgurl;
-                imgurl = docpanel.style.backgroundImage;
-                docpanel.style.backgroundImage = imgurl;
-            }
-        };
 
         $scope.reqDocStatus = function(doc_id) {
             if (doc_id) {$scope.$emit('reqVersionStatus', doc_id);}
