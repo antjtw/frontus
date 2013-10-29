@@ -23,7 +23,7 @@ function getCanvasOffset(ev) {
 
 function getNoteBounds(nx) {
     // [LEFT, TOP, WIDTH, HEIGHT]
-    var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top') - 161, 0, 0];
+    var bds = [getIntProperty(nx, 'left'), Math.max(getIntProperty(nx, 'top'), 161), 0, 0];
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
     // this could be set as a static value during other pad calculations
     var ntyp = nx.notetype;
