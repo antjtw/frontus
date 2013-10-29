@@ -774,6 +774,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document signature rejected.");
                 void(data);
+                $scope.$broadcast('rejcetSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
                 $route.reload();

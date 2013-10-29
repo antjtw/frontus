@@ -914,7 +914,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return JSON.stringify(noteData);
         };
 
-        $scope.saveNoteData = function() {
+        $scope.saveNoteData = function(clicked) {
             var nd = $scope.getNoteData();
             if ($scope.lib === undefined) return;
             // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
@@ -931,10 +931,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
-                $scope.$emit("notification:success", "Saved Annotations");
+                if (clicked) $scope.$emit("notification:success", "Saved Annotations");
                 refreshDocImage();
             });
         };
+
     }
 ]);
 

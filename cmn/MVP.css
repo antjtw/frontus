@@ -635,7 +635,7 @@ h2 {
     position: fixed;
     width: 100%;
     text-align: center;
-    z-index: 1000;
+    z-index: 1050;
     color: rgb(255, 255, 255);
     padding-top:55px;
     font-size: 24px;
