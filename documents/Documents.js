@@ -272,7 +272,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
-            if (!docId) return;
+            if (!docId || $scope.annotated) return;
             $scope.docId = docId;
             $scope.invq = invq;
             $scope.library = library;
@@ -491,6 +491,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             $scope.notes = [];
         };
+
+        $scope.$on('rejectSignature', function(event) {
+            $scope.removeAllNotes();
+        });
 
         // Investor can annotate after a document has been shared with the investor and before the investor has signed.
         investorCanAnnotate = function(investorQuery, signatureDate, signatureDeadline) {
