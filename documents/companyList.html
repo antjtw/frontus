@@ -172,7 +172,7 @@
 </div>
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share "{{docToShare.docname}}"
+        <span>Share "{{docToShare.docname}}"</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
@@ -200,12 +200,9 @@
         </ul>
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
-            </button>
-        </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
+        <div class="standard-button red"><button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button</div>
     </div>
 </div>
 <div modal="updateTitleModal" close="updateTitleClose()" options="opts" class="updateTitleModal">
