@@ -12,29 +12,53 @@
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
                 </div>
                 <div class="body-box">
-                    <div ng-show="true">
+                    <div ng-show="false">
                         <div class="onboarding-row row-fluid">
                             <div>
-                                <img src='/img/onboardingicons/doc-upload.png'>
+                                <img src='/img/onboardingicons/dayzero/doc-upload.png'>
+                                <h2>Upload and Share</h2>
                             </div>
                             <span data-icon="&#xe004;" aria-hidden="true"></span>
                             <div>
-                                <img src='/img/onboardingicons/doc-upload.png'>
+                                <img src='/img/onboardingicons/dayzero/doc-sign.png'>
+                                <h2>Request Signature</h2>
                             </div>
                             <span data-icon="&#xe004;" aria-hidden="true"></span>
                             <div>
-                                <img src='/img/onboardingicons/doc-upload.png'>
+                                <img src='/img/onboardingicons/dayzero/doc-audit.png'>
+                                <h2>Review Audit Trail</h2>
                             </div>
                         </div>
                         <div class="row-fluid">
-                            <span>Want more information? <span>Learn more</span></span>
+                            <span>Want more information? <span class="blue-link" ng-click="flipTile(1);">Learn more</span></span>
                             <div class="pull-right standard-button green">
                                 <button class="btn" ng-click="">Upload Documents</button>
                             </div>
                         </div>
                     </div>
-                    <div ng-show="false">
-
+                    <div ng-show="true">
+                        <div class="detail-row row-fluid">
+                            <div class="span6">
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-upload.png'>
+                                    <h2><span>{{docsummary.num}}</span> Documents</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-sign.png'>
+                                    <h2><span>{{docsummary.sig}}</span> Signatures Pending</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-audit.png'>
+                                    <h2><span>{{docsummary.counter}}</span> Awaiting Review</h2>
+                                </div>
+                            </div>
+                            <div class="span6 no-graph">
+                                <div class="standard-button green">
+                                    <button class="btn" ng-click="gotopage('/documents/company-list')">View Documents</button>
+                                </div>
+                                <span class="blue-link" ng-click="flipTile(1);">Learn More about Documents</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,17 +69,14 @@
                 </div>
                 <div class="body-box">
                     <ul class="q-and-a">
-                        <li>What percent of the company do my shareholders own?</li>
-                        <li>Just enter names, amounts, and terms. Leave the math to us.</li>
+                        <li>Are e-signatures on Sharewave legally binding?</li>
+                        <li>Yes, though currently in the United States only. We append an audit trail with IP Address and activity to each document, which is court admissible.</li>
 
-                        <li>How much of my option pool have I given to my employees?</li>
-                        <li>You enter the total shares authorized, and we tell you what's left unissued.</li>
+                        <li>What document types can I upload?</li>
+                        <li>Right now we only take PDF documents, though we'll soon accept a wider range.</li>
 
-                        <li>Can I show my employees the vesting progress on their stock options?</li>
-                        <li>Yes, simply enter their vesting schedule and share a personal view of the cap table with them.</li>
-
-                        <li>If I share my cap table, what can the recipient see?</li>
-                        <li>Shareholders will only see their personal holdings by default, though you can grant them an unlimited view of the cap table via their profile.</li>
+                        <li>How do I know if someone has viewed a document?</li>
+                        <li>When viewing the document, select "Status" from the navigation to view an audit trial by recipient.</li>
                     </ul>
                 </div>
             </div>
@@ -111,7 +132,54 @@
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
                 </div>
                 <div class="body-box">
-                    Text
+                    <div ng-show="false">
+                        <div class="onboarding-row row-fluid">
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-investors.png'>
+                                <h2>Add Shareholders</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-invest.png'>
+                                <h2>Add Investments</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-share.png'>
+                                <h2>Share Ownership</h2>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <span>New to Equity? <span class="blue-link" ng-click="flipTile(2);">Learn more</span></span>
+                            <div class="pull-right standard-button green">
+                                <button class="btn" ng-click="gotopage('/ownership/company-captable')">Start Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="true">
+                        <div class="detail-row row-fluid">
+                            <div class="span6">
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-invest.png'>
+                                    <h2><span>{{formatDollarAmount(ownersummary.invested)}}</span> Invested</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-investors.png'>
+                                    <h2><span>{{ownersummary.peoplenum}}</span> Shareholders</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-share.png'>
+                                    <h2><span>{{ownersummary.shares}}</span> Invited</h2>
+                                </div>
+                            </div>
+                            <div class="span6 no-graph">
+                                <div class="standard-button green">
+                                    <button class="btn" ng-click="gotopage('/ownership/company-captable')">View Ownership</button>
+                                </div>
+                                <span class="blue-link" ng-click="flipTile(2);">Learn More about Ownership</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="back info-box">
@@ -121,14 +189,17 @@
                 </div>
                 <div class="body-box">
                     <ul class="q-and-a">
-                        <li>Are e-signatures on Sharewave legally binding?</li>
-                        <li>Yes, though currently in the United States only. We append an audit trail with IP Address and activity to each document, which is court admissible.</li>
+                        <li>What percent of the company do my shareholders own?</li>
+                        <li>Just enter names, amounts, and terms. Leave the math to us.</li>
 
-                        <li>What document types can I upload?</li>
-                        <li>Right now we only take PDF documents, though we'll soon accept a wider range.</li>
+                        <li>How much of my option pool have I given to my employees?</li>
+                        <li>You enter the total shares authorized, and we tell you what's left unissued.</li>
 
-                        <li>How do I know if someone has viewed a document?</li>
-                        <li>When viewing the document, select "Status" from the navigation to view an audit trial by recipient.</li>
+                        <li>Can I show my employees the vesting progress on their stock options?</li>
+                        <li>Yes, simply enter their vesting schedule and share a personal view of the cap table with them.</li>
+
+                        <li>If I share my cap table, what can the recipient see?</li>
+                        <li>Shareholders will only see their personal holdings by default, though you can grant them an unlimited view of the cap table via their profile.</li>
                     </ul>
                 </div>
             </div>
@@ -141,7 +212,7 @@
             </div>
             <div class="body-box">
                 <ul class="activity-feed2">
-                    <li ng-repeat="events in eventGroups">
+                    <li ng-repeat="events in eventGroups  | fromNowSort">
                         <span>{{events[0]}}</span>
                         <ul>
                             <li ng-repeat="event in events.slice(2)">

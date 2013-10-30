@@ -1,0 +1,331 @@
+.wrap.background-gray {
+    background-color: #E2E2E2;
+}
+
+.issuer-top-row > div {
+    height: 300px;
+}
+
+.issuer-top-row > div:last-child {
+    padding: 0 20px 0 20px;
+    background-color: #F0F0F0;
+}
+
+.issuer-top-row > div.issuer-profile {
+    padding-top: 20px;
+}
+
+.issuer-top-row > div.issuer-profile > div:first-child > div:first-child {
+    background-color: #FFFFFF;
+}
+
+.issuer-top-row > div.issuer-profile > div:first-child > div:nth-child(2) {
+    padding: 0 0 0 10px;
+}
+
+.issuer-top-row > div.issuer-profile > div:first-child > div:last-child > ul {
+    float: right;
+}
+
+.issuer-top-row > div.issuer-profile > div:first-child > div:nth-child(2) > h2 {
+    margin: 2px 0 0 0;
+}
+
+.issuer-top-row > div.issuer-profile > div:last-child > ul {
+    margin: 30px 0 0 0;
+}
+
+.issuer-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(even) {
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.issuer-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) {
+    color: #656565;
+}
+
+.issuer-bottom-row {
+    margin: 20px 0 0 0;
+}
+
+.issuer-bottom-row .info-box.all-gray {
+    background-color: #F1F1F1;
+}
+
+.info-box.all-gray .activity-feed2 > li > ul > li {
+    border: 1px solid #C6C6C6;
+}
+
+/* Flip tiles */
+
+.flip-tile {
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    perspective: 1000;
+}
+
+
+.flip-tile.reverse .flipper {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+
+.flip-tile, .front, .back {
+}
+
+.flipper {
+    -webkit-transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+
+    -moz-transition: 0.6s;
+    -moz-transform-style: preserve-3d;
+
+    transition: 0.6s;
+    transform-style: preserve-3d;
+
+    position: relative;
+}
+
+.front, .back {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.front {
+    z-index: 2;
+}
+
+.front.info-box, .back.info-box {
+    width: 100%;
+    height: 100%;
+}
+
+.info-box > div.head-box > span {
+    font-size: 18px;
+    position: absolute;
+}
+
+.front.info-box > div.head-box > span {
+    top: 5px;
+    right: 15px;
+}
+
+.back.info-box > div.head-box > span {
+    left: 5px;
+    top: 5px;
+}
+
+.back.info-box > .head-box > h2 {
+    margin: 0 0 0 30px;
+}
+
+.front.info-box > .body-box, .back.info-box > .body-box {
+    background-color: #FFFFFF;
+    margin: 0;
+    height: 268px;
+}
+
+.front.info-box > div.body-box > div > div:last-child {
+    box-sizing: border-box;
+    padding: 0 20px 0 20px;
+}
+
+.back {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+
+.body-box > ul.q-and-a {
+    padding: 15px 30px 0 30px;
+    font-size: 14px;
+}
+
+.body-box > ul.q-and-a > li:nth-child(even) {
+    margin-bottom: 20px;
+}
+
+.body-box > ul.q-and-a > li:nth-child(odd) {
+    color: #3397DA;
+}
+
+.onboarding-row > div, .onboarding-row > span {
+    float: left;
+    display: inline-block;
+    margin-top: 100px;
+}
+
+.onboarding-row > div {
+    margin: 50px 0 40px 0;
+    width: 216px;
+    text-align: center;
+}
+
+.onboarding-row > div > img {
+    width: 100px;
+    height: 100px;
+}
+
+.onboarding-row > div > h2 {
+    display: block;
+    margin: 10px 0 0 0;
+}
+
+.detail-row > div:first-child > div {
+    overflow: auto;
+    margin: 30px 0 0 30px;
+}
+
+.detail-row > div:first-child > div > img {
+    float: left;
+}
+
+.detail-row > div:first-child > div > h2 {
+    display: inline-block;
+    margin: 12px 0 0 20px;
+}
+
+.detail-row > div:first-child > div > h2 > span {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 28px;
+}
+
+.detail-row > div:last-child {
+    text-align: center;
+}
+
+.detail-row > div.no-graph {
+    margin-top: 100px;
+}
+
+/* Modal Styling */
+
+.profile-modal.modal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.profile-modal.modal > div.modalText {
+    padding: 0 20px 0 20px;
+    text-align: left;
+}
+
+.profile-modal.modal > div.modalText .input-list > span {
+    float: left;
+    margin-left: 132px;
+}
+
+.profile-modal.modal > div.modalText > div > div:first-child {
+    width: 76px;
+    height: 76px;
+    border: 1px solid #E3E3E3;
+}
+
+.profile-modal.modal > div.modalText .input-list > div {
+    margin: 0 0 10px 50px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
+    text-transform: uppercase;
+    font-size: 10px;
+    width: 80px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 5px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > input {
+    float: none;
+}
+
+.profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {
+    margin-right: 5px;
+    margin-left: -3px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div.city-state > input:last-of-type {
+    width: 30px;
+    margin: 0;
+}
+
+.profile-modal.modal > div.modalText form.image-button {
+    position: absolute;
+    top: 140px;
+    width: 76px;
+}
+
+.profile-modal.modal div.fileinputs {
+    position: relative;
+    height: 30px;
+}
+
+
+.profile-modal.modal div.profile-fakefile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    line-height: 30px;
+}
+
+.profile-modal.modal div.profile-fakefile > div {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.profile-modal.modal div.profile-fakefile > span {
+    display: inline-block;
+    width: 76px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: #F1F1F1;
+    color: #666666;
+    border-radius: 3px;
+}
+
+.profile-modal.modal input.file {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+/* Dropdown styling for selectors, will probably become part of the MVP sitewide styling in due course */
+
+.drop-selector .standard .dropdown-toggle {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E2E2;
+}
+
+.drop-selector .standard .dropdown-menu {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E2E2;
+}
+
+.drop-selector .standard .dropdown-menu > li > a:hover, .drop-selector .standard .dropdown-menu > li > span:hover {
+    background-color: #F1F1F1;
+}
+
+.wide.drop-selector .standard .dropdown-toggle {
+    width: 320px;
+}
+
+.wide.drop-selector .standard .dropdown-menu {
+    width: 320px;
+}
+
+.dropdown-toggle.dark {
+    background-color: #E2E2E2;
+}
+

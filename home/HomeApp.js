@@ -1,5 +1,5 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -14,8 +14,8 @@ app.config(function($routeProvider, $locationProvider){
         otherwise({redirectTo:'/investor'});
 });
 
-app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState',
-    function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState) {
+app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState', 'calculate',
+    function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState, calculate) {
 
         $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
         $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
@@ -29,7 +29,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         }
 
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
-            console.log(x[0]);
             $scope.company = x[0];
             angular.forEach($scope.currencies, function(c) {
                if (c.indexOf($scope.company.currency) !== -1) {
@@ -38,6 +37,11 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             });
             $scope.company.dateformat = $scope.company.dateformat == 'MM/dd/yyyy' ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
             $scope.photoURL = '/photo/user?id=company:' + x[0].company;
+
+            // Get all the data required
+            $scope.getActivityFeed();
+            $scope.getDocumentInfo();
+            $scope.getOwnershipInfo();
         });
 
         if ($routeParams.msg) {
@@ -46,36 +50,72 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             }
         }
 
-        $scope.company = navState.name;
-        SWBrijj.tblm('account.onboarding').then(function(x) {
-            $scope.onboarding = x[0].show_onboarding;
-        }).except(initFail);
-
         $scope.close = function() {
             $scope.onboarding = false;
             SWBrijj.procm('account.onboarding_update', false);
         };
 
-        $scope.activity = [];
-        SWBrijj.tblm('global.get_company_activity').then(function(feed) {
-            var originalfeed = feed;
-            //Generate the groups for the activity feed
-            $scope.eventGroups = [];
-            var uniqueGroups = [];
-            angular.forEach(originalfeed, function(event) {
-                var timegroup = moment(event.time).fromNow();
-                if (uniqueGroups.indexOf(timegroup) > -1) {
-                    $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
-                }
-                else {
-                    $scope.eventGroups[$scope.eventGroups.length] = [];
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
-                    $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                    uniqueGroups.push(timegroup);
-                }
+        $scope.getDocumentInfo = function() {
+            SWBrijj.tblm('document.my_company_library', ['doc_id']).then(function(docs) {
+                $scope.docsummary = {};
+                $scope.docsummary.num = docs.length;
+                SWBrijj.tblm("document.my_counterparty_library").then(function(sharedocs) {
+                    $scope.docsummary.sig = 0;
+                    $scope.docsummary.counter = 0;
+                    angular.forEach(sharedocs, function(doc) {
+                        if (doc.signature_status == "signature requested (awaiting investor)") {
+                            $scope.docsummary.sig += 1;
+                        }
+                        else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
+                            $scope.docsummary.counter += 1;
+                        }
+                    });
+                });
             });
-        });
+        };
+
+        $scope.getOwnershipInfo = function() {
+            $scope.ownersummary = {};
+            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
+                $scope.ownersummary.people = [];
+                $scope.ownersummary.invested = 0
+                angular.forEach(trans, function(tran) {
+                    if ($scope.ownersummary.people.indexOf(tran.investor) == -1) {
+                        $scope.ownersummary.people.push(tran.investor);
+                    }
+                    $scope.ownersummary.invested = tran.amount ? $scope.ownersummary.invested + tran.amount : $scope.ownersummary.invested;
+                });
+                $scope.ownersummary.peoplenum = $scope.ownersummary.people.length;
+            });
+            SWBrijj.tblm("ownership.clean_company_access").then(function (people) {
+                $scope.ownersummary.shares = people.length;
+            });
+        };
+
+        $scope.getActivityFeed = function() {
+            $scope.activity = [];
+            SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+                var originalfeed = feed;
+                //Generate the groups for the activity feed
+                $scope.eventGroups = [];
+                var uniqueGroups = [];
+                angular.forEach(originalfeed, function(event) {
+                    if (event.activity != "sent") {
+                        var timegroup = moment(event.time).fromNow();
+                        if (uniqueGroups.indexOf(timegroup) > -1) {
+                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
+                        }
+                        else {
+                            $scope.eventGroups[$scope.eventGroups.length] = [];
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                            uniqueGroups.push(timegroup);
+                        }
+                    }
+                });
+            });
+        };
 
         $scope.activityOrder = function(card) {
             return -card.time;
@@ -174,6 +214,21 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 $scope.company.currency = company.currency;
                 $scope.company.dateformat = company.dateformat;
             });
+        };
+
+        $scope.gotopage = function (link){
+            location.href = link;
+        };
+
+        // Service functions
+
+        $scope.formatAmount = function (amount) {
+            return calculate.funcformatAmount(amount);
+        };
+
+        $scope.formatDollarAmount = function(amount) {
+            var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+            return (output);
         };
     }]);
 
@@ -335,3 +390,17 @@ angular.module('HomeApp').filter('investordescription', function() {
 });
 
 // Filters
+
+app.filter('fromNowSort', function () {
+    return function (events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if(a[1] > b[1]) return -1;
+                if(a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+
+        return events
+    };
+});
