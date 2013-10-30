@@ -1,6 +1,6 @@
 var app = angular.module('homeDirectives', []);
 
-app.directive('d3ExpDonut', ['d3', function(d3) {
+app.directive('d3expdonut', ['d3', function(d3) {
     return {
         restrict: 'EA',
         scope: {
@@ -25,6 +25,7 @@ app.directive('d3ExpDonut', ['d3', function(d3) {
                 .sort(null)
                 .value(function(d) { return d.percent; });
 
+            console.log(iElement[0]);
             var svg = d3.select(iElement[0])
                 .attr("width", width)
                 .attr("height", height)
