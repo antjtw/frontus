@@ -39,9 +39,9 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             $scope.photoURL = '/photo/user?id=company:' + x[0].company;
 
             // Get all the data required
-            $scope.getActivityFeed();
             $scope.getDocumentInfo();
             $scope.getOwnershipInfo();
+            $scope.getActivityFeed();
         });
 
         if ($routeParams.msg) {
