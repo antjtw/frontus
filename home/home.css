@@ -180,6 +180,7 @@
 .detail-row > div:first-child > div {
     overflow: auto;
     margin: 30px 0 0 30px;
+    width: 100%;
 }
 
 .detail-row > div:first-child > div > img {
@@ -188,7 +189,7 @@
 
 .detail-row > div:first-child > div > h2 {
     display: inline-block;
-    margin: 12px 0 0 20px;
+    margin: 12px 0 0 10px;
 }
 
 .detail-row > div:first-child > div > h2 > span {
