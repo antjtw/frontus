@@ -12,7 +12,7 @@
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
                 </div>
                 <div class="body-box">
-                    <div ng-show="false">
+                    <div ng-show="docsummary.num == 0">
                         <div class="onboarding-row row-fluid">
                             <div>
                                 <img src='/img/onboardingicons/dayzero/doc-upload.png'>
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="true">
+                    <div ng-hide="docsummary.num == 0">
                         <div class="detail-row row-fluid">
                             <div class="span6">
                                 <div>
@@ -132,7 +132,7 @@
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
                 </div>
                 <div class="body-box">
-                    <div ng-show="false">
+                    <div ng-show="ownersummary.peoplenum == 0">
                         <div class="onboarding-row row-fluid">
                             <div>
                                 <img src='/img/onboardingicons/dayzero/ownership-investors.png'>
@@ -156,7 +156,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="true">
+                    <div ng-hide="ownersummary.peoplenum == 0">
                         <div class="detail-row row-fluid">
                             <div class="span6">
                                 <div>
