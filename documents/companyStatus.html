@@ -110,12 +110,12 @@
                 </div>
                 <div class="body-box">
                     <ul class="last-edited spaced-list">
-                        <li>{{lastsent | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Sent</li>
-                        <li>{{lastedit | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Last Edited</li>
                         <!--
-                        <li>{{lastdeadline | date:"MMM d, y 'at' h:mm a"}}</li>
+                        <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Deadline</li>
                         -->
                     </ul>

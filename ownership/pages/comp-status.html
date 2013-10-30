@@ -103,7 +103,7 @@
                         <td class="shareholder-column">
                             <ul>
                                 <li>{{person.name}}</li>
-                                <li>{{person.lastlogin | date:'MMMM dd, yyyy, h:mm a'}}</li>
+                                <li>{{person.lastlogin | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                             </ul>
                         </td>
                         <td>{{person.level}}</td>
@@ -133,17 +133,17 @@
                                 <tr>
                                     <td>Delivered</td>
                                     <td>
-                                        {{person.received | date:'MMMM dd, yyyy, h:mm a'}}
+                                        {{person.received | date:(settings.longdate+', yyyy, h:mm a')}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><span ng-hide="person.lastlogin">Never Logged In</span><span ng-show="person.lastlogin">Last Logged In</span></td>
-                                    <td>{{person.lastlogin | date:'MMMM dd, yyyy, h:mm a'}}</td>
+                                    <td>{{person.lastlogin | date:(settings.longdate+', yyyy, h:mm a')}}</td>
                                 </tr>
                                 <tr>
                                     <td><span ng-hide="person.viewed">Never Viewed</span><span ng-show="person.viewed">Last Viewed</span></td>
                                     <td>
-                                        {{person.viewed | date:'MMMM dd, yyyy, h:mm a'}}
+                                        {{person.viewed | date:(settings.longdate+', yyyy, h:mm a')}}
                                     </td>
                                 </tr>
                             </table>

@@ -1074,7 +1074,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             if (!date) {
                 return fallback ? fallback : "ERROR";
             } else {
-                return "" + $filter('date')(date, 'mediumDate') + "\n" + $filter('date')(date, 'shortTime');
+                return "" + $filter('date')(date, $rootScope.settings.dateformat) + "\n" + $filter('date')(date, 'shortTime');
             }
         };
 

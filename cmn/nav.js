@@ -145,6 +145,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
       SWBrijj.tblm('account.my_company_settings').then(function (x) {
           $rootScope.settings = x[0];
           $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+          $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
           $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
       });
 
