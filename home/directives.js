@@ -10,8 +10,8 @@ app.directive('d3ExpDonut', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var width = 960,
-                height = 500,
+            var width = 150,
+                height = 150,
                 radius = Math.min(width, height) / 2;
 
             var color = d3.scale.ordinal()
@@ -19,11 +19,11 @@ app.directive('d3ExpDonut', ['d3', function(d3) {
 
             var arc = d3.svg.arc()
                 .outerRadius(radius - 10)
-                .innerRadius(radius - 70);
+                .innerRadius(radius - 30);
 
             var pie = d3.layout.pie()
                 .sort(null)
-                .value(function(d) { return d.population; });
+                .value(function(d) { return d.percent; });
 
             var svg = d3.select(iElement[0])
                 .attr("width", width)
@@ -37,22 +37,25 @@ app.directive('d3ExpDonut', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                console.log(data);
-                //create the rectangles for the bar chart
-                var g = svg.selectAll(".arc")
-                    .data(pie(data))
-                    .enter().append("g")
-                    .attr("class", "arc");
+                if (data) {
+                    console.log(data);
 
-                g.append("path")
-                    .attr("d", arc)
-                    .style("fill", function(d) { return color(d.data.age); });
+                    var g = svg.selectAll(".arc")
+                        .data(pie(data))
+                        .enter().append("g")
+                        .attr("class", "arc");
 
-                g.append("text")
-                    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-                    .attr("dy", ".35em")
-                    .style("text-anchor", "middle")
-                    .text(function(d) { return d.data.age; });
+                    g.append("path")
+                        .attr("d", arc)
+                        .style("fill", function(d) { return color(d.data.percent); });
+
+                    g.append("text")
+                        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+                        .attr("dy", ".35em")
+                        .style("text-anchor", "middle")
+                        .text(function(d) { return d.data.percent; });
+                }
+
             };
         }
     };
