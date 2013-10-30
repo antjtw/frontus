@@ -10,23 +10,42 @@ app.directive('d3expdonut', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var width = 150,
-                height = 150,
+            var width = 300,
+                height = 200,
                 radius = Math.min(width, height) / 2;
 
+            var labelr = radius-25;
+
             var color = d3.scale.ordinal()
-                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+                .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
 
             var arc = d3.svg.arc()
-                .outerRadius(radius - 10)
-                .innerRadius(radius - 30);
+                .outerRadius(radius- 40)
+                .innerRadius(radius - 60);
 
             var pie = d3.layout.pie()
                 .sort(null)
                 .value(function(d) { return d.percent; });
 
+
+            // Exploding displacement
+            var displace = function(d, axis) {
+                // Calculate angle bisector
+                var ang = d.startAngle + (d.endAngle - d.startAngle)/2;
+                // Transformate to SVG space
+                ang = (ang - (Math.PI / 2) ) * -1;
+
+                if (ang > 3.14) {
+                     return 1;
+                }
+                else {
+                    return -1;
+                }
+            };
+
             console.log(iElement[0]);
             var svg = d3.select(iElement[0])
+                .append('svg')
                 .attr("width", width)
                 .attr("height", height)
                 .append("g")
@@ -48,13 +67,45 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                     g.append("path")
                         .attr("d", arc)
+                        .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); });
 
-                    g.append("text")
-                        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+
+                    g.append("svg:text")
+                        .attr("transform", function(d) {
+                            var c = arc.centroid(d),
+                                x = c[0],
+                                y = c[1],
+                            // pythagorean theorem for hypotenuse
+                                h = Math.sqrt(x*x + y*y);
+                            return "translate(" + (x/h * labelr) +  ',' +
+                                (y/h * labelr) +  ")";
+                        })
                         .attr("dy", ".35em")
-                        .style("text-anchor", "middle")
-                        .text(function(d) { return d.data.percent; });
+                        .attr("text-anchor", function(d) {
+                            // are we past the center?
+                            return (d.endAngle + d.startAngle)/2 > Math.PI ?
+                                "end" : "start";
+                        })
+                        .text(function(d, i) { return d.data.name});
+
+                    g.append("svg:text")
+                        .attr("transform", function(d) {
+                            var c = arc.centroid(d),
+                                x = c[0],
+                                y = c[1],
+                            // pythagorean theorem for hypotenuse
+                                h = Math.sqrt(x*x + y*y);
+                            return "translate(" + (x/h * labelr) +  ',' +
+                                ((y/h * labelr) + 12) +  ")";
+                        })
+                        .attr("dy", ".35em")
+                        .attr("text-anchor", function(d) {
+                            // are we past the center?
+                            return (d.endAngle + d.startAngle)/2 > Math.PI ?
+                                "end" : "start";
+                        })
+                        .text(function(d, i) { return d.data.percent.toFixed(2) + "%"});
                 }
 
             };
