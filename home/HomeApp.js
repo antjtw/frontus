@@ -238,7 +238,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.profileopts = {
             backdropFade: true,
             dialogFade:true,
-            dialogClass: 'profile-modal modal'
+            dialogClass: 'profile-modal wideModal modal'
         };
 
         $scope.setFiles = function(element) {
@@ -341,21 +341,243 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$emit("notification:success", "You have successfully changed your password.");
             }
         }
-        //$scope.company = $routeParams.company;
+        //initialisation functions called
         $scope.company = navState.name;
-        $scope.activity = [];
-        SWBrijj.tblm('global.get_investor_activity').then(function(data) {
-            $scope.activity = data;
-            if ($scope.activity.length == 0) {
-                $scope.noActivity = true;
-            }
-        }).except(function(msg) {
-                // console.log(msg.message);
-            });
+
+        SWBrijj.tblm('account.profile').then(function(x) {
+            $scope.person = x[0];
+            $scope.photoURL = '/photo/user?id=' + x[0].email;
+            $scope.person.namekey = $scope.person.name;
+            $scope.detectChanges = $scope.name + $scope.street;
+
+            $scope.getActivityFeed();
+            $scope.getDocumentInfo();
+        });
+
 
         $scope.activityOrder = function(card) {
             return -card.time;
         };
+
+        $scope.getActivityFeed = function() {
+            $scope.activity = [];
+            SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
+                var originalfeed = feed;
+                //Generate the groups for the activity feed
+                $scope.eventGroups = [];
+                var uniqueGroups = [];
+                angular.forEach(originalfeed, function(event) {
+                    if (event.activity != "sent") {
+                        var timegroup = moment(event.time).fromNow();
+                        if (uniqueGroups.indexOf(timegroup) > -1) {
+                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
+                        }
+                        else {
+                            $scope.eventGroups[$scope.eventGroups.length] = [];
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                            uniqueGroups.push(timegroup);
+                        }
+                    }
+                });
+            });
+        };
+
+        $scope.getDocumentInfo = function() {
+            SWBrijj.tblm("document.this_investor_library").then(function(docs) {
+                $scope.docs = docs;
+                $scope.docsummary = {};
+                $scope.docsummary.num = docs.length;
+                $scope.docsummary.sig = 0;
+                SWBrijj.tblm("document.investor_activity").then(function(active) {
+                    angular.forEach($scope.docs, function(doc) {
+                        var docActivities = [];
+                        angular.forEach(active, function(act) {
+                            if (doc.doc_id == act.doc_id) {
+                                if (doc.last_event) {
+                                    doc.last_event = $scope.compareEvents(doc.last_event, act) ? doc.last_event : act;
+                                }
+                                else {
+                                    doc.last_event = act;
+                                }
+                                if (act.person === doc.investor && act.activity==="viewed") {
+                                    docActivities.push(act);
+                                }
+                            }
+                        });
+                        doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_time : null;
+                        $scope.setDocStatusRank(doc);
+                        if (!((doc.signature_deadline && doc.when_confirmed) || (!doc.signature_deadline && doc.last_viewed))) {
+                            $scope.docsummary.sig += 1;
+                        }
+                    });
+                });
+            });
+        };
+
+        $scope.compareEvents = function(a, b) {
+            var initRank = $scope.eventRank(b) - $scope.eventRank(a);
+            return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+        };
+
+        $scope.eventRank = function (ev) {
+            switch (ev.activity) {
+                case "countersigned":
+                    return 6;
+                // signed or rejected can come either before or after each other depending on chronological ordering.
+                // ambiguity is resolve in $scope.compareEvents
+                case "signed":
+                case "rejected":
+                    return 4;
+                case "viewed":
+                    return 3;
+                case "received":
+                    return 2;
+                case "uploaded":
+                    return 1;
+                default:
+                    return 0;
+            }
+        };
+
+        $scope.setDocStatusRank = function(doc) {
+            doc.statusRank = $scope.eventRank(doc.last_event);
+        };
+
+        $scope.docIsComplete = function(doc) {
+            return (doc.signature_deadline && doc.when_confirmed) ||
+                (!doc.signature_deadline && doc.last_viewed);
+        };
+
+        $scope.gotopage = function (link){
+            console.log(link);
+            location.href = link;
+        };
+
+        // Flipping tiles functionality
+
+        $scope.flipTile = function(x) {
+            $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+        };
+
+        // Password modal
+
+        $scope.passwordModalOpen = function () {
+            $scope.passwordModal = true;
+        };
+
+        $scope.passwordModalClose = function () {
+            $scope.closeMsg = 'I was closed at: ' + new Date();
+            $scope.passwordModal = false;
+            $scope.currentPassword="";
+            $scope.newPassword="";
+            $scope.passwordConfirm="";
+        };
+
+        // Password code
+        $scope.currentPassword="";
+        $scope.newPassword="";
+        $scope.passwordConfirm="";
+
+        $scope.validPasswordNot = function() {
+            return !($scope.currentPassword && $scope.passwordMatches());
+            // return !($scope.currentPassword && !($scope.passwordMatchesNot() || $scope.regexPassword())); };
+        };
+
+        $scope.regexPassword = function() {
+            var newP = $scope.newPassword;
+            if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}/)) return "";
+            else if (newP.match(/(?=.*?[a-z])(?=.*?[A-Z]).{8,}/)) return "Missing a digit";
+            else if (newP.match(/(?=.*?[a-z])(?=.*?[0-9]).{8,}/)) return "Missing an uppercase letter";
+            else if (newP.match(/(?=.*?[0-9])(?=.*?[A-Z]).{8,}/)) return "Missing a lowercase letter";
+            else if (newP.length < 8) return "Must be at least eight characters";
+            else return "Must contain at least one lowercase letter, one uppercase letter, and one digit";
+        };
+
+        $scope.passwordMatches = function() {
+            return $scope.passwordConfirm && $scope.newPassword && $scope.passwordConfirm == $scope.newPassword ;
+        };
+
+        $scope.changePassword = function() {
+            SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
+                if (x[1][0]) {
+                    $scope.$emit("notification:success", "Your password has been updated successfully.");
+                    // console.log("changed successfully");
+                } else {
+                    $scope.$emit("notification:fail", "There was an error updating your password.");
+                    // console.log("Oops.  Change failed");
+                    $scope.currentPassword = "";
+                    $scope.newPassword = "";
+                    $scope.passwordConfirm = "";
+                }
+            }).except(function(x) {alert("Oops.  Change failed: "+x); });
+        };
+
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade:true,
+            dialogClass: 'wideModal modal'
+        };
+
+        // Profile Change modal
+
+        $scope.profileModalOpen = function () {
+            $scope.profileModal = true;
+            $scope.editperson = angular.copy($scope.person);
+        };
+
+        $scope.profileModalClose = function () {
+            $scope.profileModal = false;
+        };
+
+        $scope.profileopts = {
+            backdropFade: true,
+            dialogFade:true,
+            dialogClass: 'profile-modal wideModal modal'
+        };
+
+        $scope.setFiles = function(element) {
+            $scope.files = [];
+            for (var i = 0; i < element.files.length; i++) {
+                $scope.files.push(element.files[i]);
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL($scope.files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    document.getElementById("updateImage").src = oFREvent.target.result;
+                };
+                $scope.$apply();
+            }
+        };
+
+        $scope.profileUpdate = function (person) {
+            console.log(person);
+            SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
+                void(x);
+                var fd = new FormData();
+                if ($scope.files) {
+                    for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
+                    SWBrijj.uploadImage(fd).then(function(x) {
+                        $scope.$emit("notification:success", "Profile successfully updated");
+                        void(x);
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.email;
+                        $scope.person = person;
+                    }).except( function(x) {
+                            void(x);
+                            $scope.$emit("notification:fail", "Profile photo change was unsuccessful, please try again.");
+                        });
+                }
+                else {
+                    $scope.person = person;
+                    $scope.$emit("notification:success", "Profile successfully updated");
+                }
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "There was an error updating your profile.");
+                });
+        };
+
     }]);
 
 app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {

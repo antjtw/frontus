@@ -2,54 +2,59 @@
     background-color: #E2E2E2;
 }
 
-.issuer-top-row > div {
+.home-top-row > div {
     height: 300px;
 }
 
-.issuer-top-row > div:last-child {
+.home-top-row > div.issuer-profile {
     padding: 0 20px 0 20px;
     background-color: #F0F0F0;
 }
 
-.issuer-top-row > div.issuer-profile {
+.home-top-row > div.issuer-profile {
     padding-top: 20px;
 }
 
-.issuer-top-row > div.issuer-profile > div:first-child > div:first-child {
+.home-top-row > div.issuer-profile > div:first-child > div:first-child {
     background-color: #FFFFFF;
 }
 
-.issuer-top-row > div.issuer-profile > div:first-child > div:nth-child(2) {
+.home-top-row > div.issuer-profile > div:first-child > div:nth-child(2) {
     padding: 0 0 0 10px;
 }
 
-.issuer-top-row > div.issuer-profile > div:first-child > div:last-child > ul {
+.home-top-row > div.issuer-profile > div:first-child > div:last-child > ul {
     float: right;
 }
 
-.issuer-top-row > div.issuer-profile > div:first-child > div:nth-child(2) > h2 {
+.home-top-row > div.issuer-profile > div:first-child > div:nth-child(2) > h2 {
     margin: 2px 0 0 0;
 }
 
-.issuer-top-row > div.issuer-profile > div:last-child > ul {
+.home-top-row > div.issuer-profile > div:last-child > ul {
     margin: 30px 0 0 0;
 }
 
-.issuer-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(even) {
+.home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(even) {
     text-transform: uppercase;
     font-size: 10px;
 }
 
-.issuer-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) {
+.home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) {
     color: #656565;
 }
 
-.issuer-bottom-row {
+.home-top-row > div.issuer-profile > div:last-child > ul > li.investor-address > span:first-child {
+    display: block;
+}
+
+.home-bottom-row {
     margin: 20px 0 0 0;
 }
 
-.issuer-bottom-row .info-box.all-gray {
+.info-box.all-gray {
     background-color: #F1F1F1;
+    min-height: 300px;
 }
 
 .info-box.all-gray .activity-feed2 > li > ul > li {
@@ -134,6 +139,8 @@
 .front.info-box > div.body-box > div > div:last-child {
     box-sizing: border-box;
     padding: 0 20px 0 20px;
+    position: relative;
+    height: 268px;
 }
 
 .back {
@@ -206,9 +213,51 @@
     margin-top: 100px;
 }
 
+.view-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.body-box.mini-table {
+    box-sizing: border-box;
+    padding: 20px 20px 0 20px;
+}
+
+.body-box.mini-table > table {
+    width: 100%;
+    text-align: left;
+}
+
+.body-box.mini-table > table tr {
+    border-bottom: 1px solid #F1F1F1;
+}
+
+.body-box.mini-table > table > thead > tr > th:last-child {
+    text-align: center;
+    width: 50px;
+}
+
+.body-box.mini-table > table > tbody > tr {
+    height: 40px;
+    cursor: pointer;
+}
+
+.body-box.mini-table > table > tbody > tr:hover {
+    color: #1E2D3D;
+}
+
+.body-box.mini-table > table > tbody > tr > td:last-child{
+    text-align: center;
+}
+
+.body-box.mini-table > table > tbody > tr > td:last-child > div {
+    margin: 0 auto 0 auto;
+}
+
 /* Modal Styling */
 
-.profile-modal.modal {
+.wideModal.modal {
     width: 540px;
     margin-left: -270px;
 }
