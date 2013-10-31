@@ -348,7 +348,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.person = x[0];
             $scope.photoURL = '/photo/user?id=' + x[0].email;
             $scope.person.namekey = $scope.person.name;
-            $scope.detectChanges = $scope.name + $scope.street;
 
             $scope.getActivityFeed();
             $scope.getDocumentInfo();

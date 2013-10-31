@@ -28,20 +28,20 @@
     <div class="navbar topnav row-fluid">
       <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
         <ul class="nav pull-left nav-logo">
-          <li><a ng-href="{{navState.userid ? (navState.role=='issuer' ? '/home/company' : '/home/investor') : '/'}}"><img src="/img/logo.png"/></a></li>
+          <li><a ng-click="gotohome();"><img src="/img/logo.png"/></a></li>
         </ul>
 
         <ul class="nav pull-right nav-item">
+          <li ng-click="gotohome();" style="display: none" ng-show="navState.userid" class="nav-photo"><img ng-src="{{userURL}}"><span>{{person.name}}</span></li>
           <li style="display: none;" class="dropdown" ng-show="navState.userid">
-            <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#">PROFILE<b class="caret"></b></a>
+            <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#"><span data-icon="&#xe011;" aria-hidden="true"></span></a>
             <ul class="dropdown-menu">
-              <li><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
-              <li ng-show="navState.role=='issuer'"><a class="menuProfileText button" href="/company/profile">MY COMPANY</a></li>
+              <li ng-show="navState.role=='issuer'"><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
           <li>
           <li class="dropdown hidden-phone" ng-hide="navState.userid">
-            <a style="display: none;" class="menuProfileText" href="javascript:void(0)" ng-click="toggleLogin()" ng-show="!navState.userid">LOGIN</a>
+            <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)" ng-click="toggleLogin()" ng-show="!navState.userid">LOGIN</a>
           <li>
         </ul>
 
