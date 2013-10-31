@@ -54,6 +54,9 @@
                                     <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>
                                 </td>
                             </tr>
+                        <tr ng-click="gotopage('/documents/investor-list')" ng-show="docs.length > 5">
+                            <td colspan="2" class="blue-link">view all</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

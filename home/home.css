@@ -244,6 +244,11 @@
     cursor: pointer;
 }
 
+.body-box.mini-table > table > tbody > tr:last-child {
+    height: 25px;
+    border: none;
+}
+
 .body-box.mini-table > table > tbody > tr:hover {
     color: #1E2D3D;
 }
