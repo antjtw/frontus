@@ -38,6 +38,7 @@
 .home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(even) {
     text-transform: uppercase;
     font-size: 10px;
+    margin-bottom: 10px;
 }
 
 .home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) {
