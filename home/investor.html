@@ -91,9 +91,9 @@
                     Email
                 </li>
                 <li class="investor-address">
-                    <span>{{person.street}}</span>
-                    <span>{{person.city}}, {{person.state}}</span>
-                    <span>{{person.postalcode}}</span>
+                    <span ng-show="person.street">{{person.street}}</span>
+                    <span ng-show="person.city || person.state">{{person.city}}, {{person.state}}</span>
+                    <span ng-show="person.postalcode">{{person.postalcode}}</span>
                 </li>
                 <li>
                     Address
