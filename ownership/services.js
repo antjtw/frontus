@@ -447,6 +447,35 @@ ownership.service('calculate', function () {
         return amount;
     };
 
+    var sizes = {0:'', 1:'K', 2:'M', 3:'B'};
+    this.abrAmount = function(amount) {
+        if (amount) {
+            console.log(amount);
+            var n = amount.toString().split(".");
+            var sizefactor = Math.floor((n[0].length-1)/3);
+            console.log(sizefactor);
+            if (sizefactor == 0) {
+                amount = n;
+            }
+            else {
+                var big = String(n[0]).substring(0, n[0].length - (sizefactor*3));
+                var small = String(n[0]).substring(n[0].length - (sizefactor*3), n[0].length - (sizefactor*3) + 2);
+                if (parseInt(small) % 10 == 0) {
+                    small = small.substring(0, 1);
+                    if (parseInt(small) == 0) {
+                        small = ""
+                    }
+                }
+                small = small != "" ? "." + small : "";
+                amount = big + small + sizes[sizefactor];
+            }
+        }
+        else {
+            amount = null;
+        }
+        return amount
+    };
+
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
     this.formatMoneyAmount = function (amount, settings) {
         var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'

@@ -326,6 +326,11 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
             return (output);
         };
+
+        $scope.formatAbrAmount = function(amount) {
+            var output = calculate.formatMoneyAmount(calculate.abrAmount(amount), $scope.settings);
+            return output;
+        }
     }]);
 
 app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
