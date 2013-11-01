@@ -43,7 +43,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 }
             };
 
-            console.log(iElement[0]);
             var svg = d3.select(iElement[0])
                 .append('svg')
                 .attr("width", width)

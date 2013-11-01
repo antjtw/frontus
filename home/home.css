@@ -357,6 +357,21 @@
     margin: 0;
 }
 
+.modalText.settings > div {
+    margin-bottom: 10px;
+}
+
+.modalText.settings > div > span {
+    width: 170px;
+    text-align: right;
+    line-height: 30px;
+    display: inline-block;
+}
+
+.modalText.settings > div > ul {
+    float: right;
+}
+
 /* Dropdown styling for selectors, will probably become part of the MVP sitewide styling in due course */
 
 .drop-selector .standard .dropdown-toggle {
