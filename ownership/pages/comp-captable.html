@@ -1211,9 +1211,7 @@
 
                               <p class="belowTitle" ng-show="activeIssue.postmoney"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
 
-                              <p class="belowTitle" ng-show="activeIssue.interestrate"><span ng-bind="activeIssue.interestrate"></span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">INTEREST RATE</span></p>
-
-                              <p class="belowTitle" ng-show="activeIssue.interestratefreq"><span ng-bind="activeIssue.interestratefreq"></span><span tooltip-placement="top" tooltip="The annual rate that interest accrues on this debt">INTEREST RATE FREQUENCY</span></p>
+                              <p class="belowTitle" ng-show="activeIssue.interestrate"><span>{{activeIssue.interestrate}}% {{activeIssue.interestratefreq}}</span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">INTEREST RATE</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
 
@@ -1275,9 +1273,7 @@
                                 <!-- Debt Tab -->
                                 <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Debt');">
 
-                                    <p ng-show="tran.interestrate" class="belowTitle"><span ng-bind="tran.interestrate"></span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span></p>
-
-                                    <p ng-show="tran.interestratefreq" class="belowTitle"><span ng-bind="tran.interestratefreq"></span><span tooltip-placement="top" tooltip="The frequency with which the interest is applied">Interest Rate Frequency</span></p>
+                                    <p ng-show="tran.interestrate" class="belowTitle"><span>{{tran.interestrate}}% {{tran.interestratefreq}}</span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span></p>
 
                                     <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
 
