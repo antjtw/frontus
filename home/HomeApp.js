@@ -88,6 +88,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     }
                     $scope.ownersummary.invested = tran.amount ? $scope.ownersummary.invested + tran.amount : $scope.ownersummary.invested;
                 });
+                $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.invested);
                 /*SWBrijj.tblm('ownership.company_issue').then(function (data) {
                     $scope.issues = data;
                     SWBrijj.tblm('ownership.company_grants').then(function (grants) {
