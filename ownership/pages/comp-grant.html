@@ -109,7 +109,7 @@
                       <h2>Transaction Information</h2>
 
                       <div class="rightTitle double"><span>Underlying Security</span>
-                          <ul class="dropdown-list">
+                          <ul class="dropdown-list  drop-selector">
                               <li class="dropdown standard">
                                   <a class="dropdown-toggle">
                                       {{tran.optundersec | maxLength}}<span class="invisible-drop">'</span>
@@ -142,7 +142,7 @@
 
 
                       <div class="rightTitle double"><span>Post Cliff Frequency</span>
-                          <ul class="dropdown-list">
+                          <ul class="dropdown-list  drop-selector">
                               <li class="dropdown standard">
                                   <a class="dropdown-toggle">
                                       {{tran.vestfreq}}<span class="invisible-drop">'</span>
@@ -165,7 +165,7 @@
                       <ul>
                           <li class="grant-list" ng-repeat="act in tran.activeAct">
                               <div class="rightTitle"><span>Action</span>
-                                  <ul style="display: inline-block">
+                                  <ul style="display: inline-block" class="dropdown-list drop-selector">
                                       <li class="dropdown standard">
                                           <a class="dropdown-toggle">
                                               {{act.action}}<span class="invisible-drop">'</span>

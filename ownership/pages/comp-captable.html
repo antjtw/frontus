@@ -78,24 +78,26 @@
             <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
             <br>
             <div>
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        <span ng-show="newtransaction">
-                            {{newtransaction}}
-                        </span>
-                        <span ng-hide="newtransction">
-                            {{pickTran.date | date:settings.formatdate}}
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="pickOddOption('New Transaction')">New Transaction</a>
-                        </li>
-                        <li ng-repeat="i in dateoptions(changedTransactions);">
-                            <a ng-click="pickmOption(i)">{{i.date | date:settings.formatdate}}</a>
-                        </li>
-                    </ul>
-                </li>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            <span ng-show="newtransaction">
+                                {{newtransaction}}
+                            </span>
+                            <span ng-hide="newtransction">
+                                {{pickTran.date | date:settings.formatdate}}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="pickOddOption('New Transaction')">New Transaction</a>
+                            </li>
+                            <li ng-repeat="i in dateoptions(changedTransactions);">
+                                <a ng-click="pickmOption(i)">{{i.date | date:settings.formatdate}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </form>
     </div>
@@ -201,7 +203,7 @@
     <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
         <div>
             <span>Transaction</span>
-            <ul class="dropdown-list">
+            <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
                         {{convertTran.tran.date | date:settings.shortdate}}<span class="invisible-drop">'</span>
@@ -216,7 +218,7 @@
         </div>
         <div class="pull-right">
             <span>Convert To</span>
-            <ul class="dropdown-list">
+            <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
                         {{convertTran.toissue.issue | maxLength}}<span class="invisible-drop">'</span>
@@ -237,7 +239,7 @@
         </div>
         <div ng-show="convertTran.toissue.issue" class="pull-right">
             <span>Method</span>
-            <ul class="dropdown-list">
+            <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
                         {{convertTran.method}}<span class="invisible-drop">'</span>
@@ -411,7 +413,7 @@
                     <td>{{formatAmount(tran.units)}}</td>
                     <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
                     <td>
-                        <ul class="dropdown-list">
+                        <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard">
                                 <a class="dropdown-toggle">
                                     {{tran.transferto}}<span class="invisible-drop">'</span>
@@ -683,7 +685,7 @@
 
                             <div class="rightTitle"><span>Security Type</span>
                                     <span ng-show="typeLocked(activeIssue);">
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{activeIssue.type}}<span class="invisible-drop">'</span>
@@ -728,7 +730,7 @@
                                                                                                                                                                         onkeydown="testForEnter();"></p>
 
                             <div class="rightTitle double"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is guaranteed on a liquidity event">Liquidation Preference</span>
-                                <ul class="dropdown-list">
+                                <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.liquidpref}}<span class="invisible-drop">'</span>
@@ -743,7 +745,7 @@
                             </div>
 
                             <div class="rightTitle double"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
-                                <ul class="dropdown-list">
+                                <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.partpref | falseCheck}}<span class="invisible-drop">'</span>
@@ -759,7 +761,7 @@
 
 
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">Drag Along</span>
-                                <ul class="dropdown-list">
+                                <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.dragalong | falseCheck}}<span class="invisible-drop">'</span>
@@ -774,7 +776,7 @@
                             </div>
 
                             <div class="rightTitle"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">Tag Along</span>
-                                <ul class="dropdown-list">
+                                <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
                                             {{activeIssue.tagalong | falseCheck}}<span class="invisible-drop">'</span>
@@ -790,7 +792,7 @@
 
                             <span ng-show="showPari(allowKeys)" class="paripassu-list">
                                 <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
-                                    <ul class="dropdown-list">
+                                    <ul class="dropdown-list drop-selector">
                                         <li class="dropdown standard">
                                             <a class="dropdown-toggle">
                                                 {{item.pariwith | maxLength}}<span class="invisible-drop">'</span>
@@ -810,7 +812,7 @@
                           <!-- Options Tab -->
                           <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Option');">
                               <div class="rightTitle double"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                                  <ul class="dropdown-list">
+                                  <ul class="dropdown-list drop-selector">
                                       <li class="dropdown standard">
                                           <a class="dropdown-toggle">
                                               {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
@@ -858,7 +860,7 @@
                                                                                                                                                                                                        onkeydown="testForEnter();"></p>
 
                               <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                                  <ul class="dropdown-list">
+                                  <ul class="dropdown-list drop-selector">
                                       <li class="dropdown standard">
                                           <a class="dropdown-toggle">
                                               {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
@@ -893,7 +895,7 @@
                                                                                                                                                                           onkeydown="testForEnter();"></p>
 
                               <div class="rightTitle interest-rate">
-                                  <ul class="dropdown-list">
+                                  <ul class="dropdown-list drop-selector">
                                       <li class="dropdown standard">
                                           <a class="dropdown-toggle">
                                               {{activeIssue.interestratefreq}}<span class="invisible-drop">'</span>
@@ -907,7 +909,7 @@
                                   </ul>
                               </div>
 
-                              <p class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
+                              <p style="display: inline-block" class="rightTitle"><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                                                                                                  ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
                                                                                                                                                                                                  ng-model="activeIssue.valcap"
                                                                                                                                                                                                  onkeydown="testForEnter();"></p>
@@ -984,7 +986,7 @@
 
 
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.liquidpref}}<span class="invisible-drop">'</span>
@@ -999,7 +1001,7 @@
                                     </div>
 
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="Allows an investor to collect their liquidation prefence AND stock on a liquidity event">Participating Preferred</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
@@ -1014,7 +1016,7 @@
                                     </div>
 
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders are also forced sell their shares">Drag Along</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.dragalong  | falseCheck}}<span class="invisible-drop">'</span>
@@ -1029,7 +1031,7 @@
                                     </div>
 
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">Tag Along</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.tagalong  | falseCheck}}<span class="invisible-drop">'</span>
@@ -1048,7 +1050,7 @@
                                 <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
 
                                     <div class="rightTitle double"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.optundersec  | maxLength}}<span class="invisible-drop">'</span>
@@ -1088,7 +1090,7 @@
 
 
                                     <div class="rightTitle double"><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.vestfreq}}<span class="invisible-drop">'</span>
@@ -1113,7 +1115,7 @@
 
 
                                     <div class="rightTitle interest-rate">
-                                        <ul class="dropdown-list">
+                                        <ul class="dropdown-list drop-selector">
                                             <li class="dropdown standard">
                                                 <a class="dropdown-toggle">
                                                     {{tran.interestratefreq}}<span class="invisible-drop">'</span>

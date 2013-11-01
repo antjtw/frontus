@@ -1900,6 +1900,36 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     border-bottom-left-radius: 3px;
 }
 
+/* Dropdowns unsed as selectors */
+
+.drop-selector .standard .dropdown-toggle {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E2E2;
+}
+
+.drop-selector .standard .dropdown-menu {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E2E2;
+}
+
+.drop-selector .standard .dropdown-menu > li > a:hover, .drop-selector .standard .dropdown-menu > li > span:hover {
+    background-color: #F1F1F1;
+}
+
+.wide.drop-selector .standard .dropdown-toggle {
+    width: 320px;
+}
+
+.wide.drop-selector .standard .dropdown-menu {
+    width: 320px;
+}
+
+.dropdown-toggle.dark {
+    background-color: #E2E2E2;
+}
+
+
+
 
 /* Checkbox styling */
 

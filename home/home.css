@@ -372,31 +372,3 @@
     float: right;
 }
 
-/* Dropdown styling for selectors, will probably become part of the MVP sitewide styling in due course */
-
-.drop-selector .standard .dropdown-toggle {
-    background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
-}
-
-.drop-selector .standard .dropdown-menu {
-    background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
-}
-
-.drop-selector .standard .dropdown-menu > li > a:hover, .drop-selector .standard .dropdown-menu > li > span:hover {
-    background-color: #F1F1F1;
-}
-
-.wide.drop-selector .standard .dropdown-toggle {
-    width: 320px;
-}
-
-.wide.drop-selector .standard .dropdown-menu {
-    width: 320px;
-}
-
-.dropdown-toggle.dark {
-    background-color: #E2E2E2;
-}
-
