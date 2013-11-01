@@ -362,6 +362,10 @@
     margin: 0;
 }
 
+.profile-modal.modal > div.modalText.settings {
+    padding: 0 20px 5px 20px;
+}
+
 .modalText.settings > div {
     margin-bottom: 10px;
 }
