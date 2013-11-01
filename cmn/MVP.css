@@ -96,7 +96,7 @@ textarea:focus, input:focus, input[type="text"]:focus, input[type="password"]:fo
 }
 
 input:focus, textarea:focus {
-    background-color: rgb(241, 241, 241);
+    border-color: #A6A6A6;
     outline: none !important;
     box-shadow:none !important;
 }
@@ -1910,6 +1910,11 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .drop-selector .standard .dropdown-menu {
     background-color: #FFFFFF;
     border: 1px solid #E2E2E2;
+}
+
+.drop-selector .standard .dropdown-toggle:hover {
+    background-color: #FFFFFF;
+    border-color: #A6A6A6;
 }
 
 .drop-selector .standard .dropdown-menu > li > a:hover, .drop-selector .standard .dropdown-menu > li > span:hover {
