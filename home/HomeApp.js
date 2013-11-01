@@ -88,6 +88,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     }
                     $scope.ownersummary.invested = tran.amount ? $scope.ownersummary.invested + tran.amount : $scope.ownersummary.invested;
                 });
+                $scope.ownersummary.investedraw = angular.copy($scope.ownersummary.invested);
                 $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.invested);
                 /*SWBrijj.tblm('ownership.company_issue').then(function (data) {
                     $scope.issues = data;
@@ -310,6 +311,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 $scope.company.longcurrency = company.longcurrency;
                 $scope.company.currency = company.currency;
                 $scope.company.dateformat = company.dateformat;
+                $rootScope.settings.currency = company.currency;
+                $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.investedraw);
             });
         };
 
@@ -324,12 +327,12 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         };
 
         $scope.formatDollarAmount = function(amount) {
-            var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+            var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $rootScope.settings);
             return (output);
         };
 
         $scope.formatAbrAmount = function(amount) {
-            var output = calculate.formatMoneyAmount(calculate.abrAmount(amount), $scope.settings);
+            var output = calculate.formatMoneyAmount(calculate.abrAmount(amount), $rootScope.settings);
             return output;
         }
     }]);

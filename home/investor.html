@@ -7,9 +7,12 @@
     <div class="span4 flip-tile" ng-class="{'reverse':flipped1}">
         <div class="flipper">
             <div class="front info-box">
-                <div class="head-box" ng-click="flipTile(1);">
+                <div ng-show="docsummary.num > 0" class="head-box" ng-click="flipTile(1);">
                     <h2>Document Management</h2>
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div ng-hide="docsummary.num > 0" class="head-box">
+                    <h2>Document Management</h2>
                 </div>
                 <div class="body-box">
                     <div>
@@ -24,7 +27,7 @@
                                     <h2><span>{{docsummary.sig}}</span> Waiting for Action</h2>
                                 </div>
                             </div>
-                            <div class="view-button">
+                            <div ng-show="docsummary.num > 0" class="view-button">
                                 <div class="small-standard-button standard-button gray">
                                     <button class="btn" ng-click="gotopage('/documents/investor-list')">View</button>
                                 </div>
@@ -98,7 +101,7 @@
                     <span ng-show="person.city || person.state">{{person.city}}, {{person.state}}</span>
                     <span ng-show="person.postalcode">{{person.postalcode}}</span>
                 </li>
-                <li>
+                <li ng-show="person.street || person.city || person.state || person.postalcode">
                     Address
                 </li>
             </ul>
