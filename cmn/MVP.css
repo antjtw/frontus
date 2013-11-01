@@ -20,10 +20,15 @@ body {
     /*height: 100%; */
     margin: 0 auto -112px;
 }
-/* includes the 50 pixels from the nav bar */
+
+
  :focus {
     outline-color: transparent !important;
     outline-style: none !important;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
 }
 
 .wrap-nav {

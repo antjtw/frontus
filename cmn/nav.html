@@ -32,7 +32,7 @@
         </ul>
 
         <ul class="nav pull-right nav-item">
-          <li ng-click="gotohome();" style="display: none" ng-show="navState.userid" class="nav-photo"><img ng-src="{{userURL}}"><span>{{person.name}}</span></li>
+          <li ng-click="gotohome();" ng-show="navState.userid" class="nav-photo"><img ng-show="userURL" ng-src="{{userURL}}"><span>{{person.name}}</span></li>
           <li style="display: none;" class="dropdown" ng-show="navState.userid">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#"><span data-icon="&#xe011;" aria-hidden="true"></span></a>
             <ul class="dropdown-menu">
