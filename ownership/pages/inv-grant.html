@@ -28,7 +28,7 @@
                         <td>{{formatAmount(row.forfeited)}}</td>
                         <td>{{formatAmount(row.exercised)}}</td>
                     </tr>
-                    <tr class="total-row">
+                    <tr ng-show="rows.length > 1" class="total-row">
                         <td>Total</td>
                         <td colspan="4"></td>
                     </tr>
