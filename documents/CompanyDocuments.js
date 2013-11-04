@@ -777,7 +777,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.$broadcast('rejcetSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
-                $route.reload();
+                $location.path('/company-list').search({});
+                //$route.reload();
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -826,8 +827,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit('event:reload');
                 $scope.$emit('refreshDocImage');
+                $location.path('/company-list').search({});
 
             }).except(function(x) {
                 void(x);
@@ -1371,8 +1372,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit('event:reload');
                 $scope.$emit('refreshDocImage');
+                $location.path('/investor-list').search({});
 
             }).except(function(x) {
                 void(x);
