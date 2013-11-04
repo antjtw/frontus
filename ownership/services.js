@@ -450,10 +450,8 @@ ownership.service('calculate', function () {
     var sizes = {0:'', 1:'K', 2:'M', 3:'B'};
     this.abrAmount = function(amount) {
         if (amount) {
-            console.log(amount);
             var n = amount.toString().split(".");
             var sizefactor = Math.floor((n[0].length-1)/3);
-            console.log(sizefactor);
             if (sizefactor == 0) {
                 amount = n;
             }
