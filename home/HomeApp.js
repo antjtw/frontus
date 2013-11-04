@@ -64,6 +64,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     $scope.docsummary.counter = 0;
                     angular.forEach(sharedocs, function(doc) {
                         if (doc.signature_status == "signature requested (awaiting investor)") {
+                            console.log(doc.signature_status);
                             $scope.docsummary.sig += 1;
                         }
                         else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
