@@ -211,7 +211,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTitleClose()"></span>
     </div>
     <div class="modalText updateTitleModal">
-        <input ng-model="docForModal.docname" type="text"></input>
+        <input ng-model="docForModal.docname" type="text">
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
@@ -229,6 +229,6 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="deleteDocClose()">Cancel</button></div>
-        <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button</div>
+        <div class="standard-button"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button></div>
     </div>
 </div>
