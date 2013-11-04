@@ -38,8 +38,9 @@ you can use the generic selector below, but it's slower:
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
+
 .icon-warning:before {
-    content: "\e000";
+    content: "\e0000";
 }
 .icon-view:before {
     content: "\e001";
@@ -59,20 +60,14 @@ you can use the generic selector below, but it's slower:
 .icon-text-bigger:before {
     content: "\e041";
 }
-.icon-untitled:before {
+.icon-t:before {
     content: "\e01d";
 }
 .icon-star:before {
     content: "\e020";
 }
-.icon-share:before {
-    content: "\e030";
-}
 .icon-profile:before {
     content: "\e00a";
-}
-.icon-profile-pic:before {
-    content: "\e00b";
 }
 .icon-pie:before {
     content: "\e012";
@@ -83,6 +78,9 @@ you can use the generic selector below, but it's slower:
 .icon-pen:before {
     content: "\e00d";
 }
+.icon-minus:before {
+    content: "\e02f";
+}
 .icon-magnify:before {
     content: "\e01e";
 }
@@ -90,7 +88,7 @@ you can use the generic selector below, but it's slower:
     content: "\e036";
 }
 .icon-linkedin:before {
-    content: "\e114";
+    content: "\e029";
 }
 .icon-lightening:before {
     content: "\e01f";
@@ -103,12 +101,6 @@ you can use the generic selector below, but it's slower:
 }
 .icon-graph2:before {
     content: "\e021";
-}
-.icon-graph1:before {
-    content: "\e022";
-}
-.icon-grabber:before {
-    content: "\e11a";
 }
 .icon-grab:before {
     content: "\e043";
@@ -146,11 +138,8 @@ you can use the generic selector below, but it's slower:
 .icon-countersign:before {
     content: "\e02e";
 }
-.icon-conversion:before {
-    content: "\e039";
-}
-.icon-cog:before {
-    content: "\e011";
+.icon-circle:before {
+    content: "\e051";
 }
 .icon-circle-upload:before {
     content: "\e01a";
@@ -170,6 +159,9 @@ you can use the generic selector below, but it's slower:
 .icon-circle-left:before {
     content: "\e018";
 }
+.icon-circle-info:before {
+    content: "\e044";
+}
 .icon-circle-download:before {
     content: "\e019";
 }
@@ -179,11 +171,8 @@ you can use the generic selector below, but it's slower:
 .icon-circle-delete:before {
     content: "\e01b";
 }
-.icon-cicle-minus:before {
-    content: "\e01c";
-}
-.icon-check:before {
-    content: "\e023";
+.icon-circle-check:before {
+    content: "\e052";
 }
 .icon-chat:before {
     content: "\e028";
@@ -193,6 +182,18 @@ you can use the generic selector below, but it's slower:
 }
 .icon-back:before {
     content: "\e136";
+}
+.icon-arrow-up:before {
+    content: "\e003";
+}
+.icon-arrow-right:before {
+    content: "\e004";
+}
+.icon-arrow-left:before {
+    content: "\e005";
+}
+.icon-arrow-down:before {
+    content: "\e002";
 }
 .icon-arrow-2up:before {
     content: "\e034";
@@ -209,6 +210,36 @@ you can use the generic selector below, but it's slower:
 .icon-admin:before {
     content: "\e045";
 }
+.icon-cicle-minus:before {
+    content: "\e01c";
+}
+.icon-check:before {
+    content: "\e023";
+}
+.icon-cog:before {
+    content: "\e011";
+}
+.icon-conversion:before {
+    content: "\e039";
+}
+.icon-graph1:before {
+    content: "\e022";
+}
+.icon-grabber:before {
+    content: "\e11a";
+}
+.icon-plus:before {
+    content: "\e053";
+}
+.icon-profile-pic:before {
+    content: "\e00b";
+}
+.icon-location:before {
+    content: "\e600";
+}
+.icon-facebook:before {
+    content: "\e601";
+}
 .icon-redo:before {
     content: "\e027";
 }
@@ -217,28 +248,4 @@ you can use the generic selector below, but it's slower:
 }
 .icon-unlocked:before {
     content: "\e02d";
-}
-.icon-arrow-up:before {
-    content: "\e003";
-}
-.icon-arrow-right:before {
-    content: "\e004";
-}
-.icon-arrow-down:before {
-    content: "\e002";
-}
-.icon-arrow-left:before {
-    content: "\e005";
-}
-.icon-circle-check:before {
-    content: "\e052";
-}
-.icon-circle:before {
-    content: "\e051";
-}
-.icon-circle-info:before {
-    content: "\e044";
-}
-.icon-spam:before {
-    content: "\e0000";
 }
