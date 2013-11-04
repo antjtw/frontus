@@ -51,7 +51,7 @@
                         </thead>
                         <tbody>
                             <tr ng-click="gotopage('/documents/investor-view?doc=' + doc.doc_id)" ng-repeat="doc in docs | limitTo:5">
-                                <td>{{doc.docname}}</td>
+                                <td>{{doc.docname | caplength(5)}}a</td>
                                 <td class="status-toggle status-icon">
                                     <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                                     <div ng-hide="docIsComplete(doc)" class="circle yellow"></div>

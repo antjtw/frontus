@@ -1,5 +1,5 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'd3', 'homeDirectives']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'commonServices', 'd3', 'homeDirectives']);
 
 /** @name $routeParams#msg
  *  @type {string}
