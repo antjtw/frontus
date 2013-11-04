@@ -56,7 +56,7 @@
                         </td>
                         <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                             <ul>
-                                <li>{{doc.docname}}</li>
+                                <li>{{doc.docname | caplength:35}}</li>
                                 <li>{{docStatus(doc)}}</li>
                             </ul>
                         </td>
@@ -172,7 +172,7 @@
 </div>
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share "{{docToShare.docname}}"
+        <span data-icon="&#xe027;" aria-hidden="true"></span>Share "{{docToShare.docname | caplength:25}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
