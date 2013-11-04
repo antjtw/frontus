@@ -31,7 +31,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
             if (!$scope.company) {
-                $route.reload();
+                window.location.reload();
             }
             angular.forEach($scope.currencies, function(c) {
                if (c.indexOf($scope.company.currency) !== -1) {
@@ -359,7 +359,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         SWBrijj.tblm('account.profile').then(function(x) {
             $scope.person = x[0];
             if (!$scope.person) {
-                $route.reload();
+                window.location.reload();
             }
             $scope.photoURL = '/photo/user?id=' + x[0].email;
             $scope.person.namekey = $scope.person.name;
