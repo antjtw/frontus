@@ -138,6 +138,8 @@
 }
 
 .front.info-box > div.body-box > div > div:last-child {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 0 20px 0 20px;
     position: relative;
