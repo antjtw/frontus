@@ -170,6 +170,7 @@
         </div>
     </div>
 </div>
+
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
         Share "{{docToShare.docname | caplength:25}}"
@@ -202,10 +203,11 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button</div>
+        <div class="standard-button"><button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
-<div modal="updateTitleModal" close="updateTitleClose()" options="opts" class="updateTitleModal">
+
+<div modal="updateTitleModal" close="updateTitleClose()" options="opts">
     <div class="modalHeader">
         <span>Rename Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTitleClose()"></span>
@@ -218,6 +220,7 @@
         <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
     </div>
 </div>
+
 <div modal="deleteDocModal" close="deleteDocClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
         <span>Delete Document</span>
