@@ -56,7 +56,7 @@
                         </td>
                         <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                             <ul>
-                                <li>{{doc.docname}}</li>
+                                <li>{{doc.docname | caplength:40}}</li>
                                 <li>{{docStatus(doc)}}</li>
                             </ul>
                         </td>
@@ -150,7 +150,7 @@
                     <div ng-hide="showProgress" class="fakefile">
                         <span>CHOOSE FILE</span>
                         <div ng-show="files.length">
-                            <span>{{files[0].name | fileLength}}</span>
+                            <span>{{files[0].name | caplength:20}}</span>
                         </div>
                     </div>
                     <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
@@ -172,7 +172,7 @@
 </div>
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        <span>Share "{{docToShare.docname}}"</span>
+        Share "{{docToShare.docname | caplength:25}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">

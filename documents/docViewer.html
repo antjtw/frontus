@@ -4,7 +4,7 @@
     <div class="docViewerHeader affix-top" data-spy="affix" data-offset-top="128">
         <div class="row-fluid docViewerTitle">
             <div class="pull-left">
-                <div class="docName">{{lib.docname}}</div>
+                <div class="docName">{{lib.docname | caplength: 60}}</div>
                 <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
             </div>
             <div class="lastUpdated pull-right">

@@ -552,8 +552,10 @@ h2 {
 }
 
 .topnav .nav-photo > img {
-    width: 34px;
-    height: 34px;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+    background-color: #FFFFFF;
 }
 
 .bottomnav {
@@ -1166,6 +1168,8 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 > li > ul > li {
     overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 288px;
     border: 1px solid #F1F1F1;
@@ -2309,7 +2313,7 @@ button.icon-button:hover {
 }
 .modal div.fakefile > div {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .modal div.fakefile > span {
     display: inline-block;

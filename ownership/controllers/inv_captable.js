@@ -400,7 +400,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = calculate.formatMoneyAmount(memformatamount(amount), $scope.settings);
+        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
         return output;
     };
 
