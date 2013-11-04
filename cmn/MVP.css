@@ -2313,7 +2313,7 @@ button.icon-button:hover {
 }
 .modal div.fakefile > div {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .modal div.fakefile > span {
     display: inline-block;
