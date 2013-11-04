@@ -150,7 +150,7 @@
                     <div ng-hide="showProgress" class="fakefile">
                         <span>CHOOSE FILE</span>
                         <div ng-show="files.length">
-                            <span>{{files[0].name | fileLength}}</span>
+                            <span>{{files[0].name | caplength:16}}</span>
                         </div>
                     </div>
                     <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
