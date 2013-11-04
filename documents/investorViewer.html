@@ -1,32 +1,4 @@
-<div class="container" data-ng-init="init()">
-  <div class="row-fluid">
-    <div class="headsection row-fluid">
-        <h2>
-            <a href="/documents/">
-                <span class="back-icon" data-icon="&#xe032;" aria-hidden="true"></span>
-            </a>
-            <span class="doc-title" ng-bind="document.docname | lengthLimiter"></span>
-            <span class="documentStatus">{{document.signature_status | uppercase}}</span>
-        </h2>
-    </div>
-  </div>
-    <div ng-show="signable() || (tester && document.when_signed)" class="row-fluid">
-        <div class="subnav-controls">
-            <div>
-                <div class="pull-right">
-                    <div class="share-button">
-                        <button ng-click="confirmModal=true" ng-show="signable();" class="btn">Sign Document</button>
-                    </div>
-                </div>
-                <div class="pull-right">
-                    <div class="share-button">
-                        <button class="btn" ng-show="tester && document.when_signed" ng-click="unSign(document)">UnSign</button>
-                    </div>
-                </div>
-            </div>
-            <div class="DivHelper"></div>
-        </div>
-    </div>
+<div class="container">
   <div class="row-fluid">
     <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="true"></doc-viewer>
   </div>
@@ -34,7 +6,7 @@
   <div modal="confirmModal" close="confirmModalClose()" options="opts">
     <div class="sign-modal">
       <div class="modalHeader">
-        <span data-icon="&#xe00d;" aria-hidden="true"></span>Confirm Electronic Signature
+        <span>Confirm Electronic Signature</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
       </div>
       <div class='modalText esign'>
@@ -43,10 +15,14 @@
               Do you wish to electonically sign this document?<br>(This action is irreversible)
           </span>
       </div>
-      <div class="dModalButtons">
-        <button class="greyButton" ng-click="confirmModalClose()">Cancel</button>
-        <button class="greenButton" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
-      </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
+            </div>
+        </div>
     </div>
   </div>
 </div>

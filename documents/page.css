@@ -17,7 +17,11 @@ div.maincontent {
 .buttonAddDoc {
     box-shadow: none;
     -webkit-box-shadow: none;
-};
+}
+
+.headsection.head-border-bottom {
+    border-bottom: 1px solid rgb(227, 227, 227);
+}
 
 .draggable textarea {
     font-family: Helvetica, sans-serif;
@@ -26,6 +30,10 @@ div.maincontent {
 
 .companyDocViewer {
     border-left: 1px solid #E3E3E3;
+}
+
+.subnav-controls.flush-controls {
+    margin-bottom: 0px;
 }
 
 .docVersiontab > ul {
@@ -228,7 +236,7 @@ button.greyButton {
 }
 
 .modal {
-  margin-left: -180px;
+  margin-left: -160px;
   width: auto;
   background-color: #FFFFFF;
   border: 0;
@@ -264,6 +272,7 @@ button.greyButton {
 .messageSection {
     margin-top: 20px;
     height: 80px;
+    margin-bottom: 20px;
 }
 
 .messageText {
@@ -293,6 +302,22 @@ button.greyButton {
 
 .modalText.uploadModal p {
     margin-bottom: 10px;
+}
+
+.modalText.updateTitleModal > input {
+    display: inline-block;
+    width: 300px;
+    margin: 0 25px 0 0;
+}
+
+.modalText.updateTitleModal {
+    float: none;
+    margin-bottom:60px;
+}
+
+.modalText.deleteDocModal {
+    width: 360px;
+    margin-bottom: 40px;
 }
 
 .modalText.esign {

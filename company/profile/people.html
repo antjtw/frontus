@@ -1,34 +1,93 @@
 
 <div class="headsection row-fluid">
-  <h1>People</h1>
+    <ul class="maintabs head-text">
+        <li class="selectedtab">People</li>
+    </ul>
 </div>
 <div class="row-fluid">
-  <section class="statusBlock">
-      <div class="row-fluid">
-          <div class="subnav-controls">
-              <div>
-                  <div class="pull-left">
-                    <label><span class="search-icon" data-icon="&#xe01e;" aria-hidden="true"></span>
-                      <input type="text" ng-model="filterText">
+    <section class="statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left">
+                        <span>Search</span>
+                        <input type="text" class="search-box" ng-model="filterText">
+                    </div>
+                    <div class="pull-right">
+                        <div class='standard-button'>
+                            <button class="btn" ng-click="adminModalOpen()">Add Admin</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <table class="status-table">
+                <tbody>
+                <tr>
+                    <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
+                    <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
+                    <th></th>
+                </tr>
+                </tbody>
+                <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
+                <tr class="empty-row"></tr>
+                <tr>
+                    <td style="width:400px" class="shareholder-column" >
+                        <ul>
+                            <li>{{person.name}}</li>
+                            <li>{{formatLastLogin(person.lastlogin)}}</li>
+                        </ul>
+                    </td>
+                    <td><span ng-show="person.role=='issuer'">Admin</span></td>
+                    <td style="width:50px;">
+                        <ul ng-show="person.lastlogin" class="dropdown-list">
+                            <li class="dropdown standard menu-drop">
+                                <a class="dropdown-toggle">
+                                    <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                </a>
+                                <ul ng-hide="toggleView();" class="dropdown-menu">
+                                    <li ng-show="" ng-click="modalUp(person);">Change Role</li>
+                                    <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+
+<div modal="adminModal" close="adminModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span>Add administrator</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
+    </div>
+
+    <div class="modalCopy">
+        <form>
+            <fieldset>
+                <div class="row-fluid field">
+                    <label>Email
+                        <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
                     </label>
-                  </div>
-              </div>
-              <div class="DivHelper"></div>
-          </div>
-      </div>
-    <table class="docLibrary tableView bodyText people-table">
-      <tr class="column-label">
-        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
-        <th class="button" ng-click="sortBy('email')"><span class="title sortedDown">EMAIL ADDRESS</span></th>
-      </tr>
-      <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
-        <tr ng-click="gotoPerson(person)" ng-class="{'pointer status-row':person.name}">
-        <td>{{person.name}}
-          <span class="admin" data-icon="&#xe045;" aria-hidden="true" ng-show="person.role=='issuer'"></span>
-        </td>
-        <td>{{person.email}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="adminModalClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button>
+        </div>
+    </div>
+
 </div>

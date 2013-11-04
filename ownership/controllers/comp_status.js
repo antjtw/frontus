@@ -13,6 +13,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
+            $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
             console.log(activities);
@@ -25,6 +26,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                         person[act] = time;
                     }
                 });
+                person.viewedbool = person.viewed ? "viewed" : "unviewed";
             });
         });
         SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
@@ -38,31 +40,34 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         })
     });
 
-    // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "event_time"]).then(function(data) {
-        $scope.activity = data;
-        $scope.shared_dates = [];
-        for (var i = 0; i < $scope.activity.length; i++) {
-            $scope.activity[i].timeAgo = moment($scope.activity[i].event_time).fromNow();
-            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2) {
-                $scope.activity[i].name = $scope.activity[i].email;
+    SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
+        var originalfeed = feed;
+        //Generate the groups for the activity feed
+        $scope.eventGroups = [];
+        var uniqueGroups = [];
+        angular.forEach(originalfeed, function(event) {
+            var timegroup = moment(event.event_time).fromNow();
+            if (uniqueGroups.indexOf(timegroup) > -1) {
+                console.log(uniqueGroups.indexOf(timegroup));
+                $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
             }
-            $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
-            if ($scope.activity[i].activity == "received") {
-                $scope.activity[i].activity = "Shared with ";
-                $scope.activity[i].icon = 'icon-redo';
-                $scope.shared_dates.push(new Date($scope.activity[i].whendone));
+            else {
+                $scope.eventGroups[$scope.eventGroups.length] = [];
+                $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
+                $scope.eventGroups[$scope.eventGroups.length-1].push(event);
+                uniqueGroups.push(timegroup);
             }
-            else if ($scope.activity[i].activity == "viewed") {
-                $scope.activity[i].activity = "Viewed by ";
-                $scope.activity[i].icon = 'icon-view';
-            }
-        }
+        });
     });
 
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
+
+    $scope.peopleOrder = 'name'
+
+    $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {
@@ -141,6 +146,14 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                   void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
+        }
+    };
+
+    $scope.gotoPerson = function (person) {
+        var link;
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
+        if (link) {
+            document.location.href=link;
         }
     };
 

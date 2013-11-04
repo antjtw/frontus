@@ -4,7 +4,7 @@
   <title ng-bind-template="Sharewave Documents {{selected.role}}">Sharewave Documents</title>
   <!--{{/i/head_css.inc}}-->
   <link type="text/css" rel="stylesheet" href="/documents/page.css">
-  <link type="text/css" rel="stylesheet" href="/cmn/docViewer.css">
+  <link type="text/css" rel="stylesheet" href="/documents/docViewer.css">
   <link type="text/css" rel="stylesheet" href="/lib/datepicker/bootstrap-datepicker.css">
   <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
   <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
@@ -15,7 +15,7 @@
   <!-- <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
           data-app-key="cg7umgovyixtqhi"></script> -->
   <script type="text/javascript" src="/lib/datejs/build/date.js"></script>
-  <script src="/cmn/Documents.js"></script>
+  <script src="/documents/Documents.js"></script>
   <script src="/cmn/Email.js"></script>
   <script src="/cmn/Upload.js"></script>
   <script src="/documents/CompanyDocuments.js"></script>
@@ -28,7 +28,7 @@
   <navbar></navbar>
 
   <div class="maincontent">
-    <h1 class='error-message' class="for-r0ml" ng-show='errorMessage'>{{ errorMessage }}</h1>
+    <h1 class='error-message' ng-show='false'>{{ errorMessage }}</h1>
     <div ng-view></div>
   </div>
   <div class="minimumGap"></div>

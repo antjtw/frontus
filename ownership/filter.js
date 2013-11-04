@@ -14,6 +14,19 @@ ownership.filter('noUnissue', function () {
     };
 });
 
+// Returns the rows not including the selected investor
+ownership.filter('otherinvestors', function () {
+    return function (rows, investor) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.name != "" && row.name != investor) {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
 
 // Returns the list of rows that have not yet had shares
 ownership.filter('shareList', function () {
@@ -81,6 +94,21 @@ ownership.filter('maxLength', function () {
     };
 });
 
+// Sorts the new activity feed with groups of from now
+ownership.filter('fromNowSort', function () {
+    return function (events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if(a[1] > b[1]) return -1;
+                if(a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+
+        return events
+    };
+});
+
 ownership.filter('uneditIssue', function () {
     return function (word) {
         if (word) {
@@ -101,4 +129,24 @@ ownership.filter('falseCheck', function () {
         }
         else return word;
     };
+});
+
+ownership.filter('nameoremail', function () {
+    return function (event) {
+        return (event.name) ? event.name : event.email;
+    }
+});
+
+ownership.filter('icon', function() {
+    return function(activity) {
+        if (activity == "sent") return "icon-email";
+        else if (activity == "received") return "icon-email";
+        else if (activity == "viewed") return "icon-view";
+        else if (activity == "reminder") return "icon-redo";
+        else if (activity == "signed") return "icon-pen";
+        else if (activity == "uploaded") return "icon-star";
+        else if (activity == "rejected") return "icon-circle-delete";
+        else if (activity == "countersigned") return "icon-countersign";
+        else return "hunh?";
+    }
 });

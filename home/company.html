@@ -1,53 +1,327 @@
 <div class="headsection row-fluid">
-  <h1>{{navState.name}}</h1>
+    <ul class="maintabs head-text">
+        <li class="selectedtab">Welcome, {{navState.name}}</li>
+    </ul>
 </div>
-<div class="hero-unit onboarding" ng-show="onboarding">
-  <button type="button" class="close" ng-click="close()"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
-  <div>
-    <h2>Welcome to Sharewave!</h2>
-  </div>
-  <div class="spacer20"></div>
-  <div class="row-fluid">
-      <a class="span4 onboardbox text-center" href="/ownership/company-captable">
-          <img src="/img/ownership.png"/>
-          <h2 class="onboard">Create Your Ownership Table</h2>
-          <p>Add all security types and share with anyone to <br> monitor their interactions.</p>
-      </a>
-      <a class="span4 onboardbox text-center" href="/documents/company-list">
-          <img src="/img/docs.png"/>
-          <h2 class="onboard">Upload a Document</h2>
-          <p>Upload, share and gather signatures on <br> your documents.</p>
-      </a>
-      <a class="span4 onboardbox text-center" href="/company/profile">
-          <img src="/img/shareholders.png"/>
-          <h2 class="onboard">Invite Administrators</h2>
-          <p>Give a colleague access to add information <br> to your company.</p>
-      </a>
-  </div>
+<div class="row-fluid home-top-row">
+    <div class="span8 flip-tile" ng-class="{'reverse':flipped1}">
+        <div class="flipper">
+            <div class="front info-box">
+                <div class="head-box" ng-click="flipTile(1);">
+                    <h2>Document Management</h2>
+                    <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div class="body-box">
+                    <div ng-show="docsummary.num == 0">
+                        <div class="onboarding-row row-fluid">
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/doc-upload.png'>
+                                <h2>Upload and Share</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/doc-sign.png'>
+                                <h2>Request Signature</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/doc-audit.png'>
+                                <h2>Review Audit Trail</h2>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <span>Want more information? <span class="blue-link" ng-click="flipTile(1);">Learn more</span></span>
+                            <div class="pull-right standard-button green">
+                                <button class="btn" ng-click="">Upload Documents</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-hide="docsummary.num == 0">
+                        <div class="detail-row row-fluid">
+                            <div class="span6">
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-upload.png'>
+                                    <h2><span>{{docsummary.num}}</span> Documents</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-sign.png'>
+                                    <h2><span>{{docsummary.sig}}</span> Signatures Pending</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-audit.png'>
+                                    <h2><span>{{docsummary.counter}}</span> Awaiting Review</h2>
+                                </div>
+                            </div>
+                            <div class="span6 no-graph">
+                                <div class="standard-button green">
+                                    <button class="btn" ng-click="gotopage('/documents/company-list')">View Documents</button>
+                                </div>
+                                <span class="blue-link" ng-click="flipTile(1);">Learn More about Documents</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="back info-box">
+                <div class="head-box" ng-click="flipTile(1);">
+                    <span data-icon="&#xe032;" aria-hidden="true"></span>
+                    <h2>Document Management</h2>
+                </div>
+                <div class="body-box">
+                    <ul class="q-and-a">
+                        <li>Are e-signatures on Sharewave legally binding?</li>
+                        <li>Yes, though currently in the United States only. We append an audit trail with IP Address and activity to each document, which is court admissible.</li>
+
+                        <li>What document types can I upload?</li>
+                        <li>Right now we only take PDF documents, though we'll soon accept a wider range.</li>
+
+                        <li>How do I know if someone has viewed a document?</li>
+                        <li>When viewing the document, select "Status" from the navigation to view an audit trial by recipient.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4 issuer-profile">
+        <div class="row-fluid">
+            <div class="span3">
+                <img ng-src="{{photoURL}}">
+            </div>
+            <div class="span7">
+                <h2>{{company.name}}</h2>
+                <span>{{company.city}},{{company.state}}</span>
+            </div>
+            <div class="span2">
+                <ul class="dropdown-list">
+                    <li class="dropdown standard menu-drop">
+                        <a class="dropdown-toggle dark">
+                            <span data-icon="&#xe011;" aria-hidden="true"></span>
+                        </a>
+                        <ul ng-hide="toggleView();" class="dropdown-menu">
+                            <li ng-click="settingModalOpen();">Edit Settings</li>
+                            <li ng-click="profileModalOpen();">Edit Profile</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <ul>
+                <li>
+                    {{company.longcurrency}}
+                </li>
+                <li>
+                    Currency
+                </li>
+                <li>
+                    {{company.dateformat}}
+                </li>
+                <li>
+                    Date format
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
-<div class="editProfileFP row-fluid">
-  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-      <div class="row-fluid">
-          <div class="subnav-controls">
-              <div>
-                  <div class="pull-left">
-                      <h2>Activity Feed</h2>
-                  </div>
-              </div>
-              <div class="DivHelper"></div>
-          </div>
-      </div>
-    <div class="row-fluid">
-          <ul class="activityBlock">
-              <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
-                  <i class="{{active.activity | icon}}"></i>
-                  <div>
-                      <span class="activity">{{active | description }}</span><br>
-                      <span class="time">{{active.time | fromNow}}</span>
-                  </div>
-              </li>
-          </ul>
-        <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-      </div>
+<div class="row-fluid home-bottom-row">
+    <div class="span8 flip-tile" ng-class="{'reverse':flipped2}">
+        <div class="flipper">
+            <div class="front info-box">
+                <div class="head-box" ng-click="flipTile(2);">
+                    <h2>Understand Your Ownership</h2>
+                    <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div class="body-box">
+                    <div ng-show="ownersummary.peoplenum == 0">
+                        <div class="onboarding-row row-fluid">
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-investors.png'>
+                                <h2>Add Shareholders</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-invest.png'>
+                                <h2>Add Investments</h2>
+                            </div>
+                            <span data-icon="&#xe004;" aria-hidden="true"></span>
+                            <div>
+                                <img src='/img/onboardingicons/dayzero/ownership-share.png'>
+                                <h2>Share Ownership</h2>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <span>New to Equity? <span class="blue-link" ng-click="flipTile(2);">Learn more</span></span>
+                            <div class="pull-right standard-button green">
+                                <button class="btn" ng-click="gotopage('/ownership/company-captable')">Start Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-hide="ownersummary.peoplenum == 0">
+                        <div class="detail-row row-fluid">
+                            <div class="span6">
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-invest.png'>
+                                    <h2><span>{{ownersummary.invested}}</span> Invested</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-investors.png'>
+                                    <h2><span>{{ownersummary.peoplenum}}</span> Shareholders</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/ownership-share.png'>
+                                    <h2><span>{{ownersummary.shares}}</span> Invited</h2>
+                                </div>
+                            </div>
+                            <div class="span6 no-graph">
+                                <d3expdonut ng-show="false" class="exploded-donut" data='graphdata'></d3expdonut>
+                                <div class="standard-button green">
+                                    <button class="btn" ng-click="gotopage('/ownership/company-captable')">View Ownership</button>
+                                </div>
+                                <span class="blue-link" ng-click="flipTile(2);">Learn More about Ownership</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="back info-box">
+                <div class="head-box" ng-click="flipTile(2);">
+                    <span data-icon="&#xe032;" aria-hidden="true"></span>
+                    <h2>Understand Your Ownership</h2>
+                </div>
+                <div class="body-box">
+                    <ul class="q-and-a">
+                        <li>What percent of the company do my shareholders own?</li>
+                        <li>Just enter names, amounts, and terms. Leave the math to us.</li>
+
+                        <li>How much of my option pool have I given to my employees?</li>
+                        <li>You enter the total shares authorized, and we tell you what's left unissued.</li>
+
+                        <li>Can I show my employees the vesting progress on their stock options?</li>
+                        <li>Yes, simply enter their vesting schedule and share a personal view of the cap table with them.</li>
+
+                        <li>If I share my cap table, what can the recipient see?</li>
+                        <li>Shareholders will only see their personal holdings by default, though you can grant them an unlimited view of the cap table via their profile.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="info-box all-gray">
+            <div class="head-box">
+                <h2>Activity</h2>
+            </div>
+            <div class="body-box">
+                <ul class="activity-feed2">
+                    <li ng-repeat="events in eventGroups  | fromNowSort">
+                        <span>{{events[0]}}</span>
+                        <ul>
+                            <li ng-repeat="event in events.slice(2)">
+                                <i class="{{event.activity | icon}}"></i>
+                                {{event | description}}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals below -->
+
+<div modal="profileModal" close="profileModalClose()" options="profileopts">
+    <div class="modalHeader">
+        <span>Edit Company Profile</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <div class="row-fluid">
+            <div class="span3">
+                <img id="updateImage" ng-src="{{photoURL}}">
+                <form class="form-inline image-button">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="profile-fakefile">
+                                <span>Change</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="span9 input-list">
+                <div>
+                    <span>Name</span><input type="text" ng-model="editcompany.name" maxlength="30">
+                </div>
+                <div>
+                    <span>Address*</span><input type="text" ng-model="editcompany.address">
+                </div>
+                <div class="city-state">
+                    <span>City/State*</span>
+                    <input type="text" ng-model="editcompany.city">
+                    <input type="text" ng-model="editcompany.state" maxlength="2">
+                </div>
+                <div>
+                    <span>Zip Code*</span><input type="text" ng-model="editcompany.zipcode">
+                </div>
+                <span class="capital-text">*Optional</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="profileModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="profileModalClose(); profileUpdate(editcompany);">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div modal="settingModal" close="settingModalClose()" options="profileopts">
+    <div class="modalHeader">
+        <span>Edit Setting</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="settingModalClose()"></span>
+    </div>
+    <div class="modalText settings">
+        <div>
+            <span>Currency</span>
+            <ul class="dropdown-list drop-selector wide">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{editcompany.longcurrency}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in currencies">
+                            <a ng-click="setCurrency(i);">{{i}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <span>Date Format</span>
+            <ul class="dropdown-list drop-selector wide">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{editcompany.dateformat}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in dateformats">
+                            <a ng-click="setDateFormat(i);">{{i}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="settingModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="settingModalClose(); saveSettings(editcompany);">Confirm</button>
+        </div>
     </div>
 </div>

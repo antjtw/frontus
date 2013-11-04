@@ -1,105 +1,105 @@
-
 <div class="headsection row-fluid">
-  <h1>My Profile</h1>
+    <ul class="maintabs head-text">
+        <li class="selectedtab">My Profile</li>
+    </ul>
 </div>
 <div class="editProfileFP row-fluid">
-
-  <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-    <div class="row-fluid">
-      <div class="span3"> <!-- Photo -->
-        <form>
-          <div class="editProfilePhoto" ng-click="pictureModalOpen()">
-            <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
-          </div>
-        </form>
-      </div>
-      <div class="span5">
-        <p>
-            <label><input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
-            Name</label>
-        </p>
-        <p><button class="button subText greenButton" ng-click="passwordModalOpen()">Change Password</button></p>
-      </div>
+    <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+        <div class="row-fluid">
+            <div class="span3"> <!-- Photo -->
+                <form>
+                    <div class="editProfilePhoto" ng-click="pictureModalOpen()">
+                        <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
+                    </div>
+                </form>
+            </div>
+            <div class="span5">
+                <p>
+                    <label><input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
+                        Name</label>
+                </p>
+                <p><button class="button subText greenButton" ng-click="passwordModalOpen()">Change Password</button></p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="sidebar span4">
-    <form>
-      <fieldset>
-         <label><input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
-         Email</label>
+    <div class="sidebar span4">
+        <form>
+            <fieldset>
+                <label><input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
+                    Email</label>
 
-          <label><textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-          Address</label>
-       
-      </fieldset>
-    </form>
-  </div>
+                <label><textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
+                    Address</label>
+
+            </fieldset>
+        </form>
+    </div>
 </div>
-
-<!-- <div modal="pictureModal" close="pictureModalClose()" options="opts" ng-controller="FileDNDCtrl"> -->
 <div modal="pictureModal" close="pictureModalClose()" options="opts">
-  <div class="modalHeader">
-      <span data-icon="&#xe00b;" aria-hidden="true"></span>Profile Picture<span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
-  </div>
-  <div class="modalText">
-    <p>You can upload a JPG, GIF, or PNG file<br>(file size limit is 1MB)</p>
-    <form class="form-inline">
-      <fieldset>
-          <div class="fileinputs">
-              <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
-              <div class="fakefile">
-                  <span>CHOOSE FILE</span>
-                  <div ng-show="files.length">
-                    <span>{{files[0].name | fileLength}}</span>
-                  </div>
-              </div>
-          </div>
-      </fieldset>
-    </form>
-  </div>
-
-    <div class="modalButtons">
-        <div class="left"><button class="button subText blueButton left" ng-click="pictureModalClose()">TAKE ME BACK!</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="uploadFile(); pictureModalClose();">
-                UPLOAD
-            </button>
+    <div class="modalHeader">
+        <span>Profile Picture</span><span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <p>You can upload a JPG, GIF, or PNG file<br>(file size limit is 1MB)</p>
+        <form class="form-inline">
+            <fieldset>
+                <div class="fileinputs">
+                    <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                    <div class="fakefile">
+                        <span>CHOOSE FILE</span>
+                        <div ng-show="files.length">
+                            <span>{{files[0].name | fileLength}}</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="pictureModalClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="uploadFile(); pictureModalClose();">Upload</button>
         </div>
     </div>
 </div>
 
 <div modal="passwordModal" close="passwordModalClose()" options="opts">
-  <div class="modalHeader">
-    <span data-icon="&#xe026;" aria-hidden="true"></span>Change Password
-    <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="passwordModalClose()"></span>
-  </div>
-  <div class="modalCopy">
-    <form name="passwordChange" class="editPasswordBlock">
-    <div class="passwordChangeSuccess bodyText invisible" ng-show="passwordChanged">
-    <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
-     <fieldset>
-       <div class="row-fluid field">
-         <label>Current Password
-         <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
-           </label>
-       </div>
-       <div class="row-fluid field">
-      <label>New Password
-      <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
-        </label>
-      </div>
-     <div class="row-fluid field">
-       <label>Confirm Password
-       <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
-         </label>
-     </div>
-
-    <div class="modalButtons">
-      <div class="left"><button class="button subText blueButton left" ng-click="passwordModalClose()">Cancel</button></div>
-      <div class="right"><button ng-disabled="validPasswordNot()" ng-class="{greenButton:true, button:true, adisabled:validPasswordNot() }" ng-click="changePassword(); passwordModalClose()">Change</button></div>
+    <div class="modalHeader">
+        <span>Change Password</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="passwordModalClose()"></span>
     </div>
-  </fieldset>
-  </form>
-  </div>
+    <div class="modalCopy">
+        <form name="passwordChange" class="editPasswordBlock">
+            <div class="passwordChangeSuccess bodyText invisible" ng-show="passwordChanged">
+                <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
+            <fieldset>
+                <div class="row-fluid field">
+                    <label>Current Password
+                        <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
+                    </label>
+                </div>
+                <div class="row-fluid field">
+                    <label>New Password
+                        <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
+                    </label>
+                </div>
+                <div class="row-fluid field">
+                    <label>Confirm Password
+                        <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left standard-button gray">
+                        <button class="btn" ng-click="passwordModalClose();">Cancel</button>
+                    </div>
+                    <div class="standard-button green">
+                        <button class="btn" ng-disabled="validPasswordNot()" ng-click="changePassword(); passwordModalClose();">Change</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>

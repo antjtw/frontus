@@ -138,6 +138,55 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         });
                     });
 
+                    // Get the company's Paripassu's on issues
+                    SWBrijj.tblm('ownership.this_company_paripassu').then(function (links) {
+                        var links = links;
+                        angular.forEach($scope.issues, function(issue) {
+                            issue.paripassu = [];
+                            angular.forEach(links, function(pari) {
+                                if (pari.issue == issue.issue) {
+                                    issue.paripassu.push(pari);
+                                }
+                            });
+                            if (issue.paripassu.length == 0) {
+                                issue.paripassu.push({"company":issue.company, "issue": issue.issue, "pariwith": null});
+                            }
+                        })
+                    });
+
+                    SWBrijj.tblm('ownership.this_company_conversion').then(function (convert) {
+                        SWBrijj.tblm('ownership.this_company_transfer').then(function (transfer) {
+                            angular.forEach($scope.trans, function (tran) {
+                                tran.convert = [];
+                                angular.forEach(convert, function(con) {
+                                    if (con.tranto == tran.tran_id) {
+                                        var offset = con.date.getTimezoneOffset();
+                                        con.date = con.date.addMinutes(offset);
+                                        if (con.method == "Split") {
+                                            con.split = new Fraction(con.split);
+                                        }
+                                        tran.convert.push(con);
+                                    }
+                                });
+
+                                angular.forEach(transfer, function(transf) {
+                                    var offset = transf.date.getTimezoneOffset();
+                                    transf.date = transf.date.addMinutes(offset);
+                                    if (transf.tranto == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "To";
+                                        tran.convert.push(final);
+                                    }
+                                    else if (transf.tranfrom == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "From";
+                                        tran.convert.push(final);
+                                    }
+                                });
+                            });
+                        });
+                    });
+
                     angular.forEach($scope.rows, function (row) {
                         angular.forEach($scope.issues, function (issue) {
                             if (row[issue.issue] != undefined) {
@@ -336,17 +385,23 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     };
 
+    $scope.canHover = function (row) {
+        if (row['u'] || row['a']) {
+            return true
+        }
+        else {
+            return false
+        }
+    };
+
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = $scope.formatAmount(amount);
-        if (output) {
-            output = "$" + output
-        }
-        return (output);
+        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+        return output;
     };
 
     // Functions derived from services for use in the table
