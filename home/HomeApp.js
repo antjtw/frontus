@@ -30,6 +30,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
+            console.log($scope.company);
             angular.forEach($scope.currencies, function(c) {
                if (c.indexOf($scope.company.currency) !== -1) {
                    $scope.company.longcurrency = c;
