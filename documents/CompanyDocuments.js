@@ -500,7 +500,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         // Sharing modal functions
 
         $scope.shareDocOpen = function(doc) {
-            console.log("share modal opening");
             $scope.docToShare = doc;
             $scope.shareDocModal = true;
         };
