@@ -28,8 +28,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             return;
         }
 
-        console.log("here we are");
-
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
             angular.forEach($scope.currencies, function(c) {
