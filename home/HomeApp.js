@@ -28,6 +28,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             return;
         }
 
+        console.log("here we are");
+
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
             angular.forEach($scope.currencies, function(c) {
@@ -64,7 +66,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     $scope.docsummary.counter = 0;
                     angular.forEach(sharedocs, function(doc) {
                         if (doc.signature_status == "signature requested (awaiting investor)") {
-                            console.log(doc.signature_status);
                             $scope.docsummary.sig += 1;
                         }
                         else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
