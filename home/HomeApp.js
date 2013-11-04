@@ -416,7 +416,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         });
                         doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_time : null;
                         $scope.setDocStatusRank(doc);
-                        if (!((doc.signature_deadline && doc.when_confirmed) || (!doc.signature_deadline && doc.last_viewed))) {
+                        if (!((doc.signature_deadline && doc.when_signed) || (!doc.signature_deadline && doc.last_viewed))) {
                             $scope.docsummary.sig += 1;
                         }
                     });
