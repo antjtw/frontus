@@ -1166,6 +1166,8 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 > li > ul > li {
     overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 288px;
     border: 1px solid #F1F1F1;
