@@ -11,10 +11,6 @@
  		<script src="index.js"></script>
 		<script>
 			$(document).ready(function(){
-			  $( "#inviteButton" ).click(function() {
-			    $('html, body').animate({
-			      scrollTop: $( "#CompanyRegister-form" ).offset().top - 20}, 600);
-			  });
 			  $( "#nextPage" ).click(function() {
 			    $('html, body').animate({
 			      scrollTop: $( "#comms" ).offset().top}, 600);
@@ -36,11 +32,52 @@
 				<img src="/img/white-down.png" id="nextPage" class="paginator hidden-phone" data-0="opacity:1"
                      data-100="opacity:0">
     			<div class="row-fluid">
-					<div class="span10 offset1"> 
-						<div class="spacer80"></div>
+					<div class="span10 offset1">
+                        <div class="hidden-phone"><div class="spacer70"></div></div>
+                        <div class="spacer10"></div>
 						<h3>Introducing Sharewave</h3>
 						<h1>The best way to manage <br class="hidden-phone">your shareholders</h1>
-						<button class="button greenButton" id="inviteButton" type="submit">Request Invitation</button>
+
+                        <div id="CompanyRegister-form">
+                            <div class="box on" ng-show="toggle" ng-animate="'box'">
+                                <form name="myForm">
+                                    <fieldset>
+                                        <input type="email" class="loginInput" name="email" placeholder="Your Email Address" ng-model="user.email"  >
+                                        <button type="submit" class="button greenButton" id="submitInvite"
+                                                ng-click="toggle = !toggle; companyRequest();" >Sign Up</button>
+                                    </fieldset>
+                                </form>
+                            </div>
+
+                            <div class="box off top" ng-hide="toggle" ng-animate="'box'">
+                                <div class="row-fluid">
+                                    <div class="span6 text-center thanks">
+                                        <div class="block"></div>
+                                        <div class="text">
+                                            <h2>Thanks for signing up to use Sharewave!</h2>
+                                            <div class="spacer10"></div>
+                                            <p>Please check your email to complete your registration.</p>
+                                            <div class="hidden-phone">
+                                                <p>Spread the word to your fellow entrepreneurs:</p>
+                                                <div class="spacer20"></div>
+
+                                                <a href="https://twitter.com/intent/tweet?text=Check%20out%20Sharewave%2C%20the%20best%20way%20for%20private%20companies%20to%20manage%20their%20shareholders&via=sharewaveteam&url=http://bit.ly/shwvtw&original_referer=http://sharewave.com/" target="_blank">
+                                                    <button class="button socialbtn twitter" type="button"><span data-icon="&#xe035;" aria-hidden="true"></span><span>Share</span></button>
+                                                </a>
+                                                <a href="https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb" target="_blank">
+                                                    <button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>
+                                                </a>
+                                                <a href="http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+The+best+way+to+manage+your+shareholders&source=Sharewave&summary=Spend%20more%20time%20running%20your%20business%20and%20less%20time%20on%20it%27s%20administration%2C%20no%20matter%20if%20you%20have%20one%20investor%20or%20one%20thousand." target="_blank">
+                                                    <button class="button socialbtn linkedin" type="button"><span data-icon="&#xe036;" aria-hidden="true"></span><span>Share</span></button>
+                                                </a>
+                                                <div class="spacer20"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
 					</div>
 				</div>
  			</div>
@@ -228,17 +265,18 @@
 					<div class="span10 offset1 text-center">
 						 <div id="CompanyRegister-form">
 						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
-								<h2>Request Invite</h2>
-								<p>Sharewave is creating accounts on a rolling basis, request yours now.</p>					
-								<div class="spacer30"></div>					
+								<h2>How much does this cost?</h2>
+                                <div class="spacer30"></div>
+								<div class="currency">$</div><div class="price">0</div>
+                                <div class="spacer20"></div>
+
+                                <p>For six months, for founding companies who join today.</p>
+								<div class="spacer20"></div>
 								<form name="myForm">
 									<fieldset>
-										<input type="email" class="loginInput" name="email" placeholder="EMAIL ADDRESS" ng-model="user.email"  ><br>
-										<input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" ><br>
-										<input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" ><br>
-										<div class="spacer40"></div>
-										<button type="submit" class="button greenButton" id="submitInvite" ng-disabled="fieldCheck()"
-                                                ng-click="toggle = !toggle; companyRequest();" >Request Invitation</button>
+										<input type="email" class="loginInput" name="email" placeholder="Your Email Address" ng-model="user.email"  >
+										<button type="submit" class="button greenButton" id="submitInvite"
+                                                ng-click="toggle = !toggle; companyRequest();" >Sign Up</button>
 									</fieldset>
 								</form>
 							</div>
@@ -246,14 +284,15 @@
 							<div class="box off" ng-hide="toggle" ng-animate="'box'">
 								<h2>Thanks for signing up to use Sharewave!</h2>
 								<div class="spacer10"></div>
-								<p>We appreciate your interest, and we're excited to get you on board as soon as possible.</p>
-								<div class="spacer30"></div>
+								<p>Please check your email to complete your registration.</p>
 								<p>Spread the word to your fellow entrepreneurs:</p>
-								<a href="https://twitter.com/intent/tweet?text=Check%20out%20Sharewave%2C%20the%20best%20way%20for%20private%20companies%20to%20manage%20their%20shareholders&via=sharewaveteam&url=http://bit.ly/shwvtw&original_referer=http://sharewave.com/" target="_blank">
+                                <div class="spacer20"></div>
+
+                                <a href="https://twitter.com/intent/tweet?text=Check%20out%20Sharewave%2C%20the%20best%20way%20for%20private%20companies%20to%20manage%20their%20shareholders&via=sharewaveteam&url=http://bit.ly/shwvtw&original_referer=http://sharewave.com/" target="_blank">
 									<button class="button socialbtn twitter" type="button"><span data-icon="&#xe035;" aria-hidden="true"></span><span>Share</span></button>
 								</a>
 								<a href="https://www.facebook.com/sharer/sharer.php?u=http://bit.ly/shwvfb" target="_blank">
-									<button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>	
+									<button class="button socialbtn fb" type="button"><span data-icon="&#xe037;" aria-hidden="true"></span><span>Share</span></button>
 								</a>
 								<a href="http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/shwvln&title=Sharewave%3A+The+best+way+to+manage+your+shareholders&source=Sharewave&summary=Spend%20more%20time%20running%20your%20business%20and%20less%20time%20on%20it%27s%20administration%2C%20no%20matter%20if%20you%20have%20one%20investor%20or%20one%20thousand." target="_blank">
 									<button class="button socialbtn linkedin" type="button"><span data-icon="&#xe036;" aria-hidden="true"></span><span>Share</span></button>
