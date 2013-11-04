@@ -123,7 +123,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = calculate.formatMoneyAmount(memformatamount(amount), $scope.settings);
+        var output = calculate.formatMoneyAmount(formatAmount(amount), $scope.settings);
         return output;
     };
 };
