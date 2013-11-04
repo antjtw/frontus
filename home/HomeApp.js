@@ -356,6 +356,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $scope.person = x[0];
+            console.log($scope.person);
             $scope.photoURL = '/photo/user?id=' + x[0].email;
             $scope.person.namekey = $scope.person.name;
 
