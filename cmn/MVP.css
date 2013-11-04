@@ -552,8 +552,9 @@ h2 {
 }
 
 .topnav .nav-photo > img {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
 }
 
 .bottomnav {
