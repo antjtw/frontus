@@ -82,31 +82,27 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             return color(d.data.percent); })
                         .on("mouseover", function(d) {
                             var colour = color(d.data.percent);
-                            d3.select(this).transition()
+                            /*d3.select(this).transition()
                                 .duration(200)
-                                .attr("d", arcOver);
+                                .attr("d", arcOver);*/
 
                             d3.select(".mainlabel")
                                 .text(d.data.name)
-                                .style("fill", colour);
 
                             d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%")
-                                .style("fill", colour);
                         })
 
                         .on("mouseout", function(d) {
-                            d3.select(this).transition()
+                            /*d3.select(this).transition()
                                 .duration(100)
-                                .attr("d", arc);
+                                .attr("d", arc);*/
 
                             d3.select(".mainlabel")
                                 .text('Ownership')
-                                .style("fill", "black");
 
                             d3.select(".percentlabel")
                                 .text('100%')
-                                .style("fill", "black");
                         });
                 }
 
