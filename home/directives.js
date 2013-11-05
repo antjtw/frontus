@@ -64,20 +64,23 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .enter().append("g")
                         .attr("class", "arc");
 
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,15)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .style("fill", "blue")
+                        .attr("class", "mainlabel")
+                        .text('Ownership');
+
 
                     g.append("path")
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
-                            label = g.append("text")
-                                .attr("transform", function(d) {
-                                    return "translate(0,15)";
-                                })
-                                .attr("dy", ".5em")
-                                .style("text-anchor", "middle")
-                                .style("fill", "blue")
-                                .attr("class", "on")
+                            d3.select(".mainlabel")
                                 .text(d.data.name);
 
                             text = g.append("text")
@@ -90,7 +93,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
-                            label.remove();
                             text.remove();
                         });
                 }
