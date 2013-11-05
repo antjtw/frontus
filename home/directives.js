@@ -92,6 +92,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%")
                                 .style("fill", function(current) {
+                                    console.log(current);
                                     return color(current.data.percent); });
                         })
 
