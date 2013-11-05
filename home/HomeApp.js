@@ -22,6 +22,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
         $scope.flipped1 = false;
         $scope.flipped2 = false;
+        $scope.donutlabel = "100%";
+        $scope.default = "100%";
 
         if (navState.role == 'investor') {
             $location.path('/investor');
