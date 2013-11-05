@@ -71,8 +71,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
                         .style("fill", "blue")
-                        .attr("class", "mainlabel")
-                        .text('Ownership');
+                        .attr("class", "mainlabel");
 
 
                     g.append("path")
