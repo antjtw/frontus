@@ -71,7 +71,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
                             label = g.append("text")
-                                .attr("transform", arc.centroid(d))
+                                .attr("transform", function(d) {
+                                    return "translate(0,2)";
+                                })
                                 .attr("dy", ".5em")
                                 .style("text-anchor", "middle")
                                 .style("fill", "blue")
