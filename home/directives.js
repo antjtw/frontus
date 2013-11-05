@@ -81,7 +81,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d , i) {
                             return color(d.data.percent); })
                         .on("mouseover", function(d) {
-                            var current = d;
+                            var colour = color(d.data.percent);
                             d3.select(this).transition()
                                 .duration(200)
                                 .attr("d", arcOver);
@@ -91,9 +91,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                             d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%")
-                                .style("fill", function(current) {
-                                    console.log(current);
-                                    return color(current.data.percent); });
+                                .style("fill", colour);
                         })
 
                         .on("mouseout", function(d) {
