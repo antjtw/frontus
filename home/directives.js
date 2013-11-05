@@ -21,7 +21,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
             var arc = d3.svg.arc()
                 .outerRadius(radius- 10)
-                .innerRadius(radius - 40);
+                .innerRadius(radius - 30);
 
             var pie = d3.layout.pie()
                 .sort(null)
