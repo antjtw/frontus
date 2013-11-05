@@ -385,6 +385,11 @@
 
 /* Pie Chart Styling */
 
+.exploded-donut {
+    margin-top: 10px;
+    display: block;
+}
+
 .mainlabel {
    font-size: 16px;
 }
