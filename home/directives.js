@@ -10,8 +10,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var width = 300,
-                height = 200,
+            var width = 180,
+                height = 180,
                 radius = Math.min(width, height) / 2;
 
             var labelr = radius-25;
