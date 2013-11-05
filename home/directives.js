@@ -72,7 +72,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .on("mouseenter", function(d) {
                             label = g.append("text")
                                 .attr("transform", function(d) {
-                                    return "translate(0,10)";
+                                    return "translate(0,15)";
                                 })
                                 .attr("dy", ".5em")
                                 .style("text-anchor", "middle")
@@ -93,43 +93,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             label.remove();
                             text.remove();
                         });
-
-
-                    g.append("svg:text")
-                        .attr("transform", function(d) {
-                            var c = arc.centroid(d),
-                                x = c[0],
-                                y = c[1],
-                            // pythagorean theorem for hypotenuse
-                                h = Math.sqrt(x*x + y*y);
-                            return "translate(" + (x/h * labelr) +  ',' +
-                                (y/h * labelr) +  ")";
-                        })
-                        .attr("dy", ".35em")
-                        .attr("text-anchor", function(d) {
-                            // are we past the center?
-                            return (d.endAngle + d.startAngle)/2 > Math.PI ?
-                                "end" : "start";
-                        })
-                        .text(function(d, i) { return d.data.name});
-
-                    g.append("svg:text")
-                        .attr("transform", function(d) {
-                            var c = arc.centroid(d),
-                                x = c[0],
-                                y = c[1],
-                            // pythagorean theorem for hypotenuse
-                                h = Math.sqrt(x*x + y*y);
-                            return "translate(" + (x/h * labelr) +  ',' +
-                                ((y/h * labelr) + 12) +  ")";
-                        })
-                        .attr("dy", ".35em")
-                        .attr("text-anchor", function(d) {
-                            // are we past the center?
-                            return (d.endAngle + d.startAngle)/2 > Math.PI ?
-                                "end" : "start";
-                        })
-                        .text(function(d, i) { return d.data.percent.toFixed(2) + "%"});
                 }
 
             };
