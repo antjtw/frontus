@@ -70,7 +70,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
-                            var text = g.append("text")
+                            text = g.append("text")
                                 .attr("transform", arc.centroid(d))
                                 .attr("dy", ".5em")
                                 .style("text-anchor", "middle")
