@@ -72,7 +72,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .on("mouseenter", function(d) {
                             label = g.append("text")
                                 .attr("transform", function(d) {
-                                    return "translate(0,5)";
+                                    return "translate(0,10)";
                                 })
                                 .attr("dy", ".5em")
                                 .style("text-anchor", "middle")
