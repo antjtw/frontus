@@ -70,6 +70,19 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
+                            label = g.append("text")
+                                .attr("transform", function(d) {
+                                    var c = arc.centroid(d),
+                                        x = c[0],
+                                        y = c[1];
+                                    return "translate(" + x +  ',' +
+                                        ((y + 12) +  ")");
+                                })
+                                .attr("dy", ".5em")
+                                .style("text-anchor", "middle")
+                                .style("fill", "blue")
+                                .attr("class", "on")
+                                .text(d.data.name);
                             text = g.append("text")
                                 .attr("transform", arc.centroid(d))
                                 .attr("dy", ".5em")
@@ -80,6 +93,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
+                            label.remove();
                             text.remove();
                         });
 
