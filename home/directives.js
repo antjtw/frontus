@@ -64,21 +64,13 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .enter().append("g")
                         .attr("class", "arc");
 
-                    var text = g.append("text")
-                        .attr("transform", arc.centroid(d))
-                        .attr("dy", ".5em")
-                        .style("text-anchor", "middle")
-                        .style("fill", "blue")
-                        .attr("class", "on")
-                        .text("100%");
 
                     g.append("path")
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
-                            text.remove();
-                            text = g.append("text")
+                            var text = g.append("text")
                                 .attr("transform", arc.centroid(d))
                                 .attr("dy", ".5em")
                                 .style("text-anchor", "middle")
