@@ -73,6 +73,16 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", "blue")
                         .attr("class", "mainlabel");
 
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,0)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .style("fill", "blue")
+                        .attr("class", "percentlabel");
+
+
 
                     g.append("path")
                         .attr("d", arc)
@@ -82,17 +92,15 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.select(".mainlabel")
                                 .text(d.data.name);
 
-                            text = g.append("text")
-                                .attr("transform", arc.centroid(d))
-                                .attr("dy", ".5em")
-                                .style("text-anchor", "middle")
-                                .style("fill", "blue")
-                                .attr("class", "on")
+                            d3.select('percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%");
                         })
 
                         .on("mouseout", function(d) {
-                            text.remove();
+                            d3.select(".mainlabel")
+                                .text('Ownership');
+                            d3.select(".percentlabel")
+                                .text('100%');
                         });
                 }
 
