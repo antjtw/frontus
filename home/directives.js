@@ -79,7 +79,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
-                            text.remove();
+                            text.removeAll();
                         });
 
 
