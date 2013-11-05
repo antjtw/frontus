@@ -174,14 +174,10 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                             });
                         });
                         $scope.graphdata = [];
-                        console.log(totalunits);
-                        console.log(totaldebt);
                         angular.forEach($scope.issues, function (issue) {
                             var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
                             $scope.graphdata.push({'name':issue.issue, 'percent':issuepercent});
                         });
-
-                        console.log($scope.graphdata);
 
                     });
                 });
