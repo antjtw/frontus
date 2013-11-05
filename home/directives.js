@@ -67,7 +67,20 @@ app.directive('d3expdonut', ['d3', function(d3) {
                     g.append("path")
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
-                        .style("fill", function(d) { return color(d.data.percent); });
+                        .style("fill", function(d) { return color(d.data.percent); })
+                        .on("mouseenter", function(d) {
+                            text = g.append("text")
+                                .attr("transform", arc.centroid(d))
+                                .attr("dy", ".5em")
+                                .style("text-anchor", "middle")
+                                .style("fill", "blue")
+                                .attr("class", "on")
+                                .text(function(d) { return d.data.percent.toFixed(2) + "%"});
+                        })
+
+                        .on("mouseout", function(d) {
+                            text.remove();
+                        });
 
 
                     g.append("svg:text")
