@@ -20,8 +20,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
 
             var arc = d3.svg.arc()
-                .outerRadius(radius- 40)
-                .innerRadius(radius - 60);
+                .outerRadius(radius- 10)
+                .innerRadius(radius - 40);
 
             var pie = d3.layout.pie()
                 .sort(null)
