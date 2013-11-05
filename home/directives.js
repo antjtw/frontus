@@ -89,7 +89,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                 .text(d.data.name);
 
                             d3.select('.percentlabel')
-                                .text(d.data.percent.toFixed(2) + "%");
+                                .text(d.data.percent.toFixed(2) + "%")
+                                .style("fill", function(d) { return color(d.data.percent); });
                         })
 
                         .on("mouseout", function(d) {
@@ -100,7 +101,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.select(".mainlabel")
                                 .text('Ownership');
                             d3.select(".percentlabel")
-                                .text('100%');
+                                .text('100%')
+                                .style("fill", "black");
                         });
                 }
 
