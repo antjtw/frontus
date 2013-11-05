@@ -90,7 +90,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 });
                 $scope.ownersummary.investedraw = angular.copy($scope.ownersummary.invested);
                 $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.invested);
-                /*SWBrijj.tblm('ownership.company_issue').then(function (data) {
+                SWBrijj.tblm('ownership.company_issue').then(function (data) {
                     $scope.issues = data;
                     SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                         $scope.grants = grants;
@@ -182,7 +182,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                         console.log($scope.graphdata);
 
                     });
-                });*/
+                });
                 $scope.ownersummary.peoplenum = $scope.ownersummary.people.length;
             });
             SWBrijj.tblm("ownership.clean_company_access").then(function (people) {
