@@ -80,29 +80,31 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
                             return color(d.data.percent); })
+                        .attr("class", "pie-slices")
                         .on("mouseover", function(d) {
                             var colour = color(d.data.percent);
-                            /*d3.select(this).transition()
-                                .duration(200)
-                                .attr("d", arcOver);*/
+                            d3.select(".pie-slices").transition()
+                                .duration(100)
+                                .style("fill", "gray");
 
                             d3.select(".mainlabel")
-                                .text(d.data.name)
+                                .text(d.data.name);
 
                             d3.select('.percentlabel')
-                                .text(d.data.percent.toFixed(2) + "%")
+                                .text(d.data.percent.toFixed(2) + "%");
                         })
 
                         .on("mouseout", function(d) {
-                            /*d3.select(this).transition()
+                            d3.select(".pie-slices").transition()
                                 .duration(100)
-                                .attr("d", arc);*/
+                                .style("fill", function(d , i) {
+                                    return color(d.data.percent); });
 
                             d3.select(".mainlabel")
-                                .text('Ownership')
+                                .text('Ownership');
 
                             d3.select(".percentlabel")
-                                .text('100%')
+                                .text('100%');
                         });
                 }
 
