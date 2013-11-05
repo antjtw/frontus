@@ -87,7 +87,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                 .attr("d", arcOver);
 
                             d3.select(".mainlabel")
-                                .text(d.data.name);
+                                .text(d.data.name)
+                                .style("fill", colour);
 
                             d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%")
@@ -100,7 +101,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                 .attr("d", arc);
 
                             d3.select(".mainlabel")
-                                .text('Ownership');
+                                .text('Ownership')
+                                .style("fill", "black");
+
                             d3.select(".percentlabel")
                                 .text('100%')
                                 .style("fill", "black");
