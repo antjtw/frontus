@@ -82,7 +82,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", "blue")
                         .attr("class", "percentlabel");
 
-
+                    d3.select(".mainlabel")
+                        .text('Ownership');
+                    d3.select(".percentlabel")
+                        .text('100%');
 
                     g.append("path")
                         .attr("d", arc)
