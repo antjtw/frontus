@@ -92,7 +92,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.select(".mainlabel")
                                 .text(d.data.name);
 
-                            d3.select('percentlabel')
+                            d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%");
                         })
 
