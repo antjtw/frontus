@@ -70,7 +70,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
-                        .style("fill", "blue")
                         .attr("class", "mainlabel");
 
                     g.append("text")
@@ -79,7 +78,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
-                        .style("fill", "blue")
                         .attr("class", "percentlabel");
 
                     d3.select(".mainlabel")

@@ -383,3 +383,13 @@
     float: right;
 }
 
+/* Pie Chart Styling */
+
+.mainlabel {
+   font-size: 20px;
+}
+
+.percentlabel {
+   font-size: 20px;
+}
+
