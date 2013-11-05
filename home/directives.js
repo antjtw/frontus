@@ -81,7 +81,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseover", function(d) {
 
-                            d3.select(this).select("path").transition()
+                            d3.select(this).transition()
                                 .duration(200)
                                 .attr("d", arcOver);
 
@@ -93,7 +93,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
-                            d3.select(this).select("path").transition()
+                            d3.select(this).transition()
                                 .duration(100)
                                 .attr("d", arc);
 
