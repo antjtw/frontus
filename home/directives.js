@@ -83,9 +83,15 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("class", "pie-slices")
                         .on("mouseover", function(d) {
                             var colour = color(d.data.percent);
-                            d3.select(".pie-slices").transition()
-                                .duration(100)
-                                .style("fill", "gray");
+                            var current = this;
+                            d3.selectAll(".pie-slices").transition()
+                                .duration(250)
+                                .style("fill", function() {
+                                    return (this === current) ? colour : "gray";
+                                })
+                                .style("opacity", function() {
+                                return (this === current) ? 1 : 0.5;
+                                });
 
                             d3.select(".mainlabel")
                                 .text(d.data.name);
@@ -95,10 +101,13 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
-                            d3.select(".pie-slices").transition()
-                                .duration(100)
+                            d3.selectAll(".pie-slices").transition()
+                                .duration(250)
                                 .style("fill", function(d , i) {
-                                    return color(d.data.percent); });
+                                    return color(d.data.percent); })
+                                .style("opacity", function() {
+                                    return 1;
+                                });
 
                             d3.select(".mainlabel")
                                 .text('Ownership');
