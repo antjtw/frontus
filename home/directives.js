@@ -75,7 +75,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                 .style("text-anchor", "middle")
                                 .style("fill", "blue")
                                 .attr("class", "on")
-                                .text(function(d) { return d.data.percent.toFixed(2) + "%"});
+                                .text(d.data.percent.toFixed(2) + "%");
                         })
 
                         .on("mouseout", function(d) {
