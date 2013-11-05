@@ -29,19 +29,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
 
             // Exploding displacement
-            var displace = function(d, axis) {
-                // Calculate angle bisector
-                var ang = d.startAngle + (d.endAngle - d.startAngle)/2;
-                // Transformate to SVG space
-                ang = (ang - (Math.PI / 2) ) * -1;
-
-                if (ang > 3.14) {
-                     return 1;
-                }
-                else {
-                    return -1;
-                }
-            };
+            var arcOver = d3.svg.arc()
+                .innerRadius(radius- 5)
+                .outerRadius(radius - 25);
 
             var svg = d3.select(iElement[0])
                 .append('svg')
@@ -89,7 +79,12 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d) { return color(d.data.percent); })
-                        .on("mouseenter", function(d) {
+                        .on("mouseover", function(d) {
+
+                            d3.select(this).select("path").transition()
+                                .duration(200)
+                                .attr("d", arcOver);
+
                             d3.select(".mainlabel")
                                 .text(d.data.name);
 
@@ -98,6 +93,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
 
                         .on("mouseout", function(d) {
+                            d3.select(this).select("path").transition()
+                                .duration(100)
+                                .attr("d", arc);
+
                             d3.select(".mainlabel")
                                 .text('Ownership');
                             d3.select(".percentlabel")
