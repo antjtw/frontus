@@ -30,8 +30,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
             // Exploding displacement
             var arcOver = d3.svg.arc()
-                .innerRadius(radius- 5)
-                .outerRadius(radius - 25);
+                .outerRadius(radius - 5)
+                .innerRadius(radius- 25);
 
             var svg = d3.select(iElement[0])
                 .append('svg')
