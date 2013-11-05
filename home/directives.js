@@ -66,7 +66,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                     g.append("text")
                         .attr("transform", function(d) {
-                            return "translate(0,15)";
+                            return "translate(0,5)";
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
@@ -75,7 +75,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                     g.append("text")
                         .attr("transform", function(d) {
-                            return "translate(0,0)";
+                            return "translate(0,-10)";
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
