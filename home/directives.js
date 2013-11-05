@@ -78,7 +78,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                     g.append("path")
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
-                        .style("fill", function(d) { return color(d.data.percent); })
+                        .style("fill", function(d , i) {
+                            console.log(d);
+                            console.log(i);
+                            return color(d.data.percent); })
                         .on("mouseover", function(d) {
 
                             d3.select(this).transition()
@@ -90,7 +93,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                             d3.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%")
-                                .style("fill", function(d) { return color(d.data.percent); });
+                                .style("fill", function(d, i) {
+                                    console.log(d);
+                                    console.log(i);
+                                    return color(d.data.percent); });
                         })
 
                         .on("mouseout", function(d) {
