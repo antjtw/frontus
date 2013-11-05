@@ -79,11 +79,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
-                            console.log(d);
-                            console.log(i);
                             return color(d.data.percent); })
                         .on("mouseover", function(d) {
-
+                            console.log(d);
                             d3.select(this).transition()
                                 .duration(200)
                                 .attr("d", arcOver);
