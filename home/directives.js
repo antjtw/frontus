@@ -91,9 +91,11 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d) { return color(d.data.percent); })
                         .on("mouseenter", function(d) {
                             d3.select(".mainlabel")
+                                .style("fill", function(d) { return color(d.data.percent); })
                                 .text(d.data.name);
 
                             d3.select('.percentlabel')
+                                .style("fill", function(d) { return color(d.data.percent); })
                                 .text(d.data.percent.toFixed(2) + "%");
                         })
 
