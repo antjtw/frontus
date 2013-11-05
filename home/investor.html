@@ -66,6 +66,41 @@
             </div>
         </div>
     </div>
+    <div class="span4 flip-tile" ng-class="{'reverse':flipped2}">
+        <div class="flipper">
+            <div class="front info-box">
+                <div ng-show="docsummary.num > 0" class="head-box" ng-click="flipTile(2);">
+                    <h2>My Ownership</h2>
+                    <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div class="body-box">
+                    <div>
+                        <div class="detail-row row-fluid">
+                            <div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-upload.png'>
+                                    <h2><span>{{docsummary.num}}</span> Documents</h2>
+                                </div>
+                                <div>
+                                    <img src='/img/onboardingicons/dayone/doc-sign.png'>
+                                    <h2><span>{{docsummary.sig}}</span> Waiting for Action</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="back info-box">
+                <div class="head-box" ng-click="flipTile(2);">
+                    <span data-icon="&#xe032;" aria-hidden="true"></span>
+                    <h2>My Ownership</h2>
+                </div>
+                <div class="body-box mini-table">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="span4 issuer-profile">
         <div class="row-fluid">
             <div class="span3">
@@ -107,7 +142,10 @@
             </ul>
         </div>
     </div>
+</div>
 
+<div class="row-fluid home-bottom-row">
+    <div class="span8"></div>
     <div class="span4">
         <div class="info-box all-gray">
             <div class="head-box">
