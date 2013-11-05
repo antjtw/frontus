@@ -86,6 +86,16 @@
     display: inline-block;
 }
 
+.home .frequency{
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: normal;
+    display: inline;
+    margin-left: -8px;
+}
+
 .videoModal.modal {
     width: 50%;
     height: 400px;
