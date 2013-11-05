@@ -24,7 +24,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .innerRadius(radius - 30);
 
             var pie = d3.layout.pie()
-                .sort(null)
+                .sort(function(a, b) { return b.percent - a.percent; })
                 .value(function(d) { return d.percent; });
 
 
