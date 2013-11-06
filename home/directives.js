@@ -305,7 +305,8 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             var yAxis = d3.svg.axis()
                 .scale(y)
-                .orient("left")
+                .ticks(4)
+                .orient("left");
 
             var svg = d3.select(iElement[0])
                 .append("svg")
@@ -338,7 +339,6 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("y", 6)
                         .attr("dy", ".71em")
                         .style("text-anchor", "end")
-                        .text("Frequency");
 
                     svg.selectAll(".bar")
                         .data(data)
@@ -347,7 +347,8 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("x", function(d) { return x(d.date); })
                         .attr("width", x.rangeBand())
                         .attr("y", function(d) { return y(d.units); })
-                        .attr("height", function(d) { return height - y(d.units); });
+                        .attr("height", function(d) { return height - y(d.units); })
+                        .style("fill", "#1abc96");
 
                 }
 

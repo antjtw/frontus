@@ -242,9 +242,9 @@ ownership.service('calculate', function () {
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 var cycleDate = angular.copy(tran.date).add(1).days();
                 // Create dictionary of all vesting events, [number vested by today's date, number that will be vested in total]
-                myvested[vestbegin] = [0,(tran.units * (tran.vestcliff / 100))];
+                myvested[vestbegin.toString("MMM/yyyy")] = [0,(tran.units * (tran.vestcliff / 100))];
                 if (Date.compare(Date.today(), vestbegin) > -1) {
-                    myvested[vestbegin][0] += (tran.units * (tran.vestcliff / 100));
+                    myvested[vestbegin.toString("MMM/yyyy")][0] += (tran.units * (tran.vestcliff / 100));
                 }
                 var remainingterm = angular.copy(tran.terms);
                 while (Date.compare(vestbegin, cycleDate) > -1) {
@@ -278,9 +278,9 @@ ownership.service('calculate', function () {
                     else {
                         cycleDate.addMonths(x);
                     }
-                    myvested[cycleDate] = [0, (x * ((monthlyperc / 100) * tran.units))];
+                    myvested[cycleDate.toString("MMM/yyyy")] = [0, (x * ((monthlyperc / 100) * tran.units))];
                     if (Date.compare(Date.today(), cycleDate) > -1) {
-                        myvested[cycleDate][0] += (x * ((monthlyperc / 100) * tran.units));
+                        myvested[cycleDate.toString("MMM/yyyy")][0] += (x * ((monthlyperc / 100) * tran.units));
                     }
                 }
             }
