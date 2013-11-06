@@ -430,6 +430,16 @@
     opacity: 1;
 }
 
+.axis path {
+    fill: none;
+    stroke: #e3e3e3;
+    shape-rendering: crispEdges;
+}
+
+.y.axis path, .yticks path {
+    display: none;
+}
+
 #tooltip {
     position: absolute;
     text-align: center;

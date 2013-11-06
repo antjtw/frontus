@@ -263,7 +263,7 @@ app.directive('d3myvested', ['d3', function(d3) {
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
                         .attr("class", "percentlabel")
-                        .text(data[0].units);
+                        .text(data[0].units.toFixed(2));
 
                     g.append("path")
                         .attr("d", arc)
@@ -289,8 +289,8 @@ app.directive('d3vestedbar', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var margin = {top: 20, right: 20, bottom: 30, left: 60},
-                width = 440 - margin.left - margin.right,
+            var margin = {top: 20, right: 20, bottom: 50, left: 60},
+                width = 480 - margin.left - margin.right,
                 height = 260 - margin.top - margin.bottom;
 
             var x = d3.scale.ordinal()
@@ -301,7 +301,6 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             var xAxis = d3.svg.axis()
                 .scale(x)
-                .tickValues(x.month)
                 .orient("bottom");
 
             var yAxis = d3.svg.axis()
@@ -343,13 +342,20 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
                 if (data) {
 
-                    x.domain(data.map(function(d) { return d.date; }));
+                    x.domain(data.map(function(d) { return d.month; }));
                     y.domain([0, d3.max(data, function(d) { return d.units; })]);
 
                     svg.append("g")
                         .attr("class", "x axis")
                         .attr("transform", "translate(0," + height + ")")
-                        .call(xAxis);
+                        .call(xAxis)
+                            .selectAll("text")
+                            .style("text-anchor", "end")
+                            .attr("dx", "-.8em")
+                            .attr("dy", ".15em")
+                            .attr("transform", function(d) {
+                                return "rotate(-65)"
+                            });
 
                     svg.append("g")
                         .attr("class", "y axis")
