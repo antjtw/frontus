@@ -312,6 +312,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
             var yTicks = d3.svg.axis()
                 .scale(y)
                 .tickSize(width)
+                .ticks(4)
                 .orient("right");
 
             var svg = d3.select(iElement[0])
@@ -322,7 +323,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             var gy = svg.append("g")
-                .attr("class", "y ticks")
+                .attr("class", "yticks")
                 .call(yTicks)
                 .style("fill", "transparent");
 
@@ -362,7 +363,8 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("width", x.rangeBand())
                         .attr("y", function(d) { return y(d.units); })
                         .attr("height", function(d) { return height - y(d.units); })
-                        .style("fill", "#1abc96");
+                        .style("fill", function(d) {
+                            return d.vested == 0 ? "#1abc96" : "#E2E2E2"})
 
                 }
 

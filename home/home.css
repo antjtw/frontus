@@ -424,3 +424,9 @@
    font-size: 28px;
 }
 
+.yticks {
+    stroke: #e3e3e3;
+    stroke-width: 1;
+    opacity: 1;
+}
+
