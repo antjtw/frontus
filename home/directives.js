@@ -289,7 +289,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var margin = {top: 20, right: 20, bottom: 30, left: 40},
+            var margin = {top: 20, right: 20, bottom: 30, left: 60},
                 width = 440 - margin.left - margin.right,
                 height = 260 - margin.top - margin.bottom;
 
@@ -365,6 +365,28 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("height", function(d) { return height - y(d.units); })
                         .style("fill", function(d) {
                             return d.vested == 0 ? "#1abc96" : "#E2E2E2"})
+                        .on("mouseover", function(d) {
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", .9);
+                            div.html(String(d))
+                                .style("left", (d3.event.pageX) + "px")
+                                .style("top", (d3.event.pageY - 28) + "px");
+                        })
+                        .on("mouseout", function(d) {
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", 0);
+                        });
+
+                    svg.append("text")
+                        .attr("class", "y label")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", -margin.left)
+                        .attr("x",0 - (height / 2))
+                        .attr("dy", "1em")
+                        .style("text-anchor", "middle")
+                        .text("Shares");
 
                 }
 
