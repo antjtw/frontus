@@ -301,6 +301,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             var xAxis = d3.svg.axis()
                 .scale(x)
+                .tickValues(x.month)
                 .orient("bottom");
 
             var yAxis = d3.svg.axis()
@@ -308,12 +309,25 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 .ticks(4)
                 .orient("left");
 
+            var yTicks = d3.svg.axis()
+                .scale(y)
+                .tickSize(width)
+                .orient("right");
+
             var svg = d3.select(iElement[0])
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var gy = svg.append("g")
+                .attr("class", "y ticks")
+                .call(yTicks)
+                .style("fill", "transparent");
+
+            gy.selectAll("text")
+                .attr("display", "none");
 
             scope.$watch('data', function(newVals, oldVals) {
                 return scope.render(newVals);
