@@ -330,6 +330,11 @@ app.directive('d3vestedbar', ['d3', function(d3) {
             gy.selectAll("text")
                 .attr("display", "none");
 
+            var div = d3.select(iElement[0])
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
             scope.$watch('data', function(newVals, oldVals) {
                 return scope.render(newVals);
             }, true);
