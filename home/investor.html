@@ -69,21 +69,29 @@
     <div class="span4 flip-tile" ng-class="{'reverse':flipped2}">
         <div class="flipper">
             <div class="front info-box">
-                <div ng-show="docsummary.num > 0" class="head-box" ng-click="flipTile(2);">
+                <div class="head-box" ng-click="flipTile(2);">
                     <h2>My Ownership</h2>
                     <span data-icon="&#xe033;" aria-hidden="true"></span>
                 </div>
                 <div class="body-box">
                     <div>
-                        <div class="detail-row row-fluid">
-                            <div>
+                        <div class="side-graph row-fluid">
+                            <div class="span5">
                                 <div>
-                                    <img src='/img/onboardingicons/dayone/doc-upload.png'>
-                                    <h2><span>{{docsummary.num}}</span> Documents</h2>
+                                    <div>
+                                        <h2><span>{{myownership.shares}}</span>Total Shares</h2>
+                                    </div>
+                                    <div ng-show="myownership.amount">
+                                        <h2><span>{{myownership.amount}}</span>Total Invested</h2>
+                                    </div>
                                 </div>
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/doc-sign.png'>
-                                    <h2><span>{{docsummary.sig}}</span> Waiting for Action</h2>
+                            </div>
+                            <div class="span7">
+                                <d3myownership class="personal-ownership" data='graphdata'></d3myownership>
+                                <div class="view-button">
+                                    <div class="small-standard-button standard-button gray">
+                                        <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

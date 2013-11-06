@@ -121,3 +121,84 @@ app.directive('d3expdonut', ['d3', function(d3) {
         }
     };
 }]);
+
+app.directive('d3myownership', ['d3', function(d3) {
+    return {
+        restrict: 'EA',
+        scope: {
+            data: "=",
+            label: "@",
+            onClick: "&"
+        },
+        link: function(scope, iElement, iAttrs) {
+
+            var width = 130,
+                height = 130,
+                radius = Math.min(width, height) / 2;
+
+            var color = d3.scale.ordinal()
+                .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
+
+            var arc = d3.svg.arc()
+                .outerRadius(radius)
+                .innerRadius(radius - 15);
+
+            var pie = d3.layout.pie()
+                .sort(function(a, b) { return b.percent - a.percent; })
+                .startAngle(-1.57079633)
+                .endAngle(4.71238898)
+                .value(function(d) { return d.percent; });
+
+
+            var svg = d3.select(iElement[0])
+                .append('svg')
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+            scope.$watch('data', function(newVals, oldVals) {
+                return scope.render(newVals);
+            }, true);
+
+            scope.render = function(data){
+
+                if (data) {
+                    console.log(data);
+
+                    var g = svg.selectAll(".arc")
+                        .data(pie(data))
+                        .enter().append("g")
+                        .attr("class", "arc");
+
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,10)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .attr("class", "mainlabel")
+                        .text('Ownership');
+
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,-15)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .attr("class", "percentlabel")
+                        .text(data[0].percent.toFixed(2) + "%");
+
+                    g.append("path")
+                        .attr("d", arc)
+                        .attr("transform", function(d) { return "translate(0,0)"; })
+                        .style("fill", function(d , i) {
+                            return i == 0 ? "#1abc96" : "#E2E2E2"})
+                        .attr("class", "pie-slices");
+
+                }
+
+            };
+        }
+    };
+}]);
