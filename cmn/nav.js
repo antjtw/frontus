@@ -72,6 +72,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         }
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         $scope.navState = navState;
+        console.log("initial navState");
+        console.log(navState);
         navState.path = document.location.pathname;
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;

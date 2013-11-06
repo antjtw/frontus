@@ -25,6 +25,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         if (navState.role == 'investor') {
             console.log("CompanyCtrl switch");
+            console.log(navState);
             $location.path('/investor');
             return;
         }
@@ -343,6 +344,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         if (navState.role == 'issuer') {
             console.log("InvestorCtrl switch");
+            console.log(navState);
             $location.path('/company');
             return;
         }
