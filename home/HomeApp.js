@@ -524,9 +524,9 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             angular.forEach($scope.myvested, function (value, key) {
                                 totalavailable += value[1];
                                 totalvested += value[0];
-                                $scope.vestedgraphdata.push({'date':key, 'units':value[1], 'month':key.substring(0,4), 'vested': (value[1]-value[0])});
+                                $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':key.substring(0,4), 'vested': (value[1]-value[0])});
                             });
-                            $scope.vesteddonut = [{'name':"vested", 'units': totalvested}, {'name':"rest", 'units': (totalavailable-totalvested)}];
+                            $scope.vesteddonut = [{'name':"vested", 'units': (totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
                         });
                     });
                 });

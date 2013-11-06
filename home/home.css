@@ -430,16 +430,25 @@
     opacity: 1;
 }
 
-div.tooltip {
+#tooltip {
     position: absolute;
     text-align: center;
-    width: 60px;
-    height: 28px;
+    width: 100px;
+    height: 40px;
     padding: 2px;
     font: 12px sans-serif;
-    background: lightsteelblue;
+    background-color: #1D2C3C;
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    color: #C6C6C6;
 }
 

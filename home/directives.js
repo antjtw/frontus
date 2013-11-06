@@ -371,17 +371,24 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .style("fill", function(d) {
                             return d.vested == 0 ? "#1abc96" : "#E2E2E2"})
                         .on("mouseover", function(d) {
-                            div.transition()
-                                .duration(200)
-                                .style("opacity", .9);
-                            div.html(String(d))
-                                .style("left", (d3.event.pageX) + "px")
-                                .style("top", (d3.event.pageY - 28) + "px");
+                            var xPosition = parseFloat(d3.select(this).attr("x")) + 30;
+                            var yPosition = parseFloat(d3.select(this).attr("y")) - 30;
+
+                            d3.select("#tooltip")
+                                .style("left", xPosition + "px")
+                                .style("top", yPosition + "px")
+                                .select("#date")
+                                .text(d.date);
+
+                            d3.select("#tooltip")
+                                .select("#value")
+                                .text(d.units);
+
+                            d3.select("#tooltip").classed("hidden", false);
                         })
-                        .on("mouseout", function(d) {
-                            div.transition()
-                                .duration(200)
-                                .style("opacity", 0);
+                        .on("mouseout", function() {
+                            d3.select("#tooltip").classed("hidden", true);
+
                         });
 
                     svg.append("text")
