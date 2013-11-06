@@ -156,6 +156,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         SWBrijj.tblm('account.profile').then(function(x) {
             $rootScope.person = x[0];
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            Intercom('boot', {email:$rootScope.person.email, app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", name:$rootScope.person.name});
         });
 
         // Notification code
@@ -203,7 +204,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.gotohome = function() {
-            console.log("here");
             location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
         };
     }]);

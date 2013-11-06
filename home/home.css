@@ -221,6 +221,22 @@
     margin-top: 5px;
 }
 
+.side-graph > div:first-child > div {
+    display: table-cell;
+    height: 228px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.side-graph > div:first-child > div > div:last-child {
+    margin-top: 30px;
+}
+
+.side-graph > div:first-child > div > div >  h2 > span {
+    display: block;
+    font-size: 24px;
+}
+
 .view-button {
     position: absolute;
     bottom: 20px;
@@ -381,5 +397,26 @@
 
 .modalText.settings > div > ul {
     float: right;
+}
+
+/* Pie Chart Styling */
+
+.exploded-donut {
+    margin-top: 10px;
+    display: block;
+}
+
+.personal-ownership {
+    display: block;
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.mainlabel {
+   font-size: 16px;
+}
+
+.percentlabel {
+   font-size: 28px;
 }
 
