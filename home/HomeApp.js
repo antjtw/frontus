@@ -26,6 +26,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.default = "100%";
 
         if (navState.role == 'investor') {
+            console.log("CompanyCtrl switch");
             $location.path('/investor');
             return;
         }
@@ -340,6 +341,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
+            console.log("InvestorCtrl switch");
             $location.path('/company');
             return;
         }
@@ -726,11 +728,13 @@ app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route
     SWBrijj.tbl('account.companies').then(function(x) {
         // console.log(x);
         if (x.length > 0) { //User is a CEO of a company
+            console.log("HomeCtrl first switch");
             document.location.href="company";
         } else {
+            console.log("HomeCtrl second switch");
             SWBrijj.tblm('account.invested_companies').then(function(x) {
                 document.location.href=x[0]['company'];
-            })
+            });
         }
     });
 }]);
