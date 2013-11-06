@@ -235,6 +235,59 @@ ownership.service('calculate', function () {
         return rows
     };
 
+    this.myvested = function (trans) {
+        var myvested = {};
+        angular.forEach(trans, function (tran) {
+            var vestbegin = angular.copy(tran.vestingbegins);
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                var cycleDate = angular.copy(tran.date).add(1).days();
+                // Create dictionary of all vesting events, [number vested by today's date, number that will be vested in total]
+                myvested[vestbegin] = [0,(tran.units * (tran.vestcliff / 100))];
+                if (Date.compare(Date.today(), vestbegin) > -1) {
+                    myvested[vestbegin][0] += (tran.units * (tran.vestcliff / 100));
+                }
+                var remainingterm = angular.copy(tran.terms);
+                while (Date.compare(vestbegin, cycleDate) > -1) {
+                    remainingterm = remainingterm - 1;
+                    cycleDate.addMonths(1);
+                }
+                cycleDate.add(-1).days();
+                var finalDate = vestbegin.addMonths(remainingterm);
+                var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                var x = 1;
+                if (tran.vestfreq == "monthly") {
+                    x = 1
+                }
+                else if (tran.vestfreq == "weekly") {
+                    x = 0.25
+                }
+                else if (tran.vestfreq == "bi-weekly") {
+                    x = 0.5
+                }
+                else if (tran.vestfreq == "quarterly") {
+                    x = 3;
+                }
+                else if (tran.vestfreq == "yearly") {
+                    x = 12;
+                }
+                finalDate.add(-1).days();
+                while (Date.compare(finalDate, cycleDate) > -1) {
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    myvested[cycleDate] = [0, (x * ((monthlyperc / 100) * tran.units))];
+                    if (Date.compare(Date.today(), cycleDate) > -1) {
+                        myvested[cycleDate][0] += (x * ((monthlyperc / 100) * tran.units));
+                    }
+                }
+            }
+        });
+        return myvested;
+    };
+
     // Generates the diluted rows
     this.dilution = function (rows, issues) {
         var dilutedRows = [];

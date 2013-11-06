@@ -477,6 +477,13 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                     }
                                 });
                             });
+
+                            $scope.optiontrans = [];
+                            angular.forEach($scope.trans, function(tran) {
+                                if (tran.email == $rootScope.person.email && tran.type == "Option") {
+                                    $scope.optiontrans.push(tran);
+                                }
+                            });
                             $scope.issuepercent = {};
                             angular.forEach($scope.issues, function (issue) {
                                 $scope.issuepercent[issue.issue] = {'units':0,'debt':0};
@@ -499,13 +506,27 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 });
                             });
 
+                            // This calculates the data for the ownership donut graph
                             $scope.graphdata = [];
                             angular.forEach($scope.rows, function (row) {
                                 if (row.email == $rootScope.person.email) {
                                     $scope.graphdata.push({'name':"mine", 'percent':(100 - parseFloat($scope.everyone.percentage))});
+                                    $scope.myrow = row;
                                 }
                             });
                             $scope.graphdata.push({'name':"everyone", 'percent': parseFloat($scope.everyone.percentage)});
+
+                            // This calculates the data for the vesting tab
+                            $scope.myvested = calculate.myvested($scope.optiontrans);
+                            var totalavailable = 0;
+                            var totalvested = 0;
+                            $scope.vestedgraphdata = []
+                            angular.forEach($scope.myvested, function (value, key) {
+                                totalavailable += value[1];
+                                totalvested += value[0];
+                                $scope.vestedgraphdata.push({'date':key, 'units':value[1]});
+                            });
+                            $scope.vesteddonut = [{'name':"vested", 'units': totalvested}, {'name':"rest", 'units': (totalavailable-totalvested)}];
                         });
                     });
                 });

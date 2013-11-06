@@ -104,7 +104,31 @@
                     <h2>My Ownership</h2>
                 </div>
                 <div class="body-box mini-table">
-
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Security</th>
+                                <th>Shares</th>
+                                <th>Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="issue in issues | limitTo:5">
+                                <td>{{issue.issue | caplength:25}}</td>
+                                <td>
+                                    {{myrow[issue.issue].u}}
+                                </td>
+                                <td>
+                                    {{myrow[issue.issue].a}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="view-button">
+                        <div class="small-standard-button standard-button gray">
+                            <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,7 +177,42 @@
 </div>
 
 <div class="row-fluid home-bottom-row">
-    <div class="span8"></div>
+    <div class="span8 flip-tile" ng-class="{'reverse':flipped3}">
+        <div class="flipper">
+            <div class="front info-box">
+                <div class="head-box" ng-click="flipTile(3);">
+                    <h2>Grant Vesting</h2>
+                    <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div class="body-box">
+                    <div>
+                        <div class="side-graph row-fluid">
+                            <div class="span9">
+                                <d3vestedbar data='vestedgraphdata'></d3vestedbar>
+                            </div>
+                            <div class="span3">
+                                <d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
+                                <div class="view-button">
+                                    <div class="small-standard-button standard-button gray">
+                                        <button class="btn" ng-click="gotopage('/ownership/investor-grants')">View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="back info-box">
+                <div class="head-box" ng-click="flipTile(3);">
+                    <span data-icon="&#xe032;" aria-hidden="true"></span>
+                    <h2>Grant Vesting</h2>
+                </div>
+                <div class="body-box mini-table">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="span4">
         <div class="info-box all-gray">
             <div class="head-box">
