@@ -127,6 +127,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                             navState.role = thiscmp.role;
                             navState.name = thiscmp.name;
                             navState.reasons = $scope.initReasons(thiscmp.reasons);
+                            console.log("initCompany switch");
                             document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
                             return;
                         }
