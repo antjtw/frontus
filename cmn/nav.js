@@ -27,7 +27,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
                     }                                          // End found rule name
                 }                                             // end found cssRule
                 ii++;                                         // Increment sub-counter
-            } while (cssRule)                                // end While loop
+            } while (cssRule);                                // end While loop
         }                                                   // end For loop
     }                                                      // end styleSheet ability check
     return false;                                          // we found NOTHING!
@@ -47,7 +47,7 @@ navm.factory('navState', [function () {
         userid: document.sessionState.userid,
         tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
         path: undefined
-    }
+    };
 }]);
 
 /** @unused NavCtrl */
@@ -57,7 +57,7 @@ navm.directive('navbar', function () {
         restrict: 'E',
         templateUrl: '/cmn/nav.html',
         controller: 'NavCtrl'
-    }
+    };
 });
 
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
@@ -77,6 +77,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.isCollapsed = true;
 
         $scope.switch = function (nc) {
+            console.log("navState switch");
             /** @name SWBrijj#switch_company
              * @function
              * @param {string} company
@@ -88,7 +89,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
         $scope.toggleLogin = function() {
             $scope.isCollapsed = !$scope.isCollapsed;
-        }
+        };
 
         // Take the string from the database and parse it into a useable dictionary
         $scope.initReasons = function(reasons) {
@@ -97,8 +98,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             angular.forEach(temp, function(reason) {
                 dictionary[reason] = true;
             });
-            return dictionary
-        }
+            return dictionary;
+        };
 
         $scope.initCompany = function(cmps) {
             $scope.companies = cmps;
@@ -120,7 +121,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             } else {
                 SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
                     angular.forEach(data, function (comp) {
-                        if (thiscmp.company == comp.company && comp.current == true) {
+                        if (thiscmp.company == comp.company && comp.current === true) {
                             thiscmp.current = true;
                             navState.company = thiscmp.company;
                             navState.role = thiscmp.role;
