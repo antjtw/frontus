@@ -247,6 +247,11 @@
     right: 20px;
 }
 
+.body-box.mini-table > .right-half {
+    width: 284px;
+    float: right;
+}
+
 .body-box.mini-table {
     box-sizing: border-box;
     padding: 20px 20px 0 20px;
@@ -422,6 +427,10 @@
 
 .percentlabel {
    font-size: 28px;
+}
+
+.unitslabel {
+    font-size: 24px;
 }
 
 .yticks {

@@ -262,8 +262,8 @@ app.directive('d3myvested', ['d3', function(d3) {
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
-                        .attr("class", "percentlabel")
-                        .text(data[0].units.toFixed(2));
+                        .attr("class", "unitslabel")
+                        .text(data[0].roundedunits);
 
                     g.append("path")
                         .attr("d", arc)

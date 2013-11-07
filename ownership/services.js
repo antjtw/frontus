@@ -516,7 +516,7 @@ ownership.service('calculate', function () {
             var n = amount.toString().split(".");
             var sizefactor = Math.floor((n[0].length-1)/3);
             if (sizefactor == 0) {
-                amount = n;
+                amount = n[0];
             }
             else {
                 var big = String(n[0]).substring(0, n[0].length - (sizefactor*3));

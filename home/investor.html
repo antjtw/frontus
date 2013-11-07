@@ -212,7 +212,45 @@
                     <h2>Grant Vesting</h2>
                 </div>
                 <div class="body-box mini-table">
-
+                    <table class="right-half">
+                        <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shares</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Issued</td>
+                            <td>
+                                {{formatAmount(vestedsummary.issued) || 0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Vested</td>
+                            <td>
+                                {{formatAmount(vestedsummary.vested) || 0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exercised</td>
+                            <td>
+                                {{formatAmount(vestedsummary.exercised) || 0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Forfeited</td>
+                            <td>
+                                {{formatAmount(vestedsummary.forfeited) || 0}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="view-button">
+                        <div class="small-standard-button standard-button gray">
+                            <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
