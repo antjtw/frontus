@@ -21,6 +21,7 @@
 
 .home-top-row > div.issuer-profile > div:first-child > div:first-child {
     background-color: #FFFFFF;
+    border-radius: 3px;
 }
 
 .home-top-row > div.issuer-profile > div:first-child > div:nth-child(2) {
