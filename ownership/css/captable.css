@@ -1117,6 +1117,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     padding-left: 10px;
 }
 
+.transferModal .docLibrary {
+    display: inline-block;
+}
+
 .modal .input-row {
     height:65px;
     border-top: 1px solid #E3E3E3;

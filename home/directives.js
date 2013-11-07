@@ -144,7 +144,7 @@ app.directive('d3myownership', ['d3', function(d3) {
                 .innerRadius(radius - 15);
 
             var pie = d3.layout.pie()
-                .sort(function(a, b) { return b.percent - a.percent; })
+                .sort(null)
                 .startAngle(-1.57079633)
                 .endAngle(4.71238898)
                 .value(function(d) { return d.percent; });
@@ -164,7 +164,6 @@ app.directive('d3myownership', ['d3', function(d3) {
             scope.render = function(data){
 
                 if (data) {
-                    console.log(data);
 
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
@@ -195,6 +194,219 @@ app.directive('d3myownership', ['d3', function(d3) {
                         .style("fill", function(d , i) {
                             return i == 0 ? "#1abc96" : "#E2E2E2"})
                         .attr("class", "pie-slices");
+
+                }
+
+            };
+        }
+    };
+}]);
+
+app.directive('d3myvested', ['d3', function(d3) {
+    return {
+        restrict: 'EA',
+        scope: {
+            data: "=",
+            label: "@",
+            onClick: "&"
+        },
+        link: function(scope, iElement, iAttrs) {
+
+            var width = 130,
+                height = 130,
+                radius = Math.min(width, height) / 2;
+
+            var arc = d3.svg.arc()
+                .outerRadius(radius)
+                .innerRadius(radius - 15);
+
+            var pie = d3.layout.pie()
+                .sort(null)
+                .startAngle(-1.57079633)
+                .endAngle(4.71238898)
+                .value(function(d) { return d.units; });
+
+
+            var svg = d3.select(iElement[0])
+                .append('svg')
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+            scope.$watch('data', function(newVals, oldVals) {
+                return scope.render(newVals);
+            }, true);
+
+            scope.render = function(data){
+
+                if (data) {
+
+                    var g = svg.selectAll(".arc")
+                        .data(pie(data))
+                        .enter().append("g")
+                        .attr("class", "arc");
+
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,10)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .attr("class", "mainlabel")
+                        .text('Vested');
+
+                    g.append("text")
+                        .attr("transform", function(d) {
+                            return "translate(0,-15)";
+                        })
+                        .attr("dy", ".5em")
+                        .style("text-anchor", "middle")
+                        .attr("class", "unitslabel")
+                        .text(data[0].roundedunits);
+
+                    g.append("path")
+                        .attr("d", arc)
+                        .attr("transform", function(d) { return "translate(0,0)"; })
+                        .style("fill", function(d , i) {
+                            return i == 0 ? "#1abc96" : "#E2E2E2"})
+                        .attr("class", "pie-slices");
+
+                }
+
+            };
+        }
+    };
+}]);
+
+app.directive('d3vestedbar', ['d3', function(d3) {
+    return {
+        restrict: 'EA',
+        scope: {
+            data: "=",
+            label: "@",
+            onClick: "&"
+        },
+        link: function(scope, iElement, iAttrs) {
+
+            var margin = {top: 20, right: 20, bottom: 50, left: 60},
+                width = 480 - margin.left - margin.right,
+                height = 260 - margin.top - margin.bottom;
+
+            var x = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1);
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .ticks(4)
+                .orient("left");
+
+            var yTicks = d3.svg.axis()
+                .scale(y)
+                .tickSize(width)
+                .ticks(4)
+                .orient("right");
+
+            var svg = d3.select(iElement[0])
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var gy = svg.append("g")
+                .attr("class", "yticks")
+                .call(yTicks)
+                .style("fill", "transparent");
+
+            gy.selectAll("text")
+                .attr("display", "none");
+
+            var div = d3.select(iElement[0])
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            scope.$watch('data', function(newVals, oldVals) {
+                return scope.render(newVals);
+            }, true);
+
+            scope.render = function(data){
+
+                if (data) {
+
+                    x.domain(data.map(function(d) { return d.month; }));
+                    var max = d3.max(data, function(d) { return parseFloat(d.units); });
+                    console.log(max);
+                    y.domain([0, max]);
+
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis)
+                            .selectAll("text")
+                            .style("text-anchor", "end")
+                            .attr("dx", "-.8em")
+                            .attr("dy", ".15em")
+                            .attr("transform", function(d) {
+                                return "rotate(-65)"
+                            });
+
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .call(yAxis)
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", 6)
+                        .attr("dy", ".71em")
+                        .style("text-anchor", "end");
+
+                    svg.selectAll(".bar")
+                        .data(data)
+                        .enter().append("rect")
+                        .attr("class", "bar")
+                        .attr("x", function(d) { return x(d.date); })
+                        .attr("width", x.rangeBand())
+                        .attr("y", function(d) { return y(d.units); })
+                        .attr("height", function(d) { return height - y(d.units); })
+                        .style("fill", function(d) {
+                            return d.vested == 0 ? "#1abc96" : "#E2E2E2"})
+                        .on("mouseover", function(d) {
+                            var xPosition = parseFloat(d3.select(this).attr("x")) + 30;
+                            var yPosition = parseFloat(d3.select(this).attr("y")) - 30;
+
+                            d3.select("#tooltip")
+                                .style("left", xPosition + "px")
+                                .style("top", yPosition + "px")
+                                .select("#date")
+                                .text(d.date);
+
+                            d3.select("#tooltip")
+                                .select("#value")
+                                .text(d.units);
+
+                            d3.select("#tooltip").classed("hidden", false);
+                        })
+                        .on("mouseout", function() {
+                            d3.select("#tooltip").classed("hidden", true);
+
+                        });
+
+                    svg.append("text")
+                        .attr("class", "y label")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", -margin.left)
+                        .attr("x",0 - (height / 2))
+                        .attr("dy", "1em")
+                        .style("text-anchor", "middle")
+                        .text("Shares");
 
                 }
 

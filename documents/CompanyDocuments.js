@@ -983,13 +983,16 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.setLastUpdates = function() {
             var i = 0;
             while ((!$scope.lastsent || !$scope.lastedit) &&
-                    i < $scope.activity.length-1) {
+                    i <= $scope.activity.length-1) {
                 switch ($scope.activity[i].activity) {
                     case "received":
                     case "reminder":
                         $scope.initLastSent($scope.activity[i]);
                         break;
                     case "edited":
+                        $scope.initLastEdit($scope.activity[i]);
+                        break;
+                    case "uploaded":
                         $scope.initLastEdit($scope.activity[i]);
                         break;
                 }

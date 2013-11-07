@@ -423,6 +423,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                                 tran.forfeited = grant.unit;
                                             }
                                         }
+                                        if (grant.action == "exercised") {
+                                            if (tran.exercised) {
+                                                tran.exercised = tran.exercised + grant.unit;
+                                            }
+                                            else {
+                                                tran.exercised = grant.unit;
+                                            }
+                                        }
                                     }
                                 });
                             });
@@ -479,6 +487,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                     }
                                 });
                             });
+
+                            $scope.optiontrans = [];
+                            angular.forEach($scope.trans, function(tran) {
+                                if (tran.email == $rootScope.person.email && tran.type == "Option") {
+                                    $scope.optiontrans.push(tran);
+                                }
+                            });
+
                             $scope.issuepercent = {};
                             angular.forEach($scope.issues, function (issue) {
                                 $scope.issuepercent[issue.issue] = {'units':0,'debt':0};
@@ -501,13 +517,39 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 });
                             });
 
+                            // This calculates the data for the ownership donut graph
                             $scope.graphdata = [];
                             angular.forEach($scope.rows, function (row) {
                                 if (row.email == $rootScope.person.email) {
                                     $scope.graphdata.push({'name':"mine", 'percent':(100 - parseFloat($scope.everyone.percentage))});
+                                    $scope.myrow = row;
                                 }
                             });
                             $scope.graphdata.push({'name':"everyone", 'percent': parseFloat($scope.everyone.percentage)});
+
+                            // This calculates the data for the vesting tab
+                            var vestedarray = calculate.myvested($scope.optiontrans);
+                            $scope.myvested = vestedarray[0];
+                            var tranvested = vestedarray[1];
+                            console.log(tranvested);
+                            angular.forEach(tranvested, function(vest, key) {
+                                angular.forEach($scope.optiontrans, function(tran) {
+                                    if (key == tran.date) {
+                                        tran.vested = vest;
+                                    }
+                                });
+                            });
+                            var totalavailable = 0;
+                            var totalvested = 0;
+                            $scope.vestedgraphdata = [];
+                            $scope.graphnumber= 0;
+                            angular.forEach($scope.myvested, function (value, key) {
+                                totalavailable += value[1];
+                                totalvested += value[0];
+                                $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
+                            });
+                            $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
+                            console.log($scope.vesteddonut);
                         });
                     });
                 });

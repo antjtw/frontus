@@ -114,6 +114,10 @@ table.docLibrary > tbody > tr:first-child > td {
     cursor: pointer;
 }
 
+.status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
+    text-align: center;
+}
+
 .status-showing td {
     background-color: #f1f1f1;
 }

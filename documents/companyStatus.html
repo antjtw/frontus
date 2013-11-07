@@ -38,7 +38,7 @@
           <div class="DivHelper"></div>
       </div>
       <div style="margin-left: 0;" class="span8 recipientInfo docLibrary statusBlock">
-          <table class="status-table">
+          <table class="status-table doc-status">
               <tbody>
                   <tr>
                       <th ng-click="setOrder('name')">Shareholder</th>
@@ -110,8 +110,8 @@
                 </div>
                 <div class="body-box">
                     <ul class="last-edited spaced-list">
-                        <li>{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                        <li>Sent</li>
+                        <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                        <li ng-show="lastsent">Sent</li>
                         <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Last Edited</li>
                         <!--

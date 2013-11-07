@@ -313,7 +313,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = calculate.formatMoneyAmount(formatAmount(amount), $scope.settings);
+        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
         return output;
     };
 

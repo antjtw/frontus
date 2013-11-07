@@ -235,6 +235,92 @@ ownership.service('calculate', function () {
         return rows
     };
 
+    this.myvested = function (trans) {
+        var myvested = {};
+        var tranvested = {};
+        var firstcolumn = new Date(5000000000000);
+        var lastcolumn = new Date(01-12-1000);
+        angular.forEach(trans, function(tran) {
+            tranvested[tran.date] = 0;
+            var vestbegin = angular.copy(tran.vestingbegins);
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                firstcolumn = Date.compare(vestbegin, firstcolumn) > -1 ? firstcolumn : vestbegin;
+            }
+            var remainingterm = angular.copy(tran.terms);
+            var startdate = angular.copy(tran.date);
+            while (remainingterm > 0) {
+                startdate.addMonths(1);
+                remainingterm -= 1
+            }
+            lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
+        });
+        while (Date.compare(lastcolumn, firstcolumn) > -1) {
+            myvested[firstcolumn.toString("MMM yyyy")] = [0,0];
+            firstcolumn.addMonths(1);
+        }
+        angular.forEach(trans, function (tran) {
+            var vestbegin = angular.copy(tran.vestingbegins);
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                var cycleDate = angular.copy(tran.date).add(1).days();
+                // Create dictionary of all vesting events, [number vested by today's date, number that will be vested in total]
+                if (myvested[vestbegin.toString("MMM yyyy")]) {
+                    myvested[vestbegin.toString("MMM yyyy")][1] += (tran.units * (tran.vestcliff / 100));
+                }
+                else {
+                    myvested[vestbegin.toString("MMM yyyy")] = [0,(tran.units * (tran.vestcliff / 100))];
+                }
+                if (Date.compare(Date.today(), vestbegin) > -1) {
+                    myvested[vestbegin.toString("MMM yyyy")][0] += (tran.units * (tran.vestcliff / 100));
+                    tranvested[tran.date] += (tran.units * (tran.vestcliff / 100));
+                }
+                var remainingterm = angular.copy(tran.terms);
+                while (Date.compare(vestbegin, cycleDate) > -1) {
+                    remainingterm = remainingterm - 1;
+                    cycleDate.addMonths(1);
+                }
+                cycleDate.add(-1).days();
+                var finalDate = vestbegin.addMonths(remainingterm);
+                var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                var x = 1;
+                if (tran.vestfreq == "monthly") {
+                    x = 1
+                }
+                else if (tran.vestfreq == "weekly") {
+                    x = 0.25
+                }
+                else if (tran.vestfreq == "bi-weekly") {
+                    x = 0.5
+                }
+                else if (tran.vestfreq == "quarterly") {
+                    x = 3;
+                }
+                else if (tran.vestfreq == "yearly") {
+                    x = 12;
+                }
+                finalDate.add(-1).days();
+                while (Date.compare(finalDate, cycleDate) > -1) {
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    if (myvested[cycleDate.toString("MMM yyyy")]) {
+                        myvested[cycleDate.toString("MMM yyyy")][1] += (x * ((monthlyperc / 100) * tran.units));
+                    }
+                    else {
+                        myvested[cycleDate.toString("MMM yyyy")] = [0,(x * ((monthlyperc / 100) * tran.units))];
+                    }
+                    if (Date.compare(Date.today(), cycleDate) > -1) {
+                        myvested[cycleDate.toString("MMM yyyy")][0] += (x * ((monthlyperc / 100) * tran.units));
+                        tranvested[tran.date] += (x * ((monthlyperc / 100) * tran.units));
+                    }
+                }
+            }
+        });
+        return [myvested,tranvested];
+    };
+
     // Generates the diluted rows
     this.dilution = function (rows, issues) {
         var dilutedRows = [];
@@ -453,7 +539,7 @@ ownership.service('calculate', function () {
             var n = amount.toString().split(".");
             var sizefactor = Math.floor((n[0].length-1)/3);
             if (sizefactor == 0) {
-                amount = n;
+                amount = n[0];
             }
             else {
                 var big = String(n[0]).substring(0, n[0].length - (sizefactor*3));

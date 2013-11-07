@@ -45,6 +45,7 @@ navm.factory('navState', [function () {
         name: document.sessionState.name,
         role: document.sessionState.role,
         userid: document.sessionState.userid,
+        userhash: document.sessionState.userhash,
         tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
         path: undefined
     };
@@ -141,6 +142,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('global.my_companies').then(function (x) {
             $scope.initCompany(x);
+            console.log($rootScope.navState);
+            Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // ?
@@ -156,7 +159,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         SWBrijj.tblm('account.profile').then(function(x) {
             $rootScope.person = x[0];
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
-            Intercom('boot', {email:$rootScope.person.email, app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", name:$rootScope.person.name});
         });
 
         // Notification code
