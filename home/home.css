@@ -214,6 +214,7 @@
     display: inline-block;
     margin-right: 5px;
     font-size: 28px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 .detail-row > div:last-child {
@@ -243,6 +244,7 @@
 .side-graph > div:first-child > div > div >  h2 > span {
     display: block;
     font-size: 24px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 .view-button {
