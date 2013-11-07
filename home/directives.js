@@ -343,7 +343,9 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 if (data) {
 
                     x.domain(data.map(function(d) { return d.month; }));
-                    y.domain([0, d3.max(data, function(d) { return d.units; })]);
+                    y.domain([0, d3.max(data, function(d) {
+                        console.log(d.units);
+                        return d.units; })]);
 
                     svg.append("g")
                         .attr("class", "x axis")
@@ -364,7 +366,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("transform", "rotate(-90)")
                         .attr("y", 6)
                         .attr("dy", ".71em")
-                        .style("text-anchor", "end")
+                        .style("text-anchor", "end");
 
                     svg.selectAll(".bar")
                         .data(data)
