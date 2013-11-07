@@ -41,11 +41,14 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
   $scope.toggle = true;
 
-  $scope.companyRequest = function () {
-      SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function (x) {
-        void(x);
+  $scope.companySelfRegister = function () {
+      SWBrijj.companySelfRegister($scope.user.email, 'issuer').then(function(requested) {
+          console.log(requested);
+          $scope.toggle = !$scope.toggle;
+          void(requested);
       }).except(function (x) {
-        void(x);
+          $scope.$emit("notification:fail", "Oops, something went wrong.");
+          console.log(x);
       });
   };
 

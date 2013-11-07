@@ -5,6 +5,7 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
   $routeProvider.
       when('/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
       when('/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
+      when('/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
       when('/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
       otherwise({redirectTo:'/'});
 });
@@ -16,11 +17,11 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
 /** @name $scope#email
  * @type {string} */
 
-   app.controller('CompanyCtrl', ['$scope','$location','$routeParams','SWBrijj',
+app.controller('CompanyCtrl', ['$scope','$location','$routeParams','SWBrijj',
   function($scope, $location, $routeParams, SWBrijj){
     $scope.code = $routeParams.code;
 
-    if ($scope.code == null) {
+    if (!$scope.code) {
         document.location.href="/";
     }
 
@@ -57,11 +58,47 @@ var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $loc
       return !$scope.password;
     };    
 }]);
+   
+app.controller('CompanySelfCtrl', ['$scope','$location','$routeParams','SWBrijj',
+  function($scope, $location, $routeParams, SWBrijj){
+    $scope.code = $routeParams.code;
+
+    if (!$scope.code) {
+        document.location.href="/";
+    }
+
+    /** @name SWBrijj#getInvitation
+     * @function
+     * @param {string} code
+     */
+    SWBrijj.getInvitation($scope.code).then(function(x) {
+      initPage($scope, x);
+      if ($scope.activated) { document.location.href="/login"; }
+    });
+
+    $scope.activate = function() {
+        console.log("activate@!");
+      SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, $scope.company, $scope.cname, false).then(function(activated) {
+          if (activated) {
+            document.location.href = activated + "?msg=first";
+          } else {
+            document.location.href = '/login';
+          }
+        }).except(function(x) {
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+        });
+    };
+
+    $scope.fieldCheck = function() {
+        return !($scope.pname && $scope.password && $scope.company && $scope.cname); 
+    };    
+}]);
 
 app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
   function($scope, $location, $routeParams, SWBrijj){
     $scope.code = $routeParams.code;
-    if ($scope.code == null) {
+    
+    if (!$scope.code) {
       document.location.href="/";
     }
     
