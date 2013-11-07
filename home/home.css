@@ -449,6 +449,10 @@
     shape-rendering: crispEdges;
 }
 
+.x.axis > .tick:nth-child(even) > text {
+    display: none;
+}
+
 .y.axis path, .yticks path {
     display: none;
 }

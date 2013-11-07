@@ -540,6 +540,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             var totalavailable = 0;
                             var totalvested = 0;
                             $scope.vestedgraphdata = [];
+                            $scope.graphnumber= 0;
                             angular.forEach($scope.myvested, function (value, key) {
                                 totalavailable += value[1];
                                 totalvested += value[0];
