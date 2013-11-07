@@ -144,7 +144,7 @@ app.directive('d3myownership', ['d3', function(d3) {
                 .innerRadius(radius - 15);
 
             var pie = d3.layout.pie()
-                .sort(function(a, b) { return b.percent - a.percent; })
+                .sort(null)
                 .startAngle(-1.57079633)
                 .endAngle(4.71238898)
                 .value(function(d) { return d.percent; });
