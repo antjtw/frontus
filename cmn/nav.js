@@ -117,7 +117,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 navState.role = thiscmp.role;
                 navState.name = thiscmp.name;
                 navState.reasons = $scope.initReasons(thiscmp.reasons);
-                Intercom('boot', {email:$rootScope.person.email, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", name:$rootScope.person.name, company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
+                Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", name:$rootScope.person.name, company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                 // We should take this out I think but need to double check this
                 //$route.reload();
             } else {
