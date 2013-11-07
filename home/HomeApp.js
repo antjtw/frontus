@@ -492,6 +492,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                     $scope.optiontrans.push(tran);
                                 }
                             });
+
                             $scope.issuepercent = {};
                             angular.forEach($scope.issues, function (issue) {
                                 $scope.issuepercent[issue.issue] = {'units':0,'debt':0};
@@ -525,7 +526,17 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             $scope.graphdata.push({'name':"everyone", 'percent': parseFloat($scope.everyone.percentage)});
 
                             // This calculates the data for the vesting tab
-                            $scope.myvested = calculate.myvested($scope.optiontrans);
+                            var vestedarray = calculate.myvested($scope.optiontrans);
+                            $scope.myvested = vestedarray[0];
+                            var tranvested = vestedarray[1];
+                            console.log(tranvested);
+                            angular.forEach(tranvested, function(vest, key) {
+                                angular.forEach($scope.optiontrans, function(tran) {
+                                    if (key == tran.date) {
+                                        tran.vested = vest;
+                                    }
+                                });
+                            });
                             var totalavailable = 0;
                             var totalvested = 0;
                             $scope.vestedgraphdata = [];
@@ -534,13 +545,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 totalvested += value[0];
                                 $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
                             });
-                            var totalforfeited = 0;
-                            var totalexercised = 0;
-                            angular.forEach($scope.optiontrans, function(tran) {
-                                totalforfeited = tran.forfeited ? totalforfeited + tran.forfeited : totalforfeited;
-                                totalexercised = tran.exercised ? totalforfeited + tran.exercised : totalforfeited;
-                            });
-                            $scope.vestedsummary = {'issued': totalavailable, 'vested': totalvested, 'forfeited': totalforfeited, 'exercised': totalexercised};
                             $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
                             console.log($scope.vesteddonut);
                         });

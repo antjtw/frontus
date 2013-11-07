@@ -237,11 +237,11 @@ ownership.service('calculate', function () {
 
     this.myvested = function (trans) {
         var myvested = {};
+        var tranvested = {};
         var firstcolumn = new Date(5000000000000);
-        console.log(firstcolumn);
         var lastcolumn = new Date(01-12-1000);
-        console.log(lastcolumn);
         angular.forEach(trans, function(tran) {
+            tranvested[tran.date] = 0;
             var vestbegin = angular.copy(tran.vestingbegins);
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 firstcolumn = Date.compare(vestbegin, firstcolumn) > -1 ? firstcolumn : vestbegin;
@@ -254,13 +254,10 @@ ownership.service('calculate', function () {
             }
             lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
         });
-        console.log(firstcolumn);
-        console.log(lastcolumn);
         while (Date.compare(lastcolumn, firstcolumn) > -1) {
             myvested[firstcolumn.toString("MMM yyyy")] = [0,0];
             firstcolumn.addMonths(1);
         }
-        console.log(myvested);
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins);
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
@@ -274,6 +271,7 @@ ownership.service('calculate', function () {
                 }
                 if (Date.compare(Date.today(), vestbegin) > -1) {
                     myvested[vestbegin.toString("MMM yyyy")][0] += (tran.units * (tran.vestcliff / 100));
+                    tranvested[tran.date] += (tran.units * (tran.vestcliff / 100));
                 }
                 var remainingterm = angular.copy(tran.terms);
                 while (Date.compare(vestbegin, cycleDate) > -1) {
@@ -315,11 +313,12 @@ ownership.service('calculate', function () {
                     }
                     if (Date.compare(Date.today(), cycleDate) > -1) {
                         myvested[cycleDate.toString("MMM yyyy")][0] += (x * ((monthlyperc / 100) * tran.units));
+                        tranvested[tran.date] += (x * ((monthlyperc / 100) * tran.units));
                     }
                 }
             }
         });
-        return myvested;
+        return [myvested,tranvested];
     };
 
     // Generates the diluted rows

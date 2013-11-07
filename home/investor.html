@@ -234,36 +234,30 @@
                     <h2>Grant Vesting</h2>
                 </div>
                 <div class="body-box mini-table">
-                    <table class="right-half">
+                    <table>
                         <thead>
                         <tr>
-                            <th>Action</th>
-                            <th>Shares</th>
+                            <th>Date</th>
+                            <th>Granted</th>
+                            <th>Vested</th>
+                            <th>Forfeited</th>
+                            <th>Exercised</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Issued</td>
+                        <tr ng-repeat="tran in optiontrans">
+                            <td>{{tran.date | date:settings.dateformat}}</td>
                             <td>
-                                {{formatAmount(vestedsummary.issued) || 0}}
+                                {{formatAmount(tran.units) || 0}}
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Vested</td>
                             <td>
-                                {{formatAmount(vestedsummary.vested) || 0}}
+                                {{formatAmount(tran.vested) || 0}}
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Exercised</td>
                             <td>
-                                {{formatAmount(vestedsummary.exercised) || 0}}
+                                {{formatAmount(tran.forfeited) || 0}}
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Forfeited</td>
                             <td>
-                                {{formatAmount(vestedsummary.forfeited) || 0}}
+                                {{formatAmount(tran.exercised) || 0}}
                             </td>
                         </tr>
                         </tbody>
