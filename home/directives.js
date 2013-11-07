@@ -343,7 +343,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 if (data) {
 
                     x.domain(data.map(function(d) { return d.month; }));
-                    var max = d3.max(data, function(d) { return d.units; });
+                    var max = d3.max(data, function(d) { return parseFloat(d.units); });
                     console.log(max);
                     y.domain([0, max]);
 
