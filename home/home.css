@@ -2,6 +2,10 @@
     background-color: #E2E2E2;
 }
 
+.no-left-margin {
+    margin-left: 0 !important;
+}
+
 .home-top-row > div {
     height: 300px;
 }
