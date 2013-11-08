@@ -29,6 +29,11 @@
     }
 }
 
+.home .loginInput {
+    padding-left: 15px;
+    margin-bottom: 0;
+}
+
 .home select, textarea, input[type="email"], .uneditable-input {
     padding-left: 15px;
     margin-bottom: 0;
