@@ -41,7 +41,7 @@
                     <span data-icon="&#xe032;" aria-hidden="true"></span>
                     <h2>Document Management</h2>
                 </div>
-                <div class="body-box mini-table">
+                <div class="body-box mini-table doc-table">
                     <table>
                         <thead>
                             <tr>
@@ -66,7 +66,7 @@
             </div>
         </div>
     </div>
-    <div ng-show="(myownership.shares > 0 || myownership.amount > 0)" class="span4 flip-tile" ng-class="{'reverse':flipped2, 'no-left-margin':(docsummary.num == 0)}">
+    <div ng-show="(myownership.shares > 0 || myownership.amount != null)" class="span4 flip-tile" ng-class="{'reverse':flipped2, 'no-left-margin':(docsummary.num == 0)}">
         <div class="flipper">
             <div class="front info-box">
                 <div class="head-box" ng-click="flipTile(2);">
@@ -134,7 +134,7 @@
         </div>
     </div>
 
-    <div ng-show="!(myownership.shares > 0 || myownership.amount > 0) || !(docsummary.num > 0)" class="span4">
+    <div ng-show="!(myownership.shares > 0 || myownership.amount != null) || !(docsummary.num > 0)" class="span4">
         <div class="info-box all-gray">
             <div class="head-box">
                 <h2>Activity</h2>

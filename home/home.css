@@ -287,7 +287,7 @@
     cursor: pointer;
 }
 
-.body-box.mini-table > table > tbody > tr:last-child {
+.body-box.mini-table.doc-table > table > tbody > tr:last-child {
     height: 25px;
     border: none;
 }
@@ -437,10 +437,12 @@
 }
 
 .percentlabel {
+   font-family: 'FS Elliot Web Light', sans-serif;
    font-size: 24px;
 }
 
 .unitslabel {
+    font-family: 'FS Elliot Web Light', sans-serif;
     font-size: 24px;
 }
 

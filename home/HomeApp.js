@@ -379,7 +379,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.eventGroups = [];
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent") {
+                    if (event.activity != "sent" && event.activity != "viewed") {
                         var timegroup = moment(event.time).fromNow();
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);

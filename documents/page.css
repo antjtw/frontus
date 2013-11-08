@@ -116,6 +116,7 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
     text-align: center;
+    width: 100px;
 }
 
 .status-showing td {

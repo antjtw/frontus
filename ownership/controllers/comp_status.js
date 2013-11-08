@@ -129,6 +129,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.alterEmail = function() {
         if ($scope.newEmail != $scope.oldEmail) {
+            console.log("updating");
             SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
               void(data);
                 // console.log(data);
@@ -139,6 +140,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                 });
         }
         else if ($scope.newEmail == $scope.oldEmail) {
+            console.log("resharing");
             SWBrijj.proc('ownership.reshare', $scope.oldEmail).then(function (data) {
               void(data);
                 $scope.$emit("notification:success", "Successfully resent");
