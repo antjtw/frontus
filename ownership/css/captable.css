@@ -997,7 +997,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     margin-right: 20px;
 }
 
-
+.convertModal .cancel-convert {
+    display: inline-block;
+    margin-right: 10px;
+}
 
 .capshareModal input, .capshareModal span {
     float: left;

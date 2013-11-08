@@ -543,11 +543,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     var oldissue = issue['key'];
+                    var index = -1;
+
+                    // Fires only when you change the issue name to update the rows
+                    // Removes unissued rows with the old name, new named ones get added further down
                     if (issue['issue'] != issue.key) {
                         angular.forEach($scope.rows, function (row) {
+                            if (row.name == issue['key'] + " (unissued)" && index == -1) {
+                                index = $scope.rows.indexOf(row);
+                            }
                             row[issue['issue']] = row[issue.key];
                             delete row[issue.key];
                         });
+                        if (index != -1) {
+                            $scope.rows.splice(index, 1);
+                        }
                     }
 
                     angular.forEach($scope.issues, function (x) {
