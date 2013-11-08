@@ -267,7 +267,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     SWBrijj.uploadLogo(fd).then(function(x) {
                         void(x);
                         console.log("here");
-                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company;
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company + '#' + new Date().getTime();
                         $scope.$emit("notification:success", "Company profile successfully updated");
                         $scope.company = company;
                     }).except( function(x) {
@@ -724,7 +724,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.profileUpdate = function (person) {
-            console.log(person);
             SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
                 void(x);
                 var fd = new FormData();
@@ -733,7 +732,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     SWBrijj.uploadImage(fd).then(function(x) {
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
-                        $scope.photoURL = '/photo/user?id=' + $scope.person.email;
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);
