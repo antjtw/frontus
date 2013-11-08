@@ -57,7 +57,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
             scope.render = function(data){
 
                 if (data) {
-                    console.log(data);
+
+                    data.sort(function(a, b) { return b.percent - a.percent; });
 
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
@@ -91,7 +92,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d , i) {
                             return corecolor(i); })
                         .attr("class", "pie-slices")
-                        .on("mouseover", function(d) {
+                        .on("mouseover", function(d, i) {
+                            console.log(i);
                             var colour = corecolor(i);
                             var current = this;
                             d3.selectAll(".pie-slices").transition()
