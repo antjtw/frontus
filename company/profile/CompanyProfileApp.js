@@ -77,7 +77,6 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
             $scope.get_issuers();
         }).except(function(x) {
                 void(x);
-                // console.log(x);
                 $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
             });
     };
@@ -89,7 +88,6 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
             $scope.get_issuers();
         }).except(function (x) {
                 void(x);
-                // console.log(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
     };
@@ -108,13 +106,11 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
             }
             SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) {
                 void(x);
-                // console.log("saved: "+x);
                 $scope.$emit("notification:success", "Your company profile has been updated successfully.");
                 $scope.namekey = $scope.name;
                 $scope.companykey = $scope.company;
             }).except(function(x) {
                     void(x);
-                    // console.log(x);
                     $scope.namekey = $scope.name;
                     $scope.companykey = $scope.company;
                     $scope.$emit("notification:fail", "There was an error updating your company profile.");
@@ -168,11 +164,9 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         SWBrijj.uploadLogo(fd).then(function(x) {
             void(x);
             $scope.photoURL = '/photo/user?id=company:' + $scope.company;
-            // console.log(x);
             $scope.$emit("notification:success", "Company logo successfully updated");
         }).except( function(x) {
                 void(x);
-                // console.log(x);
                 $scope.$emit("notification:fail", "Company logo change was unsuccessful, please try again.");
                 $scope.photoURL = '/photo/user?id=company:' + $scope.company;
             });
@@ -190,7 +184,6 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
 app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$route', function($scope, $rootScope, SWBrijj, navState, $route) {
 
     if (navState.role == 'investor') {
-        console.log("here");
         document.location.href="/home";
         return;
     }
@@ -224,14 +217,12 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
                 });
                 $scope.setLastLogins();
             });
-            // console.log(x);
             $scope.sort = 'name';
         });
     });
 
     $scope.setLastLogins = function() {
         SWBrijj.tblm("global.user_tracker").then(function (logins) {
-            console.log(logins);
             angular.forEach($scope.people, function (person) {
                 angular.forEach(logins, function (login) {
                     if (login.email === person.email) {
@@ -264,14 +255,23 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
 
     // Admin Modal Functions
 
-    $scope.adminModalOpen = function () {
+    $scope.adminModalOpen = function (email) {
+        $scope.newEmail = email;
         $scope.adminModal = true;
     };
 
     $scope.adminModalClose = function () {
-        $scope.newEmail = "";
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.adminModal = false;
+    };
+
+    $scope.removeAdminModalOpen = function(email) {
+        $scope.selectedToRevoke = email;
+        $scope.removeAdminModal = true;
+    };
+
+    $scope.removeAdminModalClose = function() {
+        $scope.removeAdminModal = false;
     };
 
     $scope.narrowopts = {
@@ -285,15 +285,26 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     };
 
     $scope.create_admin = function() {
-        SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
+        SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase(), navState.company).then(function(x) {
             void(x);
-            $scope.$emit("notification:success", "Admin Created");
+            $scope.$emit("notification:success", "Admin Added");
             $route.reload();
         }).except(function(x) {
                 void(x);
-                // console.log(x);
                 $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
         });
+        $scope.newEmail = "";
+    };
+    $scope.revoke_admin = function () {
+        SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function (x) {
+            void(x);
+            $scope.$emit("notification:success", "Admin Removed");
+            $route.reload();
+        }).except(function (x) {
+                void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+        });
+        $scope.selectedToRevoke = "";
     };
 }]);
 
@@ -341,11 +352,9 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
 
         SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(stuff) {
             $scope.activity = stuff;
-            // console.log($scope.activity);
         });
 
         $scope.changeVisibility = function (value) {
-            // console.log(value);
             $scope.level = value;
             SWBrijj.proc('ownership.update_investor_captable', userId, $scope.level).then(function (data) {
                 void(data);
