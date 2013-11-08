@@ -369,6 +369,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (version.last_event && version.last_event.activity) {
                 if (version.last_event.activity==='signed') {
                     return 'signed, awaiting countersign';
+                } else if (version.last_event.activity==='received') {
+                    return 'sent';
                 } else {
                     return version.last_event.activity;
                 }
