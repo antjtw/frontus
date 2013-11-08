@@ -6,6 +6,10 @@
     margin-left: 0 !important;
 }
 
+.wrap.background-gray .maincontent {
+    overflow: visible;
+}
+
 .home-top-row > div {
     height: 300px;
 }

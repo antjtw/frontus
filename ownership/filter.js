@@ -150,3 +150,9 @@ ownership.filter('icon', function() {
         else return "hunh?";
     }
 });
+
+ownership.filter('received', function () {
+    return function (activity) {
+        return (activity == "received") ? "was sent" : activity;
+    }
+});
