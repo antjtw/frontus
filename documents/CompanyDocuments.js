@@ -808,6 +808,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.confirmModalClose = function() {
+            $('*[data-spy=affix]').each(function () { $(this).data('affix').checkPosition(); });
             setCursor('default');
             $scope.processing = false;
             $scope.broadcastModalClose();
@@ -1352,6 +1353,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.confirmModalClose = function() {
             setCursor('default');
+            $('*[data-spy=affix]').each(function () { $(this).data('affix').checkPosition(); });
             $scope.processing = false;
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
