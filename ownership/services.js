@@ -555,7 +555,7 @@ ownership.service('calculate', function () {
             }
         }
         else {
-            amount = null;
+            amount = 0;
         }
         return amount
     };
