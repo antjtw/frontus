@@ -291,6 +291,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.pageBarSize = 10;
         $scope.showPageBar = true;
         $scope.isAnnotable = true;
+        $('.docViewerHeader').affix({
+            offset: {top: 120}
+        });
 
         $scope.$emit('docViewerReady');
 

@@ -1,7 +1,7 @@
 <div class="modal-backdrop" style="opacity:0.9;"></div>
 <div class="row-fluid" style="height:60px;"></div>
 <div class="docViewer" ng-hide="hidePage">
-    <div class="docViewerHeader affix-top" data-spy="affix" data-offset-top="128">
+    <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
             <div class="pull-left">
                 <div class="docName">{{lib.docname | caplength: 60}}</div>
@@ -80,7 +80,7 @@
             </ul>
         </div>
     </div>
-    <div class="docPanelContainer row-fluid" ng-class="{'annotable':isAnnotable}">
+    <div class="docPanelContainer row-fluid" ng-class="{'annotable':isAnnotable && docLength>1}">
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}">
     </div>
 </div>
