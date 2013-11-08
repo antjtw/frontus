@@ -22,11 +22,6 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
     $scope.$emit('notification:success', 'You have successfully logged out');
     return;
   }
-  $scope.$on('update:companies', function(ev, companies) {
-      if (companies.length > 0) {
-          $scope.incompany = true;
-      }
-  });
 
   if ($routeParams.video) {
     $scope.modalUp();
@@ -46,13 +41,11 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
   $scope.toggle = true;
 
-  $scope.companySelfRegister = function () {
-      SWBrijj.companySelfRegister($scope.user.email, 'issuer').then(function(requested) {
-          $scope.toggle = !$scope.toggle;
-          void(requested);
+  $scope.companyRequest = function () {
+      SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function (x) {
+        void(x);
       }).except(function (x) {
-          $scope.$emit("notification:fail", "Oops, something went wrong.");
-          console.log(x);
+        void(x);
       });
   };
 
