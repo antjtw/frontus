@@ -19,6 +19,16 @@ app.directive('d3expdonut', ['d3', function(d3) {
             var color = d3.scale.ordinal()
                 .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
 
+            var colors = ["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"];
+            var corecolor = function(i) {
+                if (i > 3) {
+                   return i % 3 == 0 ? colors[3] : colors[i % 3]
+                }
+                else {
+                    return colors[i]
+                }
+            };
+
             var arc = d3.svg.arc()
                 .outerRadius(radius- 10)
                 .innerRadius(radius - 30);
@@ -79,10 +89,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
-                            return color(d.data.percent); })
+                            return corecolor(i); })
                         .attr("class", "pie-slices")
                         .on("mouseover", function(d) {
-                            var colour = color(d.data.percent);
+                            var colour = corecolor(i);
                             var current = this;
                             d3.selectAll(".pie-slices").transition()
                                 .duration(250)
@@ -104,7 +114,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.selectAll(".pie-slices").transition()
                                 .duration(250)
                                 .style("fill", function(d , i) {
-                                    return color(d.data.percent); })
+                                    return corecolor(i); })
                                 .style("opacity", function() {
                                     return 1;
                                 });
