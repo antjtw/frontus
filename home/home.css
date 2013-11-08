@@ -287,7 +287,7 @@
     cursor: pointer;
 }
 
-.body-box.mini-table > table > tbody > tr:last-child {
+.body-box.mini-table.doc-table > table > tbody > tr:last-child {
     height: 25px;
     border: none;
 }
