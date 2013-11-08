@@ -202,10 +202,15 @@
     letter-spacing: 1px;
 }
 
-.home .button.greenButton {
+.home .button .greenButton {
     background-color: #1ABC96;
     border-radius: 0 3px 3px 0;
     display: inline-block;
+}
+
+.home .button.greenButton.invite {
+    width: 222px;
+    height: 60px;
 }
 
 .home .button.blueButton {
