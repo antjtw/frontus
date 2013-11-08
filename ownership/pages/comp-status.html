@@ -119,8 +119,8 @@
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="modalUp(person);">Edit Permissions</li>
-                                        <li ng-hide="person.name" ng-click="alterEmailModalUp(person.email)">Edit and Resend</li>
-                                        <li ng-click="gotoPerson(person);">View Profile</li>
+                                        <li ng-hide="person.lastlogin" ng-click="alterEmailModalUp(person.email)">Edit and Resend</li>
+                                        <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
                                     </ul>
                                 </li>
                             </ul>
