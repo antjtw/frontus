@@ -140,7 +140,7 @@ ownership.filter('nameoremail', function () {
 ownership.filter('icon', function() {
     return function(activity) {
         if (activity == "sent") return "icon-email";
-        else if (activity == "was sent") return "icon-email";
+        else if (activity == "received") return "icon-email";
         else if (activity == "viewed") return "icon-view";
         else if (activity == "reminder") return "icon-redo";
         else if (activity == "signed") return "icon-pen";
@@ -148,5 +148,11 @@ ownership.filter('icon', function() {
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
+    }
+});
+
+ownership.filter('received', function () {
+    return function (activity) {
+        return (activity == "received") ? "was sent" : activity;
     }
 });
