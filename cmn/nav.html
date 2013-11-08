@@ -41,6 +41,9 @@
             </ul>
           <li>
           <li class="dropdown hidden-phone" ng-hide="navState.userid">
+            <a style="display: none; width: 100px" class="menuProfileText" href="/" ng-show="!navState.userid">REGISTER</a>
+          </li>
+          <li class="dropdown hidden-phone" ng-hide="navState.userid">
             <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)" ng-click="toggleLogin()" ng-show="!navState.userid">LOGIN</a>
           <li>
         </ul>
