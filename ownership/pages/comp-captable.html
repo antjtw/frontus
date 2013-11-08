@@ -1049,21 +1049,6 @@
                                 <!-- Option Tab -->
                                 <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
 
-                                    <div class="rightTitle double"><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                                        <ul class="dropdown-list drop-selector">
-                                            <li class="dropdown standard">
-                                                <a class="dropdown-toggle">
-                                                    {{tran.optundersec  | maxLength}}<span class="invisible-drop">'</span>
-                                                </a>
-                                                <ul class="dropdown-menu">
-                                                    <li ng-repeat="i in allowKeys">
-                                                        <a ng-click="saveTranAssign(tran, 'optundersec', i)">{{i  | maxLength}}</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-
                                     <p class="rightTitle"><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span><input ng-disabled="toggleView();"
                                                                                                                                                                                          onkeydown="testForEnter();"
                                                                                                                                                                                          ui-event="{blur : 'saveTran(tran)'}"
