@@ -437,10 +437,12 @@
 }
 
 .percentlabel {
+   font-family: 'FS Elliot Web Light', sans-serif;
    font-size: 24px;
 }
 
 .unitslabel {
+    font-family: 'FS Elliot Web Light', sans-serif;
     font-size: 24px;
 }
 
