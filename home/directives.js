@@ -186,7 +186,7 @@ app.directive('d3myownership', ['d3', function(d3) {
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
                         .attr("class", "percentlabel")
-                        .text(data[0].percent.toFixed(2) + "%");
+                        .text(data[0].percent + "%");
 
                     g.append("path")
                         .attr("d", arc)

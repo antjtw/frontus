@@ -560,6 +560,24 @@ ownership.service('calculate', function () {
         return amount
     };
 
+    this.cleanZeros = function(amount) {
+        if (amount) {
+            var n = amount.toString().split(".");
+            if (n[1]) {
+                var small = n[1].substring(0,2);
+                if (parseInt(small) % 10 == 0) {
+                    small = small.substring(0, 1);
+                    if (parseInt(small) == 0) {
+                        small = ""
+                    }
+                }
+                small = small != "" ? "." + small : "";
+                amount = n[0] + small;
+            }
+        }
+        return amount;
+    };
+
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
     this.formatMoneyAmount = function (amount, settings) {
         var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'

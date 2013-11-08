@@ -521,11 +521,11 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             $scope.graphdata = [];
                             angular.forEach($scope.rows, function (row) {
                                 if (row.email == $rootScope.person.email) {
-                                    $scope.graphdata.push({'name':"mine", 'percent':(100 - parseFloat($scope.everyone.percentage))});
+                                    $scope.graphdata.push({'name':"mine", 'percent':calculate.cleanZeros(100 - parseFloat($scope.everyone.percentage))});
                                     $scope.myrow = row;
                                 }
                             });
-                            $scope.graphdata.push({'name':"everyone", 'percent': parseFloat($scope.everyone.percentage)});
+                            $scope.graphdata.push({'name':"everyone", 'percent': calculate.cleanZeros(parseFloat($scope.everyone.percentage))});
 
                             // This calculates the data for the vesting tab
                             var vestedarray = calculate.myvested($scope.optiontrans);
