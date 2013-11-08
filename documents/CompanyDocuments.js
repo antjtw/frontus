@@ -272,6 +272,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
+            Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
             upxhr.then(function(x) {
