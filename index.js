@@ -22,6 +22,11 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
     $scope.$emit('notification:success', 'You have successfully logged out');
     return;
   }
+  $scope.$on('update:companies', function(ev, companies) {
+      if (companies.length > 0) {
+          $scope.incompany = true;
+      }
+  });
 
   if ($routeParams.video) {
     $scope.modalUp();
@@ -43,7 +48,6 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
   $scope.companySelfRegister = function () {
       SWBrijj.companySelfRegister($scope.user.email, 'issuer').then(function(requested) {
-          console.log(requested);
           $scope.toggle = !$scope.toggle;
           void(requested);
       }).except(function (x) {

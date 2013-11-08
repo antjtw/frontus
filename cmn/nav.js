@@ -73,14 +73,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         }
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         $scope.navState = navState;
-        console.log("initial navState");
-        console.log(navState);
         navState.path = document.location.pathname;
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
 
         $scope.switch = function (nc) {
-            console.log("navState switch");
             /** @name SWBrijj#switch_company
              * @function
              * @param {string} company
@@ -106,6 +103,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.initCompany = function(cmps) {
             $scope.companies = cmps;
+            $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
             var thiscmp = cmps[0]; // pick the first one in case none are marked selected
             for (var i = 0; i < cmps.length; i++) {
@@ -130,7 +128,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                             navState.role = thiscmp.role;
                             navState.name = thiscmp.name;
                             navState.reasons = $scope.initReasons(thiscmp.reasons);
-                            console.log("initCompany switch");
                             document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
                             return;
                         }

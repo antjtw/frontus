@@ -38,7 +38,7 @@
 						<h3>Introducing Sharewave</h3>
 						<h1>The best way to manage <br class="hidden-phone">your shareholders</h1>
 
-                        <div id="CompanyRegister-form">
+                        <div id="CompanyRegister-form" ng-hide="incompany">
                             <div class="box on" ng-show="toggle" ng-animate="'box'">
                                 <form name="myForm">
                                     <fieldset>
@@ -274,7 +274,7 @@
 
                                 <p>For six months, for founding companies who join today.</p>
 								<div class="spacer20"></div>
-								<form name="myForm">
+								<form name="myForm" ng-hide="incompany">
 									<fieldset>
 										<input type="text" class="loginInput" name="email" placeholder="Your Email Address" ng-model="user.email"  >
 										<button type="submit" class="button greenButton" id="submitInvite"
