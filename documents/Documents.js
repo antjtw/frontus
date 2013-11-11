@@ -262,6 +262,12 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        $scope.image = {width: 0, height: 0};
+        $scope.$watchCollection('image', function(newval, oldval) {
+            var img_aspect_ratio = newval.width / newval.height;
+            var min_aspect_ratio = 900/1165;
+            $('.docPanel').height(img_aspect_ratio > min_aspect_ratio ? (900/newval.width)*newval.height : 1165);
+        });
         
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
@@ -270,6 +276,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var imgurl;
                 imgurl = docpanel.style.backgroundImage;
                 docpanel.style.backgroundImage = imgurl;
+                var img = new Image();
+                img.onload = function() {
+                    $scope.$apply(function() {
+                        $scope.image.width = img.width;
+                        $scope.image.height = img.height;
+                    });
+                };
+                img.src = $scope.pageImageUrl();
             }
         };
 
@@ -294,6 +308,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $('.docViewerHeader').affix({
             offset: {top: 120}
         });
+
 
         $scope.$emit('docViewerReady');
 
@@ -542,6 +557,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            refreshDocImage();
         };
 
         $scope.nextPage = function(value) {
@@ -896,7 +912,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 900, 1165];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 900, (900/$scope.image.width)*$scope.image.height];
                 // var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
                 // dp.clientWidth and dp.clientHeight are hard-coded because docPanel is not available
                 // when notes are saved right before stamping.
