@@ -156,6 +156,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $rootScope.person = x[0];
+            if ($rootScope.navState.role == "issuer") {
+                Intercom('update', {'name' : $rootScope.person.name});
+            }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
         });
 

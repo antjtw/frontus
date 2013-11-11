@@ -26,8 +26,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.default = "100%";
 
         if (navState.role == 'investor') {
-            console.log("CompanyCtrl switch");
-            console.log(navState);
             $location.path('/investor');
             return;
         }
@@ -266,7 +264,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
                     SWBrijj.uploadLogo(fd).then(function(x) {
                         void(x);
-                        console.log("here");
                         $scope.photoURL = '/photo/user?id=company:' + $scope.company.company + '#' + new Date().getTime();
                         $scope.$emit("notification:success", "Company profile successfully updated");
                         $scope.company = company;
@@ -342,8 +339,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
-            console.log("InvestorCtrl switch");
-            console.log(navState);
             $location.path('/company');
             return;
         }
@@ -531,7 +526,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             var vestedarray = calculate.myvested($scope.optiontrans);
                             $scope.myvested = vestedarray[0];
                             var tranvested = vestedarray[1];
-                            console.log(tranvested);
                             angular.forEach(tranvested, function(vest, key) {
                                 angular.forEach($scope.optiontrans, function(tran) {
                                     if (key == tran.date) {
@@ -549,7 +543,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
                             });
                             $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
-                            console.log($scope.vesteddonut);
                         });
                     });
                 });
@@ -623,7 +616,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.gotopage = function (link){
-            console.log(link);
             location.href = link;
         };
 
@@ -675,10 +667,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
                 if (x[1][0]) {
                     $scope.$emit("notification:success", "Your password has been updated successfully.");
-                    // console.log("changed successfully");
                 } else {
                     $scope.$emit("notification:fail", "There was an error updating your password.");
-                    // console.log("Oops.  Change failed");
                     $scope.currentPassword = "";
                     $scope.newPassword = "";
                     $scope.passwordConfirm = "";
@@ -769,12 +759,9 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
 app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
     SWBrijj.tbl('account.companies').then(function(x) {
-        // console.log(x);
         if (x.length > 0) { //User is a CEO of a company
-            console.log("HomeCtrl first switch");
             document.location.href="company";
         } else {
-            console.log("HomeCtrl second switch");
             SWBrijj.tblm('account.invested_companies').then(function(x) {
                 document.location.href=x[0]['company'];
             });

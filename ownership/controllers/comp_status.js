@@ -15,8 +15,8 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
             $scope.userStatus[i].shown = false;
             $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
+        Intercom('update', {company : {'captable_shares':$scope.userStatus.length}});
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
-            console.log(activities);
             angular.forEach($scope.userStatus, function (person) {
                 angular.forEach(activities, function (activity) {
                     if (activity.email == person.email) {
@@ -48,7 +48,6 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         angular.forEach(originalfeed, function(event) {
             var timegroup = moment(event.event_time).fromNow();
             if (uniqueGroups.indexOf(timegroup) > -1) {
-                console.log(uniqueGroups.indexOf(timegroup));
                 $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
             }
             else {
@@ -129,7 +128,6 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.alterEmail = function() {
         if ($scope.newEmail != $scope.oldEmail) {
-            console.log("updating");
             SWBrijj.proc('ownership.update_email_share', $scope.newEmail, $scope.oldEmail).then(function (data) {
               void(data);
                 // console.log(data);
@@ -140,7 +138,6 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                 });
         }
         else if ($scope.newEmail == $scope.oldEmail) {
-            console.log("resharing");
             SWBrijj.proc('ownership.reshare', $scope.oldEmail).then(function (data) {
               void(data);
                 $scope.$emit("notification:success", "Successfully resent");
