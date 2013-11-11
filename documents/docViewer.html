@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="page-bar" ng-show="showPageBar && docLength > 1 && isAnnotable">
+        <div class="page-bar" ng-show="showPageBar && docLength > 1 && isAnnotable && $scope.annotatedPages.length>0">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
                 <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
