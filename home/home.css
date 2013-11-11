@@ -2,6 +2,14 @@
     background-color: #E2E2E2;
 }
 
+.no-left-margin {
+    margin-left: 0 !important;
+}
+
+.wrap.background-gray .maincontent {
+    overflow: visible;
+}
+
 .home-top-row > div {
     height: 300px;
 }
@@ -17,6 +25,7 @@
 
 .home-top-row > div.issuer-profile > div:first-child > div:first-child {
     background-color: #FFFFFF;
+    border-radius: 3px;
 }
 
 .home-top-row > div.issuer-profile > div:first-child > div:nth-child(2) {
@@ -152,6 +161,10 @@
     transform: rotateY(180deg);
 }
 
+.back.info-box > div.body-box {
+    position: relative;
+}
+
 .body-box > ul.q-and-a {
     padding: 15px 30px 0 30px;
     font-size: 14px;
@@ -206,6 +219,7 @@
     display: inline-block;
     margin-right: 5px;
     font-size: 28px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 .detail-row > div:last-child {
@@ -221,10 +235,32 @@
     margin-top: 5px;
 }
 
+.side-graph > div:first-child > div {
+    display: table-cell;
+    height: 228px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.side-graph > div:first-child > div > div:last-child {
+    margin-top: 30px;
+}
+
+.side-graph > div:first-child > div > div >  h2 > span {
+    display: block;
+    font-size: 24px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
+
 .view-button {
     position: absolute;
     bottom: 20px;
     right: 20px;
+}
+
+.body-box.mini-table > .right-half {
+    width: 284px;
+    float: right;
 }
 
 .body-box.mini-table {
@@ -251,7 +287,7 @@
     cursor: pointer;
 }
 
-.body-box.mini-table > table > tbody > tr:last-child {
+.body-box.mini-table.doc-table > table > tbody > tr:last-child {
     height: 25px;
     border: none;
 }
@@ -381,5 +417,74 @@
 
 .modalText.settings > div > ul {
     float: right;
+}
+
+/* Pie Chart Styling */
+
+.exploded-donut {
+    margin-top: 10px;
+    display: block;
+}
+
+.personal-ownership {
+    display: block;
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.mainlabel {
+   font-size: 16px;
+}
+
+.percentlabel {
+   font-family: 'FS Elliot Web Light', sans-serif;
+   font-size: 24px;
+}
+
+.unitslabel {
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-size: 24px;
+}
+
+.yticks {
+    stroke: #e3e3e3;
+    stroke-width: 1;
+    opacity: 1;
+}
+
+.axis path {
+    fill: none;
+    stroke: #e3e3e3;
+    shape-rendering: crispEdges;
+}
+
+.x.axis > .tick:nth-child(even) > text {
+    display: none;
+}
+
+.y.axis path, .yticks path {
+    display: none;
+}
+
+#tooltip {
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    height: 40px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background-color: #1D2C3C;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    color: #C6C6C6;
 }
 

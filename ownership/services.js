@@ -140,7 +140,6 @@ ownership.service('calculate', function () {
                         cycleDate.addMonths(x);
                     }
                     while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        console.log("The cycle data is " + String(cycleDate));
                         vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
@@ -158,7 +157,6 @@ ownership.service('calculate', function () {
                 row.vested = result;
             }
         });
-        console.log(rows);
         return rows
     };
 
@@ -235,6 +233,92 @@ ownership.service('calculate', function () {
         return rows
     };
 
+    this.myvested = function (trans) {
+        var myvested = {};
+        var tranvested = {};
+        var firstcolumn = new Date(5000000000000);
+        var lastcolumn = new Date(01-12-1000);
+        angular.forEach(trans, function(tran) {
+            tranvested[tran.date] = 0;
+            var vestbegin = angular.copy(tran.vestingbegins);
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                firstcolumn = Date.compare(vestbegin, firstcolumn) > -1 ? firstcolumn : vestbegin;
+            }
+            var remainingterm = angular.copy(tran.terms);
+            var startdate = angular.copy(tran.date);
+            while (remainingterm > 0) {
+                startdate.addMonths(1);
+                remainingterm -= 1
+            }
+            lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
+        });
+        while (Date.compare(lastcolumn, firstcolumn) > -1) {
+            myvested[firstcolumn.toString("MMM yyyy")] = [0,0];
+            firstcolumn.addMonths(1);
+        }
+        angular.forEach(trans, function (tran) {
+            var vestbegin = angular.copy(tran.vestingbegins);
+            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+                var cycleDate = angular.copy(tran.date).add(1).days();
+                // Create dictionary of all vesting events, [number vested by today's date, number that will be vested in total]
+                if (myvested[vestbegin.toString("MMM yyyy")]) {
+                    myvested[vestbegin.toString("MMM yyyy")][1] += (tran.units * (tran.vestcliff / 100));
+                }
+                else {
+                    myvested[vestbegin.toString("MMM yyyy")] = [0,(tran.units * (tran.vestcliff / 100))];
+                }
+                if (Date.compare(Date.today(), vestbegin) > -1) {
+                    myvested[vestbegin.toString("MMM yyyy")][0] += (tran.units * (tran.vestcliff / 100));
+                    tranvested[tran.date] += (tran.units * (tran.vestcliff / 100));
+                }
+                var remainingterm = angular.copy(tran.terms);
+                while (Date.compare(vestbegin, cycleDate) > -1) {
+                    remainingterm = remainingterm - 1;
+                    cycleDate.addMonths(1);
+                }
+                cycleDate.add(-1).days();
+                var finalDate = vestbegin.addMonths(remainingterm);
+                var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                var x = 1;
+                if (tran.vestfreq == "monthly") {
+                    x = 1
+                }
+                else if (tran.vestfreq == "weekly") {
+                    x = 0.25
+                }
+                else if (tran.vestfreq == "bi-weekly") {
+                    x = 0.5
+                }
+                else if (tran.vestfreq == "quarterly") {
+                    x = 3;
+                }
+                else if (tran.vestfreq == "yearly") {
+                    x = 12;
+                }
+                finalDate.add(-1).days();
+                while (Date.compare(finalDate, cycleDate) > -1) {
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    if (myvested[cycleDate.toString("MMM yyyy")]) {
+                        myvested[cycleDate.toString("MMM yyyy")][1] += (x * ((monthlyperc / 100) * tran.units));
+                    }
+                    else {
+                        myvested[cycleDate.toString("MMM yyyy")] = [0,(x * ((monthlyperc / 100) * tran.units))];
+                    }
+                    if (Date.compare(Date.today(), cycleDate) > -1) {
+                        myvested[cycleDate.toString("MMM yyyy")][0] += (x * ((monthlyperc / 100) * tran.units));
+                        tranvested[tran.date] += (x * ((monthlyperc / 100) * tran.units));
+                    }
+                }
+            }
+        });
+        return [myvested,tranvested];
+    };
+
     // Generates the diluted rows
     this.dilution = function (rows, issues) {
         var dilutedRows = [];
@@ -271,7 +355,6 @@ ownership.service('calculate', function () {
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
                             if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                console.log("working");
                                 temprow[issue.issue]['u'] = row[issue.issue]['u'];
                             }
                             else {
@@ -450,12 +533,10 @@ ownership.service('calculate', function () {
     var sizes = {0:'', 1:'K', 2:'M', 3:'B'};
     this.abrAmount = function(amount) {
         if (amount) {
-            console.log(amount);
             var n = amount.toString().split(".");
             var sizefactor = Math.floor((n[0].length-1)/3);
-            console.log(sizefactor);
             if (sizefactor == 0) {
-                amount = n;
+                amount = n[0];
             }
             else {
                 var big = String(n[0]).substring(0, n[0].length - (sizefactor*3));
@@ -471,9 +552,27 @@ ownership.service('calculate', function () {
             }
         }
         else {
-            amount = null;
+            amount = 0;
         }
         return amount
+    };
+
+    this.cleanZeros = function(amount) {
+        if (amount) {
+            var n = amount.toString().split(".");
+            if (n[1]) {
+                var small = n[1].substring(0,2);
+                if (parseInt(small) % 10 == 0) {
+                    small = small.substring(0, 1);
+                    if (parseInt(small) == 0) {
+                        small = ""
+                    }
+                }
+                small = small != "" ? "." + small : "";
+                amount = n[0] + small;
+            }
+        }
+        return amount;
     };
 
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
@@ -537,7 +636,6 @@ ownership.service('calculate', function () {
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
-            console.log("discount is" + discount);
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
             if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.toissue.postmoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));

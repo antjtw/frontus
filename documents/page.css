@@ -114,6 +114,11 @@ table.docLibrary > tbody > tr:first-child > td {
     cursor: pointer;
 }
 
+.status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
+    text-align: center;
+    width: 100px;
+}
+
 .status-showing td {
     background-color: #f1f1f1;
 }
@@ -160,7 +165,6 @@ table.docLibrary > tbody > tr:first-child > td {
     box-sizing: border-box;
     width: 100%;
     padding: 5px 20px 5px 20px;
-    border-bottom: 1px solid #E3E3E3;
 }
 
 .modalText.dshare > ul > li > span {
@@ -272,7 +276,6 @@ button.greyButton {
 .messageSection {
     margin-top: 20px;
     height: 80px;
-    margin-bottom: 20px;
 }
 
 .messageText {
@@ -421,4 +424,8 @@ div.progress-bar {
 
 .icon-large {
     font-size: 1.4em;
+}
+
+.status-table .empty-table {
+    text-align: center;
 }

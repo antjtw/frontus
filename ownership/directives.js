@@ -37,7 +37,6 @@ own.directive('d3Donut', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                console.log(data);
                 //create the rectangles for the bar chart
                 var g = svg.selectAll(".arc")
                     .data(pie(data))

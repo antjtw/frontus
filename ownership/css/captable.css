@@ -645,6 +645,7 @@ tr.rowSelected, tr.rowSelected:hover {
 }
 
 .grant-list-table {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     border-top: 1px solid #E3E3E3;
     padding: 10px 0 0 20px;
     width: 100%;
@@ -997,7 +998,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     margin-right: 20px;
 }
 
-
+.convertModal .cancel-convert {
+    display: inline-block;
+    margin-right: 10px;
+}
 
 .capshareModal input, .capshareModal span {
     float: left;
@@ -1115,6 +1119,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .transferModal .tableView.modal-table td {
     text-align: left;
     padding-left: 10px;
+}
+
+.transferModal .docLibrary {
+    display: inline-block;
 }
 
 .modal .input-row {

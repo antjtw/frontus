@@ -24,7 +24,7 @@ function setCursor(cursor) {
     }
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'email'], function($routeProvider, $locationProvider) {
+var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'email', 'commonServices'], function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
     $routeProvider.
     when('/company-list', {
@@ -115,9 +115,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         });
 
         $scope.loadDocumentVersions = function () {
-            angular.forEach($scope.documents, function(doc) {
-                doc.versions = [];
-                SWBrijj.tblmm("document.my_counterparty_library", "original", doc.doc_id).then(function(data) {
+            SWBrijj.tblm("document.my_counterparty_library").then(function(data) {
+                Intercom('update', {company : {"document_shares":data.length}});
+                angular.forEach($scope.documents, function(doc) {
+                    doc.versions = [];
                     angular.forEach(data, function(version) {
                         if (doc.doc_id === version.original) {
                             doc.versions.push(version);
@@ -272,6 +273,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
+            Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
             upxhr.then(function(x) {
@@ -326,8 +328,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.versionStatus = function(version) {
             if (version.last_event) {
-                return version.last_event.activity +
-                       " by " + (version.last_event.name || version.investor) +
+                return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity + " by ")) +
+                       (version.last_event.name || version.investor) +
                        " " + moment(version.last_event.event_time).fromNow() +
                        (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
             } else {
@@ -336,9 +338,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatus = function(doc) {
-            return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
-                                                 doc.versions[0].last_event.event_time : 
-                                                 doc.last_updated)).fromNow();
+            if (doc.versions) {
+                return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
+                    doc.versions[0].last_event.event_time :
+                    doc.last_updated)).fromNow();
+            }
+
             /*
             if (doc.versions.length > 0) {
                 var set = doc.versions.filter(function (el) {return el.last_event && el.last_event.event_time;});
@@ -352,25 +357,31 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.shortDocStatus = function(doc) {
-            if (doc.versions.length === 0) {
-                return "Uploaded";
-            } else if (doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Complete";
-            } else if (!doc.signature_required && $scope.docIsComplete(doc)) {
-                return "Complete";
-            } else if (!$scope.docIsComplete(doc)) {
-                return "Pending";
-            } else {
-                return "Error";
+            if (doc.versions) {
+                if (doc.versions.length === 0) {
+                    return "Uploaded";
+                } else if (doc.signature_required && $scope.docIsComplete(doc)) {
+                    return "Complete";
+                } else if (!doc.signature_required && $scope.docIsComplete(doc)) {
+                    return "Complete";
+                } else if (!$scope.docIsComplete(doc)) {
+                    return "Pending";
+                } else {
+                    return "Error";
+                }
             }
         };
 
         $scope.shortVersionStatus = function(version) {
-            if (version.last_event && version.last_event.activity) {
-                if (version.last_event.activity==='signed') {
-                    return 'signed, awaiting countersign';
-                } else {
-                    return version.last_event.activity;
+            if (version) {
+                if (version.last_event && version.last_event.activity) {
+                    if (version.last_event.activity==='signed') {
+                        return 'signed, awaiting countersign';
+                    } else if (version.last_event.activity==='received') {
+                        return 'sent';
+                    } else {
+                        return version.last_event.activity;
+                    }
                 }
             }
         };
@@ -392,53 +403,61 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.formatDocStatusRatio = function(doc) {
-            if (doc.versions.length === 0) {
-                return "";
-            } else {
-                /*
-                // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
-                var signatureRatio = $scope.docSignatureRatio(doc);
-                var viewRatio = $scope.docViewRatio(doc);
-                if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
-                    return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
-                } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
-                    return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
+            if (doc.versions) {
+                if (doc.versions.length === 0) {
+                    return "";
                 } else {
-                    return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
-                           (doc.signature_required ? " signatures" : " views");
+                    /*
+                     // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
+                     var signatureRatio = $scope.docSignatureRatio(doc);
+                     var viewRatio = $scope.docViewRatio(doc);
+                     if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
+                     return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
+                     } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
+                     return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
+                     } else {
+                     return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
+                     (doc.signature_required ? " signatures" : " views");
+                     }
+                     */
+                    return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
+                        " / " +
+                        doc.versions.length +
+                        " documents";
                 }
-                */
-                return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
-                       " / " +
-                       doc.versions.length +
-                       " documents"; 
             }
         };
 
         $scope.docSignatureRatio = function(doc) {
-            var initRatio = ($scope.versionsSigned(doc).length / $scope.versionsReqSig(doc).length) || 0;
-            if (initRatio === Infinity) {initRatio = 0;}
-            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+            if (doc) {
+                var initRatio = ($scope.versionsSigned(doc).length / $scope.versionsReqSig(doc).length) || 0;
+                if (initRatio === Infinity) {initRatio = 0;}
+                return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+            }
         };
 
         $scope.docViewRatio = function(doc) {
-            var initRatio = ($scope.versionsViewed(doc).length / $scope.versionsReqView(doc).length) || 0;
-            if (initRatio === Infinity) {initRatio = 1;}
-            return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+            if (doc) {
+                var initRatio = ($scope.versionsViewed(doc).length / $scope.versionsReqView(doc).length) || 0;
+                if (initRatio === Infinity) {initRatio = 1;}
+                return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
+            }
         };
  
         $scope.docStatusRatio = function(doc) {
-            var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
-            // This ensure documents with no versions appear before completed documents.
-            // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-            if (doc.versions.length > 0 && initRatio == 0) {
-                initRatio = (1 / doc.versions.length)
+            if (doc) {
+                var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
+                // This ensure documents with no versions appear before completed documents.
+                // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
+                if (doc.versions.length > 0 && initRatio == 0) {
+                    initRatio = (1 / doc.versions.length)
+                }
+                if (initRatio == 2) {
+                    initRatio += (doc.versions.length)
+                }
+                if (initRatio === Infinity) {initRatio = 0;}
+                return initRatio;
             }
-            if (initRatio == 2) {
-                initRatio += (doc.versions.length)
-            }
-            if (initRatio === Infinity) {initRatio = 0;}
-            return initRatio;
         };
 
         $scope.versionsSigned = function(doc) {
@@ -470,10 +489,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docIsComplete = function(doc) {
-            if (doc.versions.length === 0) {
-                return false;
-            } else {
-                return doc.versions.length == doc.versions.filter($scope.versionIsComplete).length;
+            if (doc.versions) {
+                if (doc.versions.length === 0) {
+                    return false;
+                } else {
+                    return doc.versions.length == doc.versions.filter($scope.versionIsComplete).length;
+                }
             }
         };
 
@@ -777,7 +798,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.$broadcast('rejcetSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
-                $route.reload();
+                $location.path('/company-list').search({});
+                //$route.reload();
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -807,6 +829,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.confirmModalClose = function() {
+            $('.docViewerHeader').data('affix').checkPosition();
             setCursor('default');
             $scope.processing = false;
             $scope.broadcastModalClose();
@@ -826,8 +849,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit('event:reload');
                 $scope.$emit('refreshDocImage');
+                $location.path('/company-list').search({});
 
             }).except(function(x) {
                 void(x);
@@ -982,13 +1005,16 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.setLastUpdates = function() {
             var i = 0;
             while ((!$scope.lastsent || !$scope.lastedit) &&
-                    i < $scope.activity.length-1) {
+                    i <= $scope.activity.length-1) {
                 switch ($scope.activity[i].activity) {
                     case "received":
                     case "reminder":
                         $scope.initLastSent($scope.activity[i]);
                         break;
                     case "edited":
+                        $scope.initLastEdit($scope.activity[i]);
+                        break;
+                    case "uploaded":
                         $scope.initLastEdit($scope.activity[i]);
                         break;
                 }
@@ -1348,6 +1374,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.confirmModalClose = function() {
             setCursor('default');
+            $('.docViewerHeader').data('affix').checkPosition();
             $scope.processing = false;
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
@@ -1371,8 +1398,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit('event:reload');
                 $scope.$emit('refreshDocImage');
+                $location.path('/investor-list').search({});
 
             }).except(function(x) {
                 void(x);

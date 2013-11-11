@@ -27,7 +27,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
                     }                                          // End found rule name
                 }                                             // end found cssRule
                 ii++;                                         // Increment sub-counter
-            } while (cssRule)                                // end While loop
+            } while (cssRule);                                // end While loop
         }                                                   // end For loop
     }                                                      // end styleSheet ability check
     return false;                                          // we found NOTHING!
@@ -45,9 +45,10 @@ navm.factory('navState', [function () {
         name: document.sessionState.name,
         role: document.sessionState.role,
         userid: document.sessionState.userid,
+        userhash: document.sessionState.userhash,
         tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
         path: undefined
-    }
+    };
 }]);
 
 /** @unused NavCtrl */
@@ -57,38 +58,38 @@ navm.directive('navbar', function () {
         restrict: 'E',
         templateUrl: '/cmn/nav.html',
         controller: 'NavCtrl'
-    }
+    };
 });
 
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
-  function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
-    $scope.companies = [];
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
+        $scope.companies = [];
 
-    if (location.host=='share.wave' || navState.tester) {
-      var rr = getCSSRule('.for-r0ml');
-      if (rr) {
-        rr.style.display="inline";
-      }
-    }
-    var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
-    $scope.navState = navState;
-    navState.path = document.location.pathname;
-    $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
-    $scope.isCollapsed = true;
+        if (location.host=='share.wave' || navState.tester) {
+            var rr = getCSSRule('.for-r0ml');
+            if (rr) {
+                rr.style.display="inline";
+            }
+        }
+        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
+        $scope.navState = navState;
+        navState.path = document.location.pathname;
+        $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
+        $scope.isCollapsed = true;
 
-    $scope.switch = function (nc) {
-      /** @name SWBrijj#switch_company
-       * @function
-       * @param {string} company
-       * @param {string} role
-       */
-      SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
-        document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
-      });
-    };
-    $scope.toggleLogin = function() {
-      $scope.isCollapsed = !$scope.isCollapsed;
-    }
+        $scope.switch = function (nc) {
+            /** @name SWBrijj#switch_company
+             * @function
+             * @param {string} company
+             * @param {string} role
+             */
+            SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
+                document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
+            });
+        };
+        $scope.toggleLogin = function() {
+            $scope.isCollapsed = !$scope.isCollapsed;
+        };
 
         // Take the string from the database and parse it into a useable dictionary
         $scope.initReasons = function(reasons) {
@@ -97,11 +98,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             angular.forEach(temp, function(reason) {
                 dictionary[reason] = true;
             });
-            return dictionary
-        }
+            return dictionary;
+        };
 
         $scope.initCompany = function(cmps) {
             $scope.companies = cmps;
+            $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
             var thiscmp = cmps[0]; // pick the first one in case none are marked selected
             for (var i = 0; i < cmps.length; i++) {
@@ -120,7 +122,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             } else {
                 SWBrijj.switch_company(thiscmp.company, thiscmp.role).then(function (data) {
                     angular.forEach(data, function (comp) {
-                        if (thiscmp.company == comp.company && comp.current == true) {
+                        if (thiscmp.company == comp.company && comp.current === true) {
                             thiscmp.current = true;
                             navState.company = thiscmp.company;
                             navState.role = thiscmp.role;
@@ -137,6 +139,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('global.my_companies').then(function (x) {
             $scope.initCompany(x);
+            if ($rootScope.navState.role == "issuer") {
+                Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
+            }
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // ?
@@ -151,6 +156,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $rootScope.person = x[0];
+            if ($rootScope.navState.role == "issuer") {
+                Intercom('update', {'name' : $rootScope.person.name});
+            }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
         });
 
@@ -199,7 +207,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.gotohome = function() {
-            console.log("here");
             location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
         };
     }]);

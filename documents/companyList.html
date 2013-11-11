@@ -56,7 +56,7 @@
                         </td>
                         <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                             <ul>
-                                <li>{{doc.docname}}</li>
+                                <li>{{doc.docname | caplength:40}}</li>
                                 <li>{{docStatus(doc)}}</li>
                             </ul>
                         </td>
@@ -150,7 +150,7 @@
                     <div ng-hide="showProgress" class="fakefile">
                         <span>CHOOSE FILE</span>
                         <div ng-show="files.length">
-                            <span>{{files[0].name | fileLength}}</span>
+                            <span>{{files[0].name | caplength:20}}</span>
                         </div>
                     </div>
                     <div ng-show="showProgress" class="progress-bar"><progress percent="loadProgress"></progress></div>
@@ -170,9 +170,10 @@
         </div>
     </div>
 </div>
+
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        <span data-icon="&#xe027;" aria-hidden="true"></span>Share "{{docToShare.docname}}"
+        Share "{{docToShare.docname | caplength:25}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
@@ -200,27 +201,26 @@
         </ul>
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
     </div>
-    <div class="modalButtons">
-        <div class="left"><button class="button subText greyButton left" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="right">
-            <button class="button subText greenButton" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Share
-            </button>
-        </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
+        <div class="standard-button"><button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
-<div modal="updateTitleModal" close="updateTitleClose()" options="opts" class="updateTitleModal">
+
+<div modal="updateTitleModal" close="updateTitleClose()" options="opts">
     <div class="modalHeader">
         <span>Rename Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTitleClose()"></span>
     </div>
     <div class="modalText updateTitleModal">
-        <input ng-model="docForModal.docname" type="text"></input>
+        <input ng-model="docForModal.docname" type="text">
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
         <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
     </div>
 </div>
+
 <div modal="deleteDocModal" close="deleteDocClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
         <span>Delete Document</span>
@@ -232,6 +232,6 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="deleteDocClose()">Cancel</button></div>
-        <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button</div>
+        <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button></div>
     </div>
 </div>

@@ -291,6 +291,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.pageBarSize = 10;
         $scope.showPageBar = true;
         $scope.isAnnotable = true;
+        $('.docViewerHeader').affix({
+            offset: {top: 120}
+        });
 
         $scope.$emit('docViewerReady');
 
@@ -446,12 +449,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.saveNoteData();
         });
 
+        $scope.$on('event:leave', $scope.leave);
+
         $scope.leave = function(event) {
             if ($scope.invq) {
                 $location.path('/investor-list').search({});
             } else {
-                delete $location.$$search.page;
-                $location.path('/company-list');
+                $location.path('/company-list').search({});
             }
         };
 

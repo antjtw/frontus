@@ -1,5 +1,5 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'd3', 'homeDirectives']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'commonServices', 'd3', 'homeDirectives']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -22,6 +22,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
         $scope.flipped1 = false;
         $scope.flipped2 = false;
+        $scope.donutlabel = "100%";
+        $scope.default = "100%";
 
         if (navState.role == 'investor') {
             $location.path('/investor');
@@ -90,7 +92,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 });
                 $scope.ownersummary.investedraw = angular.copy($scope.ownersummary.invested);
                 $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.invested);
-                /*SWBrijj.tblm('ownership.company_issue').then(function (data) {
+                SWBrijj.tblm('ownership.company_issue').then(function (data) {
                     $scope.issues = data;
                     SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                         $scope.grants = grants;
@@ -172,17 +174,14 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                             });
                         });
                         $scope.graphdata = [];
-                        console.log(totalunits);
-                        console.log(totaldebt);
                         angular.forEach($scope.issues, function (issue) {
                             var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
-                            $scope.graphdata.push({'name':issue.issue, 'percent':issuepercent});
+                            var name = issue.issue.length > 14 ? issue.issue.substring(0, (13)) + ".." : issue.issue;
+                            $scope.graphdata.push({'name':name, 'percent':issuepercent});
                         });
 
-                        console.log($scope.graphdata);
-
                     });
-                });*/
+                });
                 $scope.ownersummary.peoplenum = $scope.ownersummary.people.length;
             });
             SWBrijj.tblm("ownership.clean_company_access").then(function (people) {
@@ -265,8 +264,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
                     SWBrijj.uploadLogo(fd).then(function(x) {
                         void(x);
-                        console.log("here");
-                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company;
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company + '#' + new Date().getTime();
                         $scope.$emit("notification:success", "Company profile successfully updated");
                         $scope.company = company;
                     }).except( function(x) {
@@ -337,8 +335,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         }
     }]);
 
-app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState',
-    function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState) {
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState', 'calculate',
+    function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
             $location.path('/company');
@@ -359,6 +357,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.person.namekey = $scope.person.name;
 
             $scope.getActivityFeed();
+            $scope.getOwnershipInfo();
             $scope.getDocumentInfo();
         });
 
@@ -375,7 +374,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.eventGroups = [];
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent") {
+                    if (event.activity != "sent" && event.activity != "viewed") {
                         var timegroup = moment(event.time).fromNow();
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
@@ -388,6 +387,164 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             uniqueGroups.push(timegroup);
                         }
                     }
+                });
+            });
+        };
+
+        $scope.getOwnershipInfo = function() {
+            $scope.ownersummary = {};
+            $scope.rows = [];
+            $scope.uniquerows = [];
+            SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
+                $scope.trans = trans;
+                SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
+                    $scope.issues = data;
+                    SWBrijj.tblm('ownership.this_company_options_grants').then(function (grants) {
+                        $scope.grants = grants;
+                        SWBrijj.procm('ownership.get_everyone_else').then(function (x) {
+                            $scope.everyone = {};
+                            $scope.everyone.percentage = x[0].get_everyone_else;
+
+
+                            angular.forEach($scope.grants, function (grant) {
+                                angular.forEach($scope.trans, function (tran) {
+                                    if (grant.tran_id == tran.tran_id) {
+                                        grant.investor = tran.investor;
+                                        if (grant.action == "forfeited") {
+                                            if (tran.forfeited) {
+                                                tran.forfeited = tran.forfeited + grant.unit;
+                                            }
+                                            else {
+                                                tran.forfeited = grant.unit;
+                                            }
+                                        }
+                                        if (grant.action == "exercised") {
+                                            if (tran.exercised) {
+                                                tran.exercised = tran.exercised + grant.unit;
+                                            }
+                                            else {
+                                                tran.exercised = grant.unit;
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            $scope.myownership = {}
+                            $scope.myownership.shares = 0;
+                            $scope.myownership.amount = 0;
+                            angular.forEach($scope.trans, function (tran) {
+                                if (tran.email == $rootScope.person.email) {
+                                    $scope.myownership.shares = tran.units ? $scope.myownership.shares + tran.units : $scope.myownership.shares;
+                                    $scope.myownership.shares = tran.forfeited ? $scope.myownership.shares - tran.forfeited : $scope.myownership.shares;
+                                    $scope.myownership.amount = tran.amount ? $scope.myownership.amount + tran.amount : $scope.myownership.amount;
+                                }
+                            });
+
+                            $scope.myownership.amount = $scope.formatAbrAmount($scope.myownership.amount);
+
+                            for (var i = 0, l = $scope.trans.length; i < l; i++) {
+                                if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
+                                    $scope.uniquerows.push($scope.trans[i].investor);
+                                    $scope.rows.push({"name": $scope.trans[i].investor, "email": $scope.trans[i].email});
+                                }
+                            }
+
+                            angular.forEach($scope.trans, function (tran) {
+                                angular.forEach($scope.rows, function (row) {
+                                    if (row.name == tran.investor) {
+                                        if (tran.issue in row) {
+                                            row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
+                                            row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
+                                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                                row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                            }
+                                        }
+                                        else {
+                                            row[tran.issue] = {};
+                                            row[tran.issue]["u"] = tran.units;
+                                            row[tran.issue]["a"] = tran.amount;
+                                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                                row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                                row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            angular.forEach($scope.rows, function (row) {
+                                angular.forEach($scope.issues, function (issue) {
+                                    if (row[issue.issue] != undefined) {
+                                        if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                            row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                        }
+                                    }
+                                });
+                            });
+
+                            $scope.optiontrans = [];
+                            angular.forEach($scope.trans, function(tran) {
+                                if (tran.email == $rootScope.person.email && tran.type == "Option") {
+                                    $scope.optiontrans.push(tran);
+                                }
+                            });
+
+                            $scope.issuepercent = {};
+                            angular.forEach($scope.issues, function (issue) {
+                                $scope.issuepercent[issue.issue] = {'units':0,'debt':0};
+                                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
+                            });
+                            var totalunits = 0;
+                            var totaldebt = 0;
+                            angular.forEach($scope.rows, function (row) {
+                                angular.forEach($scope.issues, function (issue) {
+                                    if (row[issue.issue]) {
+                                        if (row[issue.issue]['u']) {
+                                            totalunits += row[issue.issue]['u'];
+                                            $scope.issuepercent[issue.issue]['units'] += row[issue.issue]['u'];
+                                        }
+                                        if (row[issue.issue]['x']) {
+                                            totaldebt += row[issue.issue]['x'];
+                                            $scope.issuepercent[issue.issue]['debt'] += row[issue.issue]['x'];
+                                        }
+                                    }
+                                });
+                            });
+
+                            // This calculates the data for the ownership donut graph
+                            $scope.graphdata = [];
+                            angular.forEach($scope.rows, function (row) {
+                                if (row.email == $rootScope.person.email) {
+                                    $scope.graphdata.push({'name':"mine", 'percent':calculate.cleanZeros(100 - parseFloat($scope.everyone.percentage))});
+                                    $scope.myrow = row;
+                                }
+                            });
+                            $scope.graphdata.push({'name':"everyone", 'percent': calculate.cleanZeros(parseFloat($scope.everyone.percentage))});
+
+                            // This calculates the data for the vesting tab
+                            var vestedarray = calculate.myvested($scope.optiontrans);
+                            $scope.myvested = vestedarray[0];
+                            var tranvested = vestedarray[1];
+                            angular.forEach(tranvested, function(vest, key) {
+                                angular.forEach($scope.optiontrans, function(tran) {
+                                    if (key == tran.date) {
+                                        tran.vested = vest;
+                                    }
+                                });
+                            });
+                            var totalavailable = 0;
+                            var totalvested = 0;
+                            $scope.vestedgraphdata = [];
+                            $scope.graphnumber= 0;
+                            angular.forEach($scope.myvested, function (value, key) {
+                                totalavailable += value[1];
+                                totalvested += value[0];
+                                $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
+                            });
+                            $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
+                        });
+                    });
                 });
             });
         };
@@ -416,7 +573,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         });
                         doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_time : null;
                         $scope.setDocStatusRank(doc);
-                        if (!((doc.signature_deadline && doc.when_confirmed) || (!doc.signature_deadline && doc.last_viewed))) {
+                        if (!((doc.signature_deadline && doc.when_signed) || (!doc.signature_deadline && doc.last_viewed))) {
                             $scope.docsummary.sig += 1;
                         }
                     });
@@ -459,7 +616,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.gotopage = function (link){
-            console.log(link);
             location.href = link;
         };
 
@@ -511,10 +667,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
                 if (x[1][0]) {
                     $scope.$emit("notification:success", "Your password has been updated successfully.");
-                    // console.log("changed successfully");
                 } else {
                     $scope.$emit("notification:fail", "There was an error updating your password.");
-                    // console.log("Oops.  Change failed");
                     $scope.currentPassword = "";
                     $scope.newPassword = "";
                     $scope.passwordConfirm = "";
@@ -560,7 +714,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.profileUpdate = function (person) {
-            console.log(person);
             SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
                 void(x);
                 var fd = new FormData();
@@ -569,7 +722,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     SWBrijj.uploadImage(fd).then(function(x) {
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
-                        $scope.photoURL = '/photo/user?id=' + $scope.person.email;
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);
@@ -586,17 +739,32 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 });
         };
 
+        // Service functions
+
+        $scope.formatAmount = function (amount) {
+            return calculate.funcformatAmount(amount);
+        };
+
+        $scope.formatDollarAmount = function(amount) {
+            var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $rootScope.settings);
+            return (output);
+        };
+
+        $scope.formatAbrAmount = function(amount) {
+            var output = calculate.formatMoneyAmount(calculate.abrAmount(amount), $rootScope.settings);
+            return output;
+        }
+
     }]);
 
 app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
     SWBrijj.tbl('account.companies').then(function(x) {
-        // console.log(x);
         if (x.length > 0) { //User is a CEO of a company
             document.location.href="company";
         } else {
             SWBrijj.tblm('account.invested_companies').then(function(x) {
                 document.location.href=x[0]['company'];
-            })
+            });
         }
     });
 }]);

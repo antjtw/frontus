@@ -8,7 +8,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     var company = navState.company;
     $scope.currentCompany = company;
-    console.log(company);
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -33,7 +32,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     });
 
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
-        console.log(data);
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -42,7 +40,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
         // Pivot shenanigans
         SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
-            console.log(trans);
             $scope.trans = trans
 
             SWBrijj.tblm('ownership.this_company_options').then(function (x) {

@@ -1,7 +1,7 @@
 @charset"UTF-8";
 
 /* CSS Document */
- html, body {
+html, body {
     height: 100% !important;
     width: 100%;
     padding: 0 !important;
@@ -22,7 +22,7 @@ body {
 }
 
 
- :focus {
+:focus {
     outline-color: transparent !important;
     outline-style: none !important;
 }
@@ -39,7 +39,7 @@ body {
     background-color: rgb(255, 255, 255);
 }
 /* Bootstrap overrides */
- .container {
+.container {
     width: 1024px;
     clear:both;
 }
@@ -67,9 +67,27 @@ input.loginInput:focus, textarea:focus, select:focus {
     border-color: rgb(204, 204, 204);
     color: black;
 }
+
 .modal-backdrop {
     background-color: #1E2D3D;
 }
+
+.datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
+    background-image: none;
+}
+
+.datepicker table tr td span.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover {
+    background-image: none;
+}
+
+.datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
+    background-color: #1ABC96;
+}
+
+.datepicker table tr td span.active:hover, .datepicker table tr td span.active:hover:hover, .datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active.disabled:hover:hover, .datepicker table tr td span.active:active, .datepicker table tr td span.active:hover:active, .datepicker table tr td span.active.disabled:active, .datepicker table tr td span.active.disabled:hover:active, .datepicker table tr td span.active.active, .datepicker table tr td span.active:hover.active, .datepicker table tr td span.active.disabled.active, .datepicker table tr td span.active.disabled:hover.active, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active:hover.disabled, .datepicker table tr td span.active.disabled.disabled, .datepicker table tr td span.active.disabled:hover.disabled, .datepicker table tr td span.active[disabled], .datepicker table tr td span.active:hover[disabled], .datepicker table tr td span.active.disabled[disabled], .datepicker table tr td span.active.disabled:hover[disabled] {
+    background-color: #1ABC96;
+}
+
 [class^="icon-"], [class*=" icon-"] {
     background:none;
 }
@@ -104,7 +122,7 @@ input:focus, textarea:focus {
     cursor: pointer !important;
 }
 /* Tooltips */
- .tooltip-inner {
+.tooltip-inner {
     background-color: rgb(30, 45, 61);
     border-radius: 3px;
     background-color: #1E2D3D;
@@ -123,7 +141,7 @@ input:focus, textarea:focus {
     opacity: 1;
 }
 /* Accordians */
- .accordion-group {
+.accordion-group {
     border-left: 0;
     border-right: 0;
     border-top: 0;
@@ -136,20 +154,20 @@ input:focus, textarea:focus {
     content:'';
 }
 /* Document Viewer Styling */
- .DV-views {
+.DV-views {
     display:none;
 }
 /* Fonts */
- p, button, select, textarea, a, address, div, input, button {
+p, button, select, textarea, a, address, div, input, button {
     font-family:'FS Elliot Web Regular', sans-serif;
     font-size: 12px;
     line-height: 18px;
     color: rgb(141, 141, 141);
 }
 
- input {
-     color: rgb(102, 102, 102);
- }
+input {
+    color: rgb(102, 102, 102);
+}
 a:hover {
     text-decoration: none;
 }
@@ -213,7 +231,7 @@ h2 {
     min-height: 20px;
 }
 /* Spacing */
- .spacer5 {
+.spacer5 {
     height: 5px;
     width: 100%;
     font-size: 0;
@@ -394,14 +412,14 @@ h2 {
     display: block;
 }
 /* Hide */
- .invisible {
+.invisible {
     visibility:hidden;
 }
 .remove {
     display: none;
 }
 /* Visibility Transitions */
- .fade-hide, .fade-show {
+.fade-hide, .fade-show {
     -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
     -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
     -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
@@ -420,7 +438,7 @@ h2 {
     opacity:0.9;
 }
 /* Error */
- #error {
+#error {
     font-family:'Arvo', serif;
     font-size: 1.5em;
 }
@@ -430,7 +448,7 @@ h2 {
     padding-bottom: 20px;
 }
 /* Navigation Bar at Top of Page */
- .navBarLoggedIn {
+.navBarLoggedIn {
     height:70px;
 }
 .navBarLoggedOut {
@@ -552,8 +570,10 @@ h2 {
 }
 
 .topnav .nav-photo > img {
-    width: 34px;
-    height: 34px;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+    background-color: #FFFFFF;
 }
 
 .bottomnav {
@@ -669,7 +689,7 @@ h2 {
     color: rgb(166, 166, 166);
 }
 /* Notifications */
- .notification {
+.notification {
     position: fixed;
     width: 100%;
     text-align: center;
@@ -691,7 +711,7 @@ h2 {
     border-bottom: 2px solid rgb(236, 112, 29);
 }
 /* Head Section */
- .headsection {
+.headsection {
     height: 100px;
     position: relative;
 }
@@ -787,7 +807,7 @@ li.selectedtab {
     box-shadow: none;
 }
 /* Left Block for split pages */
- .row-fluid .span8.leftBlock {
+.row-fluid .span8.leftBlock {
     float: left;
     width: 674px;
     transition:width 0.25s;
@@ -795,7 +815,7 @@ li.selectedtab {
     /* Safari */
 }
 /* Login */
- .gateway {
+.gateway {
     margin-left:0;
     margin-top:140px;
     background-color: rgb(227, 227, 227);
@@ -931,7 +951,7 @@ form.inputs {
     color: rgb(0, 136, 204);
 }
 /* Side Bar Navigation */
- .sidebar {
+.sidebar {
     padding-top:20px;
 }
 .sideButtons {
@@ -957,7 +977,7 @@ form.inputs {
     color: rgb(255, 255, 255);
 }
 /* Central Profile Section */
- #detailsEdit {
+#detailsEdit {
     padding-right:20px;
 }
 .span10.coreEdit {
@@ -987,7 +1007,7 @@ form.inputs {
     z-index: 2;
 }
 /* Table Designs for Doc Library and Captable (This is horrendous naming as docLibrary is not just for docs) */
- .docLibrary {
+.docLibrary {
     width: 100%;
 }
 .docLibrary .column-label {
@@ -1010,7 +1030,7 @@ form.inputs {
     background: none;
 }
 /* Placeholder text color */
- .docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
+.docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
     color: rgb(199, 199, 199);
     opacity: 1;
 }
@@ -1088,15 +1108,15 @@ form.inputs {
     color: rgb(127, 140, 141);
 }
 /* Document List */
- .doclib.tableView th {
+.doclib.tableView th {
     width: 500px;
 }
 /* Document Viewer */
 
 /* Information Boxes */
 .info-box {
-   border: 1px solid #E2E2E2;
-   margin-bottom: 20px;
+    border: 1px solid #E2E2E2;
+    margin-bottom: 20px;
 }
 
 .body-box {
@@ -1166,6 +1186,8 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 > li > ul > li {
     overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 288px;
     border: 1px solid #F1F1F1;
@@ -1182,7 +1204,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 /* Document Status */
- .documentInfo {
+.documentInfo {
     float: right;
     height: 265px;
     width: 330px;
@@ -1359,7 +1381,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.status-toggle.status-icon {
-    width: 14px; 
+    width: 14px;
 }
 
 .status-toggle > .circle {
@@ -1491,7 +1513,7 @@ a.oldschool-link  {
 .status-columns.column-label > th {
     padding-left: 10px;
 }
- .status-row td {
+.status-row td {
     background-color: transparent;
 }
 .status-row:hover {
@@ -1511,7 +1533,7 @@ a.oldschool-link  {
     border-top: 6px solid #8D8D8D;
     position: absolute;
 }*/
- .status-row.selectedrow a {
+.status-row.selectedrow a {
     color: rgb(241, 241, 241);
 }
 .tableView tr.status-detail {
@@ -1565,7 +1587,7 @@ a.oldschool-link  {
     max-width: 190px;
 }
 /* Footer */
- .minimumGap {
+.minimumGap {
     min-height:150px;
 }
 .push {
@@ -1641,7 +1663,7 @@ a.oldschool-link  {
     border-right: 0;
 }
 /* Status */
- .tableView td.status-bubbles {
+.tableView td.status-bubbles {
     background-color: rgb(241, 241, 241);
     text-align: center;
     padding: 0 10px 0 10px;
@@ -1667,7 +1689,7 @@ a.oldschool-link  {
     overflow:auto;
 }
 /* Dynamic shifting of spans */
- .leftTabWindow {
+.leftTabWindow {
     overflow-x: hidden;
 }
 .leftFullTableBlock {
@@ -1677,11 +1699,11 @@ a.oldschool-link  {
     margin-right:-343px;
 }
 /* Company People */
- .tableView.people-table th {
+.tableView.people-table th {
     width: 470px;
 }
 /* Buttons */
- .button {
+.button {
     cursor: pointer;
     border: 0;
     box-sizing:border-box;
@@ -1694,7 +1716,7 @@ a.oldschool-link  {
     text-shadow: none;
 }
 /* New Standard Button as of 10/03/13 */
- .standard-button > button {
+.standard-button > button {
     border-radius: 3px;
     font-size: 12px;
     color: #FFFFFF;
@@ -1798,7 +1820,7 @@ a.oldschool-link  {
 }
 
 /* Back icon */
- .back-icon {
+.back-icon {
     display: inline-block;
     font-size: 20px;
     color: white;
@@ -2295,7 +2317,7 @@ button.icon-button:hover {
     display: inline-block;
 }
 /* Styling file uploads with fake overlay */
- .modal div.fileinputs {
+.modal div.fileinputs {
     position: relative;
     height: 50px;
 }
@@ -2309,7 +2331,7 @@ button.icon-button:hover {
 }
 .modal div.fakefile > div {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .modal div.fakefile > span {
     display: inline-block;
@@ -2329,7 +2351,7 @@ button.icon-button:hover {
     margin: 0;
 }
 /* Modal CSS */
- .modal {
+.modal {
     margin-left: -180px;
     width: 360px;
     background-color: rgb(255, 255, 255);
@@ -2337,7 +2359,7 @@ button.icon-button:hover {
     border-radius: 0;
 }
 /* Override the transition from top */
- .modal.fade {
+.modal.fade {
     top: 10%;
 }
 .modal.narrowModal {
@@ -2374,7 +2396,7 @@ button.icon-button:hover {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    padding: 0 22px 22px 22px;
+    padding: 22px 22px 22px 22px;
 }
 
 .modal .emailSection {
@@ -2474,7 +2496,7 @@ button.icon-button:hover {
     margin-left: 20px;
 }
 /* Modal Specialized */
- .deleteConfirm {
+.deleteConfirm {
     width: 400px;
 }
 .shareModal {
@@ -2486,7 +2508,7 @@ button.icon-button:hover {
     margin-bottom: 20px;
 }
 /* Dropdown */
- .menu_dropdown {
+.menu_dropdown {
     display: block;
     margin: 0;
     padding: 9px 12px 8px 12px;
@@ -2526,7 +2548,7 @@ button.icon-button:hover {
     border-left: 4px solid transparent;
 }
 /* Alerts */
- .divInline {
+.divInline {
     position:absolute;
     display: inline-block;
     margin-top:8px;
@@ -2606,13 +2628,13 @@ button.icon-button:hover {
     background-color: rgb(224, 224, 255);
 }
 /* Div vertical trickery */
- .DivHelper {
+.DivHelper {
     display: inline-block;
     vertical-align: middle;
     height:100%;
 }
 /* Clear fix */
- .cf:before, .cf:after {
+.cf:before, .cf:after {
     content:" ";
     /* 1 */
     display: table;
@@ -2632,7 +2654,7 @@ button.icon-button:hover {
 */
 
 /* Onboarding */
- .hero-unit.onboarding {
+.hero-unit.onboarding {
     background-color: rgb(52, 73, 94);
     padding: 20px 20px 30px 20px;
     border-radius: 0;

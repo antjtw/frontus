@@ -24,7 +24,7 @@
 
           <ul class="maintabs head-text">
               <li><a href="/documents/company-list">Documents</a></li>
-              <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | lengthLimiter"></span></a></li>
+              <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
           </ul>
 
       </div>
@@ -38,7 +38,7 @@
           <div class="DivHelper"></div>
       </div>
       <div style="margin-left: 0;" class="span8 recipientInfo docLibrary statusBlock">
-          <table class="status-table">
+          <table class="status-table doc-status">
               <tbody>
                   <tr>
                       <th ng-click="setOrder('name')">Shareholder</th>
@@ -110,11 +110,11 @@
                 </div>
                 <div class="body-box">
                     <ul class="last-edited spaced-list">
-                        <li>{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                        <li>Sent</li>
+                        <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                        <li ng-show="lastsent">Sent</li>
+                        <!--
                         <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Last Edited</li>
-                        <!--
                         <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Deadline</li>
                         -->

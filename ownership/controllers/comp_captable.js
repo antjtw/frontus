@@ -284,7 +284,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
-                $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
+                $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
 
                 $scope.finishedsorting = true;
                 if ($scope.radioModel == "Edit") {
@@ -293,8 +293,28 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     },100);
                 }
 
+                var earliestedit = new Date.today().addDays(1);
+                angular.forEach($scope.issues, function(issue) {
+                    if (issue.created) {
+                        if (Date.compare(earliestedit, issue.created) > -1) {
+                            earliestedit = issue.created;
+                        }
+                    }
+                });
+                if (earliestedit != new Date.today().addDays(1)) {
+                    console.log(parseInt(Date.parse(earliestedit).getTime()/1000));
+                    Intercom('update', {company : {'captablestart_at':parseInt(Date.parse(earliestedit).getTime()/1000)}});
+                }
+
             });
         });
+    });
+
+
+
+    // This call is only here for Intercom (Data is not otherwise available on the page)
+    SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
+        Intercom('update', {company : {'captable_shares':data.length}});
     });
 
 
@@ -438,8 +458,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else if (String($scope.activeIssue.tagalong) == "false") {
             $scope.activeIssue.tagalong = $scope.tf[1];
         }
-        if ($scope.activeIssue.name == "") {
-            $scope.activeIssue.date = (Date.today()).toUTCString();
+        if ($scope.activeIssue.date == "Mon Feb 01 2100 00:00:00 GMT-0500 (EST)") {
+            $scope.activeIssue.date = (Date.today());
         }
         if ($scope.activeIssue.common) {
             $scope.commonshow = true;
@@ -528,7 +548,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
 
             if (issue['key'] != null) {
-                var dateconvert = new Date(issue['date']);
+                var dateconvert = issue['date'];
                 var d1 = dateconvert.toUTCString();
                 var partpref = $scope.strToBool(issue['partpref']);
                 var dragalong = $scope.strToBool(issue['dragalong']);
@@ -543,11 +563,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     var oldissue = issue['key'];
+                    var index = -1;
+
+                    // Fires only when you change the issue name to update the rows
+                    // Removes unissued rows with the old name, new named ones get added further down
                     if (issue['issue'] != issue.key) {
                         angular.forEach($scope.rows, function (row) {
+                            if (row.name == issue['key'] + " (unissued)" && index == -1) {
+                                index = $scope.rows.indexOf(row);
+                            }
                             row[issue['issue']] = row[issue.key];
                             delete row[issue.key];
                         });
+                        if (index != -1) {
+                            $scope.rows.splice(index, 1);
+                        }
                     }
 
                     angular.forEach($scope.issues, function (x) {
@@ -1336,6 +1366,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.tran = trans[0];
         $scope.convertTran.newtran = {}
         $scope.convertTran.step = '1';
+        $scope.convertTran.date = new Date.today();
         $scope.convertTransOptions = trans;
         $scope.convertModal = true;
 
@@ -1711,7 +1742,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     angular.forEach($scope.trans, function (x) {
                         if (x.tran_id == tran.tran_id) {
                             index = $scope.trans.indexOf(x);
-                            x.convert.push({"investor_to": tran.transferto, "investor_fron": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
+                            x.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
                             decrement.issue = x.issue;
                             decrement.units = transferunits;
                             decrement.amount = x.amount * (transferunits/x.units);

@@ -96,7 +96,18 @@
 		box-sizing:border-box;
 		-moz-box-sizing:border-box;
 		width: 100%;
+        margin-bottom:10px;
+        border-radius: 3px;
 	}
+
+    .home .button.greenButton {
+        border-radius: 3px;
+    }
+
+    .home .thanks {
+        width: 300px;
+        height: 200px;
+    }
 
 	.row-fluid.iconMobile > div:first-child {
 		width:40%

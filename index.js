@@ -36,7 +36,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
   }*/
 
   $scope.fieldCheck = function() {
-    return !($scope.user.email && $scope.user.name && $scope.user.company);
+    return !($scope.user.email);
   };
 
   $scope.toggle = true;
