@@ -1366,6 +1366,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.tran = trans[0];
         $scope.convertTran.newtran = {}
         $scope.convertTran.step = '1';
+        $scope.convertTran.date = new Date.today();
         $scope.convertTransOptions = trans;
         $scope.convertModal = true;
 
