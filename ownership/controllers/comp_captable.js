@@ -311,6 +311,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     });
 
 
+
+    // This call is only here for Intercom (Data is not otherwise available on the page)
+    SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
+        Intercom('update', {company : {'captable_shares':data.length}});
+    });
+
+
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
     $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
         $scope.stretchheight = {height: String(newValue + 19) + "px"}
