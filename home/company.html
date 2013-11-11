@@ -161,15 +161,15 @@
                             <div class="span6">
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-invest.png'>
-                                    <h2><span>{{ownersummary.invested}}</span> Invested</h2>
+                                    <h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-investors.png'>
-                                    <h2><span>{{ownersummary.peoplenum}}</span> Shareholders</h2>
+                                    <h2><span>{{ownersummary.peoplenum || 0}}</span> Shareholders</h2>
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-share.png'>
-                                    <h2><span>{{ownersummary.shares}}</span> Invited</h2>
+                                    <h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
                                 </div>
                             </div>
                             <div class="span6">
