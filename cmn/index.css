@@ -30,8 +30,8 @@
 }
 
 .home .loginInput {
-    padding-left: 15px;
-    margin-bottom: 0;
+   // padding-left: 15px;
+    margin-bottom: 10px;
 }
 
 .home select, textarea, input[type="email"], .uneditable-input {
