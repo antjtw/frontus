@@ -749,6 +749,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.versionStatus = function(version) {
+            console.log(version);
             if (version && version.last_event) {
                 return "" + version.last_event.activity +
                        " by " + (version.last_event.name || version.investor) +
@@ -1026,7 +1027,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             var uniqueGroups = [];
             angular.forEach($scope.activity, function(event) {
                 if (event.activity != "sent") {
-                    var timeGroup = moment(event.event_time).fromNow();
+                    var timeGroup = moment(event.event_time).from(event.timenow);
                     if (uniqueGroups.indexOf(timeGroup) != -1) {
                         $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
                     } else {

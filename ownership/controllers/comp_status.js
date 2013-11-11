@@ -22,7 +22,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                     if (activity.email == person.email) {
                         var act = activity.activity;
                         var time;
-                      time = activity.event_time;
+                        time = activity.event_time;
                         person[act] = time;
                     }
                 });
@@ -46,7 +46,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.eventGroups = [];
         var uniqueGroups = [];
         angular.forEach(originalfeed, function(event) {
-            var timegroup = moment(event.event_time).fromNow();
+            var timegroup = moment(event.event_time).from(event.timenow);
             if (uniqueGroups.indexOf(timegroup) > -1) {
                 $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
             }

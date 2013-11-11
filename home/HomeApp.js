@@ -198,7 +198,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent") {
-                        var timegroup = moment(event.time).fromNow();
+                        var timegroup = moment(event.time).from(event.timenow);
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
                         }
@@ -375,7 +375,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent" && event.activity != "viewed") {
-                        var timegroup = moment(event.time).fromNow();
+                        var timegroup = moment(event.time).from(event.timenow);
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
                         }
