@@ -105,7 +105,7 @@
                         <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortVersionStatus(version)}}</li>
-                                <li>{{momentFromNow(version.last_event.event_time)}}</li>
+                                <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                             </ul>
                         </td>
                         <td>

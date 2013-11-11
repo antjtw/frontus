@@ -89,6 +89,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return;
         }
 
+        SWBrijj.tblm('global.server_time').then(function(time) {
+            $scope.servertime = time[0].fromnow;
+        });
+
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
@@ -322,15 +326,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
 
-        $scope.momentFromNow = function(date) {
-            return moment(date).fromNow();
+        $scope.momentFromNow = function(date, zerodate) {
+            return moment(date).from(zerodate);
         };
 
         $scope.versionStatus = function(version) {
             if (version.last_event) {
                 return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity + " by ")) +
                        (version.last_event.name || version.investor) +
-                       " " + moment(version.last_event.event_time).fromNow() +
+                       " " + moment(version.last_event.event_time).from(version.last_event.timenow) +
                        (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
             } else {
                 return "";
@@ -341,7 +345,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (doc.versions) {
                 return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
                     doc.versions[0].last_event.event_time :
-                    doc.last_updated)).fromNow();
+                    doc.last_updated)).from($scope.servertime);
             }
 
             /*
@@ -503,7 +507,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.defaultDocStatus = function (doc) {
-            return "Uploaded " + moment(doc.last_updated).fromNow();
+            return "Uploaded " + moment(doc.last_updated).from($scope.servertime);
         };
 
         $scope.viewOriginal = function(doc) {
@@ -602,6 +606,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $location.path('/investor-view');
             return;
         }
+
+        SWBrijj.tblm('global.server_time').then(function(time) {
+            $scope.servertime = time[0].fromnow;
+        });
 
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
@@ -753,7 +761,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             if (version && version.last_event) {
                 return "" + version.last_event.activity +
                        " by " + (version.last_event.name || version.investor) +
-                       " " + moment(version.last_event.event_time).fromNow();
+                       " " + moment(version.last_event.event_time).from($scope.servertime);
             } else {
                 return "";
             }
@@ -933,6 +941,10 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             return;
         }
 
+        SWBrijj.tblm('global.server_time').then(function(time) {
+            $scope.servertime = time[0].fromnow;
+        });
+
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
@@ -1094,7 +1106,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.formatLastLogin = function(lastlogin) {
-            return lastlogin ? "Last Login " + moment(lastlogin).fromNow() : "Never Logged In";
+            return lastlogin ? "Last Login " + moment(lastlogin).from($scope.servertime) : "Never Logged In";
         };
 
         $scope.formatDate = function(date, fallback) {
@@ -1169,6 +1181,11 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             $location.path("/company-list");
             return;
         }
+
+        SWBrijj.tblm('global.server_time').then(function(time) {
+            $scope.servertime = time[0].fromnow;
+        });
+
         $scope.selectedCompany = navState.company;
 
         // Set up event handlers
@@ -1227,7 +1244,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.momentFromNow = function(date) {
-            return moment(date).fromNow();
+            return moment(date).from($scope.servertime);
         };
 
         $scope.docOrder = 'docname';
@@ -1263,7 +1280,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             if (doc.last_event) {
                 return doc.last_event.activity +
                        " by " + (doc.last_event.name || doc.investor) +
-                       " " + moment(doc.last_event.event_time).fromNow();
+                       " " + moment(doc.last_event.event_time).from($scope.servertime);
             } else {
                 return "";
             }
@@ -1301,6 +1318,10 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $location.path("/company-view");
             return;
         }
+
+        SWBrijj.tblm('global.server_time').then(function(time) {
+            $scope.servertime = time[0].fromnow;
+        });
 
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
@@ -1427,7 +1448,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 /* Filter to format the activity time */
 docviews.filter('fromNow', function() {
     return function(date) {
-        return moment(date).fromNow();
+        return moment(date).from($scope.servertime);
     };
 });
 
