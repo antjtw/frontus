@@ -15,6 +15,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
             $scope.userStatus[i].shown = false;
             $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
+        Intercom('update', {company : {'captable_shares':$scope.userStatus.length}});
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
             console.log(activities);
             angular.forEach($scope.userStatus, function (person) {

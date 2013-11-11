@@ -293,6 +293,19 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     },100);
                 }
 
+                var earliestedit = new Date.today().addDays(1);
+                angular.forEach($scope.issues, function(issue) {
+                    if (issue.created) {
+                        if (Date.compare(earliestedit, issue.created) > -1) {
+                            earliestedit = issue.created;
+                        }
+                    }
+                });
+                if (earliestedit != new Date.today().addDays(1)) {
+                    console.log(parseInt(Date.parse(earliestedit).getTime()/1000));
+                    Intercom('update', {company : {'captablestart_at':parseInt(Date.parse(earliestedit).getTime()/1000)}});
+                }
+
             });
         });
     });
