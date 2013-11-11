@@ -2378,7 +2378,7 @@ button.icon-button:hover {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    padding: 0 22px 22px 22px;
+    padding: 22px 22px 22px 22px;
 }
 
 .modal .emailSection {
