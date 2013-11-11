@@ -1742,7 +1742,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     angular.forEach($scope.trans, function (x) {
                         if (x.tran_id == tran.tran_id) {
                             index = $scope.trans.indexOf(x);
-                            x.convert.push({"investor_to": tran.transferto, "investor_fron": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
+                            x.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "From", "date": $scope.transfer.date});
                             decrement.issue = x.issue;
                             decrement.units = transferunits;
                             decrement.amount = x.amount * (transferunits/x.units);
