@@ -93,7 +93,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             return corecolor(i); })
                         .attr("class", "pie-slices")
                         .on("mouseover", function(d, i) {
-                            console.log(i);
                             var colour = corecolor(i);
                             var current = this;
                             d3.selectAll(".pie-slices").transition()
@@ -356,7 +355,6 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
-                    console.log(max);
                     y.domain([0, max]);
 
                     svg.append("g")
