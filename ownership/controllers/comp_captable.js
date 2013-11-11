@@ -284,7 +284,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
-                $scope.issues.push({"name": "", "date": Date(2100, 1, 1)});
+                $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
 
                 $scope.finishedsorting = true;
                 if ($scope.radioModel == "Edit") {
@@ -458,8 +458,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else if (String($scope.activeIssue.tagalong) == "false") {
             $scope.activeIssue.tagalong = $scope.tf[1];
         }
-        if ($scope.activeIssue.name == "") {
-            $scope.activeIssue.date = (Date.today()).toUTCString();
+        console.log($scope.activeIssue.date);
+        if ($scope.activeIssue.date == "Mon Feb 01 2100 00:00:00 GMT-0500 (EST)") {
+            $scope.activeIssue.date = (Date.today());
         }
         if ($scope.activeIssue.common) {
             $scope.commonshow = true;
@@ -548,7 +549,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
 
             if (issue['key'] != null) {
-                var dateconvert = new Date(issue['date']);
+                var dateconvert = issue['date'];
                 var d1 = dateconvert.toUTCString();
                 var partpref = $scope.strToBool(issue['partpref']);
                 var dragalong = $scope.strToBool(issue['dragalong']);
