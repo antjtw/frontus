@@ -327,8 +327,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.versionStatus = function(version) {
             if (version.last_event) {
-                return version.last_event.activity +
-                       " by " + (version.last_event.name || version.investor) +
+                return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity + " by ")) +
+                       (version.last_event.name || version.investor) +
                        " " + moment(version.last_event.event_time).fromNow() +
                        (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
             } else {
