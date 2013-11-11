@@ -667,7 +667,7 @@
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-show="activeIssue.type == 'Equity'" ng-click="splitSharesUp(activeIssue);">Split Shares</li>
+                                            <li ng-show="activeIssue.type == 'Equity' || activeIssue.type == 'Option'" ng-click="splitSharesUp(activeIssue);">Split Shares</li>
                                             <li ng-click="deleteIssueButton(activeIssue);">Delete</li>
                                         </ul>
                                     </li>

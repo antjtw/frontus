@@ -1604,7 +1604,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.splitppshare = function(issue) {
         var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
         if (!isNaN(ratio)) {
-            return (issue.ppshare * ratio);
+            if (issue.type == "Equity") {
+                return (issue.ppshare * ratio);
+            }
+            else if (issue.type == "Option") {
+                return (issue.price * ratio);
+            }
         }
     };
 
@@ -1615,11 +1620,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                  angular.forEach($scope.trans, function(tran) {
                      if (tran.issue == issue.issue) {
                          tran.units = tran.units / ratio;
-                         tran.ppshare = tran.ppshare * ratio;
-                         var fraction = new Fraction(ratio)
-                         console.log(ratio);
-                         tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id, "split" : fraction});
-
+                         var fraction = new Fraction(ratio);
+                         if (issue.type == "Equity") {
+                             tran.ppshare = tran.ppshare * ratio;
+                             tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.ppshare, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id, "split" : fraction});
+                         }
+                         else if (issue.type == "Option") {
+                             tran.price = tran.price * ratio;
+                             tran.convert.push({"issuefrom": tran.issue, "tranto": tran.tran_id, "company": tran.company, "effectivepps": tran.price, "method": "Split", "date": issue.date, "tranfrom": tran.tran_id, "split" : fraction});
+                         }
                      }
                  });
                 angular.forEach($scope.rows, function (row) {
