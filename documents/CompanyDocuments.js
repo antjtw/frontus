@@ -202,6 +202,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return !$scope.query || re.test(obj.docname);
         };
 
+        $scope.exportToPdf = function(doc) {
+            console.log("here");
+            SWBrijj.procd('testdl.pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(data) {
+                console.log("it worked?!?");
+                document.location.href = data;
+            });
+            /*
+            SWBrijj.procm('document.genCompanyPdf', doc.doc_id).then(function(data) {
+                console.log("generated pdf");
+                console.log(data);
+            });
+            */
+        };
+
         // Document Upload pieces
         // Modal Up and Down Functions
 

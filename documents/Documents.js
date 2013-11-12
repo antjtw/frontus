@@ -266,7 +266,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         $scope.updateDocPanelSize = function() {
             var dp = $('.docPanel');
-            dp.height((dp.width()/$scope.image.width)*$scope.image.height);
+            if (dp) {
+                dp.height((dp.width()/$scope.image.width)*$scope.image.height);
+            };
         };
         window.onresize = $scope.updateDocPanelSize;
             
