@@ -263,11 +263,13 @@ docs.directive('icon', function() {
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
         $scope.image = {width: 0, height: 0};
-        $scope.$watchCollection('image', function(newval, oldval) {
-            var img_aspect_ratio = newval.width / newval.height;
-            var min_aspect_ratio = 900/1165;
-            $('.docPanel').height(img_aspect_ratio > min_aspect_ratio ? (900/newval.width)*newval.height : 1165);
-        });
+        $scope.$watchCollection('image', $scope.updateDocPanelSize);
+        $scope.updateDocPanelSize = function() {
+            var dp = $('.docPanel');
+            dp.height((dp.width()/$scope.image.width)*$scope.image.height);
+        };
+        window.onresize = $scope.updateDocPanelSize;
+            
         
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
@@ -281,6 +283,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     $scope.$apply(function() {
                         $scope.image.width = img.width;
                         $scope.image.height = img.height;
+                        $scope.updateDocPanelSize();
                     });
                 };
                 img.src = $scope.pageImageUrl();
@@ -306,7 +309,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
-            offset: {top: 120}
+            offset: {top: 40}
         });
 
 
