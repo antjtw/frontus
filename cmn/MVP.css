@@ -223,8 +223,12 @@ h2 {
 }
 
 .blue-link {
-    color: #3397DA;
+    color: #3498DB;
     cursor: pointer;
+}
+
+.blue-link:hover {
+    color: #2980B9;
 }
 
 .spacer {
@@ -762,7 +766,9 @@ li.selectedtab {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: 100%;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
 }
 .subnav-controls > div > div {
     margin-right: 20px;
