@@ -293,6 +293,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     },100);
                 }
 
+                for (var i=0; i < $scope.trans.length; i++) {
+                    $scope.$watch('trans['+i+']', function(newval, oldval) {
+                        $scope.transaction_watch(newval, oldval);
+                    }, true);
+                }
+
+                for (var i=0; i < $scope.issues.length; i++) {
+                    $scope.$watch('issues['+i+']', function(newval, oldval) {
+                        $scope.issue_watch(newval, oldval);
+                    }, true);
+                }
+
                 var earliestedit = new Date.today().addDays(1);
                 angular.forEach($scope.issues, function(issue) {
                     if (issue.created) {
@@ -317,11 +329,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         Intercom('update', {company : {'captable_shares':data.length}});
     });
 
-
-    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-        $scope.stretchheight = {height: String(newValue + 19) + "px"}
-    });
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -659,6 +666,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     angular.forEach($scope.rows, function (row) {
                         row[issue.key] = {"u": null, "a": null};
                     });
+                    for (var i=0; i < $scope.issues.length; i++) {
+                        if ($scope.issues[i] == issue) {
+                            $scope.$watch('issues['+i+']', function(newval, oldval) {
+                                $scope.issue_watch(newval, oldval);
+                            }, true);
+                        }
+                    }
 
                     var allowablekeys = angular.copy($scope.issuekeys);
                     var index = allowablekeys.indexOf(issue.issue);
@@ -1141,6 +1155,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (row.name == tran.investor) {
                                 if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
                                     tran.tran_id = data[1][0];
+                                    for (var i=0; i < $scope.trans.length; i++) {
+                                        if ($scope.trans[i] == tran) {
+                                            $scope.$watch('trans['+i+']', function(newval, oldval) {
+                                                $scope.transaction_watch(newval, oldval);
+                                            }, true);
+                                        }
+                                    }
                                 }
                                 if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
                                     tran.date = tran.date;
@@ -2257,6 +2278,49 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (trigger)
             return 'There are rows without transactions. These will not be saved.';
     }
+
+    //Watches constraining various values
+
+    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
+    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 19) + "px"}
+    });
+
+    $scope.transaction_watch = function(newval, oldval) {
+        if (newval && oldval && (parseFloat(newval.interestrate) > 100 || parseFloat(newval.interestrate) < 0)) {
+            for (var x=0; x < $scope.trans.length; x++) {
+                if ($scope.trans[x].tran_id == newval.tran_id) {
+                    $scope.trans[x].interestrate = oldval.interestrate;
+                }
+            }
+        }
+
+        if (newval && oldval && (parseFloat(newval.discount) > 100 || parseFloat(newval.discount) < 0)) {
+            for (var x=0; x < $scope.trans.length; x++) {
+                if ($scope.trans[x].tran_id == newval.tran_id) {
+                    $scope.trans[x].discount = oldval.discount;
+                }
+            }
+        }
+    };
+
+    $scope.issue_watch = function(newval, oldval) {
+        if (newval && oldval && (parseFloat(newval.interestrate) > 100 || parseFloat(newval.interestrate) < 0)) {
+            for (var x=0; x < $scope.issues.length; x++) {
+                if ($scope.issues[x].tran_id == newval.tran_id) {
+                    $scope.issues[x].interestrate = oldval.interestrate;
+                }
+            }
+        }
+
+        if (newval && oldval && (parseFloat(newval.discount) > 100 || parseFloat(newval.discount) < 0)) {
+            for (var x=0; x < $scope.issues.length; x++) {
+                if ($scope.issues[x].tran_id == newval.tran_id) {
+                    $scope.issues[x].discount = oldval.discount;
+                }
+            }
+        }
+    };
 
 };
 
