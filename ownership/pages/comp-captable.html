@@ -542,11 +542,12 @@
                     <td ng-repeat="key in issuekeys | orderBy:issueSort">
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
-                          <input class="captablepair" maxlength="18"
+                          <input ng-show="isDebt(key);" class="captablepair" maxlength="18"
                                  placeholder="shares"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
                                  onkeydown="testForEnter();">
+                          <input ng-hide="isDebt(key);" class="captablepair" disabled>
                           <input class="captablepair" maxlength="18" placeholder="paid"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
@@ -961,7 +962,7 @@
 
                                     </p>
 
-                                    <p class="rightTitle"><span>Shares</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle" ng-hide="tran.type =='Debt'"><span>Shares</span><input ng-disabled="toggleView();"
                                                                                     maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                     ng-model="tran.units" onkeydown="testForEnter();"></p>
 
