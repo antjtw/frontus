@@ -54,11 +54,11 @@
               <a class="menu_dropdown dropdown-toggle" ng-class="{'no-hover':companies.length == 1}">{{navState.name}}<span class='for-r0ml'> ({{navState.role}})</span></a>
             <b class="fauxcaret" ng-show="companies.length > 1"></b>
             <ul class="dropdown-menu" ng-show="companies.length > 1">
-              <li class="dropdown-label"><span>INVESTMENTS</span></li>
+              <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span></li>
               <li class="button" ng-show="company.role=='investor'" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}" ng-repeat="company in companies">
                 <a class="button" ng-click="switch(company)">{{company.name}}</a>
               </li>
-              <li class="dropdown-label"><span>ADMIN</span></li>
+              <li ng-show="hasAdmin" class="dropdown-label"><span>ADMIN</span></li>
               <li class="button" ng-show="company.role=='issuer'" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}" ng-repeat="company in companies">
                 <a class="button" ng-click="switch(company)">{{company.name}}</a>
               </li>

@@ -105,6 +105,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.initCompany = function(cmps) {
             $scope.companies = cmps;
+            $scope.hasAdmin = false;
+            $scope.hasInvest = false;
+            angular.forEach(cmps, function(company) {
+                if (company.role == 'issuer') {
+                    $scope.hasAdmin = true
+                }
+                else if (company.role == 'investor') {
+                    $scope.hasInvest = true
+                }
+            });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
             var thiscmp = cmps[0]; // pick the first one in case none are marked selected
