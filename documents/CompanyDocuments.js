@@ -213,7 +213,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportVersionToPdf = function(version) {
-            SWBrijj.procd(version.doc_id + '.pdf', 'application/pdf', 'document.genInvestorPdf', version.doc_id.toString()).then(function(url) {
+            SWBrijj.procd(version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
