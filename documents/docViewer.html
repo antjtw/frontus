@@ -7,7 +7,7 @@
                 <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
             </div>
             <div class="lastUpdated pull-right">
-                Last Updated {{lib.last_updated | fromNow}}
+                Last Updated {{lib.last_updated | fromNow:servertime}}
                 <button ng-click="leave($event)"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
             </div>
         </div>

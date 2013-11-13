@@ -1461,8 +1461,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
 /* Filter to format the activity time */
 docviews.filter('fromNow', function() {
-    return function(date) {
-        return moment(date).from($rootScope.servertime);
+    return function(date, servertime) {
+        return moment(date).from(servertime);
     };
 });
 
