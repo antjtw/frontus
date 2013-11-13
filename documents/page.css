@@ -130,6 +130,7 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .doc-name-header {
     padding-left: 10px;
+    min-width: 450px;
 }
 
 .doc-status-header {
