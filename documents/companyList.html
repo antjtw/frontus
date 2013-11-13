@@ -118,9 +118,19 @@
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle dark">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide=toggleView();" class="dropdown-menu">
+                                        <li ng-click="viewStatus(doc)">View Status</li>
+                                        <li ng-click="viewInvestorCopy(doc, version)">View Version</li>
+                                        <li ng-click="exportToPdf(version)">Export to PDF</li>
+                                    </ul>
+                                    <!--
                                     <a class="dropdown-toggle dark" ng-click="viewInvestorCopy(doc, version)">
                                         <span data-icon="&#xe009;" aria-hidden="true"></span>
                                     </a>
+                                    -->
                                 </li>
                             </ul>
                         </td>
