@@ -209,7 +209,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.exportToPdf = function(doc) {
             SWBrijj.procd('testdl.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(data) {
         //        window.open("data:application/pdf," + encodeURIComponent(data));
-                document.location = 'data:application/pdf,' + encodeURIComponent(data);
+                document.location.href = data;
             });
         };
 
