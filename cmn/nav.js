@@ -63,6 +63,7 @@ navm.directive('navbar', function () {
 
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
     function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
+
         $scope.companies = [];
 
         if (location.host=='share.wave' || navState.tester) {
@@ -143,7 +144,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($rootScope.navState.role == "issuer") {
                 Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
             }
-            UserSnap.setEmailBox($rootScope.navState.userid);
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // ?
@@ -162,6 +162,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 Intercom('update', {'name' : $rootScope.person.name});
             }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            UserSnap.setEmailBox($rootScope.navState.userid);
         });
 
         // Notification code
