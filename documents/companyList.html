@@ -84,6 +84,7 @@
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="viewStatus(doc)">View Status</li>
                                         <li ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-click="exportToPdf(doc)">Export to PDF</li>
                                         <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
                                         <!--<li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>-->
                                     </ul>
