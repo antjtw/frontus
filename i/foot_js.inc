@@ -4,7 +4,7 @@
        apiKey: 'efc0c5d1-c4c5-4260-8cea-b16a2406faef',
        valign: 'bottom',
        halign: 'right',
-       tools: ["pen", "highlight", "note"],
+       tools: ["pen", "highlight", "blackout"],
        lang: 'en',
        commentBox: true,
        emailBox: true,
