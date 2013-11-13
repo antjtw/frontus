@@ -461,10 +461,11 @@ h2 {
 .navpadding {
     padding: 0 0 0 20px;
 }
+
 .navbounder {
-    max-width: 1024px;
     margin: 0 auto 0 auto;
 }
+
 .maincontent {
     width: 100%;
     overflow-x: auto;
@@ -1326,7 +1327,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody:first-child > tr > th:first-child {
     text-align: left;
-    padding-left: 20px;
+    padding-left: 40px;
 }
 
 .status-table > tbody:first-child > tr > th:last-child {
@@ -1600,7 +1601,6 @@ a.oldschool-link  {
     height: 112px;
 }
 .container.scaling {
-    max-width: 1024px;
     width: 100%;
     margin: 0 auto 0 auto;
 }
@@ -2692,7 +2692,38 @@ h2.onboard {
     padding-top: 14px;
 }
 
-/* Dynamic Page Pieces */
+/* Dynamic page code */
+
+.container.dynamic-page {
+    min-width: 1024px;
+    width: 100%;
+}
+
+.dynamic-page .row-fluid .span8.leftBlock {
+    width: -moz-calc(100% - 350px);
+    width: -webkit-calc(100% - 350px);
+    width: calc(100% - 350px);
+}
+
+.dynamic-page .leftFullTableBlock {
+    width: -moz-calc(100% - 7px) !important;
+    width: -webkit-calc(100% - 7px) !important;
+    width: calc(100% - 7px) !important;
+}
+
+.dynamic-page .status-right {
+    width: 323px;
+    float: right;
+    margin-right: 40px;
+    margin-left: 20px;
+}
+
+.dynamic-page .recipientInfo.docLibrary.statusBlock {
+    margin-left: 40px;
+    width: -moz-calc(100% - 440px) !important;
+    width: -webkit-calc(100% - 440px) !important;
+    width: calc(100% - 440px) !important;
+}
 
 .dynamic-page .maintabs {
     padding-left: 40px;
@@ -2704,4 +2735,17 @@ h2.onboard {
 
 .dynamic-page .subnav-controls > div:first-child {
     margin-left: 40px;
+}
+
+.dynamic-page .status-table {
+    width: -moz-calc(100%) !important;
+    width: -webkit-calc(100%) !important;
+    width: calc(100%) !important;
+}
+
+.dynamic-page .span12 .status-table {
+    margin: 0 40px 0 40px;
+    width: -moz-calc(100% - 80px) !important;
+    width: -webkit-calc(100% - 80px) !important;
+    width: calc(100% - 80px) !important;
 }
