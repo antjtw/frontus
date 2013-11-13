@@ -206,10 +206,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return !$scope.query || re.test(obj.docname);
         };
 
-        $scope.exportToPdf = function(doc) {
-            SWBrijj.procd('testdl.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(data) {
-        //        window.open("data:application/pdf," + encodeURIComponent(data));
-                document.location.href = data;
+        $scope.exportOriginalToPDF = function(doc) {
+            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
+                document.location.href = url;
+            });
+        };
+
+        $scope.exportVersionToPDF = function(version) {
+            SWBrijj.procd(version.doc_id + '.pdf', 'application/pdf', 'document.getInvestorPdf', version.doc_id.toString()).then(function(url) {
+                document.location.href = url;
             });
         };
 
