@@ -41,9 +41,9 @@
             <table class="status-table" ng-show="documents.length!==0">
                 <tbody>
                     <tr>
-                        <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
+                        <th class="left" style="padding-left:10px;" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
                     </tr>
                 </tbody>
@@ -70,12 +70,10 @@
                                 <li>{{formatDocStatusRatio(doc)}}</li>
                             </ul>
                         </td>
-                        <td style="text-align: right">
-                            <div class="standard-button small-standard-button gray">
+                        <td>
+                            <div class="standard-button small-standard-button gray doc-share-button">
                                 <button class="btn" ng-click="shareDocOpen(doc)">Share</button>
                             </div>
-                        </td>
-                        <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
@@ -90,6 +88,7 @@
                                     </ul>
                                 </li>
                           </ul>
+                        </td>
                     </tr>
                     <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
@@ -110,12 +109,10 @@
                             </ul>
                         </td>
                         <td>
-                            <div class="standard-button small-standard-button">
+                            <div class="standard-button small-standard-button doc-share-button">
                                 <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
                                 <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign</button>
                             </div>
-                        </td>
-                        <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle dark">

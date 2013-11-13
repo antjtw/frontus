@@ -713,7 +713,7 @@ tr.rowSelected, tr.rowSelected:hover {
     vertical-align: middle;
 }
 
-.status-table > tbody > tr > td.shareholder-column {
+.status-table > tbody > tr > td.shareholder-column, .status-table > tbody > tr > th.shareholder-column {
     width: 300px;
     padding-left: 10px;
 }
@@ -731,6 +731,7 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .status-table .sub-table > td > table > tbody > tr {
     height: 20px;
+    text-align: left;
 }
 
 .status-table .sub-table > td > table > tbody > tr > td {
