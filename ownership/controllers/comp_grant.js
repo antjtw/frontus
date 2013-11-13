@@ -70,8 +70,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
             });
 
-            //Calculate the total vested for each row
-            $scope.rows = calculate.vested($scope.rows, $scope.trans);
 
             //Calculate the total exercised for each row
             angular.forEach($scope.grants, function (grant) {
@@ -86,6 +84,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     }
                 });
             });
+
+            //Calculate the total vested for each row
+            $scope.rows = calculate.vested($scope.rows, $scope.trans);
 
         });
     });
@@ -242,6 +243,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     }
                 });
             });
+            $scope.rows = calculate.vested($scope.rows, $scope.trans);
         });
     };
 

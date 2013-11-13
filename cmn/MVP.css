@@ -223,8 +223,12 @@ h2 {
 }
 
 .blue-link {
-    color: #3397DA;
+    color: #3498DB;
     cursor: pointer;
+}
+
+.blue-link:hover {
+    color: #2980B9;
 }
 
 .spacer {
@@ -762,7 +766,9 @@ li.selectedtab {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: 100%;
+    width: -moz-calc(100% - 45px);
+    width: -webkit-calc(100% - 45px);
+    width: calc(100% - 45px);
 }
 .subnav-controls > div > div {
     margin-right: 20px;
@@ -2081,11 +2087,11 @@ button.icon-button:hover {
     right: 9px;
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
-    padding-left: 10px;
+    text-align: left;
     line-height: 24px;
     min-height: 24px;
     display: block;
-    padding: 3px 20px;
+    padding: 3px 20px 3px 10px;
     clear: both;
     font-weight: normal;
     color: #333333;
@@ -2684,4 +2690,18 @@ button.icon-button:hover {
 h2.onboard {
     font-size: 22px;
     padding-top: 14px;
+}
+
+/* Dynamic Page Pieces */
+
+.dynamic-page .maintabs {
+    padding-left: 40px;
+}
+
+.dynamic-page .maintabs li:first-of-type {
+    padding-left: 0;
+}
+
+.dynamic-page .subnav-controls > div:first-child {
+    margin-left: 40px;
 }

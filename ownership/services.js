@@ -155,6 +155,9 @@ ownership.service('calculate', function () {
             if (!isNaN(vesting[row.name])) {
                 var result =Math.round(vesting[row.name]*1000)/1000
                 row.vested = result;
+                if (parseFloat(row.vested) > (parseFloat(row.granted)-parseFloat(row.forfeited))) {
+                    row.vested = (parseFloat(row.granted)-parseFloat(row.forfeited));
+                }
             }
         });
         return rows

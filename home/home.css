@@ -116,6 +116,10 @@
     z-index: 2;
 }
 
+.flipper .info-box > .head-box:hover {
+    cursor: pointer;
+}
+
 .front.info-box, .back.info-box {
     width: 100%;
     height: 100%;
@@ -175,7 +179,7 @@
 }
 
 .body-box > ul.q-and-a > li:nth-child(odd) {
-    color: #3397DA;
+    color: #1E2D3D;
 }
 
 .onboarding-row > div, .onboarding-row > span {

@@ -370,6 +370,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.activity = [];
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
                 var originalfeed = feed;
+                console.log(feed);
                 //Generate the groups for the activity feed
                 $scope.eventGroups = [];
                 var uniqueGroups = [];

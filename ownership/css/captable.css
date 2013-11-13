@@ -1,7 +1,44 @@
+/* Dynamic page code */
+
+.container.dynamic-page {
+    min-width: 1024px;
+    width: 100%;
+}
+
+.dynamic-page .row-fluid .span8.leftBlock {
+    width: -moz-calc(100% - 350px);
+    width: -webkit-calc(100% - 350px);
+    width: calc(100% - 350px);
+}
+
+.dynamic-page .leftFullTableBlock {
+    width: -moz-calc(100% - 7px) !important;
+    width: -webkit-calc(100% - 7px) !important;
+    width: calc(100% - 7px) !important;
+}
+
+.dynamic-page .status-right {
+    width: 323px;
+    float: right;
+    margin-right: 40px;
+    margin-left: 20px;
+}
+
+.dynamic-page .recipientInfo.docLibrary.statusBlock {
+    margin-left: 40px;
+    width: -moz-calc(100% - 440px) !important;
+    width: -webkit-calc(100% - 440px) !important;
+    width: calc(100% - 440px) !important;
+}
+
 /* Captable Bootstrap Overrides */
 
 .accordion-heading .accordion-toggle {
     padding: 11px 20px;
+}
+
+input[disabled].default-pointer {
+    cursor: default;
 }
 
 /* Captable */
@@ -94,7 +131,7 @@
 }
 
 .tableView th:first-of-type {
-    padding-left: 20px;
+    padding-left: 40px;
     width: 165px;
 }
 
@@ -146,7 +183,7 @@
 
 .tableView .total-row > td {
     text-align: left;
-    padding: 0 5px 10px 20px;
+    padding: 0 5px 10px 40px;
     font-size: 14px;
     color: #1E2D3D;
 }
@@ -260,13 +297,13 @@ p.captablepair {
     width: 65px;
 }
 
-.tableView.captable .tranSelected > input:first-child {
+.tableView.captable .tranSelected > input.first-box {
     border-left: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
 }
 
-.tableView.captable .tranSelected > input:last-child {
+.tableView.captable .tranSelected > input.last-box {
     border-right: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
@@ -329,6 +366,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .capright .headsection {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     padding-left: 20px;
     border-bottom: 1px solid #F1F1F1;
 }
@@ -626,7 +664,7 @@ textarea {
 }
 
 .tableView.grant-table tr > td:first-child {
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: left;
 }
 
@@ -807,12 +845,12 @@ ul.last-edited > li:last-child {
 
 .activity-feed2 > li > ul {
     vertical-align: middle;
-    display: inline-block;
+    display: block;
 }
 
 .activity-feed2 > li > ul > li {
     overflow: hidden;
-    box-sizing: border-box;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     width: 288px;
     border: 1px solid #F1F1F1;
     display: inline-block;
@@ -892,7 +930,7 @@ ul.last-edited > li:last-child {
 }
 
 .convertModal > div.modalText.convert-step-one > div > input {
-    box-sizing: border-box;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     width: 150px;
     height: 30px;
     float: none;

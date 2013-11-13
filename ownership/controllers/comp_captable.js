@@ -1889,6 +1889,19 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         tran.transferto = name;
     };
 
+    $scope.isDebt = function(key) {
+        var done = true;
+        angular.forEach($scope.issues, function(issue) {
+            if (key == issue.issue && issue.type=="Debt") {
+                done = false
+                return false
+            }
+        });
+        if (done) {
+            return true
+        }
+    };
+
     //Captable Delete Issue Modal
 
     $scope.dmodalUp = function (issue) {
