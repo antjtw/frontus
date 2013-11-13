@@ -207,17 +207,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportToPdf = function(doc) {
-            console.log("here");
-            SWBrijj.procd('testdl.pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(data) {
-                console.log("it worked?!?");
-                document.location.href = data;
+            SWBrijj.procd('testdl.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(data) {
+        //        window.open("data:application/pdf," + encodeURIComponent(data));
+                document.location = 'data:application/pdf,' + encodeURIComponent(data);
             });
-            /*
-            SWBrijj.procm('document.genCompanyPdf', doc.doc_id).then(function(data) {
-                console.log("generated pdf");
-                console.log(data);
-            });
-            */
         };
 
         // Document Upload pieces
