@@ -1381,7 +1381,7 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 44px;
+    width: 55px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
@@ -1468,7 +1468,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 .status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
     color:#1E2D3D !important;
