@@ -115,8 +115,26 @@ table.docLibrary > tbody > tr:first-child > td {
     width: 100px;
 }
 
+.status-table.doc-status > tbody:first-child > tr > th:first-child {
+    padding-left: 20px;
+}
+
+.status-table .doc-share-button {
+    display: inline-block;
+    margin-right: 20px;
+}
+
 .status-showing td {
     background-color: #f1f1f1;
+}
+
+.doc-name-header {
+    padding-left: 10px;
+    min-width: 450px;
+}
+
+.doc-status-header {
+
 }
 
 
