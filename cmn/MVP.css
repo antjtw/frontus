@@ -1389,7 +1389,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.status-toggle.status-icon {
-    width: 14px;
+    width: 22px;
 }
 
 .status-toggle > .circle {
