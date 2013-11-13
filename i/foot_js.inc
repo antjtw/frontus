@@ -7,7 +7,8 @@
        tools: ["pen", "highlight", "note"],
        lang: 'en',
        commentBox: true,
-       emailBox: true
+       emailBox: true,
+       emailBoxValue: document.sessionState.userid
    };
    (function() {
        var s = document.createElement('script');
