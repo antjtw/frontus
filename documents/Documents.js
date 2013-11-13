@@ -267,7 +267,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
         $scope.image = {width: 0, height: 0};
         $scope.dp = {width: 0, height: 0};
-        $scope.$watchCollection('image', $scope.updateDocPanelSize);
         $scope.updateDocPanelSize = function() {
             var dp = $('.docPanel');
             if (dp) {
@@ -276,6 +275,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.dp.height = dp.height();
             };
         };
+        $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
             
         
