@@ -131,7 +131,7 @@ input[disabled].default-pointer {
 }
 
 .tableView th:first-of-type {
-    padding-left: 20px;
+    padding-left: 40px;
     width: 165px;
 }
 
@@ -183,7 +183,7 @@ input[disabled].default-pointer {
 
 .tableView .total-row > td {
     text-align: left;
-    padding: 0 5px 10px 20px;
+    padding: 0 5px 10px 40px;
     font-size: 14px;
     color: #1E2D3D;
 }
@@ -664,7 +664,7 @@ textarea {
 }
 
 .tableView.grant-table tr > td:first-child {
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: left;
 }
 

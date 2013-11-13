@@ -766,9 +766,9 @@ li.selectedtab {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: -moz-calc(100% - 25px);
-    width: -webkit-calc(100% - 25px);
-    width: calc(100% - 25px);
+    width: -moz-calc(100% - 45px);
+    width: -webkit-calc(100% - 45px);
+    width: calc(100% - 45px);
 }
 .subnav-controls > div > div {
     margin-right: 20px;
@@ -2693,6 +2693,14 @@ h2.onboard {
 }
 
 /* Dynamic Page Pieces */
+
+.dynamic-page .maintabs {
+    padding-left: 40px;
+}
+
+.dynamic-page .maintabs li:first-of-type {
+    padding-left: 0;
+}
 
 .dynamic-page .subnav-controls > div:first-child {
     margin-left: 40px;
