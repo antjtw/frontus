@@ -17,6 +17,20 @@
     width: calc(100% - 7px) !important;
 }
 
+.dynamic-page .status-right {
+    width: 323px;
+    float: right;
+    margin-right: 40px;
+    margin-left: 20px;
+}
+
+.dynamic-page .recipientInfo.docLibrary.statusBlock {
+    margin-left: 40px;
+    width: -moz-calc(100% - 440px) !important;
+    width: -webkit-calc(100% - 440px) !important;
+    width: calc(100% - 440px) !important;
+}
+
 /* Captable Bootstrap Overrides */
 
 .accordion-heading .accordion-toggle {

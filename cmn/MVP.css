@@ -766,9 +766,9 @@ li.selectedtab {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: -moz-calc(100% - 20px);
-    width: -webkit-calc(100% - 20px);
-    width: calc(100% - 20px);
+    width: -moz-calc(100% - 25px);
+    width: -webkit-calc(100% - 25px);
+    width: calc(100% - 25px);
 }
 .subnav-controls > div > div {
     margin-right: 20px;
@@ -2690,4 +2690,10 @@ button.icon-button:hover {
 h2.onboard {
     font-size: 22px;
     padding-top: 14px;
+}
+
+/* Dynamic Page Pieces */
+
+.dynamic-page .subnav-controls > div:first-child {
+    margin-left: 40px;
 }
