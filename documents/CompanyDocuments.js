@@ -206,13 +206,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return !$scope.query || re.test(obj.docname);
         };
 
-        $scope.exportOriginalToPDF = function(doc) {
+        $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
 
-        $scope.exportVersionToPDF = function(version) {
+        $scope.exportVersionToPdf = function(version) {
             SWBrijj.procd(version.doc_id + '.pdf', 'application/pdf', 'document.getInvestorPdf', version.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
