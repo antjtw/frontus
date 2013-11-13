@@ -71,6 +71,17 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 rr.style.display="inline";
             }
         }
+
+        $.usersnap({
+            apiKey: 'efc0c5d1-c4c5-4260-8cea-b16a2406faef',
+            valign: 'bottom',
+            halign: 'right',
+            tools: ["pen", "highlight", "note"],
+            lang: 'en',
+            commentBox: true,
+            emailBox: true
+        });
+
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         $scope.navState = navState;
         navState.path = document.location.pathname;
@@ -143,6 +154,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
             }
             $.usersnap('emailbox', String($rootScope.navState.userid));
+            $.usersnap('show');
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // ?
