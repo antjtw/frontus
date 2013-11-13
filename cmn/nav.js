@@ -142,6 +142,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($rootScope.navState.role == "issuer") {
                 Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
             }
+            $('#us_add_email').val($rootScope.navState.userid);
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // ?

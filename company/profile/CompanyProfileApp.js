@@ -11,10 +11,6 @@ var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui
         otherwise({redirectTo:'/'});
 });
 
-app.controller("MainProfileController", ['$scope','$location', function($scope, $location) {
-
-} ] );
-
 function hidePopover() {
     angular.element('.popover').hide();
 }
