@@ -1995,6 +1995,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .check-box-button.selected, .check-box-button.selected:hover {
     background-color: #1ABC96;
+    border: 1px solid #1ABC96;
 }
 
 .check-box-button.selected > span {
