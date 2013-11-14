@@ -319,7 +319,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             link = "/documents/company-view?doc=" + docid;
             document.location.href = link;
         };
-        
+
         $scope.remind = function(doc_id, user_email) {
             /*
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
@@ -459,7 +459,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
             }
         };
- 
+
         $scope.docStatusRatio = function(doc) {
             if (doc) {
                 var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
@@ -679,7 +679,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.getData();
-        
+
         $scope.getVersion = function(doc) {
             $scope.invq = false;
             $scope.counterparty = true;
@@ -755,7 +755,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
         };
         */
-        
+
         $scope.loadDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "doc_id", $scope.version.doc_id).then(function(data) {
                 $scope.version.last_event = data.sort($scope.compareEvents)[0];
@@ -778,7 +778,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 return "";
             }
         };
-        
+
         $scope.compareEvents = function(a, b) {
               var initRank = $scope.eventRank(b) - $scope.eventRank(a);
               return initRank === 0 ? (b.event_time - a.event_time) : initRank;
@@ -826,7 +826,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
-        
+
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
                 case 'reject':
@@ -1230,7 +1230,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             var initRank = $scope.eventRank(b) - $scope.eventRank(a);
             return initRank === 0 ? (b.event_time - a.event_time) : initRank;
         };
-        
+
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
                 case "countersigned":
@@ -1250,7 +1250,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                     return 0;
             }
         };
-        
+
         $scope.setDocStatusRank = function(doc) {
             doc.statusRank = $scope.eventRank(doc.last_event);
         };
@@ -1279,7 +1279,13 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             link = "/documents/investor-view?doc=" + docid;
             document.location.href = link;
         };
-        
+
+        $scope.exportDocumentToPdf = function(doc) {
+            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genInvestorPdf', doc.doc_id.toString()).then(function(url) {
+                document.location.href = url;
+            });
+        };
+
         $scope.remind = function(doc_id, user_email) {
             /*
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
@@ -1350,7 +1356,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 $route.reload();
             }, 100);
         });
-        
+
         $scope.$on('docViewerReady', function(event) {
             if ($scope.docId) $scope.getData();
         });
@@ -1371,7 +1377,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-       
+
         $scope.getData = function () {
             SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
                 if (navState.company != data.company) {
@@ -1385,11 +1391,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 $location.path("/investor-list?");
             });
         };
-        
+
         $scope.getData();
 
         //$scope.$on('initview', function(event) {$scope.getData();});
-        
+
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
                 case 'confirm':
@@ -1413,7 +1419,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
         };
-        
+
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
