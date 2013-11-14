@@ -53,9 +53,13 @@
                         <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle" ng-click="gotoDoc(doc.doc_id)">
-                                        <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="gotoDoc(doc.doc_id)">View Document</li>
+                                        <li ng-click="exportDocumentToPdf(doc)">Export to PDF</li>
+                                    </ul>
                                 </li>
                             </ul>
                         </td>
