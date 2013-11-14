@@ -11,9 +11,10 @@
 
 .docViewerHeader.affix {
     position: fixed;
-    left: 40px;
-    right: 40px;
+    left: 0px;
+    right: 0px;
     top: 0px;
+    max-width: 928px;
     margin: 0 auto;
 }
 
