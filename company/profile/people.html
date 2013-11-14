@@ -67,44 +67,37 @@
 </div>
 
 
-<div modal="adminModal" close="adminModalClose()" options="narrowopts">
+<div modal="adminModal" close="adminModalClose()" options="profileopts">
     <div class="modalHeader">
         <span>Add Person</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
     </div>
 
-    <div class="modalCopy">
-        <form>
-            <fieldset>
-                <div class="row-fluid field">
-                    <label>Name
-                        <input type="text" ng-model="newName" />
-                    </label>
-                </div>
-                <div class="row-fluid field">
-                    <label>Email
-                        <input type="text" ng-model="newEmail" />
-                    </label>
-                </div>
-                <div class="row-fluid field">
-                    <label>Role
-                        <ul class="dropdown-list drop-selector">
-                            <li class="dropdown standard">
-                                <a class="dropdown-toggle">
-                                    {{newRole}}<span class="invisible-drop">'</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <span ng-click="assignRole('Investor')">Investor</span>
-                                        <span ng-click="assignRole('Admin')">Admin</span>
-                                    </li>
-                                </ul>
+    <div class="modalText">
+        <div class="input-list">
+            <div>
+                <span>Name</span><input type="text" ng-model="newName" />
+            </div>
+            <div>
+                <span>Email</span><input type="text" ng-model="newEmail" />
+            </div>
+            <div>
+                <span>Row</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{newRole}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <span ng-click="assignRole('Investor')">Investor</span>
+                                <span ng-click="assignRole('Admin')">Admin</span>
                             </li>
                         </ul>
-                    </label>
-                </div>
-            </fieldset>
-        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="modal-footer">
