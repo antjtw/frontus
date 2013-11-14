@@ -282,6 +282,12 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         dialogClass: 'narrowModal modal'
     };
 
+    $scope.profileopts = {
+        backdropFade: true,
+        dialogFade:true,
+        dialogClass: 'profile-modal wideModal modal'
+    };
+
     $scope.fieldCheck = function() {
         return !$scope.newEmail;
     };
