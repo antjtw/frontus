@@ -1297,7 +1297,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.docStatus = function(doc) {
             if (doc.last_event) {
                 return doc.last_event.activity +
-                       " by " + (doc.last_event.name || doc.investor) +
+                       " by " +
+                       doc.last_event.person +
                        " " + moment(doc.last_event.event_time).from($rootScope.servertime);
             } else {
                 return "";
