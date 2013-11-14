@@ -251,14 +251,20 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
 
     // Admin Modal Functions
 
-    $scope.adminModalOpen = function (email) {
-        $scope.newEmail = email;
+    $scope.adminModalOpen = function () {
+        $scope.newEmail = "";
+        $scope.newName = "";
+        $scope.newRole = 'Investor';
         $scope.adminModal = true;
     };
 
     $scope.adminModalClose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.adminModal = false;
+    };
+
+    $scope.assignRole = function(role) {
+        $scope.newRole = role;
     };
 
     $scope.removeAdminModalOpen = function(email) {
@@ -280,15 +286,27 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         return !$scope.newEmail;
     };
 
-    $scope.create_admin = function() {
-        SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase(), navState.company).then(function(x) {
-            void(x);
-            $scope.$emit("notification:success", "Admin Added");
-            $route.reload();
-        }).except(function(x) {
+    $scope.create_person = function() {
+        if ($scope.newRole == "Admin") {
+            SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                 void(x);
-                $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
-        });
+                $scope.$emit("notification:success", "Admin Added");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
+                });
+        }
+        if ($scope.newRole == "Investor") {
+            SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
+                void(x);
+                $scope.$emit("notification:success", "Investor Added");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
+                });
+        }
         $scope.newEmail = "";
     };
     $scope.revoke_admin = function () {

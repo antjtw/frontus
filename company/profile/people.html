@@ -15,7 +15,7 @@
                     </div>
                     <div class="pull-right">
                         <div class='standard-button'>
-                            <button class="btn" ng-click="adminModalOpen()">Add Admin</button>
+                            <button class="btn" ng-click="adminModalOpen()">Add People</button>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
 
 <div modal="adminModal" close="adminModalClose()" options="narrowopts">
     <div class="modalHeader">
-        <span>Add administrator</span>
+        <span>Add Person</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
     </div>
 
@@ -77,8 +77,30 @@
         <form>
             <fieldset>
                 <div class="row-fluid field">
+                    <label>Name
+                        <input type="text" ng-model="newName" />
+                    </label>
+                </div>
+                <div class="row-fluid field">
                     <label>Email
-                        <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
+                        <input type="text" ng-model="newEmail" />
+                    </label>
+                </div>
+                <div class="row-fluid field">
+                    <label>Role
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{newRole}}<span class="invisible-drop">'</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <span ng-click="assignRole('Investor')">Investor</span>
+                                        <span ng-click="assignRole('Admin')">Admin</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </label>
                 </div>
             </fieldset>
@@ -90,7 +112,7 @@
             <button class="btn" ng-click="adminModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Confirm</button>
+            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
         </div>
     </div>
 
