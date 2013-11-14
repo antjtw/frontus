@@ -41,6 +41,7 @@
 .tools {
     margin-left: 20px;
     padding-top: 15px;
+    min-width: 210px;
 }
 
 .tools > button {
@@ -58,7 +59,9 @@
 .pageTurn {
     padding-top:15px;
     position: absolute;
-    left: 40%;
+    left:-webkit-calc(50% - 95px);
+    left:-moz-calc(50% - 95px);
+    left: calc(50% - 95px);
 }
 
 .pageTurn > ul {
@@ -75,8 +78,9 @@
 }
 
 .docViewerControls {
-    height: 60px;
+    min-height: 60px;
     width: 100%;
+    overflow: overlay;
     background-color: #F1F1F1;
 }
 
@@ -105,7 +109,6 @@
 }
 
 .docActions {
-    display: inline;
     padding-top: 15px;
     margin-right: 20px;
 }
@@ -195,7 +198,7 @@
 }
 
 .docViewerTitle > div {
-    width: 430px;
+    max-width: 430px;
 }
 
 .docViewerTitle > div > .docName {
