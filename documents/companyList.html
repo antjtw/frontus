@@ -20,14 +20,14 @@
 
                     <div class="pull-right">
                         <div class="standard-button">
-                            <button ng-click="documentUploadOpen();" class="btn">Upload Document
+                            <button ng-click="documentUploadOpen();" class="btn">Upload
                             </button>
                         </div>
                     </div>
 
                     <div class="pull-right">
                         <div class="standard-button">
-                            <button ng-click="multishareOpen();" class="btn">Multi-share
+                            <button ng-click="multishareOpen();" class="btn">Share
                             </button>
                         </div>
                     </div>
@@ -251,7 +251,7 @@
     </div>
     <div ng-show="sharemodalscreen == '1'" class="modalText">
         <ul>
-            <li ng-repeat="doc in sharedocs">
+            <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
                 <ul>
                     <li><button ng-class="{'selected':doc.picked}" ng-click="checkShareBox(doc, 'picked');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
                     <li>{{doc.docname}}</li>

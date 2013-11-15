@@ -187,6 +187,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docOrder = 'docname';
+        $scope.shareOrder = 'docname';
         $scope.versionOrder = 'statusRank';
         $scope.selectedDoc = 0;
         $scope.recipients = [];
@@ -1354,6 +1355,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.docOrder = 'docname';
+        $scope.shareOrder = 'docname';
 
         $scope.setOrder = function(field) {
             $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
