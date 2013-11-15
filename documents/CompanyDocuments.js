@@ -207,9 +207,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportOriginalToPdf = function(doc) {
+            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
+                document.location.href = url;
+            });
+            /*
             SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
+            */
         };
 
         $scope.exportVersionToPdf = function(version) {
@@ -1425,7 +1430,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
 
-        // TODO this isn't working.
         $scope.signDocument = function(doc) {
             if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
