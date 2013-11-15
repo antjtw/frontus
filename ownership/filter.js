@@ -19,7 +19,7 @@ ownership.filter('otherinvestors', function () {
     return function (rows, investor) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.name != investor) {
+            if (row.name != "" && row.name != investor && row.editable == "yes") {
                 returnrows.push(row);
             }
         });

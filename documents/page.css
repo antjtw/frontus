@@ -137,6 +137,10 @@ table.docLibrary > tbody > tr:first-child > td {
 
 }
 
+.subnav-controls > div > div.pull-right.small-space {
+    margin-right: 20px;
+}
+
 
 
 .dModalButtons {
@@ -487,5 +491,9 @@ div.progress-bar {
 }
 
 .status-table .empty-table {
+    text-align: center;
+}
+
+.status-table .empty-table > tr > td {
     text-align: center;
 }

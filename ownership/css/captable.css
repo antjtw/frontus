@@ -139,7 +139,7 @@ input[disabled].default-pointer {
 }
 
 .capright input:disabled {
-    background: transparent;
+    background: url("/img/stripe-pattern.png") repeat;
     -webkit-text-fill-color: #8D8D8D;
 }
 
