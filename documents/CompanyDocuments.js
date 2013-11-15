@@ -633,6 +633,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             dialogClass: 'modal multishareModal'
         };
 
+        $scope.oneSelected = function(list, field) {
+            var count = 0;
+            angular.forEach(list, function(item) {
+                count = item[field] ? count + 1: count;
+            });
+            return count;
+        };
+
         $scope.gotoscreen = function(page) {
             if (page == "2") {
                 $scope.sharePeople = [];
