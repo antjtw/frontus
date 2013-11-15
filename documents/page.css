@@ -489,3 +489,7 @@ div.progress-bar {
 .status-table .empty-table {
     text-align: center;
 }
+
+.status-table .empty-table > tr > td {
+    text-align: center;
+}
