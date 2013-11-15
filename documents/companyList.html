@@ -275,6 +275,6 @@
         <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray"><button class="btn" ng-click="multishareClose()">Cancel</button></div>
         <div ng-show="sharemodalscreen == '1'" class="standard-button blue arrow-right"><button class="btn" ng-click="gotoscreen(2);">Select People</button></div>
         <div ng-show="sharemodalscreen == '2'" class="pull-left standard-button blue arrow-left"><button class="btn" ng-click="gotoscreen(1);">Back</button></div>
-        <div ng-show="sharemodalscreen == '2'" class="standard-button green"><button class="btn" ng-click="sharetoMany();">Confirm</button></div>
+        <div ng-show="sharemodalscreen == '2'" class="standard-button green"><button class="btn" ng-click="sharetoMany(); multishareClose();">Confirm</button></div>
     </div>
 </div>
