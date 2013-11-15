@@ -353,6 +353,16 @@ button.greyButton {
     margin-left: -270px;
 }
 
+.modal.multishareModal > .modalText > span {
+    box-sizing: border-box;
+    text-align: left;
+    display: inline-block;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+    margin: 0 0 10px 20px;
+}
+
 .modal.multishareModal > .modalText > ul {
     overflow-y: auto;
     overflow-x: hidden;
@@ -364,22 +374,21 @@ button.greyButton {
 }
 
 .modal.multishareModal > .modalText > ul > li > ul {
-    width: -moz-calc(100% - 40px);
-    width: -webkit-calc(100% - 40px);
-    width: calc(100% - 40px);
-    height: 60px;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+    height: 30px;
     display: inline-block;
-    margin: 0 20px 10px 20px;
-    border: 1px solid #E2E2E2;
+    margin: 0 20px 0 20px;
 }
 
 .modal.multishareModal > .modalText > ul > li > ul > li {
     float: left;
-    line-height: 60px;
+    line-height: 30px;
 }
 
 .modal.multishareModal > .modalText > ul > li > ul > li:nth-child(1) {
-    margin: 0 10px 0 20px;
+    margin: 0 10px 0 0;
 }
 
 .modal.multishareModal > .modalText > ul > li > ul > li:nth-child(2) {
@@ -496,4 +505,10 @@ div.progress-bar {
 
 .status-table .empty-table > tr > td {
     text-align: center;
+}
+
+/* Select2 Styling */
+
+.sharepeople-input .select2-container {
+    width: 500px;
 }

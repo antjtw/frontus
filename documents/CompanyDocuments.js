@@ -24,7 +24,7 @@ function setCursor(cursor) {
     }
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'email', 'commonServices'], function($routeProvider, $locationProvider) {
+var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email', 'commonServices'], function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
     $routeProvider.
     when('/company-list', {
@@ -615,6 +615,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // Multisharing modal functions
 
+        $scope.multipeople = [];
+        $scope.select2Options = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': $scope.vInvestors,
+            'placeholder': 'Select investors or type new ones in'
+        };
+
         $scope.multishareOpen = function() {
             $scope.multishareModal = true;
             $scope.sharemodalscreen = "1";
@@ -644,20 +652,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.gotoscreen = function(page) {
             if (page == "2") {
-                $scope.sharePeople = [];
-                $scope.alreadyshared = [];
-                angular.forEach($scope.sharedocs, function(doc) {
-                    if (doc.picked) {
-                        angular.forEach(doc.versions, function(version) {
-                            $scope.alreadyshared.push(version.investor);
-                        });
-                    }
-                });
-                angular.forEach($scope.vInvestors, function(investor) {
-                    if (true) {
-                        $scope.sharePeople.push({'investor':investor, 'share':false});
-                    }
-                });
             }
             $scope.sharemodalscreen = page;
         };
@@ -685,13 +679,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
             forsign = forsign == "" ? "!!!" : forsign;
             forview = forview == "" ? "!!!" : forview;
-            angular.forEach($scope.sharePeople, function(person) {
-                if (person.share) {
-                    tosee += "," +  person.investor
-                }
+            angular.forEach($scope.multipeople, function(person) {
+                tosee += "," +  person.id;
             });
             tosee = tosee == "" ? "!!!" : tosee;
-            console.log(tosee.substring(1));
+            console.log(tosee);
             SWBrijj.procm("document.multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                 console.log(data);
                 $scope.$emit("notification:success", "Documents shared");
