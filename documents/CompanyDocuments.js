@@ -208,18 +208,18 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportOriginalToPdf = function(doc) {
-            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
             /*
-            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
             */
         };
 
         $scope.exportVersionToPdf = function(version) {
-            SWBrijj.procd(version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
@@ -1376,8 +1376,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             document.location.href = link;
         };
 
-        $scope.exportDocumentToPdf = function(doc) {
-            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genInvestorPdf', doc.doc_id.toString()).then(function(url) {
+        $scope.exportOriginalToPdf = function(doc) {
+            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.original.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
