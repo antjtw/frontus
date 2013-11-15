@@ -627,7 +627,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
-            'placeholder': 'Select investors or type new ones in'
+            'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
         };
 
         $scope.multishareOpen = function() {

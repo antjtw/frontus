@@ -250,7 +250,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="multishareClose()"></span>
     </div>
     <div ng-show="sharemodalscreen == '1'" class="modalText">
-        <span>Select which documents below you'd like to send to your shareholders.</span>
+        <span>Select the document(s) you want to share.</span>
         <ul>
             <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
                 <ul>
@@ -263,7 +263,7 @@
         </ul>
     </div>
     <div ng-show="sharemodalscreen == '2'" class="modalText">
-        <span>Select which shareholders to send the chosen documents.</span>
+        <span>Add recipients for your selected documents.</span>
         <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="multipeople">
         </div>
@@ -280,6 +280,6 @@
         <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray"><button class="btn" ng-click="multishareClose()">Cancel</button></div>
         <div ng-show="sharemodalscreen == '1'" class="standard-button blue arrow-right"><button ng-disabled="!oneSelected(sharedocs, 'picked');" class="btn" ng-click="gotoscreen(2);">Select People</button></div>
         <div ng-show="sharemodalscreen == '2'" class="pull-left standard-button blue arrow-left"><button class="btn" ng-click="gotoscreen(1);">Back</button></div>
-        <div ng-show="sharemodalscreen == '2'" class="standard-button green"><button class="btn" ng-click="sharetoMany(); multishareClose();">Confirm</button></div>
+        <div ng-show="sharemodalscreen == '2'" class="standard-button green"><button class="btn" ng-click="sharetoMany(); multishareClose();">Send</button></div>
     </div>
 </div>
