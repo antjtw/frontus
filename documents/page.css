@@ -137,6 +137,10 @@ table.docLibrary > tbody > tr:first-child > td {
 
 }
 
+.subnav-controls > div > div.pull-right.small-space {
+    margin-right: 20px;
+}
+
 
 
 .dModalButtons {
