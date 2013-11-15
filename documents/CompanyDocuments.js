@@ -654,7 +654,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     }
                 });
                 angular.forEach($scope.vInvestors, function(investor) {
-                    if ($scope.alreadyshared.indexOf(investor) == -1) {
+                    if (true) {
                         $scope.sharePeople.push({'investor':investor, 'share':false});
                     }
                 });
