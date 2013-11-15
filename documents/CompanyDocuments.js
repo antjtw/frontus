@@ -618,12 +618,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.multishareModal = true;
             $scope.sharemodalscreen = "1";
             $scope.sharedocs = [];
-            $scope.sharePeople = [];
             angular.forEach($scope.documents, function(doc) {
-                $scope.sharedocs.push({'doc_id':doc.doc_id, 'docname':doc.docname, 'picked': false, 'signature': false})
-            });
-            angular.forEach($scope.vInvestors, function(inv) {
-                $scope.sharePeople.push({'investor':inv, 'share':false})
+                $scope.sharedocs.push({'doc_id':doc.doc_id, 'docname':doc.docname, 'picked': false, 'signature': false, 'versions': doc.versions})
             });
         };
 
@@ -638,6 +634,22 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.gotoscreen = function(page) {
+            if (page == "2") {
+                $scope.sharePeople = [];
+                $scope.alreadyshared = [];
+                angular.forEach($scope.sharedocs, function(doc) {
+                    if (doc.picked) {
+                        angular.forEach(doc.versions, function(version) {
+                            $scope.alreadyshared.push(version.investor);
+                        });
+                    }
+                });
+                angular.forEach($scope.vInvestors, function(investor) {
+                    if ($scope.alreadyshared.indexOf(investor) == -1) {
+                        $scope.sharePeople.push({'investor':investor, 'share':false});
+                    }
+                });
+            }
             $scope.sharemodalscreen = page;
         };
 
