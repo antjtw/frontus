@@ -147,6 +147,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
 
+            if (navState.path === '/') {
+                $scope.gotohome();
+            }
         };
 
         SWBrijj.tblm('global.my_companies').then(function (x) {

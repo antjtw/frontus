@@ -60,8 +60,8 @@ function countCRs(str) {
 }
 
 angular.module('draggable', [], function() {}).
-directive('draggable', ['$document',
-    function($document) {
+directive('draggable', ['$window', '$document',
+    function($window, $document) {
         return {
             restrict: 'EA',
             replace: true,
@@ -160,8 +160,8 @@ directive('draggable', ['$document',
                         // absolute mouse location (current): $event.clientX, $event.clientY
                         // absolute change in mouse location: dx, dy
                         // relative mouse location: mousex, mousey
-                        var dx = $event.clientX - $scope.initialMouseX;
-                        var dy = $event.clientY - $scope.initialMouseY;
+                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -171,7 +171,16 @@ directive('draggable', ['$document',
                         return false;
                     };
 
-                    $scope.mouseup = function() {
+                    var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+
+                    $scope.mouseup = function(ev) {
+                        $scope.mousemove(ev);
+                        if (document.detachEvent) {
+                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.removeEventListener) {
+                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.unbind('scroll', $scope.mousemove);
                         $document.unbind('mousemove', $scope.mousemove);
                         $document.unbind('mouseup', $scope.mouseup);
                         return false;
@@ -189,7 +198,14 @@ directive('draggable', ['$document',
                         $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.mousemove(ev);
+                        $scope.initialScrollX = $window.scrollX;
+                        $scope.initialScrollY = $window.scrollY;
+                        if (document.attachEvent) {
+                            document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.addEventListener) {
+                            document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.bind('scroll', $scope.mousemove);
                         $document.bind('mousemove', $scope.mousemove);
                         $document.bind('mouseup', $scope.mouseup);
                     };

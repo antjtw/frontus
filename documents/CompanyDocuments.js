@@ -207,9 +207,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportOriginalToPdf = function(doc) {
+            SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
+                document.location.href = url;
+            });
+            /*
             SWBrijj.procd(doc.doc_id + '.pdf', 'application/pdf', 'document.genCompanyPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
+            */
         };
 
         $scope.exportVersionToPdf = function(version) {
@@ -1366,7 +1371,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.docStatus = function(doc) {
             if (doc.last_event) {
                 return doc.last_event.activity +
-                       " by " + (doc.last_event.name || doc.investor) +
+                       " by " +
+                       doc.last_event.person +
                        " " + moment(doc.last_event.event_time).from($rootScope.servertime);
             } else {
                 return "";
@@ -1493,7 +1499,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
 
-        // TODO this isn't working.
         $scope.signDocument = function(doc) {
             if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
