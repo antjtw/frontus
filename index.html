@@ -237,7 +237,7 @@
                             <input type="text" class="loginInput" name="fullname" placeholder="FULL NAME" ng-model="user.name" ><br>
                             <input type="text" class="loginInput" name="companyname" placeholder="COMPANY NAME" ng-model="user.company" ><br>
                             <div class="spacer40"></div>
-                            <button type="submit" class="button greenButton invite" id="submitInvite" ng-disabled="fieldCheck()"
+                            <button type="submit" class="button greenButton invite" id="submitInvite" ng-disabled="!fieldCheck()"
                                     ng-click="toggle = !toggle; companyRequest();" >Request Invitation</button>
                         </fieldset>
                     </form>
