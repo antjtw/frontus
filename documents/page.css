@@ -344,6 +344,52 @@ button.greyButton {
     text-align: left;
 }
 
+.modal.multishareModal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.modal.multishareModal > .modalText > ul {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 260px;
+}
+
+.modal.multishareModal > .modalText > ul > li {
+
+}
+
+.modal.multishareModal > .modalText > ul > li > ul {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    height: 60px;
+    display: inline-block;
+    margin: 0 20px 10px 20px;
+    border: 1px solid #E2E2E2;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li {
+    float: left;
+    line-height: 60px;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(1) {
+    margin: 0 10px 0 20px;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(2) {
+    width: 330px;
+    text-align: left;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(3) {
+    margin: 0 10px 0 0;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(4) {
+}
+
 .chkboxtext {
     display: inline-block;
 }

@@ -306,6 +306,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
 
                 var earliestedit = new Date.today().addDays(1);
+                var duplicate = earliestedit;
                 angular.forEach($scope.issues, function(issue) {
                     if (issue.created) {
                         if (Date.compare(earliestedit, issue.created) > -1) {
@@ -313,8 +314,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         }
                     }
                 });
-                if (earliestedit != new Date.today().addDays(1)) {
-                    console.log(parseInt(Date.parse(earliestedit).getTime()/1000));
+                if (earliestedit != duplicate) {
                     Intercom('update', {company : {'captablestart_at':parseInt(Date.parse(earliestedit).getTime()/1000)}});
                 }
 

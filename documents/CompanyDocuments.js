@@ -606,6 +606,75 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             // TODO implement
             $scope.deleteDocModal = false;
         };
+
+        // Multisharing modal functions
+
+        $scope.multishareOpen = function() {
+            $scope.multishareModal = true;
+            $scope.sharemodalscreen = "1";
+            $scope.sharedocs = [];
+            $scope.sharePeople = [];
+            angular.forEach($scope.documents, function(doc) {
+                $scope.sharedocs.push({'doc_id':doc.doc_id, 'docname':doc.docname, 'picked': false, 'signature': false})
+            });
+            angular.forEach($scope.vInvestors, function(inv) {
+                $scope.sharePeople.push({'investor':inv, 'share':false})
+            });
+        };
+
+        $scope.multishareClose = function() {
+            $scope.multishareModal = false;
+        };
+
+        $scope.multishareopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'modal multishareModal'
+        };
+
+        $scope.gotoscreen = function(page) {
+            $scope.sharemodalscreen = page;
+        };
+
+        $scope.checkShareBox = function(doc, field) {
+            doc[field] = !doc[field];
+            if (field == "picked" && doc[field] == false) {
+                doc['signature'] = false
+            }
+        };
+
+        $scope.sharetoMany = function() {
+            var forsign = "";
+            var forview = "";
+            var tosee = "";
+            angular.forEach($scope.sharedocs, function(doc) {
+                if (doc.picked) {
+                    if (doc.signature) {
+                        forsign += "," + doc.doc_id;
+                    }
+                    else {
+                        forview += "," + doc.doc_id;
+                    }
+                }
+            });
+            forsign = forsign == "" ? "!!!" : forsign;
+            forview = forview == "" ? "!!!" : forview;
+            angular.forEach($scope.sharePeople, function(person) {
+                if (person.share) {
+                    tosee += "," +  person.investor
+                }
+            });
+            tosee = tosee == "" ? "!!!" : tosee;
+            console.log(tosee.substring(1));
+            SWBrijj.procm("document.multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                console.log(data);
+                $scope.$emit("notification:success", "Documents shared");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                });
+        }
     }
 ]);
 
