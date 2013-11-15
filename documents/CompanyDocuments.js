@@ -1376,8 +1376,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             document.location.href = link;
         };
 
-        $scope.exportDocumentToPdf = function(doc) {
-            SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genInvestorPdf', doc.doc_id.toString()).then(function(url) {
+        $scope.exportOriginalToPdf = function(doc) {
+            SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
