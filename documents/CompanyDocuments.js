@@ -106,7 +106,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         /* this investor list is used by the sharing email list drop-down */
         $scope.vInvestors = [];
         SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].name) {
+                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
+                }
+                else {
+                    $scope.vInvestors.push("(" +data[i].email+")");
+                }
+            }
         });
 
         SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
@@ -679,11 +686,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
             forsign = forsign == "" ? "!!!" : forsign;
             forview = forview == "" ? "!!!" : forview;
+            var regExp = /\(([^)]+)\)/;
             angular.forEach($scope.multipeople, function(person) {
-                tosee += "," +  person.id;
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
             });
             tosee = tosee == "" ? "!!!" : tosee;
-            console.log(tosee);
             SWBrijj.procm("document.multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                 console.log(data);
                 $scope.$emit("notification:success", "Documents shared");
