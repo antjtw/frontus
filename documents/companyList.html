@@ -255,7 +255,7 @@
             <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
                 <ul>
                     <li><button ng-class="{'selected':doc.picked}" ng-click="checkShareBox(doc, 'picked');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
-                    <li>{{doc.docname}}</li>
+                    <li>{{doc.docname  | caplength:40}}</li>
                     <li ng-show="doc.picked"><button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
                     <li ng-show="doc.picked" class="capital-text">Signature?</li>
                 </ul>

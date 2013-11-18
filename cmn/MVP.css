@@ -118,6 +118,11 @@ input:focus, textarea:focus {
     outline: none !important;
     box-shadow:none !important;
 }
+
+.btn:hover, .btn:focus, .btn:active, .btn.active, .btn.disabled, .btn[disabled] {
+    color: #FFFFFF;
+}
+
 .pointer {
     cursor: pointer !important;
 }
