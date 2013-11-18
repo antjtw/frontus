@@ -1359,6 +1359,7 @@ ul.spaced-list > li:nth-child(odd) {
     height: 60px;
 }
 .status-table > tbody > tr > th {
+    font-weight: normal;
 }
 
 .status-table > tbody > tr > th.left {
