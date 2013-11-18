@@ -89,7 +89,11 @@ input[disabled].default-pointer {
 }
 
 .tableView.captable td.viewName {
-    padding: 0 0 0 6px;
+    padding: 0 0 0 10px;
+}
+
+.tableView th.longrow {
+    padding: 0 0 0 10px;
 }
 
 .tableView th {
