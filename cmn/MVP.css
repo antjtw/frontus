@@ -1493,7 +1493,7 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.status-column > ul > li:first-child {
     text-transform: capitalize;
 }
-.status-table > tbody > tr > td.shareholder-column.status-column:hover > ul > li {
+.status-table > tbody > tr > td.shareholder-column.status-column.issuer:hover > ul > li {
     color:#1E2D3D !important;
 }
 
