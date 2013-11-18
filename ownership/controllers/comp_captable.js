@@ -2320,12 +2320,20 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             }
         }
+
+        if (newval && oldval && (parseFloat(newval.vestcliff) > 100 || parseFloat(newval.vestcliff) < 0)) {
+            for (var x=0; x < $scope.trans.length; x++) {
+                if ($scope.trans[x].tran_id == newval.tran_id) {
+                    $scope.trans[x].vestcliff = oldval.vestcliff;
+                }
+            }
+        }
     };
 
     $scope.issue_watch = function(newval, oldval) {
         if (newval && oldval && (parseFloat(newval.interestrate) > 100 || parseFloat(newval.interestrate) < 0)) {
             for (var x=0; x < $scope.issues.length; x++) {
-                if ($scope.issues[x].tran_id == newval.tran_id) {
+                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
                     $scope.issues[x].interestrate = oldval.interestrate;
                 }
             }
@@ -2333,8 +2341,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
         if (newval && oldval && (parseFloat(newval.discount) > 100 || parseFloat(newval.discount) < 0)) {
             for (var x=0; x < $scope.issues.length; x++) {
-                if ($scope.issues[x].tran_id == newval.tran_id) {
+                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
                     $scope.issues[x].discount = oldval.discount;
+                }
+            }
+        }
+
+        if (newval && oldval && (parseFloat(newval.vestcliff) > 100 || parseFloat(newval.vestcliff) < 0)) {
+            for (var x=0; x < $scope.issues.length; x++) {
+                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
+                    $scope.issues[x].vestcliff = oldval.vestcliff;
                 }
             }
         }
