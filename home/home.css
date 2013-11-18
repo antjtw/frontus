@@ -308,6 +308,16 @@
     margin: 0 auto 0 auto;
 }
 
+.body-box.mini-table.doc-table th {
+    font-weight: normal;
+    color: rgb(30, 45, 61);
+}
+
+.limited-width {
+    max-width: 240px;
+    overflow: hidden;
+}
+
 /* Modal Styling */
 
 .wideModal.modal {
