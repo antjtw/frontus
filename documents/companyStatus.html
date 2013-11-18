@@ -136,7 +136,7 @@
                             <ul>
                                 <li ng-repeat="event in events.slice(2)">
                                     <i class="{{event.activity | icon}}"></i>
-                                    {{event.name || event.person}} {{event | description}}
+                                    <span>{{event.name || event.person}} {{event | description}}</span>
                                 </li>
                             </ul>
                         </li>

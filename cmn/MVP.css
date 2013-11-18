@@ -1203,11 +1203,18 @@ ul.spaced-list > li:nth-child(odd) {
     color: #656565;
 }
 
+.activity-feed2 > li > ul > li > span {
+    display: inline-block;
+    width: 230px;
+}
+
 .activity-feed2 > li:last-of-type {
     margin-bottom: 15px;
 }
 
 .activity-feed2 > li > ul > li > i {
+    vertical-align: top;
+    padding-top: 4px;
 }
 
 /* Document Status */
