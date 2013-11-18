@@ -128,9 +128,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             doc.versions.push(version);
                         }
                     });
-                    $scope.loadDocumentActivity(doc);
-                    $scope.setDocumentStatusRatio(doc);
+         //           $scope.loadDocumentActivity(doc);
+         //           $scope.setDocumentStatusRatio(doc);
                 });
+                $scope.loadDocumentActivity();
             });
         };
 
@@ -148,17 +149,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             version.statusRank = $scope.eventRank(version.last_event);
         };
 
-        $scope.loadDocumentActivity = function(doc) {
+        $scope.loadDocumentActivity = function() {
             SWBrijj.tblm("document.company_activity").then(function(data) {
-                angular.forEach(doc.versions, function(version) {
-                    var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
-                    version.last_event = version_activity.sort($scope.compareEvents)[0];
-                    var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
-                    version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
-                    $scope.setVersionStatusRank(version);
+                angular.forEach($scope.documents, function(doc) {
+                    angular.forEach(doc.versions, function(version) {
+                        var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
+                        version.last_event = version_activity.sort($scope.compareEvents)[0];
+                        var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
+                        version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
+                        $scope.setVersionStatusRank(version);
+                    });
+                    $scope.setDocumentStatusRatio(doc);
+                    $scope.setSigRequired(doc);
                 });
             });
-            $scope.setSigRequired(doc);
         };
 
         $scope.compareEvents = function(a, b) {
