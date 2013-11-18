@@ -325,6 +325,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 .ticks(4)
                 .orient("right");
 
+
             var svg = d3.select(iElement[0])
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -351,7 +352,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data) {
+                if (data && data.length > 0) {
 
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
