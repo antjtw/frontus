@@ -1012,7 +1012,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.lib === undefined) return;
             // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
 
-            if (nd == $scope.lib.annotations) return;
+            if (nd == $scope.lib.annotations) {
+                if (clicked) {
+                    $scope.$emit("notification:success", "Saved Annotations");
+                }
+                return;
+            }
             // When there are no changes
 
             /** @name SWBrijj#saveNoteData
@@ -1024,6 +1029,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
+                console.log("here");
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
                 refreshDocImage();
             });
