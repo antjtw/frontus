@@ -1337,8 +1337,16 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 40px;
 }
 
+.status-table.investor > tbody:first-child > tr > th:first-child {
+    padding-left: 20px;
+}
+
 .status-table > tbody:first-child > tr > th:last-child {
     padding-right: 20px;
+}
+
+.sign-button {
+    text-align: right;
 }
 
 .status-table > tbody > tr.empty-row {
@@ -1369,6 +1377,10 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 20px;
 }
 
+.status-table > tbody > tr > td:last-child.toggle-column {
+    padding-left: 0px;
+}
+
 .status-table > tbody > tr > td > span > span.status-icon {
     font-size: 14px;
     color: #666666;
@@ -1392,7 +1404,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.status-toggle.status-icon {
-    width: 22px;
+    width: auto;
 }
 
 .status-toggle > .circle {
@@ -1471,7 +1483,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
-    padding-left: 10px;
+    padding-left: 20px;
 }
 .status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
     color:#1E2D3D !important;

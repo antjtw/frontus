@@ -17,7 +17,7 @@
                 </div>
                 <div class="DivHelper"></div>
             </div>
-            <table class="status-table">
+            <table class="status-table investor">
                 <tbody>
                     <tr>
                         <th colspan="1" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
@@ -45,12 +45,12 @@
                                 <li>{{momentFromNow(doc.last_event.event_time)}}</li>
                             </ul>
                         </td>
-                        <td>
+                        <td class="sign-button">
                             <div class="standard-button small-standard-button">
                                 <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc.doc_id)">Sign</button>
                             </div>
                         </td>
-                        <td>
+                        <td class="toggle-column">
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
