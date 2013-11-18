@@ -503,8 +503,8 @@ div.progress-bar {
     text-align: center;
 }
 
-.status-table .empty-table > tr > td {
-    text-align: center;
+.status-table tbody.empty-table > tr > td {
+    text-align: center !important;
 }
 
 /* Select2 Styling */
