@@ -97,6 +97,9 @@
     background-position: top;
     width: 30px;
     height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .docViewerControls > .pageTurn > ul > li:last-child {
@@ -107,6 +110,9 @@
     background-position: top;
     width: 30px;
     height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .docViewerControls > .pageTurn > ul > li:first-child:hover {
@@ -175,6 +181,9 @@
     color: #666666;
     height: 30px;
     overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .page-bar > ul > li.page-tabs:hover {
