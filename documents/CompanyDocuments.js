@@ -571,6 +571,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        //Email
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //My parentheses format
+        var regExp = /\(([^)]+)\)/;
+
+        $scope.fieldCheck = function(email) {
+            var matches = regExp.exec(email);
+            if (matches == null) {
+                matches = ["", email];
+            }
+            email = matches[1];
+            return re.test(email);
+        };
+
         $scope.share = function(message, email, sign) {
             sign = sign == "Yes";
             if (sign) {
@@ -581,6 +595,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (message === "Add an optional message...") {
                 message = "";
             }
+            var matches = regExp.exec(email);
+            if (matches == null) {
+                matches = ["", email];
+            }
+            email = matches[1];
+            console.log(email);
             SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document shared with " + email);
@@ -625,6 +645,25 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         // Multisharing modal functions
+
+        $scope.checkmany = function(people) {
+            var anybad = false;
+            angular.forEach(people, function(person) {
+                var email
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                email = matches[1];
+                if (!re.test(email)) {
+                    anybad = true
+                }
+            });
+            if (people.length == 0) {
+                anybad = true
+            }
+            return anybad
+        };
 
         $scope.multipeople = [];
         $scope.select2Options = {

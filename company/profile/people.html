@@ -105,7 +105,7 @@
             <button class="btn" ng-click="adminModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
+            <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
         </div>
     </div>
 
