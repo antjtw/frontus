@@ -1981,17 +1981,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
 
         return options;
-    }
+    };
 
     $scope.pickmOption = function(value) {
         $scope.pickTran = value;
         $scope.newtransaction = null;
-    }
+    };
 
     $scope.pickOddOption = function(value) {
         $scope.newtransaction = value;
         $scope.pickTran = null;
-    }
+    };
 
     $scope.mComplete = function (transactions, picked, number, type) {
         var inIssue = transactions[0].issue;
@@ -2118,7 +2118,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.autoCheck = function(person) {
         return person != null && person.length > 0;
-    }
+    };
 
     $scope.turnOnShares = function () {
         angular.forEach($scope.rows, function (row) {
@@ -2159,26 +2159,31 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    $scope.fieldCheck = function(email) {
+        return re.test(email);
+    };
+
 
     // Prevents the share button from being clickable until a send button has been clicked and an address filled out
     $scope.checkInvites = function () {
         var checkcontent = false;
         var checksome = false;
         angular.forEach($scope.rows, function(row) {
-            if (row.send == true && (row.email != null && row.email != "")) {
+            if (row.send == true && (row.email != null && row.email != "" && $scope.fieldCheck(row.email))) {
                 checkcontent = true;
             }
             if (row.send == true) {
                 checksome = true;
             }
         });
-        if ($scope.extraPeople.length > 0 && $scope.extraPeople[0].email) {
+        if ($scope.extraPeople.length > 0 && $scope.extraPeople[0].email && $scope.fieldCheck($scope.extraPeople[0].email)) {
             return false;
         }
         else {
             return !(checkcontent && checksome);
         }
-    }
+    };
 
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {

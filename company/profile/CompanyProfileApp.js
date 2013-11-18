@@ -288,8 +288,9 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         dialogClass: 'profile-modal wideModal modal'
     };
 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     $scope.fieldCheck = function() {
-        return !$scope.newEmail;
+        return re.test($scope.newEmail);
     };
 
     $scope.create_person = function() {
