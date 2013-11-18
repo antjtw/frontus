@@ -135,9 +135,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             doc.versions.push(version);
                         }
                     });
-                    $scope.loadDocumentActivity(doc);
-                    $scope.setDocumentStatusRatio(doc);
+         //           $scope.loadDocumentActivity(doc);
+         //           $scope.setDocumentStatusRatio(doc);
                 });
+                $scope.loadDocumentActivity();
             });
         };
 
@@ -155,17 +156,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             version.statusRank = $scope.eventRank(version.last_event);
         };
 
-        $scope.loadDocumentActivity = function (doc) {
-            angular.forEach(doc.versions, function(version) {
-                SWBrijj.tblmm("document.company_activity", "doc_id", version.doc_id).then(function(data) {
-                    // This works assuming data is in descending chronological order.
-                    version.last_event = data.sort($scope.compareEvents)[0];
-                    var versionActivities = data.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
-                    version.last_viewed = versionActivities.length > 0 ? versionActivities[0].event_time : null;
-                    $scope.setVersionStatusRank(version);
+        $scope.loadDocumentActivity = function() {
+            SWBrijj.tblm("document.company_activity").then(function(data) {
+                angular.forEach($scope.documents, function(doc) {
+                    angular.forEach(doc.versions, function(version) {
+                        var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
+                        version.last_event = version_activity.sort($scope.compareEvents)[0];
+                        var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
+                        version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
+                        $scope.setVersionStatusRank(version);
+                    });
+                    $scope.setDocumentStatusRatio(doc);
+                    $scope.setSigRequired(doc);
                 });
             });
-            $scope.setSigRequired(doc);
         };
 
         $scope.compareEvents = function(a, b) {
@@ -1327,11 +1331,12 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         });
 
         $scope.loadDocumentActivity = function() {
-            angular.forEach($scope.documents, function(doc) {
-                SWBrijj.tblmm("document.investor_activity", "doc_id", doc.doc_id).then(function(data) {
+            SWBrijj.tblm("document.investor_activity").then(function(data) {
+                angular.forEach($scope.documents, function(doc) {
+                    var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
                     doc.last_event = data.sort($scope.compareEvents)[0];
-                    var docActivities = data.filter(function(el) {return el.person === doc.investor && el.activity==="viewed";});
-                    doc.last_viewed = docActivities.length > 0 ? docActivities[0].event_time : null;
+                    var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
+                    doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
                     $scope.setDocStatusRank(doc);
                 });
             });
