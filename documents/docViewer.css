@@ -57,6 +57,10 @@
     margin-right: 20px;
 }
 
+.tools > button:hover {
+    background-color: #C7C7C7;
+}
+
 .pageTurn {
     padding-top:15px;
     position: absolute;
@@ -103,6 +107,14 @@
     background-position: top;
     width: 30px;
     height: 30px;
+}
+
+.docViewerControls > .pageTurn > ul > li:first-child:hover {
+    background-color: #C7C7C7;
+}
+
+.docViewerControls > .pageTurn > ul > li:last-child:hover {
+    background-color: #C7C7C7;
 }
 
 .pageTurn > ul > li > span.locked {
@@ -165,9 +177,17 @@
     overflow: hidden;
 }
 
+.page-bar > ul > li.page-tabs:hover {
+    background-color: #C7C7C7;
+}
+
 .page-bar > ul > li.page-tabs.cur-page {
     background-color: #1ABC96 !important;
     color: #FFFFFF !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page:hover {
+    background-color: #15A085 !important;
 }
 
 .page-jumper {
