@@ -61,9 +61,27 @@ docviews.directive('library', function() {
             void(attrs);
             scope.listScrolls = function() {
                 return elm[0].scrollHeight > elm[0].height;
-            }
+            };
         }
-    }
+    };
+});
+
+docviews.directive('myLoadingSpinner', function() {
+    return {
+        restrict: 'A',
+        replace: true,
+        transclude: true,
+        scope: {processing: '=myLoadingSpinner'},
+        template: '<div>' + 
+                      '<div ng-show="processing" class="my-loading-spinner-container"></div>' +
+                      '<div ng-hide="processing" ng-transclude></div>' +
+                  '</div>',
+        link: function(scope, element, attrs) {
+            var spinner = new Spinner().spin();
+            var loadingContainer = element.find('.my-loading-spinner-container')[0];
+            loadingContainer.appendChild(spinner.el);
+        }
+    };
 });
 
 docviews.run(function($rootScope, $document) {
@@ -596,7 +614,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 message = "";
             }
             var matches = regExp.exec(email);
-            if (matches == null) {
+            if (matches === null) {
                 matches = ["", email];
             }
             email = matches[1];
@@ -1012,9 +1030,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.countersignDocument = function() {
-            if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
-            setCursor('wait');
+            //setCursor('wait');
             // before signing the document, I may need to save the existing annotations
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
@@ -1530,6 +1547,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq;
         };
+        $scope.processing = false;
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
@@ -1570,11 +1588,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.confirmModalClose = function() {
-            setCursor('default');
             $('.docViewerHeader').data('affix').checkPosition();
             $scope.processing = false;
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
+            $scope.confirmSignature = false;
         };
 
         $scope.signable = function() {
@@ -1582,9 +1600,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.signDocument = function(doc) {
-            if (!$scope.confirmSignature) return; // didn't sign it
             $scope.processing = true;
-            setCursor('wait');
+            //setCursor('wait');
             // before signing the document, I may need to save the existing annotations
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
@@ -1593,10 +1610,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
-                // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
                 $location.path('/investor-list').search({});
-
             }).except(function(x) {
                 void(x);
                 $scope.confirmModalClose();

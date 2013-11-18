@@ -2478,6 +2478,12 @@ button.icon-button:hover {
     height: auto;
     resize: none;
 }
+.my-loading-spinner-container {
+    display: block;
+    padding-top: 40px;
+    padding-left: 180px;
+    height: 60px;
+}
 .modalText {
     padding: 10px 0 0 0;
     margin: 5px 0 20px 0;
