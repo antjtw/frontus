@@ -1369,10 +1369,6 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 20px;
 }
 
-.status-table > tbody > tr > td:hover {
-    color:#8D8D8D;
-}
-
 .status-table > tbody > tr > td > span > span.status-icon {
     font-size: 14px;
     color: #666666;
