@@ -148,13 +148,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             version.statusRank = $scope.eventRank(version.last_event);
         };
 
-        $scope.loadDocumentActivity = function (doc) {
-            angular.forEach(doc.versions, function(version) {
-                SWBrijj.tblmm("document.company_activity", "doc_id", version.doc_id).then(function(data) {
-                    // This works assuming data is in descending chronological order.
-                    version.last_event = data.sort($scope.compareEvents)[0];
-                    var versionActivities = data.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
-                    version.last_viewed = versionActivities.length > 0 ? versionActivities[0].event_time : null;
+        $scope.loadDocumentActivity = function(doc) {
+            SWBrijj.tblm("document.company_activity").then(function(data) {
+                angular.forEach(doc.versions, function(version) {
+                    var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
+                    version.last_event = version_activity.sort($scope.compareEvents)[0];
+                    var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
+                    version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
                     $scope.setVersionStatusRank(version);
                 });
             });
