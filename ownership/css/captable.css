@@ -354,7 +354,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .capright .transaction-icon {
-    margin-right: 40px;
+    margin-right: 20px;
 }
 
 .capright .issue-delete {
@@ -798,6 +798,10 @@ ul.last-edited > li:first-child {
 ul.last-edited > li:last-child {
     text-transform: uppercase;
     font-size: 10px;
+}
+
+.railpadding > p {
+    padding-right: 20px;
 }
 
 .activity-feed2 {
