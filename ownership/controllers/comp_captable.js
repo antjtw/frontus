@@ -273,11 +273,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                 $scope.rows.sort(sorting.basicrow());
 
-                var values = {"name": "", "editable": "0"};
-                angular.forEach($scope.issuekeys, function (key) {
-                    values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
-                });
-                $scope.rows.push(values);
+                while ($scope.rows.length < 5) {
+                    var values = {"name": "", "editable": "0"};
+                    angular.forEach($scope.issuekeys, function (key) {
+                        values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    });
+                    $scope.rows.push(values);
+                }
 
                 //Calculate the total vested for each row
                 $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
@@ -288,9 +290,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 $scope.finishedsorting = true;
                 if ($scope.radioModel == "Edit") {
-                    setTimeout(function() {
-                        introJs().setOptions({'nextLabel': 'NEXT', 'prevLabel': 'BACK', 'skipLabel': 'SKIP'}).start();
-                    },100);
+                    //Placeholder for where the tour start function will be
                 }
 
                 for (var i=0; i < $scope.trans.length; i++) {
@@ -800,8 +800,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
 
         investor.state = true;
+        var rowindex = $scope.rows.indexOf(investor);
 
-        if (investor.name == "") {
+        if (investor.name == "" && rowindex >= 4) {
             var values = {"name": "", "editable": "0"};
             angular.forEach($scope.issuekeys, function (key) {
                 values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
@@ -954,13 +955,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.rmodalUp(investor);
             return
         }
-        if (investor.name == "") {
+
+        var rowindex = $scope.rows.indexOf(investor);
+
+        if (investor.name == "" && rowindex >= 4) {
             var index = $scope.rows.indexOf(investor);
             $scope.rows.splice(index, 1);
             return
         }
         angular.forEach($scope.rows, function (row) {
-            if (investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
+            if (investor.name != "" && investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
                 investor.name = investor.name + " (1)";
             }
         });
@@ -999,6 +1003,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (row.namekey == investor) {
                 var index = $scope.rows.indexOf(row);
                 $scope.rows.splice(index, 1);
+                if ($scope.rows.length <= 5) {
+                    var values = {"name": "", "editable": "0"};
+                    angular.forEach($scope.issuekeys, function (key) {
+                        values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    });
+                    $scope.rows.splice(index, 0, values);
+                }
             }
         });
     };
