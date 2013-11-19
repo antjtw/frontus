@@ -504,7 +504,8 @@ h2 {
     text-align: center;
 }
 .topnav .nav.nav-logo > li > a {
-    padding: 0 0 0 40px;
+    margin: 0 0 0 40px;
+    padding: 0 0 0 20px;
 }
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);
@@ -598,7 +599,7 @@ h2 {
     border-radius: 0;
     box-shadow: none;
     padding: 0 0 0 0;
-    margin-top: 0;
+    margin: 0 0 0 40px;
     width: 245px;
     border-top: 1px solid rgb(227, 227, 227);
 }
@@ -606,6 +607,7 @@ h2 {
     height: 30px;
     background-color: rgb(241, 241, 241);
     color: rgb(199, 199, 199);
+    padding: 0 0 0 20px;
 }
 .bottomnav .nav > li > ul > li > a {
     padding: 0 20px 0 15px;
@@ -646,6 +648,7 @@ h2 {
 }
 .bottomnav .nav > li:first-child > a {
     padding: 0 0 0 20px;
+    margin: 0 0 0 40px;
     line-height: 30px;
     text-align: left;
     width: 225px;
