@@ -25,6 +25,7 @@ input[disabled].default-pointer {
 
 .capGuide.global {
     margin-top: 20px;
+    position: relative;
 }
 
 .capGuide.cap-overflow {
@@ -83,6 +84,7 @@ input[disabled].default-pointer {
 .tableView.captable td {
     margin: 0;
     padding: 0;
+    position: relative;
 }
 
 .tableView .unissued-rows td {
@@ -1223,4 +1225,284 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 5px;
+}
+
+/* Tour */
+
+.tour-box {
+    height: 120px;
+    width: -moz-calc(100% + 140px);
+    width: -webkit-calc(100% + 140px);
+    width: calc(100% + 140px);
+    background-color: #1D2C3C;
+    transition: left 0.25s;
+    -moz-transition:left 0.25s; /* Firefox 4 */;
+    -webkit-transition: left 0.25s; /* Safari and Chrome */
+    -o-transition: left 0.25s; /* Opera */
+    left: -100%;
+}
+
+.tour-box.affix {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+
+.tour-box.showtour {
+    left: 0;
+}
+
+.tour-box > .tour-stage {
+    position: absolute;
+    float: left;
+    display: inline-block;
+    background-color: #1D2C3C;
+    width: 30%;
+    margin: 20px 0 20px 0;
+    height: -moz-calc(100% - 40px);
+    height: -webkit-calc(100% - 40px);
+    height: calc(100% - 40px);
+    border-left: 1px solid #33485D;
+    transition: left 0.25s;
+    -moz-transition:left 0.25s; /* Firefox 4 */;
+    -webkit-transition: left 0.25s; /* Safari and Chrome */
+    -o-transition: left 0.25s; /* Opera */
+    overflow: hidden;
+}
+
+.tour-box > .tour-stage.first {
+    left: 5%;
+    z-index: 1;
+    border: none;
+}
+
+.tour-box > .tour-stage.second {
+    left: 35%;
+    z-index: 2;
+}
+
+.tour-box > .tour-stage.third {
+    left: 50%;
+    z-index: 3;
+}
+
+.tour-box > .tour-stage.fourth {
+    left: 65%;
+    z-index: 4;
+}
+
+.tour-box > .tour-stage.fifth {
+    left: 80%;
+    width: 10%;
+    z-index: 5;
+    border: none;
+}
+
+.tour-box > .tour-stage.second.stage-two {
+    left: 20%;
+}
+
+.tour-box > .tour-stage.third.stage-three {
+    left: 35%;
+}
+
+.tour-box > .tour-stage.fourth.stage-four {
+    left: 50%;
+}
+
+.tour-box > .tour-stage > .standard-button {
+    float: right;
+    margin: 0 20px 0 0;
+    display: inline-block;
+}
+
+.tour-box > .tour-stage > span {
+    display: inline-block;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    color: #C6C6C6;
+    background-color: #33485D;
+    margin-left: 10px;
+}
+
+.tour-box > .tour-stage > span.current-icon {
+    color: #1D2C3C;
+    background-color: #C6C6C6;
+}
+
+.tour-box > .tour-stage > span > span {
+    display: inline-block;
+    margin-left: 6px;
+    line-height: 20px;
+}
+
+.tour-box > .tour-stage p {
+    display: inline-block;
+    width: 65%;
+    padding: 0 0 0 10px;
+    color: #E2E2E2;
+}
+
+.tour-box > .tour-stage h2 {
+    display: inline-block;
+    width: 80%;
+    margin-left: 5px;
+    color: #E2E2E2;
+}
+
+.tour-box > .standard-button {
+    position: absolute;
+    right: 20px;
+    bottom: 25px;
+    z-index: 6;
+}
+
+.tour-box .tour-finish-button > button.btn {
+    background: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    color: #8C8C8C;
+}
+
+.tour-box .tour-finish-button > button.btn:hover {
+    background-color: #E64B3B;
+    color: #FFFFFF;
+}
+
+/* The Tour itself */
+
+.tableView.captable tr:nth-child(4) td.box-highlight:before {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    content: ' ';
+    width: 100%;
+    height: 182px;
+    border: 2px solid #19BB95;
+    pointer-events: none;
+}
+
+.tableView.captable tr td .next-button {
+    display: none;
+}
+
+.tableView.captable tr:nth-child(8) td.box-highlight .next-button {
+    display: block;
+    position: absolute;
+    right: -4px;
+    bottom: -30px;
+    z-index: 1;
+    text-align: center;
+    color: #FFFFFF;
+    line-height: 30px;
+    width: 74px;
+    height: 30px;
+    background-color: #19BB95;
+    cursor: pointer;
+}
+
+.tableView.captable tr:nth-child(1) th.column-highlight:nth-child(3):before {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: -1px;
+    z-index: 10;
+    content: ' ';
+    width: 100%;
+    height: 18px;
+    border: 2px solid #19BB95;
+    pointer-events: none;
+}
+
+.tableView.captable tr th .next-button {
+    display: none;
+}
+
+.tableView.captable tr:nth-child(1) th.column-highlight:nth-child(3) .next-button {
+    display: block;
+    position: absolute;
+    right: -4px;
+    bottom: -32px;
+    z-index: 1;
+    text-align: center;
+    color: #FFFFFF;
+    line-height: 30px;
+    width: 74px;
+    height: 30px;
+    background-color: #19BB95;
+    cursor: pointer;
+}
+
+div.issue-rail:before {
+    display: block;
+    position: absolute;
+    left: 15px;
+    top: -10px;
+    right: 15px;
+    z-index: 10;
+    content: ' ';
+    width: -moz-calc(100% - 30px);
+    width: -webkit-calc(100% - 30px);
+    width: calc(100% - 30px);
+    height: 450px;
+    border: 2px solid #19BB95;
+    pointer-events: none;
+}
+
+div.capGuide.global .next-button {
+    display: none;
+}
+
+div.capGuide.global.issue-rail .next-button {
+    display: block;
+    position: absolute;
+    right: 11px;
+    bottom: -402px;
+    z-index: 1;
+    text-align: center;
+    color: #FFFFFF;
+    line-height: 30px;
+    width: 74px;
+    height: 30px;
+    background-color: #19BB95;
+    cursor: pointer;
+}
+
+.tableView.captable tr:nth-child(4) td .next-button {
+    display: none;
+}
+
+.tableView.captable tr:nth-child(4) td.tran-highlight:nth-child(4) .next-button {
+    display: block;
+    position: absolute;
+    right: 83px;
+    bottom: -180px;
+    z-index: 1;
+    text-align: center;
+    color: #FFFFFF;
+    line-height: 30px;
+    width: 74px;
+    height: 30px;
+    background-color: #19BB95;
+    cursor: pointer;
+}
+
+.tableView.captable tr:nth-child(4) td.tran-highlight:nth-child(4):before {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    content: ' ';
+    width: 140px;
+    height: 182px;
+    border: 2px solid #19BB95;
+    pointer-events: none;
 }

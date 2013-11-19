@@ -492,10 +492,11 @@
                 <tr ng-hide="toggleView();" class="column-label">
                     <th class="longrow" colspan="2">Ownership</th>
                     <th class="longrow">Shareholder</th>
-                    <th  ng-repeat="one in issues">
+                    <th ng-class="{'column-highlight':tourstate==2}"  ng-repeat="one in issues">
                         <input placeholder="add security" class="capEditHeaders"
                                ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
                                onkeydown="testForEnter();">
+                        <span class="next-button" ng-click="moveTour();">Next</span>
                     </th>
                 </tr>
                 <!-- Uneditable headers -->
@@ -504,6 +505,7 @@
                     <th class="longrow">Shareholder</th>
                     <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
                         <span>{{one.issue | uneditIssue}}</span>
+                        <span class="next-button" ng-click="moveTour();">Next</span>
                     </th>
                 </tr>
 
@@ -522,7 +524,7 @@
                     <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
                     </td>
-                    <td>
+                    <td ng-class="{'box-highlight':tourstate==1}">
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
                           <input placeholder="ADD NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
@@ -535,8 +537,9 @@
                                  onkeydown="testForEnter();">
                         </span>
                       </span>
+                      <span class="next-button" ng-click="moveTour();">Next</span>
                     </td>
-                    <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                    <td ng-class="{'tran-highlight':tourstate==4}" ng-repeat="key in issuekeys | orderBy:issueSort">
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
@@ -559,6 +562,7 @@
                                  onkeydown="testForEnter();">
                         </span>
                       </span>
+                      <span class="next-button" ng-click="closeTour();">Done!</span>
                     </td>
                 </tr>
                 <!-- Unissued Rows -->
@@ -676,7 +680,8 @@
                         </div>
 
                         <!-- Global Tab -->
-                        <div class="capGuide global">
+                        <div class="capGuide global"  ng-class="{'issue-rail':tourstate==3}">
+                            <span class="next-button" ng-click="moveTour();">Next</span>
                             <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                                           ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                                                                           onkeydown="testForEnter();"></p>
@@ -1329,4 +1334,46 @@
             </div>
         </div>
     </div>
+<div class="tour-box" data-spy="affix" ng-class="{'showtour':tourstate != 0}">
+    <div class="standard-button small-standard-button" ng-click="moveTour();">
+        <button class="btn">Tour</button>
+    </div>
+    <div class="tour-stage first" ng-class="{'stage-one':tourstate >= 1}">
+        <span ng-class="{'current-icon':tourstate == 1}"><span>1</span></span>
+        <h2>Shareholders</h2>
+        <p ng-show="tourstate == 1">Add shareholders to the column. The table will auto expand as you go to fit everyone.</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
+        <span ng-class="{'current-icon':tourstate == 2}"><span>2</span></span>
+        <h2>Security</h2>
+        <p ng-show="tourstate == 2">Name the Security column</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage third" ng-class="{'stage-three':tourstate >= 3}">
+        <span ng-class="{'current-icon':tourstate == 3}"><span>3</span></span>
+        <h2>Security Terms</h2>
+        <p ng-show="tourstate == 3">Enter the security type and specific terms will apepar to define your new security</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage fourth" ng-class="{'stage-four':tourstate >= 4}">
+        <span ng-class="{'current-icon':tourstate == 4}"><span>4</span></span>
+        <h2>Individual Shares</h2>
+        <p ng-show="tourstate == 4">Enter the security type and specific terms will appear to define your new security</p>
+    </div>
+    <div class="tour-stage fifth" ng-show="tourstate != 0">
+        <div class="tour-finish-button" ng-click="closeTour();">
+            <button class="btn">X</button>
+        </div>
+    </div>
+    <div class="pull-right">
+        <h2>Need Help?</h2>
+    </div>
+</div>
 </div>

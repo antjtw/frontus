@@ -2726,6 +2726,7 @@ h2.onboard {
 .container.dynamic-page {
     min-width: 1024px;
     width: 100%;
+    overflow-x: hidden;
 }
 
 .dynamic-page .row-fluid .span8.leftBlock {

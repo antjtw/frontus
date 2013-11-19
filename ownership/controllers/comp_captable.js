@@ -13,6 +13,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.radioModel = "View";
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
+    $scope.tourshow = false;
+    $scope.tourstate = 0;
 
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
@@ -2194,6 +2196,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
             return !(checkcontent && checksome);
         }
+    };
+
+    $scope.moveTour = function() {
+        $scope.tourstate += 1;
+        if ($scope.tourstate > 4) {
+            $scope.tourstate = 0;
+        }
+    };
+
+    $scope.closeTour = function() {
+        $scope.tourstate = 0;
     };
 
     //switches the sidebar based on the type of the issue
