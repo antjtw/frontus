@@ -439,64 +439,67 @@
 
 
 <!-- Captable From Here Down -->
+<div class="row-fluid">
+    <div class="headsection row-fluid">
+
+        <ul class="maintabs head-text">
+            <li class="selectedtab">Ownership</li>
+            <li><a href="/ownership/company-grants">Grants</a></li>
+            <li><a href="/ownership/company-status">Status</a></li>
+        </ul>
+    </div>
+
+    <div class="row-fluid">
+        <div class="captable-controls subnav-controls">
+            <div>
+                <div class="pull-left">
+                    <span ng-hide="toggleView();" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
+                    <div class="standard-button small-standard-button blue">
+                        <button class="btn" ng-click="editViewToggle();">{{radioModel}}</span></button>
+                    </div>
+                </div>
+                <div ng-show="false" class="pull-left namedtoggle">
+                    <p class="pull-left">DILUTION</p>
+
+                    <div class="pull-left onoffswitch">
+                        <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();"
+                               ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox"
+                               id="myonoffswitch" checked>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <div class="onoffswitch-inner"></div>
+                            <div class="onoffswitch-switch"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <span ng-hide="toggleView();" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
+                    <div class="standard-button">
+                        <button ng-click="modalUp();" class="btn">Share</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="DivHelper"></div>
+        </div>
+    </div>
+
+</div>
 
 <div class="row-fluid leftTabWindow">
     <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
-        <div class="headsection row-fluid">
-
-            <ul class="maintabs head-text">
-                <li class="selectedtab">Ownership</li>
-                <li><a href="/ownership/company-grants">Grants</a></li>
-                <li><a href="/ownership/company-status">Status</a></li>
-            </ul>
-        </div>
-
-        <div class="row-fluid">
-            <div class="subnav-controls">
-                <div>
-                    <div class="pull-left">
-                        <div class="edittoggle btn-group">
-                            <button type="button" class="btn" ng-model="radioModel" btn-radio="'View'"><span
-                                    data-icon="&#xe050;" aria-hidden="true"></span></button>
-                            <button type="button" class="btn" ng-model="radioModel" btn-radio="'Edit'"><span
-                                    data-icon="&#xe00e;" aria-hidden="true"></span></button>
-                        </div>
-                    </div>
-                    <div ng-show="false" class="pull-left namedtoggle">
-                        <p class="pull-left">DILUTION</p>
-
-                        <div class="pull-left onoffswitch">
-                            <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();"
-                                   ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox"
-                                   id="myonoffswitch" checked>
-                            <label class="onoffswitch-label" for="myonoffswitch">
-                                <div class="onoffswitch-inner"></div>
-                                <div class="onoffswitch-switch"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="standard-button">
-                            <button ng-click="modalUp();" class="btn">Share</span></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="DivHelper"></div>
-            </div>
-        </div>
-
 
         <div class="row-fluid capcontainer">
             <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
                 <!-- Editable headers -->
                 <tr ng-hide="toggleView();" class="column-label">
-                    <th class="longrow" colspan="2">Ownership</th>
+                    <th class="longrow" colspan="2">
+                        Ownership
+                    </th>
                     <th class="longrow">Shareholder</th>
-                    <th ng-class="{'column-highlight':tourstate==2}"  ng-repeat="one in issues">
+                    <th  ng-repeat="one in issues">
+                        <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                         <input placeholder="add security" class="capEditHeaders"
                                ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
                                onkeydown="testForEnter();">
-                        <span class="next-button" ng-click="moveTour();">Next</span>
                     </th>
                 </tr>
                 <!-- Uneditable headers -->
@@ -524,7 +527,8 @@
                     <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
                     </td>
-                    <td ng-class="{'box-highlight':tourstate==1}">
+                    <td>
+                      <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
                           <input placeholder="ADD NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
@@ -537,9 +541,9 @@
                                  onkeydown="testForEnter();">
                         </span>
                       </span>
-                      <span class="next-button" ng-click="moveTour();">Next</span>
                     </td>
-                    <td ng-class="{'tran-highlight':tourstate==4}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                    <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                      <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
@@ -562,7 +566,6 @@
                                  onkeydown="testForEnter();">
                         </span>
                       </span>
-                      <span class="next-button" ng-click="closeTour();">Done!</span>
                     </td>
                 </tr>
                 <!-- Unissued Rows -->
@@ -652,7 +655,9 @@
     </div>
 
         <div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
-            <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
+            <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
+                <span ng-hide="toggleView();" class="tour-icon side-toggle" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
+                {{sideToggleName}}
             </button>
             <div class="row-fluid">
                 <div ng-switch on="sideBar">
@@ -665,6 +670,7 @@
 
                                 <ul class="dropdown-list transaction-icon pull-right">
                                     <li class="dropdown standard menu-drop">
+                                        <span ng-hide="toggleView();" class="tour-icon issue-cog" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
                                         <a class="dropdown-toggle">
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
@@ -1334,7 +1340,7 @@
             </div>
         </div>
     </div>
-<div class="tour-box" data-spy="affix" ng-class="{'showtour':tourstate != 0}">
+<div ng-hide="toggleView();" class="tour-box" data-spy="affix" ng-class="{'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
         <button class="btn">Tour</button>
     </div>

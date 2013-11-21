@@ -778,6 +778,7 @@ li.selectedtab {
 }
 .subnav-controls > div > div {
     margin-right: 20px;
+    position: relative;
 }
 .subnav-controls > div > div.pull-right {
     margin-right: 40px;

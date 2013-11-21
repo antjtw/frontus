@@ -10,6 +10,10 @@ input[disabled].default-pointer {
 
 /* Captable */
 
+.subnav-controls.captable-controls {
+    margin-bottom: 0;
+}
+
 .right-bar-header {
     margin-top: 37px;
 }
@@ -50,6 +54,7 @@ input[disabled].default-pointer {
 
 .capcontainer {
     overflow: auto;
+    margin-top: 20px;
 }
 
 .descriptionRow {
@@ -1250,6 +1255,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .tour-box.showtour {
     left: 0;
+    z-index: 1000;
 }
 
 .tour-box > .tour-stage {
@@ -1376,14 +1382,18 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 /* The Tour itself */
 
-.tableView.captable tr:nth-child(4) td.box-highlight:before {
-    display: block;
+.tableView.captable tr:nth-child(4) td > span {
+    position: relative;
+}
+
+.tableView.captable tr:nth-child(4) td > span.box-highlight:before {
+    display: inline-block;
     position: absolute;
     left: 0;
-    top: 0;
+    top: -12px;
     z-index: 1;
     content: ' ';
-    width: 100%;
+    width: 144px;
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
@@ -1393,11 +1403,11 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: none;
 }
 
-.tableView.captable tr:nth-child(8) td.box-highlight .next-button {
-    display: block;
+.tableView.captable tr:nth-child(4) td > span.box-highlight > span.next-button {
+    display: inline-block;
     position: absolute;
-    right: -4px;
-    bottom: -30px;
+    right: -148px;
+    bottom: -188px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -1408,14 +1418,18 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     cursor: pointer;
 }
 
-.tableView.captable tr:nth-child(1) th.column-highlight:nth-child(3):before {
-    display: block;
+.tableView.captable tr:nth-child(1) th:nth-child(3) > span {
+    position: relative;
+}
+
+.tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight:before {
+    display: inline-block;
     position: absolute;
     left: 0;
-    top: -1px;
+    top: -4px;
     z-index: 10;
     content: ' ';
-    width: 100%;
+    width: 150px;
     height: 18px;
     border: 2px solid #19BB95;
     pointer-events: none;
@@ -1425,11 +1439,11 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: none;
 }
 
-.tableView.captable tr:nth-child(1) th.column-highlight:nth-child(3) .next-button {
-    display: block;
+.tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight > span.next-button {
+    display: inline-block;
     position: absolute;
-    right: -4px;
-    bottom: -32px;
+    right: -154px;
+    bottom: -33px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -1441,7 +1455,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 }
 
 div.issue-rail:before {
-    display: block;
+    display: inline-block;
     position: absolute;
     left: 15px;
     top: -10px;
@@ -1461,7 +1475,7 @@ div.capGuide.global .next-button {
 }
 
 div.capGuide.global.issue-rail .next-button {
-    display: block;
+    display: inline-block;
     position: absolute;
     right: 11px;
     bottom: -402px;
@@ -1479,11 +1493,11 @@ div.capGuide.global.issue-rail .next-button {
     display: none;
 }
 
-.tableView.captable tr:nth-child(4) td.tran-highlight:nth-child(4) .next-button {
-    display: block;
+.tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
+    display: inline-block;
     position: absolute;
-    right: 83px;
-    bottom: -180px;
+    right: -144px;
+    bottom: -214px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -1494,8 +1508,8 @@ div.capGuide.global.issue-rail .next-button {
     cursor: pointer;
 }
 
-.tableView.captable tr:nth-child(4) td.tran-highlight:nth-child(4):before {
-    display: block;
+.tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
+    display: inline-block;
     position: absolute;
     left: 0;
     top: 0;
@@ -1505,4 +1519,63 @@ div.capGuide.global.issue-rail .next-button {
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
+}
+
+/* Tour Bubble, may want to move to MVP */
+
+span.tour-icon {
+    position: absolute;
+    left: -10px;
+    top: -10px;
+    z-index: 100;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #1D2C3C;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    line-height: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+
+span.tour-icon > span:first-of-type {
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 1px;
+}
+
+span.tour-icon:hover {
+    background-color: #19BB95;
+}
+
+.tooltip {
+    z-index: 10000;
+}
+
+/* Specifics for particular bubbles */
+
+span.tour-icon.side-toggle {
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+}
+
+span.tour-icon.tour-share + .tooltip {
+    left: -107px !important;
+}
+
+span.tour-icon.side-toggle + .tooltip {
+    top: -18px !important;
+    left: -100px !important;
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+}
+
+span.tour-icon.issue-cog + .tooltip {
+    top: -17px !important;
+    left: -135px !important;
 }
