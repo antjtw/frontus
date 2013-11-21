@@ -80,10 +80,14 @@ input[disabled].default-pointer {
     padding: 0 12px 0 0;
 }
 
+.tableView.grant-table {
+    margin-bottom: 60px;
+}
+
 .tableView.captable  {
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
 }
 
 .tableView.captable td {

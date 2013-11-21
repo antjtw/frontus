@@ -1,3 +1,4 @@
+<div class="maincontent">
 <div class="container dynamic-page">
 
 <div modal="capShare" close="close()" options="shareopts">
@@ -25,7 +26,7 @@
             </ul>
             <ul class="extrasAdd">
                 <li ng-repeat="person in extraPeople">
-                    <input ng-change="addRemove();" ng-model="person.email" placeholder="ADD NON SHAREHOLDER">
+                    <input ng-change="addRemove();" ng-model="person.email" placeholder="Add Non Shareholder">
                 </li>
             </ul>
         </form>
@@ -524,7 +525,7 @@
                     <th class="longrow">Shareholder</th>
                     <th  ng-repeat="one in issues">
                         <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
-                        <input placeholder="add security" class="capEditHeaders"
+                        <input placeholder="Add Security" class="capEditHeaders"
                                ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
                                onkeydown="testForEnter();">
                     </th>
@@ -558,7 +559,7 @@
                       <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
-                          <input placeholder="ADD NAME" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
+                          <input placeholder="Add Name" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
                                  onkeydown="testForEnter();">
                         </span>
@@ -1412,3 +1413,6 @@
     </div>
 </div>
 </div>
+</div>
+
+<div class="push"></div>
