@@ -534,7 +534,9 @@ h2 {
     border-radius: 0;
     padding: 0 0 0 0;
     margin-top: 0;
+    margin-right: 40px;
 }
+/*
 .topnav .nav > li > ul:before, .bottomnav .nav > li > ul:before {
     border-bottom: 0 !important;
     border-left: 0 !important;
@@ -544,6 +546,12 @@ h2 {
     border-bottom: 0 !important;
     border-left: 0 !important;
     border-right: 0 !important;
+}
+*/
+.navbar .nav > li > .dropdown-menu:before {
+    left: auto;
+    right: 9px;
+    border-bottom-color: #E7E7E7;
 }
 .topnav .nav > li > ul > li {
     height: 40px;
@@ -590,8 +598,7 @@ h2 {
 .bottomnav {
     height: 30px;
     margin-bottom: 0;
-    background-color: rgb(255, 255, 255);
-    border-bottom: 1px solid rgb(227, 227, 227);
+    background-color: #F1F1F1;;
 }
 .bottomnav .nav > li > ul {
     min-width: 100px;
@@ -599,35 +606,37 @@ h2 {
     border-radius: 0;
     box-shadow: none;
     padding: 0 0 0 0;
-    margin: 0 0 0 40px;
+    margin: 10px 0 0 40px;
     width: 245px;
-    border-top: 1px solid rgb(227, 227, 227);
 }
 .bottomnav .nav > li > ul > li {
     height: 30px;
     background-color: rgb(241, 241, 241);
     color: rgb(199, 199, 199);
-    padding: 0 0 0 20px;
 }
 .bottomnav .nav > li > ul > li > a {
-    padding: 0 20px 0 15px;
+    padding: 0 20px 0 35px;
     line-height: 30px;
-    background-color: rgb(241, 241, 241);
+    background-color: #E3E3E3;
     color: rgb(102, 102, 102);
 }
 .bottomnav .nav > li > ul > li:hover {
-    background-color: rgb(241, 241, 241);
     color: rgb(102, 102, 102);
     cursor: pointer;
 }
 .navbar.bottomnav .nav li.dropdown.open > .dropdown-toggle {
     background-color: rgb(241, 241, 241);
 }
+.open .dropdown-toggle {
+    background-color: #E3E3E3;
+}
+
 .bottomnav .nav > li > ul > li.dropdown-label {
-    background-color: rgb(241, 241, 241);
-    color: rgb(199, 199, 199);
+    background-color: #E3E3E3;
+    color: #A6A6A6;
     cursor: pointer;
     height: 20px;
+    padding: 0 0 0 20px;
 }
 .bottomnav .nav > li > ul > li.dropdown-label > span {
     margin-top: 6px;
@@ -636,13 +645,13 @@ h2 {
     font-size: 9px;
 }
 .bottomnav .nav > li > ul > li.dropdown-label:hover {
-    background-color: rgb(241, 241, 241);
-    color: rgb(199, 199, 199);
+    background-color: #E3E3E3;
+    color: #A6A6A6;
     cursor: pointer;
 }
 .bottomnav .nav > li > ul > li > a:hover {
     line-height: 30px;
-    background-color: rgb(227, 227, 227);
+    background-color: #C7C7C7;
     color: rgb(51, 51, 51);
     background-image: none !important;
 }
@@ -662,15 +671,18 @@ h2 {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+.bottomnav .nav > li.active > a {
+    background-color: white;
+}
 .bottomnav .nav > li.active > a:hover {
-    background-color: #C7C7C7;
+    background-color: white;
     text-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
 }
 .bottomnav .nav > li > a:hover {
-    background-color: rgb(241, 241, 241);
+    background-color: #E3E3E3;
     color: rgb(102, 102, 102);
 }
 .bottomnav .nav > li > a:hover.no-hover {
@@ -1882,7 +1894,6 @@ button.icon-button:hover {
 }
 
 /* Drop down menus built on top of the custom selects */
-
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: auto;
     padding-left: 8px;
@@ -2084,7 +2095,7 @@ button.icon-button:hover {
 .standard .dropdown-toggle:hover {
     background-color: rgb(227, 227, 227);
 }
-.standard .dropdown-menu {
+.standard > .dropdown-menu, .standard .dropdown-menu {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -2110,7 +2121,7 @@ button.icon-button:hover {
     border-left: 6px solid transparent;
     border-bottom: 6px solid #E3E3E3;
     top: -6px;
-    right: 9px;
+    right: 9px !important;
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     text-align: left;
