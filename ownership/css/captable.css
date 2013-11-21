@@ -356,7 +356,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     line-height:21px;
     font-weight: normal;
     color: #1e2d3d;
-    text-transform: uppercase;
     width: 260px;
 }
 
@@ -693,8 +692,6 @@ tr.rowSelected, tr.rowSelected:hover {
 .status-table > tbody:first-child > tr {
     border: 1px solid #E2E2E2;
     height: 30px;
-    font-size: 10px;
-    text-transform: uppercase;
     color: #1E2D3D;
     font-family: 'FS Elliot Web Bold', sans-serif;
 }
@@ -1147,6 +1144,17 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
 }
 
+.tourModal {
+    margin-left: -250px;
+    width:499px;
+}
+
+.tourModal .text-button > button {
+    height: 30px;
+    background: none;
+    border: none;
+}
+
 .modal .input-row {
     height:65px;
     border-top: 1px solid #E3E3E3;
@@ -1247,6 +1255,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     left: -100%;
 }
 
+.tour-box .standard-button > h2 {
+    color: #FFFFFF;
+}
+
 .tour-box.affix {
     position: fixed;
     right: 0;
@@ -1302,6 +1314,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width: 10%;
     z-index: 5;
     border: none;
+    position: relative;
 }
 
 .tour-box > .tour-stage.second.stage-two {
@@ -1330,6 +1343,8 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     color: #C6C6C6;
     background-color: #33485D;
     margin-left: 10px;
+    text-align: center;
+    cursor: pointer;
 }
 
 .tour-box > .tour-stage > span.current-icon {
@@ -1339,7 +1354,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .tour-box > .tour-stage > span > span {
     display: inline-block;
-    margin-left: 6px;
     line-height: 20px;
 }
 
@@ -1364,6 +1378,13 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     z-index: 6;
 }
 
+.tour-box .tour-finish-button {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 10px;
+}
+
 .tour-box .tour-finish-button > button.btn {
     background: none;
     -webkit-border-radius: 3px;
@@ -1373,6 +1394,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     -moz-box-shadow: none;
     box-shadow: none;
     color: #8C8C8C;
+    height: 30px;
 }
 
 .tour-box .tour-finish-button > button.btn:hover {
@@ -1539,6 +1561,12 @@ span.tour-icon {
     text-align: center;
 }
 
+span.tour-icon.intro-icon {
+    display: inline-block;
+    top: 140px;
+    left: 380px;
+}
+
 span.tour-icon > span:first-of-type {
     display: inline-block;
     font-size: 16px;
@@ -1566,9 +1594,15 @@ span.tour-icon.tour-share + .tooltip {
     left: -107px !important;
 }
 
+span.tour-icon.tour-view + .tooltip {
+    left: 12px !important;
+    width: 200px;
+}
+
 span.tour-icon.side-toggle + .tooltip {
-    top: -18px !important;
+    top: 84px !important;
     left: -100px !important;
+    width: 200px;
     -webkit-transform:rotate(-90deg);
     -moz-transform:rotate(-90deg);
     -o-transform:rotate(-90deg);

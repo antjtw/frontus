@@ -17,8 +17,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourmessages = {};
-    $scope.tourmessages.share = "When you’re done, use the share button to share with members of your cap table"
-    $scope.tourmessages.sidebar = "This is the sidebar";
+    $scope.tourmessages.intro = "Hover over these icons to reveal helpful info about your table";
+    $scope.tourmessages.share = "When you’re finished, share your cap table with others";
+    $scope.tourmessages.view = "When you’re not editing, click here for the best view of your data";
+    $scope.tourmessages.sidebar = "Additional details for securites and transactions are tucked away here";
+    $scope.tourmessages.issuecog = "Additional details for securites and transactions are tucked away here";
 
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
@@ -66,6 +69,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (Object.keys(data).length == 0) {
             $scope.maintoggle = false;
             $scope.radioModel = "View";
+            $scope.tourshow = true;
+            $scope.tourUp();
         }
         $scope.issues = data;
 
@@ -951,9 +956,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
         if (investor.name != investor.namekey) {
             investor.namekey = investor.namekey ? investor.namekey : "!!";
-            console.log(investor.namekey);
             SWBrijj.proc('ownership.update_row', investor.namekey, investor.name).then(function (data) {
-                console.log(data);
                 var index = $scope.rows.indexOf(investor);
                 angular.forEach($scope.trans, function (tran) {
                     if (tran.investor == investor.namekey) {
@@ -1112,16 +1115,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             transaction.amount = String(transaction.amount).replace(/\,/g,'');
         }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
-            console.log("there are letters")
             transaction.units = transaction.unitskey;
         };
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
-            console.log("there are letters")
             transaction.amount = transaction.paidkey;
         };
         // Bail out if insufficient data has been added for the transaction
         if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
-            console.log("transaction is undefined");
             return
         }
         // Delete the transaction if an existing transaction has had all its information removed
@@ -1131,7 +1131,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         // Not quite enough information to save
         else if (transaction['issue'] == undefined || (isNaN(parseFloat(transaction['units'])) && isNaN(parseFloat(transaction['amount'])))) {
-            console.log("incomplete transaction");
             return
         }
         // We have enough info to begin the saving process
@@ -1498,7 +1497,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.performConvert = function (tranConvert) {
-        console.log(tranConvert);
         var newtran = tranConvert.newtran;
         SWBrijj.proc('ownership.conversion', newtran.tran_id, newtran.issue, tranConvert.date, tranConvert.method, parseFloat(newtran.ppshare), parseFloat(newtran.units), parseFloat(newtran.amount)).then(function (tranid) {
             var oldid = angular.copy(newtran.tran_id);
@@ -1934,6 +1932,22 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     //Captable Delete Issue Modal
 
+    $scope.tourUp = function () {
+        $scope.tourModal = true;
+    };
+
+    $scope.tourclose = function () {
+        $scope.tourModal = false;
+    };
+
+    $scope.touropts = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'tourModal modal'
+    };
+
+    //Captable Delete Issue Modal
+
     $scope.dmodalUp = function (issue) {
         $scope.capDelete = true;
         $scope.missue = issue;
@@ -2222,8 +2236,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.gotoTour = function(x) {
+        $scope.tourstate = parseInt(x);
+    }
+
     $scope.closeTour = function() {
         $scope.tourstate = 0;
+        $scope.tourshow = false;
     };
 
     //switches the sidebar based on the type of the issue

@@ -72,6 +72,10 @@ input.loginInput:focus, textarea:focus, select:focus {
     background-color: #1E2D3D;
 }
 
+.modal-backdrop.fade.in {
+    opacity: 0.9;
+}
+
 .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
     background-image: none;
 }
@@ -132,6 +136,7 @@ input:focus, textarea:focus {
     border-radius: 3px;
     background-color: #1E2D3D;
     color: #C7C7C7;
+    text-transform: none;
 }
 
 .tooltip-date > div.tooltip {
@@ -1027,14 +1032,10 @@ form.inputs {
     border-top: 1px solid rgb(227, 227, 227);
     border-bottom: 1px solid rgb(227, 227, 227);
     font-family:'FS Elliot Web Bold', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
     color: rgb(30, 45, 61);
 }
 .docLibrary .column-label input {
     font-family:'FS Elliot Web Bold', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
     color: rgb(30, 45, 61);
     width: 150px;
     vertical-align: top;
@@ -1043,28 +1044,41 @@ form.inputs {
     background: none;
 }
 /* Placeholder text color */
-.docLibrary input::-webkit-input-placeholder, .docLibrary input:disabled::-webkit-input-placeholder {
+
+.docLibrary input:disabled::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #fff;
+}
+.docLibrary input:disabled:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #fff;
+}
+.docLibrary input:disabled::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #fff;
+}
+.docLibrary input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #fff;
+}
+
+.docLibrary input::-webkit-input-placeholder {
     color: rgb(199, 199, 199);
     opacity: 1;
 }
-.docLibrary input:-moz-placeholder, .docLibrary input:disabled:-moz-placeholder {
+.docLibrary input:-moz-placeholder {
     /* Firefox 18- */
     color: rgb(199, 199, 199);
     opacity: 1;
 }
-.docLibrary input::-moz-placeholder, .docLibrary input:disabled::-moz-placeholder {
+.docLibrary input::-moz-placeholder {
     /* Firefox 19+ */
     color: rgb(199, 199, 199);
     opacity: 1;
 }
-.docLibrary input:-ms-input-placeholder, .docLibrary input:disabled:-ms-input-placeholder {
+.docLibrary input:-ms-input-placeholder {
     color: rgb(199, 199, 199);
     opacity: 1;
 }
+
 .docLibrary input:disabled {
     background: none;
-    color: rgb(127, 140, 141);
-    -webkit-text-fill-color: rgb(127, 140, 141);
     /* Safari Fix */
 }
 .searchBox {
@@ -1332,10 +1346,8 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody:first-child > tr {
     border: 1px solid #E2E2E2;
     height: 30px;
-    font-size: 10px;
-    text-transform: uppercase;
     color: #1E2D3D;
-    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-family: 'FS Elliot Web Bold', sans-serif;
 }
 
 .status-table > tbody:first-child > tr > th:first-child {

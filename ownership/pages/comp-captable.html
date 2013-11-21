@@ -437,6 +437,33 @@
     </div>
 </div>
 
+<!-- Tour Modal -->
+<div modal="tourModal" close="tourclose();" options="touropts">
+    <div class="modalHeader">
+        <span>Welcome to your ownership table!</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="tourclose();"></span>
+    </div>
+    <div class="modalText">
+        <div class="row-fluid">
+            <div class="span7">
+                <p>We've created a simple tour to introduce you to our cap table, and guide you through the basics.</p>
+            </div>
+            <div class="span5">
+                <span class="tour-icon intro-icon"><span>?</span></span>
+                <div class="tooltip fade top in" style="top: 61px; left: 315px; width: 150px;display: block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">{{tourmessages.intro}}</div></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button green">
+            <button class="btn" ng-click="tourclose(); moveTour();">Start the Tour</button>
+        </div>
+        <div class="pull-left text-button">
+            <button ng-click="tourclose();">I'm a pro, skip the tour</button>
+        </div>
+    </div>
+</div>
+
 
 <!-- Captable From Here Down -->
 <div class="row-fluid">
@@ -453,7 +480,7 @@
         <div class="captable-controls subnav-controls">
             <div>
                 <div class="pull-left">
-                    <span ng-hide="toggleView();" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
+                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="right" bs-tooltip="tourmessages.view"><span>?</span></span>
                     <div class="standard-button small-standard-button blue">
                         <button class="btn" ng-click="editViewToggle();">{{radioModel}}</span></button>
                     </div>
@@ -472,7 +499,7 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <span ng-hide="toggleView();" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
+                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
                     <div class="standard-button">
                         <button ng-click="modalUp();" class="btn">Share</span></button>
                     </div>
@@ -622,14 +649,14 @@
                     <td>Total</td>
                     <td></td>
                     <td></td>
-                    <td ng-repeat="one in issuekeys" ></td>
+                    <td ng-repeat="one in issuekeys"></td>
                 </tr>
                 <!-- Undiluted footer -->
                 <tr ng-show="toggleDilution();" class='tablefooter'>
                     <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                     <td></td>
-                    <td ng-repeat="one in issuekeys" >
+                    <td ng-repeat="one in issuekeys">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
@@ -656,7 +683,7 @@
 
         <div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
             <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-                <span ng-hide="toggleView();" class="tour-icon side-toggle" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
+                <span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
                 {{sideToggleName}}
             </button>
             <div class="row-fluid">
@@ -670,7 +697,7 @@
 
                                 <ul class="dropdown-list transaction-icon pull-right">
                                     <li class="dropdown standard menu-drop">
-                                        <span ng-hide="toggleView();" class="tour-icon issue-cog" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
+                                        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon issue-cog" data-trigger="click" data-placement="left" bs-tooltip="tourmessages.issuecog"><span>?</span></span>
                                         <a class="dropdown-toggle">
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
@@ -1340,12 +1367,14 @@
             </div>
         </div>
     </div>
-<div ng-hide="toggleView();" class="tour-box" data-spy="affix" ng-class="{'showtour':tourstate != 0}">
+
+<div ng-hide="toggleView() || !tourshow" class="tour-box" data-spy="affix" ng-class="{'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
+        <h2>Need Help?</h2>
         <button class="btn">Tour</button>
     </div>
     <div class="tour-stage first" ng-class="{'stage-one':tourstate >= 1}">
-        <span ng-class="{'current-icon':tourstate == 1}"><span>1</span></span>
+        <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);"><span>1</span></span>
         <h2>Shareholders</h2>
         <p ng-show="tourstate == 1">Add shareholders to the column. The table will auto expand as you go to fit everyone.</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
@@ -1353,7 +1382,7 @@
         </div>
     </div>
     <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
-        <span ng-class="{'current-icon':tourstate == 2}"><span>2</span></span>
+        <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);"><span>2</span></span>
         <h2>Security</h2>
         <p ng-show="tourstate == 2">Name the Security column</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
@@ -1361,7 +1390,7 @@
         </div>
     </div>
     <div class="tour-stage third" ng-class="{'stage-three':tourstate >= 3}">
-        <span ng-class="{'current-icon':tourstate == 3}"><span>3</span></span>
+        <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);"><span>3</span></span>
         <h2>Security Terms</h2>
         <p ng-show="tourstate == 3">Enter the security type and specific terms will apepar to define your new security</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
@@ -1369,17 +1398,17 @@
         </div>
     </div>
     <div class="tour-stage fourth" ng-class="{'stage-four':tourstate >= 4}">
-        <span ng-class="{'current-icon':tourstate == 4}"><span>4</span></span>
+        <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);"><span>4</span></span>
         <h2>Individual Shares</h2>
         <p ng-show="tourstate == 4">Enter the security type and specific terms will appear to define your new security</p>
+        <div ng-show="tourstate != 0" class="standard-button small-standard-button" ng-click="closeTour();">
+            <button class="btn">Done!</button>
+        </div>
     </div>
     <div class="tour-stage fifth" ng-show="tourstate != 0">
         <div class="tour-finish-button" ng-click="closeTour();">
             <button class="btn">X</button>
         </div>
-    </div>
-    <div class="pull-right">
-        <h2>Need Help?</h2>
     </div>
 </div>
 </div>
