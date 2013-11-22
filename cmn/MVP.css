@@ -614,7 +614,7 @@ h2 {
     box-shadow: none;
     padding: 0 0 0 0;
     margin: 10px 0 0 40px;
-    width: 225px;
+    width: 235px;
 }
 .bottomnav .nav > li > ul > li {
     height: 30px;
@@ -1928,11 +1928,11 @@ button.icon-button:hover {
 
 /* Drop down menus built on top of the custom selects */
 ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
-    padding: 0 0 0 0;
-    margin: 0 0 0 40px;
+    padding: 0 0 0 10px;
+    margin: 0 0 0 30px;
     line-height: 30px;
     text-align: left;
-    width: 225px;
+    width: 235px;
     text-shadow: none;
     font-size: 12px;
 }
@@ -1959,7 +1959,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
 }
 
 ul.nav.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
-    margin-left: 40px;
+    margin-left: 30px;
 }
 ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     margin-left: -120px;
