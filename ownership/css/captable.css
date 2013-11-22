@@ -1481,15 +1481,20 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     border-bottom-left-radius: 3px;
 }
 
-.tableView.captable tr:nth-child(1) th:nth-child(3) > span {
+.tableView.captable tr:nth-child(1) th > span {
+    display: none;
+}
+
+.tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight {
     position: relative;
+    display: inline-block;
 }
 
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight:before {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -4px;
+    top: -14px;
     z-index: 10;
     content: ' ';
     width: 150px;
@@ -1506,7 +1511,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     right: -154px;
-    bottom: -33px;
+    bottom: -36px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
