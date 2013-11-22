@@ -1445,6 +1445,14 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 30px;
     background-color: #19BB95;
     cursor: pointer;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span {
@@ -1481,6 +1489,14 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 30px;
     background-color: #19BB95;
     cursor: pointer;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 div.issue-rail:before {
@@ -1516,6 +1532,14 @@ div.capGuide.global.issue-rail .next-button {
     height: 30px;
     background-color: #19BB95;
     cursor: pointer;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .tableView.captable tr:nth-child(4) td .next-button {
@@ -1535,6 +1559,14 @@ div.capGuide.global.issue-rail .next-button {
     height: 30px;
     background-color: #19BB95;
     cursor: pointer;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
@@ -1595,6 +1627,7 @@ span.tour-icon.side-toggle {
     -moz-transform:rotate(-90deg);
     -o-transform:rotate(-90deg);
     -ms-transform:rotate(-90deg);
+    top: 6px;
 }
 
 span.tour-icon.tour-share + .tooltip {
@@ -1607,7 +1640,7 @@ span.tour-icon.tour-view + .tooltip {
 }
 
 span.tour-icon.side-toggle + .tooltip {
-    top: 84px !important;
+    top: 100px !important;
     left: -100px !important;
     width: 200px;
     -webkit-transform:rotate(-90deg);
