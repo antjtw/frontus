@@ -14,6 +14,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.maintoggle = true;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
+
+    // Tour options
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourmessages = {};
@@ -78,6 +80,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.maintoggle = false;
                     $scope.radioModel = "View";
                     $scope.tourshow = true;
+                    $scope.sideToggle = true;
                     $scope.tourUp();
                 }
 
@@ -2236,6 +2239,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.tourstate += 1;
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
+        }
+        if ($scope.tourstate == 3) {
+            $scope.sideToggle = false;
         }
     };
 
