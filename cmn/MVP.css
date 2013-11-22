@@ -1894,7 +1894,7 @@ button.icon-button:hover {
 }
 
 /* Drop down menus built on top of the custom selects */
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
+ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle {
     width: auto;
     padding-left: 8px;
     padding-right: 8px;
@@ -1902,47 +1902,47 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     color: #666666;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
+ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle.dark {
     background-color: #E3E3E3;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark:hover {
+ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle.dark:hover {
     background-color: #C7C7C7;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
+ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle:before {
     background: none;
     width: 0;
     height: 0;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+ul.dropdown-list > .dropdown.standard.menuDrop > ul.dropdown-menu {
     margin-left: -120px;
 }
 
-.standard.menu-drop .dropdown-menu > li {
+.standard.menuDrop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     font-size: 12px;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+ul.dropdown-list > .dropdown.standard.menuDrop > ul.dropdown-menu {
     color : #666666;
 }
 
-.standard.menu-drop .dropdown-menu > li {
+.standard.menuDrop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     text-align: left;
     color: rgb(102, 102, 102);
 }
 
-.standard.menu-drop .dropdown-menu > li:hover {
+.standard.menuDrop .dropdown-menu > li:hover {
     background: #C7C7C7;
     color: rgb(102, 102, 102);
 }
 
-.standard.menu-drop .dropdown-menu > li:first-of-type:hover {
+.standard.menuDrop .dropdown-menu > li:first-of-type:hover {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
 
@@ -1953,7 +1953,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     border-top-left-radius: 3px;
 }
 
-.standard.menu-drop .dropdown-menu > li:last-of-type:hover {
+.standard.menuDrop .dropdown-menu > li:last-of-type:hover {
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
 
