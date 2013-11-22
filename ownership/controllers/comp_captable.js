@@ -14,6 +14,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.maintoggle = true;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
+
+    // Tour options
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourmessages = {};
@@ -66,12 +68,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        if (Object.keys(data).length == 0) {
-            $scope.maintoggle = false;
-            $scope.radioModel = "View";
-            $scope.tourshow = true;
-            $scope.tourUp();
-        }
         $scope.issues = data;
 
         // Get the company's rows
@@ -79,6 +75,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             // Get the company's Transactions
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
                 $scope.trans = trans;
+
+                if (Object.keys(trans).length == 0) {
+                    $scope.maintoggle = false;
+                    $scope.radioModel = "View";
+                    $scope.tourshow = true;
+                    $scope.sideToggle = true;
+                    $scope.tourUp();
+                }
 
                 // Get the company's Grants
                 SWBrijj.tblm('ownership.company_grants').then(function (grants) {
@@ -956,7 +960,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 investor.name = investor.name + " (1)";
             }
         });
-        if (investor.name != investor.namekey) {
+        if (investor.name != "" && investor.name != investor.namekey) {
             investor.namekey = investor.namekey ? investor.namekey : "!!";
             SWBrijj.proc('ownership.update_row', investor.namekey, investor.name).then(function (data) {
                 var index = $scope.rows.indexOf(investor);
@@ -1405,7 +1409,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggleName = "Hide";
             return false
         } else {
-            $scope.sideToggleName = "Show";
+            $scope.sideToggleName = "Details";
             return true
         }
     };
@@ -2235,6 +2239,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.tourstate += 1;
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
+        }
+        if ($scope.tourstate == 3) {
+            $scope.sideToggle = false;
         }
     };
 

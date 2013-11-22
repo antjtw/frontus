@@ -446,10 +446,10 @@
     </div>
     <div class="modalText">
         <div class="row-fluid">
-            <div class="span7">
-                <p>We've created a simple tour to introduce you to our cap table, and guide you through the basics.</p>
+            <div class="span6">
+                <p>We've created a simple tour to introduce you to your cap table, and guide you through the basics.</p>
             </div>
-            <div class="span5">
+            <div class="span6">
                 <span class="tour-icon intro-icon"><span>?</span></span>
                 <div class="tooltip fade top in" style="top: 61px; left: 315px; width: 150px;display: block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">{{tourmessages.intro}}</div></div>
             </div>
@@ -1377,7 +1377,7 @@
     <div class="tour-stage first" ng-class="{'stage-one':tourstate >= 1}">
         <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);"><span>1</span></span>
         <h2>Shareholders</h2>
-        <p ng-show="tourstate == 1">Add shareholders to the column. The table will auto expand as you go to fit everyone.</p>
+        <p ng-show="tourstate == 1">Enter your shareholder names. The table will automatically expand as you go.</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
             <button class="btn">Next</button>
         </div>
@@ -1385,7 +1385,7 @@
     <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
         <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);"><span>2</span></span>
         <h2>Security</h2>
-        <p ng-show="tourstate == 2">Name the Security column</p>
+        <p ng-show="tourstate == 2">Enter a security (e.g. Common, Seed, Series A)</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
             <button class="btn">Next</button>
         </div>
@@ -1393,7 +1393,7 @@
     <div class="tour-stage third" ng-class="{'stage-three':tourstate >= 3}">
         <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);"><span>3</span></span>
         <h2>Security Terms</h2>
-        <p ng-show="tourstate == 3">Enter the security type and specific terms will apepar to define your new security</p>
+        <p ng-show="tourstate == 3">Select the security type and we'll display terms so you can define the security</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
             <button class="btn">Next</button>
         </div>
@@ -1401,14 +1401,15 @@
     <div class="tour-stage fourth" ng-class="{'stage-four':tourstate >= 4}">
         <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);"><span>4</span></span>
         <h2>Individual Shares</h2>
-        <p ng-show="tourstate == 4">Enter the security type and specific terms will appear to define your new security</p>
-        <div ng-show="tourstate != 0" class="standard-button small-standard-button" ng-click="closeTour();">
+        <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
+            security, but you can always override them.</p>
+        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour();">
             <button class="btn">Done!</button>
         </div>
     </div>
     <div class="tour-stage fifth" ng-show="tourstate != 0">
         <div class="tour-finish-button" ng-click="closeTour();">
-            <button class="btn">X</button>
+            <button class="btn"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
         </div>
     </div>
 </div>
