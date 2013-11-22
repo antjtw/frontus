@@ -1157,6 +1157,8 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 30px;
     background: none;
     border: none;
+    margin-left: 20px;
+    padding-left: 0;
 }
 
 .modal .input-row {

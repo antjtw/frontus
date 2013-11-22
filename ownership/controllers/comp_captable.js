@@ -66,12 +66,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        if (Object.keys(data).length == 0) {
-            $scope.maintoggle = false;
-            $scope.radioModel = "View";
-            $scope.tourshow = true;
-            $scope.tourUp();
-        }
         $scope.issues = data;
 
         // Get the company's rows
@@ -79,6 +73,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             // Get the company's Transactions
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
                 $scope.trans = trans;
+
+                if (Object.keys(trans).length == 0) {
+                    $scope.maintoggle = false;
+                    $scope.radioModel = "View";
+                    $scope.tourshow = true;
+                    $scope.tourUp();
+                }
 
                 // Get the company's Grants
                 SWBrijj.tblm('ownership.company_grants').then(function (grants) {
