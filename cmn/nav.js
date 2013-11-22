@@ -218,6 +218,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.gotohome = function() {
-            location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+            if ($rootScope.companies.length == 0) {
+                location.href = '/';
+            }
+            else {
+                location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+            }
         };
     }]);
