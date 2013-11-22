@@ -293,13 +293,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                     $scope.rows.sort(sorting.basicrow());
 
-                    while ($scope.rows.length < 5) {
+                    do
+                    {
                         var values = {"name": "", "editable": "0"};
                         angular.forEach($scope.issuekeys, function (key) {
                             values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
                         });
                         $scope.rows.push(values);
                     }
+                    while ($scope.rows.length < 5);
 
                     //Calculate the total vested for each row
                     $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
