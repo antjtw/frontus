@@ -596,6 +596,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var vestcliffdate = issue['vestingbegins']
                 }
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
                     var index = -1;
 
@@ -687,6 +688,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
                     $scope.issues.push({name: ""});
                     $scope.issuekeys.push(issue.key);
@@ -717,6 +719,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.deleteIssue = function (issue) {
         SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
+            $scope.lastsaved = Date.now();
             angular.forEach($scope.issues, function (oneissue) {
                 if (oneissue['key'] == issue['key']) {
                     var index = $scope.issues.indexOf(oneissue);
@@ -763,6 +766,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             items.splice(index, 1);
         }
         SWBrijj.proc('ownership.update_paris', item.company, item.issue, allpari.substring(0, allpari.length-1)).then(function (data) {
+            $scope.lastsaved = Date.now();
         });
     };
 
@@ -910,6 +914,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.manualdeleteTran = function (tran) {
         var d1 = tran['date'].toUTCString();
         SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function (data) {
+            $scope.lastsaved = Date.now();
             var index = $scope.trans.indexOf(tran);
             $scope.trans.splice(index, 1);
             var index = $scope.activeTran.indexOf(tran);
@@ -963,6 +968,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (investor.name != "" && investor.name != investor.namekey) {
             investor.namekey = investor.namekey ? investor.namekey : "!!";
             SWBrijj.proc('ownership.update_row', investor.namekey, investor.name).then(function (data) {
+                $scope.lastsaved = Date.now();
                 var index = $scope.rows.indexOf(investor);
                 angular.forEach($scope.trans, function (tran) {
                     if (tran.investor == investor.namekey) {
@@ -989,6 +995,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.deletePerson = function (investor) {
         $scope.sideBar = "x";
         SWBrijj.proc('ownership.delete_row', investor).then(function (data) {
+            $scope.lastsaved = Date.now();
             angular.forEach($scope.trans, function (tran) {
                 if (tran.investor == investor) {
                     var index = $scope.trans.indexOf(tran);
@@ -1179,6 +1186,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     transaction.email = null
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), dragalong, tagalong).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     var tempunits = 0;
                     var tempamount = 0;
                     angular.forEach($scope.rows, function (row) {
@@ -1288,6 +1296,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (grant.action == "" && (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0)) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     var index = $scope.grants.indexOf(grant);
                     $scope.grants.splice(index, 1);
                 });
@@ -1304,6 +1313,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         var d1 = grant['date'].toUTCString();
         SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), grant.action, d1, parseFloat(grant.unit)).then(function (data) {
+            $scope.lastsaved = Date.now();
             if (grant.grant_id == "") {
                 grant.grant_id = data[1][0];
                 $scope.grants.push(grant);
@@ -1505,6 +1515,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.performConvert = function (tranConvert) {
         var newtran = tranConvert.newtran;
         SWBrijj.proc('ownership.conversion', newtran.tran_id, newtran.issue, tranConvert.date, tranConvert.method, parseFloat(newtran.ppshare), parseFloat(newtran.units), parseFloat(newtran.amount)).then(function (tranid) {
+            $scope.lastsaved = Date.now();
             var oldid = angular.copy(newtran.tran_id);
             newtran.tran_id = tranid[1][0];
             newtran.key = newtran.issue;
@@ -1672,7 +1683,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
         if (!isNaN(ratio)) {
             SWBrijj.proc('ownership.split', issue.issue, ratio, issue.date).then(function (data) {
-                 angular.forEach($scope.trans, function(tran) {
+                $scope.lastsaved = Date.now();
+                angular.forEach($scope.trans, function(tran) {
                      if (tran.issue == issue.issue) {
                          tran.units = tran.units / ratio;
                          var fraction = new Fraction(ratio);
@@ -1795,6 +1807,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             var transferunits = parseFloat(tran.transferunits);
             if (tran.transferto && !isNaN(tran.transferunits)) {
                 SWBrijj.proc('ownership.transfer', tran.tran_id, tran.transferto, transferunits, $scope.transfer.date).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     var newtran = angular.copy(tran);
                     newtran.tran_id = data[1][0];
                     newtran.investor = tran.transferto;
@@ -2125,6 +2138,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.alterEmail = function() {
         if ($scope.newEmail != "") {
             SWBrijj.proc('ownership.update_row_share', $scope.newEmail, $scope.oldEmail, $scope.activeInvestorName).then(function (data) {
+                $scope.lastsaved = Date.now();
                 angular.forEach($scope.rows, function (row) {
                     if (row.name == $scope.activeInvestorName) {
                         $scope.$emit("notification:success", "Email address updated");
@@ -2182,6 +2196,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
+                    $scope.lastsaved = Date.now();
                     $scope.$emit("notification:success", "Your table has been shared!");
                     row.send = false;
                     row.emailkey = row.email;
@@ -2196,7 +2211,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             angular.forEach($scope.extraPeople, function (people) {
                 if (people.email) {
                     SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', people.email, 'Full View').then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', people.email.toLowerCase(), 'Full View').then(function (data) {
+                            $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {

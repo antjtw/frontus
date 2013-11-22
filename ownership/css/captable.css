@@ -10,6 +10,14 @@ input[disabled].default-pointer {
 
 /* Captable */
 
+div.last-saved {
+    display: inline-block;
+    float: right;
+    margin-top: -30px;
+    margin-right: 40px;
+    padding-right: 5px;
+}
+
 .subnav-controls.captable-controls {
     margin-bottom: 0;
 }

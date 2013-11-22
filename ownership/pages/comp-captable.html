@@ -475,6 +475,10 @@
             <li><a href="/ownership/company-grants">Grants</a></li>
             <li><a href="/ownership/company-status">Status</a></li>
         </ul>
+
+        <div ng-show="lastsaved" class="last-saved">
+            <span>Last Saved: </span><span>{{lastsaved | date:'mediumTime'}}</span>
+        </div>
     </div>
 
     <div class="row-fluid">
