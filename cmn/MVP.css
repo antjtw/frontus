@@ -509,7 +509,7 @@ h2 {
 }
 .topnav .nav.nav-logo > li > a {
     margin: 0 0 0 40px;
-    padding: 0 0 0 20px;
+    padding: 0 0 0 0;
 }
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);
@@ -659,13 +659,6 @@ h2 {
     color: rgb(51, 51, 51);
     background-image: none !important;
 }
-.bottomnav .nav > li:first-child > a {
-    padding: 0 0 0 20px;
-    margin: 0 0 0 40px;
-    line-height: 30px;
-    text-align: left;
-    width: 225px;
-}
 .bottomnav .nav > li > a.button {
     line-height: 30px;
     text-align: center;
@@ -690,22 +683,30 @@ h2 {
     color: rgb(102, 102, 102);
 }
 .bottomnav .nav > li > a:hover.no-hover {
-    background-color: rgb(255, 255, 255);
+    background-color: #F1F1F1;
     color: rgb(119, 119, 119);
     cursor: default;
 }
 .dropdown .fauxcaret {
     display: inline;
+}
+.dropdown .closecaret {
+    display: none;
+}
+.dropdown .fauxcaret , .dropdown .closecaret{
     float: right;
-    margin-top: -16px;
+ //   margin-top: -16px;
     margin-right: 8px;
-    border-top: 4px solid rgb(78, 70, 70);
-    border-right: 4px solid transparent;
-    border-left: 4px solid transparent;
+//    border-top: 4px solid rgb(78, 70, 70);
+ //   border-right: 4px solid transparent;
+  //  border-left: 4px solid transparent;
 }
 .open .fauxcaret {
     border-top :0 !important;
-    border-bottom: 4px solid black;
+    display: none;
+}
+.open .closecaret {
+    display: inline;
 }
 #Login-form a[data-icon] {
     font-size: 20px;
@@ -1906,7 +1907,16 @@ button.icon-button:hover {
 }
 
 /* Drop down menus built on top of the custom selects */
-ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle {
+ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
+    padding: 0 0 0 0;
+    margin: 0 0 0 40px;
+    line-height: 30px;
+    text-align: left;
+    width: 225px;
+    text-shadow: none;
+    font-size: 12px;
+}
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: auto;
     padding-left: 8px;
     padding-right: 8px;
@@ -1914,47 +1924,50 @@ ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle {
     color: #666666;
 }
 
-ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle.dark {
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
     background-color: #E3E3E3;
 }
 
-ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle.dark:hover {
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark:hover {
     background-color: #C7C7C7;
 }
 
-ul.dropdown-list > .dropdown.standard.menuDrop > a.dropdown-toggle:before {
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
     background: none;
     width: 0;
     height: 0;
 }
 
-ul.dropdown-list > .dropdown.standard.menuDrop > ul.dropdown-menu {
+ul.nav.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
+    margin-left: 40px;
+}
+ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     margin-left: -120px;
 }
 
-.standard.menuDrop .dropdown-menu > li {
+.standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     font-size: 12px;
 }
 
-ul.dropdown-list > .dropdown.standard.menuDrop > ul.dropdown-menu {
+ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     color : #666666;
 }
 
-.standard.menuDrop .dropdown-menu > li {
+.standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     text-align: left;
     color: rgb(102, 102, 102);
 }
 
-.standard.menuDrop .dropdown-menu > li:hover {
+.standard.menu-drop .dropdown-menu > li:hover {
     background: #C7C7C7;
     color: rgb(102, 102, 102);
 }
 
-.standard.menuDrop .dropdown-menu > li:first-of-type:hover {
+.standard.menu-drop .dropdown-menu > li:first-of-type:hover {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
 
@@ -1965,7 +1978,7 @@ ul.dropdown-list > .dropdown.standard.menuDrop > ul.dropdown-menu {
     border-top-left-radius: 3px;
 }
 
-.standard.menuDrop .dropdown-menu > li:last-of-type:hover {
+.standard.menu-drop .dropdown-menu > li:last-of-type:hover {
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
 
