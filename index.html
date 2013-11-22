@@ -26,11 +26,6 @@
 <body>
 <navbar></navbar>
 <div class="wrap home" ng-controller="IndexCtrl">
-<div class="videoModal" modal="video" close="close()" options="opts">
-    <div>
-        <iframe class="videoIframe" width="560" height="315" src="//www.youtube-nocookie.com/embed/wsJ_chk1IrY?rel=0&autoplay=1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>
-    </div>
-</div>
 <span ng-view=""></span>
 <div id="hero">
     <img src="/img/white-down.png" id="nextPage" class="paginator hidden-phone" data-0="opacity:1"
@@ -266,6 +261,11 @@
     <div class="spacer90"></div>
 </div>
 <div id="skrollr-body"></div>
+<div class="videoModal" modal="video" close="close()" options="opts">
+    <div>
+        <iframe class="videoIframe" width="560" height="315" src="//www.youtube-nocookie.com/embed/wsJ_chk1IrY?rel=0&autoplay=1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>
+    </div>
+</div>
 <div class="push"></div>
 
 </div>
