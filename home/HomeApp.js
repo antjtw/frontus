@@ -30,6 +30,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             return;
         }
 
+        $scope.uselessbrowser = !Modernizr.csstransforms3d;
+
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
             angular.forEach($scope.currencies, function(c) {
@@ -221,7 +223,9 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         // Flipping tiles functionality
 
         $scope.flipTile = function(x) {
-            $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            if (!$scope.uselessbrowser) {
+                $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            }
         };
 
 
