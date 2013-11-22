@@ -1401,6 +1401,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     box-shadow: none;
     color: #8C8C8C;
     height: 30px;
+    font-size: 17px;
 }
 
 .tour-box .tour-finish-button > button.btn:hover {
