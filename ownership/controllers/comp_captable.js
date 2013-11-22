@@ -960,7 +960,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 investor.name = investor.name + " (1)";
             }
         });
-        if (investor.name != investor.namekey) {
+        if (investor.name != "" && investor.name != investor.namekey) {
             investor.namekey = investor.namekey ? investor.namekey : "!!";
             SWBrijj.proc('ownership.update_row', investor.namekey, investor.name).then(function (data) {
                 var index = $scope.rows.indexOf(investor);
@@ -1409,7 +1409,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggleName = "Hide";
             return false
         } else {
-            $scope.sideToggleName = "Show";
+            $scope.sideToggleName = "Details";
             return true
         }
     };

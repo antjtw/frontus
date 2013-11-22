@@ -175,6 +175,19 @@ input[disabled].default-pointer {
     padding: 0 0 0 6px;
 }
 
+.tableView.captable th > input::-webkit-input-placeholder {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+.tableView.captable th > input:-moz-placeholder {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+.tableView.captable th > input::-moz-placeholder {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+.tableView.captable th > input:-ms-input-placeholder {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+
 .tableView.captable input {
     background-color: #FFFFFF;
     padding: 9px 0 9px 6px;
@@ -341,6 +354,11 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     line-height: 10px;
     text-transform: uppercase;
     font-size: 12px;
+    color: #1E2D3D;
+}
+
+.span4.capright > button:active {
+    color: #1E2D3D;
 }
 
 .capright .headsection.tabbed {
@@ -1489,6 +1507,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 30px;
     background-color: #19BB95;
     cursor: pointer;
+    font-family: 'FS Elliot Web Regular', sans-serif;
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
 
