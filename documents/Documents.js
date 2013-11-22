@@ -293,7 +293,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
-            
+        $window.onkeydown = function(evt) {
+            if (event.which === 37) {
+                $scope.previousPage($scope.currentPage);
+            } else if (evt.which === 39) {
+                $scope.nextPage($scope.currentPage);
+            }
+        };
         
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
