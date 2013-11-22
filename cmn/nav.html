@@ -51,13 +51,13 @@
       <div class="navbounder">
         <ul class="menuHeaderText nav dropdown-list">
             <li class="dropdown standard menu-drop">
-                <a class="dropdown-toggle" ng-class="{'no-hover':companies.length == 1}">
+                <a class="dropdown-toggle" ng-class="{'no-hover':companies.length == 1, 'dark': navState.path.substring(0,6)==='/home/'}">
                     {{navState.name}}
                     <span class='for-r0ml'> ({{navState.role}})</span>
                     <span ng-show="companies.length!==1" class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
                     <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                 </a>
-                <ul class="dropdown-menu" ng-show="companies.length > 1">
+                <ul class="dropdown-menu" ng-class="{'dark': navState.path.substring(0,6)=== '/home/'}" ng-show="companies.length > 1">
                     <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span></li>
                     <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}" ng-repeat="company in companies | filter: {role:'investor'}">
                         <a class="button" ng-click="switch(company)">{{company.name}}</a>
