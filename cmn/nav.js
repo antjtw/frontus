@@ -109,10 +109,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             $scope.hasInvest = false;
             angular.forEach(cmps, function(company) {
                 if (company.role == 'issuer') {
-                    $scope.hasAdmin = true
+                    $scope.hasAdmin = true;
                 }
                 else if (company.role == 'investor') {
-                    $scope.hasInvest = true
+                    $scope.hasInvest = true;
                 }
             });
             $scope.$broadcast('update:companies', $scope.companies);
