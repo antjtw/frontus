@@ -38,7 +38,18 @@
           <div class="DivHelper"></div>
       </div>
       <div class="span8 recipientInfo docLibrary statusBlock">
-          <table class="status-table doc-status">
+          <table class="status-table" ng-show="docversions.length===0">
+              <tbody class="empty-table">
+                  <tr>
+                      <td>
+                          <span>Welcome! </span>
+                          <span class="link" ng-click="documentshareOpen();">Share with Investors</span>
+                          <span> to view status.</span>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          <table class="status-table doc-status" ng-show="docversions.length!==0">
               <tbody>
                   <tr>
                       <th ng-click="setOrder('name')">Shareholder</th>
@@ -112,9 +123,9 @@
                     <ul class="last-edited spaced-list">
                         <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li ng-show="lastsent">Sent</li>
-                        <!--
                         <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Last Edited</li>
+                        <!--
                         <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                         <li>Deadline</li>
                         -->

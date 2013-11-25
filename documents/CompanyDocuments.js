@@ -1238,6 +1238,12 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             });
         };
 
+        $scope.documentshareOpen = function() {
+            // TODO open documentshare modal once implemented on this page
+            $location.path('/company-list');
+            $location.search({});
+        };
+
         $scope.$watch('document.docname', function(newValue, oldValue) {
             if (newValue === "") {
                 return "Untitled";
