@@ -835,6 +835,8 @@ li.selectedtab {
     margin-bottom: 0;
     border-radius: 3px;
     margin-left: 10px;
+    box-shadow: none !important;
+    border: none !important;
 }
 .subnav-controls h2 {
     margin-left: 10px;
