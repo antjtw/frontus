@@ -265,6 +265,9 @@ div.last-saved {
 
 .tableView.captable .captablepair {
     color: #7f8c8d;
+}
+
+.tableView.captable .captablepair:disabled {
     cursor: default;
 }
 

@@ -1388,6 +1388,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.editViewToggle = function() {
         $scope.maintoggle = !$scope.maintoggle;
         $scope.radioModel = $scope.maintoggle ? "Edit" : "View";
+        angular.forEach($scope.rows, function (row) {
+            row.state = false;
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue) {
+                    row[issue.issue].state = false;
+                    issue.state = false;
+                }
+            });
+        });
     };
 
     $scope.toggleView = function () {
