@@ -130,6 +130,10 @@ div.last-saved {
     text-align: center;
 }
 
+.tableView.captable tr.no-background > th, .tableView.captable tr.no-background > td {
+    background: none;
+}
+
 .tableView th.staticHeaders {
     padding: 0 0 0 6px;
 }
@@ -159,6 +163,7 @@ div.last-saved {
     float: right;
     margin-right: 5px;
     width: 95%;
+    cursor: default;
 }
 
 .capright input:disabled {
@@ -280,6 +285,10 @@ div.last-saved {
 p.captablepair {
     width: 65px;
     margin: 0 0 0 0;
+}
+
+.tableView td.tableFields {
+    background: none;
 }
 
 .tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {

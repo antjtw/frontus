@@ -535,7 +535,7 @@
                     </th>
                 </tr>
                 <!-- Uneditable headers -->
-                <tr ng-show="toggleView();" class="column-label">
+                <tr ng-show="toggleView();" class="column-label no-background">
                     <th class="longrow" colspan="2">Ownership</th>
                     <th class="longrow">Shareholder</th>
                     <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
@@ -545,7 +545,7 @@
                 </tr>
 
                 <!-- Descriptive row viewable from all modes -->
-                <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
+                <tr class="descriptionRow no-background" ng-class="{'viewmode':toggleView()}">
                     <td class="input-right">Shares</td>
                     <td class="input-right">%</td>
                     <td></td>
@@ -617,7 +617,7 @@
                 <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
                     <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                    <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
+                    <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName tableFields" ng-click="getActiveInvestor(row);">{{row.name}}</td>
                     <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
@@ -651,17 +651,17 @@
                 </tr>
                 <!-- Footer Total Row -->
                 <tr class="total-row">
-                    <td>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td ng-repeat="one in issuekeys"></td>
+                    <td class="tableFields">Total</td>
+                    <td class="tableFields"></td>
+                    <td class="tableFields"></td>
+                    <td class="tableFields" ng-repeat="one in issuekeys"></td>
                 </tr>
                 <!-- Undiluted footer -->
                 <tr ng-show="toggleDilution();" class='tablefooter'>
                     <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                    <td></td>
-                    <td ng-repeat="one in issuekeys">
+                    <td class="tableFields"></td>
+                    <td class="tableFields" ng-repeat="one in issuekeys">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
@@ -674,8 +674,8 @@
                 <tr ng-hide="toggleDilution();" class='tablefooter'>
                     <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
                     <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                    <td></td>
-                    <td ng-repeat="one in issuekeys">
+                    <td class="tableFields"></td>
+                    <td class="tableFields" ng-repeat="one in issuekeys">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(colTotal(one, dilutedRows, 'u'))" class="output footer"></div>
                                 <div ng-bind="formatDollarAmount(colTotal(one, dilutedRows, 'a'))" class="output second footer"></div>
@@ -1020,10 +1020,11 @@
                                 <!-- Equity Tab -->
                                 <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
 
-                                    <p class="rightTitle"><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span><input ng-disabled="toggleView();"
-                                                                                                                                                                       onkeydown="testForEnter();"
-                                                                                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                                                                       ng-model="tran.ppshare"></p>
+                                    <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
+                                                                                       onkeydown="testForEnter();"
+                                                                                       ui-event="{blur : 'saveTran(tran)'}"
+                                                                                       ng-model="tran.ppshare">
+                                    </p>
 
 
                                     <div ng-hide="toggleView();" class="rightTitle double"><span tooltip-placement="top" tooltip="The minimum return multiple each investor is gauranteed on a liquidity event">Liquidation Preference</span>
