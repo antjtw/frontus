@@ -132,10 +132,6 @@ div.last-saved {
     text-align: center;
 }
 
-.tableView.captable tr.no-background > th, .tableView.captable tr.no-background > td {
-    background: none;
-}
-
 .tableView th.staticHeaders {
     padding: 0 0 0 6px;
 }
@@ -269,6 +265,7 @@ div.last-saved {
 
 .tableView.captable .captablepair {
     color: #7f8c8d;
+    cursor: default;
 }
 
 .tableView.captable.viewcaptable {

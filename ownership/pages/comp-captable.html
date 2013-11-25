@@ -535,7 +535,7 @@
                     </th>
                 </tr>
                 <!-- Uneditable headers -->
-                <tr ng-show="toggleView();" class="column-label no-background">
+                <tr ng-show="toggleView();" class="column-label">
                     <th class="longrow" colspan="2">Ownership</th>
                     <th class="longrow">Shareholder</th>
                     <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
@@ -545,7 +545,7 @@
                 </tr>
 
                 <!-- Descriptive row viewable from all modes -->
-                <tr class="descriptionRow" ng-class="{'viewmode no-background':toggleView()}">
+                <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
                     <td class="input-right">Shares</td>
                     <td class="input-right">%</td>
                     <td></td>
