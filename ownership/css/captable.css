@@ -108,11 +108,11 @@ div.last-saved {
 }
 
 .tableView.captable td.viewName {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 20px;
 }
 
 .tableView th.longrow {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 20px;
 }
 
 .tableView th {
@@ -199,6 +199,10 @@ div.last-saved {
 .tableView.captable input {
     background-color: #FFFFFF;
     padding: 9px 0 9px 6px;
+}
+
+.tableView.captable input.name-row {
+    padding-left: 20px;
 }
 
 .tableView.captable input:focus {
@@ -1448,7 +1452,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     top: -12px;
     z-index: 1;
     content: ' ';
-    width: 144px;
+    width: 158px;
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
@@ -1481,15 +1485,20 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     border-bottom-left-radius: 3px;
 }
 
-.tableView.captable tr:nth-child(1) th:nth-child(3) > span {
+.tableView.captable tr:nth-child(1) th > span {
+    display: none;
+}
+
+.tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight {
     position: relative;
+    display: inline-block;
 }
 
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight:before {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -4px;
+    top: -14px;
     z-index: 10;
     content: ' ';
     width: 150px;
@@ -1506,7 +1515,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     right: -154px;
-    bottom: -33px;
+    bottom: -36px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -1677,6 +1686,6 @@ span.tour-icon.side-toggle + .tooltip {
 }
 
 span.tour-icon.issue-cog + .tooltip {
-    top: -17px !important;
-    left: -135px !important;
+    top: -25px !important;
+    left: -235px !important;
 }

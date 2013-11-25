@@ -75,8 +75,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             // Get the company's Transactions
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
                 $scope.trans = trans;
-
-                if (Object.keys(trans).length == 0) {
+                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
                     $scope.maintoggle = false;
                     $scope.radioModel = "View";
                     $scope.tourshow = true;
@@ -690,7 +689,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
-                    $scope.issues.push({name: ""});
+                    $scope.issues.push({name: "", "date": new Date(2100, 1, 1)});
                     $scope.issuekeys.push(issue.key);
                     angular.forEach($scope.rows, function (row) {
                         row[issue.key] = {"u": null, "a": null};

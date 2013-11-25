@@ -471,13 +471,13 @@
     <div class="headsection row-fluid">
 
         <ul class="maintabs head-text">
-            <li class="selectedtab">Ownership</li>
+            <li class="selectedtab">Capitalization</li>
             <li><a href="/ownership/company-grants">Grants</a></li>
             <li><a href="/ownership/company-status">Status</a></li>
         </ul>
 
         <div ng-show="lastsaved" class="last-saved">
-            <span>Last Saved: </span><span>{{lastsaved | date:'mediumTime'}}</span>
+            <span>Last saved at </span><span>{{lastsaved | date:'mediumTime'}}</span>
         </div>
     </div>
 
@@ -563,12 +563,12 @@
                       <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
-                          <input placeholder="Add Name" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
+                          <input class="name-row" placeholder="Add Name" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
                                  onkeydown="testForEnter();">
                         </span>
                         <span ng-switch-when="0">
-                          <input disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
+                          <input class="name-row" disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
                                  onkeydown="testForEnter();">
                         </span>
@@ -702,7 +702,7 @@
 
                                 <ul class="dropdown-list transaction-icon pull-right">
                                     <li class="dropdown standard menu-drop">
-                                        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon issue-cog" data-trigger="click" data-placement="left" bs-tooltip="tourmessages.issuecog"><span>?</span></span>
+                                        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon issue-cog" data-placement="left" bs-tooltip="tourmessages.issuecog"><span>?</span></span>
                                         <a class="dropdown-toggle">
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
@@ -720,7 +720,7 @@
                         <!-- Global Tab -->
                         <div class="capGuide global"  ng-class="{'issue-rail':tourstate==3}">
                             <span class="next-button" ng-click="moveTour();">Next</span>
-                            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+                            <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                                           ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                                                                           onkeydown="testForEnter();"></p>
 
@@ -1389,7 +1389,7 @@
     <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
         <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);"><span>2</span></span>
         <h2>Security</h2>
-        <p ng-show="tourstate == 2">Enter a security (e.g. Common, Seed, Series A)</p>
+        <p ng-show="tourstate == 2">Name the security (e.g. Common, Seed, Series A)</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
             <button class="btn">Next</button>
         </div>
