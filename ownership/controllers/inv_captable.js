@@ -82,6 +82,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     for (var i = 0, l = $scope.trans.length; i < l; i++) {
                         var offset = $scope.trans[i].date.getTimezoneOffset();
                         $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
+                        if ($scope.trans[i].vestingbegins) {
+                            $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                        }
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
@@ -92,10 +95,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 $scope.trans[i].premoney = issue.premoney;
                                 $scope.trans[i].postmoney = issue.postmoney;
                             }
-                            ;
                         });
                     }
-                    ;
 
                     // Generate the rows from the transactions
                     // u represents units throughout, a price
