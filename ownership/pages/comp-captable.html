@@ -471,7 +471,7 @@
     <div class="headsection row-fluid">
 
         <ul class="maintabs head-text">
-            <li class="selectedtab">Ownership</li>
+            <li class="selectedtab">Capitalization</li>
             <li><a href="/ownership/company-grants">Grants</a></li>
             <li><a href="/ownership/company-status">Status</a></li>
         </ul>
@@ -720,7 +720,7 @@
                         <!-- Global Tab -->
                         <div class="capGuide global"  ng-class="{'issue-rail':tourstate==3}">
                             <span class="next-button" ng-click="moveTour();">Next</span>
-                            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+                            <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                                           ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                                                                           onkeydown="testForEnter();"></p>
 
