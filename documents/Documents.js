@@ -591,12 +591,22 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
 
+        $scope.safeApply = function(fn) {
+            var phase = this.$root.$$phase;
+            if (phase === '$apply' || phase === '$digest') {
+                if(fn && (typeof(fn) === 'function')) {
+                    fn();
+                }
+            } else {
+                this.$apply(fn);
+            }
+        };
+
         $scope.setPage = function(n) {
             $scope.currentPage = n;
             var s = $location.search();
             s.page = n;
             $location.search(s);
-            refreshDocImage();
         };
 
         $scope.nextPage = function(value) {
@@ -612,7 +622,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.jumpPage = function(value) {
-            $scope.setPage(parseInt(value, 10));
+            $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
         $scope.range = function(start, stop, step) {
@@ -1035,9 +1045,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
-                console.log("here");
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
-                refreshDocImage();
             });
         };
 

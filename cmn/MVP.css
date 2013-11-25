@@ -2833,6 +2833,10 @@ h2.onboard {
     overflow-x: hidden;
 }
 
+.container.dynamic-page.doclistFlow {
+    overflow-x: visible;
+}
+
 .dynamic-page .row-fluid .span8.leftBlock {
     width: -moz-calc(100% - 350px);
     width: -webkit-calc(100% - 350px);
