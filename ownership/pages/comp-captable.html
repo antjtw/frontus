@@ -702,7 +702,7 @@
 
                                 <ul class="dropdown-list transaction-icon pull-right">
                                     <li class="dropdown standard menu-drop">
-                                        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon issue-cog" data-trigger="click" data-placement="left" bs-tooltip="tourmessages.issuecog"><span>?</span></span>
+                                        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon issue-cog" data-placement="left" bs-tooltip="tourmessages.issuecog"><span>?</span></span>
                                         <a class="dropdown-toggle">
                                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                                         </a>
@@ -1389,7 +1389,7 @@
     <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
         <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);"><span>2</span></span>
         <h2>Security</h2>
-        <p ng-show="tourstate == 2">Enter a security (e.g. Common, Seed, Series A)</p>
+        <p ng-show="tourstate == 2">Name the security (e.g. Common, Seed, Series A)</p>
         <div class="standard-button small-standard-button" ng-click="moveTour();">
             <button class="btn">Next</button>
         </div>

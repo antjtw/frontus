@@ -1682,6 +1682,6 @@ span.tour-icon.side-toggle + .tooltip {
 }
 
 span.tour-icon.issue-cog + .tooltip {
-    top: -17px !important;
-    left: -135px !important;
+    top: -25px !important;
+    left: -235px !important;
 }
