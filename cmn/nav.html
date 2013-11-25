@@ -35,7 +35,7 @@
           <li ng-click="gotohome();" ng-show="navState.userid" class="nav-photo"><img ng-show="userURL" ng-src="{{userURL}}"><span>{{person.name}}</span></li>
           <li style="display: none;" class="dropdown" ng-show="navState.userid">
             <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#"><span data-icon="&#xe011;" aria-hidden="true"></span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu no-triangle">
               <li ng-show="navState.role=='issuer'"><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
               <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
             </ul>
