@@ -102,6 +102,7 @@ div.last-saved {
     margin: 0;
     padding: 0;
     position: relative;
+    background-clip: padding-box;
 }
 
 .tableView .unissued-rows td {
@@ -118,6 +119,7 @@ div.last-saved {
 .tableView th {
     margin: 0;
     padding: 0;
+    background-clip: padding-box;
 }
 
 .tableView th:first-of-type {
