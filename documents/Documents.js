@@ -608,6 +608,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            refreshDocImage();
         };
 
         $scope.nextPage = function(value) {
