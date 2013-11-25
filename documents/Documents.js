@@ -294,7 +294,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
         $window.onkeydown = function(evt) {
-            if (event.which === 37) {
+            evt.which = evt.which || e.keyCode;
+            if (evt.which === 37) {
                 $scope.previousPage($scope.currentPage);
             } else if (evt.which === 39) {
                 $scope.nextPage($scope.currentPage);
