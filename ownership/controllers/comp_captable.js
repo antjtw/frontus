@@ -65,6 +65,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Initialize a few visible variables
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
+    $('.tour-box').affix({});
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
