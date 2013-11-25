@@ -264,6 +264,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.documentUploadClose = function() {
+            $scope.showProgress = false;
+            $scope.showProcessing = false;
+            $rootScope.errorMessage = '';
             $scope.documentUploadModal = false;
         };
 
@@ -305,6 +308,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 void(arg);
                 $rootScope.showProgress = false;
                 $rootScope.showProcessing = true;
+                $scope.documentUploadClose();
+                $scope.$emit("notification:success", "Success! We're preparing your file.");
                 $scope.$apply();
             });
             $scope.$on(
@@ -330,10 +335,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             upxhr.then(function(x) {
                 void(x);
                 $scope.dropText = moreDocs;
-                $scope.showProgress = false;
-                $scope.showProcessing = false;
-                $scope.documentUploadModal = false;
-                $rootScope.errorMessage = '';
+                $scope.documentUploadClose();
                 $scope.$apply();
                 $route.reload();
             }).except(function(x) {
