@@ -108,11 +108,11 @@ div.last-saved {
 }
 
 .tableView.captable td.viewName {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 20px;
 }
 
 .tableView th.longrow {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 20px;
 }
 
 .tableView th {
@@ -199,6 +199,10 @@ div.last-saved {
 .tableView.captable input {
     background-color: #FFFFFF;
     padding: 9px 0 9px 6px;
+}
+
+.tableView.captable input.name-row {
+    padding-left: 20px;
 }
 
 .tableView.captable input:focus {
@@ -1448,7 +1452,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     top: -12px;
     z-index: 1;
     content: ' ';
-    width: 144px;
+    width: 158px;
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
