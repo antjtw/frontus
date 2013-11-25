@@ -391,17 +391,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
        
         $scope.loadAnnotations = function() {
-            if ($scope.lib) {
-                console.log("Error. This has already been called.");
-                $scope.removeAllNotes();
-                return;
-            }
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                if ($scope.lib && $scope.lib.annotations.length > 0) {
+                    return;
+                }
                 $scope.lib = data;
                 $scope.reqDocStatus($scope.docId);
 
@@ -603,13 +601,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.nextPage = function(value) {
             if ($scope.currentPage < $scope.docLength) {
-                $scope.setPage(parseInt(value, 10) + 1);
+                $scope.jumpPage(value+1);
             }
         };
 
         $scope.previousPage = function(value) {
             if ($scope.currentPage > 1) {
-                $scope.setPage(parseInt(value, 10) - 1);
+                $scope.jumpPage(value-1);
             }
         };
 
@@ -1015,16 +1013,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.saveNoteData = function(clicked) {
             var nd = $scope.getNoteData();
-            if ($scope.lib === undefined) return;
-            // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+            if ($scope.lib === undefined) {
+                // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+                return;
+            }
 
             if (nd == $scope.lib.annotations) {
+                // When there are no changes
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved Annotations");
                 }
                 return;
             }
-            // When there are no changes
 
             /** @name SWBrijj#saveNoteData
              * @function

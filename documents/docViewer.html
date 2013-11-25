@@ -20,7 +20,7 @@
                 <!-- <button ng-click="newSignature($event)"><span data-icon="&#xe02e;" aria-hidden="true"></span></button>  -->
             </div>
             <div class="pageTurn pull-left">
-                <ul ng-class="{'hidden':docLength==1}">
+                <ul>
                     <li class="button" ng-click="previousPage(currentPage)">
                         <span ng-class="{'locked':currentPage<=0}" data-icon="&#xe003;" aria-hidden="true"></span>
                     </li>
@@ -82,7 +82,7 @@
     <div class="docPanelContainer row-fluid" ng-class="{'annotable':isAnnotable && docLength>1}">
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}">
     </div>
-    <div class="keyboardHintContainer">
+    <div class="keyboardHintContainer" ng-show="docLength > 1">
         <img class="keyboardHint" src="/img/keyboard.png">
         <span><br>Use the arrow keys on the keyboard to<br>navigate between page</span>
     </div>
