@@ -499,8 +499,9 @@ div.progress-bar {
     font-size: 1.4em;
 }
 
-.status-table .empty-table {
+.status-table .empty-table > tr {
     text-align: center;
+    font-family: 'FS Elliot Web Regular', sans-serif !important;
 }
 
 .status-table tbody.empty-table > tr > td {
