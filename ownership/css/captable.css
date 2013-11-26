@@ -585,6 +585,21 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
+p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    padding-left: 0;
+    margin-left: 0;
+    padding-top: 4px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+p.rightTitle > span.tooltip-icon:hover {
+}
+
 .rightTitle > select {
     width: 100px;
     height: 25px;

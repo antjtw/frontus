@@ -25,6 +25,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tourmessages.sidebar = "Additional details for securites and transactions are tucked away here";
     $scope.tourmessages.issuecog = "Additional details for securites and transactions are tucked away here";
 
+    // Captable tooltips
+    $scope.captabletips = {};
+    $scope.captabletips.premoneyval = "The valuation before taking in money in this round";
+    $scope.captabletips.postmoneyval = "The sum of the pre-money valuation and the total money paid into this round";
+    $scope.captabletips.ppshare = "The price at which each share was purchased";
+    $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
+
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -492,7 +499,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else if (String($scope.activeIssue.tagalong) == "false") {
             $scope.activeIssue.tagalong = $scope.tf[1];
         }
-        if ($scope.activeIssue.date == "Mon Feb 01 2100 00:00:00 GMT-0500 (EST)") {
+        if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
             $scope.activeIssue.date = (Date.today());
         }
         if ($scope.activeIssue.common) {
