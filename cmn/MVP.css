@@ -1412,7 +1412,8 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr.empty-row {
     height: 10px;
-    border: none;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
 }
 
 .status-table > tbody > tr {
