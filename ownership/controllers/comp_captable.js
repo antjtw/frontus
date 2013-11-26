@@ -945,6 +945,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.trans.splice(index, 1);
             var index = $scope.activeTran.indexOf(tran);
             $scope.activeTran.splice(index, 1);
+            if ($scope.activeTran.length < 1) {
+                var anewTran = {};
+                anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (tran.issue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue == tran.issue) {
+                        anewTran = $scope.tranInherit(anewTran, issue);
+                    }
+                });
+                $scope.trans.push(anewTran);
+                $scope.activeTran.push(anewTran);
+            }
             angular.forEach($scope.rows, function (row) {
                 if (row.name === tran['investor']) {
                     if (!isNaN(tran.units)) {
