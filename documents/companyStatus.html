@@ -31,7 +31,7 @@
                 <tr>
                     <td>
                         <span>Welcome! </span>
-                        <span class="link" ng-click="documentshareOpen();">Share with Investors</span>
+                        <span class="link" ng-click="shareDocOpen();">Share with Investors</span>
                         <span> to view status.</span>
                     </td>
                 </tr>
@@ -149,7 +149,7 @@
 
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        Share "{{document.docname | caplength:25}}"
+        Share "{{document.docname | caplength:35}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
