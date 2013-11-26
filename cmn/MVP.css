@@ -92,6 +92,11 @@ input.loginInput:focus, textarea:focus, select:focus {
     background-color: #1ABC96;
 }
 
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-image: none;
+    background-color: #1ABC96;
+}
+
 [class^="icon-"], [class*=" icon-"] {
     background:none;
 }
