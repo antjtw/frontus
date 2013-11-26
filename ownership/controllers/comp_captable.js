@@ -1211,6 +1211,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (!transaction.email) {
                     transaction.email = null
                 }
+                // Autocomplete for Equity transactions, fill out the third of units, amount or price per share
+                if (transaction.type == "Equity") {
+                    if (transaction.units && transaction.amount && !transaction.ppshare) {
+                        transaction.ppshare = parseFloat(transaction.amount) / parseFloat(transaction.units);
+                    }
+                    else if (!transaction.units && transaction.amount && transaction.ppshare) {
+                        transaction.units = parseFloat(transaction.amount) / parseFloat(transaction.ppshare);
+                    }
+                    else if (transaction.units && !transaction.amount && transaction.ppshare) {
+                        transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
+                    }
+                }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), dragalong, tagalong).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var tempunits = 0;
