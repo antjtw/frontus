@@ -53,7 +53,7 @@
                                         <li ng-show="" ng-click="modalUp(person);">Change Role</li>
                                         <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
                                         <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
-                                        <li ng-show="person.role!=='issuer'" ng-click="adminModalOpen(person.email)">Add Admin</li>
+                                        <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Add Admin</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -127,4 +127,21 @@
         </div>
     </div>
 </div>
+    <div modal="addAdminModal" close="addAdminModalClose()" options="narrowopts">
+        <div class="modalHeader">
+            <span>Add administrator</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
+        </div>
+        <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+            <span>Are you sure you want to add {{selectedToAdd}} as an admin?</span>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="addAdminModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="add_admin(); addAdminModalClose();">Confirm</button>
+            </div>
+        </div>
+    </div>
 </div>
