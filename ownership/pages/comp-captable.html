@@ -749,11 +749,13 @@
 
                             <p class="rightTitle common-toggle" ng-show="commonshow"><span tooltip-placement="top" tooltip="Indicates that a security is common stock, and can only be applied to one security">Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
 
-                            <p class="rightTitle double"><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">Pre-Money Valuation</span><input ng-disabled="toggleView();"
+                            <p class="rightTitle double"><span>Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                                                                                                      pattern="[0-9]*(.[0-9]*)*"
                                                                                                                                                                                      ui-event="{blur : 'saveIssue(activeIssue, \'premoney\')'}"
                                                                                                                                                                                      ng-model="activeIssue.premoney"
-                                                                                                                                                                                     onkeydown="testForEnter();"></p>
+                                                                                                                                                                                     onkeydown="testForEnter();">
+                            <span class="tooltip-icon" data-icon="&#xe00c;" aria-hidden="true" tooltip-placement="top" tooltip="The valuation before taking in money in this round"></span>
+                            </p>
 
                             <p class="rightTitle double"><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">Post-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                                                                                                                                ui-event="{blur : 'saveIssue(activeIssue, \'postmoney\')'}"
