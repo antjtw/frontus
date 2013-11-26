@@ -595,9 +595,11 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     padding-top: 4px;
     cursor: pointer;
     margin-top: 0;
+    vertical-align: middle;
 }
 
-p.rightTitle > span.tooltip-icon:hover {
+p.double.rightTitle > span.tooltip-icon, div.rightTitle > ul.dropdown-list + span.tooltip-icon {
+    vertical-align: top;
 }
 
 .rightTitle > select {
@@ -614,7 +616,7 @@ p.rightTitle.interest-rate > input {
 }
 
 div.rightTitle.interest-rate {
-    width: 100px;
+    width: 140px;
     float: left;
     margin-left: 10px;
 }

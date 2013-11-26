@@ -31,6 +31,25 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.postmoneyval = "The sum of the pre-money valuation and the total money paid into this round";
     $scope.captabletips.ppshare = "The price at which each share was purchased";
     $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
+    $scope.captabletips.liquidpref = "The minimum return multiple each investor is guaranteed on a liquidity event";
+    $scope.captabletips.partpref = "Allows an investor to collect their liquidation preference AND stock on a liquidity event";
+    $scope.captabletips.dragalong = "When a majority shareholder enters a sale, minority shareholders are also forced sell their shares";
+    $scope.captabletips.tagalong = "When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares";
+    $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
+    $scope.captabletips.totalgranted = "The sum total of shares granted";
+    $scope.captabletips.price = "The price each granted share can be purchased at when vested";
+    $scope.captabletips.terms = "The total number of months until fully vested";
+    $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
+    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
+    $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
+    $scope.captabletips.price = "The rate that interest accrues on this debt";
+    $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
+    $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
+    $scope.captabletips.discount = "The percentage discount applied upon conversion";
+    $scope.captabletips.term = "The term of the note before expiration";
+
+
+
 
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
