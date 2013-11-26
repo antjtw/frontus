@@ -108,7 +108,7 @@
                             <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
-                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortVersionStatus(version)}}</li>
                                 <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
