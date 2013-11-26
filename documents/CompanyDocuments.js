@@ -1084,6 +1084,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             return;
         }
 
+        $scope.signeeded = "No";
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
