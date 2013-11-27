@@ -747,7 +747,10 @@
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
 
-                            <p class="rightTitle common-toggle" ng-show="commonshow"><span tooltip-placement="top" tooltip="Indicates that a security is common stock, and can only be applied to one security">Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></p>
+                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.common"></span>
+                            </p>
 
                             <p class="rightTitle double"><span>Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                 pattern="[0-9]*(.[0-9]*)*"
