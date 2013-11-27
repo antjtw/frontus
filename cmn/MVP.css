@@ -505,8 +505,8 @@ h2 {
 .topnav .nav > li > a, .topnav .nav.nav-item > li > a {
     text-shadow: 0 0 0;
     color: rgb(166, 166, 166);
-    height:40px;
-    line-height: 40px;
+    height:40px !important;
+    line-height: 40px !important;
     margin: 0 40px 0 0;
     padding: 0 0 0 0;
     width: 30px;
@@ -518,11 +518,11 @@ h2 {
 }
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);
-    color: rgb(199, 199, 199);
+    color: rgb(199, 199, 199) !important;
 }
 .topnav .nav li.dropdown.open > .dropdown-toggle {
     background-color: rgb(52, 73, 94);
-    color: rgb(199, 199, 199);
+    color: rgb(199, 199, 199) !important;
 }
 .topnav .nav li.dropdown > a:hover .caret, .topnav .nav li.dropdown > a:focus .caret {
     border-bottom-color: rgb(199, 199, 199);
@@ -536,8 +536,11 @@ h2 {
     margin-top: 17px;
     margin-left: 4px;
 }
+.topnav .nav > li > ul.dropdown-menu {
+    margin-top: 10px;
+}
 .topnav .nav > li > ul {
-    width: 100px;
+    width: 235px;
     min-width: 100px;
     border: 0;
     border-radius: 0;
@@ -557,6 +560,14 @@ h2 {
     border-right: 0 !important;
 }
 */
+.topnav.navbar .nav > li > .dropdown-menu:before {
+    right: 9px;
+    border-bottom-color: #34495E;
+    top: -7px;
+}
+.topnav.navbar .nav > li > .dropdown-menu:after {
+    border: none;
+}
 .navbar .nav > li > .dropdown-menu:before {
     left: auto;
     right: 9px;
@@ -572,15 +583,14 @@ h2 {
     border-bottom-color: #C7C7C7;
 }
 .topnav .nav > li > ul > li {
-    height: 40px;
+    height: 30px;
     background-color: rgb(52, 73, 94);
     color: rgb(199, 199, 199);
 }
 .topnav .nav > li > ul > li > a {
     padding: 0 0 0 0;
-    line-height: 40px;
+    line-height: 30px;
     color: rgb(199, 199, 199);
-    text-align: center;
 }
 .topnav .nav > li > ul > li:hover {
     background-color: rgb(30, 45, 61);
@@ -593,7 +603,7 @@ h2 {
 }
 
 .topnav li.nav-photo {
-    line-height: 39px;
+    line-height: 40px;
     padding: 0 10px 0 10px;
     cursor: pointer;
 }
@@ -726,12 +736,10 @@ h2 {
 }
 .dropdown .fauxcaret , .dropdown .closecaret{
     float: right;
- //   margin-top: -16px;
     margin-right: 8px;
-//    border-top: 4px solid rgb(78, 70, 70);
- //   border-right: 4px solid transparent;
-  //  border-left: 4px solid transparent;
+    font-size: 16px;
 }
+
 .open .fauxcaret {
     border-top :0 !important;
     display: none;
@@ -1946,6 +1954,14 @@ button.icon-button:hover {
 }
 
 /* Drop down menus built on top of the custom selects */
+.topnav ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.nav-photo {
+    line-height: 40px;
+    margin: 0 40px 0 0;
+    padding: 0 0 0 0;
+}
+.topnav ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.nav-photo > img {
+    margin: 0 10px 0 20px;
+}
 ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     padding: 0 0 0 10px;
     margin: 0 0 0 30px;
@@ -2009,6 +2025,9 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     background: #C7C7C7;
     color: rgb(102, 102, 102);
 }
+.topnav .nav > .standard.menu-drop .dropdown-menu > li:hover {
+    background-color: #1E2D3D;
+}
 .bottomnav .nav > .standard .dropdown-menu > li:hover {
     background-color: #E3E3E3;
 }
@@ -2023,7 +2042,8 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .standard.menu-drop .dropdown-menu > li:first-of-type:hover,
-.bottomnav .nav > li > ul > li:first-of-type {
+.bottomnav .nav > li > ul > li:first-of-type,
+.topnav .nav > li > ul > li:first-of-type {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
 
@@ -2036,7 +2056,9 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .standard.menu-drop .dropdown-menu > li:last-of-type:hover,
 .bottomnav .nav > li > ul > li:last-of-type,
-.bottomnav .nav > li > ul > li:last-of-type > a {
+.bottomnav .nav > li > ul > li:last-of-type > a,
+.topnav .nav > li > ul > li:last-of-type,
+.topnav .nav > li > ul > li:last-of-type > a {
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
 
@@ -2146,6 +2168,10 @@ button.icon-button:hover {
 .dropdown.standard {
     list-style: none;
     display: inline-block;
+}
+.topnav .standard .dropdown-toggle {
+    background-color: transparent; 
+    border-radius: 0;
 }
 .standard .dropdown-toggle {
     display: block;

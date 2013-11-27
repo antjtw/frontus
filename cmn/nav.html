@@ -1,81 +1,100 @@
 <div>
-  <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible" ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
+    <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible"
+    ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
+    <div collapse="isCollapsed">
+        <div class="well well-large">
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span12 text-center">
+                        <div id="Login-form" class="navlogin">
+                            <form>
+                                <fieldset>
+                                    <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off"
+                                    tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                                    <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2"
+                                    name="password" type="password" ng-model="password">
+                                    <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()"
+                                    ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button> <a ng-click="toggleLogin()"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
-  <div collapse="isCollapsed">
-    <div class="well well-large">
-      <div class="container">
-        <div class="row-fluid">
-          <div class="span12 text-center" >
-            <div id="Login-form" class="navlogin" >
-              <form>
-                <fieldset>
-                  <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off" tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                  <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"  type="password" ng-model="password">           
-                  <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Login</button>
-                  <a ng-click="toggleLogin()"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
-                  <br>
-                  <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span>             
-                </fieldset>
-              </form>
+                                    <br> <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span> 
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div> 
-  </div>
-
-  <div ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
-    <div class="navbar topnav row-fluid">
-      <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
-        <ul class="nav pull-left nav-logo">
-          <li><a ng-click="gotohome();"><img src="/img/logo.png"/></a></li>
-        </ul>
-
-        <ul class="nav pull-right nav-item">
-          <li ng-click="gotohome();" ng-show="navState.userid" class="nav-photo"><img ng-show="userURL" ng-src="{{userURL}}"><span>{{person.name}}</span></li>
-          <li style="display: none;" class="dropdown" ng-show="navState.userid">
-            <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#"><span data-icon="&#xe011;" aria-hidden="true"></span></a>
-            <ul class="dropdown-menu no-triangle">
-              <li ng-show="navState.role=='issuer'"><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
-              <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
-            </ul>
-          <li>
-          <li class="dropdown hidden-phone" ng-hide="navState.userid">
-            <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)" ng-click="toggleLogin()" ng-show="!navState.userid">LOGIN</a>
-          <li>
-        </ul>
-      </div>
     </div>
-
-    <div class="bottomnav navbar row-fluid" ng-hide="noNav">
-      <div class="navbounder">
-        <ul class="menuHeaderText nav dropdown-list">
-            <li class="dropdown standard menu-drop">
-                <a class="dropdown-toggle" ng-class="{'no-hover':companies.length == 1, 'dark': navState.path.substring(0,6)==='/home/'}">
+    <div ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
+        <div class="navbar topnav row-fluid">
+            <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
+                <ul class="nav pull-left nav-logo">
+                    <li>
+                        <a ng-click="gotohome();">
+                            <img src="/img/logo.png" />
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav pull-right nav-item dropdown-list">
+                    <li class="dropdown standard menu-drop" ng-show="navState.userid">
+                        <a class="dropdown-toggle nav-photo">
+                            <img ng-show="userURL" ng-src="{{userURL}}">
+                            <span>{{person.name}}</span>
+                            <span class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
+                            <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-show="navState.role==='issuer'">
+                                <a class="menuProfileText button" href="/investor/profile">My Account</a>
+                            </li>
+                            <li>
+                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown hidden-phone" ng-hide="navState.userid">
+                        <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)"
+                           ng-click="toggleLogin()" ng-show="!navState.userid">Log In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="bottomnav navbar row-fluid" ng-hide="noNav">
+            <div class="navbounder">
+                <ul class="menuHeaderText nav dropdown-list">
+                    <li class="dropdown standard menu-drop"> <a class="dropdown-toggle" ng-class="{'no-hover':companies.length == 1, 'dark': navState.path.substring(0,6)==='/home/'}">
                     {{navState.name}}
                     <span class='for-r0ml'> ({{navState.role}})</span>
                     <span ng-show="companies.length!==1" class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
                     <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                 </a>
-                <ul class="dropdown-menu" ng-class="{'dark': navState.path.substring(0,6)=== '/home/'}" ng-show="companies.length > 1">
-                    <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span></li>
-                    <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}" ng-repeat="company in companies | filter: {role:'investor'}">
-                        <a class="button" ng-click="switch(company)">{{company.name}}</a>
-                    </li>
-                    <li ng-show="hasAdmin" class="dropdown-label"><span>ADMIN</span></li>
-                    <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}" ng-repeat="company in companies | filter: {role:'issuer'}">
-                        <a class="button" ng-click="switch(company)">
+
+                        <ul class="dropdown-menu" ng-class="{'dark': navState.path.substring(0,6)=== '/home/'}"
+                        ng-show="companies.length > 1">
+                            <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span>
+                            </li>
+                            <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
+                            ng-repeat="company in companies | filter: {role:'investor'}"> <a class="button" ng-click="switch(company)">{{company.name}}</a>
+
+                            </li>
+                            <li ng-show="hasAdmin" class="dropdown-label"><span>ADMIN</span>
+                            </li>
+                            <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
+                            ng-repeat="company in companies | filter: {role:'issuer'}"> <a class="button" ng-click="switch(company)">
                             {{company.name}}
                         </a>
+
+                            </li>
+                        </ul>
+                    </li>
+                    <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a>
+                    </li>
+                    <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
+                    </li>
+                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="/company/profile/people">People</a>
                     </li>
                 </ul>
-            </li>
-            <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a></li>
-            <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a></li>
-            <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="/company/profile/people">People</a></li>
-        </ul>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
