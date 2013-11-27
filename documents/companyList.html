@@ -186,8 +186,10 @@
     <div class="modalText dshare">
         <ul>
             <li>
-                <span>Email Address</span>
-                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                <span>Email Addresses</span>
+                <div class="single-share-input">
+                    <input ui-select2="select2Options" ng-model="recipient">
+                </div>
             </li>
             <li>
                 <span>Get Signature?</span>

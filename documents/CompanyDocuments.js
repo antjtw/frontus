@@ -605,8 +605,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return re.test(email);
         };
 
-        $scope.share = function(message, email, sign) {
+        $scope.share = function(message, emails, sign) {
             sign = sign == "Yes";
+            var tosee = "";
             if (sign) {
                 var date = Date.parse('22 November 2113');
             } else {
@@ -615,13 +616,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (message === "Add an optional message...") {
                 message = "";
             }
-            var matches = regExp.exec(email);
-            if (matches === null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            console.log(email);
-            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            console.log(tosee);
+            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, tosee.toLowerCase(), message, Boolean(sign), date).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document shared with " + email);
                 $scope.signeeded = "No";
@@ -760,7 +763,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             tosee = tosee == "" ? "!!!" : tosee;
             if ($rootScope.navState.userid.indexOf("@sharewave.com") !== -1) {
                 console.log("here");
-                SWBrijj.procm("document.josh_multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                SWBrijj.procm("document.josh_multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                     console.log(data);
                     $scope.$emit("notification:success", "Documents shared");
                     $route.reload();
@@ -770,7 +773,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     });
             }
             else {
-                SWBrijj.procm("document.multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                     console.log(data);
                     $scope.$emit("notification:success", "Documents shared");
                     $route.reload();

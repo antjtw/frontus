@@ -194,12 +194,13 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .modalText.dshare > ul > li > span {
     float: left;
+    width: 120px;
     line-height: 35px;
 }
 
 .modalText.dshare > ul > li > .dropdown-list {
     float: left;
-    margin-left: 13px;
+    margin-left: 5px;
     margin-top: 3px;
 }
 
@@ -524,6 +525,10 @@ div.progress-bar {
 
 .sharepeople-input .select2-container {
     width: 500px;
+}
+
+.single-share-input .select2-container {
+    width: 300px;
 }
 
 .select2-results .select2-highlighted {
