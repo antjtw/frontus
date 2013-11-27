@@ -47,6 +47,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
+    $scope.captabletips.common = "Indicates that a security is common stock, and can only be applied to one security";
 
 
 

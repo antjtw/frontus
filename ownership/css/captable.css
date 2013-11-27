@@ -534,8 +534,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-left: 0;
 }
 
+
 div.rightTitle {
-    height: 30px;
+    height: 32px;
     margin: 0 0 10px 0;
 }
 
@@ -586,20 +587,33 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
 }
 
 p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     display: inline-block;
     width: 24px;
     height: 24px;
-    font-size: 20px;
+    font-size: 16px;
     padding-left: 0;
     margin-left: 0;
-    padding-top: 4px;
+    margin-top: 6px;
     cursor: pointer;
-    margin-top: 0;
     vertical-align: middle;
 }
 
-p.double.rightTitle > span.tooltip-icon, div.rightTitle > ul.dropdown-list + span.tooltip-icon {
-    vertical-align: top;
+p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
+    margin-top: -5px;
+}
+
+.rightTitle > div.tooltip {
+    left: 1048px !important;
+    width: 200px;
+}
+
+.rightTitle.common-toggle > div.tooltip {
+    left: 914px !important;
+}
+
+.rightTitle > div.tooltip > .tooltip-arrow {
+    left: 81.8%;
 }
 
 .rightTitle > select {
