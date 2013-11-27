@@ -2856,6 +2856,7 @@ h2.onboard {
     width: -moz-calc(100% - 350px);
     width: -webkit-calc(100% - 350px);
     width: calc(100% - 350px);
+    margin-left: 0;
 }
 
 .dynamic-page .leftFullTableBlock {
