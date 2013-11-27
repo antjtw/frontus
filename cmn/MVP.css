@@ -903,6 +903,11 @@ form.inputs {
     margin-right: 5px;
     width: 67px;
 }
+
+.docLibrary input:disabled {
+    -webkit-text-fill-color: #8D8D8D;
+}
+
 #forgotLink {
     font-size: 12px;
     text-decoration: underline;
