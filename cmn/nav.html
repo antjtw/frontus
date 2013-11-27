@@ -35,20 +35,27 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="nav pull-right nav-item">
-                    <!-- <li ng-click="gotohome();" ng-show="navState.userid" class="nav-photo"><img ng-show="userURL" ng-src="{{userURL}}"><span>{{person.name}}</span></li>
-          <li style="display: none;" class="dropdown" ng-show="navState.userid">
-            <a class="dropdown-toggle menuProfileText" data-toggle="dropdown" href="#"><span data-icon="&#xe011;" aria-hidden="true"></span></a>
-            <ul class="dropdown-menu no-triangle">
-              <li ng-show="navState.role=='issuer'"><a class="menuProfileText button" href="/investor/profile">MY ACCOUNT</a></li>
-              <li><a class="menuProfileText button" href="/login/logout">LOGOUT</a></li>
-            </ul>
-          </li>
-          -->
-                    <li class="dropdown hidden-phone" ng-hide="navState.userid"> <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)"
-                        ng-click="toggleLogin()" ng-show="!navState.userid">LOGIN</a>
-
-                        <li>
+                <ul class="nav pull-right nav-item dropdown-list">
+                    <li class="dropdown standard menu-drop" ng-show="navState.userid">
+                        <a class="dropdown-toggle nav-photo">
+                            <img ng-show="userURL" ng-src="{{userURL}}">
+                            <span>{{person.name}}</span>
+                            <span class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
+                            <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-show="navState.role==='issuer'">
+                                <a class="menuProfileText button" href="/investor/profile">My Account</a>
+                            </li>
+                            <li>
+                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown hidden-phone" ng-hide="navState.userid">
+                        <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)"
+                           ng-click="toggleLogin()" ng-show="!navState.userid">Log In</a>
+                    </li>
                 </ul>
             </div>
         </div>
