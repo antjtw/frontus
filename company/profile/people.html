@@ -36,7 +36,7 @@
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
                     <tr>
-                        <td style="width:400px" class="shareholder-column" >
+                        <td style="width:400px" class="shareholder-column docname-column" ng-click="gotoPerson(person)" >
                             <ul>
                                 <li>{{person.name}}</li>
                                 <li>{{formatLastLogin(person.lastlogin)}}</li>
