@@ -212,7 +212,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-disabled="!fieldCheck(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
 

@@ -596,15 +596,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         //My parentheses format
         var regExp = /\(([^)]+)\)/;
 
-        $scope.fieldCheck = function(email) {
-            var matches = regExp.exec(email);
-            if (matches == null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            return re.test(email);
-        };
-
         $scope.share = function(message, emails, sign) {
             sign = sign == "Yes";
             var tosee = "";
