@@ -1943,6 +1943,7 @@ ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: 235px;
     text-shadow: none;
     font-size: 12px;
+    height: 30px;
 }
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: auto;
