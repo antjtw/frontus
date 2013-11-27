@@ -2044,7 +2044,9 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .standard.menu-drop .dropdown-menu > li:first-of-type:hover,
 .bottomnav .nav > li > ul > li:first-of-type,
-.topnav .nav > li > ul > li:first-of-type {
+.topnav .nav > li > ul > li:first-of-type,
+.topnav .nav > li > ul > li.topItem,
+.topnav .nav > li > ul > li.topItem > a {
     -webkit-border-top-right-radius: 3px;
     -webkit-border-top-left-radius: 3px;
 
@@ -2059,7 +2061,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .bottomnav .nav > li > ul > li:last-of-type,
 .bottomnav .nav > li > ul > li:last-of-type > a,
 .topnav .nav > li > ul > li:last-of-type,
-.topnav .nav > li > ul > li:last-of-type > a {
+.topnav .nav > li > ul > li:last-of-type > a{
     -webkit-border-bottom-right-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
 

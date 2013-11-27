@@ -47,8 +47,8 @@
                             <li ng-show="navState.role==='issuer'">
                                 <a class="menuProfileText button" href="/investor/profile">My Account</a>
                             </li>
-                            <li>
-                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            <li ng-class="{topItem: navState.role!=='issuer'}">
+                            <a class="menuProfileText button" href="/login/logout">Log Out</a>
                             </li>
                         </ul>
                     </li>
