@@ -615,9 +615,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             console.log(tosee);
-            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, tosee.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
                 void(data);
-                $scope.$emit("notification:success", "Document shared with " + email);
+                $scope.$emit("notification:success", "Document shared");
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {
@@ -1101,6 +1101,13 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             }
         });
 
+        $scope.select2Options = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': $scope.vInvestors,
+            'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
+        };
+
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
@@ -1358,8 +1365,28 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             return re.test(email);
         };
 
-        $scope.share = function(message, email, sign) {
+        $scope.checkmany = function(people) {
+            var anybad = false;
+            angular.forEach(people, function(person) {
+                var email
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                email = matches[1];
+                if (!re.test(email)) {
+                    anybad = true
+                }
+            });
+            if (people.length == 0) {
+                anybad = true
+            }
+            return anybad
+        };
+
+        $scope.share = function(message, emails, sign) {
             sign = sign == "Yes";
+            var tosee = "";
             if (sign) {
                 var date = Date.parse('22 November 2113');
             } else {
@@ -1368,15 +1395,17 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             if (message === "Add an optional message...") {
                 message = "";
             }
-            var matches = regExp.exec(email);
-            if (matches === null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            console.log(email);
-            SWBrijj.procm("document.share_document", $scope.document.doc_id, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            console.log(tosee);
+            SWBrijj.procm("document.share_document", $scope.document.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
                 void(data);
-                $scope.$emit("notification:success", "Document shared with " + email);
+                $scope.$emit("notification:success", "Document shared");
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {

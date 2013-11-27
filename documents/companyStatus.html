@@ -155,8 +155,10 @@
     <div class="modalText dshare">
         <ul>
             <li>
-                <span>Email Address</span>
-                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                <span>Email Addresses</span>
+                <div class="single-share-input">
+                    <input ui-select2="select2Options" ng-model="recipient">
+                </div>
             </li>
             <li>
                 <span>Get Signature?</span>
@@ -179,7 +181,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-disabled="!fieldCheck(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
 
