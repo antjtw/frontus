@@ -809,7 +809,7 @@ h2 {
 .maintabs li > a:hover {
     color: #8D8D8D;
 }
-li.selectedtab {
+li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #1E2D3D;
 }
 .subnav-controls {
