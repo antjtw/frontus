@@ -1,160 +1,203 @@
 <div class="container dynamic-page">
 
-  <div modal="remModal" close="remclose()" options="remopts">
-    <div class="modalHeader">
-      <p class="subText">Send Reminder</p>
-    </div>
+    <div class="row-fluid">
+        <div class="headsection row-fluid">
 
-    <div class="modalText">
-      Send a reminder to {{reminder}}.
-      <p>Message</p>
-      <label>
-        <textarea rows="4" cols="40" ng-model="messageText"></textarea>
-      </label>
-    </div>
+            <ul class="maintabs head-text">
+                <li><a href="/documents/company-list">Documents</a></li>
+                <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
+            </ul>
 
-    <div class="modalButtons">
-      <button class="button subText greyButton" ng-click="remclose();">Never Mind!</button>
-      <!--<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>-->
-    </div>
-  </div>
-
-  <div class="row-fluid">
-      <div class="headsection row-fluid">
-
-          <ul class="maintabs head-text">
-              <li><a href="/documents/company-list">Documents</a></li>
-              <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
-          </ul>
-
-      </div>
-      <div class="subnav-controls">
-          <div>
-              <div class="pull-left">
-                  <span>Search</span>
-                  <input type="text" class="search-box" ng-model="query">
-              </div>
-          </div>
-          <div class="DivHelper"></div>
-      </div>
-      <div class="span8 recipientInfo docLibrary statusBlock">
-          <table class="status-table" ng-show="docversions.length===0">
-              <tbody class="empty-table">
-                  <tr>
-                      <td>
-                          <span>Welcome! </span>
-                          <span class="link" ng-click="documentshareOpen();">Share with Investors</span>
-                          <span> to view status.</span>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-          <table class="status-table doc-status" ng-show="docversions.length!==0">
-              <tbody>
-                  <tr>
-                      <th ng-click="setOrder('name')">Shareholder</th>
-                      <th ng-click="setOrder('when_shared')">Sent</th>
-                      <th ng-click="setOrder('last_viewed')">Viewed</th>
-                      <th ng-click="setOrder('when_signed')">Signed</th>
-                      <th ng-click="setOrder('when_confirmed')">Countersigned</th>
-                      <th></th>
-                      <th style="width:50px;"></th>
-                  </tr>
-              </tbody>
-              <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
-                  <tr class="empty-row"/>
-                  <tr ng-class="{selectedrow:person.shown}">
-                      <td class="shareholder-column" >
-                          <ul>
-                              <li>{{person.name || person.investor}}</li>
-                              <li>{{formatLastLogin(person.lastlogin)}}</li>
-                          </ul>
-                      </td>
-                      <td class="tooltip-date">
-                          <span ng-show="person.when_shared" tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
-                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
-                          </span>
-                      </td>
-                      <td class="tooltip-date">
-                          <span ng-show="person.last_viewed" tooltip-placement="top" tooltip="{{formatDate(person.last_viewed)}}" class="ng-scope">
-                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
-                          </span>
-                      </td>
-                      <td class="tooltip-date">
-                          <span ng-show="person.when_signed" tooltip-placement="top" tooltip="{{formatDate(person.when_signed)}}" class="ng-scope">
-                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
-                          </span>
-                          <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
-                      </td>
-                      <td class="tooltip-date">
-                          <span ng-show="person.when_confirmed" tooltip-placement="top" tooltip="{{formatDate(person.when_confirmed)}}" class="ng-scope">
-                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
-                          </span>
-                          <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
-                      </td>
-                      <td>
-                          <div class="standard-button small-standard-button">
-                              <!--<button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>-->
-                              <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign</button>
-                          </div>
-                      </td>
-                      <td>
-                          <ul class="dropdown-list page-button">
-                              <li class="dropdown standard menu-drop">
-                                  <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
-                                      <span data-icon="&#xe009;" aria-hidden="true"></span>
-                                  </a>
-                              </li>
-                          </ul>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-
-    <div class="span4 status-right">
-        <div class="row-fluid">
-
-            <div class="info-box">
-                <div class="head-box">
-                    <h2>Information</h2>
+        </div>
+        <div class="subnav-controls">
+            <div>
+                <div class="pull-left">
+                    <span>Search</span>
+                    <input type="text" class="search-box" ng-model="query">
                 </div>
-                <div class="body-box">
-                    <ul class="last-edited spaced-list">
-                        <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                        <li ng-show="lastsent">Sent</li>
-                        <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                        <li>Last Edited</li>
-                        <!--
-                        <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                        <li>Deadline</li>
-                        -->
-                    </ul>
+
+                <div class="pull-right">
                     <div class="standard-button">
-                        <button ng-click="viewOriginal()" class="btn">View Original</button>
+                        <button ng-click="shareDocOpen();" class="btn">Share
+                        </button>
                     </div>
                 </div>
             </div>
+            <div class="DivHelper"></div>
+        </div>
+        <div class="span8 recipientInfo docLibrary statusBlock">
+            <table class="status-table" ng-show="docversions.length===0">
+                <tbody class="empty-table">
+                <tr>
+                    <td>
+                        <span>Welcome! </span>
+                        <span class="link" ng-click="shareDocOpen();">Share with Investors</span>
+                        <span> to view status.</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="status-table doc-status" ng-show="docversions.length!==0">
+                <tbody>
+                <tr>
+                    <th ng-click="setOrder('name')">Shareholder</th>
+                    <th ng-click="setOrder('when_shared')">Sent</th>
+                    <th ng-click="setOrder('last_viewed')">Viewed</th>
+                    <th ng-click="setOrder('when_signed')">Signed</th>
+                    <th ng-click="setOrder('when_confirmed')">Countersigned</th>
+                    <th></th>
+                    <th style="width:50px;"></th>
+                </tr>
+                </tbody>
+                <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
+                <tr class="empty-row"/>
+                <tr ng-class="{selectedrow:person.shown}">
+                    <td class="shareholder-column" >
+                        <ul>
+                            <li>{{person.name || person.investor}}</li>
+                            <li>{{formatLastLogin(person.lastlogin)}}</li>
+                        </ul>
+                    </td>
+                    <td class="tooltip-date">
+                          <span ng-show="person.when_shared" tooltip-placement="top" tooltip="{{formatDate(person.when_shared)}}" class="ng-scope">
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                          </span>
+                    </td>
+                    <td class="tooltip-date">
+                          <span ng-show="person.last_viewed" tooltip-placement="top" tooltip="{{formatDate(person.last_viewed)}}" class="ng-scope">
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                          </span>
+                    </td>
+                    <td class="tooltip-date">
+                          <span ng-show="person.when_signed" tooltip-placement="top" tooltip="{{formatDate(person.when_signed)}}" class="ng-scope">
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                          </span>
+                        <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                    </td>
+                    <td class="tooltip-date">
+                          <span ng-show="person.when_confirmed" tooltip-placement="top" tooltip="{{formatDate(person.when_confirmed)}}" class="ng-scope">
+                              <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                          </span>
+                        <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                    </td>
+                    <td>
+                        <div class="standard-button small-standard-button">
+                            <!--<button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>-->
+                            <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign</button>
+                        </div>
+                    </td>
+                    <td>
+                        <ul class="dropdown-list page-button">
+                            <li class="dropdown standard menu-drop">
+                                <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">
+                                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <div class="info-box">
-                <div class="head-box">
-                    <h2>Activity</h2>
+        <div class="span4 status-right">
+            <div class="row-fluid">
+
+                <div class="info-box">
+                    <div class="head-box">
+                        <h2>Information</h2>
+                    </div>
+                    <div class="body-box">
+                        <ul class="last-edited spaced-list">
+                            <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li ng-show="lastsent">Sent</li>
+                            <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li>Last Edited</li>
+                            <!--
+                            <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li>Deadline</li>
+                            -->
+                        </ul>
+                        <div class="standard-button">
+                            <button ng-click="viewOriginal()" class="btn">View Original</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="body-box">
-                    <ul class="activity-feed2">
-                        <li ng-repeat="events in eventGroups | fromNowSortandFilter">
-                            <span>{{events[0]}}</span>
-                            <ul>
-                                <li ng-repeat="event in events.slice(2)">
-                                    <i class="{{event.activity | icon}}"></i>
-                                    <span>{{event.name || event.person}} {{event | description}}</span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+
+                <div class="info-box">
+                    <div class="head-box">
+                        <h2>Activity</h2>
+                    </div>
+                    <div class="body-box">
+                        <ul class="activity-feed2">
+                            <li ng-repeat="events in eventGroups | fromNowSortandFilter">
+                                <span>{{events[0]}}</span>
+                                <ul>
+                                    <li ng-repeat="event in events.slice(2)">
+                                        <i class="{{event.activity | icon}}"></i>
+                                        <span>{{event.name || event.person}} {{event | description}}</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-  </div>
+</div>
+
+<div modal="shareDocModal" close="shareDocClose()" options="opts">
+    <div class="modalHeader">
+        Share "{{document.docname | caplength:35}}"
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
+    </div>
+    <div class="modalText dshare">
+        <ul>
+            <li>
+                <span>Email Address</span>
+                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+            </li>
+            <li>
+                <span>Get Signature?</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{signeeded}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="changeSig('No')">No</a>
+                                <a ng-click="changeSig('Yes')">Yes</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText"></textarea>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="!fieldCheck(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+    </div>
+</div>
+
+<div modal="remModal" close="remclose()" options="remopts">
+    <div class="modalHeader">
+        <p class="subText">Send Reminder</p>
+    </div>
+
+    <div class="modalText">
+        Send a reminder to {{reminder}}.
+        <p>Message</p>
+        <label>
+            <textarea rows="4" cols="40" ng-model="messageText"></textarea>
+        </label>
+    </div>
+
+    <div class="modalButtons">
+        <button class="button subText greyButton" ng-click="remclose();">Never Mind!</button>
+        <!--<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>-->
+    </div>
 </div>

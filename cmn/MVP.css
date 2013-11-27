@@ -92,6 +92,11 @@ input.loginInput:focus, textarea:focus, select:focus {
     background-color: #1ABC96;
 }
 
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-image: none;
+    background-color: #1ABC96;
+}
+
 [class^="icon-"], [class*=" icon-"] {
     background:none;
 }
@@ -1412,7 +1417,8 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr.empty-row {
     height: 10px;
-    border: none;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
 }
 
 .status-table > tbody > tr {
@@ -2147,7 +2153,7 @@ button.icon-button:hover {
     text-align: left;
     padding-left: 10px;
     line-height: 30px;
-    height: 30px;
+    height: 32px;
     background-color: #F1F1F1;
     border-radius: 3px;
     margin: 0;
