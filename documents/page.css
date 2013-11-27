@@ -194,12 +194,13 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .modalText.dshare > ul > li > span {
     float: left;
+    width: 120px;
     line-height: 35px;
 }
 
 .modalText.dshare > ul > li > .dropdown-list {
     float: left;
-    margin-left: 13px;
+    margin-left: 5px;
     margin-top: 3px;
 }
 
@@ -270,7 +271,9 @@ button.greyButton {
   width: auto;
   background-color: #FFFFFF;
   border: 0;
-  border-radius: 0px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 
 .sign-modal {
@@ -471,6 +474,8 @@ h1.error-message {
     width: 15em;
     height: 2.5em;
     border: 2px solid #DDD;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
     border-radius: 8px;
     text-align: center;
     color: rgb(52, 73, 94);
@@ -520,4 +525,66 @@ div.progress-bar {
 
 .sharepeople-input .select2-container {
     width: 500px;
+}
+
+.single-share-input .select2-container {
+    width: 300px;
+}
+
+.select2-results .select2-highlighted {
+    background: #1ABC96;
+}
+
+.select2-results .select2-highlighted .select2-result-label {
+    color: #fff;
+}
+
+.select2-drop {
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.select2-drop:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    border-bottom: 6px solid #E3E3E3;
+    top: -6px;
+    right: 9px !important;
+}
+
+.select2-search-choice-close {
+    top: 5px;
+}
+
+.select2-container-multi .select2-choices {
+    background-image: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #E2E2E2;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    background-image: none;
+    background-color: #E2E2E2;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.select2-container-multi.select2-container-active .select2-choices {
+    border: 1px solid #E2E2E2;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    box-shadow: none;
+
+}
+
+.select2-drop-active {
+    border: 1px solid #E2E2E2;
 }
