@@ -1958,6 +1958,7 @@ button.icon-button:hover {
     line-height: 40px;
     margin: 0 40px 0 0;
     padding: 0 0 0 0;
+    color: #A6A6A6;
 }
 .topnav ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.nav-photo > img {
     margin: 0 10px 0 20px;
