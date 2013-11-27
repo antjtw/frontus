@@ -605,7 +605,7 @@ p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-ic
 }
 
 .rightTitle > div.tooltip {
-    left: 1048px !important;
+    right: 200px !important;
     width: 200px;
 }
 
