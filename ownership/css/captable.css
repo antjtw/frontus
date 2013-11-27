@@ -605,12 +605,14 @@ p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-ic
 }
 
 .rightTitle > div.tooltip {
-    right: 200px !important;
+    left: auto !important;
+    right: 14px !important;
     width: 200px;
 }
 
 .rightTitle.common-toggle > div.tooltip {
-    left: 914px !important;
+    left: auto !important;
+    right: 147px !important;
 }
 
 .rightTitle > div.tooltip > .tooltip-arrow {
