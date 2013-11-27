@@ -226,7 +226,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
-        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
+        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm</button></div>
     </div>
 </div>
 
