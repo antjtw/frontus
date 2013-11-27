@@ -1398,7 +1398,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             SWBrijj.tblm("document.investor_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
                     var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
-                    doc.last_event = data.sort($scope.compareEvents)[0];
+                    doc.last_event = doc_activity.sort($scope.compareEvents)[0];
                     var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
                     doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
                     $scope.setDocStatusRank(doc);
