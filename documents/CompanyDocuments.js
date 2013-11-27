@@ -630,11 +630,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.updateTitleOpen = function(doc) {
             $scope.docForModal = doc;
             $scope.updateTitleModal = true;
+            $scope.docForModal.originalName = $scope.docForModal.docname;
         };
 
         $scope.updateTitleClose = function() {
             $scope.updateTitleModal = false;
             $scope.$emit('updated:name', $scope.docForModal);
+            if ($scope.docForModal.docname.length < 1) {
+                $scope.docForModal.docname = $scope.docForModal.originalName;
+            }
             $scope.docForModal = null;
         };
 
