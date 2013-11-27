@@ -5,6 +5,13 @@
     cursor: pointer;
 }
 
+.typeahead.dropdown-menu li {
+    text-align: left;
+}
+.typeahead.dropdown-menu > li > a {
+    padding: 3px 10px;
+}
+
 .button.subText {
     float: right;
     margin-left: 10px;
@@ -187,17 +194,18 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .modalText.dshare > ul > li > span {
     float: left;
-    line-height: 28px;
+    line-height: 35px;
 }
 
 .modalText.dshare > ul > li > .dropdown-list {
     float: left;
-    margin-left: 18px;
+    margin-left: 13px;
     margin-top: 3px;
 }
 
 .modalText.dshare > ul > li > input[type=text] {
     width: 300px;
+    height: 24px;
 }
 
 
