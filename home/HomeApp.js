@@ -836,9 +836,9 @@ angular.module('HomeApp').filter('description', function() {
         }
         var type = ac.type;
         if (type == "ownership") {
-            if (activity == "received") return "Ownership Table sent to " + person;
-            else if (activity == "viewed") return "Ownership Table viewed by "+person;
-            else return "Something with Ownership Table";
+            if (activity == "received") return "Capitalization Table sent to " + person;
+            else if (activity == "viewed") return "Capitalization Table viewed by "+person;
+            else return "Something with Capitalization Table";
         }
         else {
             var document = ac.docname;
@@ -873,9 +873,9 @@ angular.module('HomeApp').filter('investordescription', function() {
         }
         var type = ac.type;
         if (type == "ownership") {
-            if (activity == "received") return "You received " + company + "'s captable";
-            else if (activity == "viewed") return "You viewed " + company + "'s captable";
-            else return "Something happened with "+company +"'s captable";
+            if (activity == "received") return "You received " + company + "'s cap table";
+            else if (activity == "viewed") return "You viewed " + company + "'s cap table";
+            else return "Something happened with "+company +"'s cap table";
         }
         else if (type == "document") {
             var document = ac.docname;
