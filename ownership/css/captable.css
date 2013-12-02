@@ -1477,6 +1477,12 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     line-height: 20px;
 }
 
+.tour-box > .tour-stage > span > span:last-of-type {
+    font-size: 20px;
+    vertical-align: bottom;
+    line-height: 0px;
+}
+
 .tour-box > .tour-stage p {
     display: inline-block;
     width: 65%;
@@ -1773,3 +1779,5 @@ span.tour-icon.issue-cog + .tooltip {
     top: -25px !important;
     left: -235px !important;
 }
+
+/* Animations */
