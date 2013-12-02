@@ -1321,6 +1321,25 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     right: 5px;
 }
 
+/* Empty Table */
+
+.tableView .empty-table > tr > td:first-child {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    padding-bottom: 20px;
+}
+
+.status-table > tbody.empty-table > tr > td:last-child {
+    text-align: center;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+.tableView .empty-table > tr > td:first-child .link, .status-table > tbody.empty-table > tr > td:last-child .link {
+    color:#3498DB;
+    cursor:pointer;
+}
+
 /* Tour */
 
 .tour-box {

@@ -64,7 +64,16 @@
     <div class="span8 docLibrary leftBlock">
 
         <div class="row-fluid">
-            <table class="tableView bodyText grant-table">
+            <table class="tableView bodyText grant-table" ng-show="rows.length===0">
+                <tbody class="empty-table">
+                <tr>
+                    <td>
+                        <a href="/ownership/company-captable" class="link">Welcome! Create an options round on your capitalization table to manage your grants</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="tableView bodyText grant-table" ng-show="rows.length!==0">
                 <tr class="column-label">
                     <th>Shareholder</th>
                     <th>Granted</th>
