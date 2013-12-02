@@ -46,7 +46,6 @@
                     <th ng-click="setOrder('when_signed')">Signed</th>
                     <th ng-click="setOrder('when_confirmed')">Countersigned</th>
                     <th></th>
-                    <th style="width:50px;"></th>
                 </tr>
                 </tbody>
                 <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
@@ -81,12 +80,10 @@
                         <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                     </td>
                     <td>
-                        <div class="standard-button small-standard-button pull-right">
+                        <div class="statusTableButton standard-button small-standard-button">
                             <!--<button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>-->
                             <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign</button>
                         </div>
-                    </td>
-                    <td>
                         <ul class="dropdown-list page-button">
                             <li class="dropdown standard menu-drop">
                                 <a class="dropdown-toggle" ng-click="viewInvestorCopy(person.investor)">

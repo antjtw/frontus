@@ -1552,6 +1552,11 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 14px;
 }
 
+.status-table > tbody > tr > td > .statusTableButton {
+    display: inline-block;
+    margin-right: 20px;
+}
+
 .status-table > tbody > tr > td.shareholder-column.status-column {
     width: 200px;
     text-align: left;
