@@ -688,6 +688,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
+            'tokenSeparators': [",", " "],
             'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
         };
 
