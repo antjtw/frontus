@@ -22,6 +22,11 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
     $scope.$emit('notification:success', 'You have successfully logged out');
     return;
   }
+  $scope.$on('update:companies', function(ev, companies) {
+      if (companies.length > 0) {
+          $scope.incompany = true;
+      }
+  });
 
   if ($routeParams.video) {
     $scope.modalUp();
@@ -36,17 +41,18 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
   }*/
 
   $scope.fieldCheck = function() {
-      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test($scope.user.email);
+    return !($scope.user.email);
   };
 
   $scope.toggle = true;
 
-  $scope.companyRequest = function () {
-      SWBrijj.companyPreregister('', $scope.user.email, $scope.user.company, $scope.user.name).then(function (x) {
-        void(x);
+  $scope.companySelfRegister = function () {
+      SWBrijj.companySelfRegister($scope.user.email, 'issuer').then(function(requested) {
+          $scope.toggle = !$scope.toggle;
+          void(requested);
       }).except(function (x) {
-        void(x);
+          $scope.$emit("notification:fail", "Oops, something went wrong.");
+          console.log(x);
       });
   };
 

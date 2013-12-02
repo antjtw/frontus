@@ -63,7 +63,6 @@ navm.directive('navbar', function () {
 
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
     function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
-
         $scope.companies = [];
 
         if (location.host=='share.wave' || navState.tester) {
@@ -72,7 +71,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 rr.style.display="inline";
             }
         }
-
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         $scope.navState = navState;
         navState.path = document.location.pathname;
@@ -105,16 +103,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.initCompany = function(cmps) {
             $scope.companies = cmps;
-            $scope.hasAdmin = false;
-            $scope.hasInvest = false;
-            angular.forEach(cmps, function(company) {
-                if (company.role == 'issuer') {
-                    $scope.hasAdmin = true;
-                }
-                else if (company.role == 'investor') {
-                    $scope.hasInvest = true;
-                }
-            });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
             var thiscmp = cmps[0]; // pick the first one in case none are marked selected
@@ -146,6 +134,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     });
                 });
             }
+
         };
 
         SWBrijj.tblm('global.my_companies').then(function (x) {
@@ -167,9 +156,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $rootScope.person = x[0];
-            if ($rootScope.navState.role == "issuer") {
-                Intercom('update', {'name' : $rootScope.person.name});
-            }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
         });
 
@@ -218,11 +204,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.gotohome = function() {
-            if ($rootScope.companies.length == 0) {
-                location.href = '/';
-            }
-            else {
-                location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
-            }
+            location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
         };
     }]);
