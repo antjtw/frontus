@@ -1555,7 +1555,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .tableView.captable tr:nth-child(4) td > span.box-highlight > span.next-button {
     display: inline-block;
     position: absolute;
-    right: -148px;
+    right: -162px;
     bottom: -188px;
     z-index: 1;
     text-align: center;
@@ -1675,7 +1675,7 @@ div.capGuide.global.issue-rail .next-button {
 .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
     display: inline-block;
     position: absolute;
-    right: -144px;
+    right: -146px;
     bottom: -214px;
     z-index: 1;
     text-align: center;
@@ -1702,10 +1702,22 @@ div.capGuide.global.issue-rail .next-button {
     top: 0;
     z-index: 1;
     content: ' ';
-    width: 140px;
+    width: 142px;
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
+}
+
+
+@-moz-document url-prefix() {
+    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
+        bottom: -198px;
+    }
+
+    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
+        top: 10px;
+        height: 172px;
+    }
 }
 
 /* Tour Bubble, may want to move to MVP */
