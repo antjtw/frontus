@@ -21,11 +21,14 @@ function getCanvasOffset(ev) {
     return [offx, offy];
 }
 
-function getNoteBounds(nx) {
+function getNoteBounds(nx, pageBar) {
     // [LEFT, TOP, WIDTH, HEIGHT]
-    var bds = [getIntProperty(nx, 'left'), Math.max(getIntProperty(nx, 'top'), 161), 0, 0];
+    var top_padding = pageBar ? 161 : 120;
+    var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop) {bds[1]-=161;}
+    if (!dp.offsetTop) {
+        bds[1]-=top_padding;
+    }
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
     // this could be set as a static value during other pad calculations
     var ntyp = nx.notetype;
@@ -57,8 +60,8 @@ function countCRs(str) {
 }
 
 angular.module('draggable', [], function() {}).
-directive('draggable', ['$document',
-    function($document) {
+directive('draggable', ['$window', '$document',
+    function($window, $document) {
         return {
             restrict: 'EA',
             replace: true,
@@ -149,16 +152,16 @@ directive('draggable', ['$document',
                     boundBoxByPage = function(element) {
                         var docPanel = document.querySelector('.docPanel');
                         // FIXME does not work in firefox because position:absolute
-                        element.style["max-width"] = (docPanel.offsetWidth - 22) + 'px';
-                        element.style["max-height"] = (docPanel.offsetHeight - 35) + 'px';
+                        element.style["max-width"] = (docPanel.offsetWidth) + 'px';
+                        element.style["max-height"] = (docPanel.offsetHeight) + 'px';
                     };
 
                     $scope.mousemove = function($event) {
                         // absolute mouse location (current): $event.clientX, $event.clientY
                         // absolute change in mouse location: dx, dy
                         // relative mouse location: mousex, mousey
-                        var dx = $event.clientX - $scope.initialMouseX;
-                        var dy = $event.clientY - $scope.initialMouseY;
+                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -168,7 +171,16 @@ directive('draggable', ['$document',
                         return false;
                     };
 
-                    $scope.mouseup = function() {
+                    var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+
+                    $scope.mouseup = function(ev) {
+                        $scope.mousemove(ev);
+                        if (document.detachEvent) {
+                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.removeEventListener) {
+                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.unbind('scroll', $scope.mousemove);
                         $document.unbind('mousemove', $scope.mousemove);
                         $document.unbind('mouseup', $scope.mouseup);
                         return false;
@@ -186,7 +198,14 @@ directive('draggable', ['$document',
                         $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.mousemove(ev);
+                        $scope.initialScrollX = $window.scrollX;
+                        $scope.initialScrollY = $window.scrollY;
+                        if (document.attachEvent) {
+                            document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.addEventListener) {
+                            document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.bind('scroll', $scope.mousemove);
                         $document.bind('mousemove', $scope.mousemove);
                         $document.bind('mouseup', $scope.mouseup);
                     };
@@ -248,8 +267,8 @@ docs.directive('docViewer', function() {
 });
 
 docs.filter('fromNow', function() {
-    return function(date) {
-        return moment(date).fromNow();
+    return function(date, servertime) {
+        return moment(date).from(servertime);
     };
 });
 
@@ -262,6 +281,26 @@ docs.directive('icon', function() {
 
 docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        $scope.image = {width: 0, height: 0};
+        $scope.dp = {width: 0, height: 0};
+        $scope.updateDocPanelSize = function() {
+            var dp = $('.docPanel');
+            if (dp) {
+                dp.height((dp.width()/$scope.image.width)*$scope.image.height);
+                $scope.dp.width = dp.width();
+                $scope.dp.height = dp.height();
+            };
+        };
+        $scope.$watchCollection('image', $scope.updateDocPanelSize);
+        window.onresize = $scope.updateDocPanelSize;
+        $window.onkeydown = function(evt) {
+            evt.which = evt.which || e.keyCode;
+            if (evt.which === 37) {
+                $scope.previousPage($scope.currentPage);
+            } else if (evt.which === 39) {
+                $scope.nextPage($scope.currentPage);
+            }
+        };
         
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
@@ -270,6 +309,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var imgurl;
                 imgurl = docpanel.style.backgroundImage;
                 docpanel.style.backgroundImage = imgurl;
+                var img = new Image();
+                img.onload = function() {
+                    $scope.$apply(function() {
+                        $scope.image.width = img.width;
+                        $scope.image.height = img.height;
+                        $scope.updateDocPanelSize();
+                    });
+                };
+                img.src = $scope.pageImageUrl();
             }
         };
 
@@ -292,8 +340,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
-            offset: {top: 120}
+            offset: {top: 40}
         });
+
+        $scope.showPageBar = function() {
+            if ($scope.docLength > 1 && $scope.isAnnotable && $scope.annotatedPages.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
 
         $scope.$emit('docViewerReady');
 
@@ -335,17 +392,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
        
         $scope.loadAnnotations = function() {
-            if ($scope.lib) {
-                console.log("Error. This has already been called.");
-                $scope.removeAllNotes();
-                return;
-            }
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                if ($scope.lib && $scope.lib.annotations.length > 0) {
+                    return;
+                }
                 $scope.lib = data;
                 $scope.reqDocStatus($scope.docId);
 
@@ -537,27 +592,39 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
 
+        $scope.safeApply = function(fn) {
+            var phase = this.$root.$$phase;
+            if (phase === '$apply' || phase === '$digest') {
+                if(fn && (typeof(fn) === 'function')) {
+                    fn();
+                }
+            } else {
+                this.$apply(fn);
+            }
+        };
+
         $scope.setPage = function(n) {
             $scope.currentPage = n;
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            refreshDocImage();
         };
 
         $scope.nextPage = function(value) {
             if ($scope.currentPage < $scope.docLength) {
-                $scope.setPage(parseInt(value, 10) + 1);
+                $scope.jumpPage(value+1);
             }
         };
 
         $scope.previousPage = function(value) {
             if ($scope.currentPage > 1) {
-                $scope.setPage(parseInt(value, 10) - 1);
+                $scope.jumpPage(value-1);
             }
         };
 
         $scope.jumpPage = function(value) {
-            $scope.setPage(parseInt(value, 10));
+            $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
         $scope.range = function(start, stop, step) {
@@ -608,6 +675,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
         };
 
+        $scope.moveBox = function(aa) {
+            var dp = $('.docPanel')[0];
+            var dpBottom = dp.offsetTop + dp.offsetHeight;
+            var dpRight = dp.offsetLeft + dp.offsetWidth;
+            var boxBottom = parseInt(aa.style.top,10) + aa.offsetHeight;
+            var boxRight = parseInt(aa.style.left,10) + aa.offsetWidth;
+            if (boxBottom > dpBottom && aa.offsetHeight < dp.offsetHeight) {
+                aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
+            }
+            if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
+                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
+            }
+        };
+
         $scope.newBoxX = function(page, val, style) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
@@ -623,6 +704,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             bb.addEventListener('input', function(e) {
                 void(e);
                 $scope.fixBox(bb);
+            });
+            window.addEventListener('resize', function() {
+                $scope.moveBox(aa[0]);
             });
 
             bb.addEventListener('mousemove', function(e) {
@@ -674,6 +758,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 '</div>')($scope);
             aa.scope().ntype = 'check';
             aa[0].notetype = 'check';
+            window.addEventListener('resize', function() {
+                $scope.fixBox(aa);
+            });
             return aa;
         };
 
@@ -715,6 +802,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.movePad = function(aa) {
+            var dp = $('.docPanel')[0];
+            dpBottom = dp.offsetTop + dp.offsetHeight;
+            dpRight = dp.offsetLeft + dp.offsetWidth;
+            if (parseInt(aa.style.top,10) + aa.offsetHeight > dpBottom) {
+                aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
+            }
+            if (parseInt(aa.style.left,10) + aa.offsetWidth > dpRight) {
+                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
+            }
+        };
+
         $scope.newPadX = function(page, lines) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
@@ -725,6 +824,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             aa.css({
                 resize: 'both',
                 overflow: 'hidden'
+            });
+            window.addEventListener('resize', function() {
+                $scope.movePad(aa[0]);
             });
 
             aa[0].addEventListener('mouseup', function(e) {
@@ -889,18 +991,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return docPanel.offsetTop + docPanel.offsetHeight - currTop;
         };
 
+
         $scope.getNoteData = function() {
             var noteData = [];
             
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], 900, 1165];
-                // var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], dp.clientWidth, dp.clientHeight];
-                // dp.clientWidth and dp.clientHeight are hard-coded because docPanel is not available
-                // when notes are saved right before stamping.
-                // these values could be set as static attributes on docPanel during other calculations
+                var bnds = getNoteBounds(nx, $scope.showPageBar());
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
@@ -926,11 +1025,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.saveNoteData = function(clicked) {
             var nd = $scope.getNoteData();
-            if ($scope.lib === undefined) return;
-            // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+            if ($scope.lib === undefined) {
+                // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+                return;
+            }
 
-            if (nd == $scope.lib.annotations) return;
-            // When there are no changes
+            if (nd == $scope.lib.annotations) {
+                // When there are no changes
+                if (clicked) {
+                    $scope.$emit("notification:success", "Saved Annotations");
+                }
+                return;
+            }
 
             /** @name SWBrijj#saveNoteData
              * @function
@@ -942,7 +1048,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
-                refreshDocImage();
             });
         };
 

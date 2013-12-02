@@ -1,5 +1,4 @@
 <div class="modal-backdrop" style="opacity:0.9;"></div>
-<div class="row-fluid" style="height:60px;"></div>
 <div class="docViewer" ng-hide="hidePage">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
@@ -8,7 +7,7 @@
                 <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
             </div>
             <div class="lastUpdated pull-right">
-                Last Updated {{lib.last_updated | fromNow}}
+                Last Updated {{lib.last_updated | fromNow:servertime}}
                 <button ng-click="leave($event)"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
             </div>
         </div>
@@ -21,7 +20,7 @@
                 <!-- <button ng-click="newSignature($event)"><span data-icon="&#xe02e;" aria-hidden="true"></span></button>  -->
             </div>
             <div class="pageTurn pull-left">
-                <ul ng-class="{'hidden':docLength==1}">
+                <ul>
                     <li class="button" ng-click="previousPage(currentPage)">
                         <span ng-class="{'locked':currentPage<=0}" data-icon="&#xe003;" aria-hidden="true"></span>
                     </li>
@@ -61,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="page-bar" ng-show="showPageBar && docLength > 1 && isAnnotable">
+        <div class="page-bar" ng-show="showPageBar()">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
                 <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
@@ -71,7 +70,7 @@
                     ng-class="{'cur-page':page===currentPage}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">
-                    <span style="font-size:16px;" data-icon="&#xe006;" aria-hidden="true"></span>
+                    <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
                     <span> {{page}}</span>
                 </li>
                 <li class="page-icons button" ng-click="pageBarRight();">
@@ -82,6 +81,10 @@
     </div>
     <div class="docPanelContainer row-fluid" ng-class="{'annotable':isAnnotable && docLength>1}">
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}">
+    </div>
+    <div class="keyboardHintContainer" ng-show="docLength > 1">
+        <img class="keyboardHint" src="/img/keyboard.png">
+        <span><br>Use the arrow keys on the keyboard to<br>navigate between page</span>
     </div>
 </div>
 

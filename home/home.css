@@ -116,6 +116,10 @@
     z-index: 2;
 }
 
+.flipper .info-box > .head-box:hover {
+    cursor: pointer;
+}
+
 .front.info-box, .back.info-box {
     width: 100%;
     height: 100%;
@@ -175,7 +179,7 @@
 }
 
 .body-box > ul.q-and-a > li:nth-child(odd) {
-    color: #3397DA;
+    color: #1E2D3D;
 }
 
 .onboarding-row > div, .onboarding-row > span {
@@ -302,6 +306,16 @@
 
 .body-box.mini-table > table > tbody > tr > td:last-child > div {
     margin: 0 auto 0 auto;
+}
+
+.body-box.mini-table.doc-table th {
+    font-weight: normal;
+    color: rgb(30, 45, 61);
+}
+
+.limited-width {
+    max-width: 240px;
+    overflow: hidden;
 }
 
 /* Modal Styling */
@@ -434,6 +448,7 @@
 
 .mainlabel {
    font-size: 16px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 .percentlabel {

@@ -19,6 +19,16 @@ app.directive('d3expdonut', ['d3', function(d3) {
             var color = d3.scale.ordinal()
                 .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
 
+            var colors = ["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"];
+            var corecolor = function(i) {
+                if (i > 3) {
+                   return i % 3 == 0 ? colors[3] : colors[i % 3]
+                }
+                else {
+                    return colors[i]
+                }
+            };
+
             var arc = d3.svg.arc()
                 .outerRadius(radius- 10)
                 .innerRadius(radius - 30);
@@ -47,7 +57,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
             scope.render = function(data){
 
                 if (data) {
-                    console.log(data);
+
+                    data.sort(function(a, b) { return b.percent - a.percent; });
 
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
@@ -79,10 +90,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
-                            return color(d.data.percent); })
+                            return corecolor(i); })
                         .attr("class", "pie-slices")
-                        .on("mouseover", function(d) {
-                            var colour = color(d.data.percent);
+                        .on("mouseover", function(d, i) {
+                            var colour = corecolor(i);
                             var current = this;
                             d3.selectAll(".pie-slices").transition()
                                 .duration(250)
@@ -104,7 +115,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                             d3.selectAll(".pie-slices").transition()
                                 .duration(250)
                                 .style("fill", function(d , i) {
-                                    return color(d.data.percent); })
+                                    return corecolor(i); })
                                 .style("opacity", function() {
                                     return 1;
                                 });
@@ -145,8 +156,8 @@ app.directive('d3myownership', ['d3', function(d3) {
 
             var pie = d3.layout.pie()
                 .sort(null)
-                .startAngle(-1.57079633)
-                .endAngle(4.71238898)
+/*                .startAngle(-1.57079633)
+                .endAngle(4.71238898)*/
                 .value(function(d) { return d.percent; });
 
 
@@ -222,8 +233,8 @@ app.directive('d3myvested', ['d3', function(d3) {
 
             var pie = d3.layout.pie()
                 .sort(null)
-                .startAngle(-1.57079633)
-                .endAngle(4.71238898)
+/*                .startAngle(-1.57079633)
+                .endAngle(4.71238898)*/
                 .value(function(d) { return d.units; });
 
 
@@ -314,6 +325,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 .ticks(4)
                 .orient("right");
 
+
             var svg = d3.select(iElement[0])
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -340,11 +352,10 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data) {
+                if (data && data.length > 0) {
 
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
-                    console.log(max);
                     y.domain([0, max]);
 
                     svg.append("g")

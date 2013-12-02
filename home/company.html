@@ -89,7 +89,7 @@
             </div>
             <div class="span7">
                 <h2>{{company.name}}</h2>
-                <span>{{company.city}}<span ng-show="company.city && company.state">,</span>{{company.state}}</span>
+                <span>{{company.city}}<span ng-show="company.city && company.state">, </span>{{company.state}}</span>
             </div>
             <div class="span2">
                 <ul class="dropdown-list">
@@ -161,15 +161,15 @@
                             <div class="span6">
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-invest.png'>
-                                    <h2><span>{{ownersummary.invested}}</span> Invested</h2>
+                                    <h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-investors.png'>
-                                    <h2><span>{{ownersummary.peoplenum}}</span> Shareholders</h2>
+                                    <h2><span>{{ownersummary.peoplenum || 0}}</span> Shareholders</h2>
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-share.png'>
-                                    <h2><span>{{ownersummary.shares}}</span> Invited</h2>
+                                    <h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
                                 </div>
                             </div>
                             <div class="span6">
@@ -218,7 +218,7 @@
                         <ul>
                             <li ng-repeat="event in events.slice(2)">
                                 <i class="{{event.activity | icon}}"></i>
-                                {{event | description}}
+                                <span>{{event | description}}</span>
                             </li>
                         </ul>
                     </li>
@@ -252,20 +252,20 @@
             </div>
             <div class="span9 input-list">
                 <div>
-                    <span>Name</span><input type="text" ng-model="editcompany.name" maxlength="30">
+                    <span>Name*</span><input type="text" ng-model="editcompany.name" maxlength="30">
                 </div>
                 <div>
-                    <span>Address*</span><input type="text" ng-model="editcompany.address">
+                    <span>Address</span><input type="text" ng-model="editcompany.address">
                 </div>
                 <div class="city-state">
-                    <span>City/State*</span>
+                    <span>City/State</span>
                     <input type="text" ng-model="editcompany.city">
                     <input type="text" ng-model="editcompany.state" maxlength="2">
                 </div>
                 <div>
-                    <span>Zip Code*</span><input type="text" ng-model="editcompany.zipcode">
+                    <span>Zip Code</span><input type="text" ng-model="editcompany.zipcode">
                 </div>
-                <span class="capital-text">*Optional</span>
+                <span class="capital-text">*Required</span>
             </div>
         </div>
     </div>

@@ -11,10 +11,6 @@ var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui
         otherwise({redirectTo:'/'});
 });
 
-app.controller("MainProfileController", ['$scope','$location', function($scope, $location) {
-
-} ] );
-
 function hidePopover() {
     angular.element('.popover').hide();
 }
@@ -255,14 +251,20 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
 
     // Admin Modal Functions
 
-    $scope.adminModalOpen = function (email) {
-        $scope.newEmail = email;
+    $scope.adminModalOpen = function () {
+        $scope.newEmail = "";
+        $scope.newName = "";
+        $scope.newRole = 'Investor';
         $scope.adminModal = true;
     };
 
     $scope.adminModalClose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.adminModal = false;
+    };
+
+    $scope.assignRole = function(role) {
+        $scope.newRole = role;
     };
 
     $scope.removeAdminModalOpen = function(email) {
@@ -274,25 +276,53 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         $scope.removeAdminModal = false;
     };
 
+    $scope.addAdminModalOpen = function(email) {
+        $scope.selectedToAdd = email;
+        $scope.addAdminModal = true;
+    };
+
+    $scope.addAdminModalClose = function() {
+        $scope.addAdminModal = false;
+    };
+
     $scope.narrowopts = {
         backdropFade: true,
         dialogFade:true,
         dialogClass: 'narrowModal modal'
     };
 
-    $scope.fieldCheck = function() {
-        return !$scope.newEmail;
+    $scope.profileopts = {
+        backdropFade: true,
+        dialogFade:true,
+        dialogClass: 'profile-modal wideModal modal'
     };
 
-    $scope.create_admin = function() {
-        SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase(), navState.company).then(function(x) {
-            void(x);
-            $scope.$emit("notification:success", "Admin Added");
-            $route.reload();
-        }).except(function(x) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    $scope.fieldCheck = function() {
+        return re.test($scope.newEmail);
+    };
+
+    $scope.create_person = function() {
+        if ($scope.newRole == "Admin") {
+            SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                 void(x);
-                $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
-        });
+                $scope.$emit("notification:success", "Admin Added");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                });
+        }
+        if ($scope.newRole == "Investor") {
+            SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
+                void(x);
+                $scope.$emit("notification:success", "Investor Added");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                });
+        }
         $scope.newEmail = "";
     };
     $scope.revoke_admin = function () {
@@ -306,6 +336,17 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         });
         $scope.selectedToRevoke = "";
     };
+
+    $scope.add_admin = function () {
+        SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
+            void(x);
+            $scope.$emit("notification:success", "Admin Added");
+            $route.reload();
+        }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+            });
+    }
 }]);
 
 app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', 'navState',

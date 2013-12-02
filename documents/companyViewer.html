@@ -1,3 +1,4 @@
+<script src="/cmn/spin.js"></script>
 <div class="container">
   <div class="row-fluid">
   </div>
@@ -10,25 +11,26 @@
   </div>
 </div>
 
-<div modal="confirmModal" close="confirmModalClose()" options="opts">
+<div modal="confirmModal" options="opts">
     <div class="sign-modal">
-      <div class="modalHeader">
-        <span>Confirm Electronic Countersignature</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()"></span>
-      </div>
-
-      <div class='modalText esign'>
-          <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">
-          <span class="chkboxtext">
-              Do you wish to electonically countersign this document?<br>(This action is irreversible)
-          </span>
-      </div>
-        <div class="modal-footer">
-            <div class="pull-left standard-button gray">
-                <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+        <div class="modalHeader">
+            <span>Confirm Electronic Countersignature</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="confirmModalClose()" ng-hide="processing"></span>
+        </div>
+        <div my-loading-spinner="processing">
+            <div class='modalText esign'>
+                <input class="checkbox-class" type="checkbox" ng-model="confirmSignature">
+                <span class="chkboxtext">
+                    Do you wish to electonically countersign this document?<br>(This action is irreversible)
+                </span>
             </div>
-            <div class="standard-button green">
-                <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument();">Countersign</button>
+            <div class="modal-footer">
+                <div class="pull-left standard-button gray">
+                    <button class="btn" ng-click="confirmModalClose()">Cancel</button>
+                </div>
+                <div class="standard-button green">
+                    <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument();">Countersign</button>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,4 @@
-<div class="container">
-
-  <div modal="shareModal" modalshare></div>
+<div class="container dynamic-page doclistFlow">
 
   <div class="row-fluid">
   	<div class="headsection row-fluid">
@@ -22,10 +20,17 @@
 
                     <div class="pull-right">
                         <div class="standard-button">
-                            <button ng-click="documentUploadOpen();" class="btn">Upload Document
+                            <button ng-click="multishareOpen();" class="btn">Share
                             </button>
                         </div>
                     </div>
+                    <div class="pull-right small-space">
+                        <div class="standard-button">
+                            <button ng-click="documentUploadOpen();" class="btn">Upload
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="DivHelper"></div>
             </div>
@@ -41,9 +46,9 @@
             <table class="status-table" ng-show="documents.length!==0">
                 <tbody>
                     <tr>
-                        <th colspan="2" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
-                        <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
+                        <th class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
                     </tr>
                 </tbody>
@@ -64,18 +69,16 @@
                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
                         </td>
-                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column issuer pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortDocStatus(doc)}}</li>
                                 <li>{{formatDocStatusRatio(doc)}}</li>
                             </ul>
                         </td>
                         <td>
-                            <div class="standard-button small-standard-button gray">
+                            <div class="standard-button small-standard-button gray doc-share-button">
                                 <button class="btn" ng-click="shareDocOpen(doc)">Share</button>
                             </div>
-                        </td>
-                        <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
@@ -84,11 +87,13 @@
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="viewStatus(doc)">View Status</li>
                                         <li ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                         <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
                                         <!--<li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>-->
                                     </ul>
                                 </li>
                           </ul>
+                        </td>
                     </tr>
                     <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
@@ -102,30 +107,32 @@
                             <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
-                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortVersionStatus(version)}}</li>
-                                <li>{{momentFromNow(version.last_event.event_time)}}</li>
+                                <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                             </ul>
                         </td>
                         <td>
-                            <div class="standard-button small-standard-button">
+                            <div class="standard-button small-standard-button doc-share-button">
                                 <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
                                 <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign</button>
                             </div>
-                        </td>
-                        <td>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle dark" ng-click="viewInvestorCopy(doc, version)">
-                                        <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                    <a class="dropdown-toggle dark">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="viewStatus(doc)">View Status</li>
+                                        <li ng-click="viewInvestorCopy(doc, version)">View Version</li>
+                                        <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                    </ul>
                                 </li>
                             </ul>
                         </td>
                     </tr>
                 </tbody>
-                <tr class="empty-row" style="height:100px"></tr>
             </table>
         </div>
     </div>
@@ -173,14 +180,16 @@
 
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        Share "{{docToShare.docname | caplength:25}}"
+        Share "{{docToShare.docname | caplength:35}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
         <ul>
             <li>
-                <span>Email Address</span>
-                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                <span>Email Addresses</span>
+                <div class="single-share-input">
+                    <input ui-select2="select2Options" ng-model="recipient">
+                </div>
             </li>
             <li>
                 <span>Get Signature?</span>
@@ -203,7 +212,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
 
@@ -217,7 +226,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
-        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
+        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm</button></div>
     </div>
 </div>
 
@@ -233,5 +242,45 @@
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="deleteDocClose()">Cancel</button></div>
         <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button></div>
+    </div>
+</div>
+
+<div modal="multishareModal" close="multishareClose()" options="multishareopts">
+    <div class="modalHeader">
+        <span>Share Documents</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="multishareClose()"></span>
+    </div>
+    <div ng-show="sharemodalscreen == '1'" class="modalText">
+        <span>Select the document(s) you want to share.</span>
+        <ul>
+            <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
+                <ul>
+                    <li><button ng-class="{'selected':doc.picked}" ng-click="checkShareBox(doc, 'picked');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
+                    <li>{{doc.docname  | caplength:40}}</li>
+                    <li ng-show="doc.picked"><button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
+                    <li ng-show="doc.picked" class="capital-text">Signature?</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div ng-show="sharemodalscreen == '2'" class="modalText">
+        <span>Add recipients for your selected documents.</span>
+        <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="multipeople">
+        </div>
+<!--        <ul>
+            <li ng-repeat="person in sharePeople">
+                <ul>
+                    <li><button ng-class="{'selected':person.share}" ng-click="checkShareBox(person, 'share');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
+                    <li>{{person.investor}}</li>
+                </ul>
+            </li>
+        </ul>-->
+    </div>
+    <div class="modal-footer">
+        <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray"><button class="btn" ng-click="multishareClose()">Cancel</button></div>
+        <div ng-show="sharemodalscreen == '1'" class="standard-button blue arrow-right"><button ng-disabled="!oneSelected(sharedocs, 'picked');" class="btn" ng-click="gotoscreen(2);">Select People</button></div>
+        <div ng-show="sharemodalscreen == '2'" class="pull-left standard-button blue arrow-left"><button class="btn" ng-click="gotoscreen(1);">Back</button></div>
+        <div ng-show="sharemodalscreen == '2'" class="standard-button green"><button class="btn" ng-disabled="checkmany(multipeople);" ng-click="sharetoMany(); multishareClose();">Send</button></div>
     </div>
 </div>

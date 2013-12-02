@@ -140,7 +140,6 @@ ownership.service('calculate', function () {
                         cycleDate.addMonths(x);
                     }
                     while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        console.log("The cycle data is " + String(cycleDate));
                         vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
@@ -156,9 +155,11 @@ ownership.service('calculate', function () {
             if (!isNaN(vesting[row.name])) {
                 var result =Math.round(vesting[row.name]*1000)/1000
                 row.vested = result;
+                if (parseFloat(row.vested) > (parseFloat(row.granted)-parseFloat(row.forfeited))) {
+                    row.vested = (parseFloat(row.granted)-parseFloat(row.forfeited));
+                }
             }
         });
-        console.log(rows);
         return rows
     };
 
@@ -357,7 +358,6 @@ ownership.service('calculate', function () {
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
                             if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                console.log("working");
                                 temprow[issue.issue]['u'] = row[issue.issue]['u'];
                             }
                             else {
@@ -639,7 +639,6 @@ ownership.service('calculate', function () {
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
-            console.log("discount is" + discount);
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
             if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.toissue.postmoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));

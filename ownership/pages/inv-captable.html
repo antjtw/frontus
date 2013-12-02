@@ -1,4 +1,5 @@
-<div class="container">
+<div class="maincontent">
+<div class="container dynamic-page">
 
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
@@ -7,7 +8,7 @@
     <div class="headsection row-fluid">
 
         <ul class="maintabs head-text">
-            <li class="selectedtab">Ownership</li>
+            <li class="selectedtab">Capitalization</li>
             <li ng-show="grantsview"><a href="/ownership/investor-grants">Grants</a></li>
         </ul>
     </div>
@@ -245,8 +246,8 @@
                             <p>{{activeInvestorEmail}}</p>
                         </span>
                       </span>
-                      <span class="capGuide" ng-switch-default>
-                        <h1 class="right-bar-header">View your Ownership</h1>
+                      <span class="capGuide railpadding" ng-switch-default>
+                        <h1 class="right-bar-header">View your Capitalization</h1>
 
                         <p>The information to the left contains your company holdings and total percent ownership.
                             Click on the values within the table to reveal additional detail.</p>
@@ -256,3 +257,8 @@
 </div>
 </div>
 </div>
+
+</div>
+
+
+<div class="push"></div>

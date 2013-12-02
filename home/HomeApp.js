@@ -26,11 +26,12 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.default = "100%";
 
         if (navState.role == 'investor') {
-            console.log("CompanyCtrl switch");
-            console.log(navState);
             $location.path('/investor');
             return;
         }
+
+        $scope.uselessbrowser = !Modernizr.csstransforms3d;
+        console.log($scope.uselessbrowser);
 
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
@@ -200,7 +201,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent") {
-                        var timegroup = moment(event.time).fromNow();
+                        var timegroup = moment(event.time).from(event.timenow);
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
                         }
@@ -223,7 +224,9 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         // Flipping tiles functionality
 
         $scope.flipTile = function(x) {
-            $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            if (!$scope.uselessbrowser) {
+                $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            }
         };
 
 
@@ -266,8 +269,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     for (var i=0;i<$scope.files.length;i++) fd.append("uploadedFile", $scope.files[i]);
                     SWBrijj.uploadLogo(fd).then(function(x) {
                         void(x);
-                        console.log("here");
-                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company;
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company.company + '#' + new Date().getTime();
                         $scope.$emit("notification:success", "Company profile successfully updated");
                         $scope.company = company;
                     }).except( function(x) {
@@ -342,8 +344,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
-            console.log("InvestorCtrl switch");
-            console.log(navState);
             $location.path('/company');
             return;
         }
@@ -353,6 +353,10 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$emit("notification:success", "You have successfully changed your password.");
             }
         }
+
+        $scope.uselessbrowser = !Modernizr.csstransforms3d;
+        console.log($scope.uselessbrowser);
+
         //initialisation functions called
         $scope.company = navState.name;
 
@@ -375,12 +379,13 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.activity = [];
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
                 var originalfeed = feed;
+                console.log(feed);
                 //Generate the groups for the activity feed
                 $scope.eventGroups = [];
                 var uniqueGroups = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent" && event.activity != "viewed") {
-                        var timegroup = moment(event.time).fromNow();
+                        var timegroup = moment(event.time).from(event.timenow);
                         if (uniqueGroups.indexOf(timegroup) > -1) {
                             $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
                         }
@@ -531,7 +536,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                             var vestedarray = calculate.myvested($scope.optiontrans);
                             $scope.myvested = vestedarray[0];
                             var tranvested = vestedarray[1];
-                            console.log(tranvested);
                             angular.forEach(tranvested, function(vest, key) {
                                 angular.forEach($scope.optiontrans, function(tran) {
                                     if (key == tran.date) {
@@ -549,7 +553,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
                             });
                             $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
-                            console.log($scope.vesteddonut);
                         });
                     });
                 });
@@ -623,14 +626,15 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.gotopage = function (link){
-            console.log(link);
             location.href = link;
         };
 
         // Flipping tiles functionality
 
         $scope.flipTile = function(x) {
-            $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            if (!$scope.uselessbrowser) {
+                $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
+            }
         };
 
         // Password modal
@@ -675,10 +679,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             SWBrijj.proc("account.change_password", $scope.currentPassword, $scope.newPassword).then(function(x) {
                 if (x[1][0]) {
                     $scope.$emit("notification:success", "Your password has been updated successfully.");
-                    // console.log("changed successfully");
                 } else {
                     $scope.$emit("notification:fail", "There was an error updating your password.");
-                    // console.log("Oops.  Change failed");
                     $scope.currentPassword = "";
                     $scope.newPassword = "";
                     $scope.passwordConfirm = "";
@@ -724,7 +726,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.profileUpdate = function (person) {
-            console.log(person);
             SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
                 void(x);
                 var fd = new FormData();
@@ -733,7 +734,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     SWBrijj.uploadImage(fd).then(function(x) {
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
-                        $scope.photoURL = '/photo/user?id=' + $scope.person.email;
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);
@@ -770,12 +771,9 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
 app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route, SWBrijj) {
     SWBrijj.tbl('account.companies').then(function(x) {
-        // console.log(x);
         if (x.length > 0) { //User is a CEO of a company
-            console.log("HomeCtrl first switch");
             document.location.href="company";
         } else {
-            console.log("HomeCtrl second switch");
             SWBrijj.tblm('account.invested_companies').then(function(x) {
                 document.location.href=x[0]['company'];
             });
@@ -838,9 +836,9 @@ angular.module('HomeApp').filter('description', function() {
         }
         var type = ac.type;
         if (type == "ownership") {
-            if (activity == "received") return "Ownership Table sent to " + person;
-            else if (activity == "viewed") return "Ownership Table viewed by "+person;
-            else return "Something with Ownership Table";
+            if (activity == "received") return "Capitalization Table sent to " + person;
+            else if (activity == "viewed") return "Capitalization Table viewed by "+person;
+            else return "Something with Capitalization Table";
         }
         else {
             var document = ac.docname;
@@ -875,9 +873,9 @@ angular.module('HomeApp').filter('investordescription', function() {
         }
         var type = ac.type;
         if (type == "ownership") {
-            if (activity == "received") return "You received " + company + "'s captable";
-            else if (activity == "viewed") return "You viewed " + company + "'s captable";
-            else return "Something happened with "+company +"'s captable";
+            if (activity == "received") return "You received " + company + "'s cap table";
+            else if (activity == "viewed") return "You viewed " + company + "'s cap table";
+            else return "Something happened with "+company +"'s cap table";
         }
         else if (type == "document") {
             var document = ac.docname;

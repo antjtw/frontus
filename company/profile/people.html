@@ -1,4 +1,4 @@
-
+<div class="container dynamic-page doclistFlow">
 <div class="headsection row-fluid">
     <ul class="maintabs head-text">
         <li class="selectedtab">People</li>
@@ -15,7 +15,7 @@
                     </div>
                     <div class="pull-right">
                         <div class='standard-button'>
-                            <button class="btn" ng-click="adminModalOpen()">Add Admin</button>
+                            <button class="btn" ng-click="adminModalOpen()">Add People</button>
                         </div>
                     </div>
                 </div>
@@ -24,63 +24,80 @@
         </div>
 
         <div class="row-fluid">
-            <table class="status-table">
-                <tbody>
-                <tr>
-                    <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">SHAREHOLDER NAME</span></th>
-                    <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
-                    <th></th>
-                </tr>
-                </tbody>
-                <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
-                <tr class="empty-row"></tr>
-                <tr>
-                    <td style="width:400px" class="shareholder-column" >
-                        <ul>
-                            <li>{{person.name}}</li>
-                            <li>{{formatLastLogin(person.lastlogin)}}</li>
-                        </ul>
-                    </td>
-                    <td><span ng-show="person.role=='issuer'">Admin</span></td>
-                    <td style="width:50px;">
-                        <ul ng-show="person.lastlogin" class="dropdown-list">
-                            <li class="dropdown standard menu-drop">
-                                <a class="dropdown-toggle">
-                                    <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                </a>
-                                <ul ng-hide="toggleView();" class="dropdown-menu">
-                                    <li ng-show="" ng-click="modalUp(person);">Change Role</li>
-                                    <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
-                                    <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
-                                    <li ng-show="person.role!=='issuer'" ng-click="adminModalOpen(person.email)">Add Admin</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="span12">
+                <table class="status-table">
+                    <tbody>
+                    <tr>
+                        <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Shareholder Name</span></th>
+                        <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                    <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
+                    <tr class="empty-row"></tr>
+                    <tr>
+                        <td style="width:400px" class="shareholder-column docname-column" ng-click="gotoPerson(person)" >
+                            <ul>
+                                <li>{{person.name}}</li>
+                                <li>{{formatLastLogin(person.lastlogin)}}</li>
+                            </ul>
+                        </td>
+                        <td><span ng-show="person.role=='issuer'">Admin</span></td>
+                        <td style="width:50px;">
+                            <ul ng-show="person.lastlogin" class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-show="" ng-click="modalUp(person);">Change Role</li>
+                                        <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
+                                        <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
+                                        <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Add Admin</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 </div>
 
 
-<div modal="adminModal" close="adminModalClose()" options="narrowopts">
+<div modal="adminModal" close="adminModalClose()" options="profileopts">
     <div class="modalHeader">
-        <span>Add administrator</span>
+        <span>Add Person</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
     </div>
 
-    <div class="modalCopy">
-        <form>
-            <fieldset>
-                <div class="row-fluid field">
-                    <label>Email
-                        <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
-                    </label>
-                </div>
-            </fieldset>
-        </form>
+    <div class="modalText">
+        <div class="input-list">
+            <div>
+                <span>Name</span><input type="text" ng-model="newName" />
+            </div>
+            <div>
+                <span>Email</span><input type="text" ng-model="newEmail" />
+            </div>
+            <div>
+                <span>Role</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{newRole}}<span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <span ng-click="assignRole('Investor')">Investor</span>
+                                <span ng-click="assignRole('Admin')">Admin</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="modal-footer">
@@ -88,7 +105,7 @@
             <button class="btn" ng-click="adminModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Confirm</button>
+            <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
         </div>
     </div>
 
@@ -105,8 +122,26 @@
         <div class="pull-left standard-button gray">
             <button class="btn" ng-click="removeAdminModalClose()">Cancel</button>
         </div>
-        <div class="standard-button red">
+        <div class="standard-button green">
             <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
+        </div>
+    </div>
+</div>
+    <div modal="addAdminModal" close="addAdminModalClose()" options="narrowopts">
+        <div class="modalHeader">
+            <span>Add administrator</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
+        </div>
+        <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+            <span>Are you sure you want to add {{selectedToAdd}} as an admin?</span>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="addAdminModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="add_admin(); addAdminModalClose();">Confirm</button>
+            </div>
         </div>
     </div>
 </div>

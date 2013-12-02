@@ -1,8 +1,11 @@
 .docViewer {
     z-index: 1041 !important;
-    position: relative;
-    left: 62px;
-    width: 900px;
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    right: 0px;
+    max-width: 928px;
+    margin: 0 auto;
     background-color: white;
 }
 
@@ -11,8 +14,8 @@
     left: 0px;
     right: 0px;
     top: 0px;
+    max-width: 928px;
     margin: 0 auto;
-    width: 900px;
 }
 
 .docViewerHeader {
@@ -39,6 +42,7 @@
 .tools {
     margin-left: 20px;
     padding-top: 15px;
+    min-width: 210px;
 }
 
 .tools > button {
@@ -53,10 +57,16 @@
     margin-right: 20px;
 }
 
+.tools > button:hover {
+    background-color: #C7C7C7;
+}
+
 .pageTurn {
     padding-top:15px;
     position: absolute;
-    left: 40%;
+    left:-webkit-calc(50% - 95px);
+    left:-moz-calc(50% - 95px);
+    left: calc(50% - 95px);
 }
 
 .pageTurn > ul {
@@ -73,8 +83,9 @@
 }
 
 .docViewerControls {
-    height: 60px;
+    min-height: 60px;
     width: 100%;
+    overflow: overlay;
     background-color: #F1F1F1;
 }
 
@@ -86,6 +97,9 @@
     background-position: top;
     width: 30px;
     height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .docViewerControls > .pageTurn > ul > li:last-child {
@@ -96,6 +110,17 @@
     background-position: top;
     width: 30px;
     height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.docViewerControls > .pageTurn > ul > li:first-child:hover {
+    background-color: #C7C7C7;
+}
+
+.docViewerControls > .pageTurn > ul > li:last-child:hover {
+    background-color: #C7C7C7;
 }
 
 .pageTurn > ul > li > span.locked {
@@ -103,7 +128,6 @@
 }
 
 .docActions {
-    display: inline;
     padding-top: 15px;
     margin-right: 20px;
 }
@@ -157,11 +181,22 @@
     color: #666666;
     height: 30px;
     overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.page-bar > ul > li.page-tabs:hover {
+    background-color: #C7C7C7;
 }
 
 .page-bar > ul > li.page-tabs.cur-page {
     background-color: #1ABC96 !important;
     color: #FFFFFF !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page:hover {
+    background-color: #15A085 !important;
 }
 
 .page-jumper {
@@ -193,7 +228,7 @@
 }
 
 .docViewerTitle > div {
-    width: 430px;
+    max-width: 430px;
 }
 
 .docViewerTitle > div > .docName {
@@ -316,6 +351,54 @@
 
 .hidden {
     visibility: hidden;
+}
+
+.keyboardHintContainer {
+    position: fixed;
+    bottom: 100px;
+    right: 0;
+    background-color: #1E2D3D;
+    opacity: 0.9;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    -webkit-animation: fadeout 1s linear 2s 1 normal forwards;
+       -moz-animation: fadeout 1s linear 2s 1 normal forwards;
+        -ms-animation: fadeout 1s linear 2s 1 normal forwards;
+         -o-animation: fadeout 1s linear 2s 1 normal forwards;
+            animation: fadeout 1s linear 2s 1 normal forwards;
+}
+@keyframes fadeout {
+    from {opacity: 0.9;}
+    to   {opacity: 0; display: none; z-index: -1;}
+}
+@-moz-keyframes fadeout {
+    from {opacity: 0.9;}
+    to   {opacity: 0; display: none; z-index: -1;}
+}
+@-webkit-keyframes fadeout {
+    from {opacity: 0.9;}
+    to   {opacity: 0; display: none; z-index: -1;}
+}
+@-ms-keyframes fadeout {
+    from {opacity: 0.9;}
+    to   {opacity: 0; display: none; z-index: -1;}
+}
+@-o-keyframes fadeout {
+    from {opacity: 0.9;}
+    to   {opacity: 0; display: none; z-index: -1;}
+}
+.keyboardHintContainer > img {
+    display: block;
+    margin: 0 auto;
+}
+.keyboardHintContainer > span {
+    display:block;
+    color: #FFFFFF;
+    text-align: center;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    font-weight: normal;
 }
 
 

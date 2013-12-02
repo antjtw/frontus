@@ -8,7 +8,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     var company = navState.company;
     $scope.currentCompany = company;
-    console.log(company);
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -33,7 +32,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     });
 
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
-        console.log(data);
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -42,7 +40,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
         // Pivot shenanigans
         SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
-            console.log(trans);
             $scope.trans = trans
 
             SWBrijj.tblm('ownership.this_company_options').then(function (x) {
@@ -85,6 +82,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     for (var i = 0, l = $scope.trans.length; i < l; i++) {
                         var offset = $scope.trans[i].date.getTimezoneOffset();
                         $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
+                        if ($scope.trans[i].vestingbegins) {
+                            $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                        }
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
@@ -95,10 +95,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 $scope.trans[i].premoney = issue.premoney;
                                 $scope.trans[i].postmoney = issue.postmoney;
                             }
-                            ;
                         });
                     }
-                    ;
 
                     // Generate the rows from the transactions
                     // u represents units throughout, a price
