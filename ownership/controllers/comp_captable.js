@@ -2311,18 +2311,32 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
-    $scope.moveTour = function() {
-        $scope.tourstate += 1;
+    $scope.tourfunc = function() {
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
         }
-        if ($scope.tourstate == 3) {
+        else if ($scope.tourstate == 1) {
+            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(3) input:first-of-type").focus();
+        }
+        else if ($scope.tourstate == 2) {
+            $(".tableView.captable th > input:first-of-type").focus();
+        }
+        else if ($scope.tourstate == 3) {
             $scope.sideToggle = false;
         }
+        else if ($scope.tourstate == 4) {
+            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(4) input:first-of-type").focus();
+        }
+    };
+
+    $scope.moveTour = function() {
+        $scope.tourstate += 1;
+        $scope.tourfunc();
     };
 
     $scope.gotoTour = function(x) {
         $scope.tourstate = parseInt(x);
+        $scope.tourfunc();
     };
 
     $scope.closeTour = function() {
