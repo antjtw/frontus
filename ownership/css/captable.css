@@ -1603,7 +1603,7 @@ div.issue-rail:before {
     width: -moz-calc(100% - 30px);
     width: -webkit-calc(100% - 30px);
     width: calc(100% - 30px);
-    height: 450px;
+    height: 550px;
     border: 2px solid #19BB95;
     pointer-events: none;
 }
@@ -1616,7 +1616,7 @@ div.capGuide.global.issue-rail .next-button {
     display: inline-block;
     position: absolute;
     right: 11px;
-    bottom: -402px;
+    bottom: -498px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
