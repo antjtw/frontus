@@ -47,8 +47,8 @@
                             <li ng-show="navState.role==='issuer'">
                                 <a class="menuProfileText button" href="/investor/profile">My Account</a>
                             </li>
-                            <li>
-                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            <li ng-class="{topItem: navState.role!=='issuer'}">
+                            <a class="menuProfileText button" href="/login/logout">Log Out</a>
                             </li>
                         </ul>
                     </li>
@@ -62,12 +62,14 @@
         <div class="bottomnav navbar row-fluid" ng-hide="noNav">
             <div class="navbounder">
                 <ul class="menuHeaderText nav dropdown-list">
-                    <li class="dropdown standard menu-drop"> <a class="dropdown-toggle" ng-class="{'no-hover':companies.length == 1, 'dark': navState.path.substring(0,6)==='/home/'}">
-                    {{navState.name}}
-                    <span class='for-r0ml'> ({{navState.role}})</span>
-                    <span ng-show="companies.length!==1" class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
-                    <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
-                </a>
+                    <li class="dropdown standard menu-drop">
+                        <a class="dropdown-toggle" ng-class="{'dark': navState.path.substring(0,6)==='/home/'}"
+                           ng-click="companies.length===1 && gotohome()">
+                            {{navState.name}}
+                            <span class='for-r0ml'> ({{navState.role}})</span>
+                            <span ng-show="companies.length!==1" class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
+                            <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
+                        </a>
 
                         <ul class="dropdown-menu" ng-class="{'dark': navState.path.substring(0,6)=== '/home/'}"
                         ng-show="companies.length > 1">
