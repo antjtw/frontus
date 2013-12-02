@@ -359,6 +359,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .span4.capright.button-offset {
     margin-top: -19px;
+    position: relative;
 }
 
 .span4.capright > button {
@@ -1761,11 +1762,8 @@ span.tour-icon:hover {
 /* Specifics for particular bubbles */
 
 span.tour-icon.side-toggle {
-    -webkit-transform:rotate(-90deg);
-    -moz-transform:rotate(-90deg);
-    -o-transform:rotate(-90deg);
-    -ms-transform:rotate(-90deg);
-    top: 6px;
+    top: 276px;
+    left: -34px;
 }
 
 span.tour-icon.tour-share + .tooltip {
@@ -1778,13 +1776,9 @@ span.tour-icon.tour-view + .tooltip {
 }
 
 span.tour-icon.side-toggle + .tooltip {
-    top: 100px !important;
-    left: -100px !important;
+    top: 252px !important;
+    left: -243px !important;
     width: 200px;
-    -webkit-transform:rotate(-90deg);
-    -moz-transform:rotate(-90deg);
-    -o-transform:rotate(-90deg);
-    -ms-transform:rotate(-90deg);
 }
 
 span.tour-icon.issue-cog + .tooltip {

@@ -687,8 +687,8 @@
 </div>
 
 <div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+<span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
     {{sideToggleName}}
 </button>
 <div class="row-fluid">
