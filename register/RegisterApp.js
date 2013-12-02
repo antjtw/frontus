@@ -30,7 +30,6 @@ app.controller('CompanyCtrl', ['$scope','$location','$routeParams','SWBrijj',
      * @param {string} code
      */
     SWBrijj.getInvitation($scope.code).then(function(x) {
-      // console.log(x);
       initPage($scope, x);
       if ($scope.activated) {
         document.location.href="/login";
@@ -77,8 +76,7 @@ app.controller('CompanySelfCtrl', ['$scope','$location','$routeParams','SWBrijj'
     });
 
     $scope.activate = function() {
-        console.log("activate@!");
-      SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, $scope.company, $scope.cname, false).then(function(activated) {
+      SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
           if (activated) {
             document.location.href = activated + "?msg=first";
           } else {
@@ -104,7 +102,6 @@ app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
     
     SWBrijj.getInvitation($scope.code).then(function(x) {
       initPage($scope, x);
-      // console.log(x);
       if ($scope.activated) {
         if ($scope.redirect) {
           document.location.href = $scope.redirect;
