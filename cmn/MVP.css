@@ -723,8 +723,8 @@ h2 {
     background-color: #E3E3E3;
     color: rgb(102, 102, 102);
 }
-.bottomnav .nav > li > a:hover.no-hover {
-    background-color: #F1F1F1;
+.bottomnav .nav > li > a:hover.noHover {
+    background-color: #E3E3E3 !important;
     color: rgb(119, 119, 119);
     cursor: default;
 }
