@@ -2015,6 +2015,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.tourclose = function () {
+        $scope.sideToggle = false;
         $scope.tourModal = false;
     };
 
@@ -2322,7 +2323,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.gotoTour = function(x) {
         $scope.tourstate = parseInt(x);
-    }
+    };
 
     $scope.closeTour = function() {
         $scope.tourstate = 0;

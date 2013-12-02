@@ -912,10 +912,6 @@ form.inputs {
     width: 67px;
 }
 
-.docLibrary input:disabled {
-    -webkit-text-fill-color: #8D8D8D;
-}
-
 #forgotLink {
     font-size: 12px;
     text-decoration: underline;
@@ -1106,19 +1102,6 @@ form.inputs {
 }
 /* Placeholder text color */
 
-.docLibrary input:disabled::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #fff;
-}
-.docLibrary input:disabled:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #fff;
-}
-.docLibrary input:disabled::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #fff;
-}
-.docLibrary input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:    #fff;
-}
-
 .docLibrary input::-webkit-input-placeholder {
     color: rgb(199, 199, 199);
     opacity: 1;
@@ -1142,6 +1125,20 @@ form.inputs {
     background: none;
     /* Safari Fix */
 }
+
+.docLibrary input:disabled::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #fff;
+}
+.docLibrary input:disabled:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #fff;
+}
+.docLibrary input:disabled::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #fff;
+}
+.docLibrary input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #fff;
+}
+
 .searchBox {
     float:right;
 }
