@@ -892,6 +892,10 @@ ul.last-edited > li:last-child {
     padding-right: 20px;
 }
 
+.captour > ul {
+    padding-right: 20px;
+}
+
 .captour > ul > li:nth-child(even) {
     margin-bottom: 20px;
 }
@@ -1337,16 +1341,19 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 50px;
     line-height: 50px;
     padding-bottom: 20px;
+    font-size: 14px;
 }
 
 .status-table > tbody.empty-table > tr > td:last-child {
     text-align: center;
     font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
 }
 
 .tableView .empty-table > tr > td:first-child .link, .status-table > tbody.empty-table > tr > td:last-child .link {
     color:#3498DB;
     cursor:pointer;
+    font-size: 14px;
 }
 
 /* Tour */
@@ -1592,7 +1599,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     top: -14px;
     z-index: 10;
     content: ' ';
-    width: 150px;
+    width: 152px;
     height: 18px;
     border: 2px solid #19BB95;
     pointer-events: none;
@@ -1605,7 +1612,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight > span.next-button {
     display: inline-block;
     position: absolute;
-    right: -154px;
+    right: -156px;
     bottom: -36px;
     z-index: 1;
     text-align: center;
