@@ -88,7 +88,7 @@ app.controller('CompanySelfCtrl', ['$scope','$location','$routeParams','SWBrijj'
     };
 
     $scope.fieldCheck = function() {
-        return !($scope.pname && $scope.password && $scope.company && $scope.cname); 
+        return !($scope.pname && $scope.password && $scope.cname); 
     };    
 }]);
 
