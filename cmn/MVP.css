@@ -2084,6 +2084,8 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .drop-selector .standard .dropdown-menu {
     background-color: #FFFFFF;
     border: 1px solid #E2E2E2;
+    margin-left: -2px;
+    width: 154px;
 }
 
 .drop-selector .standard .dropdown-toggle:hover {
