@@ -50,7 +50,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
         $scope.companySelfRegister = function () {
             if ($scope.fieldCheck($scope.user.email)) {
-                SWBrijj.companySelfRegister($scope.user.email, 'issuer').then(function(requested) {
+                SWBrijj.companySelfRegister($scope.user.email.toLowerCase(), 'issuer').then(function(requested) {
                     $scope.toggle = !$scope.toggle;
                     void(requested);
                 }).except(function (x) {
