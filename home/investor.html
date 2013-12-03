@@ -170,6 +170,8 @@
                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                         </a>
                         <ul ng-hide="toggleView();" class="dropdown-menu">
+                            <li ng-hide="backupInfo[0]['access_token']" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
+                            <li ng-show="backupInfo[0]['access_token']" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
                             <li ng-click="profileModalOpen();">Edit Profile</li>
                             <li ng-click="passwordModalOpen();">Change Password</li>
                         </ul>
@@ -192,6 +194,12 @@
                 </li>
                 <li ng-show="person.street || person.city || person.state || person.postalcode">
                     Address
+                </li>
+                <li>
+                    {{backupInfo[0]['last_backup'] || "N/A"}}
+                </li>
+                <li>
+                    Last Dropbox Backup
                 </li>
             </ul>
         </div>

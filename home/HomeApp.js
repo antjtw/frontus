@@ -55,6 +55,15 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             }
         }
 
+        SWBrijj.tblm('oauth.company_tokens', ['swid', 'service', 'access_token', 'last_backup']).then(function(data) {
+            console.log(data);
+            $scope.backupInfo = data;
+        });
+
+        $scope.authorizeOauth = function(svc) {
+            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {console.log(x); window.open(x[0]['request_authorization']);});
+        };
+
         $scope.close = function() {
             $scope.onboarding = false;
             SWBrijj.procm('account.onboarding_update', false);
@@ -369,7 +378,15 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.getOwnershipInfo();
             $scope.getDocumentInfo();
         });
+  
+        SWBrijj.tblm('oauth.user_tokens', ['swid', 'service', 'access_token', 'last_backup']).then(function(data) {
+            console.log(data);
+            $scope.backupInfo = data;
+        });
 
+        $scope.authorizeOauth = function(svc) {
+            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {console.log(x); window.open(x[0]['request_authorization']);});
+        };
 
         $scope.activityOrder = function(card) {
             return -card.time;
