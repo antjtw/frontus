@@ -2943,6 +2943,7 @@ h2.onboard {
 }
 
 /* Overwriting the usersnap buttons */
+
 div#us_report_button button.us_button_horizontal {
     height: 24px !important;
     width: 100px !important;

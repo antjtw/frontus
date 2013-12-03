@@ -1336,12 +1336,18 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 /* Empty Table */
 
-.tableView .empty-table > tr > td:first-child {
+.tableView.grant-table .empty-table > tr > td:first-child > div {
     text-align: center;
-    height: 50px;
-    line-height: 50px;
-    padding-bottom: 20px;
+    line-height: 180px;
     font-size: 14px;
+    padding: 0;
+    margin: 0 40px 0 0;
+    height: 180px;
+    border: 1px solid #E2E2E2;
+}
+
+.tableView.grant-table .empty-table tr {
+    border: none;
 }
 
 .status-table > tbody.empty-table > tr > td:last-child {
