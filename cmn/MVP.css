@@ -2941,3 +2941,12 @@ h2.onboard {
     width: -webkit-calc(100% - 80px) !important;
     width: calc(100% - 80px) !important;
 }
+
+/* Overwriting the usersnap buttons */
+div#us_report_button button.us_button_horizontal {
+    height: 24px !important;
+    width: 100px !important;
+    background-image: none !important;
+    background-color: #E3E3E3 !important;
+    padding: 0 !important ;
+}
