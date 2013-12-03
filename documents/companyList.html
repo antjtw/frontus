@@ -18,13 +18,13 @@
                         <input type="text" class="search-box" ng-model="query">
                     </div>
 
-                    <div class="pull-right">
+                    <div class="pull-right" ng-show="documents.length!==0">
                         <div class="standard-button">
                             <button ng-click="multishareOpen();" class="btn">Share
                             </button>
                         </div>
                     </div>
-                    <div class="pull-right small-space">
+                    <div class="pull-right" ng-class="{small-space: documents.length!==0}">
                         <div class="standard-button">
                             <button ng-click="documentUploadOpen();" class="btn">Upload
                             </button>
