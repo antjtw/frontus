@@ -98,8 +98,8 @@
                             <span data-icon="&#xe011;" aria-hidden="true"></span>
                         </a>
                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                            <li ng-hide="backupInfo[0]['access_token']" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
-                            <li ng-show="backupInfo[0]['access_token']" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
+                            <li ng-show="backupInfo[0]['access_token_exists']===0" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
+                            <li ng-hide="backupInfo[0]['access_token_exists']===0" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
                             <li ng-click="settingModalOpen();">Edit Settings</li>
                             <li ng-click="profileModalOpen();">Edit Profile</li>
                         </ul>

@@ -55,7 +55,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             }
         }
 
-        SWBrijj.tblm('oauth.company_tokens', ['swid', 'service', 'access_token', 'last_backup']).then(function(data) {
+        SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'access_token_exists', 'last_backup']).then(function(data) {
             console.log(data);
             $scope.backupInfo = data;
         });
@@ -379,7 +379,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.getDocumentInfo();
         });
   
-        SWBrijj.tblm('oauth.user_tokens', ['swid', 'service', 'access_token', 'last_backup']).then(function(data) {
+        SWBrijj.tblm('oauth.user_tokens', ['swid', 'service', 'access_token_exists', 'last_backup']).then(function(data) {
             console.log(data);
             $scope.backupInfo = data;
         });
