@@ -138,9 +138,12 @@
                            ng-model="tran.units">
                 </td>
                 <td>{{tran.vested}}</td>
-                <td>{{tran.forfeited}}</td>
                 <td><input maxlength="18"
-                           ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')'}"
+                           ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
+                           ng-model="tran.forfeited">
+                </td>
+                <td><input maxlength="18"
+                           ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
                 </td>
             </tr>
@@ -175,7 +178,7 @@
                   <h2>Transaction Information</h2>
 
                   <p class="rightTitle"><span>Units</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                                                                        ng-model="activeTran.units"></p>
+                                                                 ng-model="activeTran.units"></p>
 
                   <div class="rightTitle double"><span>Underlying Security</span>
                       <ul class="dropdown-list  drop-selector">
@@ -226,18 +229,30 @@
                   </div>
               </div>
 
+            <div class="capGuide grants" ng-show="mode == 2">
 
-              <div class="capGuide grants" ng-show="mode == 2">
+                <h2>Forfeit Information</h2>
 
-                  <h2>Exercise Information</h2>
+                <ul>
+                    <li class="grant-list" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
+                        <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'forfeited')" ng-model="act.date" data-date-format={{settings.lowercasedate}} bs-datepicker></p>
+                        <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act, \'forfeited\')'}" ng-model="act.unit">
+                    </li>
+                </ul>
+            </div>
 
-                  <ul>
-                      <li class="grant-list" ng-repeat="act in activeTran.activeAct">
-                          <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'exercised')" ng-model="act.date" data-date-format={{settings.lowercasedate}} bs-datepicker></p>
-                          <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act, \'exercised\')'}" ng-model="act.unit">
-                      </li>
-                  </ul>
-              </div>
+
+            <div class="capGuide grants" ng-show="mode == 3">
+
+                <h2>Exercise Information</h2>
+
+                <ul>
+                    <li class="grant-list" ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
+                        <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'exercised')" ng-model="act.date" data-date-format={{settings.lowercasedate}} bs-datepicker></p>
+                        <p class="rightTitle"><span>Shares</span><input ui-event="{blur : 'saveGrant(act, \'exercised\')'}" ng-model="act.unit">
+                    </li>
+                </ul>
+            </div>
         </span>
 
         <span ng-switch-when="2">

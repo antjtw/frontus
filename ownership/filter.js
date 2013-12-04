@@ -39,6 +39,19 @@ ownership.filter('otherinvestors', function () {
     };
 });
 
+// Filters the active grant actions for exercised/forfeited
+ownership.filter('grantSelect', function () {
+    return function (acts, type) {
+        var returnacts = [];
+        angular.forEach(acts, function (act) {
+            if (act.action == null || act.action == type) {
+                returnacts.push(act);
+            }
+        });
+        return returnacts;
+    };
+});
+
 
 // Returns the list of rows that have not yet had shares
 ownership.filter('shareList', function () {

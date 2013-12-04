@@ -95,8 +95,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.getActiveTransaction = function (currenttran, mode) {
         $scope.sideBar = 1;
         $scope.mode = 1;
-        if (mode == "exercised") {
+        if (mode == "forfeited") {
             $scope.mode = 2;
+        }
+        else if (mode == "exercised") {
+            $scope.mode = 3;
         }
         var activeAct = [];
 
@@ -124,31 +127,78 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
          $scope.saveGrant(grant);
     };
 
+    //Recalculate transaction rows
+    $scope.grantTranUpdate = function (issues, trans, grants, active) {
+        angular.forEach(issues, function(issue) {
+            if (issue.issue == active.issue) {
+                angular.forEach(trans, function(tran) {
+                    tran['exercised'] = 0;
+                    tran['forfeited'] = 0;
+                    angular.forEach(grants, function (grant) {
+                        if (grant.tran_id == tran.tran_id) {
+                            tran[grant.action] = tran[grant.action] + parseFloat(grant.unit);
+                        }
+                    });
+                    tran['exercised'] = tran['excercised'] != 0 ? tran['exercised'] : null;
+                    tran['forfeited'] = tran['forfeited'] != 0 ? tran['forfeited'] : null;
+                });
+            }
+        });
+    };
+
+    $scope.grantUpdateLR = function(tran, type) {
+        var currentgrants = 0;
+        var grantlist = [];
+        angular.forEach($scope.grants, function(grant) {
+            if (grant.tran_id == tran.tran_id && grant.action == type) {
+                currentgrants += grant.unit;
+                grantlist.push(grant);
+            }
+        });
+        tran[type] = parseFloat(tran[type]);
+        if (tran[type] > currentgrants) {
+            var newgrant = {'unit': tran[type] - currentgrants, "tran_id": tran.tran_id, "date": (Date.today()), "action": type, "investor": tran.investor, "issue": tran.issue};
+            $scope.saveGrant(newgrant, type);
+        }
+        else if (tran[type] < currentgrants) {
+            grantlist.sort(function(a,b){
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a>b?-1:a<b?1:0;
+            });
+            var difference = currentgrants - parseFloat(tran[type]);
+            var i = 0;
+            while (difference > 0) {
+                if (grantlist[i].unit >= difference) {
+                    grantlist[i].unit -= difference;
+                    difference -= difference;
+                    $scope.saveGrant(grantlist[i]);
+                }
+                else {
+                    difference = 0;
+                }
+            }
+        }
+    };
+
+    // Grant saving
+    //!!! USING $scope.activeTran IN HERE RESULTS IN BUGS IF THE USER CLICKS ONTO A DIFFERENT CELL FIX!!!
     $scope.saveGrant = function (grant, type) {
         if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
                     var index = $scope.grants.indexOf(grant);
                     $scope.grants.splice(index, 1);
-                    angular.forEach($scope.activeTran, function (tran) {
-                        var activeAct = [];
-                        angular.forEach($scope.grants, function (grant) {
-                            if (tran.tran_id == grant.tran_id) {
-                                activeAct.push(grant);
-                            }
-                        });
-                        activeAct.push({"unit": null, "tran_id": tran.tran_id, "date": (Date.today()), "action": null, "investor": tran.investor, "issue": tran.issue});
-                        tran.activeAct = activeAct;
+                    var activeAct = [];
+                    angular.forEach($scope.grants, function (grant) {
+                        if ($scope.activeTran.tran_id == grant.tran_id) {
+                            activeAct.push(grant);
+                        }
                     });
+                    activeAct.push({"unit": null, "tran_id": $scope.activeTran.tran_id, "date": (Date.today()), "action": null, "investor": $scope.activeTran.investor, "issue": $scope.activeTran.issue});
+                    $scope.activeTran.activeAct = activeAct;
 
-                    angular.forEach($scope.rows, function (row) {
-                        row['exercised'] = null;
-                        angular.forEach($scope.grants, function (grant) {
-                            if (row.name == grant.investor) {
-                                row[grant.action] = calculate.sum(row[grant.action], grant.unit)
-                            }
-                        });
-                    });
+                    $scope.grantTranUpdate($scope.issues, $scope.trans, $scope.grants, $scope.activeTran);
                 });
             }
             else {
@@ -161,13 +211,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         var d1 = grant['date'].toUTCString();
         grant.action = type;
         SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), String(grant.action), d1, parseFloat(grant.unit)).then(function (data) {
-            angular.forEach($scope.activeTran.activeAct, function (act) {
-                if (act.grant_id == "") {
-                    act.grant_id = data[1][0];
-                    grant.grant_id = data[1][0];
-                    $scope.grants.push(grant);
-                }
-            });
+            if (grant.grant_id == "") {
+                grant.grant_id = data[1][0];
+                $scope.grants.push(grant);
+            }
 
             // Calculate the total exercised for each transaction from the grant list
             var exercises = {};
@@ -195,19 +242,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
             });
 
-            angular.forEach($scope.issues, function(issue) {
-                if (issue.issue == $scope.activeTran.issue) {
-                    angular.forEach(issue.trans, function(tran) {
-                        tran['exercised'] = 0;
-                        tran['forfeited'] = 0;
-                        angular.forEach($scope.grants, function (grant) {
-                            if (grant.tran_id == tran.tran_id) {
-                                tran[grant.action] = tran[grant.action] + parseFloat(grant.unit);
-                            }
-                        });
-                    });
-                }
-            });
+            $scope.grantTranUpdate($scope.issues, $scope.trans, $scope.grants, $scope.activeTran);
 
             // Update the activeTran list and push a new blank grant
             var activeAct = [];
