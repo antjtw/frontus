@@ -31,7 +31,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         }
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
-        console.log($scope.uselessbrowser);
+        //console.log($scope.uselessbrowser);
 
         SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
             $scope.company = x[0];
@@ -44,6 +44,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             $scope.photoURL = '/photo/user?id=company:' + x[0].company;
 
             // Get all the data required
+            $scope.getTokenInfo();
             $scope.getDocumentInfo();
             $scope.getOwnershipInfo();
             $scope.getActivityFeed();
@@ -55,13 +56,29 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             }
         }
 
-        SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'access_token_exists', 'last_backup']).then(function(data) {
-            console.log(data);
-            $scope.backupInfo = data;
-        });
+        $scope.getTokenInfo = function() {
+            SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
+                $scope.backupInfo = data[0];
+            });
+        };
 
         $scope.authorizeOauth = function(svc) {
-            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {console.log(x); window.open(x[0]['request_authorization']);});
+            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {window.location.href=x[0].request_authorization;});
+        };
+
+        $scope.deauthorizeOauth = function(svc) {
+            SWBrijj.procm('oauth.deauthorize', 'dropbox', navState.role).then(function(x) {$scope.getTokenInfo();});
+        };
+        
+        $scope.backupStatus = function() {
+            return ($scope.backupInfo && $scope.backupInfo.last_backup) || "Please authenticate Dropbox for backups.";
+        };
+        $scope.backupError = function() {
+            if ($scope.backupInfo) {
+                return $scope.backupInfo.auth_code_exists > $scope.backupInfo.access_token_exists;
+            } else {
+                return false;
+            }
         };
 
         $scope.close = function() {
@@ -374,18 +391,42 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.photoURL = '/photo/user?id=' + x[0].email;
             $scope.person.namekey = $scope.person.name;
 
+            $scope.getTokenInfo();
             $scope.getActivityFeed();
             $scope.getOwnershipInfo();
             $scope.getDocumentInfo();
         });
   
-        SWBrijj.tblm('oauth.user_tokens', ['swid', 'service', 'access_token_exists', 'last_backup']).then(function(data) {
-            console.log(data);
-            $scope.backupInfo = data;
-        });
+        $scope.getTokenInfo = function() {
+            SWBrijj.tblm('oauth.user_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
+                $scope.backupInfo = data[0];
+                console.log($scope.backupInfo);
+            });
+        };
 
         $scope.authorizeOauth = function(svc) {
-            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {console.log(x); window.open(x[0]['request_authorization']);});
+            SWBrijj.procm('oauth.request_authorization', 'dropbox', navState.role).then(function(x) {window.location.href=x[0].request_authorization;});
+        };
+
+        $scope.deauthorizeOauth = function(svc) {
+            SWBrijj.procm('oauth.deauthorize', 'dropbox', navState.role).then(function(x) {$scope.getTokenInfo();});
+        };
+
+        $scope.backupStatus = function() {
+            if (!$scope.backupInfo) {
+                return "Please authenticate Dropbox for backups.";
+            } else if ($scope.backupInfo.last_backup) {
+                return $scope.backupInfo.last_backup;
+            } else if ($scope.backupInfo.access_token_exists) {
+                return "Pending backup.";
+            }
+        };
+        $scope.backupError = function() {
+            if ($scope.backupInfo) {
+                return $scope.backupInfo.auth_code_exists > $scope.backupInfo.access_token_exists;
+            } else {
+                return false;
+            }
         };
 
         $scope.activityOrder = function(card) {
@@ -396,7 +437,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.activity = [];
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
                 var originalfeed = feed;
-                console.log(feed);
                 //Generate the groups for the activity feed
                 $scope.eventGroups = [];
                 var uniqueGroups = [];
