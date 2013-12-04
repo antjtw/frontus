@@ -122,9 +122,9 @@
                     <input class="pointer" disabled style="width:180px;" ng-model="issue.issue">
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
-                <td>{{formatAmount(issue.vested)}}</td>
-                <td>{{formatAmount(issue.forfeited)}}</td>
-                <td>{{formatAmount(issue.exercised)}}</td>
+                <td>{{issue.vested}}</td>
+                <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
+                <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
             </tr>
             <tr ng-show="issue.shown" ng-repeat="tran in issue.trans">
                 <td></td>
