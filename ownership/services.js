@@ -99,7 +99,7 @@ ownership.service('calculate', function () {
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
-            var vestbegin = angular.copy(tran.vestingbegins)
+            var vestbegin = angular.copy(tran.vestingbegins);
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
                     if (!isNaN(parseFloat(vesting[tran.investor]))) {

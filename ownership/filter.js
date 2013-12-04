@@ -1,5 +1,17 @@
 var ownership = angular.module('ownerFilters', []);
 
+ownership.filter('noUnissue', function () {
+    return function (rows) {
+        var returnrows = [];
+        angular.forEach(rows, function (row) {
+            if (row.editable != 0 || row.name == "") {
+                returnrows.push(row);
+            }
+        });
+        return returnrows;
+    };
+});
+
 
 // Returns the rows not including unissued shares
 ownership.filter('noUnissue', function () {

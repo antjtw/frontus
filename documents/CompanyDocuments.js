@@ -757,27 +757,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee == "" ? "!!!" : tosee;
-            if ($rootScope.navState.userid.indexOf("@sharewave.com") !== -1) {
-                console.log("here");
-                SWBrijj.procm("document.josh_multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
-                    console.log(data);
-                    $scope.$emit("notification:success", "Documents shared");
-                    $route.reload();
-                }).except(function(x) {
-                        void(x);
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    });
-            }
-            else {
-                SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
-                    console.log(data);
-                    $scope.$emit("notification:success", "Documents shared");
-                    $route.reload();
-                }).except(function(x) {
-                        void(x);
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    });
-            }
+            SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                console.log(data);
+                $scope.$emit("notification:success", "Documents shared");
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                });
         }
     }
 ]);
