@@ -73,35 +73,6 @@
         </tbody>
     </table>
     <div class="row-fluid">
-        <!--<table class="tableView bodyText grant-table" ng-show="rows.length!==0">
-            <tr class="column-label">
-                <th>Shareholder</th>
-                <th>Granted</th>
-                <th>Vested</th>
-                <th>Forfeited</th>
-                <th>Exercised</th>
-            </tr>
-            <tr class="pointer status-row" ng-click="getActiveTransaction(row.name)" ng-repeat="row in rows" ng-class="{rowSelected:row.state}">
-                <td>
-                    <input class="pointer" disabled style="width:180px;" ng-model="row.name">
-                </td>
-                <td>{{formatAmount(row.granted)}}</td>
-                <td>{{formatAmount(row.vested)}}</td>
-                <td>{{formatAmount(row.forfeited)}}</td>
-                <td>{{formatAmount(row.exercised)}}</td>
-            </tr>
-            <tr class="total-row">
-                <td>Total</td>
-                <td colspan="4"></td>
-            </tr>
-            <tr class='tablefooter'>
-                <td></td>
-                <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalVestedAction(rows))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
-            </tr>
-        </table>-->
 
         <table class="tableView bodyText grant-table" ng-show="issues.length!==0">
             <tr class="column-label">
@@ -133,16 +104,18 @@
                             ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>
                 <td><input maxlength="18"
-                           placeholder="shares"
+                           ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
                 <td>{{tran.vested}}</td>
                 <td><input maxlength="18"
+                           ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
                 <td><input maxlength="18"
+                           ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
                 </td>
