@@ -1493,6 +1493,9 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.status-toggle.status-icon {
     width: 28px;
 }
+.investor.status-table > tbody > tr > td.status-toggle.status-icon {
+    width: auto;
+}
 
 .status-toggle > .circle {
     width: 14px;
@@ -1576,6 +1579,9 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
     padding-left: 10px;
+}
+.status-table.investor > tbody > tr > td.shareholder-column.docname-column {
+    padding-left: 20px;
 }
 .status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
     color:#1E2D3D !important;
