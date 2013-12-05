@@ -884,9 +884,12 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .row-fluid .span8.leftBlock {
     float: left;
     width: 674px;
+    /* Safari */
+}
+
+.widthtransition25 {
     transition:width 0.25s;
     -webkit-transition:width 0.25s;
-    /* Safari */
 }
 /* Login */
 .gateway {
