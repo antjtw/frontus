@@ -73,6 +73,18 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         }
 
+        navigator.sayswho= (function(){
+            var ua= navigator.userAgent, tem,
+                M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
+            if(/trident/i.test(M[1])){
+                tem=  /\brv[ :]+(\d+(\.\d+)?)/g.exec(ua) || [];
+                return 'IE '+(tem[1] || '');
+            }
+            M= M[2]? [M[1], M[2]]:[navigator.appName, navigator.appVersion, '-?'];
+            if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+            return M;
+        })();
+
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         $scope.navState = navState;
         navState.path = document.location.pathname;
@@ -225,4 +237,37 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
             }
         };
+
+        $scope.version_compare = function(v1, v2) {
+            var v1parts = v1.split('.');
+            var v2parts = v2.split('.');
+
+            for (var i = 0; i < v1parts.length; ++i) {
+                if (v2parts.length == i) {
+                    return true;
+                }
+
+                if (v1parts[i] == v2parts[i]) {
+                    continue;
+                }
+                else if (v1parts[i] > v2parts[i]) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            if (v1parts.length != v2parts.length) {
+                return false;
+            }
+
+            return true;
+        };
+
+        console.log(!(navigator.sayswho[0] == "Safari" && $scope.version_compare("537.43.58", navigator.sayswho[1])));
+
+        $scope.oldSafari = function() {
+            return (!(navigator.sayswho[0] == "Safari" && $scope.version_compare("537.43.58", navigator.sayswho[1])));
+        }
     }]);
