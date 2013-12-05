@@ -351,6 +351,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     width: 350px;
     min-height: 850px;
     border-left: 6px solid #E3E3E3;
+}
+
+.slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
     -webkit-transition: all 0.25s; /* Safari and Chrome */
@@ -1370,10 +1373,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width: -webkit-calc(100% + 140px);
     width: calc(100% + 140px);
     background-color: #1D2C3C;
-    transition: left 0.25s;
-    -moz-transition:left 0.25s; /* Firefox 4 */;
-    -webkit-transition: left 0.25s; /* Safari and Chrome */
-    -o-transition: left 0.25s; /* Opera */
     left: -100%;
 }
 
@@ -1415,10 +1414,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: -webkit-calc(100% - 40px);
     height: calc(100% - 40px);
     border-left: 1px solid #33485D;
-    transition: left 0.25s;
-    -moz-transition:left 0.25s; /* Firefox 4 */;
-    -webkit-transition: left 0.25s; /* Safari and Chrome */
-    -o-transition: left 0.25s; /* Opera */
     overflow: hidden;
 }
 
