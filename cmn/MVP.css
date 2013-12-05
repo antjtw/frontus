@@ -115,11 +115,11 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 textarea:focus, input:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 input:focus, textarea:focus {
@@ -823,24 +823,30 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls {
     height: 60px;
     white-space: nowrap;
-    margin-bottom: 20px;
+    margin: 0 40px 20px 40px;
     background-color: #F1F1F1;
+    text-align: center;
+}
+.subnav-controls span {
+    font-size: 10px;
 }
 .subnav-controls > div:first-child {
-    margin-left: 20px;
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: -moz-calc(100% - 45px);
-    width: -webkit-calc(100% - 45px);
-    width: calc(100% - 45px);
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
 }
 .subnav-controls > div > div {
-    margin-right: 20px;
     position: relative;
 }
-.subnav-controls > div > div.pull-right {
-    margin-right: 40px;
+.subnav-controls div div.standard-button {
+    margin-left: 20px;
+}
+.subnav-controls ul.drop-selector {
+    margin-left: 8px;
+    margin-right: 20px;
 }
 .subnav-controls input {
     border: 0;
@@ -855,7 +861,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     border-radius: 3px;
     margin-left: 10px;
     box-shadow: none !important;
-    border: none !important;
+    border: 1px solid #E3E3E3;
 }
 .subnav-controls h2 {
     margin-left: 10px;
@@ -1203,7 +1209,7 @@ form.inputs {
 
 /* Information Boxes */
 .info-box {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     margin-bottom: 20px;
 }
 
@@ -1405,7 +1411,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody:first-child > tr {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     height: 30px;
     color: #1E2D3D;
     font-family: 'FS Elliot Web Bold', sans-serif;
@@ -1435,7 +1441,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     height: 60px;
 }
 .status-table > tbody > tr > th {
@@ -1448,7 +1454,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td {
     color: #666666;
-    border-bottom: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E3E3E3;
 }
 
 .status-table > tbody > tr > td:last-child {
@@ -1477,7 +1483,7 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 55px;
+    width: 28px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
@@ -1486,6 +1492,9 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.status-toggle.status-icon {
     width: 28px;
+}
+.investor.status-table > tbody > tr > td.status-toggle.status-icon {
+    width: auto;
 }
 
 .status-toggle > .circle {
@@ -1516,7 +1525,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
     background-color: #F1F1F1;
-    border-right: 1px solid #E2E2E2;
+    border-right: 1px solid #E3E3E3;
     border-bottom: 1px solid #F1F1F1;
 }
 
@@ -1569,6 +1578,9 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
+    padding-left: 10px;
+}
+.status-table.investor > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }
 .status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
@@ -2081,12 +2093,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .drop-selector .standard .dropdown-toggle {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 .drop-selector .standard .dropdown-menu {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     margin-left: -2px;
     width: 154px;
 }
@@ -2109,7 +2121,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .dropdown-toggle.dark {
-    background-color: #E2E2E2;
+    background-color: #E3E3E3;
 }
 
 
@@ -2213,6 +2225,9 @@ button.icon-button:hover {
     background: url('/img/down-arrow-20x30.png');
     width:20px;
     height:30px;
+}
+.standard.open .dropdown-toggle::before {
+    background: url('/img/up-arrow-20x30.png');
 }
 .standard .dropdown-toggle:hover {
     background-color: rgb(227, 227, 227);
@@ -2929,7 +2944,6 @@ h2.onboard {
 }
 
 .dynamic-page .subnav-controls > div:first-child {
-    margin-left: 40px;
 }
 
 .dynamic-page .status-table {

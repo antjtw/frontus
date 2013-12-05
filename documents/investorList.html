@@ -41,7 +41,7 @@
                         </td>
                         <td class="shareholder-column status-column">
                             <ul>
-                                <li>{{doc.last_event.activity}}</li>
+                                <li>{{shortStatus(doc)}}</li>
                                 <li>{{momentFromNow(doc.last_event.event_time)}}</li>
                             </ul>
                         </td>
@@ -59,6 +59,7 @@
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="gotoDoc(doc.doc_id)">View Document</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
                                 </li>
                             </ul>

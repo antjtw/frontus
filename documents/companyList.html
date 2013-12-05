@@ -12,9 +12,26 @@
         <div class="row-fluid">
             <div class="subnav-controls">
                 <div>
-
                     <div class="pull-left">
-                        <span>Search</span>
+                        <span>SORT BY</span>
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ docOrder | docOrderPrinter }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="setOrder('docname')" class="button">Document Name</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setOrder('statusRatio')" class="button">Document Status</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-left">
+                        <span>SEARCH</span>
                         <input type="text" class="search-box" ng-model="query">
                     </div>
 
@@ -46,8 +63,7 @@
             <table class="status-table" ng-show="documents.length!==0">
                 <tbody>
                     <tr>
-                        <th></th>
-                        <th class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
                         <th colspan="2" class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
                         <th></th>
                     </tr>
@@ -127,6 +143,7 @@
                                         <li ng-click="viewStatus(doc)">View Status</li>
                                         <li ng-click="viewInvestorCopy(doc, version)">View Version</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
                                 </li>
                             </ul>

@@ -426,16 +426,19 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.shortVersionStatus = function(version) {
-            if (version) {
-                if (version.last_event && version.last_event.activity) {
-                    if (version.last_event.activity==='signed') {
-                        return 'signed, awaiting countersign';
-                    } else if (version.last_event.activity==='received') {
-                        return 'sent';
-                    } else {
-                        return version.last_event.activity;
-                    }
-                }
+            if (!version) return "";
+            if ($scope.isPendingSignature(version)){
+                return "Awaiting Recipient Signature";
+            } else if ($scope.isPendingCountersignature(version)){
+                return "Awaiting Countersignature";
+            } else if ($scope.isCompleteSigned(version)){
+                return "Countersigned";
+            } else if ($scope.isPendingView(version)){
+                return "Unviewed";
+            } else if ($scope.isCompleteViewed(version)){
+                return "Viewed";
+            } else {
+                return "Sent";
             }
         };
 
@@ -550,9 +553,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             }
         };
+        $scope.isCompleteSigned = function(version) {
+            return version.signature_deadline && version.when_confirmed;
+        };
+        $scope.isCompleteViewed = function(version) {
+            return !version.signature_deadline && version.last_viewed;
+        };
 
         $scope.versionIsComplete = function(version) {
-            return (version.signature_deadline && version.when_confirmed) || (!version.signature_deadline && version.last_viewed);
+            return  $scope.isCompleteSigned(version) || $scope.isCompleteViewed(version);
         };
 
         $scope.defaultDocStatus = function (doc) {
@@ -1530,6 +1539,23 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             }
         };
 
+        $scope.shortStatus = function(version) {
+            if (!version) return "";
+            if ($scope.isPendingSignature(version)){
+                return "Awaiting Recipient Signature";
+            } else if ($scope.isPendingCountersignature(version)){
+                return "Awaiting Countersignature";
+            } else if ($scope.isCompleteSigned(version)){
+                return "Countersigned";
+            } else if ($scope.isPendingView(version)){
+                return "Unviewed";
+            } else if ($scope.isCompleteViewed(version)){
+                return "Viewed";
+            } else {
+                return "Sent";
+            }
+        };
+
         $scope.isPendingCountersignature = function(doc) {
             return doc.when_signed && !doc.when_confirmed;
         };
@@ -1541,10 +1567,15 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.isPendingView = function(doc) {
             return !doc.signature_deadline && !doc.last_viewed;
         };
+        $scope.isCompleteSigned = function(version) {
+            return version.signature_deadline && version.when_confirmed;
+        };
+        $scope.isCompleteViewed = function(version) {
+            return !version.signature_deadline && version.last_viewed;
+        };
 
         $scope.docIsComplete = function(doc) {
-            return (doc.signature_deadline && doc.when_confirmed) ||
-                   (!doc.signature_deadline && doc.last_viewed);
+            return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
         };
 
     }
@@ -1690,6 +1721,14 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 docviews.filter('fromNow', function() {
     return function(date, servertime) {
         return moment(date).from(servertime);
+    };
+});
+
+docviews.filter('docOrderPrinter', function() {
+    return function(order) {
+        if (order == "docname" || order == "-docname") return "Document Name";
+        else if (order == "statusRatio" || order == "-statusRatio") return "Status Ratio";
+        else return order;
     };
 });
 
