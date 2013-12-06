@@ -18,6 +18,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     // False is edit mode, true is view mode
     $scope.maintoggle = false;
+    $scope.optionView = "Security";
 
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
@@ -522,6 +523,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.togglename = function() {
         return $scope.maintoggle ? "Edit" : "View";
     };
+
+    $scope.setView = function(field) {
+        $scope.optionView = field;
+    };
+
 
     // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
