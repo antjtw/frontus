@@ -725,6 +725,11 @@ textarea {
     width: calc(100% - 40px);
 }
 
+.tableView.grant-table.viewmode {
+    background: none;
+    background-color: #FFFFFF;
+}
+
 .tableView.grant-table .status-row:hover {
     background-color: transparent;
 }
