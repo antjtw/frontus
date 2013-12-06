@@ -49,7 +49,7 @@
                                 </form>
                             </div>
 
-                            <div class="box off top" ng-hide="toggle" ng-animate="'box'">
+                            <div class="box off top" ng-init="{toggle=false;}" ng-hide="toggle" ng-animate="'box'">
                                 <div class="row-fluid">
                                     <div class="span6 text-center thanks">
                                         <div class="block"></div>
@@ -283,7 +283,7 @@
 								</form>
 							</div>
 
-							<div class="box off" ng-hide="toggle" ng-animate="'box'">
+                                                        <div class="box off" ng-init="{toggle=false}" ng-hide="toggle" ng-animate="'box'">
 								<h2>Thanks for signing up to use Sharewave!</h2>
 								<div class="spacer10"></div>
 								<p>Please check your email to complete your registration.</p>
