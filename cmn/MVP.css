@@ -841,7 +841,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls > div > div {
     position: relative;
 }
-.subnav-controls div div.standard-button {
+.subnav-controls div.pull-right div.standard-button {
     margin-left: 20px;
 }
 .subnav-controls ul.drop-selector {
