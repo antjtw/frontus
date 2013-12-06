@@ -16,6 +16,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.issuekeys = [];
     $scope.possibleActions = ['exercised', 'forfeited'];
 
+    // False is edit mode, true is view mode
+    $scope.maintoggle = false;
+
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
         angular.forEach(results, function (result) {
@@ -511,6 +514,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     };
 
+    //
+    $scope.editViewToggle = function() {
+        $scope.maintoggle = !$scope.maintoggle;
+    };
+
+    $scope.togglename = function() {
+        return $scope.maintoggle ? "Edit" : "View";
+    };
+
     // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
         tran.issue = issue.issue;
@@ -541,3 +553,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
 
 };
+
+// Returns only the real transactions (not the empty ones)
+owner.filter('noempty', function () {
+    return function (trans) {
+        var returntrans = [];
+        angular.forEach(trans, function (tran) {
+            if (tran.investor != null) {
+                returntrans.push(tran);
+            }
+        });
+        return returntrans;
+    };
+});

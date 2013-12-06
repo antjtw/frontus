@@ -751,7 +751,7 @@ textarea {
     padding: 0;
 }
 
-.tableView.grant-table tr.status-row td {
+.tableView.grant-table tr.status-row td, .tableView.grant-table td > span {
     padding: 0 0 0 4px;
 }
 
