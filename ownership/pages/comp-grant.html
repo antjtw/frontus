@@ -90,31 +90,32 @@
                     <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input class="pointer" disabled style="width:180px;" ng-model="issue.issue">
+                    <input disabled ng-model="issue.issue">
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
-                <td>{{issue.vested}}</td>
+                <td>{{formatAmount(issueVested(issue))}}</td>
                 <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
                 <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
             </tr>
-            <tr ng-show="issue.shown" ng-repeat="tran in issue.trans">
+            <tr class="transaction-rows" ng-show="issue.shown" ng-repeat="tran in issue.trans">
                 <td></td>
                 <td><input  ng-model="tran.investor"
+                            placeholder="add new transaction"
                             ng-change="fauxupdating(tran)"
                             ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>
-                <td><input maxlength="18"
+                <td><input maxlength="18" placeholder="shares"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
-                <td>{{tran.vested}}</td>
-                <td><input maxlength="18"
+                <td>{{formatAmount(transactionVested(tran.vested))}}</td>
+                <td><input maxlength="18" placeholder="shares"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
-                <td><input maxlength="18"
+                <td><input maxlength="18" placeholder="shares"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">

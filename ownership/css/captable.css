@@ -717,21 +717,94 @@ textarea {
 .tableView.grant-table {
     margin-bottom: 60px;
     margin-top: 20px;
+    margin-left: 40px;
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+}
+
+.tableView.grant-table .status-row:hover {
+    background-color: transparent;
+}
+
+.tableView.grant-table input {
+    width: -moz-calc(100% - 9px);
+    width: -webkit-calc(100% - 9px);
+    width: calc(100% - 9px);
+    height: 100%;
+    background-color: #F1F1F1;
+    padding-left: 4px;
+}
+
+.tableView.grant-table input:focus {
+    background-color: #E3E3E3;
 }
 
 .tableView.grant-table th:first-of-type {
-    width: 60px;
+    width: 35px;
+    padding: 0;
 }
 
 .tableView.grant-table td {
     padding: 0;
 }
 
-.tableView.grant-table tr > td:first-child {
-    padding-left: 40px;
-    text-align: left;
+.tableView.grant-table tr.status-row td {
+    padding: 0 0 0 4px;
+}
+
+.tableView.grant-table tr.status-row td:nth-child(1), .tableView.grant-table tr.status-row td:nth-child(2) {
+    padding: 0;
+}
+
+.tableView.grant-table tr.status-row > td:nth-child(2) > input {
+    background-color: #FFFFFF;
+}
+
+.tableView.grant-table tr > td.status-toggle {
+    text-align: center;
+    background-color: #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
+}
+
+.tableView.grant-table tr > td.status-toggle.status-toggle-on {
+    background-color: #F1F1F1;
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+}
+
+.tableView.grant-table tr.status-row {
+    height: 42px;
+}
+
+.tableView.grant-table tr.transaction-rows {
+    border: 1px solid #E3E3E3;
+    height: 40px;
+}
+
+.tableView.grant-table tr.transaction-rows > td {
+    background-color: #F1F1F1;
+}
+
+.tableView.grant-table tr.transaction-rows > td:first-child {
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #F1F1F1;
+}
+
+.tableView.grant-table input:disabled::-webkit-input-placeholder { /* WebKit browsers */
+    color: #F1F1F1;
+}
+.tableView.grant-table input:disabled:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #F1F1F1;
+}
+.tableView.grant-table input:disabled::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #F1F1F1;
+}
+.tableView.grant-table input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #F1F1F1;
 }
 
 tr.rowSelected, tr.rowSelected:hover {
@@ -742,6 +815,10 @@ tr.rowSelected, tr.rowSelected:hover {
 .rowSelected > td > input:disabled {
     color: #F1F1F1;
     -webkit-text-fill-color: #F1F1F1;
+}
+
+.tableView.grant-table .tablefooter input {
+    background-color: #FFFFFF;
 }
 
 .rowSelected > td {

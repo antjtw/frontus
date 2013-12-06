@@ -68,6 +68,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.datekey = tran['date'].toUTCString();
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
+                            tran.vested = calculate.tranvested(tran);
                             issue.trans.push(tran);
                         }
                     });
@@ -75,8 +76,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     issue.trans.push(newTran);
                 });
 
-                //Calculate the total vested for each row
-                $scope.rows = calculate.vested($scope.rows, $scope.trans);
 
             });
         });
@@ -410,6 +409,24 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
         });
         return units
+    };
+
+    $scope.issueVested = function(issue) {
+        var units = 0;
+        angular.forEach(issue.trans, function (tran) {
+            angular.forEach(tran.vested, function (value, key) {
+                units += value;
+            });
+        });
+        return units != 0 ? units : null;
+    };
+
+    $scope.transactionVested = function(vested) {
+        var units = 0;
+        angular.forEach(vested, function (value, key) {
+            units += value;
+        });
+        return units != 0 ? units : null;
     };
 
     //switches the sidebar based on the type of the issue
