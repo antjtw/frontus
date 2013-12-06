@@ -305,32 +305,37 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.saveTran = function (transaction) {
         if (transaction.investor != null) {
-            var d1 = transaction['date'].toUTCString();
-            if (transaction['vestingbegins'] == undefined) {
-                var vestcliffdate = null
+            if (isNaN(parseFloat(transaction.units)) && !isNaN(parseInt(transaction.tran_id))) {
+                $scope.tranDeleteUp(transaction);
             }
-
             else {
-                var vestcliffdate = (transaction['vestingbegins']).toUTCString();
-            }
-            if (transaction['tran_id'] == undefined) {
-                transaction['tran_id'] = '';
-            }
-            // Convert amount to a float but remove the NaNs if amount is undefined
-            transaction['amount'] = parseFloat(transaction['amount']);
-            if (isNaN(transaction['amount'])) {
-                transaction['amount'] = null;
-            }
-            transaction['units'] = parseFloat(transaction['units']);
-            if (isNaN(transaction['units'])) {
-                transaction['units'] = null;
-            }
-            console.log(transaction);
-            SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
-                if (transaction.tran_id == '') {
-                    transaction.tran_id = data[1][0];
+                var d1 = transaction['date'].toUTCString();
+                if (transaction['vestingbegins'] == undefined) {
+                    var vestcliffdate = null
                 }
-            });
+
+                else {
+                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
+                }
+                if (transaction['tran_id'] == undefined) {
+                    transaction['tran_id'] = '';
+                }
+                // Convert amount to a float but remove the NaNs if amount is undefined
+                transaction['amount'] = parseFloat(transaction['amount']);
+                if (isNaN(transaction['amount'])) {
+                    transaction['amount'] = null;
+                }
+                transaction['units'] = parseFloat(transaction['units']);
+                if (isNaN(transaction['units'])) {
+                    transaction['units'] = null;
+                }
+                console.log(transaction);
+                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
+                    if (transaction.tran_id == '') {
+                        transaction.tran_id = data[1][0];
+                    }
+                });
+            }
         }
     };
 
@@ -348,7 +353,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.updateName = function (changetran) {
         // Deleting a transaction pulls up a check modal
         if (changetran.investor == "" && changetran.investorkey != undefined) {
-            $scope.rmodalUp(changetran);
+            changetran.investor = changetran.investorkey;
+            angular.forEach($scope.issues, function (issue) {
+                angular.forEach(issue.trans, function(tran) {
+                    if (tran.investorkey == changetran.investorkey && tran.investorkey != null) {
+                        tran.investor = changetran.investor;
+                    }
+                })
+            });
+            $scope.activeInvestor = changetran.investor;
         }
 
         // Just removes the row because nothing was added and nothing removed
@@ -467,6 +480,34 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                         $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
                     });
             }
+        });
+    };
+
+    // Captable transaction delete modal
+    $scope.tranDeleteUp = function (transaction) {
+        $scope.deleteTran = transaction;
+        $scope.tranDelete = true;
+    };
+
+    $scope.deleteclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.tranDelete = false;
+    };
+
+    $scope.manualdeleteTran = function (tran) {
+        SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function (data) {
+            angular.forEach($scope.issues, function(issue) {
+                var index = -1;
+                angular.forEach(issue.trans, function(transaction) {
+                    if (tran.tran_id == transaction.tran_id) {
+                        index = issue.trans.indexOf(tran);
+                    }
+                });
+                if (index != -1) {
+                    issue.trans.splice(index, 1);
+                    $scope.sideBar = "word";
+                }
+            });
         });
     };
 
