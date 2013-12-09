@@ -164,7 +164,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 grantlist.push(grant);
             }
         });
-        tran[type] = parseFloat(tran[type]);
+        tran[type] = !isNaN(parseFloat(tran[type])) ? parseFloat(tran[type]) : 0;
         if (tran[type] > currentgrants) {
             var newgrant = {'unit': tran[type] - currentgrants, "tran_id": tran.tran_id, "date": (Date.today()), "action": type, "investor": tran.investor, "issue": tran.issue};
             $scope.saveGrant(newgrant, type);
@@ -200,6 +200,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     // Grant saving
     //!!! USING $scope.activeTran IN HERE RESULTS IN BUGS IF THE USER CLICKS ONTO A DIFFERENT CELL FIX!!!
     $scope.saveGrant = function (grant, type) {
+        console.log(isNaN(parseFloat(grant.unit)));
         if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
