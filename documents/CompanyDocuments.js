@@ -1727,7 +1727,7 @@ docviews.filter('fromNow', function() {
 docviews.filter('docOrderPrinter', function() {
     return function(order) {
         if (order == "docname" || order == "-docname") return "Document Name";
-        else if (order == "statusRatio" || order == "-statusRatio") return "Status Ratio";
+        else if (order == "statusRatio" || order == "-statusRatio") return "Document Status";
         else return order;
     };
 });
