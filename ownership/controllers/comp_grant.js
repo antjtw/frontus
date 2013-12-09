@@ -34,16 +34,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             // Get the full set of company grants
             SWBrijj.tblm('ownership.company_grants').then(function (grants) {
 
-                var allissues = issues;
+                $scope.allissues = issues;
                 $scope.trans = trans;
                 $scope.grants = grants;
 
-                for (var i = 0, l = allissues.length; i < l; i++) {
-                    if (allissues[i].type == "Option") {
-                        allissues[i]['trans'] = [];
-                        $scope.issues.push(allissues[i]);
-                        $scope.issuekeys.push(allissues[i].issue);
+                for (var i = 0, l = $scope.allissues.length; i < l; i++) {
+                    if ($scope.allissues[i].type == "Option") {
+                        $scope.allissues[i]['trans'] = [];
+                        $scope.issues.push($scope.allissues[i]);
                     }
+                    $scope.issuekeys.push($scope.allissues[i].issue);
                 }
 
                 // Assign the grants to the respective transactions
@@ -344,6 +344,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     if (transaction.tran_id == '') {
                         transaction.tran_id = data[1][0];
                     }
+                    transaction.vested = calculate.tranvested(transaction);
                 });
             }
         }
