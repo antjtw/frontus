@@ -398,14 +398,25 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
     };
 
-    $scope.opendetails = function(name) {
-        $scope.issues.forEach(function(issue) {
-            if (name == issue.issue) {
-                issue.shown = issue.shown !== true;
-            } else {
-                issue.shown = false;
-            }
-        });
+    $scope.opendetails = function(name, type) {
+        if (type == "issue") {
+            $scope.issues.forEach(function(issue) {
+                if (name == issue.issue) {
+                    issue.shown = issue.shown !== true;
+                } else {
+                    issue.shown = false;
+                }
+            });
+        }
+        else if (type == "investor") {
+            $scope.investorLed.forEach(function(investor) {
+                if (name == investor.name) {
+                    investor.shown = investor.shown !== true;
+                } else {
+                    investor.shown = false;
+                }
+            });
+        }
     };
 
     $scope.issueGranted = function(issue) {
@@ -517,7 +528,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //
     $scope.editViewToggle = function() {
+        console.log($scope.optionView);
         $scope.maintoggle = !$scope.maintoggle;
+        if (!$scope.maintoggle) {
+            $scope.optionView = "Security";
+        }
     };
 
     $scope.togglename = function() {
@@ -526,6 +541,26 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.setView = function(field) {
         $scope.optionView = field;
+        var uniquenames = [];
+        if (field == "Investor") {
+            // Create the investor led row
+            $scope.investorLed = [];
+            angular.forEach($scope.issues, function(issue) {
+                angular.forEach(issue.trans, function(tran) {
+                    if (tran.investor != null) {
+                        if (uniquenames.indexOf(tran.investor) == -1) {
+                            uniquenames.push(tran.investor);
+                            $scope.investorLed.push({'name':tran.investor, 'shown': false, 'trans':[]})
+                        }
+                        angular.forEach($scope.investorLed, function(investor) {
+                            if (investor.name == tran.investor) {
+                                investor.trans.push(tran);
+                            }
+                        });
+                    }
+                });
+            });
+        }
     };
 
 
