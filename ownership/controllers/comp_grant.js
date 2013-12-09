@@ -343,6 +343,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     if (transaction.tran_id == '') {
                         transaction.tran_id = data[1][0];
+                        $scope.trans.push(transaction);
                     }
                     transaction.vested = calculate.tranvested(transaction);
                 });
@@ -464,6 +465,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         return units != 0 ? units : null;
     };
 
+    $scope.totalVestedAction = function(trans) {
+        var units = 0;
+        angular.forEach(trans, function(tran) {
+            angular.forEach(tran.vested, function (value, key) {
+                units += value;
+            });
+        });
+        return units != 0 ? units : null;
+    };
+
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
@@ -535,7 +546,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //
     $scope.editViewToggle = function() {
-        console.log($scope.optionView);
         $scope.maintoggle = !$scope.maintoggle;
         if (!$scope.maintoggle) {
             $scope.optionView = "Security";
