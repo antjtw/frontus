@@ -191,6 +191,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 i += 1;
             }
         }
+        if (tran[type] == 0) {
+            tran[type] = null;
+        }
     };
 
     // Grant saving
@@ -360,7 +363,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     };
 
     $scope.updateName = function (changetran) {
-        // Deleting a transaction pulls up a check modal
         if (changetran.investor == "" && changetran.investorkey != undefined) {
             changetran.investor = changetran.investorkey;
             angular.forEach($scope.issues, function (issue) {
