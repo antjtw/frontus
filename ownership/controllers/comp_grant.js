@@ -1,6 +1,6 @@
 // Grants page controller
 var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
-
+    $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
         return;
@@ -80,7 +80,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     issue.trans.push(newTran);
                 });
 
-
+                $scope.done = true;
             });
         });
     });

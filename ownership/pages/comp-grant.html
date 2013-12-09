@@ -71,7 +71,7 @@
 <div class="row-fluid">
     <div class="captable-controls subnav-controls">
         <div>
-            <div class="pull-left">
+            <div class="pull-left" ng-show="issues.length!==0">
                 <div class="standard-button small-standard-button blue">
                     <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
                 </div>
@@ -94,7 +94,7 @@
                     </li>
                 </ul>
             </div>
-            <div ng-show="rows.length > 0" class="pull-right">
+            <div ng-show="issue.length > 0" class="pull-right">
                 <div class="standard-button">
                     <button ng-click="modalUp();" class="btn">Share</span>
                     </button>
@@ -107,7 +107,7 @@
 
 <div class="span8 docLibrary leftBlock">
 
-    <table class="tableView bodyText grant-table" ng-show="issues.length===0">
+    <table class="tableView bodyText grant-table" ng-show="issues.length===0 && done">
         <tbody class="empty-table">
         <tr>
             <td>

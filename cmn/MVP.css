@@ -1842,7 +1842,7 @@ a.oldschool-link  {
     color: #FFFFFF;
     background-color: #1ABC96;
     width: 130px;
-    min-height: 30px;
+    min-height: 32px;
     position: relative;
 }
 .standard-button > button:hover {
