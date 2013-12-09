@@ -76,7 +76,7 @@
                     <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
                 </div>
             </div>
-            <div class="pull-left" ng-show="maintoggle">
+            <div class="pull-left" ng-show="maintoggle" style="margin-left:10px">
                 <span>VIEW BY</span>
                 <ul class="dropdown-list drop-selector">
                     <li class="dropdown standard">
@@ -129,7 +129,7 @@
             </tr>
             <tbody ng-repeat="issue in issues">
             <tr class="status-row">
-                <td class="status-toggle pointer" ng-class="{'status-toggle-on': issue.shown}" ng-click="opendetails(issue.issue)">
+                <td class="status-toggle pointer" ng-class="{'status-toggle-on': issue.shown}" ng-click="opendetails(issue.issue, 'issue')">
                     <span ng-hide="issue.shown" data-icon="&#xe017;" aria-hidden="true"></span>
                     <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
@@ -166,6 +166,52 @@
                 </td>
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
+                <td></td>
+                <td ng-click="getActiveTransaction(tran)"><span>{{tran.investor}}</span></td>
+                <td ng-click="getActiveTransaction(tran)"><span>{{formatAmount(tran.units)}}</span></td>
+                <td>{{formatAmount(transactionVested(tran.vested))}}</td>
+                <td ng-click="getActiveTransaction(tran, 'forfeited')"><span>{{formatAmount(tran.forfeited)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'exercised')"><span>{{formatAmount(tran.exercised)}}</span></td>
+            </tr>
+            </tbody>
+            <tr class="total-row">
+                <td>Total</td>
+                <td colspan="5"></td>
+            </tr>
+            <tr class='tablefooter'>
+                <td></td>
+                <td></td>
+                <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
+                <td><input disabled value="{{formatAmount(totalVestedAction(rows))}}"></td>
+                <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
+                <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
+            </tr>
+        </table>
+
+        <table class="tableView bodyText grant-table viewmode" ng-show="issues.length!==0 && optionView == 'Investor'">
+            <tr class="column-label">
+                <th></th>
+                <th></th>
+                <th>Granted</th>
+                <th>Vested</th>
+                <th>Forfeited</th>
+                <th>Exercised</th>
+            </tr>
+            <tbody ng-repeat="investor in investorLed">
+            <tr class="status-row">
+                <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}" ng-click="opendetails(investor.name, 'investor')">
+                    <span ng-hide="issue.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                    <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                </td>
+                <td>
+                    <input disabled ng-model="investor.name">
+                </td>
+                <td>{{formatAmount(issueGranted(investor))}}</td>
+                <td>{{formatAmount(issueVested(investor))}}</td>
+                <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
+                <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
+            </tr>
+            <tr class="transaction-rows" ng-show="investor.shown && maintoggle" ng-repeat="tran in investor.trans | noempty">
                 <td></td>
                 <td ng-click="getActiveTransaction(tran)"><span>{{tran.investor}}</span></td>
                 <td ng-click="getActiveTransaction(tran)"><span>{{formatAmount(tran.units)}}</span></td>
