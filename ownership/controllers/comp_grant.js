@@ -1,6 +1,6 @@
 // Grants page controller
 var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
-
+    $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
         return;
@@ -17,7 +17,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
-    $scope.maintoggle = false;
+    $scope.maintoggle = true;
     $scope.optionView = "Security";
 
     //Get the available range of frequency types
@@ -34,16 +34,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             // Get the full set of company grants
             SWBrijj.tblm('ownership.company_grants').then(function (grants) {
 
-                var allissues = issues;
+                $scope.allissues = issues;
                 $scope.trans = trans;
                 $scope.grants = grants;
 
-                for (var i = 0, l = allissues.length; i < l; i++) {
-                    if (allissues[i].type == "Option") {
-                        allissues[i]['trans'] = [];
-                        $scope.issues.push(allissues[i]);
-                        $scope.issuekeys.push(allissues[i].issue);
+                for (var i = 0, l = $scope.allissues.length; i < l; i++) {
+                    if ($scope.allissues[i].type == "Option") {
+                        $scope.allissues[i]['trans'] = [];
+                        $scope.issues.push($scope.allissues[i]);
                     }
+                    $scope.issuekeys.push($scope.allissues[i].issue);
                 }
 
                 // Assign the grants to the respective transactions
@@ -80,15 +80,20 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     issue.trans.push(newTran);
                 });
 
-
+                $scope.done = true;
             });
         });
     });
 
 
     //Get the active row for the sidebar
-    $scope.getActiveTransaction = function (currenttran, mode) {
-        $scope.sideBar = 1;
+    $scope.getActiveTransaction = function (currenttran, mode, view) {
+        if (view == "view") {
+            $scope.sideBar = 3;
+        }
+        else {
+            $scope.sideBar = 1;
+        }
         $scope.mode = 1;
         if (mode == "forfeited") {
             $scope.mode = 2;
@@ -159,7 +164,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 grantlist.push(grant);
             }
         });
-        tran[type] = parseFloat(tran[type]);
+        tran[type] = !isNaN(parseFloat(tran[type])) ? parseFloat(tran[type]) : 0;
         if (tran[type] > currentgrants) {
             var newgrant = {'unit': tran[type] - currentgrants, "tran_id": tran.tran_id, "date": (Date.today()), "action": type, "investor": tran.investor, "issue": tran.issue};
             $scope.saveGrant(newgrant, type);
@@ -195,6 +200,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     // Grant saving
     //!!! USING $scope.activeTran IN HERE RESULTS IN BUGS IF THE USER CLICKS ONTO A DIFFERENT CELL FIX!!!
     $scope.saveGrant = function (grant, type) {
+        console.log(isNaN(parseFloat(grant.unit)));
         if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
@@ -337,7 +343,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     if (transaction.tran_id == '') {
                         transaction.tran_id = data[1][0];
+                        $scope.trans.push(transaction);
                     }
+                    transaction.vested = calculate.tranvested(transaction);
                 });
             }
         }
@@ -457,6 +465,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         return units != 0 ? units : null;
     };
 
+    $scope.totalVestedAction = function(trans) {
+        var units = 0;
+        angular.forEach(trans, function(tran) {
+            angular.forEach(tran.vested, function (value, key) {
+                units += value;
+            });
+        });
+        return units != 0 ? units : null;
+    };
+
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
@@ -528,7 +546,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //
     $scope.editViewToggle = function() {
-        console.log($scope.optionView);
         $scope.maintoggle = !$scope.maintoggle;
         if (!$scope.maintoggle) {
             $scope.optionView = "Security";
