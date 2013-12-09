@@ -167,11 +167,11 @@
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
                 <td></td>
-                <td ng-click="getActiveTransaction(tran)"><span>{{tran.investor}}</span></td>
-                <td ng-click="getActiveTransaction(tran)"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
                 <td>{{formatAmount(transactionVested(tran.vested))}}</td>
-                <td ng-click="getActiveTransaction(tran, 'forfeited')"><span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'exercised')"><span>{{formatAmount(tran.exercised)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')"><span>{{formatAmount(tran.forfeited)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'exercised', 'view')"><span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
             <tr class="total-row">
@@ -213,11 +213,11 @@
             </tr>
             <tr class="transaction-rows" ng-show="investor.shown && maintoggle" ng-repeat="tran in investor.trans | noempty">
                 <td></td>
-                <td ng-click="getActiveTransaction(tran)"><span>{{tran.investor}}</span></td>
-                <td ng-click="getActiveTransaction(tran)"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
                 <td>{{formatAmount(transactionVested(tran.vested))}}</td>
-                <td ng-click="getActiveTransaction(tran, 'forfeited')"><span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'exercised')"><span>{{formatAmount(tran.exercised)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')"><span>{{formatAmount(tran.forfeited)}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'exercised', 'view')"><span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
             <tr class="total-row">
@@ -239,38 +239,18 @@
 
 <div class="span4 capright">
     <div ng-switch on="sideBar">
+        <div class="headsection tabbed row-fluid">
+            <h1>{{activeInvestor}}</h1>
+            <p>Terms from the ownership table</p>
+        </div>
         <span ng-switch-when="1">
-          <div class="headsection tabbed row-fluid">
-              <h1>{{activeInvestor}}</h1>
-              <p>Terms from the ownership table</p>
-          </div>
-
-              <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
-
-                  <h2>Transaction Information</h2>
-
-                  <p ng-show="activeTran.date" class="belowTitle"><span ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                  <p ng-show="activeTran.units" class="belowTitle"><span ng-bind="formatAmount(activeTran.units)"></span><span>Shares</span></p>
-
-                  <p ng-show="activeTran.optundersec" class="belowTitle"><span ng-bind="activeTran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
-
-                  <p ng-show="activeTran.price" class="belowTitle"><span ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span></p>
-
-                  <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
-
-                  <p ng-show="activeTran.vestingbegins" class="belowTitle"><span ng-bind="activeTran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
-
-                  <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
-
-                  <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span></p>
-              </div>
 
               <div class="capGuide global" ng-show="mode == 1 && !maintoggle">
 
                   <h2>Transaction Information</h2>
 
-                  <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{activeTran.$$hashKey}}"
+                  <p class="rightTitle"><span>Date</span><input ng-show="mode == 1 && !maintoggle"
+                                                                ng-disabled="toggleView();" id="date{{activeTran.$$hashKey}}"
                                                                 ui-event="{keydown:'saveTranDate(activeTran, \'date\', $event)', blur:'saveTranDate(activeTran, \'date\', \'blur\')'}"
                                                                 ng-change="saveTranDate(activeTran, 'date')"
                                                                 type="text" ng-model="activeTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
@@ -343,19 +323,6 @@
                 </ul>
             </div>
 
-            <div class="capGuide grants" ng-show="mode == 2 && maintoggle">
-
-                <h2>Forfeit Information</h2>
-
-                <ul>
-                    <li class="grant-list" ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                        <p class="belowTitle"><span ng-bind="act.date | date:settings.shortdate"></span><span>Date</span></p>
-                        <p class="belowTitle"><span ng-bind="act.unit"></span><span>Shares</span></p>
-                    </li>
-                </ul>
-            </div>
-
-
             <div class="capGuide grants" ng-show="mode == 3 && !maintoggle">
 
                 <h2>Exercise Information</h2>
@@ -368,6 +335,45 @@
                 </ul>
             </div>
 
+
+        </span>
+
+        <!-- Explain -->
+        <span ng-switch-when="3">
+
+              <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
+
+                  <h2>Transaction Information</h2>
+
+                  <p ng-show="activeTran.date" class="belowTitle"><span ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>
+
+                  <p ng-show="activeTran.units" class="belowTitle"><span ng-bind="formatAmount(activeTran.units)"></span><span>Shares</span></p>
+
+                  <p ng-show="activeTran.optundersec" class="belowTitle"><span ng-bind="activeTran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
+
+                  <p ng-show="activeTran.price" class="belowTitle"><span ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">Strike Price</span></p>
+
+                  <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
+
+                  <p ng-show="activeTran.vestingbegins" class="belowTitle"><span ng-bind="activeTran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+
+                  <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
+
+                  <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span></p>
+              </div>
+
+              <div class="capGuide grants" ng-show="mode == 2 && maintoggle">
+
+                  <h2>Forfeit Information</h2>
+
+                  <ul>
+                      <li class="grant-list" ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
+                          <p class="belowTitle"><span ng-bind="act.date | date:settings.shortdate"></span><span>Date</span></p>
+                          <p class="belowTitle"><span ng-bind="act.unit"></span><span>Shares</span></p>
+                      </li>
+                  </ul>
+              </div>
+
             <div class="capGuide grants" ng-show="mode == 3 && maintoggle">
 
                 <h2>Exercised Information</h2>
@@ -379,6 +385,7 @@
                     </li>
                 </ul>
             </div>
+
         </span>
 
         <span ng-switch-when="2">

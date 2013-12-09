@@ -17,7 +17,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
-    $scope.maintoggle = false;
+    $scope.maintoggle = true;
     $scope.optionView = "Security";
 
     //Get the available range of frequency types
@@ -87,8 +87,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
 
     //Get the active row for the sidebar
-    $scope.getActiveTransaction = function (currenttran, mode) {
-        $scope.sideBar = 1;
+    $scope.getActiveTransaction = function (currenttran, mode, view) {
+        if (view == "view") {
+            $scope.sideBar = 3;
+        }
+        else {
+            $scope.sideBar = 1;
+        }
         $scope.mode = 1;
         if (mode == "forfeited") {
             $scope.mode = 2;
