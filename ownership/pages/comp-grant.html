@@ -67,6 +67,10 @@
         <li class="selectedtab">Grants</li>
         <li><a href="/ownership/company-status">Status</a></li>
     </ul>
+
+    <div ng-show="lastsaved" class="last-saved">
+        <span>Last saved at </span><span>{{lastsaved | date:'mediumTime'}}</span>
+    </div>
 </div>
 
 <div class="row-fluid">
