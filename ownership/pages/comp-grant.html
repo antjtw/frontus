@@ -76,6 +76,24 @@
                     <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
                 </div>
             </div>
+            <div class="pull-left" ng-show="maintoggle">
+                <span>VIEW BY</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ optionView }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="setView('Security')" class="button">Security</a>
+                            </li>
+                            <li>
+                                <a ng-click="setView('Investor')" class="button">Investor</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             <div ng-show="rows.length > 0" class="pull-right">
                 <div class="standard-button">
                     <button ng-click="modalUp();" class="btn">Share</span>
@@ -100,7 +118,7 @@
     </table>
     <div class="row-fluid">
 
-        <table class="tableView bodyText grant-table" ng-class="{'viewmode': maintoggle}"  ng-show="issues.length!==0">
+        <table class="tableView bodyText grant-table" ng-class="{'viewmode': maintoggle}"  ng-show="issues.length!==0 && optionView == 'Security'">
             <tr class="column-label">
                 <th></th>
                 <th></th>
