@@ -177,19 +177,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             });
             var difference = currentgrants - parseFloat(tran[type]);
             var i = 0;
-            console.log("start");
             while (difference > 0) {
-                console.log(difference);
                 if (grantlist[i].unit >= difference) {
                     grantlist[i].unit -= difference;
                     difference -= difference;
-                    console.log("last one");
                     $scope.saveGrant(grantlist[i], type);
                 }
                 else {
                     difference -= grantlist[i].unit;
                     grantlist[i].unit = 0;
-                    console.log("saving");
                     $scope.saveGrant(grantlist[i], type);
                 }
                 i += 1;
@@ -200,7 +196,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     // Grant saving
     //!!! USING $scope.activeTran IN HERE RESULTS IN BUGS IF THE USER CLICKS ONTO A DIFFERENT CELL FIX!!!
     $scope.saveGrant = function (grant, type) {
-        console.log(isNaN(parseFloat(grant.unit)));
         if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {
                 SWBrijj.proc('ownership.delete_grant', parseInt(grant.grant_id)).then(function (data) {
@@ -341,7 +336,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
                 }
-                console.log(transaction);
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     if (transaction.tran_id == '') {
@@ -382,7 +376,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         // Just removes the row because nothing was added and nothing removed
         else if (changetran.investor == "" || changetran.investor == null) {
             angular.forEach($scope.issues, function(issue) {
-                console.log(issue);
                 if (issue.issue == changetran.issue) {
                     var index = issue.trans.indexOf(changetran);
                     issue.trans.splice(index, 1);
