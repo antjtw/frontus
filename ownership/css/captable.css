@@ -770,9 +770,14 @@ textarea {
 
 .tableView.grant-table tr > td.status-toggle {
     text-align: center;
+    color: #C7C7C7;
     background-color: #FFFFFF;
     border-left: 1px solid #FFFFFF;
     border-right: 1px solid #FFFFFF;
+}
+
+.tableView.grant-table tr > td.status-toggle:hover {
+    color: #A6A6A6;
 }
 
 .tableView.grant-table tr > td.status-toggle.status-toggle-on {
