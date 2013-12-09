@@ -200,8 +200,8 @@
             <tbody ng-repeat="investor in investorLed">
             <tr class="status-row">
                 <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}" ng-click="opendetails(investor.name, 'investor')">
-                    <span ng-hide="issue.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                    <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    <span ng-hide="investor.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                    <span ng-show="investor.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
                     <input disabled ng-model="investor.name">
@@ -213,7 +213,7 @@
             </tr>
             <tr class="transaction-rows" ng-show="investor.shown && maintoggle" ng-repeat="tran in investor.trans | noempty">
                 <td></td>
-                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
                 <td>{{formatAmount(transactionVested(tran.vested))}}</td>
                 <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')"><span>{{formatAmount(tran.forfeited)}}</span></td>
