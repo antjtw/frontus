@@ -39,7 +39,7 @@
 						<h1>The best way to manage <br class="hidden-phone">your shareholders</h1>
 
                         <div id="CompanyRegister-form" ng-hide="incompany">
-                            <div class="box on" ng-show="toggle" ng-animate="'box'">
+                            <div ng-cloak class="box on" ng-show="toggle" ng-animate="'box'">
                                 <form name="myForm">
                                     <fieldset>
                                         <input type="text" class="loginInput" name="email" placeholder="Your Email Address" ng-model="user.email"  >
@@ -49,7 +49,7 @@
                                 </form>
                             </div>
 
-                            <div class="box off top" ng-init="{toggle=false;}" ng-hide="toggle" ng-animate="'box'">
+                            <div ng-cloak class="box off top" ng-hide="toggle" ng-animate="'box'">
                                 <div class="row-fluid">
                                     <div class="span6 text-center thanks">
                                         <div class="block"></div>
@@ -264,7 +264,7 @@
 				<div class="row-fluid">
 					<div class="span10 offset1 text-center">
 						 <div id="CompanyRegister-form">
-						 	<div class="box on" ng-show="toggle" ng-animate="'box'">
+                                                     <div ng-cloak class="box on" ng-show="toggle" ng-animate="'box'">
 								<h2>How much does this cost?</h2>
                                 <div class="spacer30"></div>
 								<div class="currency">$</div>
@@ -283,7 +283,7 @@
 								</form>
 							</div>
 
-                                                        <div class="box off" ng-init="{toggle=false}" ng-hide="toggle" ng-animate="'box'">
+                                                        <div ng-cloak class="box off" ng-hide="toggle" ng-animate="'box'">
 								<h2>Thanks for signing up to use Sharewave!</h2>
 								<div class="spacer10"></div>
 								<p>Please check your email to complete your registration.</p>
