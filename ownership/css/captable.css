@@ -741,7 +741,6 @@ textarea {
     height: 100%;
     background-color: #F1F1F1;
     padding-left: 4px;
-    -webkit-text-fill-color: rgb(127, 140, 141);;
 }
 
 .tableView.grant-table input:focus {

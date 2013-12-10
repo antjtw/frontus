@@ -153,7 +153,7 @@
             <tr class="transaction-rows" ng-show="issue.shown && !maintoggle" ng-repeat="tran in issue.trans">
                 <td></td>
                 <td><input ng-model="tran.investor"
-                           placeholder="add new transaction"
+                           placeholder="Add new investor"
                            ng-change="fauxupdating(tran)"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>
