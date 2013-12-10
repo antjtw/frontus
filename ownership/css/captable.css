@@ -792,6 +792,7 @@ textarea {
 
 .tableView.grant-table tr.transaction-rows {
     border: 1px solid #E3E3E3;
+    border-right: none;
     height: 40px;
 }
 
