@@ -151,7 +151,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran[grant.action] = tran[grant.action] + parseFloat(grant.unit);
                         }
                     });
-                    tran['exercised'] = tran['excercised'] != 0 ? tran['exercised'] : null;
+                    tran['exercised'] = tran['exercised'] != 0 ? tran['exercised'] : null;
                     tran['forfeited'] = tran['forfeited'] != 0 ? tran['forfeited'] : null;
                 });
             }
