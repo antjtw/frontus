@@ -143,7 +143,8 @@
                     <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input disabled ng-model="issue.issue">
+                    <input ng-show="!maintoggle" ng-click="getActiveIssue(issue, '', 'view')" ng-model="issue.issue">
+                    <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
                 <td>{{formatAmount(issueVested(issue))}}</td>
@@ -366,6 +367,101 @@
                 </ul>
             </div>
 
+
+        </span>
+
+        <span ng-switch-when="4">
+
+            <div class="headsection tabbed row-fluid">
+                <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
+                           ng-model="activeIssue.issue"
+                           onkeydown="testForEnter();">
+                </h2>
+            </div>
+
+              <div class="capGuide grants" ng-show="mode == 1 && !maintoggle">
+
+                  <h2>Issue Information</h2>
+
+                  <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+                                                                      ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                                                                      onkeydown="testForEnter();"></p>
+
+                  <div class="rightTitle double"><span>Underlying Security</span>
+                      <ul class="dropdown-list drop-selector">
+                          <li class="dropdown standard">
+                              <a class="dropdown-toggle">
+                                  {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
+                              </a>
+                              <ul ng-hide="toggleView();" class="dropdown-menu">
+                                  <li ng-repeat="i in allowKeys">
+                                      <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
+                                  </li>
+                              </ul>
+                          </li>
+                      </ul>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                  </div>
+
+                  <p class="rightTitle"><span>Total Authorized</span><input ng-disabled="toggleView();"
+                                                                            ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
+                                                                            ng-model="activeIssue.totalauth"
+                                                                            onkeydown="testForEnter();">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalauth"></span>
+                  </p>
+
+                  <p class="rightTitle"><span>Total Granted</span><input disabled value="{{totalGranted(activeIssue.issue, trans);}}">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalgranted"></span>
+                  </p>
+
+                  <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
+                                                                        ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                        ng-model="activeIssue.price"
+                                                                        onkeydown="testForEnter();">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.price"></span>
+                  </p>
+
+                  <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-disabled="toggleView();"
+                                                                                        ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
+                                                                                        ng-model="activeIssue.terms"
+                                                                                        onkeydown="testForEnter();">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                  </p>
+
+                  <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
+                                                                              id="vestingbegins{{activeIssue.$$hashKey}}"
+                                                                              ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
+                                                                              ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
+                                                                              type="text"
+                                                                              ng-model="activeIssue.vestingbegins"
+                                                                              data-date-format={{settings.lowercasedate}}
+                                                                              bs-datepicker>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                  </p>
+
+                  <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                           ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
+                                                                           ng-model="activeIssue.vestcliff"
+                                                                           onkeydown="testForEnter();">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                  </p>
+
+                  <div class="rightTitle double"><span>Post Cliff Frequency</span>
+                      <ul class="dropdown-list drop-selector">
+                          <li class="dropdown standard">
+                              <a class="dropdown-toggle">
+                                  {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
+                              </a>
+                              <ul ng-hide="toggleView();" class="dropdown-menu">
+                                  <li ng-repeat="i in freqtypes">
+                                      <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
+                                  </li>
+                              </ul>
+                          </li>
+                      </ul>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                  </div>
+              </div>
 
         </span>
 

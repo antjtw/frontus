@@ -12,6 +12,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.rows = [];
     $scope.freqtypes = [];
+    $scope.tf = ["yes", "no"];
     $scope.issues = [];
     $scope.issuekeys = [];
     $scope.possibleActions = ['exercised', 'forfeited'];
@@ -132,6 +133,53 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 }
             });
         }
+    };
+
+    $scope.getActiveIssue = function (issue, mode, view) {
+
+        if (view == "view") {
+            $scope.sideBar = 4;
+        }
+        else {
+            $scope.sideBar = 5;
+        }
+        $scope.mode = 1;
+        $scope.activeIssue = issue;
+        $scope.issueRevert = angular.copy(issue);
+
+        issue.state = true;
+
+        // Get the all the issues that aren't the current issue for the drop downs
+        var allowablekeys = angular.copy($scope.issuekeys);
+        var index = allowablekeys.indexOf(issue.issue);
+        allowablekeys.splice(index, 1);
+        $scope.allowKeys = allowablekeys;
+
+        // Set Boolean Values for the Angularjs Select
+        if (String($scope.activeIssue.partpref) == "true") {
+            $scope.activeIssue.partpref = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.partpref) == "false") {
+            $scope.activeIssue.partpref = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.dragalong) == "true") {
+            $scope.activeIssue.dragalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.dragalong) == "false") {
+            $scope.activeIssue.dragalong = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.tagalong) == "true") {
+            $scope.activeIssue.tagalong = $scope.tf[0];
+        }
+        else if (String($scope.activeIssue.tagalong) == "false") {
+            $scope.activeIssue.tagalong = $scope.tf[1];
+        }
+        if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
+            $scope.activeIssue.date = (Date.today());
+        }
+        // Set Freq Value for Angularjs Select
+        var index = $scope.freqtypes.indexOf(issue.vestfreq);
+        $scope.activeIssue.vestfreq = $scope.freqtypes[index];
     };
 
     $scope.saveGrantDrop = function (grant, type) {
