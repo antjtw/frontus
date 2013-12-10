@@ -796,6 +796,14 @@ textarea {
     height: 40px;
 }
 
+.tableView.grant-table.viewmode tr.transaction-rows:hover > td {
+    background-color: #C7C7C7;
+}
+
+.tableView.grant-table tr.transaction-rows:hover > td:first-child {
+    border-right: #C7C7C7;
+}
+
 .tableView.grant-table tr.transaction-rows > td {
     background-color: #F1F1F1;
 }
