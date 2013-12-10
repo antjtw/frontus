@@ -274,8 +274,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
                 activeAct.push({"unit": null, "tran_id": $scope.activeTran.tran_id, "date": (Date.today()), "action": null, "investor": $scope.activeTran.investor, "issue": $scope.activeTran.issue});
                 $scope.activeTran.activeAct = activeAct;
-
-                $scope.rows = calculate.vested($scope.rows, $scope.trans);
             });
         }
     };
