@@ -90,7 +90,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                     peep.level = person.level
                 }
             });
-            $scope.$emit("notification:success", "Changed ownership table access level");
+            $scope.$emit("notification:success", "Successfully changed permissions");
         }).except(function(x) {
               void(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");

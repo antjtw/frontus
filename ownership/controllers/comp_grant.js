@@ -200,7 +200,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     };
 
     // Grant saving
-    //!!! USING $scope.activeTran IN HERE RESULTS IN BUGS IF THE USER CLICKS ONTO A DIFFERENT CELL FIX!!!
     $scope.saveGrant = function (grant, type) {
         if (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0) {
             if (grant.grant_id != null) {

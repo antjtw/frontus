@@ -173,7 +173,6 @@ ownership.service('calculate', function () {
                 tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
             }
             var remainingterm = angular.copy(tran.terms);
-            console.log(remainingterm);
             while (Date.compare(vestbegin, cycleDate) > -1) {
                 remainingterm = remainingterm - 1;
                 cycleDate.addMonths(1);
@@ -206,7 +205,6 @@ ownership.service('calculate', function () {
                     cycleDate.addMonths(x);
                 }
                 if (Date.compare(Date.today(), cycleDate) > -1) {
-                    console.log(cycleDate);
                     tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
                 }
             }
