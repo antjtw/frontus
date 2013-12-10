@@ -469,8 +469,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.totalVestedAction = function(trans) {
         var units = 0;
         angular.forEach(trans, function(tran) {
-            angular.forEach(tran.vested, function (value, key) {
-                units += value;
+            angular.forEach(tran.vested, function (grant) {
+                units += grant.units;
             });
         });
         return units != 0 ? units : null;
