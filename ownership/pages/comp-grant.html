@@ -162,7 +162,7 @@
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
-                <td><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
                 <td><input maxlength="18" placeholder="shares"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
@@ -178,7 +178,7 @@
                 <td></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'exercised', 'view')">
@@ -228,7 +228,7 @@
                 <td></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'exercised', 'view')">
@@ -351,6 +351,21 @@
                 </ul>
             </div>
 
+            <div class="capGuide grants" ng-show="mode == 4 && !maintoggle">
+
+                <h2>Vested Information</h2>
+
+                <ul>
+                    <li class="grant-list"
+                        ng-repeat="grant in activeTran.vested">
+                        <p class="belowTitle"><span
+                                ng-bind="grant.date | date:settings.shortdate"></span><span>Date</span></p>
+
+                        <p class="belowTitle"><span ng-bind="formatAmount(grant.units)"></span><span>Shares</span></p>
+                    </li>
+                </ul>
+            </div>
+
 
         </span>
 
@@ -429,6 +444,21 @@
                                 ng-bind="act.date | date:settings.shortdate"></span><span>Date</span></p>
 
                         <p class="belowTitle"><span ng-bind="act.unit"></span><span>Shares</span></p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="capGuide grants" ng-show="mode == 4 && maintoggle">
+
+                <h2>Vested Information</h2>
+
+                <ul>
+                    <li class="grant-list"
+                        ng-repeat="grant in activeTran.vested">
+                        <p class="belowTitle"><span
+                                ng-bind="grant.date | date:settings.shortdate"></span><span>Date</span></p>
+
+                        <p class="belowTitle"><span ng-bind="formatAmount(grant.units)"></span><span>Shares</span></p>
                     </li>
                 </ul>
             </div>

@@ -101,6 +101,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         else if (mode == "exercised") {
             $scope.mode = 3;
         }
+        else if (mode == "vested") {
+            $scope.mode = 4;
+        }
         var activeAct = [];
 
         // Only the issues that are not the active transactions (for underlying issue)
@@ -448,8 +451,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.issueVested = function(issue) {
         var units = 0;
         angular.forEach(issue.trans, function (tran) {
-            angular.forEach(tran.vested, function (value, key) {
-                units += value;
+            angular.forEach(tran.vested, function (grant) {
+                units += grant.units;
             });
         });
         return units != 0 ? units : null;
@@ -457,8 +460,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.transactionVested = function(vested) {
         var units = 0;
-        angular.forEach(vested, function (value, key) {
-            units += value;
+        angular.forEach(vested, function (grant) {
+            units += grant.units;
         });
         return units != 0 ? units : null;
     };

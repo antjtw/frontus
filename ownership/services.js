@@ -165,14 +165,15 @@ ownership.service('calculate', function () {
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
     this.tranvested = function (tran) {
-        var tranvested = {};
+        var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
         if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
             var cycleDate = angular.copy(tran.date).add(1).days();
             if (Date.compare(Date.today(), vestbegin) > -1) {
-                tranvested[tran.date] = (tran.units * (tran.vestcliff / 100));
+                tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
             }
             var remainingterm = angular.copy(tran.terms);
+            console.log(remainingterm);
             while (Date.compare(vestbegin, cycleDate) > -1) {
                 remainingterm = remainingterm - 1;
                 cycleDate.addMonths(1);
@@ -205,7 +206,8 @@ ownership.service('calculate', function () {
                     cycleDate.addMonths(x);
                 }
                 if (Date.compare(Date.today(), cycleDate) > -1) {
-                    tranvested[tran.date] = (x * ((monthlyperc / 100) * tran.units));
+                    console.log(cycleDate);
+                    tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
                 }
             }
         }
