@@ -9,9 +9,11 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     var company = navState.company;
     $scope.currentCompany = company;
 
-    $scope.rows = []
-    $scope.uniquerows = []
+    $scope.rows = [];
+    $scope.uniquerows = [];
     $scope.freqtypes = [];
+    $scope.issues = [];
+    $scope.issuekeys = [];
 
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
@@ -20,7 +22,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         });
     });
 
-    SWBrijj.tblm('ownership.this_company_issue').then(function (issues) {
+    SWBrijj.tblm('ownership.this_company_issues').then(function (issues) {
         // Initialisation. Get the transactions and the grants
         SWBrijj.tblm('ownership.this_company_options').then(function (trans) {
             // Get the full set of company grants
@@ -68,8 +70,6 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                             issue.trans.push(tran);
                         }
                     });
-                    var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
-                    issue.trans.push(newTran);
                 });
 
                 $scope.done = true;
@@ -82,10 +82,10 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     //Get the active row for the sidebar
     $scope.getActiveTransaction = function (currenttran, mode, view) {
         if (view == "view") {
-            $scope.sideBar = 3;
+            $scope.sideBar = 1;
         }
         else {
-            $scope.sideBar = 1;
+            $scope.sideBar = 2;
         }
         $scope.mode = 1;
         if (mode == "forfeited") {
