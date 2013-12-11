@@ -768,6 +768,10 @@ textarea {
     background-color: #FFFFFF;
 }
 
+.tableView.grant-table tr.status-row > td:nth-child(2) > input:focus {
+    background-color: #E3E3E3;
+}
+
 .tableView.grant-table tr > td.status-toggle {
     text-align: center;
     color: #C7C7C7;

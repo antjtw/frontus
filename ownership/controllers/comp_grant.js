@@ -41,6 +41,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
                 for (var i = 0, l = $scope.allissues.length; i < l; i++) {
                     if ($scope.allissues[i].type == "Option") {
+                        console.log($scope.allissues[i]);
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
@@ -81,6 +82,12 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
                     issue.trans.push(newTran);
                 });
+
+                // Add extra blank issue, which will create a new one when clicked. Silly future date so that
+                // the issue always appears on the rightmost side of the table
+                $scope.issues.sort(sorting.issuedate);
+                $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
+                $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                 $scope.done = true;
             });
@@ -322,6 +329,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
                     $scope.issuekeys.push(issue.key);
+                    $scope.saveIssue(issue, "type");
 
                     var allowablekeys = angular.copy($scope.issuekeys);
                     var index = allowablekeys.indexOf(issue.issue);
