@@ -218,7 +218,7 @@
                 </td>
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
-                <td></td>
+                <td class="viewField"></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
@@ -268,7 +268,7 @@
             </tr>
             <tr class="transaction-rows" ng-show="investor.shown && maintoggle"
                 ng-repeat="tran in investor.trans | noempty">
-                <td></td>
+                <td class="viewField"></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
                 <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
                 <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>

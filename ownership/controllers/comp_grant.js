@@ -67,11 +67,18 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 angular.forEach($scope.issues, function (issue) {
                     issue.key = issue.issue;
                     issue.shown = false;
+                    var offset = issue.date.getTimezoneOffset();
+                    issue.date = issue.date.addMinutes(offset);
+                    if (issue.vestingbegins) {
+                        issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                    }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
-                            var offset = tran.date.getTimezoneOffset();
                             tran.date = tran.date.addMinutes(offset);
                             tran.datekey = tran['date'].toUTCString();
+                            if (tran.vestingbegins) {
+                                tran.vestingbegins = tran.vestingbegins.addMinutes(offset);
+                            }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
                             tran.vested = calculate.tranvested(tran);
