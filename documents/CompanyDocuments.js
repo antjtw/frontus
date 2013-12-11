@@ -197,6 +197,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -431,8 +433,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return "Awaiting Recipient Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Awaiting Countersignature";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Finalization";
             } else if ($scope.isCompleteSigned(version)){
-                return "Countersigned";
+                return "Finalized";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -444,7 +448,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docStatusNumComplete = function(doc) {
             if (doc.signature_required) {
-                return $scope.versionsSigned(doc).length;
+                return $scope.versionsFinalized(doc).length;
             } else {
                 return $scope.versionsViewed(doc).length;
             }
@@ -468,7 +472,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                      var signatureRatio = $scope.docSignatureRatio(doc);
                      var viewRatio = $scope.docViewRatio(doc);
                      if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
-                     return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
+                     return $scope.versionsFinalized(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
                      } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
                      return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
                      } else {
@@ -476,7 +480,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                      (doc.signature_required ? " signatures" : " views");
                      }
                      */
-                    return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
+                    return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length) +
                         " / " +
                         doc.versions.length +
                         " documents";
@@ -486,7 +490,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docSignatureRatio = function(doc) {
             if (doc) {
-                var initRatio = ($scope.versionsSigned(doc).length / $scope.versionsReqSig(doc).length) || 0;
+                var initRatio = ($scope.versionsFinalized(doc).length / $scope.versionsReqSig(doc).length) || 0;
                 if (initRatio === Infinity) {initRatio = 0;}
                 return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
             }
@@ -516,8 +520,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
-        $scope.versionsSigned = function(doc) {
-            return doc.versions.filter(function(el) {return el.when_confirmed;});
+        $scope.versionsFinalized = function(doc) {
+            return doc.versions.filter(function(el) {return el.when_finalized;});
         };
 
         $scope.versionsReqSig = function(doc) {
@@ -541,7 +545,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.isPendingCountersignature = function(version) {
-            return version.when_signed && !version.when_confirmed;
+            return version.when_signed && !version.when_countersigned;
+        };
+
+        $scope.isPendingFinalization = function(version) {
+            return version.when_signed && version.when_countersigned && !version.when_finalized;
         };
 
         $scope.docIsComplete = function(doc) {
@@ -554,7 +562,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_confirmed;
+            return version.signature_deadline && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
             return !version.signature_deadline && version.last_viewed;
@@ -959,6 +967,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -1466,6 +1476,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -1545,8 +1557,10 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 return "Awaiting Recipient Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Awaiting Countersignature";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Finalization";
             } else if ($scope.isCompleteSigned(version)){
-                return "Countersigned";
+                return "Finalized";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -1556,8 +1570,12 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             }
         };
 
+        $scope.isPendingFinalization = function(doc) {
+            return doc.when_countersigned && !doc.when_finalized;
+        };
+
         $scope.isPendingCountersignature = function(doc) {
-            return doc.when_signed && !doc.when_confirmed;
+            return doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.isPendingSignature = function(doc) {
@@ -1568,7 +1586,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             return !doc.signature_deadline && !doc.last_viewed;
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_confirmed;
+            return version.signature_deadline && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
             return !version.signature_deadline && version.last_viewed;
