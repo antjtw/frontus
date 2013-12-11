@@ -65,6 +65,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
                 // Group the transactions under the issues and calculate the values for the grouped issue.
                 angular.forEach($scope.issues, function (issue) {
+                    issue.key = issue.issue;
                     issue.shown = false;
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
@@ -138,13 +139,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.getActiveIssue = function (issue, mode, view) {
 
         if (view == "view") {
-            $scope.sideBar = 4;
+            $scope.sideBar = 5;
         }
         else {
-            $scope.sideBar = 5;
+            $scope.sideBar = 4;
         }
         $scope.mode = 1;
         $scope.activeIssue = issue;
+        console.log($scope.activeIssue);
         $scope.issueRevert = angular.copy(issue);
 
         issue.state = true;
@@ -180,6 +182,154 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         // Set Freq Value for Angularjs Select
         var index = $scope.freqtypes.indexOf(issue.vestfreq);
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
+    };
+
+    $scope.saveIssueAssign = function (issue, field, i) {
+        if (i) {
+            issue[field] = i;
+        }
+        $scope.saveIssueCheck(issue, field)
+    }
+
+    $scope.saveIssueCheckDate = function (issue, field, evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element(field + '#' + issue.$$hashKey).val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    issue[field] = date;
+                    var offset = issue[field].getTimezoneOffset();
+                    issue[field] = issue[field].addMinutes(offset);
+                    $scope.saveIssueCheck(issue, field);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if (issue[field] instanceof Date) {
+                var offset = issue[field].getTimezoneOffset();
+                issue[field] = issue[field].addMinutes(offset);
+                $scope.saveIssueCheck(issue, field);
+                keyPressed = false;
+            }
+        }
+    };
+
+    $scope.saveIssueCheck = function (issue, field) {
+        var x = false;
+        var testcopy = angular.copy(issue);
+        if ($scope.issueModal == true) {
+            return;
+        }
+        else {
+            if (!angular.equals(testcopy, $scope.issueRevert)) {
+                angular.forEach($scope.trans, function(tran) {
+                    if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
+                        $scope.imodalUp(issue, field);
+                        x = true;
+                    }
+                });
+                if (x == false) {
+                    $scope.saveIssue(issue, field);
+                }
+            }
+            else {
+                return;
+            }
+        }
+    };
+
+    /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
+    $scope.saveIssue = function (issue, item) {
+        if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
+            return
+        }
+
+        else if (issue['issue'] == "" && issue['key'] != null) {
+            $scope.dmodalUp(issue);
+            return
+        }
+
+        else {
+
+            if (issue['key'] != null) {
+                var dateconvert = issue['date'];
+                var d1 = dateconvert.toUTCString();
+                var partpref = $scope.strToBool(issue['partpref']);
+                var dragalong = $scope.strToBool(issue['dragalong']);
+                var tagalong = $scope.strToBool(issue['tagalong']);
+                var common = $scope.strToBool(issue['common']);
+
+                if (issue['vestingbegins'] == undefined) {
+                    var vestcliffdate = null
+                }
+                else {
+                    var vestcliffdate = issue['vestingbegins']
+                }
+
+                if ($scope.allowKeys.indexOf(issue.issue) != -1) {
+                    issue.issue = issue.issue + " (1)";
+                }
+                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
+                    $scope.lastsaved = Date.now();
+                    var oldissue = issue['key'];
+
+                    // Sorts out updating transactions if changes in issues need to be passed down
+                    angular.forEach($scope.trans, function (tran) {
+                        if (tran.issue == issue.key) {
+                            tran[item] = issue[item];
+                            if (item == "issue" && tran["optundersec"] && tran["optundersec"] == issue.key) {
+                                tran.optundersec = issue[item];
+                            }
+                            else if (item == "issue" && tran["debtundersec"] && tran["debtundersec"] == issue.key) {
+                                tran.debtundersec = issue[item];
+                            }
+                            if (tran.tran_id != undefined) {
+                                $scope.saveTran(tran);
+                            }
+                        }
+                    });
+
+                    // In the case where the issue is changed and there are other issues that use it as the underlying
+                    if (item == "issue") {
+                        angular.forEach($scope.issues, function (keyissue) {
+                            if (item == "issue" && keyissue["optundersec"] && keyissue["optundersec"] == issue.key) {
+                                keyissue.optundersec = issue[item];
+                                $scope.saveIssue(keyissue, 'optundersec');
+                            }
+                            else if (item == "issue" && keyissue["debtundersec"] && keyissue["debtundersec"] == issue.key) {
+                                keyissue.debtundersec = issue[item];
+                                $scope.saveIssue(keyissue, 'debtundersec');
+                            }
+                        });
+                    }
+
+                    $scope.issueRevert = angular.copy(issue);
+
+                    var index = $scope.issuekeys.indexOf(issue.key);
+                    $scope.issuekeys[index] = issue.issue;
+                    issue.key = issue.issue;
+                });
+            }
+
+            else {
+                var d1 = (Date.today()).toUTCString();
+                var expire = null;
+                SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
+                    $scope.lastsaved = Date.now();
+                    issue.key = issue['issue'];
+                    $scope.issuekeys.push(issue.key);
+
+                    var allowablekeys = angular.copy($scope.issuekeys);
+                    var index = allowablekeys.indexOf(issue.issue);
+                    allowablekeys.splice(index, 1);
+                    $scope.allowKeys = allowablekeys;
+                });
+            }
+        }
     };
 
     $scope.saveGrantDrop = function (grant, type) {
@@ -563,7 +713,29 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     };
 
-    // Captable transaction delete modal
+    //modal for updating issue fields that have different underlying values
+
+    $scope.imodalUp = function (issue, field) {
+        $scope.issueModal = true;
+        $scope.changedIssue = issue;
+        $scope.changedIssueField = field;
+    };
+
+    $scope.iclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.issueModal = false;
+    };
+
+    $scope.irevert = function (issue) {
+        for (var i = 0, l = $scope.issues.length; i < l; i++) {
+            if ($scope.issues[i].issue == issue.issue) {
+                $scope.issues[i] = angular.copy($scope.issueRevert);
+                $scope.activeIssue = angular.copy($scope.issueRevert);
+            }
+        };
+    };
+
+    // Transaction delete modal
     $scope.tranDeleteUp = function (transaction) {
         $scope.deleteTran = transaction;
         $scope.tranDelete = true;
@@ -625,6 +797,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
             });
         }
+    };
+
+    $scope.strToBool = function (string) {
+        return calculate.strToBool(string);
     };
 
 

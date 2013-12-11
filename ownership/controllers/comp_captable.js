@@ -1379,22 +1379,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.strToBool = function (string) {
-        switch (String(string).toLowerCase()) {
-            case "true":
-            case "yes":
-            case "1":
-                return true;
-            case "false":
-            case "no":
-            case "0":
-                return false;
-            case null:
-            case undefined:
-            case "undefined":
-                return null;
-            default:
-                return Boolean(string);
-        }
+        return calculate.strToBool(string);
     };
 
     $scope.canHover = function (row) {

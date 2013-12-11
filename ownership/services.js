@@ -709,6 +709,27 @@ ownership.service('calculate', function () {
         }
         return convertTran.newtran;
     };
+
+    // Converts strings to boolean
+    this.strToBool = function (string) {
+        switch (String(string).toLowerCase()) {
+            case "true":
+            case "yes":
+            case "1":
+                return true;
+            case "false":
+            case "no":
+            case "0":
+                return false;
+            case null:
+            case undefined:
+            case "undefined":
+                return null;
+            default:
+                return Boolean(string);
+        }
+    };
+
 });
 
 ownership.service('switchval', function () {

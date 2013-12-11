@@ -37,6 +37,27 @@
     </div>
 </div>
 
+<div modal="issueModal" close="iclose();" options="opts">
+    <div class="modalHeader">
+        <span>Updating Issue?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose(); irevert(changedIssue);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>There are transactions in this issue with different values.<br> Making this change will override them, are
+                you sure you<br> want to continue?</p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="iclose(); irevert(changedIssue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="iclose(); saveIssue(changedIssue, changedIssueField);">Yes</button>
+        </div>
+    </div>
+</div>
+
 <div modal="tranDelete" close="deleteclose();" options="opts">
     <div class="modalHeader">
         <span>Delete?</span>
@@ -143,7 +164,7 @@
                     <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input ng-show="!maintoggle" ng-click="getActiveIssue(issue, '', 'view')" ng-model="issue.issue">
+                    <input ng-show="!maintoggle" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
                     <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
@@ -461,6 +482,39 @@
                       </ul>
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
                   </div>
+              </div>
+
+        </span>
+
+        <span ng-switch-when="5">
+
+            <div class="headsection tabbed row-fluid">
+                <h1>{{activeIssue.issue}}</h1>
+            </div>
+
+              <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
+
+                  <h2>Issue Information</h2>
+
+                  <p class="belowTitle"><span ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
+
+                  <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
+
+                  <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
+
+                  <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
+                  </p>
+
+                  <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span></p>
+
+                  <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
+
+                  <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+
+                  <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
+
+                  <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span></p>
+
               </div>
 
         </span>
