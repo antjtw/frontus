@@ -329,15 +329,47 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
                     $scope.issuekeys.push(issue.key);
-                    $scope.saveIssue(issue, "type");
+                    $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
+
+                    // Create the first empty underlying transaction
+                    var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                    issue.trans =[newTran];
 
                     var allowablekeys = angular.copy($scope.issuekeys);
                     var index = allowablekeys.indexOf(issue.issue);
                     allowablekeys.splice(index, 1);
                     $scope.allowKeys = allowablekeys;
+                    $scope.saveIssue(issue, "type");
                 });
             }
         }
+    };
+
+    $scope.deleteIssueButton = function (activeIssue) {
+        $scope.dmodalUp(activeIssue);
+    };
+
+    $scope.deleteIssue = function (issue) {
+        SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
+            $scope.lastsaved = Date.now();
+            angular.forEach($scope.issues, function (oneissue) {
+                if (oneissue['key'] == issue['key']) {
+                    var index = $scope.issues.indexOf(oneissue);
+                    $scope.issues.splice(index, 1);
+                    var indexed = $scope.issuekeys.indexOf(oneissue.key);
+                    $scope.issuekeys.splice(indexed, 1);
+                }
+            });
+            $scope.sideBar = "x";
+        });
+    };
+
+    $scope.revertIssue = function (issue) {
+        angular.forEach($scope.issues, function (x) {
+            if (x.key == issue.key) {
+                x.issue = issue.key;
+            }
+        });
     };
 
     $scope.saveGrantDrop = function (grant, type) {
@@ -741,6 +773,18 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 $scope.activeIssue = angular.copy($scope.issueRevert);
             }
         };
+    };
+
+    //Captable Delete Issue Modal
+
+    $scope.dmodalUp = function (issue) {
+        $scope.capDelete = true;
+        $scope.missue = issue;
+    };
+
+    $scope.dclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.capDelete = false;
     };
 
     // Transaction delete modal
