@@ -86,7 +86,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 // Add extra blank issue, which will create a new one when clicked. Silly future date so that
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.sort(sorting.issuedate);
-                $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                 $scope.done = true;
@@ -153,7 +152,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
         $scope.mode = 1;
         $scope.activeIssue = issue;
-        console.log($scope.activeIssue);
         $scope.issueRevert = angular.copy(issue);
 
         issue.state = true;
