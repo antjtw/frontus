@@ -995,7 +995,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document signature rejected.");
                 void(data);
-                $scope.$broadcast('rejcetSignature');
+                $scope.$broadcast('rejectSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
                 $location.path('/company-list').search({});
@@ -1015,7 +1015,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     $scope.shareDocOpen();
                     break;
                 case 'confirm':
-                    $scope.confirmDocOpen();
+                    $scope.confirmModalOpen();
                     break;
             }
         });
@@ -1024,7 +1024,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.$broadcast('close_modal');
         };
 
-        $scope.confirmDocOpen = function() {
+        $scope.confirmModalOpen = function() {
             $scope.confirmModal = true;
         };
 
@@ -1644,6 +1644,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.pages = "document.my_investor_codex";
         $scope.tester = false;
         $scope.invq = true;
+        $scope.messageText = "Add an optional message...";
         //$scope.confirmModalClose();
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq;
@@ -1675,7 +1676,13 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
                 case 'confirm':
-                    $scope.confirmDocOpen();
+                    $scope.confirmModalOpen();
+                    break;
+                case 'finalize':
+                    $scope.finalizeModalOpen();
+                    break;
+                case 'reject':
+                    $scope.rejectModalOpen();
                     break;
             }
         });
@@ -1684,7 +1691,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.$broadcast('close_modal');
         };
 
-        $scope.confirmDocOpen = function() {
+        $scope.confirmModalOpen = function() {
             $scope.confirmModal = true;
         };
 
@@ -1694,6 +1701,27 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
             $scope.confirmSignature = false;
+        };
+
+        $scope.finalizeModalOpen = function() {
+            $scope.finalizeModal = true;
+        };
+
+        $scope.finalizeModalClose = function() {
+            $('.docViewerHeader').data('affix').checkPosition();
+            $scope.processing = false;
+            $scope.broadcastModalClose();
+            $scope.finalizeModal = false;
+            $scope.confirmFinalize = false;
+        };
+
+        $scope.rejectModalOpen = function() {
+            $scope.rejectModal = true;
+        };
+
+        $scope.rejectModalClose = function() {
+            $scope.broadcastModalClose();
+            $scope.rejectModal = false;
         };
 
         $scope.signable = function() {
@@ -1716,6 +1744,35 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             }).except(function(x) {
                 void(x);
                 $scope.confirmModalClose();
+            });
+        };
+
+        $scope.finalizeDocument = function(doc) {
+            $scope.processing=true;
+            var dce = angular.element(".docPanel").scope();
+            SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
+                doc.when_finalize = data;
+                $scope.finalizeModalClose();
+                $scope.$emit('refreshDocImage');
+                $location.path('/investor-list').search({});
+            }).except(function(x) {
+                void(x);
+                $scope.finalizeModalClose();
+            });
+        };
+
+        $scope.rejectCountersignature = function(doc, msg) {
+            if (msg === "Add an optional message...") {
+                msg = "";
+            }
+            var dce = angular.element(".docPanel").scope();
+            SWBrijj.procm("document.reject_countersignature", $scope.docId, $scope.messageText).then(function(data) {
+                $scope.$emit("notification:success", "Document countersignature rejected.");
+                void(data);
+                $location.path('/company-list').search({});
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
