@@ -41,7 +41,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
                 for (var i = 0, l = $scope.allissues.length; i < l; i++) {
                     if ($scope.allissues[i].type == "Option") {
-                        console.log($scope.allissues[i]);
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
@@ -87,6 +86,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 // the issue always appears on the rightmost side of the table
                 $scope.issues.sort(sorting.issuedate);
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
+
+                if ($scope.issues.length == 1) {
+                    $scope.maintoggle = false;
+                }
 
                 $scope.done = true;
             });
