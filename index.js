@@ -52,6 +52,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             if ($scope.fieldCheck($scope.user.email)) {
                 SWBrijj.companySelfRegister($scope.user.email.toLowerCase(), 'issuer').then(function(requested) {
                     $scope.toggle = !$scope.toggle;
+                    dataLayer.push({'event': 'signup_success'}); // for analytics
                     void(requested);
                 }).except(function (x) {
                         console.log(x);
