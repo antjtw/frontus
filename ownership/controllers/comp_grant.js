@@ -855,8 +855,27 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
                 if (index != -1) {
                     issue.trans.splice(index, 1);
-                    $scope.sideBar = "word";
                 }
+            });
+            var index = -1;
+            angular.forEach($scope.trans, function(transaction) {
+                if (tran.tran_id == transaction.tran_id) {
+                    index = $scope.trans.indexOf(tran);
+                }
+            });
+            if (index != -1) {
+                $scope.trans.splice(index, 1);
+                $scope.sideBar = "word";
+            }
+
+            var index = [];
+            angular.forEach($scope.grants, function(grant) {
+                if (tran.tran_id == grant.tran_id) {
+                    index.push($scope.grants.indexOf(tran));
+                }
+            });
+            angular.forEach(index, function(i) {
+                $scope.grants.splice(i, 1);
             });
         });
     };
