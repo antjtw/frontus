@@ -4,6 +4,10 @@
     background-color: rgb(30, 45, 61);
 }
 
+.lognreg .err h2 {
+    margin-bottom: 5px !important;
+}
+
 .lognreg .row-fluid .span5 {
     min-width: 370px;
 }

@@ -809,6 +809,10 @@ textarea {
     background-color: #F1F1F1;
 }
 
+.tableView.grant-table tr.transaction-rows > td.fieldSelected {
+    background-color: #C7C7C7;
+}
+
 .tableView.grant-table tr.transaction-rows > td:first-child {
     border-left: 1px solid #E3E3E3;
     border-right: 1px solid #F1F1F1;

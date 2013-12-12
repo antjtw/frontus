@@ -10,6 +10,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.company = company;
 
     $scope.captabletips = {};
+    $scope.captabletips.name = "The name of this vesting schedule";
+    $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
+    $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
+    $scope.captabletips.totalgranted = "The sum total of shares granted";
+    $scope.captabletips.price = "The price each granted share can be purchased at when vested";
     $scope.captabletips.terms = "The total number of months until fully vested";
     $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
@@ -110,6 +115,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.vested = calculate.tranvested(tran);
                             tran.unitskey = tran.units;
                             tran.paidkey = tran.amount;
+                            tran.fields = [false, false, false, false];
                             issue.trans.push(tran);
                         }
                     });
@@ -141,8 +147,17 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         if (view == "view") {
             $scope.sideBar = 3;
             $scope.mode = 1;
+            angular.forEach($scope.issues, function(issue) {
+                angular.forEach(issue.trans, function(tran) {
+                    tran.fields = [false,false,false,false];
+                })
+            });
+            if (mode == "") {
+                currenttran.fields[0] = true;
+            }
             if (mode == "forfeited") {
                 if (currenttran.forfeited) {
+                    currenttran.fields[2] = true;
                     $scope.mode = 2;
                 }
                 else {
@@ -152,12 +167,17 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
             else if (mode == "exercised") {
                 if (currenttran.exercised) {
+                    currenttran.fields[3] = true;
                     $scope.mode = 3;
                 }
                 else {
                     $scope.sideBar = "x";
                     return
                 }
+            }
+            else if (mode == "vested") {
+                $scope.mode = 4;
+                currenttran.fields[1] = true;
             }
         }
         else {
@@ -172,9 +192,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             else if (mode == "vested") {
                 $scope.mode = 4;
             }
-        }
-        if (mode == "vested") {
-            $scope.mode = 4;
+            else if (mode == "vested") {
+                $scope.mode = 4;
+                currenttran.fields[1] = true;
+            }
         }
         var activeAct = [];
 
@@ -973,6 +994,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         SWBrijj.proc('ownership.delete_schedule', schedule['name']).then(function (data) {
             var index = $scope.schedules.indexOf(schedule);
             $scope.schedules.splice(index, 1);
+            $scope.$emit("notification:success", "Vesting schedule template removed");
         });
     };
 
