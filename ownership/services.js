@@ -165,12 +165,12 @@ ownership.service('calculate', function () {
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
     this.tranvested = function (tran) {
-        var tranvested = {};
+        var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
         if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
             var cycleDate = angular.copy(tran.date).add(1).days();
             if (Date.compare(Date.today(), vestbegin) > -1) {
-                tranvested[tran.date] = (tran.units * (tran.vestcliff / 100));
+                tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
             }
             var remainingterm = angular.copy(tran.terms);
             while (Date.compare(vestbegin, cycleDate) > -1) {
@@ -205,7 +205,7 @@ ownership.service('calculate', function () {
                     cycleDate.addMonths(x);
                 }
                 if (Date.compare(Date.today(), cycleDate) > -1) {
-                    tranvested[tran.date] = (x * ((monthlyperc / 100) * tran.units));
+                    tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
                 }
             }
         }
@@ -709,6 +709,27 @@ ownership.service('calculate', function () {
         }
         return convertTran.newtran;
     };
+
+    // Converts strings to boolean
+    this.strToBool = function (string) {
+        switch (String(string).toLowerCase()) {
+            case "true":
+            case "yes":
+            case "1":
+                return true;
+            case "false":
+            case "no":
+            case "0":
+                return false;
+            case null:
+            case undefined:
+            case "undefined":
+                return null;
+            default:
+                return Boolean(string);
+        }
+    };
+
 });
 
 ownership.service('switchval', function () {

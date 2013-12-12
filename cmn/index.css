@@ -72,6 +72,10 @@
     font-weight: normal;
 }
 
+.home .thanks p{
+    color: #1E2D3D;
+}
+
 .home .currency{
     color: #1E2D3D;
     font-family: 'FS Elliot Web Light', sans-serif;

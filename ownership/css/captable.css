@@ -768,6 +768,10 @@ textarea {
     background-color: #FFFFFF;
 }
 
+.tableView.grant-table tr.status-row > td:nth-child(2) > input:focus {
+    background-color: #E3E3E3;
+}
+
 .tableView.grant-table tr > td.status-toggle {
     text-align: center;
     color: #C7C7C7;
@@ -792,7 +796,16 @@ textarea {
 
 .tableView.grant-table tr.transaction-rows {
     border: 1px solid #E3E3E3;
+    border-right: none;
     height: 40px;
+}
+
+.tableView.grant-table.viewmode tr.transaction-rows:hover > td {
+    background-color: #C7C7C7;
+}
+
+.tableView.grant-table tr.transaction-rows:hover > td:first-child.viewField {
+    border-right: 1px solid #C7C7C7;
 }
 
 .tableView.grant-table tr.transaction-rows > td {
@@ -856,6 +869,73 @@ tr.rowSelected, tr.rowSelected:hover {
 .grant-list-table > table > tbody > tr {
     color: #1E2D3D;
     height: 25px;
+}
+
+.schedule-box {
+    margin-bottom: 10px;
+}
+
+.schedule-box > div:first-child {
+    border: 1px solid #F1F1F1;
+    width: 310px;
+    height: 38px;
+    line-height: 38px;
+}
+
+.schedule-box > div:first-child > span:nth-child(1), .schedule-box > div:first-child > span:nth-child(2)  {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    display: inline-block;
+    width: 40px;
+    padding-left: 15px;
+    border-right: 1px solid #FFFFFF;
+    cursor: pointer;
+}
+
+.schedule-box > div:first-child > span:nth-child(2) {
+    background-color: #F1F1F1;
+    border-right: 1px solid #E3E3E3;
+}
+
+.schedule-box > div:first-child > span:nth-child(4) {
+    display: inline-block;
+    float: right;
+    font-size: 16px;
+    margin-right: 10px;
+    color: #C7C7C7;
+    cursor: pointer;
+}
+
+.schedule-box > div:first-child > span:nth-child(4):hover {
+    color: #A6A6A6;
+}
+
+.schedule-box > div:last-child {
+    background-color: #F1F1F1;
+    overflow: auto;
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+    border-bottom: 1px solid #E3E3E3;
+    width: 310px;
+}
+
+.schedule-box > div:last-child p.belowTitle {
+    margin-left: 45px;
+}
+
+.schedule-box > div:last-child p.belowTitle:first-of-type {
+    margin-top: 10px;
+}
+
+.capGuide.grants.new-schedule {
+    box-sizing: border-box;
+    width: 310px;
+    padding-left: 10px;
+    border: 1px solid #E3E3E3;
+}
+
+.capGuide.grants.new-schedule .standard-button {
+    margin-left: 186px;
+    margin-bottom: 10px;
 }
 
 /* Status Page */

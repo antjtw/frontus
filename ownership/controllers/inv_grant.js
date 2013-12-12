@@ -9,9 +9,11 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     var company = navState.company;
     $scope.currentCompany = company;
 
-    $scope.rows = []
-    $scope.uniquerows = []
+    $scope.rows = [];
+    $scope.uniquerows = [];
     $scope.freqtypes = [];
+    $scope.issues = [];
+    $scope.issuekeys = [];
 
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
@@ -20,104 +22,178 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         });
     });
 
-    // Initialisation. Get the transactions and the grants
-    SWBrijj.tblm('ownership.this_company_options').then(function (data) {
+    SWBrijj.tblm('ownership.this_company_issues').then(function (issues) {
+        // Initialisation. Get the transactions and the grants
+        SWBrijj.tblm('ownership.this_company_options').then(function (trans) {
+            // Get the full set of company grants
+            SWBrijj.tblm('ownership.this_company_options_grants').then(function (grants) {
 
-        // Pivot from transactions to the rows of the table
-        $scope.trans = data;
-        angular.forEach($scope.trans, function (tran) {
-            var offset = tran.date.getTimezoneOffset();
-            tran.date = tran.date.addMinutes(offset);
-            if (tran.vestingbegins) {
-                tran.vestingbegins = tran.vestingbegins.addMinutes(offset);
-            }
-            tran.datekey = tran['date'].toUTCString();
-            if ($scope.uniquerows.indexOf(tran.investor) == -1) {
-                $scope.uniquerows.push(tran.investor);
-                $scope.rows.push({"state": false, "name": tran.investor, "namekey": tran.investor, "editable": "yes", "granted": null, "forfeited": null, "issue": tran.issue});
-            }
-        });
+                $scope.allissues = issues;
+                $scope.trans = trans;
+                $scope.grants = grants;
 
-        // Get the full set of company grants
-        SWBrijj.tblm('ownership.this_company_options_grants').then(function (data) {
-
-            $scope.grants = data;
-
-            angular.forEach($scope.grants, function (grant) {
-                angular.forEach($scope.trans, function (tran) {
-                    if (grant.tran_id == tran.tran_id) {
-                        grant.investor = tran.investor;
+                for (var i = 0, l = $scope.allissues.length; i < l; i++) {
+                    if ($scope.allissues[i].type == "Option") {
+                        $scope.allissues[i]['trans'] = [];
+                        $scope.issues.push($scope.allissues[i]);
                     }
-                });
-            });
+                    $scope.issuekeys.push($scope.allissues[i].issue);
+                }
 
-            //Calculate the total granted and forfeited for each row
-            angular.forEach($scope.trans, function (tran) {
-                angular.forEach($scope.rows, function (row) {
-                    if (row.name == tran.investor) {
-                        if (parseFloat(tran.units) > 0) {
-                            row["granted"] = calculate.sum(row["granted"], tran.units);
-                        }
-                    }
-                });
-            });
-
-            //Calculate the total vested for each row
-            $scope.rows = calculate.vested($scope.rows, $scope.trans);
-
-            //Calculate the total exercised for each row
-            angular.forEach($scope.grants, function (grant) {
-                angular.forEach($scope.rows, function (row) {
-                    if (row.name == grant.investor) {
-                        if (parseFloat(grant.unit) > 0) {
-                            if (row[grant.action] == undefined) {
-                                row[grant.action] = 0;
+                // Assign the grants to the respective transactions
+                angular.forEach($scope.grants, function (grant) {
+                    angular.forEach($scope.trans, function (tran) {
+                        if (grant.tran_id == tran.tran_id) {
+                            grant.investor = tran.investor;
+                            grant.issue = tran.issue;
+                            if (tran[grant.action]) {
+                                tran[grant.action] = tran[grant.action]+ grant.unit;
                             }
-                            row[grant.action] = calculate.sum(row[grant.action], grant.unit);
+                            else {
+                                tran[grant.action] = grant.unit;
+                            }
                         }
-                    }
+                    });
                 });
-            });
 
+                // Group the transactions under the issues and calculate the values for the grouped issue.
+                angular.forEach($scope.issues, function (issue) {
+                    issue.shown = false;
+                    angular.forEach($scope.trans, function(tran) {
+                        if (tran.issue == issue.issue) {
+                            var offset = tran.date.getTimezoneOffset();
+                            tran.date = tran.date.addMinutes(offset);
+                            tran.datekey = tran['date'].toUTCString();
+                            tran.state = false;
+                            tran.investorkey = angular.copy(tran.investor);
+                            tran.vested = calculate.tranvested(tran);
+                            issue.trans.push(tran);
+                        }
+                    });
+                });
+
+                $scope.done = true;
+            });
         });
     });
 
 
     //Get the active row for the sidebar
-    $scope.getActiveTransaction = function (currenttran) {
-        $scope.sideBar = 1;
-        $scope.activeTran = [];
-        $scope.activeInvestor = currenttran;
-        var first = 0;
-        for (var i = 0, l = $scope.trans.length; i < l; i++) {
-            if ($scope.trans[i].investor == currenttran) {
-                if (first == 0) {
-                    $scope.trans[i].active = true
-                    first = first + 1
-                }
-                $scope.activeTran.push($scope.trans[i]);
+    //Get the active row for the sidebar
+    $scope.getActiveTransaction = function (currenttran, mode, view) {
+        if (view == "view") {
+            $scope.sideBar = 1;
+        }
+        else {
+            $scope.sideBar = 2;
+        }
+        $scope.mode = 1;
+        if (mode == "forfeited") {
+            $scope.mode = 2;
+        }
+        else if (mode == "exercised") {
+            $scope.mode = 3;
+        }
+        else if (mode == "vested") {
+            $scope.mode = 4;
+        }
+        var activeAct = [];
+
+        // Only the issues that are not the active transactions (for underlying issue)
+        var allowablekeys = angular.copy($scope.issuekeys);
+        var index = allowablekeys.indexOf(currenttran.issue);
+        allowablekeys.splice(index, 1);
+        currenttran.allowKeys = allowablekeys;
+
+        $scope.activeTran = currenttran;
+        $scope.activeInvestor = currenttran.investor;
+
+        //Pair the correct grants with the selected transactions
+        for (var j = 0, a = $scope.grants.length; j < a; j++) {
+            if ($scope.activeTran.tran_id == $scope.grants[j].tran_id) {
+                activeAct.push($scope.grants[j]);
             }
         }
+        activeAct.push({"unit": null, "tran_id": $scope.activeTran.tran_id, "date": (Date.today()), "action": null, "investor": $scope.activeTran.investor, "issue": $scope.activeTran.issue});
+        $scope.activeTran.activeAct = activeAct;
 
-        angular.forEach($scope.rows, function (row) {
-            if (row.name == currenttran) {
-                row.state = true;
-            }
-            else {
-                row.state = false;
+        if (currenttran.investor == null) {
+            angular.forEach($scope.issues, function(issue) {
+                if (issue.issue == currenttran.issue) {
+                    var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                    issue.trans.push(newTran);
+                }
+            });
+        }
+    };
+
+    $scope.opendetails = function(name, type) {
+        if (type == "issue") {
+            $scope.issues.forEach(function(issue) {
+                if (name == issue.issue) {
+                    issue.shown = issue.shown !== true;
+                } else {
+                    issue.shown = false;
+                }
+            });
+        }
+        else if (type == "investor") {
+            $scope.investorLed.forEach(function(investor) {
+                if (name == investor.name) {
+                    investor.shown = investor.shown !== true;
+                } else {
+                    investor.shown = false;
+                }
+            });
+        }
+    };
+
+    $scope.issueGranted = function(issue) {
+        var units = 0;
+        angular.forEach(issue.trans, function (tran) {
+            if (parseFloat(tran.units) > 0) {
+                units += parseFloat(tran.units);
             }
         });
+        return units
+    };
 
-        //Pair the correct grants with the selected rows transactions
-        for (var i = 0, l = $scope.activeTran.length; i < l; i++) {
-            var activeAct = []
-            for (var j = 0, a = $scope.grants.length; j < a; j++) {
-                if ($scope.activeTran[i].tran_id == $scope.grants[j].tran_id) {
-                    activeAct.push($scope.grants[j]);
-                }
+    $scope.issueActions = function(issue, type) {
+        var units = 0;
+        angular.forEach(issue.trans, function (tran) {
+            if (parseFloat(tran[type]) > 0) {
+                units += parseFloat(tran[type]);
             }
-            $scope.activeTran[i].activeAct = activeAct;
-        }
+        });
+        return units
+    };
+
+    $scope.issueVested = function(issue) {
+        var units = 0;
+        angular.forEach(issue.trans, function (tran) {
+            angular.forEach(tran.vested, function (grant) {
+                units += grant.units;
+            });
+        });
+        return units != 0 ? units : null;
+    };
+
+    $scope.transactionVested = function(vested) {
+        var units = 0;
+        angular.forEach(vested, function (grant) {
+            units += grant.units;
+        });
+        return units != 0 ? units : null;
+    };
+
+    $scope.totalVestedAction = function(trans) {
+        var units = 0;
+        angular.forEach(trans, function(tran) {
+            angular.forEach(tran.vested, function (grant) {
+                units += grant.units;
+            });
+        });
+        return units != 0 ? units : null;
     };
 
     //switches the sidebar based on the type of the issue
