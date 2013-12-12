@@ -646,11 +646,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         $scope.activeInvestor = person.investor;
     };
 
-    $scope.select2Options = {
-        'tags': $scope.rownames,
-        'placeholder': "Add new investor"
-    };
-
     $scope.updateName = function (changetran) {
         if (changetran.investor == "" && changetran.investorkey != undefined) {
             changetran.investor = changetran.investorkey;

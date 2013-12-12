@@ -185,7 +185,7 @@
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input ng-show="!maintoggle" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
+                    <input ng-show="!maintoggle" placeholder="Add new security" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
                     <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
@@ -287,7 +287,7 @@
                 <td></td>
                 <td></td>
                 <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalVestedAction(rows))}}"></td>
+                <td><input disabled value="{{formatAmount(totalVestedAction(trans))}}"></td>
                 <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
                 <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
             </tr>
