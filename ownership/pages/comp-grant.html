@@ -651,9 +651,9 @@
 
             <div class="capGuide grants" ng-show="mode == 4 && maintoggle">
 
-                <h2>Vested Information</h2>
+                <h2 style="margin-bottom: 0px;">Vested Information</h2>
 
-                <p>Auto-calculated from vesting schedule</p>
+                <p style="margin-bottom: 15px;">Auto-calculated from vesting schedule</p>
 
                 <ul>
                     <li class="grant-list"
@@ -709,7 +709,7 @@
                     <p class="rightTitle"><span>Schedule Name</span><input ng-model="newschedule.name"
                                                                                           onkeydown="testForEnter();">
 
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.name"></span>
                     </p>
 
                     <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-model="newschedule.terms"

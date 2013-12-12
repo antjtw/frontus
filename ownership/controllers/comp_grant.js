@@ -10,6 +10,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.company = company;
 
     $scope.captabletips = {};
+    $scope.captabletips.name = "The name of this vesting schedule";
     $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
     $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
     $scope.captabletips.totalgranted = "The sum total of shares granted";
