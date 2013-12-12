@@ -115,6 +115,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.vested = calculate.tranvested(tran);
                             tran.unitskey = tran.units;
                             tran.paidkey = tran.amount;
+                            tran.fields = [false, false, false, false];
                             issue.trans.push(tran);
                         }
                     });
@@ -146,8 +147,17 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         if (view == "view") {
             $scope.sideBar = 3;
             $scope.mode = 1;
+            angular.forEach($scope.issues, function(issue) {
+                angular.forEach(issue.trans, function(tran) {
+                    tran.fields = [false,false,false,false];
+                })
+            });
+            if (mode == "") {
+                currenttran.fields[0] = true;
+            }
             if (mode == "forfeited") {
                 if (currenttran.forfeited) {
+                    currenttran.fields[2] = true;
                     $scope.mode = 2;
                 }
                 else {
@@ -157,12 +167,17 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
             else if (mode == "exercised") {
                 if (currenttran.exercised) {
+                    currenttran.fields[3] = true;
                     $scope.mode = 3;
                 }
                 else {
                     $scope.sideBar = "x";
                     return
                 }
+            }
+            else if (mode == "vested") {
+                $scope.mode = 4;
+                currenttran.fields[1] = true;
             }
         }
         else {
@@ -177,9 +192,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             else if (mode == "vested") {
                 $scope.mode = 4;
             }
-        }
-        if (mode == "vested") {
-            $scope.mode = 4;
+            else if (mode == "vested") {
+                $scope.mode = 4;
+                currenttran.fields[1] = true;
+            }
         }
         var activeAct = [];
 
