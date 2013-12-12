@@ -185,7 +185,7 @@
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input placeholder="Add new option security" ng-show="!maintoggle" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
+                    <input ng-show="!maintoggle" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
                     <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
@@ -195,8 +195,9 @@
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && !maintoggle" ng-repeat="tran in issue.trans">
                 <td></td>
-                <td><input ng-model="tran.investor"
+                <td><input bs-typeahead="rownames"
                            placeholder="Add new investor"
+                           ng-model="tran.investor"
                            ng-change="fauxupdating(tran)"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>

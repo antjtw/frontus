@@ -47,6 +47,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     });
 
+    SWBrijj.tblm('ownership.company_row_names').then(function (names) {
+        $scope.rownames = [];
+        angular.forEach(names, function(name) {
+            $scope.rownames.push(name.name);
+        });
+    });
+
     //Get the company issues
     SWBrijj.tblm('ownership.company_issue').then(function (issues) {
         // Initialisation. Get the transactions and the grants
@@ -637,6 +644,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             })
         });
         $scope.activeInvestor = person.investor;
+    };
+
+    $scope.select2Options = {
+        'tags': $scope.rownames,
+        'placeholder': "Add new investor"
     };
 
     $scope.updateName = function (changetran) {
