@@ -208,12 +208,12 @@
                 </td>
                 <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
                 <td><input maxlength="18" placeholder="shares"
-                           ng-disabled="!tran.investor"
+                           ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
                 <td><input maxlength="18" placeholder="shares"
-                           ng-disabled="!tran.investor"
+                           ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
                 </td>
