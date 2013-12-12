@@ -138,30 +138,40 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.getActiveTransaction = function (currenttran, mode, view) {
         if (view == "view") {
             $scope.sideBar = 3;
+            $scope.mode = 1;
+            if (mode == "forfeited") {
+                if (currenttran.forfeited) {
+                    $scope.mode = 2;
+                }
+                else {
+                    $scope.sideBar = "x";
+                    return
+                }
+            }
+            else if (mode == "exercised") {
+                if (currenttran.exercised) {
+                    $scope.mode = 3;
+                }
+                else {
+                    $scope.sideBar = "x";
+                    return
+                }
+            }
         }
         else {
             $scope.sideBar = 1;
-        }
-        $scope.mode = 1;
-        if (mode == "forfeited") {
-            if (currenttran.forfeited) {
+            $scope.mode = 1;
+            if (mode == "forfeited") {
                 $scope.mode = 2;
             }
-            else {
-                $scope.sideBar = "x";
-                return
-            }
-        }
-        else if (mode == "exercised") {
-            if (currenttran.exercised) {
+            else if (mode == "exercised") {
                 $scope.mode = 3;
             }
-            else {
-                $scope.sideBar = "x";
-                return
+            else if (mode == "vested") {
+                $scope.mode = 4;
             }
         }
-        else if (mode == "vested") {
+        if (mode == "vested") {
             $scope.mode = 4;
         }
         var activeAct = [];
