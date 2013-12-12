@@ -653,11 +653,91 @@
         <span ng-switch-when="2">
           <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
         </span>
-        <span class="capGuide railpadding" ng-switch-default>
-            <h1 class="right-bar-header">Manage your Grants</h1>
 
-            <p>View and edit your grants and options. All changes made here will also be reflected on your cap table.
-            </p>
+        <span class="capGuide railpadding" ng-switch-default>
+            <h1 class="right-bar-header">Saved Schedules</h1>
+
+            <div ng-repeat="schedule in schedules" class="schedule-box">
+                <div>
+                    <span ng-hide="schedule.shown" data-icon="&#xe017;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
+                    <span ng-show="schedule.shown" data-icon="&#xe01c;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
+                    <span>{{schedule.name}}</span>
+                    <span></span>
+                </div>
+                <div ng-show="schedule.shown">
+                    <p ng-show="schedule.terms" class="belowTitle"><span ng-bind="schedule.terms"></span><span
+                            tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
+                    </p>
+
+                    <p ng-show="schedule.vestingbegins" class="belowTitle"><span
+                            ng-bind="schedule.vestingbegins | date:settings.shortdate"></span><span
+                            tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span>
+                    </p>
+
+                    <p ng-show="schedule.vestcliff" class="belowTitle"><span ng-bind="schedule.vestcliff"></span><span
+                            tooltip-placement="top"
+                            tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
+                    </p>
+
+                    <p ng-show="schedule.vestfreq" class="belowTitle"><span ng-bind="schedule.vestfreq"></span><span
+                            tooltip-placement="top"
+                            tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="capGuide grants" ng-show="newSchedule">
+                <div>
+                    <p class="rightTitle"><span>Schedule Name</span><input ng-model="newschedule.name"
+                                                                                          onkeydown="testForEnter();">
+
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                    </p>
+
+                    <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-model="newschedule.terms"
+                                                                                          onkeydown="testForEnter();">
+
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                    </p>
+
+                    <p class="rightTitle"><span>Vesting Cliff Date</span><input type="text"
+                                                                                ng-model="newschedule.vestingbegins"
+                                                                                data-date-format={{settings.lowercasedate}}
+                                                                                bs-datepicker>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                    </p>
+
+                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-model="newschedule.vestcliff"
+                                                                             onkeydown="testForEnter();">
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                    </p>
+
+                    <div class="rightTitle double"><span>Post Cliff Frequency</span>
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{newschedule.vestfreq}}<span class="invisible-drop">'</span>
+                                </a>
+                                <ul ng-hide="toggleView();" class="dropdown-menu">
+                                    <li ng-repeat="i in freqtypes">
+                                        <a>{{i}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                    </div>
+
+                    <div class="standard-button">
+                        <button class="btn ng-binding" ng-click="createSchedule(newschedule);">Done</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-hide="newSchedule" class="standard-button">
+                <button class="btn ng-binding" ng-click="addSchedule();">New Template</button>
+            </div>
           </span>
 </div>
 </div>

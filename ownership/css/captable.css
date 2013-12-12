@@ -871,6 +871,39 @@ tr.rowSelected, tr.rowSelected:hover {
     height: 25px;
 }
 
+.schedule-box {
+    margin-bottom: 10px;
+}
+
+.schedule-box > div:first-child {
+    border: 1px solid #F1F1F1;
+    width: 310px;
+    height: 38px;
+    line-height: 38px;
+}
+
+.schedule-box > div:first-child > span:nth-child(1), .schedule-box > div:first-child > span:nth-child(2)  {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    display: inline-block;
+    width: 40px;
+    padding-left: 15px;
+}
+
+.schedule-box > div:first-child > span:nth-child(2) {
+    background-color: #F1F1F1;
+}
+
+.schedule-box > div:last-child {
+    background-color: #F1F1F1;
+    overflow: auto;
+    border: 1px solid #E3E3E3;
+    width: 310px;
+}
+
+.schedule-box > div:last-child p.belowTitle {
+    margin-left: 45px;
+}
+
 /* Status Page */
 
 .status-table {

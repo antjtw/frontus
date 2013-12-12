@@ -21,10 +21,19 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.maintoggle = true;
     $scope.optionView = "Security";
 
+    $scope.newSchedule = false;
+
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
         angular.forEach(results, function (result) {
             $scope.freqtypes.push(result['get_freqtypes']);
+        });
+    });
+
+    SWBrijj.tblm('ownership.company_schedules').then(function (schedules) {
+        $scope.schedules = schedules;
+        angular.forEach($scope.schedules, function(schedule) {
+            schedule.shown = false;
         });
     });
 
@@ -857,6 +866,29 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
             });
         }
+    };
+
+    $scope.showSchedule = function (sked) {
+        angular.forEach($scope.schedules, function(schedule) {
+            if (schedule == sked) {
+                schedule.shown = schedule.shown ? false : true;
+            }
+            else {
+                schedule.shown = false;
+            }
+        })
+    };
+
+    $scope.addSchedule = function() {
+        $scope.newschedule = {};
+        console.log("here");
+        $scope.newSchedule = true;
+    };
+
+    $scope.createSchedule = function(schedule) {
+        SWBrijj.proc('ownership.create_schedule', schedule['name'], schedule['terms'], schedule['vestingbegins'], schedule['vestcliff'], schedule['vestfreq']).then(function (data) {
+            console.log(data);
+        });
     };
 
     $scope.strToBool = function (string) {
