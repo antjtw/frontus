@@ -108,6 +108,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
                             tran.vested = calculate.tranvested(tran);
+                            tran.unitskey = tran.units;
+                            tran.paidkey = tran.amount;
                             issue.trans.push(tran);
                         }
                     });
@@ -138,18 +140,40 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.getActiveTransaction = function (currenttran, mode, view) {
         if (view == "view") {
             $scope.sideBar = 3;
+            $scope.mode = 1;
+            if (mode == "forfeited") {
+                if (currenttran.forfeited) {
+                    $scope.mode = 2;
+                }
+                else {
+                    $scope.sideBar = "x";
+                    return
+                }
+            }
+            else if (mode == "exercised") {
+                if (currenttran.exercised) {
+                    $scope.mode = 3;
+                }
+                else {
+                    $scope.sideBar = "x";
+                    return
+                }
+            }
         }
         else {
             $scope.sideBar = 1;
+            $scope.mode = 1;
+            if (mode == "forfeited") {
+                $scope.mode = 2;
+            }
+            else if (mode == "exercised") {
+                $scope.mode = 3;
+            }
+            else if (mode == "vested") {
+                $scope.mode = 4;
+            }
         }
-        $scope.mode = 1;
-        if (mode == "forfeited") {
-            $scope.mode = 2;
-        }
-        else if (mode == "exercised") {
-            $scope.mode = 3;
-        }
-        else if (mode == "vested") {
+        if (mode == "vested") {
             $scope.mode = 4;
         }
         var activeAct = [];
@@ -629,6 +653,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                         transaction.tran_id = data[1][0];
                         $scope.trans.push(transaction);
                     }
+                    transaction.unitskey = transaction.units;
+                    transaction.paidkey = transaction.amount;
                     transaction.vested = calculate.tranvested(transaction);
                 });
             }
@@ -844,6 +870,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         $scope.tranDelete = false;
     };
 
+    $scope.revertTran = function (transaction) {
+        angular.forEach($scope.trans, function(tran) {
+            if (tran.tran_id == transaction.tran_id) {
+                tran.units = tran.unitskey;
+                tran.amount = tran.paidkey;
+            }
+        });
+    };
+
     $scope.manualdeleteTran = function (tran) {
         SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function (data) {
             angular.forEach($scope.issues, function(issue) {
@@ -855,9 +890,18 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 });
                 if (index != -1) {
                     issue.trans.splice(index, 1);
-                    $scope.sideBar = "word";
                 }
             });
+            var index = -1;
+            angular.forEach($scope.trans, function(transaction) {
+                if (tran.tran_id == transaction.tran_id) {
+                    index = $scope.trans.indexOf(tran);
+                }
+            });
+            if (index != -1) {
+                $scope.trans.splice(index, 1);
+                $scope.sideBar = "word";
+            }
         });
     };
 
@@ -947,6 +991,26 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.strToBool = function (string) {
         return calculate.strToBool(string);
+    };
+
+    //Calculates total granted to and forfeited in grant table
+    $scope.footerAction = function (type, issues) {
+        var total = 0;
+        angular.forEach(issues, function (issue) {
+            angular.forEach(issue.trans, function(tran) {
+                if (type == "vested") {
+                    angular.forEach(tran.vested, function(vested) {
+                        total = total + parseFloat(vested.units);
+                    })
+                }
+                else {
+                    if (!isNaN(parseFloat(tran[type])) && parseFloat(tran[type]) > 0) {
+                        total = total + parseFloat(tran[type]);
+                    }
+                }
+            });
+        });
+        return total;
     };
 
 

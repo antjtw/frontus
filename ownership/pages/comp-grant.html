@@ -71,7 +71,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="deleteclose();">No</button>
+            <button class="btn" ng-click="deleteclose(); revertTran(deleteTran);">No</button>
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
@@ -208,24 +208,24 @@
                 </td>
                 <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
                 <td><input maxlength="18" placeholder="shares"
-                           ng-disabled="!tran.investor"
+                           ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
                 <td><input maxlength="18" placeholder="shares"
-                           ng-disabled="!tran.investor"
+                           ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
                 </td>
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
                 <td class="viewField"></td>
-                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                <td ng-class="{fieldSelected:fields[0].state,'hoverable':tran.investor}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-class="{fieldSelected:fields[0].state,'hoverable':tran.units}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-class="{fieldSelected:fields[1].state,'hoverable':tran.vested}" ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-class="{fieldSelected:fields[2].state,'hoverable':tran.forfeited}" ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                <td  ng-class="{fieldSelected:fields[3].state,'hoverable':tran.exercised}" ng-click="getActiveTransaction(tran, 'exercised', 'view')">
                     <span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
@@ -236,10 +236,10 @@
             <tr class='tablefooter'>
                 <td></td>
                 <td></td>
-                <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalVestedAction(trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('units', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('vested', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('exercised', issues))}}"></td>
             </tr>
         </table>
 
@@ -270,12 +270,13 @@
             <tr class="transaction-rows" ng-show="investor.shown && maintoggle"
                 ng-repeat="tran in investor.trans | noempty">
                 <td class="viewField"></td>
-                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
-                <td ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+
+                <td ng-class="{fieldSelected:fields[0].state,'hoverable':tran.investor}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-class="{fieldSelected:fields[0].state,'hoverable':tran.units}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-class="{fieldSelected:fields[1].state,'hoverable':tran.vested}" ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-class="{fieldSelected:fields[2].state,'hoverable':tran.forfeited}" ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                <td  ng-class="{fieldSelected:fields[3].state,'hoverable':tran.exercised}" ng-click="getActiveTransaction(tran, 'exercised', 'view')">
                     <span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
@@ -286,10 +287,10 @@
             <tr class='tablefooter'>
                 <td></td>
                 <td></td>
-                <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalVestedAction(trans))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
-                <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('units', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('vested', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('exercised', issues))}}"></td>
             </tr>
         </table>
     </div>
