@@ -144,10 +144,22 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
         $scope.mode = 1;
         if (mode == "forfeited") {
-            $scope.mode = 2;
+            if (currenttran.forfeited) {
+                $scope.mode = 2;
+            }
+            else {
+                $scope.sideBar = "x";
+                return
+            }
         }
         else if (mode == "exercised") {
-            $scope.mode = 3;
+            if (currenttran.exercised) {
+                $scope.mode = 3;
+            }
+            else {
+                $scope.sideBar = "x";
+                return
+            }
         }
         else if (mode == "vested") {
             $scope.mode = 4;
