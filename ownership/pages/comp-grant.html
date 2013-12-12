@@ -328,11 +328,27 @@
                   <p class="rightTitle"><span>Strike Price</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                         ng-model="activeTran.price"></p>
 
-                  <p class="rightTitle double"><span>Vesting Term (months)</span><input
+                  <div ng-show="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Schedule</span>
+                      <ul class="dropdown-list  drop-selector">
+                          <li class="dropdown standard">
+                              <a class="dropdown-toggle">
+                                  <span class="invisible-drop">'</span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                  <li ng-repeat="i in schedules">
+                                      <a ng-click="pickSchedule(i, activeTran)">{{i.name}}</a>
+                                  </li>
+                                  <li><a ng-click="pickSchedule('!!', activeTran)">New Schedule</a></li>
+                              </ul>
+                          </li>
+                      </ul>
+                  </div>
+
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle double"><span>Vesting Term (months)</span><input
                           ui-event="{blur : 'saveTran(activeTran)'}"
                           ng-model="activeTran.terms"></p>
 
-                  <p class="rightTitle"><span>Vesting Cliff Date</span><input id="{{activeTran.$$hashKey}}"
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Cliff Date</span><input id="{{activeTran.$$hashKey}}"
                                                                               ui-event="{keydown:'saveTranDate(activeTran, \'vestingbegins\', $event)', blur:'saveTranDate(activeTran, \'vestingbegins\', \'blur\')'}"
                                                                               ng-change="saveTranDate(activeTran, 'vestingbegins')"
                                                                               type="text"
@@ -340,11 +356,11 @@
                                                                               data-date-format={{settings.lowercasedate}}
                                                                               bs-datepicker></p>
 
-                  <p class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                            ng-model="activeTran.vestcliff"></p>
 
 
-                  <div class="rightTitle double"><span>Post Cliff Frequency</span>
+                  <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle double"><span>Post Cliff Frequency</span>
                       <ul class="dropdown-list  drop-selector">
                           <li class="dropdown standard">
                               <a class="dropdown-toggle">
@@ -655,14 +671,14 @@
         </span>
 
         <span class="capGuide railpadding" ng-switch-default>
-            <h1 class="right-bar-header">Saved Schedules</h1>
+            <h1 class="right-bar-header">Saved Vesting Schedules</h1>
 
             <div ng-repeat="schedule in schedules" class="schedule-box">
                 <div>
                     <span ng-hide="schedule.shown" data-icon="&#xe017;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
                     <span ng-show="schedule.shown" data-icon="&#xe01c;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
                     <span>{{schedule.name}}</span>
-                    <span></span>
+                    <span class="delete-icon" data-icon="&#xe00c;" ng-click="deleteSchedule(schedule);" aria-hidden="true"></span>
                 </div>
                 <div ng-show="schedule.shown">
                     <p ng-show="schedule.terms" class="belowTitle"><span ng-bind="schedule.terms"></span><span
@@ -686,7 +702,7 @@
                 </div>
             </div>
 
-            <div class="capGuide grants" ng-show="newSchedule">
+            <div class="capGuide grants new-schedule" ng-show="newSchedule">
                 <div>
                     <p class="rightTitle"><span>Schedule Name</span><input ng-model="newschedule.name"
                                                                                           onkeydown="testForEnter();">
@@ -720,7 +736,7 @@
                                 </a>
                                 <ul ng-hide="toggleView();" class="dropdown-menu">
                                     <li ng-repeat="i in freqtypes">
-                                        <a>{{i}}</a>
+                                        <a ng-click="assignFreq(i, newschedule);">{{i}}</a>
                                     </li>
                                 </ul>
                             </li>
@@ -728,8 +744,8 @@
                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
                     </div>
 
-                    <div class="standard-button">
-                        <button class="btn ng-binding" ng-click="createSchedule(newschedule);">Done</button>
+                    <div class="standard-button small-standard-button">
+                        <button class="btn ng-binding" ng-disabled="newschedule.name == null || newschedule.name == ''" ng-click="createSchedule(newschedule);">Done</button>
                     </div>
 
                 </div>

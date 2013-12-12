@@ -34,6 +34,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         $scope.schedules = schedules;
         angular.forEach($scope.schedules, function(schedule) {
             schedule.shown = false;
+            if (schedule.vestingbegins) {
+                var offset = schedule.vestingbegins.getTimezoneOffset();
+                schedule.vestingbegins = schedule.vestingbegins.addMinutes(offset);
+            }
         });
     });
 
@@ -95,6 +99,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                         }
                     });
                     var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                    newTran.vestcliff = null;
+                    newTran.terms = null;
+                    newTran.vestfreq = null;
+                    newTran.vestingbegins = null;
                     issue.trans.push(newTran);
                 });
 
@@ -155,6 +163,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             angular.forEach($scope.issues, function(issue) {
                 if (issue.issue == currenttran.issue) {
                     var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                    newTran.vestcliff = null;
+                    newTran.terms = null;
+                    newTran.vestfreq = null;
+                    newTran.vestingbegins = null;
                     issue.trans.push(newTran);
                 }
             });
@@ -350,6 +362,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
                     // Create the first empty underlying transaction
                     var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                    newTran.vestcliff = null;
+                    newTran.terms = null;
+                    newTran.vestfreq = null;
+                    newTran.vestingbegins = null;
                     issue.trans =[newTran];
 
                     var allowablekeys = angular.copy($scope.issuekeys);
@@ -868,6 +884,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
     };
 
+    $scope.assignFreq = function(value, schedule) {
+        schedule.vestfreq = value;
+    };
+
     $scope.showSchedule = function (sked) {
         angular.forEach($scope.schedules, function(schedule) {
             if (schedule == sked) {
@@ -881,14 +901,35 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     $scope.addSchedule = function() {
         $scope.newschedule = {};
-        console.log("here");
         $scope.newSchedule = true;
     };
 
     $scope.createSchedule = function(schedule) {
         SWBrijj.proc('ownership.create_schedule', schedule['name'], schedule['terms'], schedule['vestingbegins'], schedule['vestcliff'], schedule['vestfreq']).then(function (data) {
-            console.log(data);
+        schedule["shown"] = false;
+        $scope.schedules.push(schedule);
+        $scope.newSchedule = false;
         });
+    };
+
+    $scope.deleteSchedule = function(schedule) {
+        SWBrijj.proc('ownership.delete_schedule', schedule['name']).then(function (data) {
+            var index = $scope.schedules.indexOf(schedule);
+            $scope.schedules.splice(index, 1);
+        });
+    };
+
+    $scope.pickSchedule = function(schedule, activeTran) {
+        if (schedule != "!!") {
+            activeTran.vestcliff = schedule.vestcliff;
+            activeTran.terms = schedule.terms;
+            activeTran.vestfreq = schedule.vestfreq;
+            activeTran.vestingbegins = schedule.vestingbegins;
+            $scope.saveTran(activeTran);
+        }
+        else {
+            activeTran.vestfreq = "monthly";
+        }
     };
 
     $scope.strToBool = function (string) {
