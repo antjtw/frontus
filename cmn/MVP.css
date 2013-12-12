@@ -1462,6 +1462,7 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 12px;
     padding-right: 20px;
     padding-left: 20px;
+    min-width: 130px;
 }
 
 .status-table > tbody > tr > td:last-child.toggle-column {
