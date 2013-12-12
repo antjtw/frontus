@@ -9,6 +9,12 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     var company = navState.company;
     $scope.company = company;
 
+    $scope.captabletips = {};
+    $scope.captabletips.terms = "The total number of months until fully vested";
+    $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
+    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
+    $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
+
 
     $scope.rows = [];
     $scope.freqtypes = [];
