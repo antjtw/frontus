@@ -1831,6 +1831,7 @@ docviews.filter('icon', function() {
         else if (activity == "uploaded") return "icon-star";
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
+        else if (activity == "finalized") return "icon-lock";
         else return "hunh?";
     };
 });
@@ -1853,6 +1854,7 @@ docviews.filter('description', function() {
         else if (activity == "received") return "received Document";
         else if (activity == "rejected") return "rejected Document";
         else if (activity == "countersigned") return "countersigned Document";
+        else if (activity == "finalized") return "finalized Document";
         else return activity + "ed Document";
     };
 });
