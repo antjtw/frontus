@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="docViewerControls">
-            <div class="tools pull-left" ng-class="{hidden: !isAnnotable}">
+            <div ng-cloak class="tools pull-left" ng-class="{hidden: !isAnnotable}">
                 <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
                 <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                 <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
@@ -40,23 +40,26 @@
                     </li>
                 </ul>
             </div>
-            <div class="docActions pull-right" ng-class="{hidden: !isAnnotable}">
+            <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || finalizable(lib))}">
                 <div class="small-standard-button darkgray standard-button pull-left">
-                    <button class="btn" ng-click="leave($event)">Cancel</button>
+                    <button class="btn" ng-show="isAnnotable" ng-click="leave($event)">Cancel</button>
                 </div>
                 <div class="small-standard-button blue standard-button pull-left">
-                    <button class="btn" ng-click="saveNoteData(true)">Save</button>
+                    <button class="btn" ng-show="isAnnotable" ng-click="saveNoteData(true)">Save</button>
                 </div>
                 <div class="small-standard-button red standard-button pull-left">
-                    <button class="btn" ng-show="lib.when_signed && !lib.when_confirmed" ng-click="openModal('reject')">Reject</button>
+                    <button class="btn" ng-show="rejectable(lib)" ng-click="openModal('reject')">Reject</button>
                 </div>
                 <div class="small-standard-button standard-button pull-left">
                     <button class="btn" style="padding:4px 0px;"
-                            ng-show="lib.when_signed && !lib.when_confirmed"
+                            ng-show="countersignable(lib)"
                             ng-click="openModal('confirm')">Countersign</button>
                 </div>
                 <div class="small-standard-button standard-button pull-left">
-                    <button class="btn" ng-show="lib.signature_deadline && !lib.when_signed" ng-click="openModal('confirm')">Sign</button>
+                    <button class="btn" ng-show="invq && signable(lib)" ng-click="openModal('confirm')">Sign</button>
+                </div>
+                <div class="small-standard-button standard-button pull-left">
+                    <button class="btn" ng-show="invq && finalizable(lib)" ng-click="openModal('finalize')">Finalize</button>
                 </div>
             </div>
         </div>

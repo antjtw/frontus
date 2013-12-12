@@ -44,7 +44,8 @@
                     <th ng-click="setOrder('when_shared')">Sent</th>
                     <th ng-click="setOrder('last_viewed')">Viewed</th>
                     <th ng-click="setOrder('when_signed')">Signed</th>
-                    <th ng-click="setOrder('when_confirmed')">Countersigned</th>
+                    <th ng-click="setOrder('when_countersigned')">Countersigned</th>
+                    <th ng-click="setOrder('when_finalized')">Finalized</th>
                     <th></th>
                 </tr>
                 </tbody>
@@ -74,15 +75,21 @@
                         <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                     </td>
                     <td class="tooltip-date">
-                          <span ng-show="person.when_confirmed" tooltip-placement="top" tooltip="{{formatDate(person.when_confirmed)}}" class="ng-scope">
+                          <span ng-show="person.when_countersigned" tooltip-placement="top" tooltip="{{formatDate(person.when_countersigned)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
+                        <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                    </td>
+                    <td class="tooltip-date">
+                        <span ng-show="person.when_finalized" tooltip-placement="top" tooltip="{{formatDate(person.when_finalized)}}" class="ng-scope">
+                            <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
+                        </span>
                         <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
                     </td>
                     <td>
                         <div class="statusTableButton standard-button small-standard-button">
                             <!--<button ng-hide="person.when_signed || person.when_confirmed || (!person.signature_deadline && person.last_viewed)" class="btn">Remind</button>-->
-                            <button ng-show="person.when_signed && !person.when_confirmed && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign</button>
+                            <button ng-show="person.when_signed && !person.when_countersigned && person.signature_deadline" class="btn" ng-click="viewInvestorCopy(person.investor)">Sign</button>
                         </div>
                         <ul class="dropdown-list page-button">
                             <li class="dropdown standard menu-drop">

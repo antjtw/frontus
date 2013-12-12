@@ -197,6 +197,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -431,8 +433,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return "Awaiting Recipient Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Awaiting Countersignature";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Finalization";
             } else if ($scope.isCompleteSigned(version)){
-                return "Countersigned";
+                return "Finalized";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -444,7 +448,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docStatusNumComplete = function(doc) {
             if (doc.signature_required) {
-                return $scope.versionsSigned(doc).length;
+                return $scope.versionsFinalized(doc).length;
             } else {
                 return $scope.versionsViewed(doc).length;
             }
@@ -468,7 +472,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                      var signatureRatio = $scope.docSignatureRatio(doc);
                      var viewRatio = $scope.docViewRatio(doc);
                      if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
-                     return $scope.versionsSigned(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
+                     return $scope.versionsFinalized(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
                      } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
                      return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
                      } else {
@@ -476,7 +480,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                      (doc.signature_required ? " signatures" : " views");
                      }
                      */
-                    return ($scope.versionsSigned(doc).length + $scope.versionsViewed(doc).length) +
+                    return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length) +
                         " / " +
                         doc.versions.length +
                         " documents";
@@ -486,7 +490,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.docSignatureRatio = function(doc) {
             if (doc) {
-                var initRatio = ($scope.versionsSigned(doc).length / $scope.versionsReqSig(doc).length) || 0;
+                var initRatio = ($scope.versionsFinalized(doc).length / $scope.versionsReqSig(doc).length) || 0;
                 if (initRatio === Infinity) {initRatio = 0;}
                 return (initRatio % 1 === 0) ? initRatio + 1 : initRatio;
             }
@@ -516,8 +520,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
-        $scope.versionsSigned = function(doc) {
-            return doc.versions.filter(function(el) {return el.when_confirmed;});
+        $scope.versionsFinalized = function(doc) {
+            return doc.versions.filter(function(el) {return el.when_finalized;});
         };
 
         $scope.versionsReqSig = function(doc) {
@@ -541,7 +545,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.isPendingCountersignature = function(version) {
-            return version.when_signed && !version.when_confirmed;
+            return version.when_signed && !version.when_countersigned;
+        };
+
+        $scope.isPendingFinalization = function(version) {
+            return version.when_signed && version.when_countersigned && !version.when_finalized;
         };
 
         $scope.docIsComplete = function(doc) {
@@ -554,7 +562,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_confirmed;
+            return version.signature_deadline && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
             return !version.signature_deadline && version.last_viewed;
@@ -959,6 +967,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -985,7 +995,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document signature rejected.");
                 void(data);
-                $scope.$broadcast('rejcetSignature');
+                $scope.$broadcast('rejectSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
                 $location.path('/company-list').search({});
@@ -1005,7 +1015,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     $scope.shareDocOpen();
                     break;
                 case 'confirm':
-                    $scope.confirmDocOpen();
+                    $scope.confirmModalOpen();
                     break;
             }
         });
@@ -1014,7 +1024,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.$broadcast('close_modal');
         };
 
-        $scope.confirmDocOpen = function() {
+        $scope.confirmModalOpen = function() {
             $scope.confirmModal = true;
         };
 
@@ -1466,6 +1476,8 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -1545,8 +1557,10 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 return "Awaiting Recipient Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Awaiting Countersignature";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Finalization";
             } else if ($scope.isCompleteSigned(version)){
-                return "Countersigned";
+                return "Finalized";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -1556,8 +1570,12 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             }
         };
 
+        $scope.isPendingFinalization = function(doc) {
+            return doc.when_countersigned && !doc.when_finalized;
+        };
+
         $scope.isPendingCountersignature = function(doc) {
-            return doc.when_signed && !doc.when_confirmed;
+            return doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.isPendingSignature = function(doc) {
@@ -1568,7 +1586,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             return !doc.signature_deadline && !doc.last_viewed;
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_confirmed;
+            return version.signature_deadline && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
             return !version.signature_deadline && version.last_viewed;
@@ -1626,6 +1644,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.pages = "document.my_investor_codex";
         $scope.tester = false;
         $scope.invq = true;
+        $scope.messageText = "Add an optional message...";
         //$scope.confirmModalClose();
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq;
@@ -1657,7 +1676,13 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.$on('open_modal', function(event, modal) {
             switch (modal) {
                 case 'confirm':
-                    $scope.confirmDocOpen();
+                    $scope.confirmModalOpen();
+                    break;
+                case 'finalize':
+                    $scope.finalizeModalOpen();
+                    break;
+                case 'reject':
+                    $scope.rejectModalOpen();
                     break;
             }
         });
@@ -1666,7 +1691,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.$broadcast('close_modal');
         };
 
-        $scope.confirmDocOpen = function() {
+        $scope.confirmModalOpen = function() {
             $scope.confirmModal = true;
         };
 
@@ -1676,6 +1701,27 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.broadcastModalClose();
             $scope.confirmModal = false;
             $scope.confirmSignature = false;
+        };
+
+        $scope.finalizeModalOpen = function() {
+            $scope.finalizeModal = true;
+        };
+
+        $scope.finalizeModalClose = function() {
+            $('.docViewerHeader').data('affix').checkPosition();
+            $scope.processing = false;
+            $scope.broadcastModalClose();
+            $scope.finalizeModal = false;
+            $scope.confirmFinalize = false;
+        };
+
+        $scope.rejectModalOpen = function() {
+            $scope.rejectModal = true;
+        };
+
+        $scope.rejectModalClose = function() {
+            $scope.broadcastModalClose();
+            $scope.rejectModal = false;
         };
 
         $scope.signable = function() {
@@ -1698,6 +1744,35 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             }).except(function(x) {
                 void(x);
                 $scope.confirmModalClose();
+            });
+        };
+
+        $scope.finalizeDocument = function(doc) {
+            $scope.processing=true;
+            var dce = angular.element(".docPanel").scope();
+            SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
+                doc.when_finalize = data;
+                $scope.finalizeModalClose();
+                $scope.$emit('refreshDocImage');
+                $location.path('/investor-list').search({});
+            }).except(function(x) {
+                void(x);
+                $scope.finalizeModalClose();
+            });
+        };
+
+        $scope.rejectCountersignature = function(doc, msg) {
+            if (msg === "Add an optional message...") {
+                msg = "";
+            }
+            var dce = angular.element(".docPanel").scope();
+            SWBrijj.procm("document.reject_countersignature", $scope.docId, $scope.messageText).then(function(data) {
+                $scope.$emit("notification:success", "Document countersignature rejected.");
+                void(data);
+                $location.path('/company-list').search({});
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -1756,6 +1831,7 @@ docviews.filter('icon', function() {
         else if (activity == "uploaded") return "icon-star";
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
+        else if (activity == "finalized") return "icon-lock";
         else return "hunh?";
     };
 });
@@ -1778,6 +1854,7 @@ docviews.filter('description', function() {
         else if (activity == "received") return "received Document";
         else if (activity == "rejected") return "rejected Document";
         else if (activity == "countersigned") return "countersigned Document";
+        else if (activity == "finalized") return "finalized Document";
         else return activity + "ed Document";
     };
 });

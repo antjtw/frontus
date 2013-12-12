@@ -94,7 +94,8 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     $scope.docsummary.sig = 0;
                     $scope.docsummary.counter = 0;
                     angular.forEach(sharedocs, function(doc) {
-                        if (doc.signature_status == "signature requested (awaiting investor)") {
+                        if (doc.signature_status == "countersigned by issuer (awaiting investor confirmation)" ||
+                            doc.signature_status == "signature requested (awaiting investor)") {
                             $scope.docsummary.sig += 1;
                         }
                         else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
@@ -103,6 +104,19 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
                     });
                 });
             });
+        };
+
+        $scope.isPendingInvestor = function(doc) {
+            return $scope.isPendingView(doc) && $scope.isPendingSignature(doc) && $scope.isPendingFinalization(doc);
+        };
+        $scope.isPendingView = function(doc) {
+            return !doc.signature_deadline && !version.last_viewed;
+        };
+        $scope.isPendingSignature = function(doc) {
+            return doc.signature_deadline && !doc.when_signed;
+        };
+        $scope.isPendingFinalization = function(doc) {
+            return doc.when_signed && doc.when_countersigned && !doc.when_finalized;
         };
 
         $scope.getOwnershipInfo = function() {
@@ -381,7 +395,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         }
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
-        console.log($scope.uselessbrowser);
 
         //initialisation functions called
         $scope.company = navState.name;
@@ -400,7 +413,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         $scope.getTokenInfo = function() {
             SWBrijj.tblm('oauth.user_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
                 $scope.backupInfo = data[0];
-                console.log($scope.backupInfo);
             });
         };
 
@@ -655,6 +667,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         $scope.eventRank = function (ev) {
             switch (ev.activity) {
+                case "finalized":
+                    return 7;
                 case "countersigned":
                     return 6;
                 // signed or rejected can come either before or after each other depending on chronological ordering.
@@ -876,6 +890,7 @@ angular.module('HomeApp').filter('icon', function() {
         else if (activity == "uploaded") return "icon-star";
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
+        else if (activity == "finalized") return "icon-lock";
         else return "hunh?";
     }
 });
@@ -908,6 +923,7 @@ angular.module('HomeApp').filter('description', function() {
             else if (activity == "received") return document + " sent to "+person;
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
+            else if (activity == "finalized") return document + " finalized by " + person;
             else return activity + " by "+person;
         }
     }
@@ -942,6 +958,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "signed") return "You signed "+document;
             else if (activity == "rejected") return person + " rejected your signature on " +document;
             else if (activity == "countersigned") return person + " countersigned "+document;
+            else if (activity == "finalized") return person + " finalized " + document;
             else  {
                 return activity + " by "+person;
             }
