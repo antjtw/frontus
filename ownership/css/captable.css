@@ -800,12 +800,9 @@ textarea {
     height: 40px;
 }
 
-.tableView.grant-table.viewmode tr.transaction-rows:hover > td {
+.tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover {
     background-color: #C7C7C7;
-}
-
-.tableView.grant-table tr.transaction-rows:hover > td:first-child.viewField {
-    border-right: 1px solid #C7C7C7;
+    cursor: pointer;
 }
 
 .tableView.grant-table tr.transaction-rows > td {
