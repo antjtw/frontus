@@ -1121,10 +1121,6 @@ ul.last-edited > li:last-child {
 
 /* Specialized Modals */
 
-.capaccess-form {
-    border-bottom: 1px solid #E3E3E3;
-}
-
 .capaccess-drop {
     display: inline-block;
     text-align: left;
@@ -1427,9 +1423,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 }
 
 .modal .input-row {
-    height:65px;
-    border-top: 1px solid #E3E3E3;
-    border-bottom: 1px solid #E3E3E3;
+    height: 40px;
     margin: 10px 20px 0 20px;
 }
 
@@ -1442,6 +1436,11 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width: 100%;
     margin: 5px 0 0 0;
 }
+
+.modal .input-row.newEmail > input {
+    width: 300px;
+}
+
 
 /* ios button thingy */
 
