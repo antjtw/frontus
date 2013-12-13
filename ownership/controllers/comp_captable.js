@@ -581,8 +581,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (!angular.equals(testcopy, $scope.issueRevert)) {
                 angular.forEach($scope.trans, function(tran) {
                     if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                        $scope.imodalUp(issue, field);
-                        x = true;
+                        if (tran.units != null || tran.paid != null) {
+                            $scope.imodalUp(issue, field);
+                            x = true;
+                        }
                     }
                 });
                 if (x == false) {
