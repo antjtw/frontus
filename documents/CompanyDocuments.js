@@ -430,13 +430,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.shortVersionStatus = function(version) {
             if (!version) return "";
             if ($scope.isPendingSignature(version)){
-                return "Awaiting Recipient Signature";
+                return "Sent for Signature";
             } else if ($scope.isPendingCountersignature(version)){
-                return "Awaiting Countersignature";
+                return "Review and Sign";
             } else if ($scope.isPendingFinalization(version)) {
-                return "Awaiting Finalization";
+                return "Signed and Sent for Approval";
             } else if ($scope.isCompleteSigned(version)){
-                return "Finalized";
+                return "Completed";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -1554,13 +1554,13 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.shortStatus = function(version) {
             if (!version) return "";
             if ($scope.isPendingSignature(version)){
-                return "Awaiting Recipient Signature";
+                return "Review and Sign";
             } else if ($scope.isPendingCountersignature(version)){
-                return "Awaiting Countersignature";
+                return "Signed and Sent for Review";
             } else if ($scope.isPendingFinalization(version)) {
-                return "Awaiting Finalization";
+                return "Awaiting Your Approval";
             } else if ($scope.isCompleteSigned(version)){
-                return "Finalized";
+                return "Completed";
             } else if ($scope.isPendingView(version)){
                 return "Unviewed";
             } else if ($scope.isCompleteViewed(version)){
@@ -1837,7 +1837,6 @@ docviews.filter('icon', function() {
 });
 
 /* Filter to format the activity description on document status */
-// TODO: reconcile this with Alison
 docviews.filter('description', function() {
     return function(ac) {
         var activity = ac.activity;
@@ -1854,7 +1853,7 @@ docviews.filter('description', function() {
         else if (activity == "received") return "received Document";
         else if (activity == "rejected") return "rejected Document";
         else if (activity == "countersigned") return "countersigned Document";
-        else if (activity == "finalized") return "finalized Document";
+        else if (activity == "finalized") return "approved Document";
         else return activity + "ed Document";
     };
 });
