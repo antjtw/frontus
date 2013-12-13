@@ -768,6 +768,10 @@ textarea {
     background-color: #FFFFFF;
 }
 
+.tableView.grant-table tr.status-row > td:nth-child(2) > input:disabled {
+    -webkit-text-fill-color: rgb(127, 140, 141);
+}
+
 .tableView.grant-table tr.status-row > td:nth-child(2) > input:focus {
     background-color: #E3E3E3;
 }
@@ -843,6 +847,7 @@ tr.rowSelected, tr.rowSelected:hover {
 
 .tableView.grant-table .tablefooter input {
     background-color: #FFFFFF;
+    -webkit-text-fill-color: rgb(127, 140, 141);
 }
 
 .rowSelected > td {
