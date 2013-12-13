@@ -404,7 +404,7 @@
                 <h2>Forfeit Information</h2>
 
                 <ul>
-                    <li class="grant-list" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
+                    <li class="grant-list-edit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
                         <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'forfeited')"
                                                                       ng-model="act.date"
                                                                       data-date-format={{settings.lowercasedate}}
@@ -421,7 +421,7 @@
                 <h2>Exercise Information</h2>
 
                 <ul>
-                    <li class="grant-list" ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
+                    <li class="grant-list-edit" ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
                         <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'exercised')"
                                                                       ng-model="act.date"
                                                                       data-date-format={{settings.lowercasedate}}
@@ -438,7 +438,7 @@
                 <h2>Vested Information</h2>
 
                 <ul>
-                    <li class="grant-list"
+                    <li class="grant-list-edit"
                         ng-repeat="grant in activeTran.vested">
                         <p class="belowTitle"><span
                                 ng-bind="grant.date | date:settings.shortdate"></span><span>Date</span></p>
