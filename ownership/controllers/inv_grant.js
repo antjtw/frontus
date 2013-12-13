@@ -15,6 +15,8 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     $scope.issues = [];
     $scope.issuekeys = [];
 
+    $scope.optionView = "Security";
+
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
         angular.forEach(results, function (result) {
@@ -225,5 +227,30 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     $scope.formatDollarAmount = function(amount) {
         var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
         return output;
+    };
+
+    $scope.setView = function(field) {
+        $scope.optionView = field;
+        var uniquenames = [];
+        if (field == "Investor") {
+            // Create the investor led row
+            $scope.investorLed = [];
+            angular.forEach($scope.issues, function(issue) {
+                angular.forEach(issue.trans, function(tran) {
+                    if (tran.investor != null) {
+                        if (uniquenames.indexOf(tran.investor) == -1) {
+                            uniquenames.push(tran.investor);
+                            $scope.investorLed.push({'name':tran.investor, 'shown': false, 'trans':[]})
+                        }
+                        angular.forEach($scope.investorLed, function(investor) {
+                            if (investor.name == tran.investor) {
+                                investor.trans.push(tran);
+                            }
+                        });
+                    }
+                });
+            });
+            console.log($scope.investorLed);
+        }
     };
 };

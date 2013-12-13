@@ -44,7 +44,8 @@
     </div>
     <div class="modalText">
         <form>
-            <p>There are transactions in this issue with different values.<br> Making this change will override them, are
+            <p>There are transactions in this issue with different values.<br> Making this change will override them,
+                are
                 you sure you<br> want to continue?</p>
         </form>
     </div>
@@ -185,7 +186,9 @@
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td>
-                    <input ng-show="!maintoggle" placeholder="Add new security" ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}" ng-model="issue.issue">
+                    <input ng-show="!maintoggle" placeholder="Add new security"
+                           ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}"
+                           ng-model="issue.issue">
                     <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
@@ -206,7 +209,8 @@
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
-                <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
+                <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                </td>
                 <td><input maxlength="18" placeholder="shares"
                            ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
@@ -220,12 +224,18 @@
             </tr>
             <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
                 <td class="viewField"></td>
-                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}" ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}" ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
+                    ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
+                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
+                    ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}"
+                    ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                </td>
+                <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                    ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td  ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}" ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                    ng-click="getActiveTransaction(tran, 'exercised', 'view')">
                     <span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
@@ -271,12 +281,18 @@
                 ng-repeat="tran in investor.trans | noempty">
                 <td class="viewField"></td>
 
-                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}" ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}" ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}" ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
+                    ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
+                <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
+                    ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}"
+                    ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                </td>
+                <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                    ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
                     <span>{{formatAmount(tran.forfeited)}}</span></td>
-                <td  ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}" ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                    ng-click="getActiveTransaction(tran, 'exercised', 'view')">
                     <span>{{formatAmount(tran.exercised)}}</span></td>
             </tr>
             </tbody>
@@ -330,7 +346,8 @@
                   <p class="rightTitle"><span>Strike Price</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                         ng-model="activeTran.price"></p>
 
-                  <div ng-show="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Schedule</span>
+                  <div ng-show="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
+                       class="rightTitle"><span>Vesting Schedule</span>
                       <ul class="dropdown-list  drop-selector">
                           <li class="dropdown standard">
                               <a class="dropdown-toggle">
@@ -346,11 +363,13 @@
                       </ul>
                   </div>
 
-                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle double"><span>Vesting Term (months)</span><input
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
+                     class="rightTitle double"><span>Vesting Term (months)</span><input
                           ui-event="{blur : 'saveTran(activeTran)'}"
                           ng-model="activeTran.terms"></p>
 
-                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Cliff Date</span><input id="{{activeTran.$$hashKey}}"
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
+                     class="rightTitle"><span>Vesting Cliff Date</span><input id="{{activeTran.$$hashKey}}"
                                                                               ui-event="{keydown:'saveTranDate(activeTran, \'vestingbegins\', $event)', blur:'saveTranDate(activeTran, \'vestingbegins\', \'blur\')'}"
                                                                               ng-change="saveTranDate(activeTran, 'vestingbegins')"
                                                                               type="text"
@@ -358,11 +377,13 @@
                                                                               data-date-format={{settings.lowercasedate}}
                                                                               bs-datepicker></p>
 
-                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                  <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
+                     class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                            ng-model="activeTran.vestcliff"></p>
 
 
-                  <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null" class="rightTitle double"><span>Post Cliff Frequency</span>
+                  <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
+                       class="rightTitle double"><span>Post Cliff Frequency</span>
                       <ul class="dropdown-list  drop-selector">
                           <li class="dropdown standard">
                               <a class="dropdown-toggle">
@@ -455,8 +476,14 @@
 
                   <h2>Issue Information</h2>
 
-                  <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
-                                                                      ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                  <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();"
+                                                                      id="date{{activeIssue.$$hashKey}}"
+                                                                      ng-change="saveIssueCheckDate(activeIssue, 'date')"
+                                                                      ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}"
+                                                                      type="text"
+                                                                      ng-model="activeIssue.date"
+                                                                      data-date-format={{settings.lowercasedate}}
+                                                                      bs-datepicker
                                                                       onkeydown="testForEnter();"></p>
 
                   <div class="rightTitle double"><span>Underlying Security</span>
@@ -467,37 +494,43 @@
                               </a>
                               <ul ng-hide="toggleView();" class="dropdown-menu">
                                   <li ng-repeat="i in equityissues">
-                                      <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
+                                      <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i | maxLength}}</a>
                                   </li>
                               </ul>
                           </li>
                       </ul>
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.optundersec"></span>
                   </div>
 
                   <p class="rightTitle"><span>Total Authorized</span><input ng-disabled="toggleView();"
                                                                             ui-event="{blur : 'saveIssue(activeIssue, \'totalauth\')'}"
                                                                             ng-model="activeIssue.totalauth"
                                                                             onkeydown="testForEnter();">
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalauth"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.totalauth"></span>
                   </p>
 
-                  <p class="rightTitle"><span>Total Granted</span><input disabled value="{{totalGranted(activeIssue.issue, trans);}}">
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalgranted"></span>
+                  <p class="rightTitle"><span>Total Granted</span><input disabled
+                                                                         value="{{totalGranted(activeIssue.issue, trans);}}">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.totalgranted"></span>
                   </p>
 
                   <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
                                                                         ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
                                                                         ng-model="activeIssue.price"
                                                                         onkeydown="testForEnter();">
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.price"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.price"></span>
                   </p>
 
                   <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-disabled="toggleView();"
                                                                                         ui-event="{blur : 'saveIssueCheck(activeIssue, \'terms\')'}"
                                                                                         ng-model="activeIssue.terms"
                                                                                         onkeydown="testForEnter();">
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.terms"></span>
                   </p>
 
                   <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
@@ -508,14 +541,16 @@
                                                                               ng-model="activeIssue.vestingbegins"
                                                                               data-date-format={{settings.lowercasedate}}
                                                                               bs-datepicker>
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestingbegins"></span>
                   </p>
 
                   <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
                                                                            ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
                                                                            ng-model="activeIssue.vestcliff"
                                                                            onkeydown="testForEnter();">
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestcliff"></span>
                   </p>
 
                   <div class="rightTitle double"><span>Post Cliff Frequency</span>
@@ -531,7 +566,8 @@
                               </ul>
                           </li>
                       </ul>
-                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestfreq"></span>
                   </div>
               </div>
 
@@ -547,24 +583,47 @@
 
                   <h2>Issue Information</h2>
 
-                  <p class="belowTitle"><span ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
+                  <p class="belowTitle"><span
+                          ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
 
-                  <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
-
-                  <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
-
-                  <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
+                  <p ng-show="activeIssue.optundersec" class="belowTitle"><span
+                          ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top"
+                                                                         tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span>
                   </p>
 
-                  <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span></p>
+                  <p ng-show="activeIssue.totalauth" class="belowTitle"><span
+                          ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top"
+                                                                                     tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span>
+                  </p>
 
-                  <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
+                  <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span
+                          ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span
+                          tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
+                  </p>
 
-                  <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+                  <p ng-show="activeIssue.price" class="belowTitle"><span
+                          ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top"
+                                                                                       tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span>
+                  </p>
 
-                  <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
+                  <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span
+                          tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span>
+                  </p>
 
-                  <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span tooltip-placement="top" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span></p>
+                  <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span
+                          ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span>
+                  </p>
+
+                  <p ng-show="activeIssue.vestcliff" class="belowTitle"><span
+                          ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top"
+                                                                       tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span>
+                  </p>
+
+                  <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span
+                          tooltip-placement="top"
+                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span>
+                  </p>
 
               </div>
 
@@ -677,10 +736,13 @@
 
             <div ng-repeat="schedule in schedules" class="schedule-box">
                 <div>
-                    <span ng-hide="schedule.shown" data-icon="&#xe017;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
-                    <span ng-show="schedule.shown" data-icon="&#xe01c;" aria-hidden="true" ng-click="showSchedule(schedule);"></span>
+                    <span ng-hide="schedule.shown" data-icon="&#xe017;" aria-hidden="true"
+                          ng-click="showSchedule(schedule);"></span>
+                    <span ng-show="schedule.shown" data-icon="&#xe01c;" aria-hidden="true"
+                          ng-click="showSchedule(schedule);"></span>
                     <span>{{schedule.name}}</span>
-                    <span class="delete-icon" data-icon="&#xe00c;" ng-click="deleteSchedule(schedule);" aria-hidden="true"></span>
+                    <span class="delete-icon" data-icon="&#xe00c;" ng-click="deleteSchedule(schedule);"
+                          aria-hidden="true"></span>
                 </div>
                 <div ng-show="schedule.shown">
                     <p ng-show="schedule.terms" class="belowTitle"><span ng-bind="schedule.terms"></span><span
@@ -707,27 +769,31 @@
             <div class="capGuide grants new-schedule" ng-show="newSchedule">
                 <div>
                     <p class="rightTitle"><span>Schedule Name</span><input ng-model="newschedule.name"
-                                                                                          onkeydown="testForEnter();">
+                                                                           onkeydown="testForEnter();">
 
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.name"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                              bs-tooltip="captabletips.name"></span>
                     </p>
 
                     <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-model="newschedule.terms"
                                                                                           onkeydown="testForEnter();">
 
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                              bs-tooltip="captabletips.terms"></span>
                     </p>
 
                     <p class="rightTitle"><span>Vesting Cliff Date</span><input type="text"
                                                                                 ng-model="newschedule.vestingbegins"
                                                                                 data-date-format={{settings.lowercasedate}}
                                                                                 bs-datepicker>
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                              bs-tooltip="captabletips.vestingbegins"></span>
                     </p>
 
                     <p class="rightTitle"><span>Vesting Cliff %</span><input ng-model="newschedule.vestcliff"
                                                                              onkeydown="testForEnter();">
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                              bs-tooltip="captabletips.vestcliff"></span>
                     </p>
 
                     <div class="rightTitle double"><span>Post Cliff Frequency</span>
@@ -743,11 +809,14 @@
                                 </ul>
                             </li>
                         </ul>
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                              bs-tooltip="captabletips.vestfreq"></span>
                     </div>
 
                     <div class="standard-button small-standard-button">
-                        <button class="btn ng-binding" ng-disabled="newschedule.name == null || newschedule.name == ''" ng-click="createSchedule(newschedule);">Done</button>
+                        <button class="btn ng-binding" ng-disabled="newschedule.name == null || newschedule.name == ''"
+                                ng-click="createSchedule(newschedule);">Done
+                        </button>
                     </div>
 
                 </div>
