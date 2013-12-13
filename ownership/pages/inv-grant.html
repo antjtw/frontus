@@ -58,10 +58,10 @@
                     <tr class='tablefooter'>
                         <td></td>
                         <td></td>
-                        <td><input disabled value="{{formatAmount(totalTranAction('granted', trans))}}"></td>
-                        <td><input disabled value="{{formatAmount(totalVestedAction(rows))}}"></td>
-                        <td><input disabled value="{{formatAmount(totalGrantAction('forfeited', grants))}}"></td>
-                        <td><input disabled value="{{formatAmount(totalGrantAction('exercised', grants))}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
                     </tr>
                 </table>
             </div>

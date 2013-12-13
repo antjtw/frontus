@@ -196,9 +196,30 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         return units != 0 ? units : null;
     };
 
+    //Calculates total granted to and forfeited in grant table
+    $scope.footerAction = function (type, issues) {
+        var total = 0;
+        angular.forEach(issues, function (issue) {
+            angular.forEach(issue.trans, function(tran) {
+                if (type == "vested") {
+                    angular.forEach(tran.vested, function(vested) {
+                        total = total + parseFloat(vested.units);
+                    })
+                }
+                else {
+                    if (!isNaN(parseFloat(tran[type])) && parseFloat(tran[type]) > 0) {
+                        total = total + parseFloat(tran[type]);
+                    }
+                }
+            });
+        });
+        return total;
+    };
+
     //switches the sidebar based on the type of the issue
-    $scope.formatAmount = function (amount) {
-        return calculate.funcformatAmount(amount);
+    $scope.formatAmount = function (amount, allowzero) {
+        var unit = calculate.funcformatAmount(amount);
+        return (allowzero == "zero" && unit == null) ? 0 : unit;
     };
 
     $scope.formatDollarAmount = function(amount) {

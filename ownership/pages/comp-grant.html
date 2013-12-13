@@ -236,10 +236,10 @@
             <tr class='tablefooter'>
                 <td></td>
                 <td></td>
-                <td><input disabled value="{{formatAmount(footerAction('units', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('vested', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('exercised', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
             </tr>
         </table>
 
@@ -287,10 +287,10 @@
             <tr class='tablefooter'>
                 <td></td>
                 <td></td>
-                <td><input disabled value="{{formatAmount(footerAction('units', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('vested', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues))}}"></td>
-                <td><input disabled value="{{formatAmount(footerAction('exercised', issues))}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
+                <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
             </tr>
         </table>
     </div>
@@ -466,7 +466,7 @@
                                   {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
                               </a>
                               <ul ng-hide="toggleView();" class="dropdown-menu">
-                                  <li ng-repeat="i in allowKeys">
+                                  <li ng-repeat="i in equityissues">
                                       <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
                                   </li>
                               </ul>
