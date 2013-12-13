@@ -180,6 +180,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     angular.forEach(doc.versions, function(version) {
                         var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
                         version.last_event = version_activity.sort($scope.compareEvents)[0];
+                        if (version.last_event.activity == 'finalized') {version.last_event.activity = 'approved';}
                         var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
                         version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
                         $scope.setVersionStatusRank(version);
@@ -1049,11 +1050,13 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document countersigned");
                 $location.path('/company-list').search({});
 
             }).except(function(x) {
-                void(x);
                 $scope.confirmModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -1462,6 +1465,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 angular.forEach($scope.documents, function(doc) {
                     var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
                     doc.last_event = doc_activity.sort($scope.compareEvents)[0];
+                    if (doc.last_event.activity == 'finalized') {doc.last_event.activity = 'approved';}
                     var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
                     doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
                     $scope.setDocStatusRank(doc);
@@ -1740,10 +1744,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document signed");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                void(x);
                 $scope.confirmModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -1754,10 +1760,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 doc.when_finalize = data;
                 $scope.finalizeModalClose();
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document approved");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                void(x);
                 $scope.finalizeModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
