@@ -39,7 +39,7 @@
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
                             <img ng-show="userURL" ng-src="{{userURL}}">
-                            <span>{{person.name}}</span>
+                            <span>{{person.name  | caplength:25}}</span>
                             <span class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
                             <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                         </a>

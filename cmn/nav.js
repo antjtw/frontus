@@ -304,3 +304,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return (!(navigator.sayswho[0] == "Safari" && $scope.version_compare("537.43.58", navigator.sayswho[1])));
         }
     }]);
+
+navm.filter('caplength', function () {
+    return function (word, length) {
+        if (word) {
+            if (word.length > length) {
+                return word.substring(0, (length-1)) + "...";
+            }
+            else {
+                return word;
+            }
+        }
+    };
+});
