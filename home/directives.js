@@ -156,8 +156,8 @@ app.directive('d3myownership', ['d3', function(d3) {
 
             var pie = d3.layout.pie()
                 .sort(null)
-                .startAngle(-1.57079633)
-                .endAngle(4.71238898)
+/*                .startAngle(-1.57079633)
+                .endAngle(4.71238898)*/
                 .value(function(d) { return d.percent; });
 
 
@@ -233,8 +233,8 @@ app.directive('d3myvested', ['d3', function(d3) {
 
             var pie = d3.layout.pie()
                 .sort(null)
-                .startAngle(-1.57079633)
-                .endAngle(4.71238898)
+/*                .startAngle(-1.57079633)
+                .endAngle(4.71238898)*/
                 .value(function(d) { return d.units; });
 
 

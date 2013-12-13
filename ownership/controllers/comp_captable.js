@@ -25,6 +25,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tourmessages.sidebar = "Additional details for securites and transactions are tucked away here";
     $scope.tourmessages.issuecog = "Additional details for securites and transactions are tucked away here";
 
+    // Captable tooltips
+    $scope.captabletips = {};
+    $scope.captabletips.premoneyval = "The valuation before taking in money in this round";
+    $scope.captabletips.postmoneyval = "The sum of the pre-money valuation and the total money paid into this round";
+    $scope.captabletips.ppshare = "The price at which each share was purchased";
+    $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
+    $scope.captabletips.liquidpref = "The minimum return multiple each investor is guaranteed on a liquidity event";
+    $scope.captabletips.partpref = "Allows an investor to collect their liquidation preference AND stock on a liquidity event";
+    $scope.captabletips.dragalong = "When a majority shareholder enters a sale, minority shareholders are also forced sell their shares";
+    $scope.captabletips.tagalong = "When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares";
+    $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
+    $scope.captabletips.totalgranted = "The sum total of shares granted";
+    $scope.captabletips.price = "The price each granted share can be purchased at when vested";
+    $scope.captabletips.terms = "The total number of months until fully vested";
+    $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
+    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
+    $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
+    $scope.captabletips.price = "The rate that interest accrues on this debt";
+    $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
+    $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
+    $scope.captabletips.discount = "The percentage discount applied upon conversion";
+    $scope.captabletips.term = "The term of the note before expiration";
+    $scope.captabletips.common = "Indicates that a security is common stock, and can only be applied to one security";
+
+
+
+
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -492,7 +519,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else if (String($scope.activeIssue.tagalong) == "false") {
             $scope.activeIssue.tagalong = $scope.tf[1];
         }
-        if ($scope.activeIssue.date == "Mon Feb 01 2100 00:00:00 GMT-0500 (EST)") {
+        if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
             $scope.activeIssue.date = (Date.today());
         }
         if ($scope.activeIssue.common) {
@@ -919,6 +946,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.trans.splice(index, 1);
             var index = $scope.activeTran.indexOf(tran);
             $scope.activeTran.splice(index, 1);
+            if ($scope.activeTran.length < 1) {
+                var anewTran = {};
+                anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (tran.issue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue == tran.issue) {
+                        anewTran = $scope.tranInherit(anewTran, issue);
+                    }
+                });
+                $scope.trans.push(anewTran);
+                $scope.activeTran.push(anewTran);
+            }
             angular.forEach($scope.rows, function (row) {
                 if (row.name === tran['investor']) {
                     if (!isNaN(tran.units)) {
@@ -1184,6 +1222,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 });
                 if (!transaction.email) {
                     transaction.email = null
+                }
+                // Autocomplete for Equity transactions, fill out the third of units, amount or price per share
+                if (transaction.type == "Equity") {
+                    if (transaction.units && transaction.amount && !transaction.ppshare) {
+                        transaction.ppshare = parseFloat(transaction.amount) / parseFloat(transaction.units);
+                    }
+                    else if (!transaction.units && transaction.amount && transaction.ppshare) {
+                        transaction.units = parseFloat(transaction.amount) / parseFloat(transaction.ppshare);
+                    }
+                    else if (transaction.units && !transaction.amount && transaction.ppshare) {
+                        transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
+                    }
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), dragalong, tagalong).then(function (data) {
                     $scope.lastsaved = Date.now();
@@ -1965,6 +2015,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.tourclose = function () {
+        $scope.sideToggle = false;
         $scope.tourModal = false;
     };
 
@@ -2260,19 +2311,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
-    $scope.moveTour = function() {
-        $scope.tourstate += 1;
+    $scope.tourfunc = function() {
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
         }
-        if ($scope.tourstate == 3) {
+        else if ($scope.tourstate == 1) {
+            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(3) input:first-of-type").focus();
+        }
+        else if ($scope.tourstate == 2) {
+            $(".tableView.captable th > input:first-of-type").focus();
+        }
+        else if ($scope.tourstate == 3) {
             $scope.sideToggle = false;
         }
+        else if ($scope.tourstate == 4) {
+            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(4) input:first-of-type").focus();
+        }
+    };
+
+    $scope.moveTour = function() {
+        $scope.tourstate += 1;
+        $scope.tourfunc();
     };
 
     $scope.gotoTour = function(x) {
         $scope.tourstate = parseInt(x);
-    }
+        $scope.tourfunc();
+    };
 
     $scope.closeTour = function() {
         $scope.tourstate = 0;

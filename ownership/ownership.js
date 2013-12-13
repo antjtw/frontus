@@ -10,7 +10,7 @@
   */
 
 var owner = angular
-    .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'd3', 'ownerServices', 'ownerFilters', 'ownerDirectives'])
+    .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'd3', 'ownerServices', 'ownerFilters', 'ownerDirectives']);
 
 owner.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');

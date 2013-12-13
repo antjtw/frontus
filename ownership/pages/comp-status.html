@@ -85,7 +85,16 @@
         <div class="span8 recipientInfo docLibrary statusBlock">
 
             <div class="row-fluid">
-                <table class="status-table">
+                <table class="status-table" ng-show="userStatus.length===0">
+                    <tbody class="empty-table">
+                    <tr>
+                        <td>
+                            Welcome! <a href="/ownership/company-captable" class="link">Start your cap table</a> and share with investors to view status</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="status-table" ng-show="userStatus.length!==0">
                     <tbody>
                     <tr>
                         <th></th>
@@ -169,13 +178,13 @@
                     </div>
                     <div class="body-box">
                         <ul class="last-edited">
-                            <li>{{lastupdated | date:settings.dateformat}}</li>
+                            <li>{{lastupdated | date:settings.shortdate}}</li>
                             <li>Last Edited</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="info-box">
+                <div class="info-box" ng-show="eventGroups.length > 0">
                     <div class="head-box">
                         <h2>Activity</h2>
                     </div>
@@ -186,7 +195,7 @@
                                 <ul>
                                     <li ng-repeat="event in events.slice(2)">
                                         <i class="{{event.activity | icon}}"></i>
-                                        <span>{{event | nameoremail}} {{event.activity | received}} the captable.</span>
+                                        <span>{{event | nameoremail}} {{event.activity | received}} the cap table.</span>
                                     </li>
                                 </ul>
                             </li>

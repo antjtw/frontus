@@ -18,16 +18,15 @@
                         <input type="text" class="search-box" ng-model="query">
                     </div>
 
-                    <div class="pull-right">
+                    <div class="pull-right" ng-show="documents.length!==0">
                         <div class="standard-button">
-                            <button ng-click="documentUploadOpen();" class="btn">Upload
+                            <button ng-click="multishareOpen();" class="btn">Share
                             </button>
                         </div>
                     </div>
-
-                    <div class="pull-right small-space">
+                    <div class="pull-right" ng-class="{small-space: documents.length!==0}">
                         <div class="standard-button">
-                            <button ng-click="multishareOpen();" class="btn">Share
+                            <button ng-click="documentUploadOpen();" class="btn">Upload
                             </button>
                         </div>
                     </div>
@@ -108,7 +107,7 @@
                             <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                         </td>
-                        <td class="shareholder-column status-column" ng-click="viewStatus(doc)">
+                        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                             <ul>
                                 <li>{{shortVersionStatus(version)}}</li>
                                 <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
@@ -181,14 +180,16 @@
 
 <div modal="shareDocModal" close="shareDocClose()" options="opts">
     <div class="modalHeader">
-        Share "{{docToShare.docname | caplength:25}}"
+        Share "{{docToShare.docname | caplength:35}}"
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
     </div>
     <div class="modalText dshare">
         <ul>
             <li>
-                <span>Email Address</span>
-                <input ng-model="recipient" type="text" typeahead="investor for investor in vInvestors | filter:$viewValue" typeahead-min-length="1"/>
+                <span>Email Addresses</span>
+                <div class="single-share-input">
+                    <input ui-select2="select2Options" ng-model="recipient">
+                </div>
             </li>
             <li>
                 <span>Get Signature?</span>
@@ -211,7 +212,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-disabled="!fieldCheck(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
     </div>
 </div>
 
@@ -225,7 +226,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="updateTitleClose()">Cancel</button></div>
-        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()">Confirm</button></div>
+        <div class="standard-button green"><button class="btn" ng-click="updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm</button></div>
     </div>
 </div>
 

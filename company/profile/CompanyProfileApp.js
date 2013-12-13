@@ -276,6 +276,15 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         $scope.removeAdminModal = false;
     };
 
+    $scope.addAdminModalOpen = function(email) {
+        $scope.selectedToAdd = email;
+        $scope.addAdminModal = true;
+    };
+
+    $scope.addAdminModalClose = function() {
+        $scope.addAdminModal = false;
+    };
+
     $scope.narrowopts = {
         backdropFade: true,
         dialogFade:true,
@@ -301,7 +310,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
                 $route.reload();
             }).except(function(x) {
                     void(x);
-                    $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
         if ($scope.newRole == "Investor") {
@@ -311,7 +320,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
                 $route.reload();
             }).except(function(x) {
                     void(x);
-                    $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
         $scope.newEmail = "";
@@ -327,6 +336,17 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         });
         $scope.selectedToRevoke = "";
     };
+
+    $scope.add_admin = function () {
+        SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
+            void(x);
+            $scope.$emit("notification:success", "Admin Added");
+            $route.reload();
+        }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+            });
+    }
 }]);
 
 app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', 'navState',

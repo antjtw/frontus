@@ -90,6 +90,7 @@ div.last-saved {
 
 .tableView.grant-table {
     margin-bottom: 60px;
+    margin-top: 20px;
 }
 
 .tableView.captable  {
@@ -358,6 +359,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .span4.capright.button-offset {
     margin-top: -19px;
+    position: relative;
 }
 
 .span4.capright > button {
@@ -395,13 +397,13 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .capright .headsection h2 input {
-    border: 0;
     font-family: 'FS Elliot Web Light', sans-serif !important;
     font-size: 24px;
     line-height:21px;
     font-weight: normal;
     color: #1e2d3d;
     width: 260px;
+    border-radius: 3px;
 }
 
 .capright .tab-content {
@@ -534,8 +536,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-left: 0;
 }
 
+
 div.rightTitle {
-    height: 30px;
+    height: 32px;
     margin: 0 0 10px 0;
 }
 
@@ -585,6 +588,38 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
+p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    padding-left: 0;
+    margin-left: 0;
+    margin-top: 6px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
+    margin-top: -5px;
+}
+
+.rightTitle > div.tooltip {
+    left: auto !important;
+    right: 14px !important;
+    width: 200px;
+}
+
+.rightTitle.common-toggle > div.tooltip {
+    left: auto !important;
+    right: 147px !important;
+}
+
+.rightTitle > div.tooltip > .tooltip-arrow {
+    left: 81.8%;
+}
+
 .rightTitle > select {
     width: 100px;
     height: 25px;
@@ -599,7 +634,7 @@ p.rightTitle.interest-rate > input {
 }
 
 div.rightTitle.interest-rate {
-    width: 100px;
+    width: 140px;
     float: left;
     margin-left: 10px;
 }
@@ -675,7 +710,7 @@ textarea {
 }
 
 .captips {
-    color:  #3498db;
+    color:  #1E2D3D;
     cursor: default;
 }
 
@@ -855,6 +890,18 @@ ul.last-edited > li:last-child {
 
 .railpadding > p {
     padding-right: 20px;
+}
+
+.captour > ul {
+    padding-right: 20px;
+}
+
+.captour > ul > li:nth-child(even) {
+    margin-bottom: 20px;
+}
+
+.captour > ul > li:nth-child(odd) {
+    color: rgb(30, 45, 61);
 }
 
 .activity-feed2 {
@@ -1287,6 +1334,34 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     right: 5px;
 }
 
+/* Empty Table */
+
+.tableView.grant-table .empty-table > tr > td:first-child > div {
+    text-align: center;
+    line-height: 180px;
+    font-size: 14px;
+    padding: 0;
+    margin: 0 40px 0 0;
+    height: 180px;
+    border: 1px solid #E2E2E2;
+}
+
+.tableView.grant-table .empty-table tr {
+    border: none;
+}
+
+.status-table > tbody.empty-table > tr > td:last-child {
+    text-align: center;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    font-size: 14px;
+}
+
+.tableView .empty-table > tr > td:first-child .link, .status-table > tbody.empty-table > tr > td:last-child .link {
+    color:#3498DB;
+    cursor:pointer;
+    font-size: 14px;
+}
+
 /* Tour */
 
 .tour-box {
@@ -1416,6 +1491,12 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     line-height: 20px;
 }
 
+.tour-box > .tour-stage > span > span:last-of-type {
+    font-size: 20px;
+    vertical-align: bottom;
+    line-height: 0px;
+}
+
 .tour-box > .tour-stage p {
     display: inline-block;
     width: 65%;
@@ -1488,7 +1569,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .tableView.captable tr:nth-child(4) td > span.box-highlight > span.next-button {
     display: inline-block;
     position: absolute;
-    right: -148px;
+    right: -162px;
     bottom: -188px;
     z-index: 1;
     text-align: center;
@@ -1524,7 +1605,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     top: -14px;
     z-index: 10;
     content: ' ';
-    width: 150px;
+    width: 152px;
     height: 18px;
     border: 2px solid #19BB95;
     pointer-events: none;
@@ -1537,7 +1618,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight > span.next-button {
     display: inline-block;
     position: absolute;
-    right: -154px;
+    right: -156px;
     bottom: -36px;
     z-index: 1;
     text-align: center;
@@ -1569,7 +1650,7 @@ div.issue-rail:before {
     width: -moz-calc(100% - 30px);
     width: -webkit-calc(100% - 30px);
     width: calc(100% - 30px);
-    height: 450px;
+    height: 550px;
     border: 2px solid #19BB95;
     pointer-events: none;
 }
@@ -1582,7 +1663,7 @@ div.capGuide.global.issue-rail .next-button {
     display: inline-block;
     position: absolute;
     right: 11px;
-    bottom: -402px;
+    bottom: -498px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -1608,7 +1689,7 @@ div.capGuide.global.issue-rail .next-button {
 .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
     display: inline-block;
     position: absolute;
-    right: -144px;
+    right: -146px;
     bottom: -214px;
     z-index: 1;
     text-align: center;
@@ -1635,10 +1716,22 @@ div.capGuide.global.issue-rail .next-button {
     top: 0;
     z-index: 1;
     content: ' ';
-    width: 140px;
+    width: 142px;
     height: 182px;
     border: 2px solid #19BB95;
     pointer-events: none;
+}
+
+
+@-moz-document url-prefix() {
+    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
+        bottom: -198px;
+    }
+
+    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
+        top: 10px;
+        height: 172px;
+    }
 }
 
 /* Tour Bubble, may want to move to MVP */
@@ -1682,11 +1775,8 @@ span.tour-icon:hover {
 /* Specifics for particular bubbles */
 
 span.tour-icon.side-toggle {
-    -webkit-transform:rotate(-90deg);
-    -moz-transform:rotate(-90deg);
-    -o-transform:rotate(-90deg);
-    -ms-transform:rotate(-90deg);
-    top: 6px;
+    top: 276px;
+    left: -34px;
 }
 
 span.tour-icon.tour-share + .tooltip {
@@ -1699,16 +1789,14 @@ span.tour-icon.tour-view + .tooltip {
 }
 
 span.tour-icon.side-toggle + .tooltip {
-    top: 100px !important;
-    left: -100px !important;
+    top: 252px !important;
+    left: -243px !important;
     width: 200px;
-    -webkit-transform:rotate(-90deg);
-    -moz-transform:rotate(-90deg);
-    -o-transform:rotate(-90deg);
-    -ms-transform:rotate(-90deg);
 }
 
 span.tour-icon.issue-cog + .tooltip {
     top: -25px !important;
     left: -235px !important;
 }
+
+/* Animations */

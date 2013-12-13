@@ -599,17 +599,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         //My parentheses format
         var regExp = /\(([^)]+)\)/;
 
-        $scope.fieldCheck = function(email) {
-            var matches = regExp.exec(email);
-            if (matches == null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            return re.test(email);
-        };
-
-        $scope.share = function(message, email, sign) {
+        $scope.share = function(message, emails, sign) {
             sign = sign == "Yes";
+            var tosee = "";
             if (sign) {
                 var date = Date.parse('22 November 2113');
             } else {
@@ -618,15 +610,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (message === "Add an optional message...") {
                 message = "";
             }
-            var matches = regExp.exec(email);
-            if (matches === null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            console.log(email);
-            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            console.log(tosee);
+            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
                 void(data);
-                $scope.$emit("notification:success", "Document shared with " + email);
+                $scope.$emit("notification:success", "Document shared");
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {
@@ -639,11 +633,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.updateTitleOpen = function(doc) {
             $scope.docForModal = doc;
             $scope.updateTitleModal = true;
+            $scope.docForModal.originalName = $scope.docForModal.docname;
         };
 
         $scope.updateTitleClose = function() {
             $scope.updateTitleModal = false;
             $scope.$emit('updated:name', $scope.docForModal);
+            if ($scope.docForModal.docname.length < 1) {
+                $scope.docForModal.docname = $scope.docForModal.originalName;
+            }
             $scope.docForModal = null;
         };
 
@@ -693,6 +691,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
+            'tokenSeparators': [",", " "],
             'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
         };
 
@@ -763,7 +762,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             tosee = tosee == "" ? "!!!" : tosee;
             if ($rootScope.navState.userid.indexOf("@sharewave.com") !== -1) {
                 console.log("here");
-                SWBrijj.procm("document.josh_multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                SWBrijj.procm("document.josh_multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                     console.log(data);
                     $scope.$emit("notification:success", "Documents shared");
                     $route.reload();
@@ -773,7 +772,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     });
             }
             else {
-                SWBrijj.procm("document.multishare", tosee.substring(1), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
+                SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
                     console.log(data);
                     $scope.$emit("notification:success", "Documents shared");
                     $route.reload();
@@ -1074,64 +1073,44 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.rejectDocModal = false;
         };
 
-        // Sharing modal functions
-
-        $scope.shareDocOpen = function() {
-            $scope.shareDocModal = true;
-        };
-
-        $scope.shareDocClose = function() {
-            $scope.broadcastModalClose();
-            $scope.shareDocModal = false;
-        };
-
-        $scope.changeSig = function(value) {
-            $scope.signeeded = value;
-            if (value == "Yes") {
-                $scope.messageText = "Hi, Your signature is requested";
-            } else {
-                $scope.messageText = "Add an optional message...";
-            }
-        };
-
-        $scope.share = function(message, email, sign) {
-            sign = sign == "Yes";
-            if (sign) {
-                var date = Date.parse('22 November 2113');
-            } else {
-                date = null;
-            }
-            if (message === "Add an optional message...") {
-                message = "";
-            }
-            SWBrijj.procm("document.share_document", $scope.docId, email.toLowerCase(), message, Boolean(sign), date).then(function(data) {
-                void(data);
-                $scope.$emit("notification:success", "Document shared with " + email);
-                $scope.signeeded = "No";
-                $route.reload();
-            }).except(function(x) {
-                void(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.signeeded = "No";
-            });
-        };
-
 
     }
 ]);
 
 /*******************************************************************************************************************/
 
-docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState',
-    function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState) {
+docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState', '$route',
+    function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState, $route) {
         if (navState.role == 'investor') {
             $location.path('/investor-list');
             return;
         }
 
+        $scope.signeeded = "No";
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
+
+        /* this investor list is used by the sharing email list drop-down */
+        $scope.vInvestors = [];
+        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].name) {
+                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
+                }
+                else {
+                    $scope.vInvestors.push("(" +data[i].email+")");
+                }
+            }
+        });
+
+        $scope.select2Options = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': $scope.vInvestors,
+            'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
+        };
 
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
@@ -1317,11 +1296,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             $scope.investorOrder = ($scope.investorOrder == field) ? '-' + field : field;
         };
 
-        $scope.share = function(message, email, sign) {
-            SWBrijj.procm("document.share_document", docId, email.toLowerCase(), message, Boolean(sign)).then(function(data) {
-            });
-        };
-
         /*$scope.remind = function(message, email) {
             SWBrijj.procm("document.remind_document", docId, email.toLowerCase(), message).then(function(data) {
             });
@@ -1340,7 +1314,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.opts = {
             backdropFade: true,
             dialogFade: true,
-            dialogClass: 'modal shareModal'
+            dialogClass: 'modal'
         };
 
         $scope.remmodalUp = function(name) {
@@ -1361,6 +1335,89 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         function failed() {
             alert("failed")
         }
+
+        // Sharing modal functions
+
+        $scope.shareDocOpen = function() {
+            $scope.shareDocModal = true;
+        };
+
+        $scope.shareDocClose = function() {
+            $scope.shareDocModal = false;
+        };
+
+        $scope.changeSig = function(value) {
+            $scope.signeeded = value;
+            if (value == "Yes") {
+                $scope.messageText = "Hi, Your signature is requested";
+            } else {
+                $scope.messageText = "Add an optional message...";
+            }
+        };
+
+        //Email
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //My parentheses format
+        var regExp = /\(([^)]+)\)/;
+
+        $scope.fieldCheck = function(email) {
+            var matches = regExp.exec(email);
+            if (matches == null) {
+                matches = ["", email];
+            }
+            email = matches[1];
+            return re.test(email);
+        };
+
+        $scope.checkmany = function(people) {
+            var anybad = false;
+            angular.forEach(people, function(person) {
+                var email
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                email = matches[1];
+                if (!re.test(email)) {
+                    anybad = true
+                }
+            });
+            if (people.length == 0) {
+                anybad = true
+            }
+            return anybad
+        };
+
+        $scope.share = function(message, emails, sign) {
+            sign = sign == "Yes";
+            var tosee = "";
+            if (sign) {
+                var date = Date.parse('22 November 2113');
+            } else {
+                date = null;
+            }
+            if (message === "Add an optional message...") {
+                message = "";
+            }
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            console.log(tosee);
+            SWBrijj.procm("document.share_document", $scope.document.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document shared");
+                $scope.signeeded = "No";
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.signeeded = "No";
+                });
+        };
 
     }
 ]);
@@ -1401,7 +1458,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             SWBrijj.tblm("document.investor_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
                     var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
-                    doc.last_event = data.sort($scope.compareEvents)[0];
+                    doc.last_event = doc_activity.sort($scope.compareEvents)[0];
                     var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
                     doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
                     $scope.setDocStatusRank(doc);
