@@ -1050,11 +1050,13 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document countersigned");
                 $location.path('/company-list').search({});
 
             }).except(function(x) {
-                void(x);
                 $scope.confirmModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -1742,10 +1744,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 dce.removeAllNotes();
                 $scope.confirmModalClose();
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document signed");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                void(x);
                 $scope.confirmModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -1756,10 +1760,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 doc.when_finalize = data;
                 $scope.finalizeModalClose();
                 $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document approved");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                void(x);
                 $scope.finalizeModalClose();
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
