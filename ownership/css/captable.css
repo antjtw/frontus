@@ -849,6 +849,16 @@ tr.rowSelected, tr.rowSelected:hover {
     background-color: transparent;
 }
 
+li.grant-list-edit {
+    border-bottom: 1px solid #F1F1F1;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+li.grant-list-edit:last-child {
+    border-bottom: none;
+}
+
 .grant-list-table {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     border-top: 1px solid #E3E3E3;
