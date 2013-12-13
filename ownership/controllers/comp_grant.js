@@ -156,9 +156,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     tran.fields = [false,false,false,false];
                 })
             });
-            if (mode == "") {
-                currenttran.fields[0] = true;
-            }
             if (mode == "forfeited") {
                 if (currenttran.forfeited) {
                     currenttran.fields[2] = true;
@@ -180,8 +177,17 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 }
             }
             else if (mode == "vested") {
-                $scope.mode = 4;
-                currenttran.fields[1] = true;
+                if (currenttran.vested.length > 0) {
+                    $scope.mode = 4;
+                    currenttran.fields[1] = true;
+                }
+                else {
+                    $scope.sideBar = "x";
+                    return
+                }
+            }
+            else {
+                currenttran.fields[0] = true;
             }
         }
         else {

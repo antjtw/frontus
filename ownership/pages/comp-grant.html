@@ -228,7 +228,7 @@
                     ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
                 <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
                     ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}"
+                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
                     ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
                 </td>
                 <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
@@ -285,7 +285,7 @@
                     ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
                 <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
                     ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':tran.vested}"
+                <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
                     ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
                 </td>
                 <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"

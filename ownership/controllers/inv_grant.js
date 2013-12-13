@@ -114,8 +114,14 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
             }
         }
         else if (mode == "vested") {
-            $scope.mode = 4;
-            currenttran.fields[1] = true;
+            if (currenttran.vested.length > 0) {
+                $scope.mode = 4;
+                currenttran.fields[1] = true;
+            }
+            else {
+                $scope.sideBar = "x";
+                return
+            }
         }
         else {
             currenttran.fields[0] = true;
