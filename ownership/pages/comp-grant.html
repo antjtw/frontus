@@ -357,7 +357,7 @@
                                   <li ng-repeat="i in schedules">
                                       <a ng-click="pickSchedule(i, activeTran)">{{i.name}}</a>
                                   </li>
-                                  <li><a ng-click="pickSchedule('!!', activeTran)">New Schedule</a></li>
+                                  <li><a ng-click="pickSchedule('!!', activeTran)">Custom Schedule</a></li>
                               </ul>
                           </li>
                       </ul>
@@ -682,13 +682,14 @@
 
                   <h2>Forfeit Information</h2>
 
-                  <ul>
-                      <li class="grant-list" ng-show="act.unit"
-                          ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                          <p class="belowTitle"><span
-                                  ng-bind="act.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                          <p class="belowTitle"><span ng-bind="act.unit"></span><span>Shares</span></p>
+                  <ul class="grant-list-view">
+                      <li>
+                          <span>Date</span>
+                          <span>Shares</span>
+                      </li>
+                      <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
+                          <span ng-bind="act.date | date:settings.shortdate"></span>
+                            <span ng-bind="act.unit"></span>
                       </li>
                   </ul>
               </div>
@@ -697,13 +698,15 @@
 
                 <h2>Exercised Information</h2>
 
-                <ul>
-                    <li class="grant-list" ng-show="act.unit"
+                <ul class="grant-list-view">
+                    <li>
+                        <span>Date</span>
+                        <span>Shares</span>
+                    </li>
+                    <li ng-show="act.unit"
                         ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
-                        <p class="belowTitle"><span
-                                ng-bind="act.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                        <p class="belowTitle"><span ng-bind="act.unit"></span><span>Shares</span></p>
+                        <span ng-bind="act.date | date:settings.shortdate"></span>
+                        <span ng-bind="formatAmount(act.unit)"></span>
                     </li>
                 </ul>
             </div>
@@ -714,13 +717,14 @@
 
                 <p style="margin-bottom: 15px;">Auto-calculated from vesting schedule</p>
 
-                <ul>
-                    <li class="grant-list"
-                        ng-repeat="grant in activeTran.vested">
-                        <p class="belowTitle"><span
-                                ng-bind="grant.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                        <p class="belowTitle"><span ng-bind="formatAmount(grant.units)"></span><span>Shares</span></p>
+                <ul class="grant-list-view">
+                    <li>
+                        <span>Date</span>
+                        <span>Shares</span>
+                    </li>
+                    <li ng-repeat="grant in activeTran.vested">
+                        <span ng-bind="grant.date | date:settings.shortdate"></span>
+                        <span ng-bind="formatAmount(grant.units)"></span>
                     </li>
                 </ul>
             </div>
