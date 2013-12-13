@@ -68,6 +68,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                             tran.datekey = tran['date'].toUTCString();
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
+                            tran.fields = [false, false, false, false];
                             tran.vested = calculate.tranvested(tran);
                             issue.trans.push(tran);
                         }
@@ -86,18 +87,38 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         if (view == "view") {
             $scope.sideBar = 1;
         }
-        else {
-            $scope.sideBar = 2;
-        }
         $scope.mode = 1;
+        angular.forEach($scope.issues, function(issue) {
+            angular.forEach(issue.trans, function(tran) {
+                tran.fields = [false,false,false,false];
+            })
+        });
         if (mode == "forfeited") {
-            $scope.mode = 2;
+            if (currenttran.forfeited) {
+                currenttran.fields[2] = true;
+                $scope.mode = 2;
+            }
+            else {
+                $scope.sideBar = "x";
+                return
+            }
         }
         else if (mode == "exercised") {
-            $scope.mode = 3;
+            if (currenttran.exercised) {
+                currenttran.fields[3] = true;
+                $scope.mode = 3;
+            }
+            else {
+                $scope.sideBar = "x";
+                return
+            }
         }
         else if (mode == "vested") {
             $scope.mode = 4;
+            currenttran.fields[1] = true;
+        }
+        else {
+            currenttran.fields[0] = true;
         }
         var activeAct = [];
 
