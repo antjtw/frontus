@@ -437,13 +437,14 @@
 
                 <h2>Vested Information</h2>
 
-                <ul>
-                    <li class="grant-list-edit"
-                        ng-repeat="grant in activeTran.vested">
-                        <p class="belowTitle"><span
-                                ng-bind="grant.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                        <p class="belowTitle"><span ng-bind="formatAmount(grant.units)"></span><span>Shares</span></p>
+                <ul class="grant-list-view">
+                    <li>
+                        <span>Date</span>
+                        <span>Shares</span>
+                    </li>
+                    <li ng-repeat="grant in activeTran.vested">
+                        <span ng-bind="grant.date | date:settings.shortdate"></span>
+                        <span ng-bind="formatAmount(grant.units)"></span>
                     </li>
                 </ul>
             </div>
