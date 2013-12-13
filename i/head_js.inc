@@ -13,6 +13,7 @@
 <script src="/lib/angular/ui-bootstrap-tpls-0.4.0.js"></script>
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
+<script src="/lib/placeholders.min.js"></script>
 <script src="/brijj/aBrijj.js"></script>
 <script src="/lib/moment.min.js"></script>
 <script src="/cmn/nav.js"></script>
