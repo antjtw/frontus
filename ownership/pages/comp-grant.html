@@ -466,7 +466,7 @@
                                   {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
                               </a>
                               <ul ng-hide="toggleView();" class="dropdown-menu">
-                                  <li ng-repeat="i in allowKeys">
+                                  <li ng-repeat="i in equityissues">
                                       <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
                                   </li>
                               </ul>

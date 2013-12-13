@@ -26,6 +26,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.tf = ["yes", "no"];
     $scope.issues = [];
     $scope.issuekeys = [];
+    $scope.equityissues = [];
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
@@ -76,6 +77,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                         $scope.issues.push($scope.allissues[i]);
                     }
                     $scope.issuekeys.push($scope.allissues[i].issue);
+                    if ($scope.allissues[i].type == "Equity") {
+                        $scope.equityissues.push($scope.allissues[i].issue);
+                    }
                 }
 
                 // Assign the grants to the respective transactions
