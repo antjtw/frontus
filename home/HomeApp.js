@@ -923,7 +923,7 @@ angular.module('HomeApp').filter('description', function() {
             else if (activity == "received") return document + " sent to "+person;
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
-            else if (activity == "finalized") return document + " finalized by " + person;
+            else if (activity == "finalized") return document + " approved by " + person;
             else return activity + " by "+person;
         }
     }
@@ -958,7 +958,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "signed") return "You signed "+document;
             else if (activity == "rejected") return person + " rejected your signature on " +document;
             else if (activity == "countersigned") return person + " countersigned "+document;
-            else if (activity == "finalized") return person + " finalized " + document;
+            else if (activity == "finalized") return person + " approved " + document;
             else  {
                 return activity + " by "+person;
             }

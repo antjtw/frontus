@@ -31,14 +31,14 @@
     <div modal="finalizeModal" options="opts">
         <div class="sign-modal">
             <div class="modalHeader">
-                <span>Finalize Document</span>
+                <span>Approve Document</span>
                 <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="finalizeModalClose()" ng-hide="processing"></span>
             </div>
             <div my-loading-spinner="processing">
                 <div class="modalText esign">
                     <input class="checkbox-class" type="checkbox" ng-model="confirmFinalize">
                     <span class="chkboxtext">
-                        Do you wish to finalize this document?
+                        Do you wish to approve this document?
                         <br>(This action is irreversible)
                     </span>
                 </div>
@@ -47,7 +47,7 @@
                         <button class="btn" ng-click="finalizeModalClose()">Cancel</button>
                     </div>
                     <div class="standard-button green">
-                        <button class="btn" ng-disabled="processing || !confirmFinalize" ng-click="finalizeDocument(document);">Finalize</button>
+                        <button class="btn" ng-disabled="processing || !confirmFinalize" ng-click="finalizeDocument(document);">Approve</button>
                     </div>
                 </div>
             </div>
