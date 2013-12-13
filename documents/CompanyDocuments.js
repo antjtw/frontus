@@ -278,13 +278,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        var mimetypes = ["application/pdf"];
+        var mimetypes = ["application/pdf","application/vnd.openxmlformats-officedocument.wordpressingml.document",
+			 "application/vnd.openxmlformats-officedocument.wordpressingml.template",
+			 "application/msword"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
                 for (var j = 0; j < mimetypes.length; j++) {
+		    // console.log(element.files[i].type);
                     if (element.files[i].size > 20000000) {
                         $scope.fileError = "Please choose a smaller file";
                     } else if (element.files[i].type != mimetypes[j]) {
