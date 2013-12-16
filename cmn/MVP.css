@@ -1579,6 +1579,7 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
     padding-left: 10px;
+    width: 230px;
 }
 .status-table.investor > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
