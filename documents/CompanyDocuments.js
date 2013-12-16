@@ -193,17 +193,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.compareEvents = function(a, b) {
               var initRank = $scope.eventRank(b) - $scope.eventRank(a);
-              return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+              return initRank === 0 ? (Date.parse(b.event_time) - Date.parse(a.event_time)) : initRank;
         };
 
         $scope.eventRank = function (ev) {
+            // signed or rejected can come either before or after each other depending on chronological ordering.
+            // ambiguity is resolve in $scope.compareEvents
             switch (ev.activity) {
                 case "finalized":
-                    return 7;
                 case "countersigned":
-                    return 6;
-                // signed or rejected can come either before or after each other depending on chronological ordering.
-                // ambiguity is resolve in $scope.compareEvents
                 case "signed":
                 case "rejected":
                     return 4;
@@ -430,7 +428,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shortVersionStatus = function(version) {
             if (!version) return "";
-            if ($scope.isPendingSignature(version)){
+            if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+                return "Rejected by recipient";
+            } else if ($scope.wasJustRejected(version) &&
+                       !$scope.lastEventByInvestor(version)) {
+                return "Rejected by you";
+            } else if ($scope.isPendingSignature(version)){
                 return "Sent for Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Review and Sign";
@@ -445,6 +448,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 return "Sent";
             }
+        };
+
+        $scope.lastEventByInvestor = function(doc) {
+            return doc.investor == doc.last_event.person;
+        };
+
+        $scope.wasJustRejected = function(doc) {
+            return doc.last_event && doc.last_event.activity == 'rejected';
         };
 
         $scope.docStatusNumComplete = function(doc) {
@@ -947,7 +958,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.versionStatus = function(version) {
-            console.log(version);
             if (version && version.last_event) {
                 return "" + version.last_event.activity +
                        " by " + (version.last_event.name || version.investor) +
@@ -1475,17 +1485,15 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.compareEvents = function(a, b) {
             var initRank = $scope.eventRank(b) - $scope.eventRank(a);
-            return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+            return initRank === 0 ? (Date.parse(b.event_time) - Date.parse(a.event_time)) : initRank;
         };
 
         $scope.eventRank = function (ev) {
+            // signed or rejected can come either before or after each other depending on chronological ordering.
+            // ambiguity is resolve in $scope.compareEvents
             switch (ev.activity) {
                 case "finalized":
-                    return 7;
                 case "countersigned":
-                    return 6;
-                // signed or rejected can come either before or after each other depending on chronological ordering.
-                // ambiguity is resolve in $scope.compareEvents
                 case "signed":
                 case "rejected":
                     return 4;
@@ -1557,7 +1565,12 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.shortStatus = function(version) {
             if (!version) return "";
-            if ($scope.isPendingSignature(version)){
+            if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+                return "Rejected by you";
+            } else if ($scope.wasJustRejected(version) &&
+                       !$scope.lastEventByInvestor(version)) {
+                return "Rejected by company";
+            } else if ($scope.isPendingSignature(version)){
                 return "Review and Sign";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Signed and Sent for Review";
@@ -1572,6 +1585,14 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             } else {
                 return "Sent";
             }
+        };
+
+        $scope.lastEventByInvestor = function(doc) {
+            return doc.last_event.person == navState.userid;
+        };
+
+        $scope.wasJustRejected = function(doc) {
+            return doc.last_event && doc.last_event.activity == 'rejected';
         };
 
         $scope.isPendingFinalization = function(doc) {

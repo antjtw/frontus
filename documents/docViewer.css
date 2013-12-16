@@ -91,7 +91,7 @@ navbar {
 .docViewerControls {
     min-height: 60px;
     width: 100%;
-    overflow: overlay;
+    overflow: visible;
     background-color: #F1F1F1;
 }
 
