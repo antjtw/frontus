@@ -888,6 +888,7 @@ angular.module('HomeApp').filter('icon', function() {
         else if (activity == "edited") return "icon-pencil";
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
+        else if (activity == "transcoded") return "icon-star";
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
         else if (activity == "finalized") return "icon-lock";
@@ -920,6 +921,7 @@ angular.module('HomeApp').filter('description', function() {
             else if (activity == "edited") return document + " edited by "+person;
             else if (activity == "signed") return document + " signed by "+person;
             else if (activity == "uploaded") return document + " uploaded by "+person;
+            else if (activity == "transcoded") return document + " uploaded by "+person;
             else if (activity == "received") return document + " sent to "+person;
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
