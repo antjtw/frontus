@@ -1432,6 +1432,12 @@ ul.spaced-list > li:nth-child(odd) {
 
 .sign-button {
     text-align: right;
+    min-width: 150px;
+}
+
+.sign-button div.standard-button {
+    display: inline;
+    padding-right: 18px;
 }
 
 .status-table > tbody > tr.empty-row {
