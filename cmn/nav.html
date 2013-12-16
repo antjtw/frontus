@@ -16,7 +16,7 @@
                                     <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
                                     <div class="standard-button">
-                                        <button class="btn"  ng-click="doLogin()">Login</button>
+                                        <button class="btn"  ng-click="doLogin()">Log In</button>
                                     </div>
                                     <a ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
@@ -34,18 +34,25 @@
             <div class="container">
                 <div class="row-fluid">
                     <div class="span12 text-center">
-                        <div class="navlogin">
+                        <div class="navlogin" ng-hide="registertoggle">
                             <form>
                                 <fieldset>
                                     <span>Email Address</span>
                                     <input type="text" class="registerInput" autocomplete="off"
                                            tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
                                     <div class="standard-button">
-                                        <button class="btn"  ng-click="toggleLogin('register'); companySelfRegister()">Sign Up</button>
+                                        <button class="btn"  ng-click="companySelfRegister()">Sign Up</button>
                                     </div>
                                     <a ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
                                 </fieldset>
                             </form>
+                        </div>
+                        <div class="navlogin register-message" ng-show="registertoggle">
+                            <div>
+                                <h2>Thanks for signing up to use Sharewave!</h2>
+                                <p>Please check your email to complete your registration.</p>
+                            </div>
+                            <span data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
                         </div>
                     </div>
                 </div>

@@ -91,6 +91,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
+        $scope.registertoggle = false;
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company
@@ -286,6 +287,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($scope.fieldCheck($scope.registeremail)) {
                 SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {
                     $scope.registeremail = "";
+                    $scope.registertoggle = true;
                     dataLayer.push({'event': 'signup_success'}); // for analytics
                     void(requested);
                 }).except(function (x) {

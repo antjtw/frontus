@@ -518,6 +518,23 @@ h2 {
     margin-top: 60px;
 }
 
+.navlogin.register-message > div {
+    display: inline-block;
+    padding-left: 40px;
+}
+
+.navlogin.register-message > div > h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.navlogin.register-message > span {
+    display: inline-block;
+    margin-top: 20px;
+    vertical-align: top;
+    padding-left: 20px;
+}
+
 .navlogin > form > fieldset > div.standard-button {
     display: inline-block;
 }
@@ -1061,10 +1078,12 @@ form.inputs {
 .forgotLog {
     display: inline-block;
     float: right;
-    margin-right: 165px;
+    margin-right: 174px;
+    margin-top: 5px;
 }
 .forgotLog > a {
     color: rgb(0, 136, 204);
+    font-size: 10px;
 }
 /* Side Bar Navigation */
 .sidebar {
