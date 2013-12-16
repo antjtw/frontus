@@ -55,18 +55,6 @@ label {
     /* zoom:1; */
     /* ie7 junk */
 }
-input.loginInput:focus, textarea:focus, select:focus {
-    outline: none;
-    box-shadow:none;
-    border-color: rgb(204, 204, 204);
-    color: rgb(0, 0, 0);
-}
-input.loginInput:focus, textarea:focus, select:focus {
-    outline: none;
-    box-shadow:none;
-    border-color: rgb(204, 204, 204);
-    color: black;
-}
 
 .modal-backdrop {
     background-color: #1E2D3D;
@@ -471,10 +459,10 @@ h2 {
     height:70px;
 }
 .navBarLoggedOut {
-    height:40px;
+    height:80px;
 }
 .navpadding {
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 20px;
 }
 
 .navbounder {
@@ -496,6 +484,53 @@ h2 {
     margin-bottom: 0;
     background-color: rgb(30, 45, 61);
 }
+
+.topnav.navheight {
+    height: 80px;
+}
+
+.topnav.navheight > div > ul.nav-logo {
+    margin-top: 16px;
+}
+
+.topnav.navheight > div > ul.nav-item {
+    margin-top: 18px;
+}
+
+.topnav.navheight > div > ul.nav-item > li {
+    margin-left: 20px;
+    position: relative;
+}
+
+.topnav.navheight > div > ul.nav-item > li.showarrow:after {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    right: 30px;
+    top: -18px;
+    width: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #F1F1F1;
+}
+
+.navlogin {
+    margin-top: 60px;
+}
+
+.navlogin > form > fieldset > div.standard-button {
+    display: inline-block;
+}
+
+.navlogin > form > fieldset > div, .navlogin > form > fieldset > span, .navlogin > form > fieldset > a {
+    margin-left: 15px;
+}
+
+.navlogin > form > fieldset > input {
+    margin-left: 5px;
+}
+
+
 .logo {
     line-height: 40px;
     color: rgb(247, 141, 30);
@@ -930,48 +965,45 @@ form.inputs {
     text-align:left;
     margin-left: 42px;
 }
-#Login-form .loginInput, #Login-form .loginInput:focus {
-    width:210px;
-    height: 30px;
-    border-radius:0;
+
+.navlogin input {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 200px;
+    height: 32px;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
     background-color: rgb(255, 255, 255);
-    border: 0;
-    box-shadow: none;
-    padding: 0 0 0 10px;
-    margin: 10px 20px 10px 0;
+    border-radius: 3px;
+    display: inline;
+    margin-bottom: 0;
 }
-.loginInput::-webkit-input-placeholder {
-    color: rgb(199, 199, 199);
+
+.navlogin > form > fieldset > span {
+    text-transform: uppercase;
     font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
 }
-.loginInput:-moz-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
+
+.navlogin input:focus {
+    background-color: rgb(255, 255, 255);
 }
-.loginInput::-moz-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
-}
-.loginInput:-ms-input-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
-}
+
 .well {
     margin: 0;
     border: none;
 }
 .well-large {
-    padding: 30px 0 0 0;
+    padding: 0;
+    height: 160px;
     border-radius: 0;
 }
+
+.collapse-well {
+    height: 160px;
+}
+
 #login_password {
     margin-bottom: 0;
 }
@@ -1029,7 +1061,7 @@ form.inputs {
 .forgotLog {
     display: inline-block;
     float: right;
-    margin-right: 240px;
+    margin-right: 165px;
 }
 .forgotLog > a {
     color: rgb(0, 136, 204);
@@ -1851,6 +1883,11 @@ a.oldschool-link  {
 }
 .standard-button > button:disabled {
     background-color: #8CDDCA;
+    color: #FFFFFF;
+}
+
+.standard-button > button:active, .standard-button > button:focus {
+    background-color: #1ABC96;
     color: #FFFFFF;
 }
 

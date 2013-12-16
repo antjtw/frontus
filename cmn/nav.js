@@ -90,6 +90,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         navState.path = document.location.pathname;
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
+        $scope.isRegisterCollapsed = true;
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company
@@ -101,10 +102,21 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
-        $scope.toggleLogin = function() {
-            $scope.isCollapsed = !$scope.isCollapsed;
+        $scope.toggleLogin = function(type) {
+            if (type == "login") {
+                $scope.isCollapsed = !$scope.isCollapsed;
+                if (!$scope.isRegisterCollapsed) {
+                    $scope.isRegisterCollapsed = !$scope.isRegisterCollapsed;
+                }
+            }
+            else if (type == "register") {
+                $scope.isRegisterCollapsed = !$scope.isRegisterCollapsed;
+                console.log("here");
+                if (!$scope.isCollapsed) {
+                    $scope.isCollapsed = !$scope.isCollapsed;
+                }
+            }
         };
-
         // Take the string from the database and parse it into a useable dictionary
         $scope.initReasons = function(reasons) {
             var dictionary = {};
@@ -263,6 +275,30 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
 
             return true;
+        };
+
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        $scope.fieldCheck = function(email) {
+            return re.test(email);
+        };
+
+        $scope.companySelfRegister = function () {
+            if ($scope.fieldCheck($scope.registeremail)) {
+                SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {
+                    $scope.registeremail = "";
+                    dataLayer.push({'event': 'signup_success'}); // for analytics
+                    void(requested);
+                }).except(function (x) {
+                        console.log(x);
+                        if (x['message'].indexOf("ERROR: duplicate key value") !== -1) {
+                            $scope.$emit("notification:fail", "This email address is already registered, try logging in.");
+                        }
+                        else {
+                            $scope.$emit("notification:fail", "Oops, something went wrong.");
+                        }
+                    });
+            }
+            else { $scope.$emit("notification:fail", "Please enter a valid email"); }
         };
 
         $scope.oldSafari = function() {
