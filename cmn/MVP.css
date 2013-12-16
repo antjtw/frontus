@@ -1464,6 +1464,12 @@ ul.spaced-list > li:nth-child(odd) {
 
 .sign-button {
     text-align: right;
+    min-width: 150px;
+}
+
+.sign-button div.standard-button {
+    display: inline;
+    padding-right: 18px;
 }
 
 .status-table > tbody > tr.empty-row {
@@ -1575,7 +1581,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column {
-    width: 130px;
+    width: 160px;
     text-align: left;
     padding-left: 20px;
 }
@@ -1611,6 +1617,7 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
     padding-left: 10px;
+    width: 230px;
 }
 .status-table.investor > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;

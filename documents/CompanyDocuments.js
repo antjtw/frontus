@@ -611,6 +611,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.shareDocModal = false;
         };
 
+        $scope.fakePlaceholder = function() {
+            if ($scope.messageText == "Add an optional message...") {
+                $scope.messageText = "";
+            }
+        };
+
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
             if (value == "Yes") {
