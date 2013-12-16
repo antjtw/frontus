@@ -1543,7 +1543,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column {
-    width: 130px;
+    width: 160px;
     text-align: left;
     padding-left: 20px;
 }
