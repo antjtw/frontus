@@ -1479,7 +1479,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.loadDocumentActivity = function() {
             SWBrijj.tblm("document.investor_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
-                    var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
+                    var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id && (el.doc_id===doc.doc_id && el.activity == 'viewed' && el.person == navState.userid);});
                     doc.last_event = doc_activity.sort($scope.compareEvents)[0];
                     if (doc.last_event.activity == 'finalized') {doc.last_event.activity = 'approved';}
                     var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
