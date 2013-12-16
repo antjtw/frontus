@@ -65,7 +65,8 @@
                 <ul class="nav pull-left nav-logo">
                     <li>
                         <a ng-click="gotohome();">
-                            <img src="/img/logo.png" />
+                            <img ng-show="navState.userid" src="/img/logo.png" />
+                            <img ng-hide="navState.userid" src="/img/logo-large.png" />
                         </a>
                     </li>
                 </ul>
