@@ -505,7 +505,7 @@
                 </div>
                 <div class="pull-right">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
-                    <div class="standard-button">
+                    <div style="margin-left: 0;" class="standard-button">
                         <button ng-click="modalUp();" class="btn">Share</span></button>
                     </div>
                 </div>
@@ -517,7 +517,7 @@
 </div>
 
 <div class="row-fluid leftTabWindow">
-<div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
+<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
         <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
@@ -575,7 +575,7 @@
                       </span>
                 </td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour();">Done!</span></span>
+                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
@@ -686,7 +686,7 @@
     </div>
 </div>
 
-<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
 <span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
     {{sideToggleName}}
@@ -1443,12 +1443,12 @@
 </div>
 </div>
 
-<div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'showtour':tourstate != 0}">
+<div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
         <h2>Need Help?</h2>
         <button class="btn">Tour</button>
     </div>
-    <div class="tour-stage first" ng-class="{'stage-one':tourstate >= 1}">
+    <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
         <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">
             <span ng-show="tourstate <= 1">1</span>
             <span ng-hide="tourstate <= 1" data-icon="&#xe052;" aria-hidden="true"></span>
@@ -1459,7 +1459,7 @@
             <button class="btn">Next</button>
         </div>
     </div>
-    <div class="tour-stage second" ng-class="{'stage-two':tourstate >= 2}">
+    <div class="tour-stage second" ng-class="{'slidingcss25':oldSafari(), 'stage-two':tourstate >= 2}">
         <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);">
             <span ng-show="tourstate <= 2">2</span>
             <span ng-hide="tourstate <= 2" data-icon="&#xe052;" aria-hidden="true"></span>
@@ -1470,7 +1470,7 @@
             <button class="btn">Next</button>
         </div>
     </div>
-    <div class="tour-stage third" ng-class="{'stage-three':tourstate >= 3}">
+    <div class="tour-stage third" ng-class="{'slidingcss25':oldSafari(), 'stage-three':tourstate >= 3}">
         <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);">
             <span ng-show="tourstate <= 3">3</span>
             <span ng-hide="tourstate <= 3" data-icon="&#xe052;" aria-hidden="true"></span>
@@ -1481,7 +1481,7 @@
             <button class="btn">Next</button>
         </div>
     </div>
-    <div class="tour-stage fourth" ng-class="{'stage-four':tourstate >= 4}">
+    <div class="tour-stage fourth" ng-class="{'slidingcss25':oldSafari(), 'stage-four':tourstate >= 4}">
         <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);">
             <span ng-show="tourstate <= 4">4</span>
             <span ng-hide="tourstate <= 4" data-icon="&#xe052;" aria-hidden="true"></span>
@@ -1489,11 +1489,11 @@
         <h2>Individual Shares</h2>
         <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
             security, but you can always override them.</p>
-        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour();">
+        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour(); tourNotification();">
             <button class="btn">Done!</button>
         </div>
     </div>
-    <div class="tour-stage fifth" ng-show="tourstate != 0">
+    <div class="tour-stage fifth" ng-show="tourstate != 0" ng-class="{'slidingcss25':oldSafari()}">
         <div class="tour-finish-button" ng-click="closeTour();">
             <button class="btn"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
         </div>

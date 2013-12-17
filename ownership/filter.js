@@ -1,7 +1,5 @@
 var ownership = angular.module('ownerFilters', []);
 
-
-// Returns the rows not including unissued shares
 ownership.filter('noUnissue', function () {
     return function (rows) {
         var returnrows = [];
@@ -24,6 +22,19 @@ ownership.filter('otherinvestors', function () {
             }
         });
         return returnrows;
+    };
+});
+
+// Filters the active grant actions for exercised/forfeited
+ownership.filter('grantSelect', function () {
+    return function (acts, type) {
+        var returnacts = [];
+        angular.forEach(acts, function (act) {
+            if (act.action == null || act.action == type) {
+                returnacts.push(act);
+            }
+        });
+        return returnacts;
     };
 });
 
@@ -84,8 +95,8 @@ ownership.filter('issueviewList', function () {
 ownership.filter('maxLength', function () {
     return function (word) {
         if (word) {
-            if (word.length > 8) {
-                return word.substring(0, 7);
+            if (word.length > 16) {
+                return word.substring(0, 15);
             }
             else {
                 return word;

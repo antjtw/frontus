@@ -50,8 +50,14 @@
     margin-bottom: 10px;
 }
 
-.home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) {
+.home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd),
+.home-top-row > div.issuer-profile > div:last-child > ul > li:nth-child(odd) > div {
     color: #656565;
+    line-height: 20px;
+}
+
+.error {
+    color: #C44032 !important;
 }
 
 .home-top-row > div.issuer-profile > div:last-child > ul > li.investor-address > span:first-child {

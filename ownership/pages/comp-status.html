@@ -12,23 +12,32 @@
                 <div class="cf capaccess-drop">
                     <span>CURRENT</span>
                     <li class="dropdown standard pull-left">
-                        <a class="dropdown-toggle">
-                            {{selectedI.level}}
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a ng-click="selectVisibility('No View', selectedI)">None</a>
-                                <a ng-click="selectVisibility('Personal View', selectedI)">Personal View</a>
-                                <a ng-click="selectVisibility('Full View', selectedI)">Full View</a>
+
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{selectedI.level}}<span class="invisible-drop">'</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <span ng-click="selectVisibility('No View', selectedI)">No View</span>
+                                        <span ng-click="selectVisibility('Personal View', selectedI)">Personal View</span>
+                                        <span ng-click="selectVisibility('Full View', selectedI)">Full View</span>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
                 </div>
             </form>
         </div>
-        <div class="modalButtons">
-            <div class="left"><button class="button subText blueButton left" ng-click="close()">Cancel</button></div>
-            <div class="right"><button class="button subText greenButton" ng-click="changeVisibility(selectedI); close();">Change</button></div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="close()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="changeVisibility(selectedI); close();">Change</button>
+            </div>
         </div>
     </div>
 
@@ -41,18 +50,21 @@
             <p>Changing the email address of this row will invite a new email to view the captable. The account
                 associated with the old email will no longer be able to see it.
             </p>
-            <div class="input-row">
+            <div class="input-row newEmail">
                 <p>Email Address</p>
-                <input ng-model="newEmail">
+                <input type="text" ng-model="newEmail">
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="alterEmailModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="alterEmailModalClose(); alterEmail();">Update and Send</button>
             </div>
         </div>
-        <div class="modalButtons">
-            <div class="left"><button class="button subText greyButton left" ng-click="alterEmailModalClose()">Undo</button></div>
-            <div class="right">
-                <button class="button subText greenButton" ng-click="alterEmailModalClose(); alterEmail();">Update and Send
-                </button>
-            </div>
-        </div>
+
     </div>
 
 
