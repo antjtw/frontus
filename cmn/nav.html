@@ -88,7 +88,7 @@
                         </ul>
                     </li>
                     <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isRegisterCollapsed}">
-                        <div class="standard-button small-standard-button green" style="display: none;" ng-show="!navState.userid">
+                        <div class="standard-button small-standard-button green" style="display: none;" ng-show="!navState.userid  && navState.path != '/'">
                             <button class="btn"  ng-click="toggleLogin('register')">Sign Up</button>
                         </div>
                     </li>

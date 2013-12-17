@@ -180,7 +180,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         }).except(function (ignore) {
                 void(ignore);
-                $scope.navState={}; // ?
+                $scope.navState={}; // Not sure why this is here but I don't want to rip it out without further examination (it doesn't seem to hurt!)
+                $scope.navState.path = document.location.pathname;
             });
 
         SWBrijj.tblm('account.my_company_settings').then(function (x) {
@@ -221,11 +222,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     callback();
                 }
             }, 3000);
-        };
-
-        // Returns true (disabling the login button) until the fields are filled out
-        $scope.fieldCheck = function () {
-            return !($scope.username && $scope.password);
         };
 
         // Login Function
@@ -306,6 +302,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.oldSafari = function() {
             return (!(navigator.sayswho[0] == "Safari" && $scope.version_compare("537.43.58", navigator.sayswho[1])));
         }
+
     }]);
 
 navm.filter('caplength', function () {
