@@ -9,12 +9,16 @@
                         <div id="Login-form" class="navlogin">
                             <form>
                                 <fieldset>
-                                    <input type="text" placeholder="EMAIL ADDRESS" class="loginInput" autocomplete="off"
+                                    <span>Email Address</span>
+                                    <input type="text" class="loginInput" autocomplete="off"
                                     tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                                    <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2"
+                                    <span>Password</span>
+                                    <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
-                                    <button class="button greenButton" id="submitLogin" type="submit" ng-disabled="fieldCheck()"
-                                    ng-class="loginClass()" ng-click="doLogin()" tabindex="3">Log In</button> <a ng-click="toggleLogin()"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
+                                    <div class="standard-button">
+                                        <button class="btn" ng-disabled="!fieldCheck(username);" ng-click="doLogin()">Log In</button>
+                                    </div>
+                                    <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
                                     <br> <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span> 
                                 </fieldset>
@@ -25,13 +29,44 @@
             </div>
         </div>
     </div>
+    <div collapse="isRegisterCollapsed" class="collapse-well">
+        <div class="well well-large">
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span12 text-center">
+                        <div class="navlogin" ng-hide="registertoggle">
+                            <form>
+                                <fieldset>
+                                    <span>Email Address</span>
+                                    <input type="text" class="registerInput" autocomplete="off"
+                                           tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
+                                    <div class="standard-button">
+                                        <button class="btn" ng-disabled="!fieldCheck(registeremail);"  ng-click="companySelfRegister()">Sign Up</button>
+                                    </div>
+                                    <a class="pointer" ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="navlogin register-message" ng-show="registertoggle">
+                            <div>
+                                <h2>Thanks for signing up to use Sharewave!</h2>
+                                <p>Please check your email to complete your registration.</p>
+                            </div>
+                            <span class="pointer" data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
-        <div class="navbar topnav row-fluid">
+        <div class="navbar topnav row-fluid" ng-class="{navheight:!navState.userid}">
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
                 <ul class="nav pull-left nav-logo">
                     <li>
                         <a ng-click="gotohome();">
-                            <img src="/img/logo.png" />
+                            <img ng-show="navState.userid" src="/img/logo.png" />
+                            <img ng-hide="navState.userid" src="/img/logo-large.png" />
                         </a>
                     </li>
                 </ul>
@@ -52,9 +87,15 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown hidden-phone" ng-hide="navState.userid">
-                        <a style="display: none; width: 100px" class="menuProfileText" href="javascript:void(0)"
-                           ng-click="toggleLogin()" ng-show="!navState.userid">Log In</a>
+                    <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isRegisterCollapsed}">
+                        <div class="standard-button small-standard-button green" style="display: none;" ng-show="!navState.userid  && navState.path != '/'">
+                            <button class="btn"  ng-click="toggleLogin('register')">Sign Up</button>
+                        </div>
+                    </li>
+                    <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isCollapsed}">
+                        <div class="standard-button small-standard-button blue" style="display: none;" ng-show="!navState.userid">
+                            <button class="btn"  ng-click="toggleLogin('login')">Log In</button>
+                        </div>
                     </li>
                 </ul>
             </div>

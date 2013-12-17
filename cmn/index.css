@@ -198,7 +198,7 @@
 
 .home .button {
     width: 130px;
-    height: 40px;
+    height: 42px;
     text-transform:capitalize;
     border: 0;
     font-size: 14px;
@@ -245,7 +245,7 @@
 
 .home input {
     width: 300px;
-    height: 30px;
+    height: 32px;
     outline: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
