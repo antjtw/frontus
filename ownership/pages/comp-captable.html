@@ -575,7 +575,7 @@
                       </span>
                 </td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort">
-                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour();">Done!</span></span>
+                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
@@ -1489,7 +1489,7 @@
         <h2>Individual Shares</h2>
         <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
             security, but you can always override them.</p>
-        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour();">
+        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour(); tourNotification();">
             <button class="btn">Done!</button>
         </div>
     </div>

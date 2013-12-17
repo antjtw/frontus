@@ -2334,6 +2334,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.tourshow = false;
     };
 
+    $scope.tourNotification = function() {
+        $scope.$emit("notification:success", "Great! Just repeat for all securities, and share when you're ready.");
+    }
+
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
