@@ -55,18 +55,6 @@ label {
     /* zoom:1; */
     /* ie7 junk */
 }
-input.loginInput:focus, textarea:focus, select:focus {
-    outline: none;
-    box-shadow:none;
-    border-color: rgb(204, 204, 204);
-    color: rgb(0, 0, 0);
-}
-input.loginInput:focus, textarea:focus, select:focus {
-    outline: none;
-    box-shadow:none;
-    border-color: rgb(204, 204, 204);
-    color: black;
-}
 
 .modal-backdrop {
     background-color: #1E2D3D;
@@ -115,11 +103,11 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 textarea:focus, input:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 input:focus, textarea:focus {
@@ -471,10 +459,10 @@ h2 {
     height:70px;
 }
 .navBarLoggedOut {
-    height:40px;
+    height:80px;
 }
 .navpadding {
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 20px;
 }
 
 .navbounder {
@@ -496,6 +484,70 @@ h2 {
     margin-bottom: 0;
     background-color: rgb(30, 45, 61);
 }
+
+.topnav.navheight {
+    height: 80px;
+}
+
+.topnav.navheight > div > ul.nav-logo {
+    margin-top: 16px;
+}
+
+.topnav.navheight > div > ul.nav-item {
+    margin-top: 18px;
+}
+
+.topnav.navheight > div > ul.nav-item > li {
+    margin-left: 20px;
+    position: relative;
+}
+
+.topnav.navheight > div > ul.nav-item > li.showarrow:after {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    right: 30px;
+    top: -18px;
+    width: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #F1F1F1;
+}
+
+.navlogin {
+    margin-top: 60px;
+}
+
+.navlogin.register-message > div {
+    display: inline-block;
+    padding-left: 40px;
+}
+
+.navlogin.register-message > div > h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.navlogin.register-message > span {
+    display: inline-block;
+    margin-top: 20px;
+    vertical-align: top;
+    padding-left: 20px;
+}
+
+.navlogin > form > fieldset > div.standard-button {
+    display: inline-block;
+}
+
+.navlogin > form > fieldset > div, .navlogin > form > fieldset > span, .navlogin > form > fieldset > a {
+    margin-left: 15px;
+}
+
+.navlogin > form > fieldset > input {
+    margin-left: 5px;
+}
+
+
 .logo {
     line-height: 40px;
     color: rgb(247, 141, 30);
@@ -823,24 +875,30 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls {
     height: 60px;
     white-space: nowrap;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
     background-color: #F1F1F1;
+    text-align: center;
+}
+.subnav-controls span {
+    font-size: 10px;
 }
 .subnav-controls > div:first-child {
-    margin-left: 20px;
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    width: -moz-calc(100% - 45px);
-    width: -webkit-calc(100% - 45px);
-    width: calc(100% - 45px);
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
 }
 .subnav-controls > div > div {
-    margin-right: 20px;
     position: relative;
 }
-.subnav-controls > div > div.pull-right {
-    margin-right: 40px;
+.subnav-controls div.pull-right div.standard-button {
+    margin-left: 20px;
+}
+.subnav-controls ul.drop-selector {
+    margin-left: 8px;
+    margin-right: 20px;
 }
 .subnav-controls input {
     border: 0;
@@ -855,7 +913,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     border-radius: 3px;
     margin-left: 10px;
     box-shadow: none !important;
-    border: none !important;
+    border: 1px solid #E3E3E3;
 }
 .subnav-controls h2 {
     margin-left: 10px;
@@ -884,9 +942,12 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .row-fluid .span8.leftBlock {
     float: left;
     width: 674px;
+    /* Safari */
+}
+
+.widthtransition25 {
     transition:width 0.25s;
     -webkit-transition:width 0.25s;
-    /* Safari */
 }
 /* Login */
 .gateway {
@@ -921,48 +982,45 @@ form.inputs {
     text-align:left;
     margin-left: 42px;
 }
-#Login-form .loginInput, #Login-form .loginInput:focus {
-    width:210px;
-    height: 30px;
-    border-radius:0;
+
+.navlogin input {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 200px;
+    height: 32px;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
     background-color: rgb(255, 255, 255);
-    border: 0;
-    box-shadow: none;
-    padding: 0 0 0 10px;
-    margin: 10px 20px 10px 0;
+    border-radius: 3px;
+    display: inline;
+    margin-bottom: 0;
 }
-.loginInput::-webkit-input-placeholder {
-    color: rgb(199, 199, 199);
+
+.navlogin > form > fieldset > span {
+    text-transform: uppercase;
     font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
 }
-.loginInput:-moz-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
+
+.navlogin input:focus {
+    background-color: rgb(255, 255, 255);
 }
-.loginInput::-moz-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
-}
-.loginInput:-ms-input-placeholder {
-    color: rgb(199, 199, 199);
-    font-size: 10px;
-    font-family:'FS Elliot Web Light', sans-serif;
-    opacity: 1;
-}
+
 .well {
     margin: 0;
     border: none;
 }
 .well-large {
-    padding: 30px 0 0 0;
+    padding: 0;
+    height: 160px;
     border-radius: 0;
 }
+
+.collapse-well {
+    height: 160px;
+}
+
 #login_password {
     margin-bottom: 0;
 }
@@ -1020,10 +1078,12 @@ form.inputs {
 .forgotLog {
     display: inline-block;
     float: right;
-    margin-right: 240px;
+    margin-right: 174px;
+    margin-top: 5px;
 }
 .forgotLog > a {
     color: rgb(0, 136, 204);
+    font-size: 10px;
 }
 /* Side Bar Navigation */
 .sidebar {
@@ -1200,7 +1260,7 @@ form.inputs {
 
 /* Information Boxes */
 .info-box {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     margin-bottom: 20px;
 }
 
@@ -1402,7 +1462,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody:first-child > tr {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     height: 30px;
     color: #1E2D3D;
     font-family: 'FS Elliot Web Bold', sans-serif;
@@ -1423,6 +1483,12 @@ ul.spaced-list > li:nth-child(odd) {
 
 .sign-button {
     text-align: right;
+    min-width: 150px;
+}
+
+.sign-button div.standard-button {
+    display: inline;
+    padding-right: 18px;
 }
 
 .status-table > tbody > tr.empty-row {
@@ -1432,7 +1498,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr {
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     height: 60px;
 }
 .status-table > tbody > tr > th {
@@ -1445,7 +1511,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td {
     color: #666666;
-    border-bottom: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E3E3E3;
 }
 
 .status-table > tbody > tr > td:last-child {
@@ -1474,7 +1540,7 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 55px;
+    width: 28px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
@@ -1483,6 +1549,9 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.status-toggle.status-icon {
     width: 28px;
+}
+.investor.status-table > tbody > tr > td.status-toggle.status-icon {
+    width: auto;
 }
 
 .status-toggle > .circle {
@@ -1513,7 +1582,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.status-toggle.status-toggle-on {
     background-color: #F1F1F1;
-    border-right: 1px solid #E2E2E2;
+    border-right: 1px solid #E3E3E3;
     border-bottom: 1px solid #F1F1F1;
 }
 
@@ -1531,7 +1600,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column {
-    width: 200px;
+    width: 160px;
     text-align: left;
     padding-left: 20px;
 }
@@ -1566,6 +1635,10 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
+    padding-left: 10px;
+    width: 230px;
+}
+.status-table.investor > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }
 .status-table > tbody > tr > td.shareholder-column.docname-column:hover > ul > li {
@@ -1827,7 +1900,7 @@ a.oldschool-link  {
     color: #FFFFFF;
     background-color: #1ABC96;
     width: 130px;
-    min-height: 30px;
+    min-height: 32px;
     position: relative;
 }
 .standard-button > button:hover {
@@ -1836,6 +1909,11 @@ a.oldschool-link  {
 }
 .standard-button > button:disabled {
     background-color: #8CDDCA;
+    color: #FFFFFF;
+}
+
+.standard-button > button:active, .standard-button > button:focus {
+    background-color: #1ABC96;
     color: #FFFFFF;
 }
 
@@ -2078,12 +2156,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .drop-selector .standard .dropdown-toggle {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
 }
 
 .drop-selector .standard .dropdown-menu {
     background-color: #FFFFFF;
-    border: 1px solid #E2E2E2;
+    border: 1px solid #E3E3E3;
     margin-left: -2px;
     width: 154px;
 }
@@ -2106,7 +2184,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .dropdown-toggle.dark {
-    background-color: #E2E2E2;
+    background-color: #E3E3E3;
 }
 
 
@@ -2210,6 +2288,9 @@ button.icon-button:hover {
     background: url('/img/down-arrow-20x30.png');
     width:20px;
     height:30px;
+}
+.standard.open .dropdown-toggle::before {
+    background: url('/img/up-arrow-20x30.png');
 }
 .standard .dropdown-toggle:hover {
     background-color: rgb(227, 227, 227);
@@ -2926,7 +3007,6 @@ h2.onboard {
 }
 
 .dynamic-page .subnav-controls > div:first-child {
-    margin-left: 40px;
 }
 
 .dynamic-page .status-table {

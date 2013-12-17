@@ -581,8 +581,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (!angular.equals(testcopy, $scope.issueRevert)) {
                 angular.forEach($scope.trans, function(tran) {
                     if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                        $scope.imodalUp(issue, field);
-                        x = true;
+                        if (tran.units != null || tran.paid != null) {
+                            $scope.imodalUp(issue, field);
+                            x = true;
+                        }
                     }
                 });
                 if (x == false) {
@@ -764,6 +766,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.rows.splice(index, 1);
                 }
             });
+            if ($scope.issues.length == 0 || ($scope.issues[$scope.issues.length-1].name != "")) {
+                $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
+            }
             $scope.sideBar = "x";
         });
     };
@@ -1379,22 +1384,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.strToBool = function (string) {
-        switch (String(string).toLowerCase()) {
-            case "true":
-            case "yes":
-            case "1":
-                return true;
-            case "false":
-            case "no":
-            case "0":
-                return false;
-            case null:
-            case undefined:
-            case "undefined":
-                return null;
-            default:
-                return Boolean(string);
-        }
+        return calculate.strToBool(string);
     };
 
     $scope.canHover = function (row) {
@@ -2343,6 +2333,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.tourstate = 0;
         $scope.tourshow = false;
     };
+
+    $scope.tourNotification = function() {
+        $scope.$emit("notification:success", "Great! Just repeat for all securities, and share when you're ready.");
+    }
 
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {

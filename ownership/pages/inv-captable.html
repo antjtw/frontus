@@ -2,7 +2,7 @@
 <div class="container dynamic-page">
 
 <div class="row-fluid leftTabWindow">
-<div ng-class="{leftFullTableBlock:toggleSide()}" class="span8 docLibrary leftBlock">
+<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
 
 
     <div class="headsection row-fluid">
@@ -19,7 +19,7 @@
                 <th colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue | uneditIssue}}</span>
+                    <span style="display: block;">{{one.issue | uneditIssue}}</span>
                 </th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
@@ -85,7 +85,7 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide()}" class="span4 capright button-offset">
+<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
 </button>
 <div class="row-fluid">

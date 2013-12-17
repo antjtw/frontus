@@ -99,7 +99,7 @@ ownership.service('calculate', function () {
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
-            var vestbegin = angular.copy(tran.vestingbegins)
+            var vestbegin = angular.copy(tran.vestingbegins);
             if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
                     if (!isNaN(parseFloat(vesting[tran.investor]))) {
@@ -161,6 +161,55 @@ ownership.service('calculate', function () {
             }
         });
         return rows
+    };
+
+    // Calculates vested on each transaction returning dictionary of date:amount vested
+    this.tranvested = function (tran) {
+        var tranvested = [];
+        var vestbegin = angular.copy(tran.vestingbegins);
+        if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+            var cycleDate = angular.copy(tran.date).add(1).days();
+            if (Date.compare(Date.today(), vestbegin) > -1) {
+                tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
+            }
+            var remainingterm = angular.copy(tran.terms);
+            while (Date.compare(vestbegin, cycleDate) > -1) {
+                remainingterm = remainingterm - 1;
+                cycleDate.addMonths(1);
+            }
+            cycleDate.add(-1).days();
+            var finalDate = vestbegin.addMonths(remainingterm);
+            var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+            var x = 1;
+            if (tran.vestfreq == "monthly") {
+                x = 1
+            }
+            else if (tran.vestfreq == "weekly") {
+                x = 0.25
+            }
+            else if (tran.vestfreq == "bi-weekly") {
+                x = 0.5
+            }
+            else if (tran.vestfreq == "quarterly") {
+                x = 3;
+            }
+            else if (tran.vestfreq == "yearly") {
+                x = 12;
+            }
+            finalDate.add(-1).days();
+            while (Date.compare(finalDate, cycleDate) > -1) {
+                if (x < 1) {
+                    cycleDate.addWeeks(x * 4);
+                }
+                else {
+                    cycleDate.addMonths(x);
+                }
+                if (Date.compare(Date.today(), cycleDate) > -1) {
+                    tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
+                }
+            }
+        }
+        return tranvested;
     };
 
     // Calculates the vested amounts for the
@@ -660,6 +709,27 @@ ownership.service('calculate', function () {
         }
         return convertTran.newtran;
     };
+
+    // Converts strings to boolean
+    this.strToBool = function (string) {
+        switch (String(string).toLowerCase()) {
+            case "true":
+            case "yes":
+            case "1":
+                return true;
+            case "false":
+            case "no":
+            case "0":
+                return false;
+            case null:
+            case undefined:
+            case "undefined":
+                return null;
+            default:
+                return Boolean(string);
+        }
+    };
+
 });
 
 ownership.service('switchval', function () {

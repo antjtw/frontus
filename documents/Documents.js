@@ -337,14 +337,31 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.annotatedPages = [];
         $scope.pageScroll = 0;
         $scope.pageBarSize = 10;
-        $scope.showPageBar = true;
+        //$scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
             offset: {top: 40}
         });
+        
+        $scope.setAnnotable = function() {
+                $scope.isAnnotable = $scope.annotable();
+        };
+        
+        $scope.annotable = function() {
+            return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
+        };
+
+        $scope.investorCanAnnotate = function() {
+            return (!$scope.lib.when_signed && $scope.lib.signature_deadline);
+        };
+
+        $scope.issuerCanAnnotate = function() {
+            return !$scope.lib.when_countersigned && $scope.lib.when_signed;
+        };
 
         $scope.showPageBar = function() {
-            if ($scope.docLength > 1 && $scope.isAnnotable && $scope.annotatedPages.length > 0) {
+            console.log($scope.annotatedPages);
+            if ($scope.docLength > 1 && $scope.annotatedPages.length > 0) {
                 return true;
             } else {
                 return false;
@@ -387,10 +404,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
         
-        $scope.setAnnotable = function() {
-                $scope.isAnnotable = $scope.annotable();
-        };
-       
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
@@ -557,27 +570,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.removeAllNotes();
         });
 
-        // Investor can annotate after a document has been shared with the investor and before the investor has signed.
-        investorCanAnnotate = function(investorQuery, signatureDate, signatureDeadline) {
-            return investorQuery && !signatureDate && signatureDeadline;
-        };
-
-        // Issuer can annotate when:
-        //     1) it's not an investorQuery
-        //     2) has not been counter signed
-        //     3) has been signed by the investor
-        issuerCanAnnotate = function(investorQuery, signatureDate, countersignDate) {
-            return !investorQuery && !countersignDate && signatureDate;
-        };
-
-
-        $scope.annotable = function() {
-            return investorCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.signature_deadline) ||
-                   issuerCanAnnotate($scope.invq, $scope.lib.when_signed, $scope.lib.when_confirmed);
-                // original id is there when the document being viewed is not the original
-                // doc_id will refer to versions viewed at later stages in the workflow
-        };
-
         $scope.closeMe = function(ev) {
             var z = ev.currentTarget;
             while (z.attributes.draggable === undefined) z = z.parentElement;
@@ -608,6 +600,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var s = $location.search();
             s.page = n;
             $location.search(s);
+            scroll(0,0);
             refreshDocImage();
         };
 
@@ -933,6 +926,22 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 // $route.reload();
                 window.location.reload();
             });
+        };
+
+        $scope.signable = function(doc) {
+            return doc && doc.signature_deadline && !doc.when_signed;
+        };
+
+        $scope.rejectable = function(doc) {
+            return (doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
+        };
+
+        $scope.countersignable = function(doc) {
+            return doc && doc.when_signed && !doc.when_countersigned;
+        };
+
+        $scope.finalizable = function(doc) {
+            return doc && doc.when_countersigned && !doc.when_finalized;
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});

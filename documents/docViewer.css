@@ -1,3 +1,9 @@
+.footerBar {
+    display: none !important;
+}
+navbar {
+    display: none !important;
+}
 .docViewer {
     z-index: 1041 !important;
     position: absolute;
@@ -85,7 +91,7 @@
 .docViewerControls {
     min-height: 60px;
     width: 100%;
-    overflow: overlay;
+    overflow: visible;
     background-color: #F1F1F1;
 }
 

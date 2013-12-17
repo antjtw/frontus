@@ -23,7 +23,6 @@
                         <th colspan="1" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
                         <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRank')">Status</th>
                         <th/>
-                        <th/>
                     </tr>
                 </tbody>
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
@@ -41,16 +40,15 @@
                         </td>
                         <td class="shareholder-column status-column">
                             <ul>
-                                <li>{{doc.last_event.activity}}</li>
+                                <li>{{shortStatus(doc)}}</li>
                                 <li>{{momentFromNow(doc.last_event.event_time)}}</li>
                             </ul>
                         </td>
-                        <td class="sign-button">
+                        <td class="sign-button toggle-column">
                             <div class="standard-button small-standard-button">
                                 <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc.doc_id)">Sign</button>
+                                <button ng-show="isPendingFinalization(doc)" class="btn" ng-click="gotoDoc(doc.doc_id)">Approve</button>
                             </div>
-                        </td>
-                        <td class="toggle-column">
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
@@ -59,6 +57,7 @@
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="gotoDoc(doc.doc_id)">View Document</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
                                 </li>
                             </ul>

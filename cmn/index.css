@@ -72,6 +72,10 @@
     font-weight: normal;
 }
 
+.home .thanks p{
+    color: #1E2D3D;
+}
+
 .home .currency{
     color: #1E2D3D;
     font-family: 'FS Elliot Web Light', sans-serif;
@@ -194,7 +198,7 @@
 
 .home .button {
     width: 130px;
-    height: 40px;
+    height: 42px;
     text-transform:capitalize;
     border: 0;
     font-size: 14px;
@@ -241,7 +245,7 @@
 
 .home input {
     width: 300px;
-    height: 30px;
+    height: 32px;
     outline: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
