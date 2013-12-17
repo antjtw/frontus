@@ -43,6 +43,12 @@ body {
     width: 1024px;
     clear:both;
 }
+
+.container.static hr {
+    margin: 0;
+    border-bottom: none;
+}
+
 label {
     cursor: default;
     cursor: default;
@@ -150,9 +156,15 @@ input:focus, textarea:focus {
     border-top: 0;
     border-radius: 0;
 }
+
 .accordion-heading {
-    height: 43px;
+    padding: 20px 0;
 }
+
+.accordion-heading:not:first-child {
+    padding-top: 20px;
+}
+
 .accordion-heading > a:before {
     content:'';
 }
