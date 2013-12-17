@@ -337,7 +337,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.annotatedPages = [];
         $scope.pageScroll = 0;
         $scope.pageBarSize = 10;
-        $scope.showPageBar = true;
+        //$scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
             offset: {top: 40}
@@ -360,7 +360,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPageBar = function() {
-            if ($scope.docLength > 1 && $scope.isAnnotable && $scope.annotatedPages.length > 0) {
+            console.log($scope.annotatedPages);
+            if ($scope.docLength > 1 && $scope.annotatedPages.length > 0) {
                 return true;
             } else {
                 return false;
