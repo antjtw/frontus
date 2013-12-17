@@ -254,7 +254,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     $scope.adminModalOpen = function () {
         $scope.newEmail = "";
         $scope.newName = "";
-        $scope.newRole = 'Investor';
+        $scope.newRole = false;
         $scope.adminModal = true;
     };
 
@@ -263,8 +263,8 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
         $scope.adminModal = false;
     };
 
-    $scope.assignRole = function(role) {
-        $scope.newRole = role;
+    $scope.toggleRole = function() {
+        $scope.newRole = !$scope.newRole;
     };
 
     $scope.removeAdminModalOpen = function(email) {
@@ -303,7 +303,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     };
 
     $scope.create_person = function() {
-        if ($scope.newRole == "Admin") {
+        if ($scope.newRole) {
             SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                 void(x);
                 $scope.$emit("notification:success", "Admin Added");
@@ -313,7 +313,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
-        if ($scope.newRole == "Investor") {
+        else {
             SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
                 void(x);
                 $scope.$emit("notification:success", "Investor Added");
