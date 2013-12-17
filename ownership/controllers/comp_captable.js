@@ -1,5 +1,5 @@
 
-
+// Need to catch x:({javaClassName:"net.r0kit.brijj.BrijjServlet$NotLoggedIn",message:"Not Logged In"}) on all the exceptions
 var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
 
     if (navState.role == 'investor') {
