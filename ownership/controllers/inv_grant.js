@@ -61,11 +61,17 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                 // Group the transactions under the issues and calculate the values for the grouped issue.
                 angular.forEach($scope.issues, function (issue) {
                     issue.shown = false;
+                    issue.date = calculate.timezoneOffset(issue.date);
+                    if (issue.vestingbegins) {
+                        issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                    }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
-                            var offset = tran.date.getTimezoneOffset();
-                            tran.date = tran.date.addMinutes(offset);
+                            tran.date = calculate.timezoneOffset(tran.date);
                             tran.datekey = tran['date'].toUTCString();
+                            if (tran.vestingbegins) {
+                                tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
+                            }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
                             tran.fields = [false, false, false, false];
