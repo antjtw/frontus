@@ -2240,6 +2240,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    // Hides transaction fields for common stock
+    $scope.commonstock = function(tran) {
+        var common = false;
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == tran.issue) {
+                common = issue.common ? true : false
+            }
+        });
+        return common
+    };
+
     $scope.tourfunc = function() {
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
