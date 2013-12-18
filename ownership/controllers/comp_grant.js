@@ -47,8 +47,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         angular.forEach($scope.schedules, function(schedule) {
             schedule.shown = false;
             if (schedule.vestingbegins) {
-                var offset = schedule.vestingbegins.getTimezoneOffset();
-                schedule.vestingbegins = schedule.vestingbegins.addMinutes(offset);
+                schedule.vestingbegins = calculate.timezoneOffset(schedule.vestingbegins);
             }
         });
     });
@@ -102,17 +101,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 angular.forEach($scope.issues, function (issue) {
                     issue.key = issue.issue;
                     issue.shown = false;
-                    var offset = issue.date.getTimezoneOffset();
-                    issue.date = issue.date.addMinutes(offset);
+                    issue.date = calculate.timezoneOffset(issue.date);
                     if (issue.vestingbegins) {
-                        issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                        issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
                     }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
-                            tran.date = tran.date.addMinutes(offset);
+                            tran.date = calculate.timezoneOffset(tran.date);
                             tran.datekey = tran['date'].toUTCString();
                             if (tran.vestingbegins) {
-                                tran.vestingbegins = tran.vestingbegins.addMinutes(offset);
+                                tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
                             }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
@@ -305,17 +303,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    issue[field] = date;
-                    var offset = issue[field].getTimezoneOffset();
-                    issue[field] = issue[field].addMinutes(offset);
+                    issue[field] = calculate.timezoneOffset(date);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if (issue[field] instanceof Date) {
-                var offset = issue[field].getTimezoneOffset();
-                issue[field] = issue[field].addMinutes(offset);
+                issue[field] = calculate.timezoneOffset(issue[field]);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
             }
@@ -627,9 +622,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    transaction[field] = date;
-                    var offset = transaction[field].getTimezoneOffset();
-                    transaction[field] = transaction[field].addMinutes(offset);
+                    transaction[field] = calculate.timezoneOffset(date);
                     keyPressed = false;
                     $scope.saveTran(transaction);
                 }
@@ -637,8 +630,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
             if (transaction[field] instanceof Date) {
-                var offset = transaction[field].getTimezoneOffset();
-                transaction[field] = transaction[field].addMinutes(offset);
+                transaction[field] = calculate.timezoneOffset(transaction[field]);
                 keyPressed = false;
                 $scope.saveTran(transaction);
             }

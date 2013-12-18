@@ -730,6 +730,10 @@ ownership.service('calculate', function () {
         }
     };
 
+    this.timezoneOffset = function (date) {
+        return date.addMinutes(date.getTimezoneOffset());
+    }
+
 });
 
 ownership.service('switchval', function () {
