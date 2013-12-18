@@ -486,16 +486,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
             $scope.activeIssue.date = (Date.today());
         }
-        if ($scope.activeIssue.common) {
-            $scope.commonshow = true;
-        }
-        else {
-            var comtoggle = false;
-            angular.forEach($scope.issues, function(iss) {
-                comtoggle = iss.common || comtoggle ? true : false;
-            });
-            $scope.commonshow = comtoggle ? false : true;
-        }
         // Set Freq Value for Angularjs Select
         var index = $scope.freqtypes.indexOf(issue.vestfreq);
         $scope.activeIssue.vestfreq = $scope.freqtypes[index];
@@ -1130,10 +1120,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             transaction.units = transaction.unitskey;
-        };
+        }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             transaction.amount = transaction.paidkey;
-        };
+        }
         // Bail out if insufficient data has been added for the transaction
         if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
             return
