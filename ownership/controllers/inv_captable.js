@@ -276,18 +276,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         tran['active'] = true
                         first = first + 1
                     }
-                    if (String(tran['partpref']) == "true") {
-                        tran.partpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.partpref = $scope.tf[1];
-                    }
-                    if (String(tran['liquidpref']) == "true") {
-                        tran.liquidpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.liquidpref = $scope.tf[1];
-                    }
+                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -317,19 +308,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
 
-        // Set Boolean Values for the Angularjs Select
-        if (String($scope.activeIssue.partpref) == "true") {
-            $scope.activeIssue.partpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.partpref = $scope.tf[1];
-        }
-        if (String($scope.activeIssue.liquidpref) == "true") {
-            $scope.activeIssue.liquidpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.liquidpref = $scope.tf[1];
-        }
+        $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
+        $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
+        $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
         }
