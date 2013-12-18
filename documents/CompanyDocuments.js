@@ -188,6 +188,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     $scope.setDocumentStatusRatio(doc);
                     $scope.setSigRequired(doc);
                 });
+                $scope.constructDocumentsByInvestor();
             });
         };
 
@@ -216,6 +217,26 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.constructDocumentsByInvestor = function() {
+            $scope.investorDocs = null;
+            angular.forEach($scope.documents, function(doc) {
+                angular.forEach(doc.versions, function(version) {
+                    if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
+                        $scope.investorDocs[version.investor].documents.push(version);
+                    } else {
+                        if (!$scope.investorDocs) {$scope.investorDocs = {}}
+                        $scope.investorDocs[version.investor] = {'documents': [version],
+                                                                   'name': version.name};
+                    }
+                });
+            });
+                                                                   
+            // investorname, statusRatio, signatureRequired, shown
+        };
+        $scope.noInvestors = function() {
+            return Object.keys($scope.investorDocs).length !== 0;
+        };
+
         $scope.setMaxRatio = function(rat) {
             $scope.maxRatio = rat;
         };
@@ -223,6 +244,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return $scope.maxRatio === 1000;
         };
 
+        $scope.viewBy = 'document';
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
         $scope.versionOrder = 'statusRank';
@@ -236,6 +258,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
+        };
+
+        $scope.setViewBy = function(viewby) {
+            $scope.viewBy = viewby;
         };
 
         $scope.searchFilter = function(obj) {
@@ -385,6 +411,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     doc.shown = false;
                 }
             });
+        };
+
+        $scope.openinvestordetails = function(selected) {
+            selected.shown = selected.shown !== true;
         };
 
         $scope.momentFromNow = function(date, zerodate) {
@@ -1845,10 +1875,10 @@ docviews.filter('fromNow', function() {
     };
 });
 
-docviews.filter('docOrderPrinter', function() {
-    return function(order) {
-        if (order == "docname" || order == "-docname") return "Document Name";
-        else if (order == "statusRatio" || order == "-statusRatio") return "Document Status";
+docviews.filter('viewByPrinter', function() {
+    return function(viewby) {
+        if (viewby == "document") return "Document";
+        else if (viewby == "investor") return "Investor";
         else return order;
     };
 });
