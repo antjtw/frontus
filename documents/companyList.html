@@ -133,7 +133,7 @@
                     </tr>
                     <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
-                        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(doc, version)">
+                        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                             <ul>
                                 <li>{{version.name || version.investor}}</li>
                                 <li>{{versionStatus(version)}}</li>
@@ -152,7 +152,7 @@
                         <td>
                             <div class="standard-button small-standard-button doc-share-button">
                                 <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
-                                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign</button>
+                                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
                             </div>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -161,7 +161,7 @@
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
                                         <li ng-click="viewStatus(doc)">View Status</li>
-                                        <li ng-click="viewInvestorCopy(doc, version)">View Version</li>
+                                        <li ng-click="viewInvestorCopy(version)">View Version</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                         <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
@@ -188,7 +188,7 @@
                             <span ng-hide="investor.shown || !investor.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
-                        <td class="shareholder-column docname-column">
+                        <td class="shareholder-column docname-column" ng-click="viewProfile(investor)">
                             <ul>
                                 <li>{{investor.name | caplength:40}}</li>
                                 <li>{{docStatus(investor)}}</li>
@@ -198,7 +198,7 @@
                             <div ng-show="docIsComplete(investor)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                             <div ng-hide="docIsComplete(investor)" class="circle" ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div>
                         </td>
-                        <td class="shareholder-column status-column issuer pointer">
+                        <td class="shareholder-column status-column issuer pointer" ng-click="viewProfile(investor)">
                             <ul>
                                 <li>{{shortDocStatus(investor)}}</li>
                                 <li>{{formatDocStatusRatio(investor)}}</li>
@@ -211,8 +211,7 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-click="viewOriginal(version)">View Original</li><!--TODO this probs doesn't work-->
-                                        <li ng-click="exportOriginalToPdf(version)">Export Original to PDF</li><!--TODO-->
+                                        <li ng-click="viewProfile(investor)">View Profile</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -220,7 +219,7 @@
                     </tr>
                     <tr ng-show="investor.shown" class="sub-row" ng-repeat="version in investor.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
-                        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(investor, version)"><!-- this won't work TODO-->
+                        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                             <ul>
                                 <li>{{version.docname}}</li>
                                 <li>{{versionStatus(version)}}</li>
@@ -238,7 +237,7 @@
                         </td>
                         <td>
                             <div class="standard-button small-standard-button doc-share-button">
-                                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(doc, version)">Sign</button><!--TODO-->
+                                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
                             </div>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -246,8 +245,8 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hiden="toggleView();" class="dropdown-menu">
-                                        <li ng-click="viewInvestorCopy(doc, version)">View Version</li><!-- TODO-->
-                                        <li ng-click="exportOriginalToPdf(investor)">Export Original to PDF</li>
+                                        <li ng-click="viewDoc(version.original)">View Version</li>
+                                        <li ng-click="exportOriginalDocidToPdf(version.original)">Export Original to PDF</li>
                                         <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
                                 </li>

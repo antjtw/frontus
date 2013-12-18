@@ -230,9 +230,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     }
                 });
             });
+            // convert dict to array for orderBy to work
+            var tmp = [];
+            angular.forEach($scope.investorDocs, function(investor) {
+                tmp.push(investor);
+            });
+            $scope.investorDocs = tmp;
             angular.forEach($scope.investorDocs, function(investor) {
                 investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
-                investor.statusRatio = $scope.investorStatusRatio(investor);
+                investor.statusRatio = $scope.docStatusRatio(investor);
             });
         };
         $scope.noInvestors = function() {
@@ -277,6 +283,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
              * @type { string} */
             return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
         };
+        $scope.investorSearchFilter = function(obj) {
+            var re = new RegExp($scope.query, 'i');
+            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name));
+        };
 
         $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
@@ -287,6 +297,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 document.location.href = url;
             });
             */
+        };
+        $scope.exportOriginalDocidToPdf = function(docid) {
+            SWBrijj.procd('sharewave-' + docid + '.pdf', 'application/pdf', 'document.genOriginalPdf', docid.toString()).then(function(url) {
+                document.location.href = url;
+            });
         };
 
         $scope.exportVersionToPdf = function(version) {
@@ -562,19 +577,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return initRatio;
             }
         };
-        $scope.investorStatusRatio = function(investor) {
-            if (investor) {
-                var initRatio = (investor.documents.filter($scope.versionIsComplete).length / investor.documents.length) + 1 || 0;
-                if (investor.documents.length > 0 && initRatio === 0) {
-                    initRatio = (1 / investor.documents.length);
-                }
-                if (initRatio == 2) {
-                    initRatio += (investor.documents.length);
-                }
-                if (initRatio === Infinity) {initRatio = 0;}
-                return initRatio;
-            }
-        };
 
         $scope.versionsFinalized = function(doc) {
             return doc.versions.filter(function(el) {return el.when_finalized;});
@@ -635,13 +637,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.viewOriginal = function(doc) {
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1");
         };
+        $scope.viewDoc = function(docid) {
+            $location.url("/company-view?doc=" + docid + "&page=1");
+        };
 
         $scope.viewStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.doc_id);
         };
 
-        $scope.viewInvestorCopy = function(doc, version) {
-            $location.url("/company-view?doc=" + doc.doc_id + "&page=1" + "&investor=" + version.investor);
+        $scope.viewProfile = function(investor) {
+            document.location.href = "/company/profile/view?id=" + investor.versions[0].investor;
+        };
+
+        $scope.viewInvestorCopy = function(version) {
+            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
         };
 
         // Sharing modal functions
