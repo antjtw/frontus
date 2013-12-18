@@ -82,20 +82,8 @@
                 <span>Email</span><input type="text" ng-model="newEmail" />
             </div>
             <div>
-                <span>Role</span>
-                <ul class="dropdown-list drop-selector">
-                    <li class="dropdown standard">
-                        <a class="dropdown-toggle">
-                            {{newRole}}<span class="invisible-drop">'</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <span ng-click="assignRole('Investor')">Investor</span>
-                                <span ng-click="assignRole('Admin')">Admin</span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <span>Admin</span>
+                <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
             </div>
         </div>
     </div>
