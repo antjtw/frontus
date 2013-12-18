@@ -216,9 +216,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.setMaxRatio = function(rat) {
+            $scope.maxRatio = rat;
+        };
+        $scope.viewAll = function() {
+            return $scope.maxRatio === 1000;
+        };
+
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
         $scope.versionOrder = 'statusRank';
+        $scope.maxRatio = 1000;
         $scope.selectedDoc = 0;
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
@@ -234,7 +242,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-            return !$scope.query || re.test(obj.docname);
+            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
         };
 
         $scope.exportOriginalToPdf = function(doc) {

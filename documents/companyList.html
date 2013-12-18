@@ -30,6 +30,15 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="pull-left" style="margin-right: 20px;">
+                        <div class="btn-group standard-button small-standard-button">
+                            <button class="btn" ng-class="{'on':viewAll()}"
+                                    ng-click="setMaxRatio(1000)">All</button>
+                            <button class="btn" ng-class="{'on':!viewAll()}"
+                                    ng-click="setMaxRatio(2)">Pending</button>
+                        </div>
+                    </div>
+                        
                     <div class="pull-left">
                         <span>SEARCH</span>
                         <input type="text" class="search-box" ng-model="query">

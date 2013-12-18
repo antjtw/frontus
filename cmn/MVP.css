@@ -1893,6 +1893,9 @@ a.oldschool-link  {
     border: none;
     text-shadow: none;
 }
+.standard-button.btn-group > .btn.on{
+    background-color: #15A085 !important;
+}
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;
@@ -1902,6 +1905,9 @@ a.oldschool-link  {
     width: 130px;
     min-height: 32px;
     position: relative;
+}
+.standard-button.btn-group > button.btn {
+    font-size: 12px;
 }
 .standard-button > button:hover {
     background-color: #15A085;
