@@ -125,7 +125,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         issue.date = calculate.timezoneOffset(issue.date);
                         console.log(issue.date);
                         if (issue.vestingbegins) {
-                            issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                            issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
                         }
                     });
 
@@ -164,11 +164,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         $scope.trans[i].key = $scope.trans[i].issue;
                         $scope.trans[i].unitskey = $scope.trans[i].units;
                         $scope.trans[i].paidkey = $scope.trans[i].amount;
-                        var offset = $scope.trans[i].date.getTimezoneOffset();
-                        $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
+                        $scope.trans[i].date = calculate.timezoneOffset($scope.trans[i].date);
                         $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
                         if ($scope.trans[i].vestingbegins) {
-                            $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                            $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
                         }
                         $scope.trans[i].investorkey = $scope.trans[i].investor;
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
@@ -256,8 +255,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 tran.convert = [];
                                 angular.forEach(convert, function(con) {
                                     if (con.tranto == tran.tran_id) {
-                                        var offset = con.date.getTimezoneOffset();
-                                        con.date = con.date.addMinutes(offset);
+                                        con.date = calculate.timezoneOffset(con.date);
                                         if (con.method == "Split") {
                                             con.split = new Fraction(con.split);
                                         }
@@ -266,8 +264,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                                 });
 
                                 angular.forEach(transfer, function(transf) {
-                                    var offset = transf.date.getTimezoneOffset();
-                                    transf.date = transf.date.addMinutes(offset);
+                                    transf.date = calculate.timezoneOffset(transf.date);
                                     if (transf.tranto == tran.tran_id) {
                                         var final = angular.copy(transf);
                                         final.direction = "To";
@@ -554,17 +551,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    issue[field] = date;
-                    var offset = issue[field].getTimezoneOffset();
-                    issue[field] = issue[field].addMinutes(offset);
+                    issue[field] = calculate.timezoneOffset(date);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if (issue[field] instanceof Date) {
-                var offset = issue[field].getTimezoneOffset();
-                issue[field] = issue[field].addMinutes(offset);
+                issue[field] = calculate.timezoneOffset(issue[field]);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
             }
@@ -1106,9 +1100,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    transaction[field] = date;
-                    var offset = transaction[field].getTimezoneOffset();
-                    transaction[field] = transaction[field].addMinutes(offset);
+                    transaction[field] = calculate.timezoneOffset(date);
                     keyPressed = false;
                     $scope.saveTran(transaction);
                 }
@@ -1116,8 +1108,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
             if (transaction[field] instanceof Date) {
-                var offset = transaction[field].getTimezoneOffset();
-                transaction[field] = transaction[field].addMinutes(offset);
+                transaction[field] = calculate.timezoneOffset(transaction[field]);
                 keyPressed = false;
                 $scope.saveTran(transaction);
             }
@@ -1546,16 +1537,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    $scope.convertTran.date = date;
-                    var offset = $scope.convertTran.date.getTimezoneOffset();
-                    $scope.convertTran.date = $scope.convertTran.date.addMinutes(offset);
+                    $scope.convertTran.date = calculate.timezoneOffset(date);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if ($scope.convertTran.date instanceof Date) {
-                var offset = $scope.convertTran.date.getTimezoneOffset();
-                $scope.convertTran.date = $scope.convertTran.date.addMinutes(offset);
+                $scope.convertTran.date = calculate.timezoneOffset($scope.convertTran.date);
                 keyPressed = false;
             }
         }
@@ -1681,16 +1669,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    $scope.splitIssue.date = date;
-                    var offset = $scope.splitIssue.date.getTimezoneOffset();
-                    $scope.splitIssue.date = $scope.splitIssue.date.addMinutes(offset);
+                    $scope.splitIssue.date = calculate.timezoneOffset(date);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if ($scope.splitIssue.date instanceof Date) {
-                var offset = $scope.splitIssue.date.getTimezoneOffset();
-                $scope.splitIssue.date = $scope.splitIssue.date.addMinutes(offset);
+                $scope.splitIssue.date = calculate.timezoneOffset($scope.splitIssue.date);
                 keyPressed = false;
             }
         }
@@ -1965,16 +1950,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    $scope.transfer.date = date;
-                    var offset = $scope.transfer.date.getTimezoneOffset();
-                    $scope.transfer.date = $scope.transfer.date.addMinutes(offset);
+                    $scope.transfer.date = calculate.timezoneOffset(date);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if ($scope.transfer.date instanceof Date) {
-                var offset = $scope.transfer.date.getTimezoneOffset();
-                $scope.transfer.date = $scope.transfer.date.addMinutes(offset);
+                $scope.transfer.date = calculate.timezoneOffset($scope.transfer.date);
                 keyPressed = false;
             }
         }
