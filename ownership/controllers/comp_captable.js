@@ -121,9 +121,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
 
                     angular.forEach($scope.issues, function(issue) {
-                        console.log(issue.date);
                         issue.date = calculate.timezoneOffset(issue.date);
-                        console.log(issue.date);
                         if (issue.vestingbegins) {
                             issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
                         }
@@ -430,24 +428,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         tran['active'] = true;
                         first = first + 1
                     }
-                    if (String(tran['partpref']) == "true") {
-                        tran.partpref = $scope.tf[0];
-                    }
-                    else if (String(tran['partpref']) == "false") {
-                        tran.partpref = $scope.tf[1];
-                    }
-                    if (String(tran['dragalong']) == "true") {
-                        tran.dragalong = $scope.tf[0];
-                    }
-                    else if (String(tran['dragalong']) == "false") {
-                        tran.dragalong = $scope.tf[1];
-                    }
-                    if (String(tran['tagalong']) == "true") {
-                        tran.tagalong = $scope.tf[0];
-                    }
-                    else if (String(tran['tagalong']) == "false") {
-                        tran.tagalong = $scope.tf[1];
-                    }
+                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -497,37 +480,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
 
-        // Set Boolean Values for the Angularjs Select
-        if (String($scope.activeIssue.partpref) == "true") {
-            $scope.activeIssue.partpref = $scope.tf[0];
-        }
-        else if (String($scope.activeIssue.partpref) == "false") {
-            $scope.activeIssue.partpref = $scope.tf[1];
-        }
-        if (String($scope.activeIssue.dragalong) == "true") {
-            $scope.activeIssue.dragalong = $scope.tf[0];
-        }
-        else if (String($scope.activeIssue.dragalong) == "false") {
-            $scope.activeIssue.dragalong = $scope.tf[1];
-        }
-        if (String($scope.activeIssue.tagalong) == "true") {
-            $scope.activeIssue.tagalong = $scope.tf[0];
-        }
-        else if (String($scope.activeIssue.tagalong) == "false") {
-            $scope.activeIssue.tagalong = $scope.tf[1];
-        }
+        $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
+        $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
+        $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
         if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
             $scope.activeIssue.date = (Date.today());
-        }
-        if ($scope.activeIssue.common) {
-            $scope.commonshow = true;
-        }
-        else {
-            var comtoggle = false;
-            angular.forEach($scope.issues, function(iss) {
-                comtoggle = iss.common || comtoggle ? true : false;
-            });
-            $scope.commonshow = comtoggle ? false : true;
         }
         // Set Freq Value for Angularjs Select
         var index = $scope.freqtypes.indexOf(issue.vestfreq);
@@ -1163,10 +1120,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             transaction.units = transaction.unitskey;
-        };
+        }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
             transaction.amount = transaction.paidkey;
-        };
+        }
         // Bail out if insufficient data has been added for the transaction
         if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
             return
@@ -2281,6 +2238,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
             return !(checkcontent && checksome);
         }
+    };
+
+    // Hides transaction fields for common stock
+    $scope.commonstock = function(tran) {
+        var common = false;
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == tran.issue) {
+                common = issue.common ? true : false
+            }
+        });
+        return common
     };
 
     $scope.tourfunc = function() {

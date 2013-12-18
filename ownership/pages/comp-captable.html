@@ -747,7 +747,7 @@
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
 
-                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                            <p class="rightTitle common-toggle"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
 
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.common"></span>
                             </p>
@@ -785,7 +785,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalauth"></span>
                             </p>
 
-                            <div class="rightTitle double"><span>Liquidation Preference</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle double"><span>Liquidation Preference</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -801,7 +801,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
                             </div>
 
-                            <div class="rightTitle double"><span>Participating Preferred</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle double"><span>Participating Preferred</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -818,7 +818,7 @@
                             </div>
 
 
-                            <div class="rightTitle"><span>Drag Along</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle"><span>Drag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -834,7 +834,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
                             </div>
 
-                            <div class="rightTitle"><span>Tag Along</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle"><span>Tag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -850,7 +850,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
                             </div>
 
-                            <span ng-show="showPari(allowKeys)" class="paripassu-list">
+                            <span ng-show="showPari(allowKeys) && !activeIssue.common" class="paripassu-list">
                                 <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
                                     <ul class="dropdown-list drop-selector">
                                         <li class="dropdown standard">
@@ -1070,7 +1070,7 @@
                             </p>
 
 
-                            <div ng-hide="toggleView();" class="rightTitle double"><span>Liquidation Preference</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Liquidation Preference</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1086,7 +1086,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle double"><span>Participating Preferred</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Participating Preferred</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1102,7 +1102,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.partpref"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle"><span>Drag Along</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle"><span>Drag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1118,7 +1118,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle"><span>Tag Along</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle"><span>Tag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">

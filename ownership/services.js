@@ -730,6 +730,16 @@ ownership.service('calculate', function () {
         }
     };
 
+    this.booltoYN = function (object, field, options) {
+        if (String(object[field]) == "true") {
+            object[field] = options[0];
+        }
+        else if (String(object[field]) == "false") {
+            object[field] = options[1];
+        }
+        return object[field]
+    };
+
     this.timezoneOffset = function (date) {
         return date.addMinutes(date.getTimezoneOffset());
     }
