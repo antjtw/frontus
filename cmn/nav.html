@@ -16,7 +16,7 @@
                                     <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
                                     <div class="standard-button">
-                                        <button class="btn" ng-disabled="!fieldCheck(username);" ng-click="doLogin()">Log In</button>
+                                        <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
                                     </div>
                                     <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
