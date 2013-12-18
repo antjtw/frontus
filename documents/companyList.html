@@ -183,25 +183,25 @@
                     <tr class="empty-row"></tr>
                     <tr ng-class="{selectedrow:investor.shown}">
                         <td class="status-toggle"
-                            ng-class="{'pointer':investor.documents[0], 'status-toggle-on':investor.shown}"
-                            ng-click="!investor.documents[0] || openinvestordetails(investor)">
-                            <span ng-hide="investor.shown || !investor.documents[0]" data-icon="&#xe017;" aria-hidden="true"></span>
-                            <span ng-show="investor.shown && investor.documents[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                            ng-class="{'pointer':investor.versions[0], 'status-toggle-on':investor.shown}"
+                            ng-click="!investor.versions[0] || openinvestordetails(investor)">
+                            <span ng-hide="investor.shown || !investor.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
                         <td class="shareholder-column docname-column">
                             <ul>
                                 <li>{{investor.name | caplength:40}}</li>
-                                <li>{{investorStatus(doc)}}</li>
+                                <li>{{docStatus(investor)}}</li>
                             </ul>
                         </td>
                         <td class="status-toggle status-icon">
-                            <div ng-show="investorIsComplete(investor)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-                            <div ng-hide="investorIsComplete(investor)" class="circle" ng-class="{gray:investor.documents.length===0, yelow:investor.documents.length>0}"></div>
+                            <div ng-show="docIsComplete(investor)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-hide="docIsComplete(investor)" class="circle" ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div>
                         </td>
                         <td class="shareholder-column status-column issuer pointer">
                             <ul>
-                                <li>{{shortInvestorStatus(investor)}}</li>
-                                <li>{{formatInvestorStatusRatio(investor)}}</li><!--can formatDocStatusRatio be generalized?-->
+                                <li>{{shortDocStatus(investor)}}</li>
+                                <li>{{formatDocStatusRatio(investor)}}</li>
                             </ul>
                         </td>
                         <td>
@@ -218,7 +218,7 @@
                             </ul>
                         </td>
                     </tr>
-                    <tr ng-show="investor.shown" class="sub-row" ng-repeat="version in investor.documents | orderBy:versionOrder">
+                    <tr ng-show="investor.shown" class="sub-row" ng-repeat="version in investor.versions | orderBy:versionOrder">
                         <td class="status-toggle"></td>
                         <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(investor, version)"><!-- this won't work TODO-->
                             <ul>
