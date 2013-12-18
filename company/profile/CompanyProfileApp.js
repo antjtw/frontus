@@ -444,8 +444,9 @@ app.filter('icon', function() {
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
         else if (activity == "countersigned") return "icon-countersign";
+        else if (activity == "finalized") return "icon-lock";
         else return "hunh?";
-    }
+    };
 });
 
 
@@ -475,6 +476,7 @@ app.filter('description', function() {
             else if (activity == "received") return document + " sent to "+person;
             else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
             else if (activity == "countersigned") return document + " countersigned by "+person;
+            else if (activity == "finalized") return document + " approved by " + person;
             else return activity + " by "+person;
         }
         return "";

@@ -960,7 +960,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "signed") return "You signed "+document;
             else if (activity == "rejected") return person + " rejected your signature on " +document;
             else if (activity == "countersigned") return person + " countersigned "+document;
-            else if (activity == "finalized") return person + " approved " + document;
+            else if (activity == "finalized") return "You approved " + document;
             else  {
                 return activity + " by "+person;
             }

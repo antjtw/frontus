@@ -89,8 +89,12 @@
               <td colspan="2">{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
           <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-              <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="doc.when_confirmed">Not Countersigned</span><span ng-show="doc.when_confirmed">Countersigned</span></td>
-              <td colspan="2">{{doc.when_confirmed | date:'MMMM dd, yyyy, h:mm a'}}</td>
+              <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="doc.when_countersigned">Not Countersigned</span><span ng-show="doc.when_countersigned">Countersigned</span></td>
+              <td colspan="2">{{doc.when_countersigned | date:'MMMM dd, yyyy, h:mm a'}}</td>
+          </tr>
+          <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
+              <td><span data-icon="&#xe02c;" aria-hidden="true"></span><span ng-hide="doc.when_finalized">Not Approved</span><span ng-show="doc.when_finalized">Approved</span></td>
+              <td colspan="2">{{doc.when_finalized | date:'MMMM dd, yyyy, h:mm a'}}</td>
           </tr>
 
           </tbody>
