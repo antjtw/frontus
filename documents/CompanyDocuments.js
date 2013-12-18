@@ -222,16 +222,18 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             angular.forEach($scope.documents, function(doc) {
                 angular.forEach(doc.versions, function(version) {
                     if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
-                        $scope.investorDocs[version.investor].documents.push(version);
+                        $scope.investorDocs[version.investor].versions.push(version);
                     } else {
-                        if (!$scope.investorDocs) {$scope.investorDocs = {}}
-                        $scope.investorDocs[version.investor] = {'documents': [version],
+                        if (!$scope.investorDocs) {$scope.investorDocs = {};}
+                        $scope.investorDocs[version.investor] = {'versions': [version],
                                                                    'name': version.name};
                     }
                 });
             });
-                                                                   
-            // investorname, statusRatio, signatureRequired, shown
+            angular.forEach($scope.investorDocs, function(investor) {
+                investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
+                investor.statusRatio = $scope.investorStatusRatio(investor);
+            });
         };
         $scope.noInvestors = function() {
             return Object.keys($scope.investorDocs).length !== 0;
@@ -248,6 +250,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
         $scope.versionOrder = 'statusRank';
+        $scope.investorOrder = 'name';
         $scope.maxRatio = 1000;
         $scope.selectedDoc = 0;
         $scope.recipients = [];
@@ -258,6 +261,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
+        };
+
+        $scope.setInvestorOrder = function(field) {
+            $scope.investorOrder = ($scope.investorOrder == field) ? '-' + field : field;
         };
 
         $scope.setViewBy = function(viewby) {
@@ -438,18 +445,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     doc.versions[0].last_event.event_time :
                     doc.last_updated)).from($rootScope.servertime);
             }
-
-            /*
-            if (doc.versions.length > 0) {
-                var set = doc.versions.filter(function (el) {return el.last_event && el.last_event.event_time;});
-                if (set.length === 0) {return $scope.defaultDocStatus(doc);}
-                set.sort(function (a, b) {return b.last_event.event_time - a.last_event.event_time;});
-                return $scope.versionStatus(set[0]);
-            } else {
-                return $scope.defaultDocStatus(doc);
-            }
-            */
         };
+        /*
+        $scope.investorStatus = function(investor) {
+            if (investor && investor.versions) {
+                return "Last Updated " + moment(investor.versions[0] && investor.versions[0].last_event && investor.versions[0].last_event.event_time).from($rootScope.servertime);
+            }
+        };
+        */
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions) {
@@ -520,19 +523,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (doc.versions.length === 0) {
                     return "";
                 } else {
-                    /*
-                     // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
-                     var signatureRatio = $scope.docSignatureRatio(doc);
-                     var viewRatio = $scope.docViewRatio(doc);
-                     if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
-                     return $scope.versionsFinalized(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
-                     } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
-                     return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
-                     } else {
-                     return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
-                     (doc.signature_required ? " signatures" : " views");
-                     }
-                     */
                     return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length) +
                         " / " +
                         doc.versions.length +
@@ -562,11 +552,24 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
                 // This ensure documents with no versions appear before completed documents.
                 // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-                if (doc.versions.length > 0 && initRatio == 0) {
-                    initRatio = (1 / doc.versions.length)
+                if (doc.versions.length > 0 && initRatio === 0) {
+                    initRatio = (1 / doc.versions.length);
                 }
                 if (initRatio == 2) {
-                    initRatio += (doc.versions.length)
+                    initRatio += (doc.versions.length);
+                }
+                if (initRatio === Infinity) {initRatio = 0;}
+                return initRatio;
+            }
+        };
+        $scope.investorStatusRatio = function(investor) {
+            if (investor) {
+                var initRatio = (investor.documents.filter($scope.versionIsComplete).length / investor.documents.length) + 1 || 0;
+                if (investor.documents.length > 0 && initRatio === 0) {
+                    initRatio = (1 / investor.documents.length);
+                }
+                if (initRatio == 2) {
+                    initRatio += (investor.documents.length);
                 }
                 if (initRatio === Infinity) {initRatio = 0;}
                 return initRatio;
