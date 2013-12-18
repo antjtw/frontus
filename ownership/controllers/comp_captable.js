@@ -115,15 +115,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                     $scope.grants = grants;
 
-
                     for (var i = 0, l = $scope.issues.length; i < l; i++) {
                         $scope.issues[i].key = $scope.issues[i].issue;
                         $scope.issuekeys.push($scope.issues[i].key);
                     }
 
                     angular.forEach($scope.issues, function(issue) {
-                        var offset = issue.date.getTimezoneOffset();
-                        issue.date = issue.date.addMinutes(offset);
+                        console.log(issue.date);
+                        issue.date = calculate.timezoneOffset(issue.date);
+                        console.log(issue.date);
                         if (issue.vestingbegins) {
                             issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
                         }
