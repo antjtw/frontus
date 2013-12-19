@@ -332,6 +332,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.loadPages();
         });
 
+        $scope.stage = 0;
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
@@ -342,7 +343,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $('.docViewerHeader').affix({
             offset: {top: 40}
         });
-        
+
         $scope.setAnnotable = function() {
                 $scope.isAnnotable = $scope.annotable();
         };
@@ -360,7 +361,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPageBar = function() {
-            console.log($scope.annotatedPages);
             if ($scope.docLength > 1 && $scope.annotatedPages.length > 0) {
                 return true;
             } else {

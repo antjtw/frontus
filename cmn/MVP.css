@@ -1958,17 +1958,44 @@ a.oldschool-link  {
     color: #FFFFFF;
 }
 
+.standard-button.arrow-right > button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .standard-button.arrow-right > button:after {
     content: ' ';
     display: block;
     position: absolute;
     width: 0;
     height: 0;
-    border-top: 14px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 14px solid #3498DB;
-    top: 1px;
-    right: -13px;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 13px solid #3498DB;
+    top: 0px;
+    right: -12px;
+}
+
+.standard-button.blue.arrow-right > button:hover:after {
+    border-left: 13px solid #2980B9;
+}
+
+.standard-button.cutout-left > button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.standard-button.cutout-left > button:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 13px solid white;
+    top: 0px;
+    left: -1px;
 }
 
 .standard-button.red > button {
@@ -1983,10 +2010,6 @@ a.oldschool-link  {
 }
 .standard-button.blue > button:hover {
     background-color: #2980B9;
-}
-
-.standard-button.blue.arrow-right > button:hover:after {
-    border-left: 14px solid #2980B9;
 }
 
 .standard-button.gray > button {
