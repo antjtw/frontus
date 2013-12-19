@@ -886,7 +886,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     font-size: 14px;
 }
 .subnav-controls .dropdown-list {
-    line-height: 40px;
+//    line-height: 40px;
 }
 .subnav-controls > div:first-child {
     display: inline-block;
@@ -916,10 +916,18 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     background-color: #FFFFFF;
     height: 22px;
     margin-bottom: 0;
+    margin-right: 20px;
     border-radius: 3px;
     margin-left: 10px;
     box-shadow: none !important;
     border: 1px solid #E3E3E3;
+}
+.subnav-controls .checkboxitem {
+    line-height: 32px;
+}
+.subnav-controls button.check-box-button {
+    margin-left: 10px;
+    margin-right: 20px;
 }
 .subnav-controls h2 {
     margin-left: 10px;

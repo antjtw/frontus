@@ -245,8 +245,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return Object.keys($scope.investorDocs).length !== 0;
         };
 
-        $scope.setMaxRatio = function(rat) {
-            $scope.maxRatio = rat;
+        $scope.toggleMaxRatio = function() {
+            $scope.maxRatio = ($scope.maxRatio===1000) ? 2 : 1000;
         };
         $scope.viewAll = function() {
             return $scope.maxRatio === 1000;
