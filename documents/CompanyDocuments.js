@@ -1577,14 +1577,18 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
+        $scope.hideCompleted = false;
 
         $scope.setOrder = function(field) {
             $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
         };
+        $scope.toggleHideCompleted = function() {
+            $scope.hideCompleted = !$scope.hideCompleted;
+        };
 
         $scope.searchFilter = function(obj) {
             var re = new RegExp($scope.query, 'i');
-            return !$scope.query || re.test(obj.docname);
+            return !($scope.hideCompleted && $scope.docIsComplete(obj)) && (!$scope.query || re.test(obj.docname));
         };
 
         $scope.time = function(doc) {
@@ -1721,7 +1725,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         });
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
-
         $scope.docId = parseInt($routeParams.doc, 10);
         $scope.thisPage = $routeParams.page ? parseInt($routeParams.page, 10) : 1;
         $scope.library = "document.my_investor_library";
