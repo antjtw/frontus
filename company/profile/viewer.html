@@ -55,7 +55,29 @@
                             <h2>Ownership Permissions</h2>
                         </div>
                         <div class="body-box">
+                            <br>
                             <span>Shareholders can only see their personal holdings by default, unless you allow full permission below.</span>
+                            <br><br>
+                            <div ng-hide="level">
+                                What if you haven't shared your cap table with this version?
+                            </div>
+                            <div ng-show="level">
+                                <span>Ownership</span>
+                                <ul class="dropdown-list drop-selector">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{level}}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a ng-click="changeVisibility('No View')">No View</a>
+                                                <a ng-click="changeVisibility('Personal View')">Personal View</a>
+                                                <a ng-click="changeVisibility('Full VIew')">Full View</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="front info-box">
@@ -67,10 +89,10 @@
                                 <!-- TODO tbody for no docs -->
                                 <tbody>
                                     <tr>
-                                        <th colspan="1" class="left" style="width:45%;" ng-click="setOrder('docname')">
+                                        <th colspan="1" class="left" style="width:70%;" ng-click="setOrder('docname')">
                                             Document Name
                                         </th>
-                                        <th colspan="2" class="left" style="width:40%;" ng-click="setOrder('statusRank')">
+                                        <th colspan="2" class="left" style="width:25%;" ng-click="setOrder('statusRank')">
                                             Status
                                         </th>
                                         <th/>
@@ -117,19 +139,17 @@
                         <h2>Activity</h2>
                     </div>
                     <div class="body-box">
-                    <!--
                         <ul class="activity-feed2">
-                            <li ng-repeat="">
-                                <span>{{}}</span>
+                            <li ng-repeat="events in eventGroups | fromNowSort">
+                                <span>{{events[0]}}</span>
                                 <ul>
-                                    <li ng-repeat="">
-                                        <i class="{{}}"></i>
-                                        <span>{{event | insertordescription}}</span>
+                                    <li ng-repeat="event in events.slice(2)">
+                                        <i class="{{event.activity | icon}}"></i>
+                                        <span>{{event | investordescription}}</span>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
-                    -->
                     </div>
                 </div>
             </div>

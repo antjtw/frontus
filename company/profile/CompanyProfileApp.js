@@ -360,13 +360,12 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
         var userId = $routeParams.id;
         $scope.docOrder = 'statusRank';
 
-        SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
+        SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile if viewing yourself
             if(x[0].email == userId)
                 document.location.href="/investor/profile";
         });
 
         SWBrijj.tblm('global.user_list', 'email', userId).then(function(x) {
-
             if (!x.name) {
                 history.back();
             }
@@ -374,20 +373,55 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
         }).except(function(err) {
                 void(err);
                 history.back();
-            });
+        });
 
-        SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(x) {
-            $scope.docs = x;
-            SWBrijj.tblmm("document.company_activity", "person", userId).then(function(data) {
-                angular.forEach($scope.docs, function(doc) {
-                    var version_activity = data.filter(function(el) {return el.doc_id===doc.doc_id;});
-                    doc.last_event = version_activity.sort($scope.compareEvents)[0];
-                    if (doc.last_event.activity=='finalized') {doc.last_event.activity='approved';}
-                    $scope.setStatusRank(doc);
+        SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(data) {
+            $scope.docs = data;
+            $scope.getDocumentActivity();
+            $scope.getCompanyActivity();
+            $scope.getCompanyAccess();
+        });
+
+        $scope.getCompanyActivity = function() {
+            SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(feed) {
+                var originalfeed = feed;
+                $scope.eventGroups = [];
+                var uniqueGroups = [];
+                angular.forEach(originalfeed, function(ev) {
+                    if (ev.activity != 'sent') {
+                        var timegroup = moment(ev.time).from(ev.timenow);
+                        if (uniqueGroups.indexOf(timegroup) > -1) {
+                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(ev);
+                        } else {
+                            $scope.eventGroups[$scope.eventGroups.length] = [];
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(ev.time);
+                            $scope.eventGroups[$scope.eventGroups.length-1].push(ev);
+                            uniqueGroups.push(timegroup);
+                        }
+                    }
                 });
             }).except(function(err) {
-                void(err);
+                console.log(err);
             });
+        };
+        $scope.getDocumentActivity = function() {
+            SWBrijj.tblmm("document.company_activity", "person", userId).then(function(data) {
+                $scope.setDocsLastEvent(data);
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.setDocsLastEvent = function(activityfeed) {
+            angular.forEach($scope.docs, function(doc) {
+                var version_activity = activityfeed.filter(function(el) {return el.doc_id===doc.doc_id;});
+                doc.last_event = version_activity.sort($scope.compareEvents)[0];
+                if (doc.last_event.activity==='finalized') {doc.last_event.activity='approved';}
+                $scope.setStatusRank(doc);
+            });
+        };
+
+        $scope.getCompanyAccess = function() {
             SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
                 if (access[0]) {
                     $scope.level = access[0].level;
@@ -395,8 +429,8 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
             }).except(function(err) {
                     void(err);
                     $scope.level = false;
-                });
-        });
+            });
+        };
         $scope.setStatusRank = function(version) {
             version.statusRank = $scope.eventRank(version.last_event);
         };
@@ -526,7 +560,53 @@ app.filter('fileLength', function () {
 app.filter('fromNow', function() {
     return function(date) {
         return moment(date).fromNow();
-    }
+    };
+});
+app.filter('fromNowSort', function () {
+    return function (events) {
+        if (events) {
+            events.sort(function (a, b) {
+                if(a[1] > b[1]) return -1;
+                if(a[1] < b[1]) return 1;
+                return 0;
+            });
+        }
+
+        return events;
+    };
+});
+app.filter('investordescription', function() {
+    return function(ac) {
+        var activity = ac.activity;
+        var person;
+        if (ac.name) {
+            person = ac.name;
+        }
+        else {
+            person = ac.email;
+        }
+        var type = ac.type;
+        if (type == "ownership") {
+            if (activity == "received") return "Capitalization Table sent to " + person;
+            else if (activity == "viewed") return "Capitalization Table viewed by "+person;
+            else return "Something with Capitalization Table";
+        }
+        else {
+            var document = ac.docname;
+            if (activity == "sent") return "";
+            else if (activity == "viewed") return document + " viewed by "+person;
+            else if (activity == "reminder") return "Reminded "+person + " about " +document;
+            else if (activity == "edited") return document + " edited by "+person;
+            else if (activity == "signed") return document + " signed by "+person;
+            else if (activity == "uploaded") return document + " uploaded by "+person;
+            else if (activity == "transcoded") return document + " uploaded by "+person;
+            else if (activity == "received") return document + " sent to "+person;
+            else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
+            else if (activity == "countersigned") return document + " countersigned by "+person;
+            else if (activity == "finalized") return document + " approved by " + person;
+            else return activity + " by "+person;
+        }
+    };
 });
 
 /* Filter to select the activity icon for document status */
@@ -577,7 +657,7 @@ app.filter('description', function() {
             else return activity + " by "+person;
         }
         return "";
-    }
+    };
 });
 
 /**

@@ -983,6 +983,6 @@ app.filter('fromNowSort', function () {
             });
         }
 
-        return events
+        return events;
     };
 });

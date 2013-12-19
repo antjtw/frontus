@@ -1341,6 +1341,12 @@ ul.spaced-list > li:nth-child(odd) {
     color: #656565;
 }
 
+.body-box .activity-feed2 > li > ul > li {
+    width: -moz-calc(100% - 20px) !important;
+    width: -webkit-calc(100% - 20px) !important;
+    width: calc(100% - 20px) !important;
+}
+
 .activity-feed2 > li > ul > li > span {
     display: inline-block;
     width: 230px;
