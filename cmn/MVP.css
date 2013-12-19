@@ -882,6 +882,12 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls span {
     font-size: 10px;
 }
+.subnav-controls .dropdown-toggle span {
+    font-size: 14px;
+}
+.subnav-controls .dropdown-list {
+    line-height: 40px;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
@@ -922,6 +928,10 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     display: inline-block;
     font-size: 18px;
     color: rgb(166, 166, 166);
+}
+.subnav-controls .viewProfileText > ul > li {
+    padding-left: 20px;
+    text-align: left;
 }
 .doc-title {
     display: inline-block;
@@ -1342,9 +1352,13 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .body-box .activity-feed2 > li > ul > li {
-    width: -moz-calc(100% - 20px) !important;
     width: -webkit-calc(100% - 20px) !important;
+    width: -moz-calc(100% - 20px) !important;
     width: calc(100% - 20px) !important;
+    padding: 8px 10px 10px 10px;
+}
+.body-box .activity-feed2 > li > ul > li > span {
+    width: auto;
 }
 
 .activity-feed2 > li > ul > li > span {

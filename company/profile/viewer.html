@@ -12,22 +12,23 @@
                     <div>
                         <div class="pull-left">
                             <div class="viewProfilePhoto"
-                                 style="width:60px; height:60px;">
+                                 style="width:40px; height:40px;">
                                 <img ng-src="/photo/user?id=investor:{{user.email}}">
                             </div>
                         </div>
-                        <div class="pull-left">
+                        <div class="viewProfileText pull-left" style="width:30%;">
                             <ul>
                                 <li>{{user.name}}</li>
                                 <li>{{user.email}}</li>
                             </ul>
                         </div>
-                        <div ng-show="user.address1 && user.address2" class="pull-left">
+                        <div ng-show="user.address1 && user.address2" class="viewProfileText pull-left" style="width:30%;">
                             <ul>
                                 <li>{{user.address1}}</li>
                                 <li>{{user.address2}}</li>
                             </ul>
                         </div>
+                        <!--
                         <div class="pull-right">
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -36,12 +37,14 @@
                                         </span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li>do 1</li>
-                                        <li>do 2</li>
+                                        <li>Edit Profile</li>
+                                        <li>Edit Settings</li>
+                                        <li>Change Password</li>
                                     </ul>
                                 </li>
                             </ul>
                         </div> 
+                        -->
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -144,8 +147,10 @@
                                 <span>{{events[0]}}</span>
                                 <ul>
                                     <li ng-repeat="event in events.slice(2)">
-                                        <i class="{{event.activity | icon}}"></i>
-                                        <span>{{event | investordescription}}</span>
+                                        <span>
+                                            <i class="{{event.activity | icon}}"></i>
+                                            {{event | investordescription}}
+                                        </span>
                                     </li>
                                 </ul>
                             </li>
