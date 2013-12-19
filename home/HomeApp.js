@@ -692,7 +692,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.docIsComplete = function(doc) {
-            return (doc.signature_deadline && doc.when_confirmed) ||
+            return (doc.signature_deadline && doc.when_finalized) ||
                 (!doc.signature_deadline && doc.last_viewed);
         };
 

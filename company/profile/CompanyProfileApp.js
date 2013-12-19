@@ -349,8 +349,8 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     }
 }]);
 
-app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', 'navState',
-    function($scope, $rootScope, $routeParams, SWBrijj, navState) {
+app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams', 'SWBrijj', 'navState',
+    function($scope, $rootScope, $location, $routeParams, SWBrijj, navState) {
 
         if (navState.role == 'investor') {
             document.location.href="/home";
@@ -358,6 +358,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
         }
 
         var userId = $routeParams.id;
+        $scope.docOrder = 'statusRank';
 
         SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile is viewing yourself
             if(x[0].email == userId)
@@ -377,6 +378,16 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
 
         SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(x) {
             $scope.docs = x;
+            SWBrijj.tblmm("document.company_activity", "person", userId).then(function(data) {
+                angular.forEach($scope.docs, function(doc) {
+                    var version_activity = data.filter(function(el) {return el.doc_id===doc.doc_id;});
+                    doc.last_event = version_activity.sort($scope.compareEvents)[0];
+                    if (doc.last_event.activity=='finalized') {doc.last_event.activity='approved';}
+                    $scope.setStatusRank(doc);
+                });
+            }).except(function(err) {
+                void(err);
+            });
             SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
                 if (access[0]) {
                     $scope.level = access[0].level;
@@ -386,27 +397,113 @@ app.controller('ViewerCtrl', ['$scope','$rootScope','$routeParams', 'SWBrijj', '
                     $scope.level = false;
                 });
         });
+        $scope.setStatusRank = function(version) {
+            version.statusRank = $scope.eventRank(version.last_event);
+        };
+        $scope.compareEvents = function(a, b) {
+              var initRank = $scope.eventRank(b) - $scope.eventRank(a);
+              return initRank === 0 ? (b.event_time - a.event_time) : initRank;
+        };
+        $scope.eventRank = function (ev) {
+            switch (ev.activity) {
+                case "finalized":
+                    return 7;
+                case "countersigned":
+                    return 6;
+                // signed or rejected can come either before or after each other depending on chronological ordering.
+                // ambiguity is resolve in $scope.compareEvents
+                case "signed":
+                case "rejected":
+                    return 4;
+                case "viewed":
+                    return 3;
+                case "received":
+                    return 2;
+                case "uploaded":
+                    return 1;
+                default:
+                    return 0;
+            }
+        };
+        $scope.setOrder = function(field) {
+            $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
+        };
+        $scope.viewInvestorCopy = function(version) {
+            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+        };
 
         $scope.activityOrder = function(card) {
             return -card.time;
         };
 
-        SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(stuff) {
-            $scope.activity = stuff;
+        SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(data) {
+            $scope.activity = data;
         });
+        $scope.shortStatus = function(version) {
+            if (!version) return "";
+            if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+                return "Rejected by recipient";
+            } else if ($scope.wasJustRejected(version) &&
+                       !$scope.lastEventByInvestor(version)) {
+                return "Rejected by you";
+            } else if ($scope.isPendingSignature(version)){
+                return "Sent for Signature";
+            } else if ($scope.isPendingCountersignature(version)){
+                return "Review and Sign";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Signed and Sent for Approval";
+            } else if ($scope.isCompleteSigned(version)){
+                return "Completed";
+            } else if ($scope.isPendingView(version)){
+                return "Unviewed";
+            } else if ($scope.isCompleteViewed(version)){
+                return "Viewed";
+            } else {
+                return "Sent";
+            }
+        };
+        $scope.lastEventByInvestor = function(doc) {
+            return doc.last_event.person == navState.userid;
+        };
+
+        $scope.wasJustRejected = function(doc) {
+            return doc.last_event && doc.last_event.activity == 'rejected';
+        };
+
+        $scope.isPendingFinalization = function(doc) {
+            return doc.when_countersigned && !doc.when_finalized;
+        };
+
+        $scope.isPendingCountersignature = function(doc) {
+            return doc.when_signed && !doc.when_countersigned;
+        };
+
+        $scope.isPendingSignature = function(doc) {
+            return doc.signature_deadline && !doc.when_signed;
+        };
+
+        $scope.isPendingView = function(doc) {
+            return !doc.signature_deadline && !doc.last_viewed;
+        };
+        $scope.isCompleteSigned = function(version) {
+            return version.signature_deadline && version.when_finalized;
+        };
+        $scope.isCompleteViewed = function(version) {
+            return !version.signature_deadline && version.last_viewed;
+        };
+
+        $scope.docIsComplete = function(doc) {
+            return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
+        };
+        $scope.momentFromNow = function(date) {
+            return moment(date).from($rootScope.servertime);
+        };
 
         $scope.changeVisibility = function (value) {
             $scope.level = value;
             SWBrijj.proc('ownership.update_investor_captable', userId, $scope.level).then(function (data) {
                 void(data);
                 $scope.$emit("notification:success", "Successfully changed cap table visibility");
-            });
-        };
-
-        $scope.opendetails = function(selected) {
-            $scope.docs.forEach(function(name) {
-                if (name === selected) name.shown = !name.shown;
-                else name.shown = false;
             });
         };
 

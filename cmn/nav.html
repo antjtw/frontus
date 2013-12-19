@@ -134,7 +134,7 @@
                     </li>
                     <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
                     </li>
-                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="/company/profile/people">People</a>
+                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/') != -1}"><a class="button" href="/company/profile/people">People</a>
                     </li>
                 </ul>
             </div>

@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <div class="row-fluid home-top-row">
+        <div class="row-fluid home-top-row span12">
             <div class="span8">
                 <div class="row-fluid">
                     <div class="front info-box">
@@ -64,17 +64,19 @@
                         </div>
                         <div class="body-box">
                             <table class="status-table investor">
+                                <!-- TODO tbody for no docs -->
                                 <tbody>
                                     <tr>
-                                        <th colspan="1" class="left" style="width:45%;">
+                                        <th colspan="1" class="left" style="width:45%;" ng-click="setOrder('docname')">
                                             Document Name
                                         </th>
-                                        <th colspan="2" class="left" style="width:40%;">
+                                        <th colspan="2" class="left" style="width:40%;" ng-click="setOrder('statusRank')">
                                             Status
                                         </th>
+                                        <th/>
                                     </tr>
                                 </tbody>
-                                <tbody ngrepeat="doc in docs">
+                                <tbody ng-repeat="doc in docs | orderBy:docOrder">
                                     <tr class="empty-row"/>
                                     <tr>
                                         <td class="shareholder-column docname-column">
@@ -84,8 +86,27 @@
                                             </ul>
                                         </td>
                                         <td class="status-toggle status-icon">
-                                            <div ng-show="docIsComplete(doc)" 
-
+                                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                                            <div ng-hide="docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
+                                        </td>
+                                        <td class="shareholder-column status-column">
+                                            <ul>
+                                                <li>{{shortStatus(doc)}}</li>
+                                                <li>{{momentFromNow(doc.last_event.event_time)}}</li>
+                                            </ul>
+                                        </td>
+                                        <td class="sign-button toggle-column">
+                                            <ul class="dropdown-list page-button">
+                                                <li class="dropdown standard menu-drop">
+                                                    <a class="dropdown-toggle" ng-click="viewInvestorCopy(doc)">
+                                                        <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -113,10 +134,11 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="editProfileFP row-fluid">
-          <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
+          <div id="detailsEdit" class="span8">
             <div class="row-fluid">
-              <div class="span3"> <!-- Photo -->
+              <div class="span3">
                 <form>
                   <div class="viewProfilePhoto">
                     <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:140px; height:140px;'>
@@ -238,5 +260,6 @@
             </div>
           </div>
         </div>
+        -->
     </div>
 </div>
