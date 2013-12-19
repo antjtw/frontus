@@ -346,7 +346,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
                 void(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
-    }
+    };
 }]);
 
 app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams', 'SWBrijj', 'navState',
@@ -370,6 +370,10 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
                 history.back();
             }
             $scope.user = x;
+            SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
+                $scope.user.address1 = x.street;
+                $scope.user.address2 = (x.city && x.state && x.postalcode) ? x.city + ", " + x.state + " " + x.postalcode + " " + x.country : null;
+            });
         }).except(function(err) {
                 void(err);
                 history.back();

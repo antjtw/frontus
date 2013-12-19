@@ -22,10 +22,10 @@
                                 <li>{{user.email}}</li>
                             </ul>
                         </div>
-                        <div class="pull-left">
+                        <div ng-show="user.address1 && user.address2" class="pull-left">
                             <ul>
-                                <li>address</li>
-                                <li>addressline2</li>
+                                <li>{{user.address1}}</li>
+                                <li>{{user.address2}}</li>
                             </ul>
                         </div>
                         <div class="pull-right">
