@@ -107,7 +107,11 @@
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
-        <div class="confirmPanel"></div>
+        <div class="confirmPanel">
+            <div ng-show="sign"></div>
+            <div ng-show="countersign"></div>
+            <div ng-show="approve"></div>
+        </div>
     </div>
 
     <div class="keyboardHintContainer" ng-show="docLength > 1">

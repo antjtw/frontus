@@ -30,15 +30,15 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="pull-left">
-                        <span>SEARCH</span>
-                        <input type="text" class="search-box" ng-model="query">
-                    </div>
                     <div class="pull-left checkboxitem">
                         <span>HIDE COMPLETED</span>
                         <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button> 
+                    </div>
+                    <div class="pull-left">
+                        <span>SEARCH</span>
+                        <input type="text" class="search-box" ng-model="query">
                     </div>
 
                     <div class="pull-right" ng-show="documents.length!==0">
