@@ -2291,6 +2291,47 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     display: inline-block;
 }
 
+/* Radial (radio) Button Styling */
+
+.radio-button {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: solid 1px #C7C7C7;
+}
+.radio-button:before {
+    content: '';
+    display:block;
+}
+.radio-button:hover:before {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #C7C7C7;
+    border: solid 2px #FFFFFF;
+    left: 0px;
+    top: 0px;
+}
+.radio-button.selected,
+.radio-button.selected:hover {
+    border: solid 1px #1ABC96;
+}
+.radio-button.selected:before ,
+.radio-button.selected:hover:before {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #1ABC96;
+    border: solid 2px #FFFFFF;
+    left: 0px;
+    top: 0px;
+}
+
+
 /* Icon Box styling */
 
 button.icon-button {
