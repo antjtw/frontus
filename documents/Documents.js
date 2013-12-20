@@ -333,6 +333,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         });
 
         $scope.stage = 0;
+        $scope.confirmValue = 0;
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
@@ -343,6 +344,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $('.docViewerHeader').affix({
             offset: {top: 40}
         });
+
+        $scope.setStage = function(n) {
+            $scope.setConfirmValue(0);
+            $scope.stage = n;
+        };
+        $scope.setConfirmValue = function(n) {
+            $scope.confirmValue = n;
+        };
 
         $scope.setAnnotable = function() {
                 $scope.isAnnotable = $scope.annotable();
@@ -367,7 +376,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 return false;
             }
         };
-
 
         $scope.$emit('docViewerReady');
 
@@ -519,8 +527,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.$on('event:leave', $scope.leave);
 
-        $scope.leave = function(event) {
-            if ($scope.invq) {
+        $scope.leave = function() {
+            if ($rootScope.lastPage) {
+                document.location.href = $rootScope.lastPage;
+            } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
             } else {
                 $location.path('/company-list').search({});

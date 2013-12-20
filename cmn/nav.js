@@ -86,8 +86,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         })();
 
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
-        $scope.navState = navState;
         navState.path = document.location.pathname;
+        $scope.navState = navState;
+        $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
+            if (newURL.indexOf($scope.navState.path)==-1) {
+                $scope.lastPage = document.location.href;
+            }
+        });
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
