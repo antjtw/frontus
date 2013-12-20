@@ -1059,7 +1059,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
             });
         };
-
     }
 ]);
 

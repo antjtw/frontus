@@ -1,3 +1,4 @@
+<script src="/cmn/spin.js"></script>
 <link type="text/css" rel="stylesheet" href="/documents/docViewer.css">
 <div class="modal-backdrop" style="opacity:0.9;"></div>
 <div class="docViewer" ng-hide="hidePage">
@@ -7,20 +8,24 @@
                 <div class="pull-left">
                     <div class="docName">{{lib.docname | caplength: 60}}</div>
                     <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
+                    <div class="lastUpdated">
+                        Last Updated {{lib.last_updated | fromNow:servertime}}
+                    </div>
                 </div>
-                <div class="stageControls" ng-show="true"><!-- TODO limit this to when there's an action -->
+                <div class="stageControls" ng-show="signable(lib) || countersignable(lib) || finalizable(lib)"><!-- TODO limit this to when there's an action -->
                     <div class="standard-button blue arrow-right pull-left" ng-click="stage=0;">
-                        <button class="btn">{{stagezero}}</button>
+                        <button class="btn" ng-show="isAnnotable">Annotate</button>
+                        <button class="btn" ng-show="finalizable(lib)">Review</button>
                     </div>
                     <div class="standard-button gray cutout-left pull-right" ng-click="stage=1;">
-                        <button class="btn">{{stageone}}</button>
+                        <button class="btn" ng-show="isAnnotable">Confirm</button>
+                        <button class="btn" ng-show="finalizable(lib)">Approve / Reject</button>
                     </div>
                 </div>
-                <div class="lastUpdated pull-right">
+                <div class="pull-right">
                     <div class="small-standard-button standard-button gray">
                         <button class="btn" ng-click="leave($event)">Exit</button>
                     </div>
-                    Last Updated {{lib.last_updated | fromNow:servertime}}
                 </div>
             </div>
             <div class="DivHelper"></div>
@@ -83,6 +88,11 @@
                     -->
                 </div>
             </div>
+            <div class="docViewerAction" ng-show="stage===1">
+                <span ng-show="signable(lib)">Confirm Electronic Signature</span>
+                <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
+                <span ng-show="finalizable(lib)">Approve Issuer's Countersignature</span>
+            </div>
         </div>
         <div class="page-bar" ng-show="showPageBar() && stage===0">
             <ul class="pull-left">
@@ -107,10 +117,48 @@
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
-        <div class="confirmPanel">
-            <div ng-show="sign"></div>
-            <div ng-show="countersign"></div>
-            <div ng-show="approve"></div>
+        <div class="confirmPanel" my-loading-spinner="processing">
+            <div ng-show="signable(lib)">
+                <div class='confirmBody'>
+                    <button class="check-box-button" ng-class="{'selected':confirmSignature}" ng-click="confirmSignature=!confirmSignature">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                    <span class="chkboxtext">
+                        Do you wish to electonically sign this document?
+                        <br>(This action is irreversible)
+                    </span>
+                </div>
+                <div class="standard-button green confirmButton">
+                    <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="signDocument(document);">Sign</button>
+                </div>
+            </div>
+
+            <div ng-show="countersignable(lib)">
+                <div class='confirmBody'>
+                    <button class="check-box-button" ng-class="{'selected':confirmSignature}" ng-click="confirmSignature=!confirmSignature">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                    <span class="chkboxtext">
+                        Do you wish to electonically countersign this document?<br>(This action is irreversible)
+                    </span>
+                </div>
+                <div class="standard-button green confirmButton">
+                    <button class="btn" ng-disabled="processing || !confirmSignature" ng-click="countersignDocument();">Countersign</button>
+                </div>
+            </div>
+
+            <div ng-show="finalizable(lib)">
+                <div class="confirmBody">
+                    <input class="checkbox-class" type="checkbox" ng-model="confirmFinalize">
+                    <span class="chkboxtext">
+                        Do you wish to approve this document?
+                        <br>(This action is irreversible)
+                    </span>
+                </div>
+                <div class="standard-button green confirmButton">
+                    <button class="btn" ng-disabled="processing || !confirmFinalize" ng-click="finalizeDocument(document);">Approve</button>
+                </div>
+            </div>
         </div>
     </div>
 

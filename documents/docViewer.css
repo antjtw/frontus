@@ -45,6 +45,17 @@ navbar {
     bottom: 0;
 }
 
+.docViewerAction {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 14px;
+    color: #1E2D3D;
+    display: inline-block;
+    vertical-align: middle;
+    height: 60px;
+    width: 100%;
+}
+
 .tools {
     margin-left: 20px;
     padding-top: 15px;
@@ -247,8 +258,8 @@ navbar {
 }
 
 .docViewerTitle .lastUpdated {
-    margin-top:0px;
-    margin-right: 20px;
+    margin-top: 0px;
+    margin-left: 20px;
     text-transform: uppercase;
     text-align: right;
     font-size: 10px;
@@ -291,6 +302,20 @@ navbar {
     width: 100%;
     height: 200px;
     margin: 0 auto;
+}
+.confirmPanel > div {
+    width: 100%;
+    height: 100%;
+}
+.confirmBody {
+    margin: 0 auto;
+    padding-top: 30px;
+    width: 300px;
+}
+.confirmButton {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
 }
 
 .draggable {
