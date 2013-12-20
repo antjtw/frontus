@@ -88,11 +88,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
+        // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf($scope.navState.path)==-1) {
                 $scope.lastPage = document.location.href;
             }
         });
+        // On each NavCtrl load (new angular app), if the referrer is of the same domain, record the old page.
+        if (document.referrer.indexOf(location.host)!=-1) {
+            $scope.lastPage = document.referrer;
+        }
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
