@@ -1376,7 +1376,10 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 > li > ul > li > span {
     display: inline-block;
-    width: 230px;
+    min-width: 220px;
+    max-width: -webkit-calc(100% - 20px) !important;
+    max-width: -moz-calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
 }
 
 .activity-feed2 > li:last-of-type {
