@@ -350,7 +350,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.stage = n;
         };
         $scope.setConfirmValue = function(n) {
-            $scope.confirmValue = n;
+            if ($scope.confirmValue === n) {
+                $scope.confirmValue = 0;
+            } else {
+                $scope.confirmValue = n;
+            }
         };
 
         $scope.setAnnotable = function() {

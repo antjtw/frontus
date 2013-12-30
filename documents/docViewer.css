@@ -53,6 +53,7 @@ navbar {
     display: inline-block;
     vertical-align: middle;
     height: 60px;
+    line-height: 60px;
     width: 100%;
 }
 
@@ -99,6 +100,11 @@ navbar {
     padding-top: 6px;
 }
 
+.pageTurn > ul > li > span {
+    font-size: 18px;
+    color: #666666;
+}
+
 .docViewerControls {
     min-height: 60px;
     width: 100%;
@@ -106,7 +112,7 @@ navbar {
     background-color: #F1F1F1;
 }
 
-.docViewerControls > .pageTurn > ul > li:first-child {
+.docViewerControls .pageTurn > ul > li:first-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -119,7 +125,7 @@ navbar {
     box-sizing: border-box;
 }
 
-.docViewerControls > .pageTurn > ul > li:last-child {
+.docViewerControls .pageTurn > ul > li:last-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -280,6 +286,7 @@ navbar {
     left: calc(50% - 140px);
     margin: 14px auto;
     width: 280px;
+    color: #666666;
 }
 
 .docViewerTitle div.small-standard-button {
@@ -309,7 +316,7 @@ navbar {
 }
 .confirmPanel {
     width: 100%;
-    height: 200px;
+    height: 100%;
     margin: 0 auto;
 }
 .confirmPanel > div {
@@ -319,8 +326,39 @@ navbar {
 .confirmBody {
     margin: 0 auto;
     padding-top: 30px;
-    width: 300px;
+    padding-bottom: 60px;
+    width: 380px;
+    height: 100%;
 }
+
+.confirmBody > .radioOption {
+    height: 40px;
+}
+
+.confirmBody > .radioOption > li:first-child {
+    padding-right: 20px;
+}
+
+.confirmBody > .radioOption > li:last-child > span:first-child {
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.confirmBody > .radioOption > li:last-child > span {
+    color: #666666;
+}
+
+.confirmBody > .radioOption textarea.messageText {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 6px;
+    color: #666666;
+}
+
+.confirmFooter {
+    height: 72px;
+}
+
 .confirmButton {
     position: absolute;
     right: 20px;

@@ -2001,14 +2001,23 @@ a.oldschool-link  {
     height: 0;
     border-top: 16px solid transparent;
     border-bottom: 16px solid transparent;
-    border-left: 13px solid #3498DB;
+    border-left: 13px solid #F1F1F1;
     top: 0px;
     right: -12px;
 }
 
+.standard-button.gray.arrow-right > button:hover:after {
+    border-left: 13px solid #E3E3E3;
+}
+
+.standard-button.darkgray.arrow-right > button:after {
+    border-left: 13px solid #C7C7C7;
+}
+/*
 .standard-button.blue.arrow-right > button:hover:after {
     border-left: 13px solid #2980B9;
 }
+*/
 
 .standard-button.cutout-left > button {
     border-top-left-radius: 0;
@@ -2050,6 +2059,14 @@ a.oldschool-link  {
 .standard-button.gray > button:hover {
     background-color: #E3E3E3;
     color: #666666;
+}
+
+.standard-button.darkgray > button {
+    background-color: #C7C7C7;
+    color: #666666;
+}
+
+.standard-button.darkgray > button:hover {
 }
 
 .small-standard-button > button {
