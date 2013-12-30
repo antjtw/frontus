@@ -1306,6 +1306,13 @@ form.inputs {
 .info-box > .body-box > .standard-button{
     padding: 0 0 20px 0;
 }
+
+.info-box > .body-box > .ownershipPermissions > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #8D8D8D;
+    padding-right: 10px;
+}
 ul.last-edited {
     display: inline-block;
     padding: 20px 0 20px 0;

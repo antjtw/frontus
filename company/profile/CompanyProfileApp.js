@@ -370,24 +370,32 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
                 history.back();
             }
             $scope.user = x;
+            console.log($scope.user);
             SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
                 $scope.user.address1 = x.street;
                 $scope.user.address2 = (x.city && x.state && x.postalcode) ? x.city + ", " + x.state + " " + x.postalcode + " " + x.country : null;
             });
+            $scope.getCounterpartyLibrary();
         }).except(function(err) {
                 void(err);
                 history.back();
         });
 
-        SWBrijj.tblmm('document.my_counterparty_library', 'investor', userId).then(function(data) {
-            $scope.docs = data;
-            $scope.getDocumentActivity();
-            $scope.getCompanyActivity();
-            $scope.getCompanyAccess();
-        });
+        $scope.getCounterpartyLibrary = function() {
+            SWBrijj.tblmm('document.my_counterparty_library', 'investor', $scope.user.email).then(function(data) {
+                $scope.docs = data;
+                $scope.getDocumentActivity();
+                $scope.getCompanyActivity();
+                $scope.getCompanyAccess();
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
 
         $scope.getCompanyActivity = function() {
-            SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(feed) {
+            // TODO this doesn't work
+            //SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
+            SWBrijj.tblm('global.get_company_activity').then(function(feed) {
                 var originalfeed = feed;
                 $scope.eventGroups = [];
                 var uniqueGroups = [];
@@ -410,7 +418,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
             });
         };
         $scope.getDocumentActivity = function() {
-            SWBrijj.tblmm("document.company_activity", "person", userId).then(function(data) {
+            SWBrijj.tblmm("document.company_activity", "person", $scope.user.email).then(function(data) {
                 $scope.setDocsLastEvent(data);
             }).except(function(err) {
                 console.log(err);
@@ -427,8 +435,11 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
 
         $scope.getCompanyAccess = function() {
             SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
+                console.log(access);
                 if (access[0]) {
                     $scope.level = access[0].level;
+                } else {
+                    $scope.level = 'No View';
                 }
             }).except(function(err) {
                     void(err);

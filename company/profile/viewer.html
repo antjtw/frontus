@@ -28,7 +28,7 @@
                                 <li>{{user.address2}}</li>
                             </ul>
                         </div>
-                        <!--
+                        <!-- TODO why is this here?
                         <div class="pull-right">
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -61,10 +61,7 @@
                             <br>
                             <span>Shareholders can only see their personal holdings by default, unless you allow full permission below.</span>
                             <br><br>
-                            <div ng-hide="level">
-                                What if you haven't shared your cap table with this version?
-                            </div>
-                            <div ng-show="level">
+                            <div class="ownershipPermissions" ng-show="level">
                                 <span>Ownership</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
@@ -81,6 +78,7 @@
                                     </li>
                                 </ul>
                             </div>
+                            <br>
                         </div>
                     </div>
                     <div class="front info-box">
@@ -167,132 +165,5 @@
                 </div>
             </div>
         </div>
-        <!--
-        <div class="editProfileFP row-fluid">
-          <div id="detailsEdit" class="span8">
-            <div class="row-fluid">
-              <div class="span3">
-                <form>
-                  <div class="viewProfilePhoto">
-                    <img ng-src="/photo/user?id=investor:{{user.email}}" style='width:140px; height:140px;'>
-                  </div>
-                </form>
-              </div>
-              <div class="span7">
-                <p>
-                    <label><input ng-class="{'content':!user.name}" class="name" type="text" ng-model="user.name" disabled>
-                    Name</label>
-                </p>
-              </div>
-            </div>
-            <div class="row-fluid">
-              <section class="recipientInfo statusBlock">
-              <div>
-                  <p class="title">Ownership Permissions</p>
-                  <p>Shareholders will only see their personal holdings by default, unless you allow full permission here.</p>
-              </div>
-              <div ng-show="level" class="cf permission-block">
-                <div>
-                    <div class="pull-left permission-label">Type:</div>
-                    <ul class="pull-left dropdown-list drop-selector">
-                      <li class="dropdown standard pull-left">
-                          <a class="dropdown-toggle">
-                              {{level}}
-                          </a>
-                          <ul class="dropdown-menu">
-                              <li>
-                                  <a ng-click="changeVisibility('No View')">No View</a>
-                                  <a ng-click="changeVisibility('Personal View')">Personal View</a>
-                                  <a ng-click="changeVisibility('Full View')">Full View</a>
-                              </li>
-                          </ul>
-                      </li>
-                    </ul>
-                </div>
-                <div class="DivHelper"></div>
-              </div>
-              <div style="display: none;" class="temp-text" ng-hide="level">You've not shared your cap table with this person.</div>
-            </section>
-            <br>
-            <section class="recipientInfo docLibrary">
-              <div>
-                  <p class="title">Document Permissions</p>
-                  <p>The following files can be viewed by this person</p>
-              </div>
-              <table class="tableView bodyText">
-                <tr class="column-label subText" ng-hide="noDocs">
-                  <th class="button"><span class="title sortedDown">Name</span></th>
-                  <th colspan="2" class="button"><span class="title">Status</span></th>
-
-                </tr>
-                  <tr class="noFeed" ng-show="docs.length == 0">
-                      <td colspan="3">You've not shared any documents with this person.</td>
-                  </tr>
-                  <tbody ng-repeat="doc in docs">
-                  <tr class="button status-row" ng-class="{selectedrow:doc.shown}" ng-click="(opendetails(doc))">
-                      <td style="width:50%;">{{doc.docname}}</td>
-                      <td>{{doc.signature_status}}</td>
-                      <td class="button">
-                          <span ng-Hide="doc.shown" data-icon="&#xe031;" aria-hidden="true"></span>
-                          <span ng-Show="doc.shown" data-icon="&#xe034;" aria-hidden="true"></span>
-                      </td>
-                  </tr>
-                  <tr class="status-detail" ng-Show="doc.shown">
-                      <td><span data-icon="&#xe024;" aria-hidden="true"></span>Sent</td>
-                      <td colspan="2">
-                          {{doc.when_shared | date:'MMMM dd, yyyy, h:mm a'}}
-                      </td>
-                  </tr>
-                  <tr class="status-detail" ng-Show="doc.shown">
-                      <td><span data-icon="&#xe001;" aria-hidden="true"></span><span ng-hide="doc.last_viewed">Never Viewed</span><span ng-show="doc.last_viewed">Last Logged In</span></td>
-                      <td colspan="2">{{doc.last_viewed | date:'MMMM dd, yyyy, h:mm a'}}</td>
-                  </tr>
-                  <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-                      <td><span data-icon="&#xe00d;" aria-hidden="true"></span><span ng-hide="doc.when_signed">Never Signed</span><span ng-show="doc.when_signed">Signed</span></td>
-                      <td colspan="2">{{doc.when_signed | date:'MMMM dd, yyyy, h:mm a'}}</td>
-                  </tr>
-                  <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-                      <td><span data-icon="&#xe02e;" aria-hidden="true"></span><span ng-hide="doc.when_countersigned">Not Countersigned</span><span ng-show="doc.when_countersigned">Countersigned</span></td>
-                      <td colspan="2">{{doc.when_countersigned | date:'MMMM dd, yyyy, h:mm a'}}</td>
-                  </tr>
-                  <tr class="status-detail" ng-Show="doc.shown && doc.signature_deadline">
-                      <td><span data-icon="&#xe02c;" aria-hidden="true"></span><span ng-hide="doc.when_finalized">Not Approved</span><span ng-show="doc.when_finalized">Approved</span></td>
-                      <td colspan="2">{{doc.when_finalized | date:'MMMM dd, yyyy, h:mm a'}}</td>
-                  </tr>
-
-                  </tbody>
-              </table>
-            </section>
-            </div>
-          </div>
-          <div class="sidebar span4">
-            <form>
-              <fieldset>
-                <p>
-                  <label><input type="text" ng-model="user.email" disabled>
-                  Email</label>
-                </p>
-              </fieldset>
-            </form>
-
-            <div>
-              <p class="title">Activity Feed</p>
-            </div>
-
-            <div class="row-fluid">
-                  <ul class="activityBlock">
-                      <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description">
-                          <i class="{{active.activity | icon}}"></i>
-                          <div>
-                              <span class="activity">{{active | description }}</span><br>
-                              <span class="time">{{active.time | fromNow}}</span>
-                          </div>
-                      </li>
-                  </ul>
-               <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-            </div>
-          </div>
-        </div>
-        -->
     </div>
 </div>
