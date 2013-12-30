@@ -274,8 +274,17 @@ navbar {
 }
 
 .stageControls {
+    position: absolute;
+    left:-webkit-calc(50% - 140px);
+    left:-moz-calc(50% - 140px);
+    left: calc(50% - 140px);
+    margin: 14px auto;
     width: 280px;
-    margin: 0 auto;
+}
+
+.docViewerTitle div.small-standard-button {
+    padding-top: 14px;
+    padding-right: 20px;
 }
 
 .docPanel {
