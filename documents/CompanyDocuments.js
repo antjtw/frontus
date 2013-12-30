@@ -644,6 +644,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.viewStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.doc_id);
         };
+        $scope.viewVersionStatus = function(doc) {
+            $location.url("/company-status?doc=" + doc.original);
+        };
 
         $scope.viewProfile = function(investor) {
             document.location.href = "/company/profile/view?id=" + investor.versions[0].investor;

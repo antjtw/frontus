@@ -370,7 +370,6 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
                 history.back();
             }
             $scope.user = x;
-            console.log($scope.user);
             SWBrijj.tblm('account.company_investors', 'email', userId).then(function(x) {
                 $scope.user.address1 = x.street;
                 $scope.user.address2 = (x.city && x.state && x.postalcode) ? x.city + ", " + x.state + " " + x.postalcode + " " + x.country : null;
@@ -435,7 +434,6 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
 
         $scope.getCompanyAccess = function() {
             SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
-                console.log(access);
                 if (access[0]) {
                     $scope.level = access[0].level;
                 } else {
@@ -479,6 +477,9 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
         };
         $scope.viewInvestorCopy = function(version) {
             document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+        };
+        $scope.viewVersionStatus = function(version) {
+            document.location.href = "/documents/company-status?doc=" + version.original;
         };
 
         $scope.activityOrder = function(card) {
