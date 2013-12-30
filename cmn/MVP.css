@@ -1479,6 +1479,10 @@ ul.spaced-list > li:nth-child(odd) {
     height: 180px;
 }
 
+.status-table > tbody.empty-table:first-child > tr > td {
+    text-align: center;
+}
+
 .status-table > tbody.empty-table > tr > td > span {
     font-size: 14px;
     text-transform:none;
@@ -1514,6 +1518,18 @@ ul.spaced-list > li:nth-child(odd) {
     width: -moz-calc(100% - 20px) !important;
     width: -webkit-calc(100% - 20px) !important;
     width: calc(100% - 20px) !important;
+}
+
+.body-box > table.status-table.investor > tbody > tr > th:first-child {
+    width: -moz-calc(50%) !important;
+    width: -webkit-calc(50%) !important;
+    width: calc(50%) !important;
+}
+
+.body-box > table.status-table.investor > tbody > tr > th:nth-child(2) {
+    width: -moz-calc(50%-50px) !important;
+    width: -webkit-calc(50%-50px) !important;
+    width: calc(50%-50px) !important;
 }
 
 .sign-button {
@@ -1587,6 +1603,9 @@ ul.spaced-list > li:nth-child(odd) {
 }
 .investor.status-table > tbody > tr > td.status-toggle.status-icon {
     width: auto;
+}
+.body-box > table.status-table.investor > tbody > tr > td.status-toggle.status-icon {
+    width: 28px;
 }
 
 .status-toggle > .circle {

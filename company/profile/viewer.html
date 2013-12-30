@@ -88,14 +88,22 @@
                             <h2>Document Stuff</h2>
                         </div>
                         <div class="body-box">
-                            <table class="status-table investor">
-                                <!-- TODO tbody for no docs -->
+                            <table class="status-table investor" ng-show="docs.length===0">
+                                <tbody class="empty-table">
+                                    <tr>
+                                        <td>
+                                            <span>You have not shared any documents with this investor!</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="status-table investor" ng-show="docs.length!==0">
                                 <tbody>
                                     <tr>
-                                        <th colspan="1" class="left" style="width:70%;" ng-click="setOrder('docname')">
+                                        <th colspan="1" class="left" ng-click="setOrder('docname')">
                                             Document Name
                                         </th>
-                                        <th colspan="2" class="left" style="width:25%;" ng-click="setOrder('statusRank')">
+                                        <th colspan="2" class="left" ng-click="setOrder('statusRank')">
                                             Status
                                         </th>
                                         <th/>
@@ -106,7 +114,7 @@
                                     <tr>
                                         <td class="shareholder-column docname-column">
                                             <ul>
-                                                <li>{{doc.docname | caplength:40}}</li>
+                                                <li>{{doc.docname | caplength:50}}</li>
                                                 <li>{{doc.signature_status}}</li>
                                             </ul>
                                         </td>
@@ -120,7 +128,7 @@
                                                 <li>{{momentFromNow(doc.last_event.event_time)}}</li>
                                             </ul>
                                         </td>
-                                        <td class="sign-button toggle-column">
+                                        <td class="toggle-column">
                                             <ul class="dropdown-list page-button">
                                                 <li class="dropdown standard menu-drop">
                                                     <a class="dropdown-toggle" ng-click="viewInvestorCopy(doc)">
