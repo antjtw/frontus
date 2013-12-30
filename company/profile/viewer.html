@@ -153,8 +153,8 @@
                                 <span>{{events[0]}}</span>
                                 <ul>
                                     <li ng-repeat="event in events.slice(2)">
+                                        <i class="{{event.activity | icon}}"></i>
                                         <span>
-                                            <i class="{{event.activity | icon}}"></i>
                                             {{event | investordescription}}
                                         </span>
                                     </li>

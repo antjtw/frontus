@@ -1350,6 +1350,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .activity-feed2 > li > ul {
+    width: 100%;
     vertical-align: middle;
     display: inline-block;
 }
@@ -1371,9 +1372,6 @@ ul.spaced-list > li:nth-child(odd) {
     width: -moz-calc(100% - 20px) !important;
     width: calc(100% - 20px) !important;
     padding: 8px 10px 10px 10px;
-}
-.body-box .activity-feed2 > li > ul > li > span {
-    width: auto;
 }
 
 .activity-feed2 > li > ul > li > span {
