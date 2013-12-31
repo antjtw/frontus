@@ -175,7 +175,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.loadDocumentActivity = function() {
-            SWBrijj.tblm("document.company_activity").then(function(data) {
+            SWBrijj.tblm("document.recent_company_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach(doc.versions, function(version) {
                         var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
