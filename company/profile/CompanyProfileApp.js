@@ -392,9 +392,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
         };
 
         $scope.getCompanyActivity = function() {
-            // TODO this doesn't work
-            //SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
-            SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+            SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
                 var originalfeed = feed;
                 $scope.eventGroups = [];
                 var uniqueGroups = [];

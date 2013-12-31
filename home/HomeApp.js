@@ -234,7 +234,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         $scope.getActivityFeed = function() {
             $scope.activity = [];
-            SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+            SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
                 $scope.eventGroups = [];
