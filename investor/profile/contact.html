@@ -1,39 +1,50 @@
-<div class="headsection row-fluid">
-    <ul class="maintabs head-text">
-        <li class="selectedtab">My Profile</li>
-    </ul>
-</div>
-<div class="editProfileFP row-fluid">
-    <div id="detailsEdit" class="span8"> <!-- detailsEdit = Vertical line -->
-        <div class="row-fluid">
-            <div class="span3"> <!-- Photo -->
-                <form>
-                    <div class="editProfilePhoto" ng-click="pictureModalOpen()">
-                        <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
+<div class="container dynamic-page doclistFlow">
+    <div class="row-fluid">
+        <div class="headsection row-fluid">
+            <ul class="maintabs head-text">
+                <li><a href="/company/profile/people/">People</a></li>
+                <li class="selectedtab">My Profile</li>
+            </ul>
+        </div>
+        <div style="margin-left: 0;" class="span12 statusBlock">
+            <div class="row-fluid">
+                <div class="subnav-controls">
+                    <div>
+                        <div class="pull-left">
+                            <form>
+                                <div class="editProfilePhoto"
+                                     style="width:40px; height:40px;"
+                                     ng-click="pictureModalOpen()">
+                                     <img ng-src="{{photoURL}}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="viewProfileText pull-left" style="width:30%;">
+                            <ul>
+                                <li>{{user.address1}}</li>
+                                <li>{{user.address2}}</li>
+                            </ul>
+                        </div>
+                        <div class="pull-right">
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle dark">
+                                        <span data-icon="&#xe011;" aria-hidden="true">
+                                        </span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li>Edit Profile</li>
+                                        <li>Edit Settings</li>
+                                        <li ng-click="passwordModalOpen()">Change Password</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div> 
                     </div>
-                </form>
-            </div>
-            <div class="span5">
-                <p>
-                    <label><input ng-class="{'content':!name}" type="text" class="name" ng-disabled="toggleView();" ng-model="name" name="name" ui-event="{blur: 'contactSave()'}">
-                        Name</label>
-                </p>
-                <p><button class="button subText greenButton" ng-click="passwordModalOpen()">Change Password</button></p>
+                    <div class="DivHelper"></div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="sidebar span4">
-        <form>
-            <fieldset>
-                <label><input ng-class="{'content':!email}" type="text" ng-model="email" name="email" disabled>
-                    Email</label>
-
-                <label><textarea ng-class="{'content':!street}" ng-model="street" name="street" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-                    Address</label>
-
-            </fieldset>
-        </form>
     </div>
 </div>
 <div modal="pictureModal" close="pictureModalClose()" options="opts">
