@@ -425,7 +425,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             */
         };
 
-        $scope.opendetails = function(selected) {
+        $scope.opendetailsExclusive = function(selected) {
             $scope.documents.forEach(function(doc) {
                 if (selected.doc_id == doc.doc_id) {
                     doc.shown = doc.shown !== true;
@@ -435,7 +435,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
 
-        $scope.openinvestordetails = function(selected) {
+        $scope.opendetails = function(selected) {
             selected.shown = selected.shown !== true;
         };
 

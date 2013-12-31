@@ -181,7 +181,7 @@
                     <tr ng-class="{selectedrow:investor.shown}">
                         <td class="status-toggle"
                             ng-class="{'pointer':investor.versions[0], 'status-toggle-on':investor.shown}"
-                            ng-click="!investor.versions[0] || openinvestordetails(investor)">
+                            ng-click="!investor.versions[0] || opendetails(investor)">
                             <span ng-hide="investor.shown || !investor.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
                             <span ng-show="investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                         </td>
