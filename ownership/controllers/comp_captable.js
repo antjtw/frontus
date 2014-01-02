@@ -2191,7 +2191,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     row.send = false;
                     row.emailkey = row.email;
                 }).except(function(err) {
-                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        if (err.message = "ERROR: Duplicate email for the row") {
+                            $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                        }
+                        else {
+                            $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        }
                     });
             }
         });
