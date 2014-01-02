@@ -48,6 +48,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock, and can only be applied to one security";
+    $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
 
 
 
@@ -2190,7 +2191,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     row.send = false;
                     row.emailkey = row.email;
                 }).except(function(err) {
-                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        if (err.message = "ERROR: Duplicate email for the row") {
+                            $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                        }
+                        else {
+                            $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        }
                     });
             }
         });

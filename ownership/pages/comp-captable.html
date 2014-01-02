@@ -851,7 +851,7 @@
                             </div>
 
                             <span ng-show="showPari(allowKeys) && !activeIssue.common" class="paripassu-list">
-                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span>Pari Passu With</span>
                                     <ul class="dropdown-list drop-selector">
                                         <li class="dropdown standard">
                                             <a class="dropdown-toggle">
@@ -864,6 +864,7 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
                                     <button class="icon-button" ng-click="addIssuePari(activeIssue.paripassu)"><span data-icon="&#xe053;" aria-hidden="true"></span></button>
                                 </div>
                             </span>
