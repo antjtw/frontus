@@ -138,15 +138,27 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         $scope.photoURL = '/photo/user?id=company:' + $scope.company;
     }).except(initFail);
 
-    /** @name x#item_id
-     * @type {int}
-     */
     $scope.activity = [];
-    SWBrijj.tblm('global.get_company_activity').then(function(data) {
-        $scope.activity = data;
-        if ($scope.activity.length == 0) {
-            $scope.noActivity = true;
-        }
+    SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+        var originalfeed = feed;
+        $scope.eventGroups = [];
+        var uniqueGroups = [];
+        angular.forEach(originalfeed, function(ev) {
+            if (ev.activity != 'sent') {
+                var timegroup = moment(ev.time).from(ev.timenow);
+                if (uniqueGroups.indexOf(timegroup) > -1) {
+                    $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(ev);
+                } else {
+                    $scope.eventGroups[$scope.eventGroups.length] = [];
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(ev.time);
+                    $scope.eventGroups[$scope.eventGroups.length-1].push(ev);
+                    uniqueGroups.push(timegroup);
+                }
+            }
+        });
+    }).except(function(err) {
+        console.log(err);
     });
 
     $scope.activityOrder = function(card) {

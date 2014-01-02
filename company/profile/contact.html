@@ -10,6 +10,39 @@
                 <div class="subnav-controls">
                     <div>
                         <!-- TODO -->
+                        <div class="pull-left">
+                            <form>
+                                <div class="editProfilePhoto" ng-click="pictureModalOpen()">
+                                    <img ng-src="{{photoURL}}" style="width: 40px; height: 40px;">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="viewProfileText pull-left" style="width:30%;">
+                            <ul>
+                                <li>{{name}}</li>
+                                <li>{{domain}}</li> <!--TODO-->
+                            </ul>
+                        </div>
+                        <div ng-show="address1() && address2()" class="viewProfileText pull-left" style="width:30%;">
+                            <ul>
+                                <li>{{address1()}}</li>
+                                <li>{{address2()}}</li>
+                            </ul>
+                        </div>
+                        <div class="pull-right">
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle dark">
+                                        <span data-icon="&#xe011;" aria-hidden="true">
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li ng-click="profileModalOpen()">Edit Profile</li>
+                                        <li ng-click="settingsModalOpen()">Edit Settings</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div> 
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -23,7 +56,16 @@
                             <h2>Settings</h2>
                         </div>
                         <div class="body-box">
-                            stuff
+                            <table>
+                                <tr>
+                                    <td>Currency</td>
+                                    <td>{{company.longcurrency}}
+                                </tr>
+                                <tr>
+                                    <td>Date Format</td>
+                                    <td>{{company.dateformat}}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                     <div class="front info-box">
@@ -31,7 +73,21 @@
                             <h2>Integrations</h2>
                         </div>
                         <div class="body-box">
-                            stuff
+                            <table class="status-table investor">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Dropbox icon
+                                        </td>
+                                        <td>
+                                            Dropbox
+                                        </td>
+                                        <td>
+                                            Connect Button
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -42,7 +98,19 @@
                         <h2>Activity</h2>
                     </div>
                     <div class="body-box">
-                        stuff
+                        <ul class="activity-feed2">
+                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:5">
+                                <span>{{events[0]}}</span>
+                                <ul>
+                                    <li ng-repeat="event in events.slice(2)">
+                                        <i class="{{event.activity | icon}}"></i>
+                                        <span>
+                                            {{event | investordescription}}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
