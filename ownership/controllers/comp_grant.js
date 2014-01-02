@@ -102,8 +102,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     issue.key = issue.issue;
                     issue.shown = false;
                     issue.date = calculate.timezoneOffset(issue.date);
+                    console.log(issue.vestingbegins);
                     if (issue.vestingbegins) {
                         issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                        issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                     }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
@@ -111,6 +113,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.datekey = tran['date'].toUTCString();
                             if (tran.vestingbegins) {
                                 tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
+                                tran.vestingbeginsdisplay = calculate.monthDiff(tran.vestingbegins,tran.date);
                             }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
