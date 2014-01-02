@@ -73,7 +73,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     angular.forEach($scope.issues, function(issue) {
                         issue.date = calculate.timezoneOffset(issue.date);
                         if (issue.vestingbegins) {
-                            issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                            issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                            issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                         }
                     });
 
@@ -82,7 +83,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         $scope.trans[i].date = calculate.timezoneOffset($scope.trans[i].date);
                         if ($scope.trans[i].vestingbegins) {
                             $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
+                            $scope.trans[i].vestingbeginsdisplay = calculate.monthDiff($scope.trans[i].vestingbegins,$scope.trans[i].date);
                         }
+
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});

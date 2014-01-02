@@ -137,7 +137,7 @@
 
                               <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+                              <p ng-show="activeIssue.vestingbeginsdisplay" class="belowTitle"><span ng-bind="activeIssue.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF (MONTHS)</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
@@ -202,7 +202,7 @@
 
                                     <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+                                    <p ng-show="tran.vestingbeginsdisplay" class="belowTitle"><span ng-bind="tran.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (MONTHS)</span></p>
 
                                     <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 

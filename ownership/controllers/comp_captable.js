@@ -125,6 +125,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         issue.date = calculate.timezoneOffset(issue.date);
                         if (issue.vestingbegins) {
                             issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                            issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                         }
                     });
 
@@ -167,6 +168,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
                         if ($scope.trans[i].vestingbegins) {
                             $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
+                            $scope.trans[i].vestingbeginsdisplay = calculate.monthDiff($scope.trans[i].vestingbegins,$scope.trans[i].date);
                         }
                         $scope.trans[i].investorkey = $scope.trans[i].investor;
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
@@ -570,12 +572,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var tagalong = $scope.strToBool(issue['tagalong']);
                 var common = $scope.strToBool(issue['common']);
 
+                if (item == 'vestcliff' || (item == 'date' && !isNaN(parseInt(issue.vestingbeginsdisplay)))) {
+                    var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
+                    issue.vestingbegins = vestcliffdate;
+                }
+
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
-                else {
-                    var vestcliffdate = issue['vestingbegins']
-                }
+
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
@@ -1158,7 +1163,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var partpref = $scope.strToBool(transaction['partpref']);
                 var dragalong = $scope.strToBool(transaction['dragalong']);
                 var tagalong = $scope.strToBool(transaction['tagalong']);
-                var vestcliffdate = transaction['vestingbegins'] == undefined ? null : transaction['vestingbegins'];
+
+                var vestcliffdate = null;
+                if (!isNaN(parseInt(transaction.vestingbeginsdisplay))) {
+                    vestcliffdate = angular.copy(transaction.date).addMonths(parseInt(transaction.vestingbeginsdisplay));
+                    transaction.vestingbegins = vestcliffdate;
+                }
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
                 transaction['amount'] = parseFloat(transaction['amount']);

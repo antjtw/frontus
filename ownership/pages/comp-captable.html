@@ -913,14 +913,10 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
                               </p>
 
-                              <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                          id="vestingbegins{{activeIssue.$$hashKey}}"
-                                                                                          ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
-                                                                                          ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
-                                                                                          type="text"
-                                                                                          ng-model="activeIssue.vestingbegins"
-                                                                                          data-date-format={{settings.lowercasedate}}
-                                                                                          bs-datepicker>
+                              <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text" ng-model="activeIssue.vestingbeginsdisplay"
+                                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestcliff\')'}"
+                                                                                                     onkeydown="testForEnter();">
+
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
                               </p>
 
@@ -1153,14 +1149,10 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
                             </p>
 
-                            <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                        id="vestingbegins{{tran.$$hashKey}}"
-                                                                                        ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\', $event)', blur:'saveTranDate(tran, \'vestingbegins\', \'blur\')'}"
-                                                                                        ng-change="saveTranDate(tran, 'vestingbegins')"
-                                                                                        type="text"
-                                                                                        ng-model="tran.vestingbegins"
-                                                                                        data-date-format={{settings.lowercasedate}}
-                                                                                        bs-datepicker>
+                            <p class="rightTitle double"><span>Vesting Cliff (months)</span><input type="text"
+                                                                                                   onkeydown="testForEnter();"
+                                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                   ng-model="tran.vestingbeginsdisplay">
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
                             </p>
 
@@ -1289,7 +1281,7 @@
 
                               <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+                              <p ng-show="activeIssue.vestingbeginsdisplay" class="belowTitle"><span ng-bind="activeIssue.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The XXXX vesting cliff percentage becomes vested">VESTING CLIFF (MONTHS)</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
@@ -1354,7 +1346,7 @@
 
                                     <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+                                    <p ng-show="tran.vestingbeginsdisplay" class="belowTitle"><span ng-bind="tran.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The XXXX vesting cliff percentage becomes vested">Vesting Cliff (months)</span></p>
 
                                     <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
