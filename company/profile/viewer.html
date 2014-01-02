@@ -132,7 +132,7 @@
                     </div>
                     <div class="body-box">
                         <ul class="activity-feed2">
-                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:50">
+                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:5">
                                 <span>{{events[0]}}</span>
                                 <ul>
                                     <li ng-repeat="event in events.slice(2)">

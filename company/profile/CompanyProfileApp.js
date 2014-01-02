@@ -242,6 +242,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     };
 
     $scope.gotoPerson = function (person) {
+        if (!person.lastlogin) return;
         var link;
         link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
         if (link) {
