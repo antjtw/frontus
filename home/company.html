@@ -102,8 +102,9 @@
                             <li ng-show="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
                             <li ng-hide="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
                             -->
-                            <li ng-click="settingModalOpen();">Edit Settings</li>
+                            <li ng-click="gotopage('/company/profile/');">View Profile</li>
                             <li ng-click="profileModalOpen();">Edit Profile</li>
+                            <li ng-click="settingModalOpen();">Edit Settings</li>
                         </ul>
                     </li>
                 </ul>
