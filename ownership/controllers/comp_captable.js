@@ -48,6 +48,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock, and can only be applied to one security";
+    $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
 
 
 
