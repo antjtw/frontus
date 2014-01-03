@@ -64,6 +64,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                     issue.date = calculate.timezoneOffset(issue.date);
                     if (issue.vestingbegins) {
                         issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                        issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                     }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
@@ -71,6 +72,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                             tran.datekey = tran['date'].toUTCString();
                             if (tran.vestingbegins) {
                                 tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
+                                tran.vestingbeginsdisplay = calculate.monthDiff(tran.vestingbegins,tran.date);
                             }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);

@@ -369,7 +369,8 @@
                           ng-model="activeTran.terms"></p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                     class="rightTitle"><span>Vesting Cliff (Months)</span><input ng-model="activeTran.vestingbeginsdisplay"></p>
+                     class="rightTitle"><span>Vesting Cliff (Months)</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                                                                                  ng-model="activeTran.vestingbeginsdisplay"></p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
                      class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
@@ -528,7 +529,7 @@
                             bs-tooltip="captabletips.terms"></span>
                   </p>
 
-                  <p class="rightTitle"><span>Vesting Cliff (Months)</span><input type="text" ng-model="activeIssue.vestingbeginsdisplay">
+                  <p class="rightTitle"><span>Vesting Cliff (Months)</span><input type="text" ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestingbegins\')'}" ng-model="activeIssue.vestingbeginsdisplay">
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                             bs-tooltip="captabletips.vestingbegins"></span>
                   </p>
@@ -742,7 +743,7 @@
                     </p>
 
                     <p ng-show="schedule.vestingbegins" class="belowTitle"><span
-                            ng-bind="schedule.vestingbeginsdisplay"></span><span
+                            ng-bind="schedule.vestingbegins"></span><span
                             tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                     </p>
 
@@ -774,7 +775,7 @@
                               bs-tooltip="captabletips.terms"></span>
                     </p>
 
-                    <p class="rightTitle"><span>Vesting Cliff Date</span><input type="text"
+                    <p class="rightTitle"><span>Vesting Cliff (Months)</span><input type="text"
                                                                                 ng-model="newschedule.vestingbegins">
                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                               bs-tooltip="captabletips.vestingbegins"></span>
