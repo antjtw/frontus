@@ -9,171 +9,14 @@
     <link type="text/css" rel="stylesheet" href="https://s3.amazonaws.com/sharewave/www/cmn/fonts/icons/blog-style.css">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="https://s3.amazonaws.com/sharewave/www/blog/css/blogMVP.css">
+
+<!--         <link type="text/css" rel="stylesheet" href="/cmn/blogMVP.css"> -->
     <link type="text/css" rel="stylesheet" href="https://s3.amazonaws.com/sharewave/www/blog/css/MVPmobile.css">
     <link rel="stylesheet" href="//f.fontdeck.com/s/css/Oj+Nln32FcMtkXgEzqsJznLXgf0/blog.sharewave.com/35219.css" type="text/css" />
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <style type="text/css">
 
 
-            /* blog */
-
-
-        li {
-            list-style-type: none;
-        }
-
-        ul, ol {
-            padding: 0;
-            margin: 0;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        h2.post-title {
-            padding-bottom: 30px;
-            text-align: left;
-        }
-
-        p {
-            line-height: 24px;
-        }
-
-        blockquote p{
-            line-height: 2;
-        }
-
-        p strong {
-            color: #34495E;
-            font-weight: normal;
-            font-family:'FS Elliot Web Regular', sans-serif;
-        }
-
-        strong {
-            color: #34495E;
-            font-weight: normal;
-            display:inline-block;
-            padding-top:20px;
-        }
-
-        ul.tag-list li {
-            float: left;
-            padding-right: 10px;
-            list-style-type: none;
-        }
-
-        .meta p, .meta a {
-            font-size: 10px ;
-            text-transform:uppercase;
-        }
-
-        .standard-button > button {
-            border-radius: 3px;
-            font-size: 12px;
-            color: #FFFFFF;
-            background-color: #1ABC96;
-            width: 128px;
-            min-height: 30px;
-            position: relative;
-            float: right;
-            outline:none;
-            text-shadow: none;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-        }
-
-        .box {
-            border: 1px solid #C7C7C7;
-            width: 220px;
-            padding: 15px 15px 25px 15px;
-            margin-bottom: 15px;
-        }
-
-        .box.socialbox {
-            padding: 15px;
-        }
-
-        .static p.title {
-            line-height: 0px;
-        }
-
-        .social-icons {
-            display: inline-block;
-            float: right;
-
-        }
-
-
-
-        .social-icons a, .social-icons a:hover {
-            color: #1E2D3D;
-            font-size: 18px;
-            padding-left: 12px;
-        }
-
-        input[type="email"]:focus, input:focus:invalid:focus, input:focus:invalid {
-            box-shadow:none;
-            -webkit-box-shadow:none;
-            outline:none;
-            border-color: #C7C7C7;
-            color: #666666;
-        }
-
-        :focus {
-            outline-color: transparent !important;
-            outline-style: none !important;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                padding-left: 20px;
-            }
-        }
-
-        @media (max-width: 767px), @media only screen and (min-device-width: 560px) and (max-device-width: 1136px) and (-webkit-min-device-pixel-ratio: 2) {
-
-            .box {
-                width: 500px;
-                text-align: center;
-                border:none;
-                display:inline;
-
-            }
-
-            .box.socialbox {
-                margin-top:30px;
-            }
-
-            .title {
-                display: block;
-            }
-
-            .social-icons a, .social-icons a:hover {
-                color: #1E2D3D;
-                font-size: 32px;
-                padding-left: 12px;
-            }
-
-            .social-icons {
-                padding-top: 10px;
-                display: block;
-                float: none;
-
-            }
-
-            .standard-button > button {
-                width: 250px;
-                height: 40px;
-                float: none;
-            }
-        }
-
-            @media (max-width: 480px) {
-                .box {
-                    width: 320px;
-                }
-            }
 
     </style>
     <link rel="icon"
@@ -210,16 +53,19 @@
             <div class="navbounder">
                 <ul class="nav pull-left nav-logo">
                     <li><a href="http://www.sharewave.com">
-                        <img src="https://s3.amazonaws.com/sharewave/www/images/logo.png"/>
+                        <img src="https://s3.amazonaws.com/sharewave/www/images/logo-large.png"/>
 
                     </a></li>
                 </ul>
 
                 <ul class="nav pull-right nav-item">
+                <li>
 
-                    <li class="dropdown" ng-hide="selected.company">
-                        <a class="menuProfileText" href="https://www.sharewave.com/login">Log In</a>
-                    <li>
+                         <div class="standard-button small-standard-button blue hidden-phone">
+                            <button class="btn" onclick="window.location='https://www.sharewave.com/login';">Log In</button>
+                        </div>
+                        
+                    </li>
                 </ul>
             </div>
 

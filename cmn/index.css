@@ -212,6 +212,10 @@
     display: inline-block;
 }
 
+.home .button.greenButton:hover {
+    background-color: #15A085;
+}
+
 .home .button.blueButton {
     margin-left: 15px;
     background-color: rgb(52, 152, 219);
