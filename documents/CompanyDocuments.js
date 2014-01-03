@@ -153,8 +153,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             doc.versions.push(version);
                         }
                     });
-         //           $scope.loadDocumentActivity(doc);
-         //           $scope.setDocumentStatusRatio(doc);
                 });
                 $scope.loadDocumentActivity();
             });

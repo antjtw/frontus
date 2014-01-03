@@ -21,6 +21,12 @@
                         </div>
                         <div class="viewProfileText pull-left" style="width:30%;">
                             <ul>
+                                <li>{{name}}</li>
+                                <li>{{email}}</li>
+                            </ul>
+                        </div>
+                        <div ng-show="address1() && address2()" class="viewProfileText pull-left" style="width:30%;">
+                            <ul>
                                 <li>{{address1()}}</li>
                                 <li>{{address2()}}</li>
                             </ul>
@@ -115,7 +121,7 @@
 </div>
 <div modal="profileModal" close="profileModalClose()" options="profileopts">
     <div class="modalHeader">
-        <span>Edit Company Profile</span>
+        <span>Edit Profile</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
     </div>
     <div class="modalText">
@@ -135,18 +141,18 @@
             </div>
             <div class="span9 input-list">
                 <div>
-                    <span>Name*</span><input type="text" ng-model="editcompany.name" maxlength="30">
+                    <span>Name*</span><input type="text" ng-model="editData.name" maxlength="30">
                 </div>
                 <div>
-                    <span>Address</span><input type="text" ng-model="editcompany.address">
+                    <span>Address</span><input type="text" ng-model="editData.street">
                 </div>
                 <div class="city-state">
                     <span>City/State</span>
-                    <input type="text" ng-model="editcompany.city">
-                    <input type="text" ng-model="editcompany.state" maxlength="2">
+                    <input type="text" ng-model="editData.city">
+                    <input type="text" ng-model="editData.state" maxlength="2">
                 </div>
                 <div>
-                    <span>Zip Code</span><input type="text" ng-model="editcompany.zipcode">
+                    <span>Zip Code</span><input type="text" ng-model="editData.postalcode">
                 </div>
                 <span class="capital-text">*Required</span>
             </div>
@@ -157,7 +163,7 @@
             <button class="btn" ng-click="profileModalClose();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="profileModalClose(); profileUpdate(editcompany);">Confirm</button>
+            <button class="btn" ng-click="profileUpdate(editData); profileModalClose();">Confirm</button>
         </div>
     </div>
 </div>

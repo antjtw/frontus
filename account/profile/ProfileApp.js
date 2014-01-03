@@ -80,14 +80,36 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
         };
 
         $scope.profileModalOpen = function() {
-            console.log("TODO");
             $scope.profileModal = true;
-        //    $scope.editcompany = angular.copy($scope.company);
+            $scope.editData = {'name': angular.copy($scope.name),
+                               'street': angular.copy($scope.street),
+                               'city': angular.copy($scope.city),
+                               'state': angular.copy($scope.state),
+                               'postalcode': angular.copy($scope.postalcode)};
         };
         $scope.profileModalClose = function() {
             $scope.profileModal = false;
-            console.log("TODO");
+            $scope.editData = null;
         };
+        
+        $scope.profileUpdate = function(user) {
+            SWBrijj.proc("account.contact_update", user.name, user.street, user.city, user.state, user.postalcode).then(function(x) {
+                void(x);
+                if ($scope.files) {
+                    $scope.uploadFile();
+                }
+                $scope.$emit("notification:success", "Profile successfully updated");
+                $scope.name = user.name;
+                $scope.street = user.street;
+                $scope.city = user.city;
+                $scope.state = user.state;
+                $scope.postalcode = user.postalcode;
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later");
+            });
+        };
+
         $scope.profileopts = {
             backdropFade: true,
             dialogFade:true,
@@ -99,27 +121,11 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             dialogFade: true
         };
 
-        $scope.contactSave = function() {
-            /** @name $scope#street
-             * @type {string} */
-            if ($scope.detectChanges != $scope.name + $scope.street) {
-                $scope.detectChanges = $scope.name + $scope.street;
-                if ($scope.name.replace(/[^a-z0-9]/gi, '').length < 2) {
-                    $scope.$emit("notification:fail", "Please enter a name more than 1 letter in length");
-                    $scope.name = $scope.namekey;
-                    return;
-                }
-                SWBrijj.proc("account.contact_update", $scope.name, $scope.street).then(function(x) {
-                    void(x);
-                    // console.log("saved: "+x);
-                    $scope.$emit("notification:success", "Profile successfully updated");
-                    $scope.namekey = $scope.name;
-                }).except(function(x) {
-                    void(x);
-                    $scope.namekey = $scope.name;
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            }
+        $scope.address1 = function() {
+            return $scope.street;
+        };
+        $scope.address2 = function() {
+            return ($scope.city && $scope.state && $scope.postalcode) ? $scope.city + ", " + $scope.state + " " + $scope.postalcode : null;
         };
 
         /** @name SWBrijj#tbl
@@ -127,15 +133,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
          * @param {string} table_name */
         SWBrijj.tbl('account.profile').then(function(x) {
             initPage($scope, x);
-            $scope.address1 = function() {
-                return $scope.street;
-            };
-            $scope.address2 = function() {
-                return ($scope.city && $scope.state && $scope.postalcode) ? $scope.city + ", " + $scope.state + " " + $scope.postalcode + " " + $scope.country : null;
-            };
             $scope.photoURL = '/photo/user?id=' + $scope.email;
             $scope.namekey = $scope.name;
-            $scope.detectChanges = $scope.name + $scope.street;
         }).except(initFail);
 
         $scope.uploadFile = function() {
@@ -167,7 +166,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 $scope.files.push(element.files[i]);
                 $scope.$apply();
             }
-        }
+        };
     }
 ]);
 
