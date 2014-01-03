@@ -2190,8 +2190,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.rows, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
-                    $scope.lastsaved = Date.now();
-                    $scope.$emit("notification:success", "Your table has been shared!");
+                    if (row.permission = "Full") {
+                        SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
+                            $scope.lastsaved = Date.now();
+                            $scope.$emit("notification:success", "Your table has been shared!");
+                        });
+                    }
+                    else {
+                        $scope.lastsaved = Date.now();
+                        $scope.$emit("notification:success", "Your table has been shared!");
+                    }
                     row.send = false;
                     row.emailkey = row.email;
                 }).except(function(err) {
@@ -2208,14 +2216,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         // Handles the non-shareholder shares
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
-                if (people.email) {
-                    SWBrijj.procm("ownership.share_captable", people.email.toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', people.email.toLowerCase(), 'Full View').then(function (data) {
+                if (people.text) {
+                    SWBrijj.procm("ownership.share_captable", people.text.toLowerCase(), "").then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', people.text.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $scope.$emit("notification:fail", "Email : " + people.email + " failed to send");
+                            $scope.$emit("notification:fail", "Email : " + people.text + " failed to send");
                         });
                 }
             });
@@ -2241,9 +2249,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 checksome = true;
             }
         });
-        else {
-            return !(checkcontent && checksome);
-        }
     };
 
     // Hides transaction fields for common stock
