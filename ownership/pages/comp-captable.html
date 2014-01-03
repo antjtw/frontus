@@ -13,33 +13,37 @@
 
         <div class="docLibrary full-width">
             <table class="captable tableView modal-table">
-                <tr class="column-label">
-                    <th>Name</th>
-                    <th></th>
-                    <th>Email</th>
-                    <th>Permissions</th>
-                </tr>
-                <tr ng-repeat="row in rows | shareList">
-                    <td>
-                        <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                    </td>
-                    <td>{{row.name}}</td>
-                    <td><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
-                               ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)"></td>
-                    <td>
-                        <ul class="dropdown-list drop-selector">
-                            <li class="dropdown standard">
-                                <a class="dropdown-toggle">
-                                    {{row.permission}}<span class="invisible-drop">'</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><span ng-click="row.permission = 'Personal'">Personal</span></li>
-                                    <li><span ng-click="row.permission = 'Full'">Full</span></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr class="column-label">
+                        <th>Name</th>
+                        <th></th>
+                        <th>Email</th>
+                        <th>Permissions</th>
+                    </tr>
+                </tbody>
+                <tbody class="scrollable-body">
+                    <tr ng-repeat="row in rows | shareList">
+                        <td>
+                            <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </td>
+                        <td style="width: 225px;">{{row.name}}</td>
+                        <td style="width: 210px;"><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
+                                   ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)"></td>
+                        <td style="width: 198px;">
+                            <ul class="dropdown-list drop-selector">
+                                <li class="dropdown standard">
+                                    <a class="dropdown-toggle">
+                                        {{row.permission}}<span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><span ng-click="row.permission = 'Personal'">Personal</span></li>
+                                        <li><span ng-click="row.permission = 'Full'">Full</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 

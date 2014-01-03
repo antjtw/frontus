@@ -1451,6 +1451,14 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     table-layout: fixed;
 }
 
+.transferModal .share-modal-main .tableView.modal-table .scrollable-body {
+    display: block;
+    width: 676px;
+    height: 170px;
+    overflow: auto;
+}
+
+
 .transferModal .share-modal-main .tableView.modal-table .column-label > th:first-child {
     width: 35px;
 }
