@@ -584,14 +584,14 @@
                     <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
-                          <input class="name-row" placeholder="Add Name" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
+                          <input class="name-row" placeholder="Add Name" style="width:140px;"
+                                 ng-model="row.name"
+                                 ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
                                  onkeydown="testForEnter();">
                         </span>
                         <span ng-switch-when="0">
-                          <input class="name-row" disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
-                                 ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
-                                 onkeydown="testForEnter();">
+                          <input class="name-row" disabled style="width:180px;" ng-model="row.name">
                         </span>
                       </span>
                 </td>
