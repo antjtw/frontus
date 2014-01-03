@@ -73,7 +73,7 @@ app.controller('LogoutCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {
 //Controller for the home page
 app.controller('HomeCtrl', ['$scope', function($scope) {
     $scope.user = function(){
-      document.location.href = '/investor/profile';
+      document.location.href = '/account/profile';
 //      return $routeParams.userName;
     };
 }]);

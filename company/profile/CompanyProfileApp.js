@@ -256,7 +256,7 @@ app.controller('PeopleCtrl', ['$scope','$rootScope','SWBrijj', 'navState', '$rou
     $scope.gotoPerson = function (person) {
         if (!person.lastlogin) return;
         var link;
-        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/account/profile/') : '');
         if (link) {
             document.location.href=link;
         }
@@ -375,7 +375,7 @@ app.controller('ViewerCtrl', ['$scope','$rootScope', '$location', '$routeParams'
 
         SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile if viewing yourself
             if(x[0].email == userId)
-                document.location.href="/investor/profile";
+                document.location.href="/account/profile";
         });
 
         SWBrijj.tblm('global.user_list', 'email', userId).then(function(x) {
