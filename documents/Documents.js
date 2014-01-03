@@ -349,11 +349,27 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.setConfirmValue(0);
             $scope.stage = n;
         };
+        $scope.resetCursor = function(txtElement) { 
+            if (txtElement.setSelectionRange) { 
+                txtElement.focus(); 
+                txtElement.setSelectionRange(0, 0); 
+            } else if (txtElement.createTextRange) { 
+                var range = txtElement.createTextRange();  
+                range.moveStart('character', 0); 
+                range.select(); 
+            } 
+        };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
                 $scope.confirmValue = 0;
             } else {
                 $scope.confirmValue = n;
+            }
+            if ($scope.confirmValue === -1) {
+                $scope.messageText = '';
+                $scope.resetCursor($(".messageText:visible")[0]);
+            } else {
+                $scope.messageText = "Add an optional message...";
             }
         };
 
