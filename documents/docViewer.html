@@ -99,12 +99,14 @@
         <div class="confirmPanel" my-loading-spinner="processing">
             <div ng-show="signable(lib)">
                 <div class='confirmBody'>
-                    <ul class="pull-left">
+                    <ul class="checkboxOption">
                         <li class="pull-left">
-                            <button class="check-box-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
+                            <button class="check-box-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)">
+                                <span data-icon="&#xe023;" aria-hidden="true"></span>
+                            </button>
                         </li>
-                        <li class="pull-right">
-                            <span>Do you want to electronically sign this document</span>
+                        <li class="pull-left">
+                            <span>Do you want to electronically sign this document?</span>
                             <br>
                             <span>(This action is irreversible.)</span>
                         </li>

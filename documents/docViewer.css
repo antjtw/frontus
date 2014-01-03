@@ -323,6 +323,10 @@ navbar {
     width: 100%;
     height: 100%;
 }
+.confirmPanel > .my-loading-spinner-container > div {
+    left: 50%;
+    height: 60px;
+}
 .confirmBody {
     margin: 0 auto;
     padding-top: 30px;
@@ -352,6 +356,19 @@ navbar {
     margin-left: 0;
     margin-right: 0;
     margin-top: 6px;
+    color: #666666;
+}
+
+.confirmBody > .checkboxOption {
+    width: 320px;
+    margin: 0 auto;
+}
+
+.confirmBody > .checkboxOption > li:last-child {
+    padding-left: 20px;
+}
+
+.confirmBody > .checkboxOption > li:last-child > span {
     color: #666666;
 }
 
