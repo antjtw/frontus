@@ -953,6 +953,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .viewProfileText > ul > li {
     padding-left: 20px;
     text-align: left;
+    color: #666666;
 }
 .doc-title {
     display: inline-block;

@@ -239,7 +239,7 @@ directive('draggable', ['$window', '$document',
             ]
         };
     }
-])
+]);
 
 var docs = angular.module('documents', ['ui.bootstrap', 'brijj', 'draggable'], function() {});
 
@@ -289,7 +289,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 dp.height((dp.width()/$scope.image.width)*$scope.image.height);
                 $scope.dp.width = dp.width();
                 $scope.dp.height = dp.height();
-            };
+            }
         };
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
@@ -301,7 +301,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.nextPage($scope.currentPage);
             }
         };
-        
+
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
             var docpanel = document.querySelector(".docPanel");
@@ -334,12 +334,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stage = 0;
         $scope.confirmValue = 0;
+        $scope.messageText = "Add an optional message...";
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
         $scope.pageScroll = 0;
         $scope.pageBarSize = 10;
-        //$scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
             offset: {top: 40}
@@ -349,18 +349,34 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.setConfirmValue(0);
             $scope.stage = n;
         };
+        $scope.resetCursor = function(txtElement) {
+            if (txtElement.setSelectionRange) {
+                txtElement.focus();
+                txtElement.setSelectionRange(0, 0);
+            } else if (txtElement.createTextRange) {
+                var range = txtElement.createTextRange();
+                range.moveStart('character', 0);
+                range.select();
+            }
+        };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
                 $scope.confirmValue = 0;
             } else {
                 $scope.confirmValue = n;
             }
+            if ($scope.confirmValue === -1) {
+                $scope.messageText = '';
+                $scope.resetCursor($(".messageText:visible")[0]);
+            } else {
+                $scope.messageText = "Add an optional message...";
+            }
         };
 
         $scope.setAnnotable = function() {
                 $scope.isAnnotable = $scope.annotable();
         };
-        
+
         $scope.annotable = function() {
             return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
         };
@@ -415,7 +431,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 return '';
             }
         };
-        
+
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
@@ -495,7 +511,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
-        
+
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             var ndx = $scope.getNoteData();
@@ -542,7 +558,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPages = function() {
-            return $scope.range($scope.pageScroll, 
+            return $scope.range($scope.pageScroll,
                                 Math.min($scope.pageScroll + $scope.pageBarSize,
                                          $scope.annotatedPages.length)
                                 ).map(function(i){return $scope.annotatedPages[i];});
@@ -943,19 +959,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.signable = function(doc) {
-            return doc && doc.signature_deadline && !doc.when_signed;
+            return $scope.invq && doc && doc.signature_deadline && !doc.when_signed;
         };
 
         $scope.rejectable = function(doc) {
-            return (doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
+            // reject reject signature OR countersignature
+            return (!$scope.invq && doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.countersignable = function(doc) {
-            return doc && doc.when_signed && !doc.when_countersigned;
+            return !$scope.invq && doc && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {
-            return doc && doc.when_countersigned && !doc.when_finalized;
+            return $scope.invq && doc && doc.when_countersigned && !doc.when_finalized;
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
@@ -1017,7 +1034,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.getNoteData = function() {
             var noteData = [];
-            
+
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
@@ -1040,7 +1057,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
                 }
-                
+
                 noteData.push(ndx);
             }
             return JSON.stringify(noteData);

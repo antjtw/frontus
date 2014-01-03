@@ -192,14 +192,14 @@
             <button class="btn" ng-click="profileModalClose();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="profileModalClose(); profileUpdate(editcompany);">Confirm</button>
+            <button class="btn" ng-click="profileUpdate(editcompany); profileModalClose();">Confirm</button>
         </div>
     </div>
 </div>
 
 <div modal="settingModal" close="settingModalClose()" options="profileopts">
     <div class="modalHeader">
-        <span>Edit Setting</span>
+        <span>Edit Settings</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="settingModalClose()"></span>
     </div>
     <div class="modalText settings">
@@ -239,7 +239,7 @@
             <button class="btn" ng-click="settingModalClose();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="settingModalClose(); saveSettings(editcompany);">Confirm</button>
+            <button class="btn" ng-click="saveSettings(editcompany); settingModalClose();">Confirm</button>
         </div>
     </div>
 </div>
