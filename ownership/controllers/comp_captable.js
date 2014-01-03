@@ -74,6 +74,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
 
+    $scope.vInvestors = [];
+
 
     // Empty variables for issues
     $scope.issuekeys = [];
@@ -366,6 +368,27 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (earliestedit != duplicate) {
                         Intercom('update', {company : {'captablestart_at':parseInt(Date.parse(earliestedit).getTime()/1000)}});
                     }
+
+                    // Generates the list of company users who haven't been shared to yet
+                    var emailedalready = []
+                    angular.forEach($scope.rows, function (row) {
+                        if (row.emailkey != null) {
+                            emailedalready.push(row.emailkey);
+                        }
+                    });
+
+                    SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (emailedalready.indexOf(data[i].email) == -1) {
+                                if (data[i].name) {
+                                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
+                                }
+                                else {
+                                    $scope.vInvestors.push("(" +data[i].email+")");
+                                }
+                            }
+                        }
+                    });
 
                 });
             });
@@ -2156,7 +2179,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags': [],
+        'tags': $scope.vInvestors,
         'tokenSeparators': [",", " "],
         'placeholder': 'Enter email address & press enter'
     };
@@ -2184,7 +2207,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
-
+    //regex to deal with the parentheses
+    var regExp = /\(([^)]+)\)/;
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
         angular.forEach($scope.rows, function (row) {
@@ -2217,8 +2241,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
                 if (people.text) {
-                    SWBrijj.procm("ownership.share_captable", people.text.toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', people.text.toLowerCase(), 'Full View').then(function (data) {
+                    var matches = regExp.exec(people.text);
+                    if (matches == null) {
+                        matches = ["", people.text];
+                    }
+                    SWBrijj.procm("ownership.share_captable", matches[1].toLowerCase(), "").then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', matches[1].toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
@@ -2236,7 +2264,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         return re.test(email);
     };
 
-
     // Prevents the share button from being clickable until a send button has been clicked and an address filled out
     $scope.checkInvites = function () {
         var checkcontent = false;
@@ -2250,7 +2277,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
         angular.forEach($scope.extraPeople, function(people) {
-            if (people.text != null && people.text != "" && $scope.fieldCheck(people.text)) {
+            var matches = regExp.exec(people.text);
+            if (matches == null) {
+                matches = ["", people.text];
+            }
+            if (matches[1] != null && matches[1] != "" && $scope.fieldCheck(matches[1])) {
                 checkcontent = true;
             }
             else {

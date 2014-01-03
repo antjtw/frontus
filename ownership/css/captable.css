@@ -1447,6 +1447,18 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     padding: 0 20px 0 20px;
 }
 
+.transferModal .share-modal-main .tableView.modal-table {
+    table-layout: fixed;
+}
+
+.transferModal .share-modal-main .tableView.modal-table .column-label > th:first-child {
+    width: 35px;
+}
+
+.transferModal .share-modal-main input.transfer-shares-input {
+    float: left;
+}
+
 .transferModal .share-modal-main .sharepeople-input {
     padding-left: 20px;
 }
@@ -2013,4 +2025,74 @@ span.tour-icon.issue-cog + .tooltip {
     left: -235px !important;
 }
 
-/* Animations */
+/* Select2 Styling */
+
+.sharepeople-input .select2-container {
+    width: 500px;
+}
+
+.single-share-input .select2-container {
+    width: 300px;
+}
+
+.select2-results .select2-highlighted {
+    background: #1ABC96;
+}
+
+.select2-results .select2-highlighted .select2-result-label {
+    color: #fff;
+}
+
+.select2-drop {
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.select2-drop:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    border-bottom: 6px solid #E3E3E3;
+    top: -6px;
+    right: 9px !important;
+}
+
+.select2-search-choice-close {
+    top: 5px;
+}
+
+.select2-container-multi .select2-choices {
+    background-image: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #E2E2E2;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    background-image: none;
+    background-color: #E2E2E2;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.select2-container-multi.select2-container-active .select2-choices {
+    border: 1px solid #E2E2E2;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    box-shadow: none;
+
+}
+
+.select2-drop-active {
+    border: 1px solid #E2E2E2;
+}
+
+.select2-container-multi .select2-choices .select2-search-field input {
+    font-family: 'FS Elliot Web Regular', sans-serif;
+}
