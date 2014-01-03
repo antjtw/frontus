@@ -190,9 +190,9 @@
                           tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
                   </p>
 
-                  <p ng-show="activeTran.vestingbegins" class="belowTitle"><span
-                          ng-bind="activeTran.vestingbegins | date:settings.shortdate"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span>
+                  <p ng-show="activeTran.vestingbeginsdisplay" class="belowTitle"><span
+                          ng-bind="activeTran.vestingbeginsdisplay"></span><span
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                   </p>
 
                   <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span

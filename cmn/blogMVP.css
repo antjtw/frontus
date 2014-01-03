@@ -270,6 +270,7 @@ h2 {
 	width: 100%;
 	margin-bottom: 0px;
 	background-color: #1E2D3D;
+	padding: 20px 0 20px 0;
 }
 
 
@@ -1334,7 +1335,8 @@ tr.rowSelected {
 .btn {
 	background-color: #FFFFFF;
 	background-image: none;
-	border: 1px solid #E3E3E3;
+	border: none;
+	text-shadow: none;
 }
 
 /* Dropdown buttons */
@@ -2204,7 +2206,7 @@ margin-top: 0.9em;
     color: #FFFFFF;
     background-color: #1ABC96;
     width: 130px;
-    min-height: 30px;
+    min-height: 32px;
     position: relative;
 }
 .standard-button > button:hover {
@@ -2301,3 +2303,147 @@ margin-top: 0.9em;
     background-color: #E3E3E3;
 }
 
+
+
+
+            /* blog */
+
+
+        li {
+            list-style-type: none;
+        }
+
+        ul, ol {
+            padding: 0;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        h2.post-title {
+            padding-bottom: 30px;
+            text-align: left;
+        }
+
+        p {
+            line-height: 24px;
+        }
+
+        blockquote p{
+            line-height: 2;
+        }
+
+        p strong {
+            color: #34495E;
+            font-weight: normal;
+            font-family:'FS Elliot Web Regular', sans-serif;
+        }
+
+        strong {
+            color: #34495E;
+            font-weight: normal;
+            display:inline-block;
+            padding-top:20px;
+        }
+
+        ul.tag-list li {
+            float: left;
+            padding-right: 10px;
+            list-style-type: none;
+        }
+
+        .meta p, .meta a {
+            font-size: 10px ;
+            text-transform:uppercase;
+        }
+
+
+        .box {
+            border: 1px solid #C7C7C7;
+            width: 220px;
+            padding: 15px 15px 25px 15px;
+            margin-bottom: 15px;
+        }
+
+        .box.socialbox {
+            padding: 15px;
+        }
+
+        .static p.title {
+            line-height: 0px;
+        }
+
+        .social-icons {
+            display: inline-block;
+            float: right;
+
+        }
+
+
+
+        .social-icons a, .social-icons a:hover {
+            color: #1E2D3D;
+            font-size: 18px;
+            padding-left: 12px;
+        }
+
+        input[type="email"]:focus, input:focus:invalid:focus, input:focus:invalid {
+            box-shadow:none;
+            -webkit-box-shadow:none;
+            outline:none;
+            border-color: #C7C7C7;
+            color: #666666;
+        }
+
+        :focus {
+            outline-color: transparent !important;
+            outline-style: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding-left: 20px;
+            }
+        }
+
+        @media (max-width: 767px), @media only screen and (min-device-width: 560px) and (max-device-width: 1136px) and (-webkit-min-device-pixel-ratio: 2) {
+
+            .box {
+                width: 500px;
+                text-align: center;
+                border:none;
+                display:inline;
+
+            }
+
+            .box.socialbox {
+                margin-top:30px;
+            }
+
+            .title {
+                display: block;
+            }
+
+            .social-icons a, .social-icons a:hover {
+                color: #1E2D3D;
+                font-size: 32px;
+                padding-left: 12px;
+            }
+
+            .social-icons {
+                padding-top: 10px;
+                display: block;
+                float: none;
+
+            }
+
+
+        }
+
+            @media (max-width: 480px) {
+                .box {
+                    width: 320px;
+                }
+            }

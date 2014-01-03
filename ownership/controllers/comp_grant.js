@@ -46,9 +46,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         $scope.schedules = schedules;
         angular.forEach($scope.schedules, function(schedule) {
             schedule.shown = false;
-            if (schedule.vestingbegins) {
-                schedule.vestingbegins = calculate.timezoneOffset(schedule.vestingbegins);
-            }
         });
     });
 
@@ -104,6 +101,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     issue.date = calculate.timezoneOffset(issue.date);
                     if (issue.vestingbegins) {
                         issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                        issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                     }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
@@ -111,6 +109,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                             tran.datekey = tran['date'].toUTCString();
                             if (tran.vestingbegins) {
                                 tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
+                                tran.vestingbeginsdisplay = calculate.monthDiff(tran.vestingbegins,tran.date);
                             }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
@@ -362,11 +361,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 var tagalong = $scope.strToBool(issue['tagalong']);
                 var common = $scope.strToBool(issue['common']);
 
+                if (item == 'vestingbegins' || (item == 'date' && !isNaN(parseInt(issue.vestingbeginsdisplay)))) {
+                    var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
+                    issue.vestingbegins = vestcliffdate;
+                }
+
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
-                }
-                else {
-                    var vestcliffdate = issue['vestingbegins']
                 }
 
                 if ($scope.allowKeys.indexOf(issue.issue) != -1) {
@@ -651,13 +652,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
             else {
                 var d1 = transaction['date'].toUTCString();
-                if (transaction['vestingbegins'] == undefined) {
-                    var vestcliffdate = null
+
+                var vestcliffdate = null;
+                if (!isNaN(parseInt(transaction.vestingbeginsdisplay))) {
+                    vestcliffdate = angular.copy(transaction.date).addMonths(parseInt(transaction.vestingbeginsdisplay));
+                    transaction.vestingbegins = vestcliffdate;
                 }
 
-                else {
-                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
-                }
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
                 }
@@ -1006,7 +1007,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             activeTran.vestcliff = schedule.vestcliff;
             activeTran.terms = schedule.terms;
             activeTran.vestfreq = schedule.vestfreq;
-            activeTran.vestingbegins = schedule.vestingbegins;
+            activeTran.vestingbeginsdisplay = schedule.vestingbegins;
             $scope.saveTran(activeTran);
         }
         else {

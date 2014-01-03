@@ -742,6 +742,13 @@ ownership.service('calculate', function () {
 
     this.timezoneOffset = function (date) {
         return date.addMinutes(date.getTimezoneOffset());
+    };
+
+    this.monthDiff = function(d1, d2) {
+        var diffYears = d1.getFullYear()-d2.getFullYear();
+        var diffMonths = d1.getMonth()-d2.getMonth();
+
+        return (diffYears*12 + diffMonths);
     }
 
 });
