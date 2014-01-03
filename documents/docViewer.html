@@ -112,7 +112,11 @@
                 </div>
                 <div class="confirmFooter">
                     <div class="standard-button green confirmButton">
-                        <button class="btn" ng-disabled="processing || confirmValue===0" ng-click="signDocument(document, confirmValue);">Confirm</button>
+                        <button class="btn"
+                                ng-disabled="processing || confirmValue===0"
+                                ng-click="signDocument(document, confirmValue);">
+                            Confirm
+                        </button>
                     </div>
                 </div>
             </div>
@@ -134,15 +138,22 @@
                             <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
                         </li>
                         <li class="pull-left">
-                            <span>Reject Document</span><br>
-                            <span>Reject shareholders signature on this document.</span><br>
-                            <textarea class="messageText" rows="3" ng-model="messageText" ng-disabled="confirmValue!==-1"></textarea>
+                            <span>Reject Document</span>
+                            <br>
+                            <span>Reject shareholders signature on this document.</span>
+                            <br>
+                            <textarea class="messageText" rows="3"
+                                      ng-model="messageText"
+                                      ng-disabled="confirmValue!==-1">
+                            </textarea>
                         </li>
                     </ul>
                 </div>
                 <div class="confirmFooter">
                     <div class="standard-button green confirmButton">
-                        <button class="btn" ng-disabled="processing || confirmValue===0" ng-click="countersignDocument(document, confirmValue, messageText);">Confirm</button>
+                        <button class="btn"
+                                ng-disabled="processing || confirmValue===0"
+                                ng-click="countersignAction(document, confirmValue, messageText);">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -162,18 +173,30 @@
                     <br>
                     <ul class="radioOption">
                         <li class="pull-left">
-                            <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
+                            <button class="radio-button"
+                                    ng-class="{'selected':confirmValue===-1}"
+                                    ng-click="setConfirmValue(-1)">
+                            </button>
                         </li>
                         <li class="pull-left">
-                            <span>Reject Document</span><br>
-                            <span>Reject issuers countersignature on this document.</span><br>
-                            <textarea class="messageText" rows="3" ng-model="messageText" ng-disabled="confirmValue!==-1"></textarea>
+                            <span>Reject Document</span>
+                            <br>
+                            <span>Reject issuers countersignature on this document.</span>
+                            <br>
+                            <textarea class="messageText" rows="3"
+                                      ng-model="messageText"
+                                      ng-disabled="confirmValue!==-1">
+                            </textarea>
                         </li>
                     </ul>
                 </div>
                 <div class="confirmFooter">
                     <div class="standard-button green confirmButton">
-                        <button class="btn" ng-disabled="processing || confirmValue===0" ng-click="finalizeDocument(document, confirmValue, messageText);">Confirm</button>
+                        <button class="btn"
+                                ng-disabled="processing || confirmValue===0"
+                                ng-click="finalizeAction(document, confirmValue, messageText);">
+                            Confirm
+                        </button>
                     </div>
                 </div>
             </div>
