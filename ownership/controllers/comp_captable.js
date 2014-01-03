@@ -2249,6 +2249,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 checksome = true;
             }
         });
+        angular.forEach($scope.extraPeople, function(people) {
+            if (people.text == true && (people.text != null && people.text != "" && $scope.fieldCheck(people.text))) {
+                checkcontent = true;
+            }
+            if (people.text == true) {
+                checksome = true;
+            }
+        });
+        return (checksome && checkcontent)
     };
 
     // Hides transaction fields for common stock
