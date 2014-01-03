@@ -943,19 +943,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.signable = function(doc) {
-            return doc && doc.signature_deadline && !doc.when_signed;
+            return $scope.invq && doc && doc.signature_deadline && !doc.when_signed;
         };
 
         $scope.rejectable = function(doc) {
-            return (doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
+            // reject reject signature OR countersignature 
+            return (!$scope.invq && doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.countersignable = function(doc) {
-            return doc && doc.when_signed && !doc.when_countersigned;
+            return !$scope.invq && doc && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {
-            return doc && doc.when_countersigned && !doc.when_finalized;
+            return $scope.invq && doc && doc.when_countersigned && !doc.when_finalized;
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
