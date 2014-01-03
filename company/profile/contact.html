@@ -9,18 +9,17 @@
             <div class="row-fluid">
                 <div class="subnav-controls">
                     <div>
-                        <!-- TODO -->
                         <div class="pull-left">
                             <form>
-                                <div class="editProfilePhoto" ng-click="pictureModalOpen()">
-                                    <img ng-src="{{photoURL}}" style="width: 40px; height: 40px;">
+                                <div class="editProfilePhoto" ng-click="pictureModalOpen()" style="width: 40px; height: 40px;">
+                                    <img ng-src="{{photoURL}}">
                                 </div>
                             </form>
                         </div>
                         <div class="viewProfileText pull-left" style="width:30%;">
                             <ul>
                                 <li>{{name}}</li>
-                                <li>{{domain}}</li> <!--TODO-->
+                                <li>{{company}}</li>
                             </ul>
                         </div>
                         <div ng-show="address1() && address2()" class="viewProfileText pull-left" style="width:30%;">
@@ -32,17 +31,17 @@
                         <div class="pull-right">
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle dark">
-                                        <span data-icon="&#xe011;" aria-hidden="true">
+                                    <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true">
                                         </span>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li ng-click="profileModalOpen()">Edit Profile</li>
-                                        <li ng-click="settingsModalOpen()">Edit Settings</li>
+                                        <li ng-click="settingModalOpen()">Edit Settings</li>
                                     </ul>
                                 </li>
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -53,60 +52,63 @@
                 <div class="row-fluid">
                     <div class="front info-box">
                         <div class="head-box">
-                            <h2>Settings</h2>
+                             <h2>Settings</h2>
+
                         </div>
                         <div class="body-box">
-                            <table>
+                            <table class="settingtable">
+                                <tr>
+                                    <th style="width:130px;"></th>
+                                    <th></th>
+                                </tr>
                                 <tr>
                                     <td>Currency</td>
-                                    <td>{{company.longcurrency}}
+                                    <td>{{currency}}</td>
                                 </tr>
                                 <tr>
                                     <td>Date Format</td>
-                                    <td>{{company.dateformat}}</td>
+                                    <td>{{dateformat}}</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
+                    <!-- Dropbox backup not enabled
                     <div class="front info-box">
                         <div class="head-box">
-                            <h2>Integrations</h2>
+                             <h2>Integrations</h2>
+
                         </div>
                         <div class="body-box">
                             <table class="status-table investor">
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            Dropbox icon
-                                        </td>
-                                        <td>
-                                            Dropbox
-                                        </td>
-                                        <td>
-                                            Connect Button
-                                        </td>
+                                        <td>Dropbox icon</td>
+                                        <td>Dropbox</td>
+                                        <td>Connect Button</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    -->
                 </div>
             </div>
             <div class="span4">
                 <div class="info-box">
                     <div class="head-box">
-                        <h2>Activity</h2>
+                         <h2>Activity</h2>
+
                     </div>
                     <div class="body-box">
                         <ul class="activity-feed2">
-                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:5">
-                                <span>{{events[0]}}</span>
+                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:5"> <span>{{events[0]}}</span>
+
                                 <ul>
-                                    <li ng-repeat="event in events.slice(2)">
-                                        <i class="{{event.activity | icon}}"></i>
-                                        <span>
+                                    <li ng-repeat="event in events.slice(2)"> <i class="{{event.activity | icon}}"></i>
+ <span>
                                             {{event | investordescription}}
                                         </span>
+
                                     </li>
                                 </ul>
                             </li>
@@ -117,96 +119,11 @@
         </div>
     </div>
 </div>
-<!--
-<div class="container">
-    <div class="headsection row-fluid">
-        <ul class="maintabs head-text">
-            <li class="selectedtab">{{name}}</li>
-        </ul>
-    </div>
-    <div class="editProfileFP row-fluid">
-        <div id="detailsEdit" class="span8">
-            <div class="row-fluid">
-                <div class="span3">
-                    <form>
-                        <div class="editProfilePhoto" ng-click="pictureModalOpen()">
-                            <img ng-src="{{photoURL}}" style='width:140px; height:140px;'>
-                        </div>
-                    </form>
-                </div>
-                <div class="span7">
-                    <p>
-                        <label>
-                            <input class="name" ng-class="{'content':!name}" type="text" ng-model="name" maxlength="30"
-                            data-ui-event="{blur: 'contactSave()'}">Company Name</label>
-                    </p>
-                    <p>
-                        <button class="button subText greenButton" ng-click="adminModalOpen()">Add Admin</button>
-                    </p>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <section class="recipientInfo statusBlock">
-                    <div>
-                        <p class="title">Admins</p>
-                    </div>
-                    <p>Administrators can access and edit all data associated to your company.</p>
-                    <table
-                    class="tableView bodyText">
-                        <tr class="subText">
-                            <th class="button" colspan="2"><span class="title sortedDown">Name</span>
-                            </th>
-                        </tr>
-                        <tbody ng-repeat="admin in admins">
-                            <tr>
-                                <td>{{admin.name}}</td>
-                                <td class="button"><i ng-hide="admin.hideLock" ng-click="revokeModalOpen('{{admin.email}}');" class="icon-lock"
-                                    data-tooltip-placement="bottom" data-tooltip-html-unsafe="Revoke admin privileges"></i>
-
-                            </tr>
-                        </tbody>
-                        </table>
-                </section>
-            </div>
-        </div>
-        <div class="sidebar span4">
-      <form>
-        <fieldset>
-
-          <p>
-            <label><input disabled ng-class="{'content':!company}" type="text" ng-model="company" name="company">
-            Website</label>
-          </p>
-          <p>
-            <label><textarea ng-class="{'content':!address}" ng-model="address" name="address" rows="3" ui-event="{blur: 'contactSave()'}"></textarea>
-            Address</label>
-          </p>
-
-      </fieldset>
-    </form>
-        <div>
-            <p class="activityFeed-header subText">Activity Feed</p>
-        </div>
-        <section class="statusFeed">
-            <div class="noFeed" ng-show="noActivity">There is no activity yet.</div>
-            <ul class="activityBlock">
-                <li ng-repeat="active in activity | orderBy:activityOrder" ng-show="active | description"> <i class="{{active.activity | icon}}"></i>
-
-                    <div> <span class="activity">{{active | description }}</span>
-                        <br> <span class="time">{{active.time | fromNow}}</span>
-
-                    </div>
-                </li>
-            </ul>
-        </section>
-    </div>
-</div>
--->
 <div modal="pictureModal" close="pictureModalClose()" options="narrowopts">
-    <div class="modalHeader"> <span>Update company logo</span>
- <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-        ng-click="pictureModalClose()"></span>
-
+    <div class="modalHeader">
+        <span>Update company logo</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+              ng-click="pictureModalClose()"></span>
     </div>
     <div class="modalText">
         <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
@@ -215,8 +132,8 @@
                 <div class="fileinputs">
                     <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"
                     />
-                    <div class="profile-fakefile"> <span>CHOOSE FILE</span>
-
+                    <div class="profile-fakefile">
+                        <span>CHOOSE FILE</span>
                     </div>
                 </div>
             </fieldset>
@@ -231,48 +148,98 @@
         </div>
     </div>
 </div>
-<div modal="adminModal" close="adminModalClose()" options="narrowopts">
-    <div class="modalHeader"> <span>Add administrator</span>
- <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-        ng-click="adminModalClose()"></span>
-
-    </div>
-    <div class="modalCopy">
-        <form>
-            <fieldset>
-                <div class="row-fluid field">
-                    <label>Email
-                        <input type="text" ng-class="{'content':!newEmail}" ng-model="newEmail" />
-                    </label>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="adminModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-disabled="fieldCheck()" ng-click="create_admin(); adminModalClose();">Send</button>
-        </div>
-    </div>
-</div>
-<div modal="revokeModal" close="revokeModalClose()" options="narrowopts">
-    <div class="modalHeader"> <span>Remove admin</span>
- <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-        ng-click="revokeModalClose()"></span>
-
+<div modal="profileModal" close="profileModalClose()" options="profileopts">
+    <div class="modalHeader">
+        <span>Edit Company Profile</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
     </div>
     <div class="modalText">
-        <p>Do you want to remove this person as an administrator?</p>
+        <div class="row-fluid">
+            <div class="span3">
+                <img id="updateImage" ng-src="{{photoURL}}">
+                <form class="form-inline image-button">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="profile-fakefile">
+                                <span>Change</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="span9 input-list">
+                <div>
+                    <span>Name*</span><input type="text" ng-model="editcompany.name" maxlength="30">
+                </div>
+                <div>
+                    <span>Address</span><input type="text" ng-model="editcompany.address">
+                </div>
+                <div class="city-state">
+                    <span>City/State</span>
+                    <input type="text" ng-model="editcompany.city">
+                    <input type="text" ng-model="editcompany.state" maxlength="2">
+                </div>
+                <div>
+                    <span>Zip Code</span><input type="text" ng-model="editcompany.zipcode">
+                </div>
+                <span class="capital-text">*Required</span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="revokeModalClose();">Cancel</button>
+            <button class="btn" ng-click="profileModalClose();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="revokeAdmin(); revokeModalClose();">Remove</button>
+            <button class="btn" ng-click="profileModalClose(); profileUpdate(editcompany);">Confirm</button>
         </div>
     </div>
 </div>
+
+<div modal="settingModal" close="settingModalClose()" options="profileopts">
+    <div class="modalHeader">
+        <span>Edit Setting</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="settingModalClose()"></span>
+    </div>
+    <div class="modalText settings">
+        <div>
+            <span>Currency</span>
+            <ul class="dropdown-list drop-selector wide">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{editcompany.longcurrency}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in currencies">
+                            <a ng-click="setCurrency(i);">{{i}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <span>Date Format</span>
+            <ul class="dropdown-list drop-selector wide">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{editcompany.dateformat}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in dateformats">
+                            <a ng-click="setDateFormat(i);">{{i}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="settingModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="settingModalClose(); saveSettings(editcompany);">Confirm</button>
+        </div>
+    </div>
 </div>

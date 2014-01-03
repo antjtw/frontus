@@ -1314,6 +1314,23 @@ form.inputs {
     color: #8D8D8D;
     padding-right: 10px;
 }
+.settingtable {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+table.settingtable tr > td {
+    height: 30px;
+}
+table.settingtable tr > td:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #A6A6A6;
+}
+table.settingtable tr > td:last-child {
+    font-size: 12px;
+    color: #666666;
+}
 ul.last-edited {
     display: inline-block;
     padding: 20px 0 20px 0;

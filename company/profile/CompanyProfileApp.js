@@ -20,6 +20,9 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         document.location.href="/home";
         return;
     }
+    $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+    $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
+    $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
 
     $scope.pictureModalOpen = function () {
         $scope.pictureModal = true;
@@ -30,29 +33,48 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.pictureModal = false;
     };
-
-    $scope.adminModalOpen = function () {
-        $scope.adminModal = true;
+    $scope.profileModalOpen = function () {
+        $scope.profileModal = true;
+        $scope.editcompany = null; // TODO angular.copy($scope.company);
     };
 
-    $scope.adminModalClose = function () {
-        $scope.newEmail = "";
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.adminModal = false;
+    $scope.profileModalClose = function () {
+        $scope.profileModal = false;
     };
 
-    $scope.fieldCheck = function() {
-        return !$scope.newEmail;
+    $scope.profileopts = {
+        backdropFade: true,
+        dialogFade:true,
+        dialogClass: 'profile-modal wideModal modal'
     };
 
-    $scope.revokeModalOpen = function (email) {
-        $scope.selectedToRevoke = email;
-        $scope.revokeModal = true;
+    $scope.settingModalOpen = function () {
+        $scope.settingModal = true;
+        $scope.editcompany = angular.copy($scope.company);
     };
 
-    $scope.revokeModalClose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.revokeModal = false;
+    $scope.settingModalClose = function () {
+        $scope.settingModal = false;
+    };
+
+    $scope.setCurrency = function(currency) {
+        $scope.editcompany.longcurrency = currency;
+        $scope.editcompany.currency = currency.match(/\(...\)/)[0].substring(1,4);
+    };
+
+    $scope.setDateFormat = function(dateformat) {
+        $scope.editcompany.dateformat = dateformat;
+    };
+
+    $scope.saveSettings = function(company) {
+        var dateformat = company.dateformat == 'MM/DD/YYYY' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+        SWBrijj.proc("account.company_settings_update", company.currency, dateformat).then(function (x) {
+            void(x);
+            // TODO get this setup with the right vars
+            $scope.company.longcurrency = company.longcurrency;
+            $scope.company.currency = company.currency;
+            $scope.company.dateformat = company.dateformat;
+        });
     };
 
     $scope.narrowopts = {
@@ -66,32 +88,8 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
         dialogFade:true
     };
 
-    $scope.create_admin = function() {
-        SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-            void(x);
-            $scope.$emit("notification:success", "Invitation sent");
-            $scope.get_issuers();
-        }).except(function(x) {
-                void(x);
-                $scope.$emit("notifcation:fail", "Something went wrong, please try again later.");
-            });
-    };
-
-    $scope.revokeAdmin = function () {
-        SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke).then(function (x) {
-            void(x);
-            $scope.$emit("notification:success", "Privileges updated");
-            $scope.get_issuers();
-        }).except(function (x) {
-                void(x);
-                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-            });
-    };
-
+    /*
     $scope.contactSave = function () {
-        /** @name $scope#address
-         * @type {string}
-         */
         if ($scope.detectChanges != $scope.name + $scope.address + $scope.company) {
             $scope.detectChanges = $scope.name + $scope.address + $scope.company;
             if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
@@ -113,28 +111,13 @@ app.controller('ContactCtrl', ['$scope','$rootScope','SWBrijj', 'navState', func
                 });
         }
     };
-
-    $scope.get_issuers = function () {
-        SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function (x) {
-            $scope.admins = x;
-            SWBrijj.tblm('account.profile', ['email']).then(function (me) {
-                angular.forEach($scope.admins, function (admin) {
-                    if (admin.email == me[0].email)
-                        admin.hideLock = true;
-                    if (admin.name == null)
-                        admin.name = admin.email;
-                });
-            });
-        }).except(initFail);
-    };
-
-    $scope.get_issuers();
+    */
 
     SWBrijj.tbl('account.my_company').then(function(x) {
         initPage($scope, x);
         $scope.namekey = $scope.name;
         $scope.companykey = $scope.company;
-        $scope.detectChanges = $scope.name + $scope.address + $scope.company;
+        $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
         $scope.photoURL = '/photo/user?id=company:' + $scope.company;
     }).except(initFail);
 
@@ -647,9 +630,13 @@ app.filter('icon', function() {
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "signed") return "icon-pen";
         else if (activity == "uploaded") return "icon-star";
+        else if (activity == "transcoded") return "icon-star";
         else if (activity == "countersigned") return "icon-countersign";
         else if (activity == "finalized") return "icon-lock";
-        else return "hunh?";
+        else {
+            console.log(activity);
+            return "hunh?";
+        }
     };
 });
 
