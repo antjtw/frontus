@@ -40,7 +40,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.price = "The price each granted share can be purchased at when vested";
     $scope.captabletips.terms = "The total number of months until fully vested";
     $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
-    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
+    $scope.captabletips.vestcliff = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
     $scope.captabletips.price = "The rate that interest accrues on this debt";
     $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
@@ -60,9 +60,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.liquidpref = ['None','1X','2X', '3X'];
 
 
-    $scope.extraPeople = [
-        {"email": ""}
-    ];
+    $scope.extraPeople = [];
 
     // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
     SWBrijj.procm('ownership.get_transaction_types').then(function (results) {
@@ -2122,12 +2120,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.capShare = false;
     };
 
-    $scope.shareopts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'capshareModal modal'
-    };
-
     // Alter already shared row's email address
     $scope.alterEmailModalUp = function (email) {
         $scope.capEditEmail = true;
@@ -2161,18 +2153,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         dialogFade: true
     };
 
-    // Adds new rows to the non-shareholder sharing
-    $scope.addRemove = function () {
-        var add = 0;
-        angular.forEach($scope.extraPeople, function (people) {
-            if (people.email) {
-                add = add + 1
-            }
-        });
-        if (add == $scope.extraPeople.length) {
-            $scope.extraPeople.push({"email": ""});
-        }
+    $scope.select2Options = {
+        'multiple': true,
+        'simple_tags': true,
+        'tags': [],
+        'tokenSeparators': [",", " "],
+        'placeholder': 'Enter email address & press enter'
     };
+
+
 
 
     // Controls the orange border around the send boxes if an email is not given
@@ -2231,7 +2220,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
             $scope.extraPeople = [];
-            $scope.extraPeople.push({'email': ""});
         }
     };
 
@@ -2253,9 +2241,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 checksome = true;
             }
         });
-        if ($scope.extraPeople.length > 0 && $scope.extraPeople[0].email && $scope.fieldCheck($scope.extraPeople[0].email)) {
-            return false;
-        }
         else {
             return !(checkcontent && checksome);
         }

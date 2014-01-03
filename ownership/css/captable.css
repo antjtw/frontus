@@ -1443,6 +1443,18 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
 }
 
+.transferModal .share-modal-main p {
+    padding: 0 20px 0 20px;
+}
+
+.transferModal .share-modal-main .sharepeople-input {
+    padding-left: 20px;
+}
+
+.transferModal .share-modal-main .sharepeople-input .select2-container {
+    width: 510px;
+}
+
 .tourModal {
     margin-left: -250px;
     width:499px;

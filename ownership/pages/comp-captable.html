@@ -1,35 +1,51 @@
 <div class="maincontent">
 <div class="container dynamic-page">
 
-<div modal="capShare" close="close()" options="shareopts">
+<div modal="capShare" close="close()" options="transferopts">
     <div class="modalHeader">
         <span>Share Cap Table</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
     </div>
-    <div>
+    <div class="share-modal-main">
         <p>Shareholders only see their personal holdings by default, change this by visiting their profile
             to grant full access. Sharing with non-shareholders grants full-access.
         </p>
-        <form>
-            <ul>
-                <li>
-                    <input ng-model="selectAll" ng-change="turnOnShares();" class="checkbox" type="checkbox">
-                    <span>Name</span>
-                    <span>Email</span>
-                </li>
-                <li ng-repeat="row in rows | shareList">
-                    <input class="checkbox" ng-model="row.send" type="checkbox" tabindex="-1">
-                    <span class="capshareNames">{{row.name}}</span>
-                    <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}"
-                           ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)">
-                </li>
-            </ul>
-            <ul class="extrasAdd">
-                <li ng-repeat="person in extraPeople">
-                    <input ng-change="addRemove();" ng-model="person.email" placeholder="Add Non Shareholder">
-                </li>
-            </ul>
-        </form>
+
+        <div class="docLibrary full-width">
+            <table class="captable tableView modal-table">
+                <tr class="column-label">
+                    <th colspan="2">Name</th>
+                    <th>Email</th>
+                    <th>Permissions</th>
+                </tr>
+                <tr ng-repeat="row in rows | shareList">
+                    <td>
+                        <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                    </td>
+                    <td>{{row.name}}</td>
+                    <td><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
+                               ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)"></td>
+                    <td>
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{row.permission}}<span class="invisible-drop">'</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><span ng-click="row.permission = 'Personal'">Personal</span></li>
+                                    <li><span ng-click="row.permission = 'Full'">Full</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <p>Share with contacts not listed in your cap table</p>
+        <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="extraPeople">
+        </div>
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -1281,7 +1297,7 @@
 
                               <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbeginsdisplay" class="belowTitle"><span ng-bind="activeIssue.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The XXXX vesting cliff percentage becomes vested">VESTING CLIFF (MONTHS)</span></p>
+                              <p ng-show="activeIssue.vestingbeginsdisplay" class="belowTitle"><span ng-bind="activeIssue.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">VESTING CLIFF (MONTHS)</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
@@ -1346,7 +1362,7 @@
 
                                     <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbeginsdisplay" class="belowTitle"><span ng-bind="tran.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="The XXXX vesting cliff percentage becomes vested">Vesting Cliff (months)</span></p>
+                                    <p ng-show="tran.vestingbeginsdisplay" class="belowTitle"><span ng-bind="tran.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">Vesting Cliff (months)</span></p>
 
                                     <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
