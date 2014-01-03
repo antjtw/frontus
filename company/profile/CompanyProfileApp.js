@@ -73,9 +73,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
         };
 
         $scope.profileUpdate = function(editcompany) {
-            console.log(editcompany);
             SWBrijj.proc("account.company_update", editcompany.name, editcompany.address, editcompany.city, editcompany.state, editcompany.zipcode).then(function(x) {
-                console.log(x);// void(x);
+                void(x);
                 if ($scope.files) {
                     $scope.uploadFile();
                 }
@@ -92,11 +91,14 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
         };
         $scope.settingModalOpen = function() {
             $scope.settingModal = true;
-            $scope.editcompany = angular.copy($scope.company);
+            $scope.editcompany = {'currency': angular.copy($scope.currency),
+                                  'longcurrency': angular.copy($scope.longcurrency),
+                                  'dateformat': angular.copy($scope.dateformat)};
         };
 
         $scope.settingModalClose = function() {
             $scope.settingModal = false;
+            $scope.editcompany = null;
         };
 
         $scope.setCurrency = function(currency) {
@@ -112,10 +114,13 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             var dateformat = company.dateformat == 'MM/DD/YYYY' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
             SWBrijj.proc("account.company_settings_update", company.currency, dateformat).then(function(x) {
                 void(x);
-                // TODO get this setup with the right vars
-                $scope.company.longcurrency = company.longcurrency;
-                $scope.company.currency = company.currency;
-                $scope.company.dateformat = company.dateformat;
+                $scope.$emit("notification:success", "Company settings successfully updated.");
+                $scope.longcurrency = company.longcurrency;
+                $scope.currency = company.currency;
+                $scope.dateformat = company.dateformat;
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "There was an error updating your company settings.");
             });
         };
 
@@ -125,37 +130,17 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             dialogClass: 'narrowModal modal'
         };
 
-        /*
-    $scope.contactSave = function () {
-        if ($scope.detectChanges != $scope.name + $scope.address + $scope.company) {
-            $scope.detectChanges = $scope.name + $scope.address + $scope.company;
-            if ($scope.name.replace(/[^a-z0-9]/gi,'').length < 2 || $scope.company.replace(/[^a-z0-9]/gi,'').length < 3) {
-                $scope.$emit("notification:fail", "Please enter a valid company and domain name");
-                $scope.name = $scope.namekey;
-                $scope.company = $scope.companykey;
-                return;
-            }
-            SWBrijj.proc("account.company_update", $scope.name, $scope.address, $scope.company).then(function (x) {
-                void(x);
-                $scope.$emit("notification:success", "Your company profile has been updated successfully.");
-                $scope.namekey = $scope.name;
-                $scope.companykey = $scope.company;
-            }).except(function(x) {
-                    void(x);
-                    $scope.namekey = $scope.name;
-                    $scope.companykey = $scope.company;
-                    $scope.$emit("notification:fail", "There was an error updating your company profile.");
-                });
-        }
-    };
-    */
-
         SWBrijj.tbl('account.my_company').then(function(x) {
             initPage($scope, x);
             $scope.namekey = $scope.name;
             $scope.companykey = $scope.company;
             $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
             $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+            angular.forEach($scope.currencies, function(c) {
+               if (c.indexOf($scope.currency) !== -1) {
+                   $scope.longcurrency = c;
+               }
+            });
         }).except(initFail);
 
         $scope.activity = [];
