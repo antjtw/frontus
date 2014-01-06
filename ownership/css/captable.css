@@ -1439,6 +1439,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     padding-left: 10px;
 }
 
+.transferModal .tableView .scrollable-body tr {
+    border-bottom: none;
+}
+
 .transferModal .docLibrary {
     display: inline-block;
 }
@@ -1448,7 +1452,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 }
 
 .transferModal .share-modal-main p:last-of-type {
-    padding-top: 20px;
+    padding-top: 40px;
 }
 
 .transferModal .share-modal-main .tableView.modal-table {
@@ -1477,7 +1481,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 }
 
 .transferModal .share-modal-main .sharepeople-input .select2-container {
-    width: 510px;
+    width: 677px;
 }
 
 .tourModal {
