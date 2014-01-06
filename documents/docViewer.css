@@ -1,7 +1,7 @@
 .footerBar {
     display: none !important;
 }
-navbar {
+navbar .navbar {
     display: none !important;
 }
 .docViewer {
