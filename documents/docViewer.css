@@ -160,6 +160,12 @@ navbar {
     margin-left: 10px;
 }
 
+.last-saved {
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-top: 23px;
+}
+
 .page-bar {
     background-color: white;
     position: relative;
