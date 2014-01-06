@@ -1456,6 +1456,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width: 676px;
     height: 170px;
     overflow: auto;
+    background-color: #FFFFFF;
 }
 
 
