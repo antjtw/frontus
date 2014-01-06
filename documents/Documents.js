@@ -1064,6 +1064,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveNoteData = function(clicked) {
+            $scope.last_save = new Date().getTime();
             var nd = $scope.getNoteData();
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one

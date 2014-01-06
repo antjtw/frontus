@@ -66,6 +66,9 @@
                         <button class="btn" ng-show="isAnnotable" ng-click="saveNoteData(true)">Save</button>
                     </div>
                 </div>
+                <div ng-cloak class="pull-right last-saved" ng-class="{hidden: !(isAnnotable || finalizable(lib))}" ng-show="last_save">
+                    <span>last saved {{last_save | date:(settings.longdate+', yyyy, h:mm a')}}</span>
+                </div>
             </div>
             <div class="docViewerAction" ng-show="stage===1">
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>

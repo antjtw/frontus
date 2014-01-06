@@ -38,7 +38,15 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             return $scope.address;
         };
         $scope.address2 = function() {
-            return ($scope.city && $scope.state && $scope.zipcode) ? $scope.city + ", " + $scope.state + " " + $scope.zipcode : null;
+            if ($scope.city && $scope.state && $scope.zipcode) {
+                return $scope.city + ", " + $scope.state + " " + $scope.zipcode;
+            } else if ($scope.city || $scope.state) {
+                return ($scope.city || "") + ($scope.state || "") + " " + ($scope.zipcode || "");
+            } else if ($scope.zipcode) {
+                return $scope.zipcode;
+            } else {
+                return null;
+            }
         };
 
         $scope.pictureModalOpen = function() {
