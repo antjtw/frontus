@@ -2207,6 +2207,19 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
+    $scope.updateSendRow = function(row) {
+        if (row.email.length > 0) {
+            row.send = $scope.autoCheck(row.email);
+            if (!row.permission) {
+                row.permission = "Personal"
+            }
+        }
+        else {
+            row.send = false;
+            row.permission = null
+        }
+    };
+
     //regex to deal with the parentheses
     var regExp = /\(([^)]+)\)/;
     // Send the share invites from the share modal
