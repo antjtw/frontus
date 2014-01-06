@@ -119,8 +119,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $rootScope.errorMessage = msg;
         });
 
-        // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
-
         /* this investor list is used by the sharing email list drop-down */
         $scope.vInvestors = [];
         SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
@@ -854,7 +852,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     void(x);
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 });
-        }
+        };
     }
 ]);
 
@@ -1059,7 +1057,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
                 $location.path('/company-list').search({});
-                //$route.reload();
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1714,6 +1711,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
 
@@ -1736,6 +1734,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
 
@@ -1752,6 +1751,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
     }
