@@ -301,6 +301,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.nextPage($scope.currentPage);
             }
         };
+        $scope.resetMsgText = function() {
+            if ($scope.messageText === "Add an optional message...") {
+                $scope.messageText = "";
+            }
+        };
 
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
@@ -348,15 +353,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.setStage = function(n) {
             $scope.setConfirmValue(0);
             $scope.stage = n;
-        };
-        $scope.resetCursor = function(txtElement) {
-            if (txtElement.setSelectionRange) {
-                txtElement.focus();
-                txtElement.setSelectionRange(0, 0);
-            } else if (txtElement.createTextRange) {
-                var range = txtElement.createTextRange();
-                range.moveStart('character', 0);
-                range.select();
+            if ($scope.stage === 0) {
+                refreshDocImage();
             }
         };
         $scope.setConfirmValue = function(n) {
@@ -365,10 +363,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             } else {
                 $scope.confirmValue = n;
             }
-            if ($scope.confirmValue === -1) {
-                $scope.messageText = '';
-                $scope.resetCursor($(".messageText:visible")[0]);
-            } else {
+            if ($scope.confirmValue !== -1) {
                 $scope.messageText = "Add an optional message...";
             }
         };
