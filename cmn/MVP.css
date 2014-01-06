@@ -898,13 +898,13 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     font-size: 14px;
 }
 .subnav-controls .dropdown-list {
-    line-height: 40px;
+    line-height: 32px;
 }
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
-    height: 40px;
+    height: 32px;
     width: -moz-calc(100% - 80px);
     width: -webkit-calc(100% - 80px);
     width: calc(100% - 80px);
