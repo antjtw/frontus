@@ -1,0 +1,33 @@
+/* Modal Styling */
+
+.wideModal.modal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.profile-modal.modal > div.modalText {
+    padding: 0 20px 0 20px;
+    text-align: left;
+}
+
+.profile-modal.modal > div.modalText .input-list > span {
+    float: left;
+    margin-left: 132px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div {
+    margin: 0 0 10px 50px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
+    text-transform: uppercase;
+    font-size: 10px;
+    width: 140px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > input {
+    float: none;
+}
