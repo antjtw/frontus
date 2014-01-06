@@ -1447,6 +1447,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     padding: 0 20px 0 20px;
 }
 
+.transferModal .share-modal-main p:last-of-type {
+    padding-top: 20px;
+}
+
 .transferModal .share-modal-main .tableView.modal-table {
     table-layout: fixed;
 }
@@ -1826,6 +1830,11 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .tableView.captable tr:nth-child(1) th > span {
     display: none;
+}
+
+.tableView.captable tr:nth-child(1) th > span.tooltip-icon {
+    display: inline-block;
+    color: #A6A6A6;
 }
 
 .tableView.captable tr:nth-child(1) th:nth-child(3) > span.column-highlight {

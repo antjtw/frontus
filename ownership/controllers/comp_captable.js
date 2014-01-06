@@ -49,7 +49,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.term = "The term of the note before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock";
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
-
+    $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
 
 
