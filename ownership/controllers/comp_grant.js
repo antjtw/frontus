@@ -16,7 +16,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.captabletips.totalgranted = "The sum total of shares granted";
     $scope.captabletips.price = "The price each granted share can be purchased at when vested";
     $scope.captabletips.terms = "The total number of months until fully vested";
-    $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
+    $scope.captabletips.vestcliff = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
     $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
 
