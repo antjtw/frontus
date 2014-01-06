@@ -1563,6 +1563,11 @@ ul.spaced-list > li:nth-child(odd) {
     width: calc(100% - 20px) !important;
 }
 
+.body-box > table.status-table > tbody.empty-table > tr > td > span {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+
+
 .body-box > table.status-table.investor > tbody > tr > th:first-child {
     width: -moz-calc(50%) !important;
     width: -webkit-calc(50%) !important;
