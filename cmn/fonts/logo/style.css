@@ -8,15 +8,12 @@
 	font-weight: normal;
 	font-style: normal;
 }
-@font-face {
-	font-family: 'logo';
-	src:url('sharewave.eot');
-	src:url('sharewave.eot?#iefix') format('embedded-opentype'),
-		url('sharewave.woff') format('woff'),
-		url('sharewave.ttf') format('truetype'),
-		url('sharewave.svg#sharewave') format('svg');
-	font-weight: normal;
-	font-style: normal;
+// Chrome fix http://stackoverflow.com/questions/13674808/chrome-svg-font-rendering-breaks-layout/14345363#14345363
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'logo';
+        src:url('sharewave.svg#sharewave') format('svg');
+    }
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
