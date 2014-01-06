@@ -90,7 +90,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
-            if (newURL.indexOf($scope.navState.path)==-1) {
+            if (newURL.indexOf(document.location.pathname)==-1) {
                 $scope.lastPage = document.location.href;
             }
         });
