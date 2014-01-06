@@ -53,7 +53,7 @@
                                         <li ng-show="" ng-click="modalUp(person);">Change Role</li>
                                         <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
                                         <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
-                                        <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Add Admin</li>
+                                        <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Make Admin</li>
                                     </ul>
                                 </li>
                             </ul>

@@ -1039,6 +1039,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         return total;
     };
 
+    $scope.resetSideBar = function() {
+        $scope.sideBar = 'x';
+        angular.forEach($scope.issues, function(issue) {
+            angular.forEach(issue.trans, function(tran) {
+                tran.fields = [false,false,false,false];
+            });
+        });
+    };
+
 
     // Function to inherit all the values from the issue to new and updating transactions
     $scope.tranInherit = function (tran, issue) {
