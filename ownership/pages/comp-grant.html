@@ -366,15 +366,25 @@
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
                      class="rightTitle double"><span>Vesting Term (months)</span><input
                           ui-event="{blur : 'saveTran(activeTran)'}"
-                          ng-model="activeTran.terms"></p>
+                          ng-model="activeTran.terms">
+                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                          bs-tooltip="captabletips.terms"></span>
+                  </p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                     class="rightTitle"><span>Vesting Cliff (Months)</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                                                                                  ng-model="activeTran.vestingbeginsdisplay"></p>
+                     class="rightTitle double"><span>Vesting Cliff (Months)</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                                                                                  ng-model="activeTran.vestingbeginsdisplay">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestingbegins"></span>
+
+                  </p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
                      class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                                                                           ng-model="activeTran.vestcliff"></p>
+                                                                           ng-model="activeTran.vestcliff">
+                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                          bs-tooltip="captabletips.vestcliff"></span>
+                  </p>
 
 
                   <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
@@ -391,6 +401,9 @@
                               </ul>
                           </li>
                       </ul>
+
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestfreq"></span>
                   </div>
               </div>
 
@@ -529,7 +542,7 @@
                             bs-tooltip="captabletips.terms"></span>
                   </p>
 
-                  <p class="rightTitle"><span>Vesting Cliff (Months)</span><input type="text" ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestingbegins\')'}" ng-model="activeIssue.vestingbeginsdisplay">
+                  <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text" ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestingbegins\')'}" ng-model="activeIssue.vestingbeginsdisplay">
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                             bs-tooltip="captabletips.vestingbegins"></span>
                   </p>
@@ -775,7 +788,7 @@
                               bs-tooltip="captabletips.terms"></span>
                     </p>
 
-                    <p class="rightTitle"><span>Vesting Cliff (Months)</span><input type="text"
+                    <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text"
                                                                                 ng-model="newschedule.vestingbegins">
                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                               bs-tooltip="captabletips.vestingbegins"></span>
