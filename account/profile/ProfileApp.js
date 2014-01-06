@@ -125,7 +125,15 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             return $scope.street;
         };
         $scope.address2 = function() {
-            return ($scope.city && $scope.state && $scope.postalcode) ? $scope.city + ", " + $scope.state + " " + $scope.postalcode : null;
+            if ($scope.city && $scope.state && $scope.postalcode) {
+                return $scope.city + ", " + $scope.state + " " + $scope.postalcode;
+            } else if ($scope.city || $scope.state) {
+                return ($scope.city || "") + ($scope.state || "") + " " + ($scope.postalcode || "");
+            } else if ($scope.postalcode) {
+                return $scope.postalcode;
+            } else {
+                return null;
+            }
         };
 
         /** @name SWBrijj#tbl

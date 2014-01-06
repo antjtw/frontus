@@ -795,6 +795,21 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$apply();
             }
         };
+        
+        $scope.address1 = function() {
+            return $scope.person.street;
+        };
+        $scope.address2 = function() {
+            if ($scope.person.city && $scope.person.state && $scope.person.postalcode) {
+                return $scope.person.city + ", " + $scope.person.state + " " + $scope.person.postalcode;
+            } else if ($scope.person.city || $scope.person.state) {
+                return ($scope.person.city || "") + ($scope.person.state || "") + " " + ($scope.person.postalcode || "");
+            } else if ($scope.person.postalcode) {
+                return $scope.person.postalcode;
+            } else {
+                return null;
+            }
+        };
 
         $scope.profileUpdate = function (person) {
             SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
