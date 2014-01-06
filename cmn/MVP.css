@@ -1015,6 +1015,10 @@ form.inputs {
     margin-left: 42px;
 }
 
+.login-logo {
+    margin-bottom: 10px;
+}
+
 .navlogin input {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
