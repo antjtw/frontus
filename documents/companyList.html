@@ -187,7 +187,7 @@
                         </td>
                         <td class="shareholder-column docname-column" ng-click="viewProfile(investor)">
                             <ul>
-                                <li>{{investor.name | caplength:40}}</li>
+                                <li>{{investor.name || investor.investor | caplength:40}}</li>
                                 <li>{{docStatus(investor)}}</li>
                             </ul>
                         </td>

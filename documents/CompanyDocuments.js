@@ -222,7 +222,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     } else {
                         if (!$scope.investorDocs) {$scope.investorDocs = {};}
                         $scope.investorDocs[version.investor] = {'versions': [version],
-                                                                   'name': version.name};
+                                                                   'name': version.name,
+                                                                   'investor': version.investor};
                     }
                 });
             });
