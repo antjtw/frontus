@@ -1059,15 +1059,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     return 0;
             }
         };
-
-        $scope.countersignAction = function(doc, conf, msg) {
-            if (conf === 1) {
+        $scope.$on('countersignAction', function(evt, data) {
+            $scope.countersignAction(data);
+        });
+        $scope.countersignAction = function(data) {
+            if (data[0] === 1) {
                 $scope.countersignDocument();
-            } else if (conf === -1) {
-                $scope.rejectSignature(msg);
+            } else if (data[0] === -1) {
+                $scope.rejectSignature(data[1]);
             }
         };
-
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
             if (msg === "Add an optional message...") {
@@ -1737,15 +1738,18 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             });
         };
 
-        $scope.finalizeAction = function(doc, conf, msg) {
-            if (conf === 1) {
-                $scope.finalizeDocument(doc);
-            } else if (conf === -1) {
-                $scope.rejectCountersignature(doc, msg);
+        $scope.$on('finalizeAction', function(evt, data) {
+            $scope.finalizeAction(data);
+        });
+        $scope.finalizeAction = function(data) {
+            if (data[0] === 1) {
+                $scope.finalizeDocument();
+            } else if (data[0] === -1) {
+                $scope.rejectCountersignature(data[1]);
             }
         };
 
-        $scope.finalizeDocument = function(doc) {
+        $scope.finalizeDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
@@ -1760,7 +1764,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             });
         };
 
-        $scope.rejectCountersignature = function(doc, msg) {
+        $scope.rejectCountersignature = function(msg) {
+            console.log(msg);
             $scope.processing = true;
             if (msg === "Add an optional message...") {
                 msg = "";

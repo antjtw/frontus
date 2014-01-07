@@ -301,12 +301,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.nextPage($scope.currentPage);
             }
         };
-        $scope.resetMsgText = function() {
-            if ($scope.messageText === "Add an optional message...") {
-                $scope.messageText = "";
-            }
-        };
-
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
             var docpanel = document.querySelector(".docPanel");
@@ -339,7 +333,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stage = 0;
         $scope.confirmValue = 0;
-        $scope.messageText = "Add an optional message...";
+        if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
@@ -390,6 +384,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             } else {
                 return false;
             }
+        };
+
+        $scope.resetMsg = function() {
+            if ($scope.rejectMessage === "Add an optional message...") {
+                $scope.rejectMessage = "";
+            }
+        };
+        $scope.countersignAction = function(conf, msg) {
+            $scope.$emit('countersignAction', [conf, msg]);
+        };
+        $scope.finalizeAction = function(conf, msg) {
+            $scope.$emit('finalizeAction', [conf, msg]);
         };
 
         $scope.$emit('docViewerReady');
