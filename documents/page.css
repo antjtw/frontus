@@ -585,6 +585,10 @@ div.progress-bar {
     box-shadow: none;
 }
 
+.select2-search-choice > div {
+    text-align: left;
+}
+
 .select2-container-multi.select2-container-active .select2-choices {
     border: 1px solid #E2E2E2;
     outline: none;
