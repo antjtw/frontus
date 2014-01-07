@@ -1089,13 +1089,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData()).then(function(data) {
+            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document countersigned");
                 $location.path('/company-list').search({});
-
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1725,7 +1724,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData()).then(function(data) {
+            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');

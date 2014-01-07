@@ -21,12 +21,12 @@ function getCanvasOffset(ev) {
     return [offx, offy];
 }
 
-function getNoteBounds(nx, pageBar, stage) {
+function getNoteBounds(nx, pageBar, not_visible) {
     // [LEFT, TOP, WIDTH, HEIGHT]
     var top_padding = pageBar ? 161 : 120;
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop && stage===0) {
+    if (!dp.offsetTop && not_visible) {
         bds[1]-=top_padding;
     }
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
@@ -509,7 +509,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $window.addEventListener('beforeunload', function(event) {
             void(event);
-            var ndx = $scope.getNoteData();
+            var ndx = $scope.getNoteData(false);
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
@@ -1027,13 +1027,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
 
-        $scope.getNoteData = function() {
+        $scope.getNoteData = function(stamping) {
             var noteData = [];
 
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx, $scope.showPageBar(), $scope.stage);
+                var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
@@ -1060,7 +1060,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
-            var nd = $scope.getNoteData();
+            var nd = $scope.getNoteData(false);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
