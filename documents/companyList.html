@@ -122,7 +122,7 @@
                                         <li ng-click="viewOriginal(doc)">View Original</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                         <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
-                                        <!--<li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>-->
+                                        <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
                                     </ul>
                                 </li>
                           </ul>
@@ -360,7 +360,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="deleteDocClose()">Cancel</button></div>
-        <div class="standard-button red"><button class="btn" ng-click="deleteDocClose(doc)">Confirm</button></div>
+        <div class="standard-button green"><button class="btn" ng-click="reallyDeleteDoc(docForModal); deleteDocClose();">Confirm</button></div>
     </div>
 </div>
 
