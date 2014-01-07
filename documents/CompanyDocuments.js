@@ -260,6 +260,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
         $scope.messageText = "Add an optional message...";
+        $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
@@ -281,7 +282,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
         };
         $scope.investorSearchFilter = function(obj) {
-            var re = new RegExp($scope.query, 'i');
+            var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
+            var re = new RegExp(testString, 'i');
             // need to backslash all special characters
             return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
         };
