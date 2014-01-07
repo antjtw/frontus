@@ -240,6 +240,9 @@ you can use the generic selector below, but it's slower:
 .icon-facebook:before {
     content: "\e601";
 }
+.icon-save:before {
+    content: "\e602";
+}
 .icon-redo:before {
     content: "\e027";
 }
