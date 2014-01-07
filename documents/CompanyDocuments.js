@@ -388,13 +388,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
+            console.log("here3");
             upxhr.then(function(x) {
+                console.log("here1");
                 void(x);
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
                 $scope.$apply();
                 $route.reload();
             }).except(function(x) {
+                console.log("here2");
                 if ($scope.tester === true) {
                     $scope.fileError = x.message;
                 } else {

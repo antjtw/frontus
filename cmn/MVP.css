@@ -2986,7 +2986,7 @@ button.icon-button:hover {
     margin-left: 132px;
 }
 
-.profile-modal.modal > div.modalText > div > div:first-child {
+.profile-modal.modal > div.modalText > div > div.profile-image {
     width: 76px;
     height: 76px;
     border: 1px solid #E3E3E3;
@@ -2994,6 +2994,9 @@ button.icon-button:hover {
 
 .profile-modal.modal > div.modalText .input-list > div {
     margin: 0 0 10px 50px;
+}
+.profile-modal.modal > div.modalText .input-list > div > button {
+    margin-left: -3px;
 }
 
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
