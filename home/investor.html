@@ -190,13 +190,13 @@
                     Email
                 </li>
                 <li class="investor-address">
-                    <span>{{address1()}}</span>
-                    <span>{{address2()}}</span>
+                    <span ng-bind="address1()"></span>
+                    <span ng-bind="address2()"></span>
                 <!--
                     <span ng-show="person.street">{{person.street}}</span>
                     <span ng-show="person.city || person.state">{{person.city}}, {{person.state}}</span>
                     <span ng-show="person.postalcode">{{person.postalcode}}</span>
-                ->>
+                -->
                 </li>
                 <li ng-show="person.street || person.city || person.state || person.postalcode">
                     Address
