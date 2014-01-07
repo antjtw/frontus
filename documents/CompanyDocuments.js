@@ -372,6 +372,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $rootScope.errorMessage = arg;
                 $scope.showProgress = false;
                 $scope.documentUploadClose();
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.$apply();
                 console.log(arg);
             });

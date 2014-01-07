@@ -344,6 +344,7 @@ navbar .navbar {
     padding-bottom: 30px;
     width: 380px;
     height: 100%;
+    min-height: 40px;
 }
 
 .confirmBody > .radioOption {
