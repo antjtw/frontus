@@ -282,7 +282,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.investorSearchFilter = function(obj) {
             var re = new RegExp($scope.query, 'i');
-            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name));
+            // need to backslash all special characters
+            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
         };
 
         $scope.exportOriginalToPdf = function(doc) {
@@ -1141,7 +1142,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
-            'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
+            'placeholder': 'Enter email address & press enter'
         };
 
         // Set up event handlers
@@ -1346,7 +1347,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.opts = {
             backdropFade: true,
             dialogFade: true,
-            dialogClass: 'modal'
+            dialogClass: 'modal wideModal'
         };
 
         $scope.remmodalUp = function(name) {
