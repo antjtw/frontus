@@ -21,12 +21,12 @@ function getCanvasOffset(ev) {
     return [offx, offy];
 }
 
-function getNoteBounds(nx, pageBar) {
+function getNoteBounds(nx, pageBar, stage) {
     // [LEFT, TOP, WIDTH, HEIGHT]
     var top_padding = pageBar ? 161 : 120;
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop && $scope.stage===0) {
+    if (!dp.offsetTop && stage===0) {
         bds[1]-=top_padding;
     }
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
@@ -1033,7 +1033,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx, $scope.showPageBar());
+                var bnds = getNoteBounds(nx, $scope.showPageBar(), $scope.stage);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
