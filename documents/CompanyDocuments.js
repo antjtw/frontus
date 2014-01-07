@@ -324,6 +324,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.documentUploadModal = false;
         };
 
+        $scope.wideopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'wideModal modal'
+        };
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'modal'
+        };
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
@@ -1348,7 +1358,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
 
         function failed() {
-            alert("failed")
+            alert("failed");
         }
 
         // Sharing modal functions
