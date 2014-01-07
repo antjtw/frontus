@@ -260,6 +260,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
         $scope.messageText = "Add an optional message...";
+        $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
@@ -281,7 +282,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
         };
         $scope.investorSearchFilter = function(obj) {
-            var re = new RegExp($scope.query, 'i');
+            var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
+            var re = new RegExp(testString, 'i');
             // need to backslash all special characters
             return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
         };
@@ -1057,15 +1059,16 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     return 0;
             }
         };
-
-        $scope.countersignAction = function(doc, conf, msg) {
-            if (conf === 1) {
+        $scope.$on('countersignAction', function(evt, data) {
+            $scope.countersignAction(data);
+        });
+        $scope.countersignAction = function(data) {
+            if (data[0] === 1) {
                 $scope.countersignDocument();
-            } else if (conf === -1) {
-                $scope.rejectSignature(msg);
+            } else if (data[0] === -1) {
+                $scope.rejectSignature(data[1]);
             }
         };
-
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
             if (msg === "Add an optional message...") {
@@ -1087,13 +1090,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData()).then(function(data) {
+            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document countersigned");
                 $location.path('/company-list').search({});
-
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1723,7 +1725,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData()).then(function(data) {
+            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
@@ -1736,15 +1738,18 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             });
         };
 
-        $scope.finalizeAction = function(doc, conf, msg) {
-            if (conf === 1) {
-                $scope.finalizeDocument(doc);
-            } else if (conf === -1) {
-                $scope.rejectCountersignature(doc, msg);
+        $scope.$on('finalizeAction', function(evt, data) {
+            $scope.finalizeAction(data);
+        });
+        $scope.finalizeAction = function(data) {
+            if (data[0] === 1) {
+                $scope.finalizeDocument();
+            } else if (data[0] === -1) {
+                $scope.rejectCountersignature(data[1]);
             }
         };
 
-        $scope.finalizeDocument = function(doc) {
+        $scope.finalizeDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
@@ -1759,7 +1764,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             });
         };
 
-        $scope.rejectCountersignature = function(doc, msg) {
+        $scope.rejectCountersignature = function(msg) {
+            console.log(msg);
             $scope.processing = true;
             if (msg === "Add an optional message...") {
                 msg = "";

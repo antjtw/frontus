@@ -53,7 +53,7 @@
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || finalizable(lib))}">
                     <div class="pull-right standard-button green">
-                        <button class="btn" ng-click="setStage(1)">Confirm Signature</button>
+                        <button class="btn" ng-click="setStage(1);">Confirm</button>
                     </div>
                     <div class="pull-right tools">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
@@ -85,13 +85,13 @@
                     <button class="btn"
                             ng-show="countersignable(lib)"
                             ng-disabled="processing || confirmValue===0"
-                            ng-click="countersignAction(document, confirmValue, messageText);">
+                            ng-click="countersignAction(confirmValue, rejectMessage);">
                         Confirm
                     </button>
                     <button class="btn"
                             ng-show="finalizable(lib)"
                             ng-disabled="processing || confirmValue===0"
-                            ng-click="finalizeAction(document, confirmValue, messageText);">
+                            ng-click="finalizeAction(confirmValue, rejectMessage);">
                         Confirm
                     </button>
                 </div>
@@ -159,23 +159,14 @@
                             <br>
                             <span>Reject shareholders signature on this document.</span>
                             <br>
-                            <textarea class="messageText" rows="3"
-                                      ng-model="messageText"
-                                      ng-show="confirmValue===-1"
-                                      ng-click="resetMsgText()">
+                            <textarea ng-show="confirmValue===-1"
+                                      class="messageText" rows="3"
+                                      ng-model="$parent.rejectMessage"
+                                      ng-click="resetMsg()">
                             </textarea>
                         </li>
                     </ul>
                 </div>
-                <!--
-                <div class="confirmFooter">
-                    <div class="standard-button green confirmButton">
-                        <button class="btn"
-                                ng-disabled="processing || confirmValue===0"
-                                ng-click="countersignAction(document, confirmValue, messageText);">Confirm</button>
-                    </div>
-                </div>
-                -->
             </div>
 
             <div ng-show="finalizable(lib)">
@@ -205,8 +196,8 @@
                             <br>
                             <textarea ng-show="confirmValue===-1"
                                       class="messageText" rows="3"
-                                      ng-model="messageText"
-                                      ng-click="resetMsgText()">
+                                      ng-model="$parent.rejectMessage"
+                                      ng-click="resetMsg()">
                             </textarea>
                         </li>
                     </ul>
