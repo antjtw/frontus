@@ -26,7 +26,7 @@ function getNoteBounds(nx, pageBar) {
     var top_padding = pageBar ? 161 : 120;
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop) {
+    if (!dp.offsetTop && $scope.stage===0) {
         bds[1]-=top_padding;
     }
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
