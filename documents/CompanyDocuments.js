@@ -324,6 +324,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.documentUploadModal = false;
         };
 
+        $scope.wideopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'wideModal modal'
+        };
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'modal'
+        };
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
@@ -372,6 +382,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $rootScope.errorMessage = arg;
                 $scope.showProgress = false;
                 $scope.documentUploadClose();
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.$apply();
                 console.log(arg);
             });
@@ -387,13 +398,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
+            console.log("here3");
             upxhr.then(function(x) {
+                console.log("here1");
                 void(x);
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
                 $scope.$apply();
                 $route.reload();
             }).except(function(x) {
+                console.log("here2");
                 if ($scope.tester === true) {
                     $scope.fileError = x.message;
                 } else {
@@ -1344,7 +1358,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
 
         function failed() {
-            alert("failed")
+            alert("failed");
         }
 
         // Sharing modal functions
