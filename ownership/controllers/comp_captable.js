@@ -977,8 +977,23 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.updateRow = function (investor) {
+        //Name has been reduced to "" and previously had a value
         if (investor.name == "" && investor.namekey != undefined) {
-            $scope.rmodalUp(investor);
+            var hastran = false
+            //Check if row has transactions
+            angular.forEach($scope.trans, function(tran) {
+                if (tran.investor == investor.namekey) {
+                    hastran = true;
+                }
+            });
+            //If they do, double check with the user
+            if (hastran) {
+                $scope.rmodalUp(investor);
+            }
+            //else just delete the row
+            else {
+                $scope.deletePerson(investor.namekey);
+            }
             return
         }
 
