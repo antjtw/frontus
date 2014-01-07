@@ -53,7 +53,7 @@
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || finalizable(lib))}">
                     <div class="pull-right standard-button green">
-                        <button class="btn" ng-click="setStage(1)">Confirm Signature</button>
+                        <button class="btn" ng-click="saveNoteData(false); setStage(1);">Confirm Signature</button>
                     </div>
                     <div class="pull-right tools">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
