@@ -345,9 +345,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        var mimetypes = ["application/pdf","application/vnd.openxmlformats-officedocument.wordpressingml.document",
-			 "application/vnd.openxmlformats-officedocument.wordpressingml.template",
-			 "application/msword"];
+        // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
+
+        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
