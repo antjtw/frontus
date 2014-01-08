@@ -26,6 +26,7 @@ textarea {
     overflow:hidden;
 }
 
+/*
 .editProfilePhoto:hover{
     border: 4px solid rgb(26, 188, 150);
     height:136px;
@@ -46,6 +47,7 @@ textarea {
     color: rgb(255, 255, 255);
     font-size: 11px;
 }
+*/
 
 .editProfileFP input, .editProfileFP textarea {
     padding: 0;
