@@ -954,6 +954,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     padding-left: 20px;
     text-align: left;
     color: #666666;
+    line-height: 16px;
 }
 .doc-title {
     display: inline-block;
