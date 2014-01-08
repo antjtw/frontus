@@ -797,17 +797,21 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
         
         $scope.address1 = function() {
-            return $scope.person.street;
+            if ($scope.person) {
+                return $scope.person.street;
+            }
         };
         $scope.address2 = function() {
-            if ($scope.person.city && $scope.person.state && $scope.person.postalcode) {
-                return $scope.person.city + ", " + $scope.person.state + " " + $scope.person.postalcode;
-            } else if ($scope.person.city || $scope.person.state) {
-                return ($scope.person.city || "") + ($scope.person.state || "") + " " + ($scope.person.postalcode || "");
-            } else if ($scope.person.postalcode) {
-                return $scope.person.postalcode;
-            } else {
-                return null;
+            if ($scope.person) {
+                if ($scope.person.city && $scope.person.state && $scope.person.postalcode) {
+                    return $scope.person.city + ", " + $scope.person.state + " " + $scope.person.postalcode;
+                } else if ($scope.person.city || $scope.person.state) {
+                    return ($scope.person.city || "") + ($scope.person.state || "") + " " + ($scope.person.postalcode || "");
+                } else if ($scope.person.postalcode) {
+                    return $scope.person.postalcode;
+                } else {
+                    return null;
+                }
             }
         };
 
@@ -821,6 +825,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
                         $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
+                        $rootScope.userURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);

@@ -159,12 +159,13 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 void(x);
                 // console.log(x);
                 $scope.$emit("notification:success", "Profile photo successfully updated");
-                $scope.photoURL = '/photo/user?id=' + $scope.email;
+                $scope.photoURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
+                $rootScope.userURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
             }).except(function(x) {
                 void(x);
                 // console.log(x);
                 $scope.$emit("notification:fail", "Profile photo change was unsuccessful, please try again.");
-                $scope.photoURL = '/photo/user?id=' + $scope.email;
+                $scope.photoURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
             });
         };
 
