@@ -1375,56 +1375,36 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .activity-feed2 {
-    margin-top: 10px;
-    height: auto;
+    height: 268px;
+    overflow: auto;
 }
 
-.activity-feed2 > li > span {
-    text-transform: uppercase;
-    font-size: 10px;
-    margin-left: 10px;
+.activity-feed2 > li {
+    min-height: 50px;
+    border-bottom: 1px solid #E3E3E3;
 }
 
-.activity-feed2 > li > ul {
-    width: 100%;
-    vertical-align: middle;
+.activity-feed2 a {
+    color: #3397DA;
+}
+
+.activity-feed2 > li > span:first-of-type {
     display: inline-block;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
 }
 
-.activity-feed2 > li > ul > li {
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 282px;
-    border: 1px solid #F1F1F1;
+.activity-feed2 > li > span:last-of-type {
     display: inline-block;
-    padding: 8px 0 10px 10px;
-    color: #656565;
+    min-height: 50px;
+    width: -moz-calc(100% - 58px) !important;
+    width: -webkit-calc(100% - 58px) !important;
+    width: calc(100% - 58px) !important;
 }
 
-.body-box .activity-feed2 > li > ul > li {
-    width: -webkit-calc(100% - 20px) !important;
-    width: -moz-calc(100% - 20px) !important;
-    width: calc(100% - 20px) !important;
-    padding: 8px 10px 10px 10px;
-}
-
-.activity-feed2 > li > ul > li > span {
-    display: inline-block;
-    min-width: 220px;
-    max-width: -webkit-calc(100% - 20px) !important;
-    max-width: -moz-calc(100% - 20px) !important;
-    max-width: calc(100% - 20px) !important;
-}
-
-.activity-feed2 > li:last-of-type {
-    margin-bottom: 15px;
-}
-
-.activity-feed2 > li > ul > li > i {
-    vertical-align: top;
-    padding-top: 4px;
+.activity-feed2 > li > span:last-of-type > ul > li {
+    line-height: 16px;
 }
 
 /* Document Status */
@@ -2213,12 +2193,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     color: #666666;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
-    background-color: #E3E3E3;
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active {
+    background-color: #FFFFFF;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark:hover {
-    background-color: #C7C7C7;
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active:hover {
+    background-color: #E3E3E3;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {

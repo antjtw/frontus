@@ -1,0 +1,22 @@
+<div class="info-box">
+    <div class="head-box">
+        <h2>Activity</h2>
+    </div>
+    <div class="body-box">
+        <ul class="activity-feed2">
+            <li ng-repeat="event in activity">
+                <span><img src="/img/activity/{{event.activity | icon}}.png"></span>
+                <span>
+                    <ul>
+                        <li>
+                            <span ng-bind-html-unsafe="event | description"></span>
+                        </li>
+                        <li>
+                            <span>{{event.when}}</span>
+                        </li>
+                    </ul>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>

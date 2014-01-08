@@ -104,7 +104,7 @@
             <div class="navbounder">
                 <ul class="menuHeaderText nav dropdown-list">
                     <li class="dropdown standard menu-drop">
-                        <a class="dropdown-toggle" ng-class="{'dark': navState.path.substring(0,6)==='/home/'}"
+                        <a class="dropdown-toggle" ng-class="{'active': navState.path.substring(0,6)==='/home/'}"
                            ng-click="companies.length===1 && gotohome()">
                             {{navState.name}}
                             <span class='for-r0ml'> ({{navState.role}})</span>
@@ -112,7 +112,7 @@
                             <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                         </a>
 
-                        <ul class="dropdown-menu" ng-class="{'dark': navState.path.substring(0,6)=== '/home/'}"
+                        <ul class="dropdown-menu" ng-class="{'active': navState.path.substring(0,6)=== '/home/'}"
                         ng-show="companies.length > 1">
                             <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span>
                             </li>
