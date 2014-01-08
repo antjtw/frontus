@@ -2877,6 +2877,10 @@ button.icon-button:hover {
     width: 160px;
     float: right;
 }
+
+.modal .add-person input {
+    width: 260px;
+}
 .modal input[type='checkbox'] {
     width: 30px;
 }
