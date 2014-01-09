@@ -1,4 +1,4 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj'], function($routeProvider, $locationProvider) {
+var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective'], function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
     // $locationProvider.html5Mode(false).hashPrefix('!');
@@ -153,25 +153,18 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
 
         $scope.activity = [];
         SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+
             var originalfeed = feed;
-            $scope.eventGroups = [];
-            var uniqueGroups = [];
-            angular.forEach(originalfeed, function(ev) {
-                if (ev.activity != 'sent') {
-                    var timegroup = moment(ev.time).from(ev.timenow);
-                    if (uniqueGroups.indexOf(timegroup) > -1) {
-                        $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(ev);
-                    } else {
-                        $scope.eventGroups[$scope.eventGroups.length] = [];
-                        $scope.eventGroups[$scope.eventGroups.length - 1].push(timegroup);
-                        $scope.eventGroups[$scope.eventGroups.length - 1].push(ev.time);
-                        $scope.eventGroups[$scope.eventGroups.length - 1].push(ev);
-                        uniqueGroups.push(timegroup);
-                    }
+            //Generate the groups for the activity feed
+            $scope.feed = [];
+            angular.forEach(originalfeed, function(event) {
+                if (event.activity != "sent") {
+                    event.when = moment(event.time).from(event.timenow);
+                    $scope.feed.push(event);
                 }
             });
+
         }).except(function(err) {
-            console.log(err);
         });
 
         $scope.activityOrder = function(card) {
@@ -421,32 +414,23 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
 
         $scope.getCompanyActivity = function() {
             SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
+
                 var originalfeed = feed;
-                $scope.eventGroups = [];
-                var uniqueGroups = [];
-                angular.forEach(originalfeed, function(ev) {
-                    if (ev.activity != 'sent') {
-                        var timegroup = moment(ev.time).from(ev.timenow);
-                        if (uniqueGroups.indexOf(timegroup) > -1) {
-                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(ev);
-                        } else {
-                            $scope.eventGroups[$scope.eventGroups.length] = [];
-                            $scope.eventGroups[$scope.eventGroups.length - 1].push(timegroup);
-                            $scope.eventGroups[$scope.eventGroups.length - 1].push(ev.time);
-                            $scope.eventGroups[$scope.eventGroups.length - 1].push(ev);
-                            uniqueGroups.push(timegroup);
-                        }
+                //Generate the groups for the activity feed
+                $scope.feed = [];
+                angular.forEach(originalfeed, function(event) {
+                    if (event.activity != "sent") {
+                        event.when = moment(event.time).from(event.timenow);
+                        $scope.feed.push(event);
                     }
                 });
             }).except(function(err) {
-                console.log(err);
             });
         };
         $scope.getDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "person", $scope.user.email).then(function(data) {
                 $scope.setDocsLastEvent(data);
             }).except(function(err) {
-                console.log(err);
             });
         };
         $scope.setDocsLastEvent = function(activityfeed) {
@@ -618,90 +602,6 @@ app.filter('fromNowSort', function() {
         }
 
         return events;
-    };
-});
-app.filter('investordescription', function() {
-    return function(ac) {
-        var activity = ac.activity;
-        var person;
-        if (ac.name) {
-            person = ac.name;
-        } else {
-            person = ac.email;
-        }
-        var type = ac.type;
-        if (type == "ownership") {
-            if (activity == "received") return "Capitalization Table sent to " + person;
-            else if (activity == "viewed") return "Capitalization Table viewed by " + person;
-            else return "Something with Capitalization Table";
-        } else {
-            var document = ac.docname;
-            if (activity == "sent") return "";
-            else if (activity == "viewed") return document + " viewed by " + person;
-            else if (activity == "reminder") return "Reminded " + person + " about " + document;
-            else if (activity == "edited") return document + " edited by " + person;
-            else if (activity == "signed") return document + " signed by " + person;
-            else if (activity == "uploaded") return document + " uploaded by " + person;
-            else if (activity == "transcoded") return document + " uploaded by " + person;
-            else if (activity == "received") return document + " sent to " + person;
-            else if (activity == "rejected") return "Signature on " + document + " rejected by " + person;
-            else if (activity == "countersigned") return document + " countersigned by " + person;
-            else if (activity == "finalized") return document + " approved by " + person;
-            else return activity + " by " + person;
-        }
-    };
-});
-
-/* Filter to select the activity icon for document status */
-app.filter('icon', function() {
-    return function(activity) {
-        if (activity == "sent") return "icon-email";
-        else if (activity == "received") return "icon-email";
-        else if (activity == "viewed") return "icon-view";
-        else if (activity == "reminder") return "icon-redo";
-        else if (activity == "edited") return "icon-pencil";
-        else if (activity == "rejected") return "icon-circle-delete";
-        else if (activity == "signed") return "icon-pen";
-        else if (activity == "uploaded") return "icon-star";
-        else if (activity == "transcoded") return "icon-star";
-        else if (activity == "countersigned") return "icon-countersign";
-        else if (activity == "finalized") return "icon-lock";
-        else {
-            console.log(activity);
-            return "hunh?";
-        }
-    };
-});
-
-
-app.filter('description', function() {
-    return function(ac) {
-        var activity = ac.activity;
-        var person;
-        if (ac.name) {
-            person = ac.name;
-        } else {
-            person = ac.email;
-        }
-        var type = ac.type;
-        if (type == "ownership") {
-            if (activity == "received") return "Ownership Table sent to " + person;
-            else if (activity == "viewed") return "Ownership Table viewed by " + person;
-        } else {
-            var document = ac.docname;
-            if (activity == "sent") return document + " sent to " + person;
-            else if (activity == "viewed") return document + " viewed by " + person;
-            else if (activity == "reminder") return "Reminded " + person + " about " + document;
-            else if (activity == "edited") return "Edited by " + person;
-            else if (activity == "signed") return document + " signed by " + person;
-            else if (activity == "uploaded") return document + " uploaded by " + person;
-            else if (activity == "received") return document + " sent to " + person;
-            else if (activity == "rejected") return "Signature on " + document + " rejected by " + person;
-            else if (activity == "countersigned") return document + " countersigned by " + person;
-            else if (activity == "finalized") return document + " approved by " + person;
-            else return activity + " by " + person;
-        }
-        return "";
     };
 });
 

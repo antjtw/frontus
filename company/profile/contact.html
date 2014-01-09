@@ -95,27 +95,7 @@
                 </div>
             </div>
             <div class="span4">
-                <div class="info-box">
-                    <div class="head-box">
-                         <h2>Activity</h2>
-
-                    </div>
-                    <div class="body-box">
-                        <ul class="activity-feed2">
-                            <li ng-repeat="events in eventGroups | fromNowSort | limitTo:5"> <span>{{events[0]}}</span>
-
-                                <ul>
-                                    <li ng-repeat="event in events.slice(2)"> <i class="{{event.activity | icon}}"></i>
- <span>
-                                            {{event | investordescription}}
-                                        </span>
-
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <div activity-feed activity="feed" type="iss"></div>
             </div>
         </div>
     </div>

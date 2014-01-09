@@ -129,25 +129,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="info-box">
-                    <div class="head-box">
-                        <h2>Activity</h2>
-                    </div>
-                    <div class="body-box">
-                        <ul class="activity-feed2">
-                            <li ng-repeat="events in eventGroups | fromNowSortandFilter">
-                                <span>{{events[0]}}</span>
-                                <ul>
-                                    <li ng-repeat="event in events.slice(2)">
-                                        <i class="{{event.activity | icon}}"></i>
-                                        <span>{{event.name || event.person}} {{event | description}}</span>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div>
+                <div activity-feed activity="feed" type="issdoc"></div>
             </div>
         </div>
     </div>

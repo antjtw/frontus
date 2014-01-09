@@ -135,24 +135,7 @@
     </div>
 
     <div ng-show="!(myownership.shares > 0 || myownership.amount != null) || !(docsummary.num > 0)" class="span4">
-        <div class="info-box all-gray">
-            <div class="head-box">
-                <h2>Activity</h2>
-            </div>
-            <div class="body-box">
-                <ul class="activity-feed2">
-                    <li ng-repeat="events in eventGroups  | fromNowSort | limitTo:50">
-                        <span>{{events[0]}}</span>
-                        <ul>
-                            <li ng-repeat="event in events.slice(2)">
-                                <i class="{{event.activity | icon}}"></i>
-                                <span>{{event | investordescription}}</span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div activity-feed activity="feed" type="inv"></div>
     </div>
 
     <div class="span4 issuer-profile">
@@ -289,24 +272,7 @@
         </div>
     </div>
     <div ng-hide="!(myownership.shares > 0 || myownership.amount > 0) || !(docsummary.num > 0)" class="span4" style="float: right;">
-        <div class="info-box all-gray">
-            <div class="head-box">
-                <h2>Activity</h2>
-            </div>
-            <div class="body-box">
-                <ul class="activity-feed2">
-                    <li ng-repeat="events in eventGroups  | fromNowSort">
-                        <span>{{events[0]}}</span>
-                        <ul>
-                            <li ng-repeat="event in events.slice(2)">
-                                <i class="{{event.activity | icon}}"></i>
-                                {{event | investordescription}}
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div activity-feed activity="feed" type="inv"></div>
     </div>
 
 </div>

@@ -1374,6 +1374,10 @@ ul.spaced-list > li:nth-child(odd) {
     padding-top: 14px;
 }
 
+.info-box.activity-feed-box .body-box {
+    margin: 0;
+}
+
 .activity-feed2 {
     height: 268px;
     overflow: auto;
@@ -1384,18 +1388,22 @@ ul.spaced-list > li:nth-child(odd) {
     border-bottom: 1px solid #E3E3E3;
 }
 
+.activity-feed2 > li:not(:last-of-type) {
+}
+
 .activity-feed2 a {
     color: #3397DA;
 }
 
-.activity-feed2 > li > span:first-of-type {
+.activity-feed2 > li > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
-    line-height: 50px;
+    margin-top: 10px;
+    vertical-align: top;
 }
 
-.activity-feed2 > li > span:last-of-type {
+.activity-feed2 > li > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -1403,8 +1411,17 @@ ul.spaced-list > li:nth-child(odd) {
     width: calc(100% - 58px) !important;
 }
 
-.activity-feed2 > li > span:last-of-type > ul > li {
+.activity-feed2 > li > div:last-of-type > ul > li {
     line-height: 16px;
+}
+
+.activity-feed2 > li > div:last-of-type > ul > li:first-of-type {
+    margin-top: 8px;
+}
+
+.activity-feed2 > li > div:last-of-type > ul > li:last-of-type {
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
 /* Document Status */

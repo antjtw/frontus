@@ -440,21 +440,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
-                $scope.eventGroups = [];
-                var uniqueGroups = [];
+
+                var originalfeed = feed;
+                //Generate the groups for the activity feed
+                $scope.feed = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent" && event.activity != "viewed") {
-                        var timegroup = moment(event.time).from(event.timenow);
-                        if (uniqueGroups.indexOf(timegroup) > -1) {
-                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
-                        }
-                        else {
-                            $scope.eventGroups[$scope.eventGroups.length] = [];
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                            uniqueGroups.push(timegroup);
-                        }
+                        event.when = moment(event.time).from(event.timenow);
+                        $scope.feed.push(event);
                     }
                 });
             });
