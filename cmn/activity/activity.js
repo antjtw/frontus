@@ -1,5 +1,16 @@
 var active = angular.module('activityDirective', []);
 
+function caplength(word, length) {
+    if (word) {
+        if (word.length > length) {
+            return word.substring(0, (length-1)) + "...";
+        }
+        else {
+            return word;
+        }
+    }
+}
+
 active.directive('activityFeed', function() {
     return {
         restrict: 'A',
@@ -56,9 +67,9 @@ active.filter('description', function() {
                 var url = '/documents/company-view?doc=' + ac.docid;
                 if (activity == "sent") return "";
                 else if (activity == "viewed") {
-                    return "<a href=" + url + ">" + document + "</a>" + " viewed by "+person;
+                    return "<a href=" + url + ">" + caplength(document, 20) + "</a>" + " viewed by "+person;
                 }
-                else if (activity == "reminder") return "Reminded "+person + " about " + "<a href=" + url + ">" + document + "</a>";
+                else if (activity == "reminder") return "Reminded "+person + " about " + "<a href=" + url + ">" + caplength(document, 20) + "</a>";
                 else if (activity == "edited") return "<a href=" + url + ">" + document + "</a>" + " edited by "+person;
                 else if (activity == "signed") return "<a href=" + url + ">" + document + "</a>" + " signed by "+person;
                 else if (activity == "uploaded") return "<a href=" + url + ">" + document + "</a>" + " uploaded by "+person;
