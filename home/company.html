@@ -220,25 +220,8 @@
             </div>
         </div>
     </div>
-    <div ng-show="eventGroups.length > 0" class="span4">
-        <div class="info-box all-gray">
-            <div class="head-box">
-                <h2>Activity</h2>
-            </div>
-            <div class="body-box">
-                <ul class="activity-feed2">
-                    <li ng-repeat="events in eventGroups  | fromNowSort">
-                        <span>{{events[0]}}</span>
-                        <ul>
-                            <li ng-repeat="event in events.slice(2)">
-                                <i class="{{event.activity | icon}}"></i>
-                                <span>{{event | description}}</span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="span4">
+        <div activity-feed activity="feed" type="iss"></div>
     </div>
 </div>
 

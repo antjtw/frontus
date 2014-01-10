@@ -24,7 +24,7 @@ function setCursor(cursor) {
     }
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email', 'commonServices'], function($routeProvider, $locationProvider) {
+var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email', 'commonServices', 'activityDirective'], function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
     $routeProvider.
     when('/company-list', {
@@ -1185,7 +1185,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
             $scope.activity = data;
             $scope.setLastUpdates();
-            $scope.makeEventGroups();
+            $scope.makeFeed();
         });
 
         $scope.initInfoVar = function(infoVar, eventTime) {
@@ -1236,21 +1236,12 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
                 i++;
             }
         };
-        $scope.makeEventGroups = function() {
-            $scope.eventGroups = [];
-            var uniqueGroups = [];
+        $scope.makeFeed = function() {
+            $scope.feed = [];
             angular.forEach($scope.activity, function(event) {
                 if (event.activity != "sent") {
-                    var timeGroup = moment(event.event_time).from(event.timenow);
-                    if (uniqueGroups.indexOf(timeGroup) != -1) {
-                        $scope.eventGroups[uniqueGroups.indexOf(timeGroup)].push(event);
-                    } else {
-                        $scope.eventGroups[$scope.eventGroups.length] = [];
-                        $scope.eventGroups[$scope.eventGroups.length-1].push(timeGroup);
-                        $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
-                        $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                        uniqueGroups.push(timeGroup);
-                    }
+                    event.when = moment(event.time).from(event.timenow);
+                    $scope.feed.push(event);
                 }
             });
         };
@@ -1815,46 +1806,6 @@ docviews.filter('fromNowSortandFilter', function() {
             });
         }
         return events;
-    };
-});
-
-/* Filter to select the activity icon for document status */
-docviews.filter('icon', function() {
-    return function(activity) {
-        if (activity == "received") return "icon-email";
-        else if (activity == "viewed") return "icon-view";
-        else if (activity == "reminder") return "icon-redo";
-        else if (activity == "edited") return "icon-pencil";
-        else if (activity == "signed") return "icon-pen";
-        else if (activity == "uploaded") return "icon-star";
-        else if (activity == "transcoded") return "icon-star";
-        else if (activity == "rejected") return "icon-circle-delete";
-        else if (activity == "countersigned") return "icon-countersign";
-        else if (activity == "finalized") return "icon-lock";
-        else return "hunh?";
-    };
-});
-
-/* Filter to format the activity description on document status */
-docviews.filter('description', function() {
-    return function(ac) {
-        var activity = ac.activity;
-        var person = ac.name;
-        if (person === "") {
-            person = ac.person;
-        }
-        if (activity == "sent") return "";
-        else if (activity == "viewed") return "viewed Document";
-        else if (activity == "reminder") return "reminded Document";
-        else if (activity == "edited") return "edited Document";
-        else if (activity == "signed") return "signed Document";
-        else if (activity == "uploaded") return "uploaded Document";
-        else if (activity == "transcoded") return "uploaded Document";
-        else if (activity == "received") return "received Document";
-        else if (activity == "rejected") return "rejected Document";
-        else if (activity == "countersigned") return "countersigned Document";
-        else if (activity == "finalized") return "approved Document";
-        else return activity + "ed Document";
     };
 });
 
