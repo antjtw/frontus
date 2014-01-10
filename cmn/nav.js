@@ -51,6 +51,19 @@ navm.factory('navState', [function () {
     };
 }]);
 
+navm.directive('notifications', function() {
+    return {
+        restrict: 'A',
+        require: '^notes',
+        scope: {
+            notes: '='
+        },
+        templateUrl: '/cmn/navnotifications.html',
+        controller: ['$scope', function($scope) {
+        }]
+    }
+});
+
 idleTime = 0;
 $(document).ready(function () {
     //Increment the idle time counter every minute.
@@ -206,9 +219,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         SWBrijj.tblm('global.my_companies').then(function (x) {
             $scope.initCompany(x);
-            if ($rootScope.navState.role == "issuer") {
-                Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-            }
+            $scope.notifications();
         }).except(function (ignore) {
                 void(ignore);
                 $scope.navState={}; // Not sure why this is here but I don't want to rip it out without further examination (it doesn't seem to hurt!)
@@ -332,6 +343,56 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.oldSafari = function() {
             return (!(navigator.sayswho[0] == "Safari" && $scope.version_compare("537.43.58", navigator.sayswho[1])));
+        };
+
+        $scope.docStatus = function(doc) {
+            if (doc.signature_deadline == null) return 0;
+            else if (doc.when_signed == null) return 1;
+            else if (doc.when_countersigned == null) return 2;
+            else if (doc.when_finalized == null) return 3;
+            else return 4;
+        };
+
+        $scope.notifications = function() {
+            if ($rootScope.navState.role == "issuer") {
+                Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
+
+                // Get Notifications for docs
+                SWBrijj.tblm('document.action_library').then(function (x) {
+                    $scope.notes = x;
+                    angular.forEach($scope.notes, function(note) {
+                        note.signature_status = $scope.docStatus(note);
+                    })
+                    $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
+                });
+            }
+            else {
+                SWBrijj.tblm('document.investor_action_library').then(function (x) {
+                    console.log(x);
+                    $scope.notes = x;
+                    angular.forEach($scope.notes, function(note) {
+                        note.signature_status = $scope.docStatus(note);
+                    })
+                    $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
+                });
+            }
+        }
+
+        $scope.actionablenotes = function(notes, type) {
+            var notifications = [];
+            angular.forEach(notes, function(note) {
+                if (type == "issuer") {
+                    if (note.signature_status == 2) {
+                        notifications.push(note);
+                    }
+                }
+                else if (type == "investor") {
+                    if (note.signature_status == 1 || note.signature_status == 3) {
+                        notifications.push(note);
+                    }
+                }
+            });
+            return notifications
         }
 
     }]);
@@ -347,4 +408,32 @@ navm.filter('caplength', function () {
             }
         }
     };
+});
+navm.filter('notifications', function () {
+    return function (note) {
+        var document = note.docname;
+        var investor = note.investor;
+        if (note.signature_status == 1) {
+            var url = '/documents/investor-view?doc=' + note.doc_id;
+            return "Review and sign <a href=" + url + ">" + caplength(document, 35) + "</a>"
+        }
+        if (note.signature_status == 2) {
+            var url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
+            return "Review and sign <a href=" + url + ">" + caplength(document, 35) + "</a>"
+        }
+        if (note.signature_status == 3) {
+            var url = '/documents/investor-view?doc=' + note.doc_id;
+            return "Review and Finalize <a href=" + url + ">" + caplength(document, 35) + "</a>"
+        }
+    };
+});
+
+/* Filter to select the activity icon for document status */
+navm.filter('noteicon', function() {
+    return function(activity) {
+        if (activity == 1) return "doc-sign-yel";
+        else if (activity == 2) return "doc-countersign-yel";
+        else if (activity == 3) return "doc-final-yel";
+        else return "hunh?";
+    }
 });

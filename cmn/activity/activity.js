@@ -37,7 +37,6 @@ active.filter('icon', function() {
         else if (activity == "uploaded") return "doc-upload";
         else if (activity == "transcoded") return "doc-upload";
         else if (activity == "rejected") return "doc-rejected";
-        // Need to get this from Alison
         else if (activity == "countersigned") return "doc-countersign";
         else if (activity == "finalized") return "doc-final";
         else return "hunh?";

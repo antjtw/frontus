@@ -2202,12 +2202,94 @@ ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     font-size: 12px;
     height: 30px;
 }
+
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: auto;
     padding-left: 8px;
     padding-right: 8px;
     font-size: 14px;
     color: #666666;
+}
+
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    line-height: 30px;
+    text-align: center;
+    width: 50px;
+    text-shadow: none;
+    font-size: 12px;
+    height: 30px;
+}
+
+.topnav.navbar .nav.dropdown-list.notifications > li > .dropdown-menu:before {
+    right: 155px;
+    top: -7px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul {
+    border: 1px solid #33485D;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
+    border-radius: 0;
+    background-color: #33485D;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 30px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type:hover {
+    background-color: #33485D;
+    color: #FFFFFF;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    color: #656565;
+    height: 50px;
+}
+
+.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
+    background-color: #FFFFFF;
+    color: #656565;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul {
+    width: 323px;
+    min-width: 100px;
+    border-radius: 0;
+    padding: 0 0 0 0;
+    margin-top: 10px;
+    margin-right: -135px;
+}
+
+
+.nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    margin-top: 7px;
+    vertical-align: top;
+}
+
+.nav.dropdown-list.notifications > li > ul > li > div:last-of-type {
+    display: inline-block;
+    min-height: 50px;
+    width: -moz-calc(100% - 58px) !important;
+    width: -webkit-calc(100% - 58px) !important;
+    width: calc(100% - 58px) !important;
+}
+
+.nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
+    line-height: 44px;
+}
+
+.nav.dropdown-list.notifications > li > ul > li a {
+    color: #3397DA;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active {
