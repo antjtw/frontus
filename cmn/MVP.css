@@ -2258,6 +2258,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #FFFFFF;
     font-size: 14px;
     line-height: 30px;
+    cursor: default;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type:hover {
@@ -2272,6 +2273,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     background-color: #FFFFFF;
     color: #656565;
     height: 50px;
+    cursor: default;
 }
 
 .topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {

@@ -415,15 +415,15 @@ navm.filter('notifications', function () {
         var investor = note.investor;
         if (note.signature_status == 1) {
             var url = '/documents/investor-view?doc=' + note.doc_id;
-            return "Review and sign <a href=" + url + ">" + caplength(document, 35) + "</a>"
+            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         if (note.signature_status == 2) {
             var url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
-            return "Review and sign <a href=" + url + ">" + caplength(document, 35) + "</a>"
+            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         if (note.signature_status == 3) {
             var url = '/documents/investor-view?doc=' + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 35) + "</a>"
+            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };
 });
