@@ -1744,7 +1744,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
-                doc.when_finalize = data;
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $location.path('/investor-list').search({});
