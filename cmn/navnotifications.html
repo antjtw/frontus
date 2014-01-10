@@ -1,6 +1,7 @@
 <li class="dropdown standard menu-drop" ng-show="$parent.navState.userid && (notes.length > 0)">
     <a class="dropdown-toggle">
-        <span data-icon="&#xe603;" aria-hidden="true"></span>
+        <span class="note-flag" data-icon="&#xe603;" aria-hidden="true"></span>
+        <span class="note-number">{{notes.length}}</span>
     </a>
     <ul class="dropdown-menu">
         <li>Notifications</li>

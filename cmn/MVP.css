@@ -2222,6 +2222,27 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     height: 30px;
 }
 
+
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle > span.note-flag {
+    position: absolute;
+    left: 20px;
+    top: 2px;
+    font-size: 18px;
+    color: #C6C6C6;
+}
+
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle > span.note-number {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    background-color: #EB6F1C;
+    color: #FFFFFF;
+    border-radius: 2px;
+    height: 15px;
+    width: 15px;
+    line-height: 15px;
+}
+
 .topnav.navbar .nav.dropdown-list.notifications > li > .dropdown-menu:before {
     right: 155px;
     top: -7px;
