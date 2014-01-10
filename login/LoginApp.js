@@ -12,6 +12,7 @@ var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locati
       when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
       when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
       when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
+      when('/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
       otherwise({redirectTo:'/'});
 });
 
