@@ -81,7 +81,7 @@ $(document).ready(function () {
 function timerIncrement() {
     idleTime = idleTime + 1;
     if (idleTime > 28) { // 1 minutes
-        document.location.href = "/login/logout";
+        document.location.href = "/login/logout?timeout";
     }
 }
 
