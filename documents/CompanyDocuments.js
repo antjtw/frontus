@@ -107,6 +107,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return;
         }
 
+        $scope.sideToggleName = "Hide";
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
@@ -131,6 +133,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             }
         });
+
+        SWBrijj.tblm('smartdoc.document_meta').then(function(data) {
+            $scope.smarttemplates = data;
+        }).except(function(x) {
+            });
 
         SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
             $scope.documents = data;
@@ -663,6 +670,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.viewInvestorCopy = function(version) {
             $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+        };
+
+        // Toggles sidebar back and forth
+        $scope.toggleSide = function () {
+            if (!$scope.sideToggle) {
+                $scope.sideToggleName = "Hide";
+                return false
+            } else {
+                $scope.sideToggleName = "Templates";
+                return true
+            }
         };
 
         // Sharing modal functions
