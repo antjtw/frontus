@@ -347,17 +347,19 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
 
-        var mimetypes = ["application/pdf", "application/msword"];
+        var mimetypes = ["application/pdf",
+                         "application/msword",
+                         "application/vnd.ms-powerpoint",
+                         "text/csv"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
-        	    // console.log(element.files[i].type);
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    $scope.fileError = "Please choose a pdf";
+                    $scope.fileError = "Please choose a .pdf, .doc, .ppt or .csv";
                 } else {
                     $scope.files.push(element.files[i]);
                 }
