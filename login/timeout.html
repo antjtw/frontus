@@ -4,13 +4,16 @@
             <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
             <p class="tagline">the best way to manage shareholders<p>
         </div>
-        <div class="spacer30"></div>
+        <div class="spacer20"></div>
         <div>
+            <div ng-hide="showError">
+                <h2>Automatic Log Out Due to Inactivity</h2>
+                <p>We hadn't heard from you for about 25 minutes, so <br> for your security we logged you out of your account. <br> Log back in below to continue.</p>
+            </div>
             <div ng-show="showError" class="textalert loginErrorBox text-center">
                 <h2>Invalid email/password combination.</h2>
             </div>
         </div>
-
         <form id="login" class="text-center inputs" ng-submit="doLogin()">
             <fieldset>
                 <div class="field text-right">
