@@ -111,6 +111,11 @@ you can use the generic selector below, but it's slower:
 .icon-facebook-f:before {
     content: "\e037";
 }
+
+.icon-notification:before {
+    content: "\e603";
+}
+
 .icon-email:before {
     content: "\e024";
 }

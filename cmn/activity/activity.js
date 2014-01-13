@@ -1,5 +1,16 @@
 var active = angular.module('activityDirective', []);
 
+function caplength(word, length) {
+    if (word) {
+        if (word.length > length) {
+            return word.substring(0, (length-1)) + "...";
+        }
+        else {
+            return word;
+        }
+    }
+}
+
 active.directive('activityFeed', function() {
     return {
         restrict: 'A',
@@ -26,7 +37,6 @@ active.filter('icon', function() {
         else if (activity == "uploaded") return "doc-upload";
         else if (activity == "transcoded") return "doc-upload";
         else if (activity == "rejected") return "doc-rejected";
-        // Need to get this from Alison
         else if (activity == "countersigned") return "doc-countersign";
         else if (activity == "finalized") return "doc-final";
         else return "hunh?";
@@ -56,17 +66,17 @@ active.filter('description', function() {
                 var url = '/documents/company-view?doc=' + ac.docid;
                 if (activity == "sent") return "";
                 else if (activity == "viewed") {
-                    return "<a href=" + url + ">" + document + "</a>" + " viewed by "+person;
+                    return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " viewed by "+person;
                 }
-                else if (activity == "reminder") return "Reminded "+person + " about " + "<a href=" + url + ">" + document + "</a>";
-                else if (activity == "edited") return "<a href=" + url + ">" + document + "</a>" + " edited by "+person;
-                else if (activity == "signed") return "<a href=" + url + ">" + document + "</a>" + " signed by "+person;
-                else if (activity == "uploaded") return "<a href=" + url + ">" + document + "</a>" + " uploaded by "+person;
-                else if (activity == "transcoded") return "<a href=" + url + ">" + document + "</a>" + " uploaded by "+person;
-                else if (activity == "received") return "<a href=" + url + ">" + document + "</a>" + " sent to "+person;
-                else if (activity == "rejected") return "Signature on " +"<a href=" + url + ">" + document + "</a>" + " rejected by "+person;
-                else if (activity == "countersigned") return "<a href=" + url + ">" + document + "</a>" + " countersigned by "+person;
-                else if (activity == "finalized") return "<a href=" + url + ">" + document + "</a>" + " approved by " + person;
+                else if (activity == "reminder") return "Reminded "+person + " about " + "<a href=" + url + ">" + caplength(document, 35) + "</a>";
+                else if (activity == "edited") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " edited by "+person;
+                else if (activity == "signed") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " signed by "+person;
+                else if (activity == "uploaded") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " uploaded by "+person;
+                else if (activity == "transcoded") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " uploaded by "+person;
+                else if (activity == "received") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " sent to "+person;
+                else if (activity == "rejected") return "Signature on " +"<a href=" + url + ">" + caplength(document, 35) + "</a>" + " rejected by "+person;
+                else if (activity == "countersigned") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " countersigned by "+person;
+                else if (activity == "finalized") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " approved by " + person;
                 else return activity + " by "+person;
             }
         }
@@ -91,13 +101,13 @@ active.filter('description', function() {
             }
             else if (type == "document") {
                 var document = ac.docname;
-                if (activity == "received") return "You received " + document + " from " + company;
-                else if (activity == "viewed") return "You viewed " + document;
-                else if (activity == "reminder") return "You were reminded about" +document;
-                else if (activity == "signed") return "You signed "+document;
-                else if (activity == "rejected") return person + " rejected your signature on " +document;
-                else if (activity == "countersigned") return person + " countersigned "+document;
-                else if (activity == "finalized") return "You approved " + document;
+                if (activity == "received") return "You received " + caplength(document, 35) + " from " + company;
+                else if (activity == "viewed") return "You viewed " + caplength(document, 35);
+                else if (activity == "reminder") return "You were reminded about" +caplength(document, 35);
+                else if (activity == "signed") return "You signed "+caplength(document, 35);
+                else if (activity == "rejected") return person + " rejected your signature on " +caplength(document, 35);
+                else if (activity == "countersigned") return person + " countersigned "+caplength(document, 35);
+                else if (activity == "finalized") return "You approved " + caplength(document, 35);
                 else  {
                     return activity + " by "+person;
                 }
