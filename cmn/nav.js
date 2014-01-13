@@ -81,7 +81,7 @@ $(document).ready(function () {
 function timerIncrement() {
     idleTime = idleTime + 1;
     if (idleTime > 28) { // 1 minutes
-        document.location.href = "/login/logout"
+        document.location.href = "/login/logout";
     }
 }
 
@@ -125,7 +125,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
-                $scope.lastPage = document.location.href;
+                if (document.location.pathname == "/login/") {
+                    $scope.lastPage = "/document/company-list";
+                } else {
+                    $scope.lastPage = document.location.href;
+                }
             }
         });
         // On each NavCtrl load (new angular app), if the referrer is of the same domain, record the old page.
