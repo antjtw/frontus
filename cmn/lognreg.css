@@ -39,8 +39,14 @@
     max-width: 370px;
 }
 
+.lognreg p span.welcome {
+    color: #1E2D3D;
+    font-size: 14px;
+}
+
 .lognreg p strong{
-    font-family: 'FS Elliot Web Bold', sans-serif;;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    color: #1E2D3D;
 }
 
 .lognreg .caption {
