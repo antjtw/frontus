@@ -48,7 +48,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         angular.forEach(originalfeed, function(event) {
             console.log(event);
             if (event.activity != "sent") {
-                event.when = moment(event.time).from(event.timenow);
+                event.when = moment(event.event_time).from(event.timenow);
                 event.type = "ownership"
                 $scope.feed.push(event);
             }

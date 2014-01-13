@@ -1082,7 +1082,7 @@ form.inputs {
     background-color: rgb(28, 202, 161);
 }
 .textalert.loginErrorBox {
-    width:300px;
+    width:330px;
     background-color: rgb(166, 166, 166);
     border-radius: 0;
     margin: auto;
@@ -1376,10 +1376,11 @@ ul.spaced-list > li:nth-child(odd) {
 
 .info-box.activity-feed-box .body-box {
     margin: 0;
+    height: 536px;
 }
 
 .activity-feed2 {
-    height: 268px;
+    height: 536px;
     overflow: auto;
 }
 
@@ -1388,7 +1389,8 @@ ul.spaced-list > li:nth-child(odd) {
     border-bottom: 1px solid #E3E3E3;
 }
 
-.activity-feed2 > li:not(:last-of-type) {
+.activity-feed2 > li:last-of-type {
+    border-bottom: none;
 }
 
 .activity-feed2 a {
@@ -1417,6 +1419,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 > li > div:last-of-type > ul > li:first-of-type {
     margin-top: 8px;
+    color: #666666;
 }
 
 .activity-feed2 > li > div:last-of-type > ul > li:last-of-type {
@@ -1637,7 +1640,7 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 28px;
+    width: 50px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
@@ -1700,7 +1703,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column {
-    width: 160px;
     text-align: left;
     padding-left: 20px;
 }
@@ -1724,7 +1726,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.status-column {
-    width: 200px;
     text-align: left;
     padding-left: 0px;
 }
@@ -1736,7 +1737,6 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
     padding-left: 10px;
-    width: 230px;
 }
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
@@ -2250,6 +2250,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
+    border-radius: 3px;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2284,7 +2285,6 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     width: 323px;
     min-width: 100px;
-    border-radius: 0;
     padding: 0 0 0 0;
     margin-top: 10px;
     margin-right: -135px;
@@ -3269,8 +3269,8 @@ button.icon-button:hover {
     margin-top:-10px;
     margin-left: 20px;
     width:260px;
-    padding-bottom:7px;
-    padding-top:7px;
+    padding-bottom:15px;
+    padding-top:15px;
     background-color: rgb(52, 73, 94);
     color: rgb(255, 255, 255);
     border-radius: 5px;

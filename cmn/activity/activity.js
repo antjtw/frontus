@@ -27,19 +27,27 @@ active.directive('activityFeed', function() {
 
 /* Filter to select the activity icon for document status */
 active.filter('icon', function() {
-    return function(activity) {
-        if (activity == "sent") return "doc-share";
-        else if (activity == "received") return "doc-share";
-        else if (activity == "viewed") return "doc-view";
-        else if (activity == "reminder") return "icon-redo";
-        else if (activity == "edited") return "doc-edit";
-        else if (activity == "signed") return "doc-sign";
-        else if (activity == "uploaded") return "doc-upload";
-        else if (activity == "transcoded") return "doc-upload";
-        else if (activity == "rejected") return "doc-rejected";
-        else if (activity == "countersigned") return "doc-countersign";
-        else if (activity == "finalized") return "doc-final";
-        else return "hunh?";
+    return function(event) {
+        var activity = event.activity;
+        if (event.type == "ownership") {
+            if (activity == "sent") return "received";
+            else if (activity == "received") return "received";
+            else if (activity == "viewed") return "view";
+        }
+        else {
+            if (activity == "sent") return "doc-share";
+            else if (activity == "received") return "doc-share";
+            else if (activity == "viewed") return "doc-view";
+            else if (activity == "reminder") return "icon-redo";
+            else if (activity == "edited") return "doc-edit";
+            else if (activity == "signed") return "doc-sign";
+            else if (activity == "uploaded") return "doc-upload";
+            else if (activity == "transcoded") return "doc-upload";
+            else if (activity == "rejected") return "doc-rejected";
+            else if (activity == "countersigned") return "doc-countersign";
+            else if (activity == "finalized") return "doc-final";
+            else return "hunh?";
+        }
     }
 });
 
