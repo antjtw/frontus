@@ -134,7 +134,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         });
 
-        SWBrijj.tblm('smartdoc.document_meta').then(function(data) {
+        SWBrijj.tblm('smartdoc.document').then(function(data) {
             $scope.smarttemplates = data;
         }).except(function(x) {
             });

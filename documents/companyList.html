@@ -280,14 +280,26 @@
         {{sideToggleName}}
     </button>
     <div class="row-fluid">
-        <h2>Templates</h2>
+        <h2 class="large-h2">Templates</h2>
 
         <div class="smart-doc-list">
             <ul>
                 <li ng-repeat="template in smarttemplates">
                     <ul>
                         <li>{{template.template_name}}</li>
-                        <li>Cog</li>
+                        <li>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>View</li>
+                                        <li>Share</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             </ul>

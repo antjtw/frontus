@@ -200,6 +200,7 @@ h1 {
     font-weight: normal;
     color: rgb(30, 45, 61);
 }
+
 h2 {
     font-family:'FS Elliot Web Regular', sans-serif !important;
     font-size: 14px;
@@ -207,6 +208,7 @@ h2 {
     font-weight: normal;
     color: rgb(30, 45, 61);
 }
+
 .bodyText, .bodyText input, .bodyText a {
     font-family:'FS Elliot Web Regular', sans-serif;
     font-size: 12px;
@@ -2313,6 +2315,12 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 .nav.dropdown-list.notifications > li > ul > li a {
     color: #3397DA;
+}
+.nav.dropdown-list.notifications > li > ul > li > div.no-notifications {
+    text-align: center;
+    width: 301px !important;
+    line-height: 45px;
+    margin: 0;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active {
