@@ -266,6 +266,27 @@ docs.directive('docViewer', function() {
     };
 });
 
+docs.directive('templateViewer', function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            html: '='
+        },
+        templateUrl: 'template.html',
+        controller: 'TemplateViewController',
+        link: function (scope, iElement, iAttrs) {
+            var html = angular.element(scope.html);
+            iElement.append(html);
+
+        }
+    };
+});
+
+docs.controller('TemplateViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+    }
+]);
+
 docs.filter('fromNow', function() {
     return function(date, servertime) {
         return moment(date).from(servertime);
@@ -329,6 +350,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.pages = pages;
             refreshDocImage();
             $scope.loadPages();
+        });
+
+        $scope.$on('initTemplateView', function(event, templateId) {
+            $scope.templateId = templateId;
+            $scope.isAnnotable = false;
+            $scope.docLength = 0;
+            $scope.stage = -1;
+            $scope.code = "<div>Hello</div>";
         });
 
         $scope.stage = 0;

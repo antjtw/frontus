@@ -129,6 +129,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         Intercom('update', {company : {'captable_shares':data.length}});
     });
 
+    SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
+        $scope.userstatuses = data;
+    });
+
     $scope.generateCaptable = function(names) {
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -860,6 +864,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         $scope.activeInvestorName = investor.name;
         $scope.activeInvestorEmail = investor.email;
+        angular.forEach($scope.userstatuses, function(user) {
+            if (investor.email == user.email) {
+                $scope.activeInvestorRealName = user.name;
+            }
+        });
         $scope.activeInvestorNameKey = angular.copy(investor.name);
     };
 
@@ -2371,7 +2380,56 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.tourNotification = function() {
         $scope.$emit("notification:success", "Great! Just repeat for all securities, and share when you're ready.");
-    }
+    };
+
+    // Modal for changing access type
+    $scope.accessmodalUp = function (person) {
+        $scope.capAccess = true;
+        angular.forEach($scope.userstatuses, function(user) {
+            if (person == user.email) {
+                person = user;
+            }
+        });
+        $scope.selectedI = angular.copy(person);
+    };
+
+    $scope.accessclose = function () {
+        $scope.closeMsg = 'I was closed at: ' + new Date();
+        $scope.capAccess = false;
+    };
+
+    $scope.selectVisibility = function (value, person) {
+        $scope.selectedI.level = value
+    };
+
+    $scope.changeVisibility = function (person) {
+        SWBrijj.proc('ownership.update_investor_captable', person.email, person.level).then(function (data) {
+            void(data);
+            angular.forEach($scope.userstatuses, function(peep) {
+                if (peep.email == person.email) {
+                    peep.level = person.level
+                }
+            });
+            $scope.$emit("notification:success", "Successfully changed permissions");
+        }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+            });
+    };
+
+    $scope.shareopts = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'modal'
+    };
+
+    $scope.gotoProfile = function(email, name) {
+        var link;
+        link = (name ? ((navState.userid != email) ? '/company/profile/view?id=' + email : '/account/profile/') : '');
+        if (link) {
+            document.location.href = link;
+        }
+    };
 
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {

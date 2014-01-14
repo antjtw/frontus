@@ -659,6 +659,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + docid + "&page=1");
         };
 
+        $scope.viewTemplate = function(templateid) {
+            $location.url("/company-view?template=" + templateid);
+        };
+
         $scope.viewStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.doc_id);
         };
@@ -930,9 +934,11 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.$on('docViewerReady', function(event) {
             if ($scope.docId) $scope.getData();//{$route.reload();}
+            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey);
         });
 
         $scope.docKey = parseInt($routeParams.doc, 10);
+        $scope.templateKey = parseInt($routeParams.template, 10);
         $scope.urlInves = $routeParams.investor;
         $scope.invq = false;
         $scope.counterparty = !! $scope.urlInves;
@@ -951,20 +957,22 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
 
         $scope.getData = function() {
-            SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
-                if ($scope.counterparty) {
-                    for (var i = 0; i < data.length; i++) {
-                        var doc = data[i];
-                        if (doc.investor == $scope.urlInves) {
-                            $scope.version = doc;
-                            $scope.getVersion(doc);
-                            return;
+            if ($scope.docKey) {
+                SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+                    if ($scope.counterparty) {
+                        for (var i = 0; i < data.length; i++) {
+                            var doc = data[i];
+                            if (doc.investor == $scope.urlInves) {
+                                $scope.version = doc;
+                                $scope.getVersion(doc);
+                                return;
+                            }
                         }
+                    } else {
+                        $scope.getOriginal();
                     }
-                } else {
-                    $scope.getOriginal();
-                }
-            });
+                });
+            }
         };
 
         $scope.getData();
