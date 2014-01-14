@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span4">
+            <div class="span4"><!-- TODO show if user is an investor with any company -->
                 <div class="row-fluid">
                     <div class="front info-box">
                         <div class="head-box">
@@ -70,8 +70,16 @@
                         </div>
                     </div>
                     <div class="body-box">
-                        <!-- ng-repeat for attribute, answer pair in smartdoc.my_profile -->
-                        stuff
+                        <div ng-repeat="attr in investor_attributes">
+                            <span>{{attr[2]}}</span>
+                            <div>
+                                <button ng-show="attr[1]==='check-box'" ng-class="{'selected':attr[3]===true}"
+                                        ng-click="attr[3]=true" class="check-box-button">
+                                    <span data-icon="&#xe023;" aria-hidden="true"></span>
+                                </button>
+                                <input ng-show="attr[1]==='text'" type="text" ng-model="attr[3]" max-length="30">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

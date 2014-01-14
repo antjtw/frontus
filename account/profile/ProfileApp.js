@@ -136,6 +136,15 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             }
         };
 
+        $scope.getInvestorInformation = function() {
+            SWBrijj.tbl('smartdoc.my_profile').then(function(data) {
+                $scope.investor_attributes = data;
+                console.log(data);
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+
         /** @name SWBrijj#tbl
          * @function
          * @param {string} table_name */
@@ -143,6 +152,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             initPage($scope, x);
             $scope.photoURL = '/photo/user?id=' + $scope.email;
             $scope.namekey = $scope.name;
+            $scope.getInvestorInformation();
         }).except(initFail);
 
         $scope.uploadFile = function() {
