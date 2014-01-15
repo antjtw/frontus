@@ -275,8 +275,16 @@ docs.directive('templateViewer', function() {
         templateUrl: 'template.html',
         controller: 'TemplateViewController',
         link: function (scope, iElement, iAttrs) {
-            var html = angular.element(scope.html);
+
+            scope.$watch("html", function(newVals, oldVals) {
+                return scope.add(newVals);
+            }, true);
+
+            scope.add = function(raw_html) {
+            var html = angular.element(raw_html);
             iElement.append(html);
+
+            }
 
         }
     };
@@ -352,12 +360,69 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.loadPages();
         });
 
+        $scope.get_attribute = function(attribute, type, company_info) {
+            if (type == "company") {
+                if (attribute == "company_name") {
+                    return company_info.name;
+                }
+                else if (attribute == "company_state") {
+                    return company_info.state;
+                }
+            }
+        };
+
+        $scope.template_share = function(email, attributes) {
+            console.log(email);
+            console.log(JSON.stringify(attributes));
+        };
+
         $scope.$on('initTemplateView', function(event, templateId) {
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
             $scope.docLength = 0;
             $scope.stage = -1;
-            $scope.code = "<div>Hello</div>";
+            $scope.template_original = true;
+            $scope.used_attributes = {};
+            $scope.template_email = "";
+
+            SWBrijj.procm('smartdoc.render_html', $scope.templateId).then(function(code) {
+                SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
+                    var attributes = attributes;
+                    SWBrijj.tblm('account.my_company').then(function(company_info) {
+                        $scope.company_info = company_info[0];
+                        var raw_html = code[0].render_html;
+                        raw_html = raw_html.replace(/&#x02D9;/g, "_");
+
+                        //Sort through all the !!! and make the appropriate replacement
+                        while (raw_html.match(/!!![^!]+!!!/g)) {
+                            var thing = raw_html.match(/!!![^!]+!!!/);
+                            thing = thing[0].substring(3,(thing[0].length)-3);
+                            var replace = "";
+                            angular.forEach(attributes, function (attribute) {
+                                if (thing == attribute.attribute ) {
+                                    var first = thing.split("_")[0];
+
+                                    if (first == "company") {
+                                        replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
+                                        $scope.used_attributes[attribute.attribute] = replace;
+                                        replace = "<span>" + replace + "</span>"
+                                    }
+                                    else {
+                                        if (attribute.attribute_type == "text") {
+                                            replace = "<span>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
+                                        }
+                                        if (attribute.attribute_type == "check-box") {
+                                            replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"===true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                        }
+                                    }
+                                }
+                            });
+                            raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
+                        }
+                        $scope.html = raw_html;
+                    });
+                });
+            });
         });
 
         $scope.stage = 0;

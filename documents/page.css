@@ -694,3 +694,20 @@ div.progress-bar {
 .span4.capright > button:active {
     color: #1E2D3D;
 }
+
+/* Template CSS */
+
+.templatePanel {
+    margin: 0 20px 0 20px;
+}
+
+.templatePanel .center {
+    width: 100%;
+    text-align: center;
+}
+
+.templatePanel .center p {
+    font-size: 18px;
+    color: black;
+    line-height: 22px;
+}
