@@ -403,6 +403,18 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
     }]);
 
+
+function caplength(word, length) {
+    if (word) {
+        if (word.length > length) {
+            return word.substring(0, (length-1)) + "...";
+        }
+        else {
+            return word;
+        }
+    }
+}
+
 navm.filter('caplength', function () {
     return function (word, length) {
         if (word) {

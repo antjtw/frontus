@@ -11,38 +11,12 @@
                 <div class="subnav-controls">
                     <div>
                         <div class="pull-left">
-                            <form>
-                                <div class="editProfilePhoto"
-                                    style="width:40px; height:40px; margin-top:-4px">
-                                     <img ng-src="{{photoURL}}">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="viewProfileText pull-left" style="width:30%;">
-                            <ul>
-                                <li>{{name}}</li>
-                                <li>{{email}}</li>
-                            </ul>
-                        </div>
-                        <div ng-show="address1() || address2()" class="viewProfileText pull-left" style="width:30%;">
-                            <ul>
-                                <li>{{address1()}}</li>
-                                <li>{{address2()}}</li>
-                            </ul>
+                            <h2>{{name}}</h2>
                         </div>
                         <div class="pull-right">
-                            <ul class="dropdown-list">
-                                <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle dark">
-                                        <span data-icon="&#xe011;" aria-hidden="true">
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-click="profileModalOpen()">Edit Profile</li>
-                                        <li ng-click="passwordModalOpen()">Change Password</li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <div class="standard-button">
+                                <button class="btn">Edit Profile</button>
+                            </div>
                         </div> 
                     </div>
                     <div class="DivHelper"></div>
@@ -56,10 +30,45 @@
                         <div class="head-box">
                             <h2>Personal Information</h2>
                         </div>
+                        <div class="body-box">
+                            <ul class="personal-information">
+                                <li>
+                                    <ul>
+                                        <li>Full Name</li>
+                                        <li><input ng-model="name"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>Address</li>
+                                        <li><input ng-model="street"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>City</li>
+                                        <li><input ng-model="city"></li>
+                                        <li>State</li>
+                                        <li><input class="short-input" maxlength="2" ng-model="state"></li>
+                                        <li>Zip Code</li>
+                                        <li><input class="short-input" maxlength="12" ng-model="postalcode"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>Telephone</li>
+                                        <li><input ng-model="phone"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>Profile Image</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="body-box">
-                        stuff
-                    </div>
+
                 </div>
             </div>
             <div class="span4"><!-- TODO show if user is an investor with any company -->
@@ -68,16 +77,16 @@
                         <div class="head-box">
                             <h2>Investor Information</h2>
                         </div>
-                    </div>
-                    <div class="body-box">
-                        <div ng-repeat="attr in investor_attributes">
-                            <span>{{attr[2]}}</span>
-                            <div>
-                                <button ng-show="attr[1]==='check-box'" ng-class="{'selected':attr[3]===true}"
-                                        ng-click="attr[3]=true" class="check-box-button">
-                                    <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                </button>
-                                <input ng-show="attr[1]==='text'" type="text" ng-model="attr[3]" max-length="30">
+                        <div class="body-box">
+                            <div ng-repeat="attr in investor_attributes">
+                                <span>{{attr.label}}</span>
+                                <div>
+                                    <button ng-show="attr.attribute_type==='check-box'" ng-class="{'selected':attr.answer=='true'}"
+                                            ng-click="booleanUpdate(attr.attribute, attr.answer)" class="check-box-button">
+                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                                    </button>
+                                    <input ui-event="{blur:'attributeUpdate(attr.attribute, attr.answer)'}" ng-show="attr.attribute_type==='text'" type="text" ng-model="attr.answer" max-length="30">
+                                </div>
                             </div>
                         </div>
                     </div>

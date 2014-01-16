@@ -110,6 +110,29 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             });
         };
 
+        $scope.booleanUpdate = function(attribute, value) {
+            if (value == null) {
+                value = false;
+            }
+            value = value == "true" ? "false": "true";
+            angular.forEach($scope.investor_attributes, function(attr) {
+                if (attr.attribute == attribute) {
+                    attr.answer = value;
+                }
+            });
+            SWBrijj.procm("smartdoc.update_investor_attributes", attribute, String(value)).then(function(x) {
+                console.log(x);
+            }).except(function(err) {
+                    console.log(err);
+                });
+        };
+
+        $scope.attributeUpdate = function(attribute, value) {
+            SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
+            }).except(function(err) {
+            });
+        };
+
         $scope.profileopts = {
             backdropFade: true,
             dialogFade:true,
@@ -137,9 +160,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
         };
 
         $scope.getInvestorInformation = function() {
-            SWBrijj.tbl('smartdoc.my_profile').then(function(data) {
+            SWBrijj.tblm('smartdoc.my_profile').then(function(data) {
                 $scope.investor_attributes = data;
-                console.log(data);
             }).except(function(err) {
                 console.log(err);
             });

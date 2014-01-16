@@ -934,11 +934,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.$on('docViewerReady', function(event) {
             if ($scope.docId) $scope.getData();//{$route.reload();}
-            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey);
+            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
         });
 
         $scope.docKey = parseInt($routeParams.doc, 10);
         $scope.templateKey = parseInt($routeParams.template, 10);
+        $scope.subId = parseInt($routeParams.subid, 10);
         $scope.urlInves = $routeParams.investor;
         $scope.invq = false;
         $scope.counterparty = !! $scope.urlInves;
@@ -1574,9 +1575,10 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             return doc.when_signed || doc.signature_deadline;
         };
 
-        $scope.gotoDoc = function(docid) {
+        $scope.gotoDoc = function(doc) {
             var link;
-            link = "/documents/investor-view?doc=" + docid;
+            if (doc.template_id) link = "/documents/investor-view?template=" + doc.template_id + "&subid=" + doc.doc_id;
+            else link = "/documents/investor-view?doc=" + doc.doc_id;
             document.location.href = link;
         };
 
@@ -1701,9 +1703,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.$on('docViewerReady', function(event) {
             if ($scope.docId) $scope.getData();
+            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
         });
 
         $scope.docId = parseInt($routeParams.doc, 10);
+        $scope.templateKey = parseInt($routeParams.template, 10);
+        $scope.subId = parseInt($routeParams.subid, 10);
         $scope.thisPage = $routeParams.page ? parseInt($routeParams.page, 10) : 1;
         $scope.library = "document.my_investor_library";
         $scope.pages = "document.my_investor_codex";
@@ -1719,17 +1724,19 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.getData = function () {
-            SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-                if (navState.company != data.company) {
+            if ($scope.docId) {
+                SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
+                    if (navState.company != data.company) {
+                        $location.path("/investor-list?");
+                        return;
+                    }
+                    $scope.document = data;
+                    $scope.initDocView();
+                }).except(function(x) {
+                    void(x);
                     $location.path("/investor-list?");
-                    return;
-                }
-                $scope.document = data;
-                $scope.initDocView();
-            }).except(function(x) {
-                void(x);
-                $location.path("/investor-list?");
-            });
+                });
+            }
         };
 
         $scope.getData();

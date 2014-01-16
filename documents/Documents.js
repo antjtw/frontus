@@ -266,7 +266,7 @@ docs.directive('docViewer', function() {
     };
 });
 
-docs.directive('templateViewer', function() {
+docs.directive('templateViewer', function($compile) {
     return {
         restrict: 'EA',
         scope: {
@@ -281,7 +281,7 @@ docs.directive('templateViewer', function() {
             }, true);
 
             scope.add = function(raw_html) {
-            var html = angular.element(raw_html);
+            var html = angular.element($compile(raw_html)(scope));
             iElement.append(html);
 
             }
@@ -360,23 +360,24 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.loadPages();
         });
 
-        $scope.get_attribute = function(attribute, type, company_info) {
+        $scope.get_attribute = function(attribute, type, attributes) {
             if (type == "company") {
                 if (attribute == "company_name") {
-                    return company_info.name;
+                    return attributes.name;
                 }
                 else if (attribute == "company_state") {
-                    return company_info.state;
+                    return attributes.state;
                 }
             }
         };
 
+        // This needs hooking up to the backend !!!!
         $scope.template_share = function(email, attributes) {
             console.log(email);
             console.log(JSON.stringify(attributes));
         };
 
-        $scope.$on('initTemplateView', function(event, templateId) {
+        $scope.$on('initTemplateView', function(event, templateId, subId) {
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
             $scope.docLength = 0;
@@ -385,44 +386,89 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.used_attributes = {};
             $scope.template_email = "";
 
-            SWBrijj.procm('smartdoc.render_html', $scope.templateId).then(function(code) {
-                SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
-                    var attributes = attributes;
-                    SWBrijj.tblm('account.my_company').then(function(company_info) {
-                        $scope.company_info = company_info[0];
-                        var raw_html = code[0].render_html;
-                        raw_html = raw_html.replace(/&#x02D9;/g, "_");
+            SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
+                $scope.lib = {};
+                $scope.lib.docname = meta[0].template_name;
+            });
 
-                        //Sort through all the !!! and make the appropriate replacement
-                        while (raw_html.match(/!!![^!]+!!!/g)) {
-                            var thing = raw_html.match(/!!![^!]+!!!/);
-                            thing = thing[0].substring(3,(thing[0].length)-3);
-                            var replace = "";
-                            angular.forEach(attributes, function (attribute) {
-                                if (thing == attribute.attribute ) {
-                                    var first = thing.split("_")[0];
+            if ($rootScope.navState.role == "issuer") {
+                SWBrijj.procm('smartdoc.render_html', $scope.templateId).then(function(code) {
+                    SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
+                        var attributes = attributes;
+                        SWBrijj.tblm('account.my_company').then(function(company_info) {
+                            $scope.company_info = company_info[0];
+                            var raw_html = code[0].render_html;
 
-                                    if (first == "company") {
-                                        replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
-                                        $scope.used_attributes[attribute.attribute] = replace;
-                                        replace = "<span>" + replace + "</span>"
-                                    }
-                                    else {
-                                        if (attribute.attribute_type == "text") {
-                                            replace = "<span>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
+                            //Sort through all the !!! and make the appropriate replacement
+                            while (raw_html.match(/!!![^!]+!!!/g)) {
+                                var thing = raw_html.match(/!!![^!]+!!!/);
+                                thing = thing[0].substring(3,(thing[0].length)-3);
+                                var replace = "";
+                                angular.forEach(attributes, function (attribute) {
+                                    if (thing == attribute.attribute ) {
+                                        var first = thing.split("_")[0];
+
+                                        if (first == "company") {
+                                            replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
+                                            $scope.used_attributes[attribute.attribute] = replace;
+                                            replace = "<span>" + replace + "</span>"
                                         }
-                                        if (attribute.attribute_type == "check-box") {
-                                            replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"===true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                        else {
+                                            if (attribute.attribute_type == "text") {
+                                                replace = "<span>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
+                                            }
+                                            if (attribute.attribute_type == "check-box") {
+                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"===true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                            }
                                         }
                                     }
-                                }
-                            });
-                            raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
-                        }
-                        $scope.html = raw_html;
+                                });
+                                raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
+                            }
+                            $scope.html = raw_html;
+                        });
                     });
                 });
-            });
+            }
+            else {
+                SWBrijj.procm('smartdoc.investor_html', $scope.subId).then(function(html) {
+                    SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
+                        SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
+                            console.log(html);
+                            var raw_html = html[0].investor_html;
+                            $scope.investor_attributes = {};
+                            angular.forEach(inv_attributes, function(attr) {
+                                $scope.investor_attributes[attr.attribute] = attr.answer;
+                            });
+
+                            $scope.trial = "lalala";
+
+                            //Sort through all the !!! and make the appropriate replacement
+                            while (raw_html.match(/!!![^!]+!!!/g)) {
+                                var thing = raw_html.match(/!!![^!]+!!!/);
+                                thing = thing[0].substring(3,(thing[0].length)-3);
+                                var replace = "";
+                                angular.forEach(attributes, function (attribute) {
+                                    if (thing == attribute.attribute ) {
+                                        var first = thing.split("_")[0];
+
+                                        if (first == "investor") {
+                                            if (attribute.attribute_type == "text") {
+                                                replace = "<span>" +attribute.label + "</span><input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                            }
+                                            if (attribute.attribute_type == "check-box") {
+                                                replace = "<button type='text' ng-model='investor_attributes." + attribute.attribute + "' class='check-box-button'></button>"
+                                            }
+                                        }
+                                    }
+                                });
+                                raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
+                            }
+                            $scope.html = raw_html;
+                        });
+                    });
+                });
+            }
         });
 
         $scope.stage = 0;
