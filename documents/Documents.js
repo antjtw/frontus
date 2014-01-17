@@ -434,14 +434,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 SWBrijj.procm('smartdoc.investor_html', $scope.subId).then(function(html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                            console.log(html);
                             var raw_html = html[0].investor_html;
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
                             });
-
-                            $scope.trial = "lalala";
+                            $scope.investor_attributes['investor_name'] = angular.copy($rootScope.person.name);
+                            $scope.investor_attributes['investor_state'] = angular.copy($rootScope.person.state);
+                            $scope.investor_attributes['investor_country'] = angular.copy($rootScope.person.country);
+                            $scope.investor_attributes['investor_address'] = angular.copy($rootScope.person.street);
+                            $scope.investor_attributes['investor_phone'] = angular.copy($rootScope.person.phone);
+                            $scope.investor_attributes['investor_email'] = angular.copy($rootScope.person.email);
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -457,7 +460,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 replace = "<span class='text-attribute'>" +attribute.label + "<input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'></span>"
                                             }
                                             if (attribute.attribute_type == "check-box") {
-                                                replace = "<button type='text' ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'></button>"
+                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'></button>"
                                             }
                                         }
                                     }
@@ -1231,6 +1234,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
             });
+        };
+
+        $scope.booleanUpdate = function(attribute, value) {
+            console.log(attribute);
+            console.log(value);
+
         };
     }
 ]);
