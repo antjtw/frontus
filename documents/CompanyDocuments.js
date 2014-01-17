@@ -139,7 +139,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         }).except(function(x) {
             });
 
-        SWBrijj.tblm('document.my_company_library', ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
+        SWBrijj.tblm('document.my_company_library', ['doc_id', 'template_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
             $scope.documents = data;
             if ($scope.documents.length === 0) {
                 $scope.noDocs = true;
@@ -678,6 +678,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
         };
 
+        $scope.addToLibrary = function(templateid) {
+            SWBrijj.procm("smartdoc.add_to_company_library", navState.userid, navState.company, templateid).then(function(data) {
+                console.log(data);
+                $scope.shareTemplate(data[0].add_to_company_library);
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.shareTemplate = function(templateid) {
+            console.log(templateid);
+            
+            // SWBrijj.procm("smartdoc.share_document", $scope.$scope.docToShare.doc_id, templateid, template
+        };
+
         // Toggles sidebar back and forth
         $scope.toggleSide = function () {
             if (!$scope.sideToggle) {
@@ -698,6 +712,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
+        };
+
+        $scope.shareTemplateOpen = function(templateid) {
+            console.log("todo");
+        };
+        $scope.shareTemplateClose = function(templateid) {
+            console.log("todo");
         };
 
         $scope.fakePlaceholder = function() {

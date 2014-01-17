@@ -172,7 +172,7 @@
                                 <li ng-click="viewStatus(doc)">View Status</li>
                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
-                                <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
+                                <li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>
                             </ul>
                         </li>
                     </ul>
@@ -295,7 +295,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li ng-click="viewTemplate(template.template_id)">View</li>
-                                        <li>Share</li>
+                                        <li ng-click="addToLibrary(template.template_id)">Share</li>
                                     </ul>
                                 </li>
                             </ul>
