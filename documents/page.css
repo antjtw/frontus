@@ -709,6 +709,8 @@ div.progress-bar {
 .templatePanel p {
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .templatePanel .center p {
@@ -721,4 +723,17 @@ span.text-attribute {
     display: block;
     width: 350px;
     margin: 0 auto 0 auto;
+}
+
+.inline-radio {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.inline-radio > li {
+    float: left;
+}
+
+.inline-radio > li:nth-child(n+1) {
+    margin-left: 10px;
 }

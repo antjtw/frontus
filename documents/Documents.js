@@ -377,6 +377,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             console.log(JSON.stringify(attributes));
         };
 
+        //This needs hooking up to the backend !!!!
+        $scope.signTemplate = function(attributes, saved, signed) {
+            attributes = JSON.stringify(attributes);
+            console.log(saved);
+            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.templateId, attributes, saved).then(function(meta) {
+                console.log(meta);
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+
         $scope.$on('initTemplateView', function(event, templateId, subId) {
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
@@ -431,6 +442,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 });
             }
             else {
+                $scope.forsigning = true;
                 SWBrijj.procm('smartdoc.investor_html', $scope.subId).then(function(html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
@@ -445,6 +457,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             $scope.investor_attributes['investor_address'] = angular.copy($rootScope.person.street);
                             $scope.investor_attributes['investor_phone'] = angular.copy($rootScope.person.phone);
                             $scope.investor_attributes['investor_email'] = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes['signature_date'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -455,12 +468,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     if (thing == attribute.attribute ) {
                                         var first = thing.split("_")[0];
 
-                                        if (first == "investor") {
+                                        if (first != "company") {
                                             if (attribute.attribute_type == "text") {
                                                 replace = "<span class='text-attribute'>" +attribute.label + "<input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'></span>"
                                             }
                                             if (attribute.attribute_type == "check-box") {
-                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'></button>"
+                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
                                             }
                                         }
                                     }
@@ -502,6 +515,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             if ($scope.confirmValue !== -1) {
                 $scope.messageText = "Add an optional message...";
+            }
+        };
+
+        $scope.setinfoValue = function(n) {
+            if ($scope.infoValue === n) {
+                $scope.infoValue = 0;
+            } else {
+                $scope.infoValue = n;
             }
         };
 
@@ -674,9 +695,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-            var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
-            // I expect this returns true (meaning updated).  If not, the data is lost
-            if (!res) alert('failed to save annotations');
+            if (!$scope.templateId) {
+                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+                // I expect this returns true (meaning updated).  If not, the data is lost
+                if (!res) alert('failed to save annotations');
+            }
         });
 
         /* Save the notes when navigating away */
@@ -1237,9 +1260,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.booleanUpdate = function(attribute, value) {
-            console.log(attribute);
-            console.log(value);
-
+            if (value == null) {
+                value = false;
+            }
+            $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
     }
 ]);
