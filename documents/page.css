@@ -706,8 +706,19 @@ div.progress-bar {
     text-align: center;
 }
 
+.templatePanel p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .templatePanel .center p {
     font-size: 18px;
     color: black;
     line-height: 22px;
+}
+
+span.text-attribute {
+    display: block;
+    width: 350px;
+    margin: 0 auto 0 auto;
 }

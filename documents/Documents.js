@@ -418,7 +418,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 replace = "<span>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
                                             }
                                             if (attribute.attribute_type == "check-box") {
-                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"===true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
                                             }
                                         }
                                     }
@@ -454,10 +454,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
                                         if (first == "investor") {
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span>" +attribute.label + "</span><input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                                replace = "<span class='text-attribute'>" +attribute.label + "<input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'></span>"
                                             }
                                             if (attribute.attribute_type == "check-box") {
-                                                replace = "<button type='text' ng-model='investor_attributes." + attribute.attribute + "' class='check-box-button'></button>"
+                                                replace = "<button type='text' ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'></button>"
                                             }
                                         }
                                     }
