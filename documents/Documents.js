@@ -410,6 +410,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
                             var raw_html = code[0].render_template;
+                            console.log(raw_html);
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
