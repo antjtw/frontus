@@ -59,9 +59,14 @@
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !template_original}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && forsigning}">
                     <div class="pull-right standard-button green">
                         <button class="btn" ng-click="setStage(1);">Share</button>
+                    </div>
+                </div>
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && !forsigning}">
+                    <div class="pull-right standard-button green">
+                        <button class="btn" ng-click="setStage(1);">Review</button>
                     </div>
                 </div>
                 <!--
@@ -100,9 +105,14 @@
                         Confirm
                     </button>
                     <button class="btn"
-                            ng-show="template_original"
+                            ng-show="template_original && !forsigning"
                             ng-click="template_share(template_email, used_attributes);">
                         Send
+                    </button>
+                    <button class="btn"
+                            ng-show="template_original && forsigning"
+                            ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
+                        Sign
                     </button>
                 </div>
             </div>
@@ -215,11 +225,60 @@
                 </div>
             </div>
 
-            <div ng-show="template_original">
+            <div ng-show="template_original && !forsigning">
                 <div class="confirmBody">
                     <input type="text" ng-model="$parent.template_email">
                 </div>
             </div>
+
+            <div ng-show="template_original && forsigning">
+                <div class='confirmBody'>
+                    <div>
+                        <ul class="checkboxOption">
+                            <li class="pull-left">
+                                <button class="check-box-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)">
+                                    <span data-icon="&#xe023;" aria-hidden="true"></span>
+                                </button>
+                            </li>
+                            <li class="pull-left">
+                                <span>Do you want to electronically sign this document?</span>
+                                <br>
+                                <span>(This action is irreversible.)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="radioOption inline-radio">
+                            <li>
+                                <span>Save Info?</span>
+                                <br>
+                                <span>Choose yes or no below if you want like to save all this information for other investor requests.
+                                You can access and chnage information in your investor profile.</span>
+                            </li>
+                            <br>
+                            <li>
+                                <button class="radio-button" ng-class="{'selected':infoValue===1}" ng-click="setinfoValue(1)"></button>
+                            </li>
+                            <li>
+                                YES
+                            </li>
+                            <li>
+                                <button class="radio-button"
+                                        ng-class="{'selected':infoValue===-1}"
+                                        ng-click="setinfoValue(-1)">
+                                </button>
+                            </li>
+                            <li>
+                                NO
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+
         </div>
     </div>
 
