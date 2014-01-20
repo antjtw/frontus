@@ -694,7 +694,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(err);
             });
         };
-*/
         $scope.shareTemplate = function(templateid) {
             SWBrijj.procm("smartdoc.share_template", templateid, templatedata, xemails, message, sign, deadline).then(function(docid) {
                 console.log(docid);
@@ -702,6 +701,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(err);
             });
         };
+*/
 
         // Toggles sidebar back and forth
         $scope.toggleSide = function () {
