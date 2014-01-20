@@ -372,10 +372,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        // This needs hooking up to the backend !!!!
-        $scope.template_share = function(email, attributes) {
-            console.log(email);
-            console.log(JSON.stringify(attributes));
+        $scope.template_share = function(email, attributes, message, sign, deadline) {
+            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
+                console.log(docid);
+            }).except(function(err) {
+                console.log(err);
+            });
         };
 
         //This needs hooking up to the backend !!!!
