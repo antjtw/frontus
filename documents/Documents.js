@@ -281,6 +281,7 @@ docs.directive('templateViewer', function($compile) {
             }, true);
 
             scope.add = function(raw_html) {
+            console.log(raw_html);
             var html = angular.element($compile(raw_html)(scope));
             iElement.append(html);
 
@@ -382,8 +383,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         //This needs hooking up to the backend !!!!
         $scope.signTemplate = function(attributes, saved, signed) {
             attributes = JSON.stringify(attributes);
-            console.log(saved);
-            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.templateId, attributes, saved).then(function(meta) {
+            console.log($scope.subId);
+            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, attributes, saved).then(function(meta) {
                 console.log(meta);
             }).except(function(err) {
                 console.log(err);
@@ -405,12 +406,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
 
             if ($rootScope.navState.role == "issuer") {
-                SWBrijj.procm('smartdoc.render_html', $scope.templateId).then(function(code) {
+                SWBrijj.procm('smartdoc.render_template', $scope.templateId).then(function(code) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         var attributes = attributes;
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
-                            var raw_html = code[0].render_html;
+                            var raw_html = code[0].render_template;
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -445,10 +446,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             else {
                 $scope.forsigning = true;
-                SWBrijj.procm('smartdoc.investor_html', $scope.subId).then(function(html) {
+                SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                            var raw_html = html[0].investor_html;
+                            var raw_html = html[0].render_investor_template;
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
