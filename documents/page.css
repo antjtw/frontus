@@ -713,10 +713,33 @@ div.progress-bar {
     line-height: 20px;
 }
 
-.templatePanel .center p {
-    font-size: 18px;
-    color: black;
-    line-height: 22px;
+.templatePanel dl dt {
+    display: none;
+}
+
+.templatePanel dl dd > p {
+    width: 550px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel dl dd > p > span {
+    width: 200px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.templatePanel ol {
+    margin-left: 50px;
+}
+
+.templatePanel ol > li > p {
+    position: relative;
+}
+
+.templatePanel ol > li > p > button {
+    position: absolute;
+    left: -50px;
 }
 
 span.text-attribute {

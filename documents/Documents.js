@@ -363,16 +363,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.get_attribute = function(attribute, type, attributes) {
             if (type == "company") {
-                if (attribute == "company_name") {
+                if (attribute == "companyName") {
                     return attributes.name;
                 }
-                else if (attribute == "company_state") {
+                else if (attribute == "companyState") {
                     return attributes.state;
                 }
             }
         };
 
         $scope.template_share = function(email, attributes, message, sign, deadline) {
+            console.log(JSON.stringify(attributes));
             SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
                 console.log(docid);
             }).except(function(err) {
@@ -421,8 +422,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 var replace = "";
                                 angular.forEach(attributes, function (attribute) {
                                     if (thing == attribute.attribute ) {
-                                        var first = thing.split("_")[0];
-
+                                        var first = thing.substring(0,7);
+                                        console.log(first);
                                         if (first == "company") {
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
@@ -455,13 +456,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
                             });
-                            $scope.investor_attributes['investor_name'] = angular.copy($rootScope.person.name);
-                            $scope.investor_attributes['investor_state'] = angular.copy($rootScope.person.state);
-                            $scope.investor_attributes['investor_country'] = angular.copy($rootScope.person.country);
-                            $scope.investor_attributes['investor_address'] = angular.copy($rootScope.person.street);
-                            $scope.investor_attributes['investor_phone'] = angular.copy($rootScope.person.phone);
-                            $scope.investor_attributes['investor_email'] = angular.copy($rootScope.person.email);
-                            $scope.investor_attributes['signature_date'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+                            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
+                            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
+                            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
+                            $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
+                            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
+                            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
