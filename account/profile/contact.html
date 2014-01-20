@@ -79,12 +79,12 @@
                         </div>
                         <div class="body-box">
                             <div ng-repeat="attr in investor_attributes">
-                                <span>{{attr.label}}</span>
                                 <div>
                                     <button ng-show="attr.attribute_type==='check-box'" ng-class="{'selected':attr.answer=='true'}"
-                                            ng-click="booleanUpdate(attr.attribute, attr.answer)" class="check-box-button">
+                                            ng-click="booleanUpdate(attr.attribute, attr.answer)" class="check-box-button profile-box">
                                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                                     </button>
+                                    <span>{{attr.label}}</span>
                                     <input ui-event="{blur:'attributeUpdate(attr.attribute, attr.answer)'}" ng-show="attr.attribute_type==='text'" type="text" ng-model="attr.answer" max-length="30">
                                 </div>
                             </div>
