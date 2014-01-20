@@ -678,6 +678,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
         };
 
+/*
         $scope.addToLibrary = function(templateid) {
             SWBrijj.procm("smartdoc.add_to_company_library", navState.userid, navState.company, templateid).then(function(data) {
                 console.log(data);
@@ -686,10 +687,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(err);
             });
         };
+        $scope.generatePDF = function(templateid) {
+            SWBrijj.procd(templateid+'.pdf', 'application/pdf', 'smartdoc.render_initial_pdf', templateid).then(function(url) {
+                document.location.href = url;
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+*/
         $scope.shareTemplate = function(templateid) {
-            console.log(templateid);
-            
-            // SWBrijj.procm("smartdoc.share_document", $scope.$scope.docToShare.doc_id, templateid, template
+            SWBrijj.procm("smartdoc.share_template", templateid, templatedata, xemails, message, sign, deadline).then(function(docid) {
+                console.log(docid);
+            }).except(function(err) {
+                console.log(err);
+            });
         };
 
         // Toggles sidebar back and forth
