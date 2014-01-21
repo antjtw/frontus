@@ -35,7 +35,7 @@
                                 <li>
                                     <ul>
                                         <li>Full Name</li>
-                                        <li><input ng-model="name"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
                                     </ul>
                                 </li>
                                 <li>
@@ -160,53 +160,5 @@
                 </div>
             </fieldset>
         </form>
-    </div>
-</div>
-<div modal="profileModal" close="profileModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Edit Profile</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
-    </div>
-    <div class="modalText">
-        <div class="row-fluid">
-            <div class="profile-image span3">
-                <img id="updateImage" ng-src="{{photoURL}}">
-                <form class="form-inline image-button">
-                    <fieldset>
-                        <div class="fileinputs">
-                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
-                            <div class="profile-fakefile">
-                                <span>Change</span>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="span9 input-list">
-                <div>
-                    <span>Name*</span><input type="text" ng-model="editData.name" maxlength="30">
-                </div>
-                <div>
-                    <span>Address</span><input type="text" ng-model="editData.street">
-                </div>
-                <div class="city-state">
-                    <span>City/State</span>
-                    <input type="text" ng-model="editData.city">
-                    <input type="text" ng-model="editData.state" maxlength="2">
-                </div>
-                <div>
-                    <span>Zip Code</span><input type="text" ng-model="editData.postalcode">
-                </div>
-                <span class="capital-text">*Required</span>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="profileModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="profileUpdate(editData); profileModalClose();">Confirm</button>
-        </div>
     </div>
 </div>

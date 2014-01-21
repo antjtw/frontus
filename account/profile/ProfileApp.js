@@ -92,18 +92,11 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             $scope.editData = null;
         };
         
-        $scope.profileUpdate = function(user) {
-            SWBrijj.proc("account.contact_update", user.name, user.street, user.city, user.state, user.postalcode).then(function(x) {
+        $scope.profileUpdate = function(attr, value) {
+            SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
                 void(x);
-                if ($scope.files) {
-                    $scope.uploadFile();
-                }
                 $scope.$emit("notification:success", "Profile successfully updated");
-                $scope.name = user.name;
-                $scope.street = user.street;
-                $scope.city = user.city;
-                $scope.state = user.state;
-                $scope.postalcode = user.postalcode;
+                $scope[attr] = value;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later");
