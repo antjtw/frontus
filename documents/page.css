@@ -742,6 +742,10 @@ div.progress-bar {
     left: -50px;
 }
 
+.templatePanel textarea {
+    resize: none;
+}
+
 span.text-attribute {
     display: block;
     width: 350px;

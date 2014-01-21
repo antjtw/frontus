@@ -432,8 +432,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             if (attribute.attribute_type == "text") {
                                                 replace = "<span>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
                                             }
-                                            if (attribute.attribute_type == "check-box") {
+                                            else if (attribute.attribute_type == "check-box") {
                                                 replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                            }
+                                            else if (attribute.attribute_type == "textarea") {
+                                                replace = "<span>" +attribute.label + "</span><textarea disabled ng-model='" + attribute.attribute + "'></textarea>"
                                             }
                                         }
                                     }
@@ -476,8 +479,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             if (attribute.attribute_type == "text") {
                                                 replace = "<span class='text-attribute'>" +attribute.label + "<input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'></span>"
                                             }
-                                            if (attribute.attribute_type == "check-box") {
+                                            else if (attribute.attribute_type == "check-box") {
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
+                                            }
+                                            else if (attribute.attribute_type == "textarea") {
+                                                replace = "<span>" +attribute.label + "</span><textarea disabled ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>"
                                             }
                                         }
                                     }
