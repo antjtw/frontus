@@ -373,7 +373,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.template_share = function(email, attributes, message, sign, deadline) {
-            console.log(JSON.stringify(attributes));
             SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
                 console.log(docid);
             }).except(function(err) {
@@ -1149,7 +1148,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.finalizable = function(doc) {
-            return $scope.invq && doc && doc.when_countersigned && !doc.when_finalized;
+            return (!$scope.invq && doc && doc.signature_flow===1 && doc.when_signed && !doc.when_finalized) ||
+                   ($scope.invq && doc && doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});

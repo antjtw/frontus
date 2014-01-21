@@ -745,8 +745,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
                 tosee += "," +  matches[1];
             });
-            console.log(tosee);
-            SWBrijj.procm("document.share_document", $scope.docToShare.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            SWBrijj.procm("document.share_document",
+                              $scope.docToShare.doc_id,
+                              0, '',
+                              tosee.substring(1).toLowerCase(),
+                              message,
+                              Boolean(sign) ? 2 : 0,
+                              date
+                          ).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document shared");
                 $scope.signeeded = "No";
@@ -808,20 +814,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.checkmany = function(people) {
             var anybad = false;
             angular.forEach(people, function(person) {
-                var email
+                var email;
                 var matches = regExp.exec(person.id);
-                if (matches == null) {
+                if (matches === null) {
                     matches = ["", person.id];
                 }
                 email = matches[1];
                 if (!re.test(email)) {
-                    anybad = true
+                    anybad = true;
                 }
             });
-            if (people.length == 0) {
-                anybad = true
+            if (people && people.length === 0) {
+                anybad = true;
             }
-            return anybad
+            return anybad;
         };
 
         $scope.multipeople = [];
@@ -1468,8 +1474,14 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
                 }
                 tosee += "," +  matches[1];
             });
-            console.log(tosee);
-            SWBrijj.procm("document.share_document", $scope.document.doc_id, tosee.substring(1).toLowerCase(), message, Boolean(sign), date).then(function(data) {
+            SWBrijj.procm("document.share_document",
+                              $scope.document.doc_id,
+                              0, '',
+                              tosee.substring(1).toLowerCase(),
+                              message,
+                              Boolean(sign) ? 2 : 0,
+                              date
+                          ).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document shared");
                 $scope.signeeded = "No";
