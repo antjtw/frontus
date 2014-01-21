@@ -381,11 +381,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
-        //This needs hooking up to the backend !!!!
         $scope.signTemplate = function(attributes, saved, signed) {
             attributes = JSON.stringify(attributes);
             console.log($scope.subId);
-            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, attributes, saved).then(function(meta) {
+            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
                 console.log(meta);
             }).except(function(err) {
                 console.log(err);
