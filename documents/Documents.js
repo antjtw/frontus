@@ -374,7 +374,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.template_share = function(email, attributes, message, sign, deadline) {
             SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
-                console.log(docid);
+                $scope.$emit("notification:success", "Successfully shared document");
+                $location.path('/company-list').search({});
             }).except(function(err) {
                 console.log(err);
             });
@@ -382,9 +383,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.signTemplate = function(attributes, saved, signed) {
             attributes = JSON.stringify(attributes);
-            console.log($scope.subId);
             SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
-                console.log(meta);
+                $scope.$emit("notification:success", "Signed Document");
+                $location.path('/investor-list').search({});
             }).except(function(err) {
                 console.log(err);
             });
@@ -464,6 +465,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
                             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
                             $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+                            $scope.investor_attributes['signatoryTitle'] = "";
+                            $scope.investor_attributes['signatoryName'] = "";
+                            $scope.investor_attributes['investorSignature'] = "";
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -482,7 +486,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
                                             }
                                             else if (attribute.attribute_type == "textarea") {
-                                                replace = "<span>" +attribute.label + "</span><textarea disabled ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>"
+                                                replace = "<span>" +attribute.label + "</span><textarea ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>"
                                             }
                                         }
                                     }
