@@ -382,7 +382,27 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.signTemplate = function(attributes, saved, signed) {
-            attributes = JSON.stringify(attributes);
+            // This is hideous and can go away when the user profile is updated at the backend
+            cleanatt = {};
+            for (var key in attributes) {
+                if (key == 'investorName') {
+                    cleanatt['name'] = attributes[key];
+                }
+                else if (key == 'investorState') {
+                    cleanatt['state'] = attributes[key];
+                }
+                else if (key == 'investorCountry') {
+                    cleanatt['country'] = attributes[key];
+                }
+                else if (key == 'investorAddress') {
+                    cleanatt['street'] = attributes[key];
+                }
+                else if (key == 'investorPhone') {
+                    cleanatt['phone'] = attributes[key];
+                }
+                cleanatt[key] = attributes[key];
+            }
+            attributes = JSON.stringify(cleanatt);
             SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
@@ -480,7 +500,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
                                         if (first != "company") {
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span class='text-attribute template-label'>" +attribute.label + "<input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'></span>"
+                                                if (attribute.attribute == "investorState" || attribute.attribute == "investorCountry") {
+                                                    replace = "<span class='template-label'>" +attribute.label + "</span><input maxlength='2' type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                                }
+                                                else{
+                                                    replace = "<span class='template-label'>" +attribute.label + "</span><input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                                }
                                             }
                                             else if (attribute.attribute_type == "check-box") {
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"

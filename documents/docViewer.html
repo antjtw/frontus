@@ -110,6 +110,7 @@
                         Send
                     </button>
                     <button class="btn"
+                            ng-disabled="!confirmValue"
                             ng-show="template_original && forsigning"
                             ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
                         Sign

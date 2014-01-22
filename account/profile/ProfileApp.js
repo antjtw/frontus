@@ -108,20 +108,29 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 value = false;
             }
             value = value == "true" ? "false": "true";
-            angular.forEach($scope.investor_attributes, function(attr) {
-                if (attr.attribute == attribute) {
-                    attr.answer = value;
-                }
-            });
             SWBrijj.procm("smartdoc.update_investor_attributes", attribute, String(value)).then(function(x) {
-                console.log(x);
+                $scope.investor_attributes[attribute][0] = value;
             }).except(function(err) {
                     console.log(err);
                 });
         };
 
+        $scope.setInvestor = function(attributetrue, attributefalse) {
+            $scope.investor_attributes[attributetrue][0] = "true";
+            $scope.investor_attributes[attributefalse][0] = "false";
+            SWBrijj.procm("smartdoc.update_investor_attributes", attributetrue, String($scope.investor_attributes[attributetrue][0])).then(function(x) {
+                SWBrijj.procm("smartdoc.update_investor_attributes", attributefalse, String($scope.investor_attributes[attributefalse][0])).then(function(x) {
+                });
+            });
+        };
+
         $scope.attributeUpdate = function(attribute, value) {
+            if (attribute == "investorIsNotAnAccreditedInvestor") {
+                $scope.investor_attributes['investorIsAnAccreditedInvestor'][0] = value == "true" ? "false": "true";
+
+            }
             SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
+                $scope.investor_attributes[attribute][0] = value;
             }).except(function(err) {
             });
         };
@@ -154,7 +163,16 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
 
         $scope.getInvestorInformation = function() {
             SWBrijj.tblm('smartdoc.my_profile').then(function(data) {
-                $scope.investor_attributes = data;
+                // Imports the investor attributes
+                $scope.investor_attributes = {};
+                // Accreditation is worked out based on whether other attributes exist
+                $scope.investor_attributes['investorIsAnAccreditedInvestor'] = ['false',''];
+                angular.forEach(data, function(attr) {
+                    $scope.investor_attributes[attr.attribute] = [attr.answer, attr.label];
+                    if ((attr.attribute == "investorMeetsNetWorthRequirement" && attr.answer=="true") || (attr.attribute == "investorMeetsIncomeRequirement" && attr.answer=="true")) {
+                        $scope.investor_attributes['investorIsAnAccreditedInvestor'][0] = "true";
+                    }
+                });
             }).except(function(err) {
                 console.log(err);
             });
