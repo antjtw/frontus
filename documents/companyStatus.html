@@ -16,7 +16,7 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
-                <div class="pull-right">
+                <div class="pull-right" ng-hide="docversions[0].template_id">
                     <div class="standard-button">
                         <button ng-click="shareDocOpen();" class="btn">Share
                         </button>
