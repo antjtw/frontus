@@ -536,7 +536,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatusNumComplete = function(doc) {
-            if (doc.signature_required) {
+            if (doc.signature_flow>0) {
                 return $scope.versionsFinalized(doc).length;
             } else {
                 return $scope.versionsViewed(doc).length;
@@ -544,7 +544,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatusNumVersions = function(doc) {
-            if (doc.signature_required) {
+            if (doc.signature_flow>0) {
                 return $scope.versionsReqSig(doc).length;
             } else {
                 return $scope.versionsReqView(doc).length;
@@ -601,11 +601,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.versionsReqSig = function(doc) {
-            return doc.versions.filter(function(el) {return el.signature_deadline;});
+            return doc.versions.filter(function(el) {return el.signature_flow>0;});
         };
 
         $scope.versionsViewed = function(doc) {
-            return doc.versions.filter(function(el) {return el.last_viewed && !el.signature_deadline;});
+            return doc.versions.filter(function(el) {return el.last_viewed && el.signature_flow===0;});
         };
 
         $scope.versionsReqView = function(doc) {
@@ -613,19 +613,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.isPendingView = function(version) {
-            return !version.signature_deadline && !version.last_viewed;
+            return version.signature_flow===0 && !version.last_viewed;
         };
 
         $scope.isPendingSignature = function(version) {
-            return version.signature_deadline && !version.when_signed;
+            return version.signature_flow>0 && !version.when_signed;
         };
 
         $scope.isPendingCountersignature = function(version) {
-            return version.when_signed && !version.when_countersigned;
+            return version.when_signed && !version.when_countersigned && version.signature_flow===2;
         };
 
         $scope.isPendingFinalization = function(version) {
-            return version.when_signed && version.when_countersigned && !version.when_finalized;
+            return (version.signature_flow===2 && version.when_signed && version.when_countersigned && !version.when_finalized) ||
+                   (version.signature_flow===1 && version.when_signed && !version.when_finalized);
         };
 
         $scope.docIsComplete = function(doc) {
@@ -638,10 +639,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_finalized;
+            return version.signature_flow>0 && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
-            return !version.signature_deadline && version.last_viewed;
+            return version.signature_flow===0 && version.last_viewed;
         };
 
         $scope.versionIsComplete = function(version) {
@@ -1140,6 +1141,44 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $location.path('/company-list').search({});
             }).except(function(x) {
                 console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        };
+
+        $scope.$on('finalizeAction', function(evt, data) {
+            $scope.finalizeAction(data);
+        });
+        $scope.finalizeAction = function(data) {
+            if (data[0] === 1) {
+                $scope.finalizeDocument();
+            } else if (data[0] === -1) {
+                $scope.rejectSignature(data[1]);
+            }
+        };
+        $scope.finalizeDocument = function() {
+            $scope.processing = true;
+            SWBrijj.procm("document.issuer_finalize", $scope.docId).then(function(data) {
+                $scope.$emit('refreshDocImage');
+                $scope.$emit("notification:success", "Document approved");
+                $location.path('/company-list').search({});
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
+            });
+        };
+        $scope.rejectSignature = function(msg) {
+            $scope.processing = true;
+            if (msg === "Add an optional message...") {
+                msg = "";
+            }
+            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document signature rejected.");
+                $scope.$broadcast('rejectSignature');
+                $location.path('/company-list').search({});
+            }).except(function(x) {
+                void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
@@ -1659,25 +1698,26 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isPendingFinalization = function(doc) {
-            return doc.when_countersigned && !doc.when_finalized;
+            return (doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized) ||
+                       (doc.signature_flow===1 && doc.when_signed && !doc.when_finalized);
         };
 
         $scope.isPendingCountersignature = function(doc) {
-            return doc.when_signed && !doc.when_countersigned;
+            return doc.when_signed && !doc.when_countersigned && doc.signature_flow===2;
         };
 
         $scope.isPendingSignature = function(doc) {
-            return doc.signature_deadline && !doc.when_signed;
+            return doc.signature_flow>0 && !doc.when_signed;
         };
 
         $scope.isPendingView = function(doc) {
-            return !doc.signature_deadline && !doc.last_viewed;
+            return doc.signature_flow===0 && !doc.last_viewed;
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_finalized;
+            return version.signature_flow>0 && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
-            return !version.signature_deadline && version.last_viewed;
+            return version.signature_flow===0 && version.last_viewed;
         };
 
         $scope.docIsComplete = function(doc) {
@@ -1796,7 +1836,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.finalizeDocument = function() {
             $scope.processing = true;
-            var dce = angular.element(".docPanel").scope();
+            //var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
@@ -1809,12 +1849,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.rejectCountersignature = function(msg) {
-            console.log(msg);
             $scope.processing = true;
             if (msg === "Add an optional message...") {
                 msg = "";
             }
-            var dce = angular.element(".docPanel").scope();
+            //var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.reject_countersignature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document countersignature rejected.");
                 void(data);

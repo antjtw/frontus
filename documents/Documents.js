@@ -573,11 +573,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.investorCanAnnotate = function() {
-            return (!$scope.lib.when_signed && $scope.lib.signature_deadline);
+            return (!$scope.lib.when_signed && $scope.lib.signature_deadline && $scope.lib.signature_flow===2);
         };
 
         $scope.issuerCanAnnotate = function() {
-            return !$scope.lib.when_countersigned && $scope.lib.when_signed;
+            return !$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2;
         };
 
         $scope.showPageBar = function() {
@@ -1173,7 +1173,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.countersignable = function(doc) {
-            return !$scope.invq && doc && doc.when_signed && !doc.when_countersigned;
+            return !$scope.invq && doc && doc.signature_flow===2 && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {

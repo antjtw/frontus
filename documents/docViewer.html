@@ -55,11 +55,11 @@
                     <div class="pull-right standard-button green">
                         <button class="btn" ng-click="setStage(1);">Confirm</button>
                     </div>
-                    <div class="pull-right tools">
+                    <div class="pull-right tools" ng-class="{hidden: !isAnnotable}">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && forsigning}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && forsigning || version}">
                     <div class="pull-right standard-button green">
                         <button class="btn" ng-click="setStage(1);">Share</button>
                     </div>
@@ -84,7 +84,8 @@
                 </div>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
                 <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
-                <span ng-show="finalizable(lib)">Approve Issuer's Countersignature</span>
+                <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
+                <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
                     <button class="btn"
                             ng-show="signable(lib)"
@@ -191,7 +192,41 @@
                 </div>
             </div>
 
-            <div ng-show="finalizable(lib)">
+            <div ng-show="finalizable(lib) && lib.signature_flow===1">
+                <div class="confirmBody">
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Approve Document</span>
+                            <br>
+                            <span>Approve investor's signature and finalize this document.</span>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button"
+                                    ng-class="{'selected':confirmValue===-1}"
+                                    ng-click="setConfirmValue(-1)">
+                            </button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Reject Document</span>
+                            <br>
+                            <span>Reject investor's signature on this document.</span>
+                            <br>
+                            <textarea ng-show="confirmValue===-1"
+                                      class="messageText" rows="3"
+                                      ng-model="$parent.rejectMessage"
+                                      ng-click="resetMsg()">
+                            </textarea>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-show="finalizable(lib) && lib.signature_flow===2">
                 <div class="confirmBody">
                     <ul class="radioOption">
                         <li class="pull-left">
