@@ -350,9 +350,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.docStatus = function(doc) {
-            if (doc.signature_deadline == null) return 0;
+            if (doc.signature_flow === 0) return 0;
             else if (doc.when_signed == null) return 1;
-            else if (doc.when_countersigned == null) return 2;
+            else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
             else if (doc.when_finalized == null) return 3;
             else return 4;
         };

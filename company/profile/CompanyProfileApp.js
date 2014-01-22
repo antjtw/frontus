@@ -532,32 +532,33 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         $scope.wasJustRejected = function(doc) {
             return doc.last_event && doc.last_event.activity == 'rejected';
         };
-
         $scope.isPendingFinalization = function(doc) {
-            return doc.when_countersigned && !doc.when_finalized;
+            return (doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized) ||
+                       (doc.signature_flow===1 && doc.when_signed && !doc.when_finalized);
         };
 
         $scope.isPendingCountersignature = function(doc) {
-            return doc.when_signed && !doc.when_countersigned;
+            return doc.when_signed && !doc.when_countersigned && doc.signature_flow===2;
         };
 
         $scope.isPendingSignature = function(doc) {
-            return doc.signature_deadline && !doc.when_signed;
+            return doc.signature_flow>0 && !doc.when_signed;
         };
 
         $scope.isPendingView = function(doc) {
-            return !doc.signature_deadline && !doc.last_viewed;
+            return doc.signature_flow===0 && !doc.last_viewed;
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_deadline && version.when_finalized;
+            return version.signature_flow>0 && version.when_finalized;
         };
         $scope.isCompleteViewed = function(version) {
-            return !version.signature_deadline && version.last_viewed;
+            return version.signature_flow===0 && version.last_viewed;
         };
 
         $scope.docIsComplete = function(doc) {
-            return $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
+            return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
         };
+
         $scope.momentFromNow = function(date) {
             return moment(date).from($rootScope.servertime);
         };
