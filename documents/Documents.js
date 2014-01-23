@@ -281,7 +281,6 @@ docs.directive('templateViewer', function($compile) {
             }, true);
 
             scope.add = function(raw_html) {
-            console.log(raw_html);
             var html = angular.element($compile(raw_html)(scope));
             iElement.append(html);
 
@@ -383,6 +382,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
+            $scope.processing = true;
             cleanatt = {};
             for (var key in attributes) {
                 if (key == 'investorName') {
@@ -432,7 +432,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
                             var raw_html = code[0].render_template;
-                            console.log(raw_html);
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -442,21 +441,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 angular.forEach(attributes, function (attribute) {
                                     if (thing == attribute.attribute ) {
                                         var first = thing.substring(0,7);
-                                        console.log(first);
                                         if (first == "company") {
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
-                                            replace = "<span>" + replace + "</span>"
+                                            replace = "<input type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
                                         }
                                         else {
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span class='template-label'>" +attribute.label + "</span><input disabled type='text' ng-model='" + attribute.attribute + "'>"
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input disabled type='text'>"
                                             }
                                             else if (attribute.attribute_type == "check-box") {
-                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' ng-model='" + attribute.attribute + "' class='check-box-button'></button>"
+                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' class='check-box-button'></button>"
                                             }
                                             else if (attribute.attribute_type == "textarea") {
-                                                replace = "<textarea placeholder='" + attribute.label +"' disabled ng-model='" + attribute.attribute + "'></textarea>"
+                                                replace = "<textarea placeholder='" + attribute.label +"' disabled></textarea>"
                                             }
                                         }
                                     }
@@ -753,7 +751,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage) {
+            if ($rootScope.lastPage && document.location.pathname.indexOf("/register/") != -1) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});

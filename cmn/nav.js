@@ -125,8 +125,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
-                if (document.location.pathname == "/login/") {
-                    $scope.lastPage = "/document/company-list";
+                if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
+                    console.log("here");
+                    $scope.lastPage = "/documents/";
                 } else {
                     $scope.lastPage = document.location.href;
                 }
@@ -160,7 +161,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
             else if (type == "register") {
                 $scope.isRegisterCollapsed = !$scope.isRegisterCollapsed;
-                console.log("here");
                 if (!$scope.isCollapsed) {
                     $scope.isCollapsed = !$scope.isCollapsed;
                 }
@@ -333,7 +333,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     dataLayer.push({'event': 'signup_success'}); // for analytics
                     void(requested);
                 }).except(function (x) {
-                        console.log(x);
                         if (x['message'].indexOf("ERROR: duplicate key value") !== -1) {
                             $scope.$emit("notification:fail", "This email address is already registered, try logging in.");
                         }
@@ -374,7 +373,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
             else {
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
-                    console.log(x);
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
