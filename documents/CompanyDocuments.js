@@ -720,11 +720,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
+            /*
             if (value == "Yes") {
                 $scope.messageText = "Hi, Your signature is requested";
             } else {
                 $scope.messageText = "Add an optional message...";
             }
+            */
         };
 
         //Email
@@ -1459,11 +1461,13 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
+            /*
             if (value == "Yes") {
                 $scope.messageText = "Hi, Your signature is requested";
             } else {
                 $scope.messageText = "Add an optional message...";
             }
+            */
         };
 
         //Email
