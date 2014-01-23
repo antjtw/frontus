@@ -59,7 +59,7 @@
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && forsigning || version}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
                     <div class="pull-right standard-button green">
                         <button class="btn" ng-click="setStage(1);">Share</button>
                     </div>
