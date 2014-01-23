@@ -406,6 +406,13 @@ navbar .navbar {
 .backButton > button > span:before {
     vertical-align: middle;
 }
+.forwardButton > button > span {
+    font-size: 16px;
+    padding-left: 6px;
+}
+.forwardButton > button > span:before {
+    vertical-align: middle;
+}
 
 .draggable {
     border: 0 solid red;
