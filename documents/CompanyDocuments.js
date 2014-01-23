@@ -466,7 +466,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity + " by ")) +
                        (version.last_event.name || version.investor) +
                        " " + moment(version.last_event.event_time).from(version.last_event.timenow) +
-                       (version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
+                       (version.signature_flow===2 && version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
             } else {
                 return "";
             }
@@ -514,8 +514,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return "Sent for Signature";
             } else if ($scope.isPendingCountersignature(version)){
                 return "Review and Sign";
-            } else if ($scope.isPendingFinalization(version)) {
+            } else if ($scope.isPendingInvestorFinalization(version)) {
                 return "Signed and Sent for Approval";
+            } else if ($scope.isPendingIssuerFinalization(version)) {
+                return "Awaiting Your Approval";
             } else if ($scope.isCompleteSigned(version)){
                 return "Completed";
             } else if ($scope.isPendingView(version)){
@@ -624,9 +626,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return version.when_signed && !version.when_countersigned && version.signature_flow===2;
         };
 
-        $scope.isPendingFinalization = function(version) {
-            return (version.signature_flow===2 && version.when_signed && version.when_countersigned && !version.when_finalized) ||
-                   (version.signature_flow===1 && version.when_signed && !version.when_finalized);
+        $scope.isPendingInvestorFinalization = function(version) {
+            return (version.signature_flow===2 && version.when_signed && version.when_countersigned && !version.when_finalized);
+        };
+        $scope.isPendingIssuerFinalization = function(version) {
+            return (version.signature_flow===1 && version.when_signed && !version.when_finalized);
         };
 
         $scope.docIsComplete = function(doc) {
@@ -1698,12 +1702,12 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isPendingFinalization = function(doc) {
-            return (doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized) ||
-                       (doc.signature_flow===1 && doc.when_signed && !doc.when_finalized);
+            return (doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.isPendingCountersignature = function(doc) {
-            return doc.when_signed && !doc.when_countersigned && doc.signature_flow===2;
+            return (doc.when_signed && !doc.when_countersigned && doc.signature_flow===2)
+                    || (doc.when_signed && !doc.when_finalized && doc.signature_flow===1);
         };
 
         $scope.isPendingSignature = function(doc) {

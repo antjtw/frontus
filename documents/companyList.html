@@ -162,6 +162,9 @@
                         <button ng-show="isPendingCountersignature(version)" class="btn"
                                 ng-click="viewInvestorCopy(version)">Sign
                         </button>
+                        <button ng-show="isPendingIssuerFinalization(version)" class="btn"
+                                ng-click="viewInvestorCopy(version)">Approve
+                        </button>
                     </div>
                     <ul class="dropdown-list">
                         <li class="dropdown standard menu-drop">
