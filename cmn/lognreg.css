@@ -77,6 +77,10 @@
 
 }
 
+.lognreg .small-standard-button > button > span {
+    margin-right: 3px;
+}
+
 ::-webkit-input-placeholder {
     font-size: 12px;
 }
