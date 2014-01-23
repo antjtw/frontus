@@ -52,16 +52,22 @@
                     </ul>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || finalizable(lib))}">
-                    <div class="pull-right standard-button green">
-                        <button class="btn" ng-click="setStage(1);">Confirm</button>
+                    <div class="pull-right standard-button green forwardButton">
+                        <button class="btn" ng-click="setStage(1);">
+                            Next
+                            <span data-icon="&#xe016;" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="pull-right tools" ng-class="{hidden: !isAnnotable}">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
-                    <div class="pull-right standard-button green">
-                        <button class="btn" ng-click="setStage(1);">Share</button>
+                    <div class="pull-right standard-button green forwardButton">
+                        <button class="btn" ng-click="setStage(1);">
+                            Share
+                            <span data-icon="&#xe016;" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && !forsigning}">
