@@ -469,6 +469,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             else {
                 $scope.forsigning = true;
                 SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
+                    console.log(html);
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                             var raw_html = html[0].render_investor_template;
@@ -497,6 +498,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                         var first = thing.split("_")[0];
 
                                         if (first != "company") {
+                                            console.log(attribute.attribute_type);
                                             if (attribute.attribute_type == "text") {
                                                 if (attribute.attribute == "investorState" || attribute.attribute == "investorCountry") {
                                                     replace = "<span class='template-label'>" +attribute.label + "</span><input maxlength='2' type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"

@@ -41,23 +41,23 @@
                                 <li>
                                     <ul>
                                         <li>Address</li>
-                                        <li><input ng-model="street"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>City</li>
-                                        <li><input ng-model="city"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
                                         <li>State</li>
-                                        <li><input class="short-input" maxlength="2" ng-model="state"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
                                         <li>Zip Code</li>
-                                        <li><input class="short-input" maxlength="12" ng-model="postalcode"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Telephone</li>
-                                        <li><input ng-model="phone"></li>
+                                        <li><input ui-event="{blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
                                     </ul>
                                 </li>
                                 <li>
