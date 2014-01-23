@@ -1108,6 +1108,15 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     return 0;
             }
         };
+        $scope.leave = function() {
+            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+                document.location.href = $rootScope.lastPage;
+            } else if ($scope.invq) {
+                $location.path('/investor-list').search({});
+            } else {
+                $location.path('/company-list').search({});
+            }
+        };
         $scope.$on('countersignAction', function(evt, data) {
             $scope.countersignAction(data);
         });
@@ -1129,7 +1138,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.$broadcast('rejectSignature');
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
-                $location.path('/company-list').search({});
+                $scope.leave();
+                //$location.path('/company-list').search({});
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1144,7 +1154,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document countersigned");
-                $location.path('/company-list').search({});
+                $scope.leave();
+                //$location.path('/company-list').search({});
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1166,7 +1177,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             SWBrijj.procm("document.issuer_finalize", $scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
-                $location.path('/company-list').search({});
+                $scope.leave();
+                //$location.path('/company-list').search({});
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1182,7 +1194,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
                 $scope.$broadcast('rejectSignature');
-                $location.path('/company-list').search({});
+                $scope.leave();
+                //$location.path('/company-list').search({});
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1811,6 +1824,16 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
+        $scope.leave = function() {
+            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+                console.log($rootScope.lastPage);
+                document.location.href = $rootScope.lastPage;
+            } else if ($scope.invq) {
+                $location.path('/investor-list').search({});
+            } else {
+                $location.path('/company-list').search({});
+            }
+        };
 
         $scope.signDocument = function(doc) {
             $scope.processing = true;
@@ -1823,7 +1846,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                 dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
-                $location.path('/investor-list').search({});
+                $scope.leave();
+                //$location.path('/investor-list').search({});
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1848,7 +1872,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
-                $location.path('/investor-list').search({});
+                $scope.leave()
+                //$location.path('/investor-list').search({});
             }).except(function(x) {
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1865,7 +1890,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             SWBrijj.procm("document.reject_countersignature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document countersignature rejected.");
                 void(data);
-                $location.path('/company-list').search({});
+                $scope.leave();
+                //$location.path('/company-list').search({});
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");

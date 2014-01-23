@@ -751,7 +751,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && document.location.pathname.indexOf("/register/") != -1) {
+            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
