@@ -703,6 +703,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
+            $scope.messageText = "Add an optional message...";
+            $scope.signeeded = "No";
         };
 
         $scope.shareTemplateOpen = function(templateid) {
@@ -720,13 +722,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
-            /*
-            if (value == "Yes") {
-                $scope.messageText = "Hi, Your signature is requested";
-            } else {
+            if ($scope.messageText==="") {
                 $scope.messageText = "Add an optional message...";
             }
-            */
         };
 
         //Email
@@ -1470,17 +1468,15 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
+            $scope.messageText = "Add an optional message...";
+            $scope.signeeded = "No";
         };
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
-            /*
-            if (value == "Yes") {
-                $scope.messageText = "Hi, Your signature is requested";
-            } else {
+            if ($scope.messageText==="") {
                 $scope.messageText = "Add an optional message...";
             }
-            */
         };
 
         //Email
