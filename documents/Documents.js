@@ -372,10 +372,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.template_share = function(email, attributes, message, sign, deadline) {
+            $scope.processing = true;
             SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
+                $scope.processing = false;
                 console.log(err);
             });
         };
