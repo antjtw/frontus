@@ -492,6 +492,17 @@ h2 {
     overflow: visible;
 }
 
+div.fixednav{
+    position: fixed;
+    z-index: 1000000;
+    width: 100%;
+    top: 0;
+}
+
+.fixednavoffset {
+    margin-top: 80px;
+}
+
 .topnav {
     height: 40px;
     width: 100%;
@@ -2474,6 +2485,11 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .check-box-button:hover {
     background-color: #E3E3E3;
+}
+
+.check-box-button:hover:disabled {
+    background-color: #FFFFFF;
+    cursor: default;
 }
 
 .check-box-button:hover > span {

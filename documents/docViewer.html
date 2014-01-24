@@ -268,12 +268,16 @@
             </div>
 
             <div ng-show="template_original && !forsigning">
-                <div class="confirmBody">
-                    <span>Send to...</span>
-                    <input type="text" ng-model="$parent.template_email">
-                    <br>
-                    <span>Message</span>
-                    <input type="textarea" ng-model="$parent.template_message">
+                <div class="template-share">
+                    <div>
+                        <span>Email Address(es)</span>
+                        <input type="text" ng-model="$parent.template_email">
+                    </div>
+                    <div>
+                        <span></span>
+                        <textarea placeholder="Add an optional message..." ng-model="$parent.template_message">
+                        </textarea>
+                    </div>
                 </div>
             </div>
 
