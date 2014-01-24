@@ -735,7 +735,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-            if (!$scope.templateId) {
+            if (!$scope.templateId && $scope.lib) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -1279,7 +1279,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 return;
             }
 
-            if (nd == $scope.lib.annotations) {
+            if (nd == $scope.lib.annotations || !nd) {
                 // When there are no changes
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved Annotations");
