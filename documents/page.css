@@ -815,3 +815,11 @@ div.template-share > div > textarea {
     height: 80px;
     resize: none;
 }
+
+input[type='text']:disabled, textarea:disabled {
+    background: url("/img/stripe-pattern.png") repeat;
+}
+
+.check-box-button, .check-box-button:hover {
+    background: url("/img/stripe-pattern.png") repeat;
+}

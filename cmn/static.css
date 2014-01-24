@@ -22,6 +22,10 @@
     text-decoration: none;
 }
 
+.static a.currentpage {
+    color: #231F20;
+}
+
 .static a:hover {
     color: rgb(41, 128, 185)
 }
@@ -72,7 +76,6 @@
 }
 
 .static .header-section {
-    margin-top: 60px;
 }
 
 .static .header-section h1 {
