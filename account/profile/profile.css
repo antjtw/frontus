@@ -130,10 +130,11 @@ h1.profile-name {
 .investor-attributes > ul > li > button.check-box-button {
     margin-left: 80px;
     vertical-align: top;
+    margin-right: 5px;
 }
 
 .investor-attributes > ul > li > button.check-box-button + span {
-    width: 260px;
+    width: 250px;
     display: inline-block;
 }
 

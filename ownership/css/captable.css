@@ -410,6 +410,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .capright .transaction-icon {
     margin-right: 20px;
+    font-family: 'FS Elliot Web Regular', sans-serif !important;
 }
 
 .capright .issue-delete {
