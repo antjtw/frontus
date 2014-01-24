@@ -531,6 +531,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stage = 0;
         $scope.confirmValue = 0;
+        $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
         $scope.hidePage = false;
         $scope.notes = [];
