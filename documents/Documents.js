@@ -372,10 +372,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.template_share = function(email, attributes, message, sign, deadline) {
+            $scope.processing = true;
             SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
+                $scope.processing = false;
                 console.log(err);
             });
         };
@@ -407,6 +409,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
+                $scope.processing = false;
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 console.log(err);
             });
         };
@@ -527,6 +531,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stage = 0;
         $scope.confirmValue = 0;
+        $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
         $scope.hidePage = false;
         $scope.notes = [];
@@ -733,7 +738,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-            if (!$scope.templateId) {
+            if (!$scope.templateId && $scope.lib) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -1277,7 +1282,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 return;
             }
 
-            if (nd == $scope.lib.annotations) {
+            if (nd == $scope.lib.annotations || !nd) {
                 // When there are no changes
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved Annotations");

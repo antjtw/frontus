@@ -94,22 +94,35 @@ h1.profile-name {
 
 }
 
+.investor-attributes > ul {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
 .investor-attributes .radioOption {
     display: block;
-    overflow: auto;
-}
-
-.investor-attributes .radioOption > li {
-    display: inline-block;
-    float: left;
-    margin-right: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .investor-attributes .radioOption > li:first-child {
-    width: 70px;
+    width: 100%;
     display: inline-block;
+    margin-left: 0px;
     margin-right: 10px;
-    text-align: right;
+    text-align: left;
+}
+
+.investor-attributes .radioOption > li {
+    width: 100%;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    margin-left: 80px;
+}
+
+.investor-attributes .radioOption > li > button {
+    margin-right: 10px;
 }
 
 .investor-attributes .text-input > span {
@@ -134,7 +147,7 @@ h1.profile-name {
 }
 
 .investor-attributes > ul > li > button.check-box-button + span {
-    width: 250px;
+    width: 230px;
     display: inline-block;
 }
 
