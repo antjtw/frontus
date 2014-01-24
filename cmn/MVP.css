@@ -2487,6 +2487,11 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     background-color: #E3E3E3;
 }
 
+.check-box-button:hover:disabled {
+    background-color: #FFFFFF;
+    cursor: default;
+}
+
 .check-box-button:hover > span {
     display: inline-block;
 }
