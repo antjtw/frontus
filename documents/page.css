@@ -786,3 +786,32 @@ span.text-attribute {
 .inline-radio > li:nth-child(n+1) {
     margin-left: 10px;
 }
+
+div.template-share {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+div.template-share > div {
+    margin-bottom: 10px;
+}
+
+div.template-share > div > span {
+    text-transform: uppercase;
+    width: 307px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+}
+
+div.template-share > div > input {
+    margin-bottom: 0;
+    width: 300px;
+
+}
+
+div.template-share > div > textarea {
+    width: 300px;
+    height: 80px;
+    resize: none;
+}
