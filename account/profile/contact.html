@@ -11,11 +11,11 @@
                 <div class="subnav-controls">
                     <div>
                         <div class="pull-left">
-                            <h2>{{name}}</h2>
+                            <h1 class="profile-name">{{name}}</h1>
                         </div>
                         <div class="pull-right">
                             <div class="standard-button">
-                                <button class="btn">Edit Profile</button>
+                                <button class="btn" ng-click="passwordModalOpen();">Change Password</button>
                             </div>
                         </div> 
                     </div>
@@ -35,34 +35,40 @@
                                 <li>
                                     <ul>
                                         <li>Full Name</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Address</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>City</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
                                         <li>State</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
                                         <li>Zip Code</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Telephone</li>
-                                        <li><input ui-event="{blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
+                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Profile Image</li>
+                                        <li class='profile-image'>
+                                            <img ng-src="{{photoURL}}">
+                                            <div class="standard-button small-standard-button gray">
+                                                <button ng-click="pictureModalOpen();" class="btn">Change</button>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -102,12 +108,12 @@
 
                                     </ul>
                                 </li>
-                                <li class="text-input" ng-show="investor_attributes.investorIsAnIndividual[0]==='true'"><span>SSN</span><input ui-event="{blur:'attributeUpdate(\'investorSsn\', investor_attributes.investorSsn[0])'}" ng-model="investor_attributes.investorSsn[0]"></li>
-                                <li class="text-input" ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'"><span>EIN</span><input ui-event="{blur:'attributeUpdate(\'investorEin\', investor_attributes.investorSsn[0])'}" ng-model="investor_attributes.investorEin[0]"></li>
+                                <li class="text-input" ng-show="investor_attributes.investorIsAnIndividual[0]==='true'"><span>SSN</span><input type="text" ui-event="{blur:'attributeUpdate(\'investorSsn\', investor_attributes.investorSsn[0])'}" ng-model="investor_attributes.investorSsn[0]"></li>
+                                <li class="text-input" ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'"><span>EIN</span><input type="text" ui-event="{blur:'attributeUpdate(\'investorEin\', investor_attributes.investorSsn[0])'}" ng-model="investor_attributes.investorEin[0]"></li>
                                 <li ng-show="investor_attributes.investorIsAnIndividual[0]==='true'">
                                     <ul class="radioOption">
                                         <li>
-                                            Accredited?
+                                            Accredited
                                         </li>
                                         <li>
                                             <button class="radio-button"

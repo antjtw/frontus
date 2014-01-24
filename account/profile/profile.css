@@ -4,10 +4,6 @@ textarea {
     resize: none;
 }
 
-.editProfileFP {
-    margin-top:40px;
-}
-
 .editPasswordBlock {
     margin-top:-8px;
 }
@@ -24,77 +20,6 @@ textarea {
     width:136px;
     border: none;
     overflow:hidden;
-}
-
-/*
-.editProfilePhoto:hover{
-    border: 4px solid rgb(26, 188, 150);
-    height:136px;
-    width:136px;
-    margin: -4px;
-    position: relative;
-    cursor: pointer;
-
-}
-
-.editProfilePhoto:hover:before {
-    content:'EDIT';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 3px 12px 3px 12px;
-    background-color: rgb(26, 188, 150);
-    color: rgb(255, 255, 255);
-    font-size: 11px;
-}
-*/
-
-.editProfileFP input, .editProfileFP textarea {
-    padding: 0;
-    box-shadow: none;
-    margin: 0;
-    color: rgb(102, 102, 102);
-}
-
-.editProfileFP input.name, .editProfileFP textarea.name {
-    font-size: 18px;
-    box-shadow: none !important;
-}
-
-.editProfileFP label {
-    color: rgb(166, 166, 166);
-    border-radius: 0;
-    text-shadow: none;
-    background-color: rgb(255, 255, 255);
-    text-transform: uppercase;
-    font-family: 'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
-    margin-bottom: 20px;
-}
-
-.editProfileFP .sidebar {
-    padding: 0;
-}
-
-.editProfileFP p.title {
-    font-size: 14px;
-    color: rgb(52, 73, 94);
-}
-
-.editProfileFP th {
-    border-top: 1px solid rgb(241, 241, 241);
-}
-
-.editProfileFP .admin {
-    font-size: 16px;
-    color: rgb(166, 166, 166);
-    vertical-align: middle;
-}
-
-.editProfileFP input.name, .editProfileFP textarea.name {
-    font-size: 18px;
-    box-shadow: none !important;
-    width: 272px;
 }
 
 .permission-block {
@@ -115,7 +40,9 @@ textarea {
     text-transform: uppercase;
 }
 
-/* Company Profile */
+h1.profile-name {
+    margin: 4px 0;
+}
 
 .recipientInfo .temp-text {
     font-style: italic;
@@ -135,7 +62,6 @@ textarea {
 .personal-information > li > ul {
     display: block;
     overflow: auto;
-    margin-bottom: 30px;
 }
 
 .personal-information > li > ul > li {
@@ -149,6 +75,7 @@ textarea {
     text-align: right;
     text-transform: uppercase;
     font-size: 10px;
+    line-height: 30px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
@@ -175,12 +102,50 @@ textarea {
 .investor-attributes .radioOption > li {
     display: inline-block;
     float: left;
+    margin-right: 10px;
+}
+
+.investor-attributes .radioOption > li:first-child {
+    width: 70px;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: right;
 }
 
 .investor-attributes .text-input > span {
-
+    width: 70px;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: right;
 }
 
 .investor-attributes .text-input > input {
+    margin-bottom: 0;
+}
 
+.investor-attributes > ul > li {
+    margin-top: 20px;
+}
+
+.investor-attributes > ul > li > button.check-box-button {
+    margin-left: 80px;
+    vertical-align: top;
+}
+
+.investor-attributes > ul > li > button.check-box-button + span {
+    width: 260px;
+    display: inline-block;
+}
+
+li.profile-image > img {
+    width: 106px;
+    height: 106px;
+    border-radius: 3px;
+    border: 1px solid #E3E3E3;
+}
+
+
+li.profile-image > div {
+    text-align: center;
+    margin-top: 10px;
 }
