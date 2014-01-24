@@ -349,11 +349,14 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.docStatus = function(doc) {
-            if (doc.signature_flow === 0) return 0;
-            else if (doc.when_signed == null) return 1;
-            else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
-            else if (doc.when_finalized == null) return 3;
-            else return 4;
+            if (doc.signature_deadline == null) return -1;
+            else {
+                if (doc.signature_flow === 0) return 0;
+                else if (doc.when_signed == null) return 1;
+                else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
+                else if (doc.when_finalized == null) return 3;
+                else return 4;
+            }
         };
 
         $scope.notifications = function() {
@@ -367,7 +370,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
-                    })
+                    });
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
@@ -376,7 +379,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
-                    })
+                    });
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
@@ -391,7 +394,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
                 else if (type == "investor") {
-                    if (note.signature_status == 1 || note.signature_status == 3) {
+                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1) {
                         notifications.push(note);
                     }
                 }
@@ -429,15 +432,19 @@ navm.filter('notifications', function () {
     return function (note) {
         var document = note.docname;
         var investor = note.investor;
-        if (note.signature_status == 1) {
+        if (note.signature_status == -1) {
+            var url = '/documents/investor-view?doc=' + note.doc_id;
+            return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
+        }
+        else if (note.signature_status == 1) {
             var url = '/documents/investor-view?doc=' + note.doc_id;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
-        if (note.signature_status == 2) {
+        else if (note.signature_status == 2) {
             var url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
-        if (note.signature_status == 3) {
+        else if (note.signature_status == 3) {
             var url = '/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
@@ -450,6 +457,7 @@ navm.filter('noteicon', function() {
         if (activity == 1) return "doc-sign-yel";
         else if (activity == 2) return "doc-countersign-yel";
         else if (activity == 3) return "doc-final-yel";
+        else if (activity == -1) return "doc-view-yel";
         else return "hunh?";
     }
 });

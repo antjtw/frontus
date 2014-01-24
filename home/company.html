@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-hide="docsummary.num == 0">
+                    <div ng-show="docsummary && docsummary.num != 0">
                         <div class="detail-row row-fluid">
                             <div class="span6">
                                 <div>
@@ -170,7 +170,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-hide="ownersummary.peoplenum == 0">
+                    <div ng-show="ownersummary && ownersummary.peoplenum != 0">
                         <div class="detail-row row-fluid">
                             <div class="span6">
                                 <div>
