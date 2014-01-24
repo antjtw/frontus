@@ -407,6 +407,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
+                $scope.processing = false;
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 console.log(err);
             });
         };
