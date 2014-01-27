@@ -360,11 +360,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.notifications = function() {
-            console.log(angular.copy($rootScope.navState.userid));
-            _kmq.push(['identify', $rootScope.navState.userid]);
+            if (window.location.hostname == "www.sharewave.com") {
+                _kmq.push(['identify', $rootScope.navState.userid]);
+            }
             if ($rootScope.navState.role == "issuer") {
-                _kmq.push(['set', {'role':'issuer'}]);
                 if (window.location.hostname == "www.sharewave.com") {
+                    _kmq.push(['set', {'role':'issuer'}]);
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                 }
 
@@ -378,7 +379,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
             else {
-                _kmq.push(['set', {'role':'shareholder'}]);
+                if (window.location.hostname == "www.sharewave.com") {
+                    _kmq.push(['set', {'role':'shareholder'}]);
+                }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {

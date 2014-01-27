@@ -705,7 +705,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             else {
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
-                if ($scope.issues.length == 1) {
+                if ($scope.issues.length == 1 && window.location.hostname == "www.sharewave.com") {
                     _kmq.push(['record', 'cap table creator']);
                 }
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
