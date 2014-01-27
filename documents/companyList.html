@@ -354,7 +354,9 @@
             <button class="btn" ng-click="documentUploadClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="uploadFile(files)">Upload</button>
+            <button class="btn"
+                    ng-click="uploadFile(files)"
+                    ng-disabled="files.length === 0">Upload</button>
         </div>
     </div>
 </div>
