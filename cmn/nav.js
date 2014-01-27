@@ -360,6 +360,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.notifications = function() {
+            console.log(angular.copy($rootScope.navState.userid));
             _kmq.push(['identify', $rootScope.navState.userid]);
             if ($rootScope.navState.role == "issuer") {
                 _kmq.push(['set', {'role':'issuer'}]);
