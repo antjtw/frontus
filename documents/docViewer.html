@@ -113,7 +113,7 @@
                     </button>
                     <button class="btn"
                             ng-show="template_original && !forsigning"
-                            ng-disabled="processing"
+                            ng-disabled="processing || checkmany(template_email)"
                             ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
                         Send
                     </button>
@@ -272,7 +272,7 @@
                 <div class="template-share">
                     <div>
                         <span>Email Address(es)</span>
-                        <input type="text" ng-model="$parent.template_email">
+                        <input ui-select2="select2Options" ng-model="$parent.template_email">
                     </div>
                     <div>
                         <span></span>
