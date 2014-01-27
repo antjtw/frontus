@@ -705,7 +705,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             else {
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
-                console.log($scope.issues.length);
                 if ($scope.issues.length == 1) {
                     _kmq.push(['record', 'cap table creator']);
                 }

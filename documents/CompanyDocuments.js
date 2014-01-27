@@ -407,6 +407,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
+            console.log("$scope.documents.length");
             if ($scope.documents.length == 0) {
                 _kmq.push(['record', 'doc uploader']);
             }
