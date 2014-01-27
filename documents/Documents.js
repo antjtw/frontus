@@ -371,9 +371,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
             $scope.processing = true;
-            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), email, message, sign, deadline).then(function(docid) {
+            var shareto = "";
+
+            angular.forEach(email, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                shareto += "," +  matches[1];
+            });
+
+            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
@@ -422,7 +433,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.stage = -1;
             $scope.template_original = true;
             $scope.used_attributes = {};
-            $scope.template_email = "";
+            $scope.template_email = [];
 
             SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
                 $scope.lib = {};

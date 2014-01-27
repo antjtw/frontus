@@ -935,6 +935,18 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $rootScope.servertime = time[0].fromnow;
         });
 
+        $scope.vInvestors = [];
+        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].name) {
+                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
+                }
+                else {
+                    $scope.vInvestors.push("(" +data[i].email+")");
+                }
+            }
+        });
+
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
@@ -1206,6 +1218,38 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.emit('event:remind');
             });
             */
+        };
+
+        //Email
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //My parentheses format
+        var regExp = /\(([^)]+)\)/;
+
+        $scope.checkmany = function(people) {
+            var anybad = false;
+            angular.forEach(people, function(person) {
+                var email;
+                var matches = regExp.exec(person.id);
+                if (matches === null) {
+                    matches = ["", person.id];
+                }
+                email = matches[1];
+                if (!re.test(email)) {
+                    anybad = true;
+                }
+            });
+            if (people && people.length === 0) {
+                anybad = true;
+            }
+            return anybad;
+        };
+
+        $scope.select2Options = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': $scope.vInvestors,
+            'tokenSeparators': [",", " "],
+            'placeholder': 'Enter email address & press enter'
         };
     }
 ]);
