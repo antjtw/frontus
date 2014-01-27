@@ -2461,7 +2461,10 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .dropdown-toggle.dark {
-    background-color: #E3E3E3;
+    background-color: #E3E3E3 !important;
+}
+.dropdown-toggle.dark:hover {
+    background-color: #C7C7C7 !important;
 }
 
 
