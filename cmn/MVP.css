@@ -1647,13 +1647,22 @@ ul.spaced-list > li:nth-child(odd) {
     color:#1ABC96;
 }
 
+.leftFullTableBlock .status-table > tbody > tr > td.status-toggle {
+    min-width: 27px;
+}
 .status-table > tbody > tr > td.status-toggle {
     font-size: 14px;
     border-right: 1px solid transparent;
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 50px;
+    min-width: 40px;
+}
+.leftFullTableBlock .status-table > tbody > tr.selectedrow > td.status-toggle {
+    max-width: 18px;
+}
+.status-table > tbody > tr.selectedrow > td.status-toggle {
+    min-width: 40px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
