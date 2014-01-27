@@ -407,6 +407,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
+            if ($scope.documents.length == 0) {
+                _kmq.push(['record', 'doc uploader']);
+            }
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
