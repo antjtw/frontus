@@ -426,6 +426,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
+
         $scope.$on('initTemplateView', function(event, templateId, subId) {
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
@@ -457,9 +458,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     if (thing == attribute.attribute ) {
                                         var first = thing.substring(0,7);
                                         if (first == "company") {
+                                            var max_length = "";
+                                            if (attribute.max_length) {
+                                                max_length = " maxlength=" + attribute.max_length;
+                                            }
+
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
-                                            replace = "<input type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
+                                            replace = "<input" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
                                         }
                                         else {
                                             if (attribute.attribute_type == "text") {
@@ -484,7 +490,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             else {
                 $scope.forsigning = true;
                 SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
-                    console.log(html);
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                             var raw_html = html[0].render_investor_template;
@@ -513,14 +518,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                         var first = thing.split("_")[0];
 
                                         if (first != "company") {
-                                            console.log(attribute.attribute_type);
+
+                                            var max_length = "";
+                                            if (attribute.max_length) {
+                                                max_length = " maxlength=" + attribute.max_length;
+                                            }
+
                                             if (attribute.attribute_type == "text") {
-                                                if (attribute.attribute == "investorState" || attribute.attribute == "investorCountry") {
-                                                    replace = "<span class='template-label'>" +attribute.label + "</span><input maxlength='2' type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
-                                                }
-                                                else{
-                                                    replace = "<span class='template-label'>" +attribute.label + "</span><input type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
-                                                }
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
                                             }
                                             else if (attribute.attribute_type == "check-box") {
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
@@ -700,7 +705,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     // restoreNotes
                     var annots = JSON.parse(aa);
                     if (annots.length > 100) {
-                        console.log("Error, too many notes.");
                         //$scope.removeAllNotes();
                         return;
                     }
