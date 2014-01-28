@@ -176,7 +176,7 @@
                                 <li ng-click="viewStatus(doc)">View Status</li>
                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
-                                <li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>
+                                <!--<li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                             </ul>
                         </li>
                     </ul>
@@ -323,7 +323,7 @@
     </div>
 
     <div class="modalText uploadModal">
-        <p>Currently we're taking PDF, DOC, PPT and CSV files (20MB max)</p>
+        <p>Currently we're only taking PDF files (20MB max)</p>
         <form class="form-inline">
             <fieldset>
                 <div ng-show="fileError" class="upload-errors">
