@@ -1179,6 +1179,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 //$location.path('/company-list').search({});
             }).except(function(x) {
                 console.log(x);
+                $scope.processing = false;
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
