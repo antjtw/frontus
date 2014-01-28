@@ -1,3 +1,4 @@
+<div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 
 <div class="row-fluid">
@@ -278,7 +279,7 @@
         </table>
     </div>
 </div>
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
+<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
     <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
         {{sideToggleName}}
     </button>
@@ -502,3 +503,5 @@
         </div>
     </div>
 </div>
+</div>
+<div class="push"></div>

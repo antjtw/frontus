@@ -921,6 +921,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 });
         };
+
+        $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+        });
     }
 ]);
 
