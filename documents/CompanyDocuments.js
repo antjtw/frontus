@@ -1195,7 +1195,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 msg = "";
             }
             console.log($scope.docId);
-/*            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
+            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
                 $scope.$broadcast('rejectSignature');
@@ -1204,7 +1204,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });*/
+            });
         };
 
         $scope.remind = function(doc_id, user_email) {
@@ -1864,6 +1864,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+                console.log($rootScope.lastPage);
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
