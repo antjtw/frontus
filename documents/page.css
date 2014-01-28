@@ -735,6 +735,10 @@ div.progress-bar {
     visibility: hidden;
 }
 
+.templatePanel > p:nth-child(2) > br:first-child {
+    display: none;
+}
+
 .templatePanel > p:nth-child(2) input, .templatePanel > p:nth-child(2) span {
     visibility: visible;
 }
