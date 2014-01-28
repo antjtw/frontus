@@ -1510,6 +1510,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         // Sharing modal functions
 
         $scope.shareDocOpen = function() {
+            $scope.messageText = "Add an optional message...";
+            $scope.signeeded = "No";
             $scope.shareDocModal = true;
         };
 
