@@ -1300,6 +1300,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
             }
+            if ($scope.html) {
+                return;
+            }
 
             if (nd == $scope.lib.annotations || !nd) {
                 // When there are no changes
