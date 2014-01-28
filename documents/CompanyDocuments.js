@@ -72,7 +72,7 @@ docviews.directive('myLoadingSpinner', function() {
         replace: true,
         transclude: true,
         scope: {processing: '=myLoadingSpinner'},
-        template: '<div>' + 
+        template: '<div>' +
                       '<div ng-show="processing" class="my-loading-spinner-container"></div>' +
                       '<div ng-hide="processing" ng-transclude></div>' +
                   '</div>',
@@ -119,8 +119,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $rootScope.errorMessage = msg;
         });
 
-        // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
-
         /* this investor list is used by the sharing email list drop-down */
         $scope.vInvestors = [];
         SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
@@ -153,8 +151,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             doc.versions.push(version);
                         }
                     });
-         //           $scope.loadDocumentActivity(doc);
-         //           $scope.setDocumentStatusRatio(doc);
                 });
                 $scope.loadDocumentActivity();
             });
@@ -175,7 +171,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.loadDocumentActivity = function() {
-            SWBrijj.tblm("document.company_activity").then(function(data) {
+            SWBrijj.tblm("document.recent_company_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach(doc.versions, function(version) {
                         var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
@@ -188,6 +184,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     $scope.setDocumentStatusRatio(doc);
                     $scope.setSigRequired(doc);
                 });
+                $scope.constructDocumentsByInvestor();
             });
         };
 
@@ -216,25 +213,79 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.constructDocumentsByInvestor = function() {
+            $scope.investorDocs = null;
+            angular.forEach($scope.documents, function(doc) {
+                angular.forEach(doc.versions, function(version) {
+                    if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
+                        $scope.investorDocs[version.investor].versions.push(version);
+                    } else {
+                        if (!$scope.investorDocs) {$scope.investorDocs = {};}
+                        $scope.investorDocs[version.investor] = {'versions': [version],
+                                                                   'name': version.name,
+                                                                   'investor': version.investor};
+                    }
+                });
+            });
+            // convert dict to array for orderBy to work
+            var tmp = [];
+            angular.forEach($scope.investorDocs, function(investor) {
+                tmp.push(investor);
+            });
+            $scope.investorDocs = tmp;
+            angular.forEach($scope.investorDocs, function(investor) {
+                investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
+                investor.statusRatio = $scope.docStatusRatio(investor);
+            });
+        };
+        $scope.noInvestors = function() {
+            return Object.keys($scope.investorDocs).length !== 0;
+        };
+
+        $scope.toggleMaxRatio = function() {
+            $scope.maxRatio = ($scope.maxRatio===1000) ? 2 : 1000;
+        };
+        $scope.viewAll = function() {
+            return $scope.maxRatio === 1000;
+        };
+
+        $scope.viewBy = 'document';
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
         $scope.versionOrder = 'statusRank';
+        $scope.investorOrder = 'name';
+        $scope.maxRatio = 1000;
         $scope.selectedDoc = 0;
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
         $scope.messageText = "Add an optional message...";
+        $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
 
+        $scope.setInvestorOrder = function(field) {
+            $scope.investorOrder = ($scope.investorOrder == field) ? '-' + field : field;
+        };
+
+        $scope.setViewBy = function(viewby) {
+            $scope.viewBy = viewby;
+        };
+
         $scope.searchFilter = function(obj) {
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-            return !$scope.query || re.test(obj.docname);
+            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
+        };
+        $scope.investorSearchFilter = function(obj) {
+            var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
+            var re = new RegExp(testString, 'i');
+            // need to backslash all special characters
+            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
         };
 
         $scope.exportOriginalToPdf = function(doc) {
@@ -246,6 +297,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 document.location.href = url;
             });
             */
+        };
+        $scope.exportOriginalDocidToPdf = function(docid) {
+            SWBrijj.procd('sharewave-' + docid + '.pdf', 'application/pdf', 'document.genOriginalPdf', docid.toString()).then(function(url) {
+                document.location.href = url;
+            });
         };
 
         $scope.exportVersionToPdf = function(version) {
@@ -271,6 +327,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.documentUploadModal = false;
         };
 
+        $scope.wideopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'wideModal modal'
+        };
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'modal'
+        };
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
@@ -279,25 +345,23 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        var mimetypes = ["application/pdf","application/vnd.openxmlformats-officedocument.wordpressingml.document",
-			 "application/vnd.openxmlformats-officedocument.wordpressingml.template",
-			 "application/msword"];
+        // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
+
+        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
-                for (var j = 0; j < mimetypes.length; j++) {
-		    // console.log(element.files[i].type);
-                    if (element.files[i].size > 20000000) {
-                        $scope.fileError = "Please choose a smaller file";
-                    } else if (element.files[i].type != mimetypes[j]) {
-                        $scope.fileError = "Please choose a pdf"
-                    } else {
-                        $scope.files.push(element.files[i]);
-                    }
-                    $scope.$apply();
+        	    // console.log(element.files[i].type);
+                if (element.files[i].size > 20000000) {
+                    $scope.fileError = "Please choose a smaller file";
+                } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                    $scope.fileError = "Please choose a pdf"
+                } else {
+                    $scope.files.push(element.files[i]);
                 }
+                $scope.$apply();
             }
         };
 
@@ -321,6 +385,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $rootScope.errorMessage = arg;
                 $scope.showProgress = false;
                 $scope.documentUploadClose();
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.$apply();
                 console.log(arg);
             });
@@ -369,7 +434,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             */
         };
 
-        $scope.opendetails = function(selected) {
+        $scope.opendetailsExclusive = function(selected) {
             $scope.documents.forEach(function(doc) {
                 if (selected.doc_id == doc.doc_id) {
                     doc.shown = doc.shown !== true;
@@ -377,6 +442,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     doc.shown = false;
                 }
             });
+        };
+
+        $scope.opendetails = function(selected) {
+            selected.shown = selected.shown !== true;
         };
 
         $scope.momentFromNow = function(date, zerodate) {
@@ -400,18 +469,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     doc.versions[0].last_event.event_time :
                     doc.last_updated)).from($rootScope.servertime);
             }
-
-            /*
-            if (doc.versions.length > 0) {
-                var set = doc.versions.filter(function (el) {return el.last_event && el.last_event.event_time;});
-                if (set.length === 0) {return $scope.defaultDocStatus(doc);}
-                set.sort(function (a, b) {return b.last_event.event_time - a.last_event.event_time;});
-                return $scope.versionStatus(set[0]);
-            } else {
-                return $scope.defaultDocStatus(doc);
-            }
-            */
         };
+        /*
+        $scope.investorStatus = function(investor) {
+            if (investor && investor.versions) {
+                return "Last Updated " + moment(investor.versions[0] && investor.versions[0].last_event && investor.versions[0].last_event.event_time).from($rootScope.servertime);
+            }
+        };
+        */
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions) {
@@ -482,19 +547,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (doc.versions.length === 0) {
                     return "";
                 } else {
-                    /*
-                     // If one ratio >= 1 and the other is < 1; display the ratio that's less than 1.
-                     var signatureRatio = $scope.docSignatureRatio(doc);
-                     var viewRatio = $scope.docViewRatio(doc);
-                     if (signatureRatio <= 1 && $scope.versionsReqSig(doc).length > 0) {
-                     return $scope.versionsFinalized(doc).length + " / " + $scope.versionsReqSig(doc).length + " signatures";
-                     } else if (viewRatio <= 1 && $scope.versionsReqView(doc).length > 0) {
-                     return $scope.versionsViewed(doc).length + " / " + $scope.versionsReqView(doc).length + " views";
-                     } else {
-                     return $scope.docStatusNumComplete(doc) + " / " + $scope.docStatusNumVersions(doc) +
-                     (doc.signature_required ? " signatures" : " views");
-                     }
-                     */
                     return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length) +
                         " / " +
                         doc.versions.length +
@@ -524,11 +576,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
                 // This ensure documents with no versions appear before completed documents.
                 // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-                if (doc.versions.length > 0 && initRatio == 0) {
-                    initRatio = (1 / doc.versions.length)
+                if (doc.versions.length > 0 && initRatio === 0) {
+                    initRatio = (1 / doc.versions.length);
                 }
                 if (initRatio == 2) {
-                    initRatio += (doc.versions.length)
+                    initRatio += (doc.versions.length);
                 }
                 if (initRatio === Infinity) {initRatio = 0;}
                 return initRatio;
@@ -594,13 +646,23 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.viewOriginal = function(doc) {
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1");
         };
+        $scope.viewDoc = function(docid) {
+            $location.url("/company-view?doc=" + docid + "&page=1");
+        };
 
         $scope.viewStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.doc_id);
         };
+        $scope.viewVersionStatus = function(doc) {
+            $location.url("/company-status?doc=" + doc.original);
+        };
 
-        $scope.viewInvestorCopy = function(doc, version) {
-            $location.url("/company-view?doc=" + doc.doc_id + "&page=1" + "&investor=" + version.investor);
+        $scope.viewProfile = function(investor) {
+            document.location.href = "/company/profile/view?id=" + investor.versions[0].investor;
+        };
+
+        $scope.viewInvestorCopy = function(version) {
+            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
         };
 
         // Sharing modal functions
@@ -695,9 +757,19 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.deleteDocModal = true;
         };
 
-        $scope.deleteDocClose = function(docToDelete) {
-            // TODO implement
+        $scope.deleteDocClose = function() {
             $scope.deleteDocModal = false;
+        };
+        
+        $scope.reallyDeleteDoc = function(doc) {
+            SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", doc.docname + " deleted.");
+                $scope.documents.splice($scope.documents.indexOf(doc), 1);
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Document deletion failed.");
+            });
         };
 
         // Multisharing modal functions
@@ -803,7 +875,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     void(x);
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 });
-        }
+        };
     }
 ]);
 
@@ -846,7 +918,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.counterparty = !! $scope.urlInves;
         $scope.tester = false;
         $scope.signeeded = "No";
-        $scope.messageText = "Add an optional message...";
 
         // For Email sharing
         $scope.recipients = [];
@@ -936,24 +1007,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             });
         };
 
-        /*
-        $scope.retract = function(cd) {
-            SWBrijj.procm('document.retract_share', cd.doc_id).then(function(data) {
-                void(data);
-                $scope.getOriginal();
-                $route.reload();
-            })
-        };
-
-        $scope.renege = function(cd) {
-            SWBrijj.procm("document.renege", cd.doc_id).then(function(data) {
-                void(data);
-                cd.when_confirmed = null;
-                $route.reload();
-            });
-        };
-        */
-
         $scope.loadDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "doc_id", $scope.version.doc_id).then(function(data) {
                 $scope.version.last_event = data.sort($scope.compareEvents)[0];
@@ -1006,9 +1059,18 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                     return 0;
             }
         };
-
-
+        $scope.$on('countersignAction', function(evt, data) {
+            $scope.countersignAction(data);
+        });
+        $scope.countersignAction = function(data) {
+            if (data[0] === 1) {
+                $scope.countersignDocument();
+            } else if (data[0] === -1) {
+                $scope.rejectSignature(data[1]);
+            }
+        };
         $scope.rejectSignature = function(msg) {
+            $scope.processing = true;
             if (msg === "Add an optional message...") {
                 msg = "";
             }
@@ -1019,86 +1081,34 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
                 //cd.when_signed = null;
                 $location.path('/company-list').search({});
-                //$route.reload();
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
-
-        $scope.$on('open_modal', function(event, modal) {
-            switch (modal) {
-                case 'reject':
-                    $scope.rejectDocOpen();
-                    break;
-                case 'share':
-                    $scope.shareDocOpen();
-                    break;
-                case 'confirm':
-                    $scope.confirmModalOpen();
-                    break;
-            }
-        });
-
-        $scope.broadcastModalClose = function() {
-            $scope.$broadcast('close_modal');
-        };
-
-        $scope.confirmModalOpen = function() {
-            $scope.confirmModal = true;
-        };
-
-        $scope.confirmModalClose = function() {
-            $('.docViewerHeader').data('affix').checkPosition();
-            setCursor('default');
-            $scope.processing = false;
-            $scope.broadcastModalClose();
-            $scope.confirmModal = false;
-        };
-
+        
         $scope.countersignDocument = function() {
             $scope.processing = true;
-            //setCursor('wait');
-            // before signing the document, I may need to save the existing annotations
-            // In fact, I should send the existing annotations along with the signature request for a two-fer.
-
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData()).then(function(data) {
-                //doc.when_signed = data;
+            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 dce.removeAllNotes();
-                $scope.confirmModalClose();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document countersigned");
                 $location.path('/company-list').search({});
-
             }).except(function(x) {
-                $scope.confirmModalClose();
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
         $scope.remind = function(doc_id, user_email) {
-            /*
+            /* TODO
             SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
                 $scope.emit('event:remind');
             });
             */
         };
-
-        // Rejecting modal functions
-
-        $scope.rejectDocOpen = function() {
-            $scope.rejectDocModal = true;
-        };
-
-        $scope.rejectDocClose = function() {
-            $scope.broadcastModalClose();
-            $scope.rejectDocModal = false;
-        };
-
-
     }
 ]);
 
@@ -1134,7 +1144,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
-            'placeholder': 'Select existing people, or enter new email addresses and press [enter]'
+            'placeholder': 'Enter email address & press enter'
         };
 
         // Set up event handlers
@@ -1339,7 +1349,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         $scope.opts = {
             backdropFade: true,
             dialogFade: true,
-            dialogClass: 'modal'
+            dialogClass: 'modal wideModal'
         };
 
         $scope.remmodalUp = function(name) {
@@ -1358,7 +1368,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
 
 
         function failed() {
-            alert("failed")
+            alert("failed");
         }
 
         // Sharing modal functions
@@ -1527,14 +1537,18 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
+        $scope.hideCompleted = false;
 
         $scope.setOrder = function(field) {
             $scope.docOrder = $scope.docOrder == field ? '-' + field : field;
         };
+        $scope.toggleHideCompleted = function() {
+            $scope.hideCompleted = !$scope.hideCompleted;
+        };
 
         $scope.searchFilter = function(obj) {
             var re = new RegExp($scope.query, 'i');
-            return !$scope.query || re.test(obj.docname);
+            return !($scope.hideCompleted && $scope.docIsComplete(obj)) && (!$scope.query || re.test(obj.docname));
         };
 
         $scope.time = function(doc) {
@@ -1670,16 +1684,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             if ($scope.docId) $scope.getData();
         });
 
-        // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
-
         $scope.docId = parseInt($routeParams.doc, 10);
         $scope.thisPage = $routeParams.page ? parseInt($routeParams.page, 10) : 1;
         $scope.library = "document.my_investor_library";
         $scope.pages = "document.my_investor_codex";
         $scope.tester = false;
         $scope.invq = true;
-        $scope.messageText = "Add an optional message...";
-        //$scope.confirmModalClose();
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq;
         };
@@ -1705,120 +1715,70 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.getData();
 
-        //$scope.$on('initview', function(event) {$scope.getData();});
-
-        $scope.$on('open_modal', function(event, modal) {
-            switch (modal) {
-                case 'confirm':
-                    $scope.confirmModalOpen();
-                    break;
-                case 'finalize':
-                    $scope.finalizeModalOpen();
-                    break;
-                case 'reject':
-                    $scope.rejectModalOpen();
-                    break;
-            }
-        });
-
-        $scope.broadcastModalClose = function() {
-            $scope.$broadcast('close_modal');
-        };
-
-        $scope.confirmModalOpen = function() {
-            $scope.confirmModal = true;
-        };
-
-        $scope.confirmModalClose = function() {
-            $('.docViewerHeader').data('affix').checkPosition();
-            $scope.processing = false;
-            $scope.broadcastModalClose();
-            $scope.confirmModal = false;
-            $scope.confirmSignature = false;
-        };
-
-        $scope.finalizeModalOpen = function() {
-            $scope.finalizeModal = true;
-        };
-
-        $scope.finalizeModalClose = function() {
-            $('.docViewerHeader').data('affix').checkPosition();
-            $scope.processing = false;
-            $scope.broadcastModalClose();
-            $scope.finalizeModal = false;
-            $scope.confirmFinalize = false;
-        };
-
-        $scope.rejectModalOpen = function() {
-            $scope.rejectModal = true;
-        };
-
-        $scope.rejectModalClose = function() {
-            $scope.broadcastModalClose();
-            $scope.rejectModal = false;
-        };
-
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
 
         $scope.signDocument = function(doc) {
             $scope.processing = true;
-            //setCursor('wait');
             // before signing the document, I may need to save the existing annotations
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData()).then(function(data) {
+            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 doc.when_signed = data;
                 dce.removeAllNotes();
-                $scope.confirmModalClose();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                $scope.confirmModalClose();
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
 
-        $scope.finalizeDocument = function(doc) {
-            $scope.processing=true;
+        $scope.$on('finalizeAction', function(evt, data) {
+            $scope.finalizeAction(data);
+        });
+        $scope.finalizeAction = function(data) {
+            if (data[0] === 1) {
+                $scope.finalizeDocument();
+            } else if (data[0] === -1) {
+                $scope.rejectCountersignature(data[1]);
+            }
+        };
+
+        $scope.finalizeDocument = function() {
+            $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
                 doc.when_finalize = data;
-                $scope.finalizeModalClose();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $location.path('/investor-list').search({});
             }).except(function(x) {
-                $scope.finalizeModalClose();
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
 
-        $scope.rejectCountersignature = function(doc, msg) {
+        $scope.rejectCountersignature = function(msg) {
+            console.log(msg);
+            $scope.processing = true;
             if (msg === "Add an optional message...") {
                 msg = "";
             }
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.reject_countersignature", $scope.docId, $scope.messageText).then(function(data) {
+            SWBrijj.procm("document.reject_countersignature", $scope.docId, msg).then(function(data) {
                 $scope.$emit("notification:success", "Document countersignature rejected.");
                 void(data);
                 $location.path('/company-list').search({});
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
-        };
-
-        $scope.unSign = function(cd) {
-            SWBrijj.procm('document.unsign', cd.doc_id).then(function(data) {
-                void(data);
-                cd.when_signed = null;
-                $route.reload();
+                $scope.processing = false;
             });
         };
     }
@@ -1837,10 +1797,10 @@ docviews.filter('fromNow', function() {
     };
 });
 
-docviews.filter('docOrderPrinter', function() {
-    return function(order) {
-        if (order == "docname" || order == "-docname") return "Document Name";
-        else if (order == "statusRatio" || order == "-statusRatio") return "Document Status";
+docviews.filter('viewByPrinter', function() {
+    return function(viewby) {
+        if (viewby == "document") return "Document";
+        else if (viewby == "investor") return "Investor";
         else return order;
     };
 });

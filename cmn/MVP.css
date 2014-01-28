@@ -43,6 +43,12 @@ body {
     width: 1024px;
     clear:both;
 }
+
+.container.static hr {
+    margin: 0;
+    border-bottom: none;
+}
+
 label {
     cursor: default;
     cursor: default;
@@ -150,9 +156,15 @@ input:focus, textarea:focus {
     border-top: 0;
     border-radius: 0;
 }
+
 .accordion-heading {
-    height: 43px;
+    padding: 20px 0;
 }
+
+.accordion-heading:not:first-child {
+    padding-top: 20px;
+}
+
 .accordion-heading > a:before {
     content:'';
 }
@@ -882,10 +894,17 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls span {
     font-size: 10px;
 }
+.subnav-controls .dropdown-toggle span {
+    font-size: 14px;
+}
+.subnav-controls .dropdown-list {
+    line-height: 32px;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
+    height: 32px;
     width: -moz-calc(100% - 80px);
     width: -webkit-calc(100% - 80px);
     width: calc(100% - 80px);
@@ -910,10 +929,18 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     background-color: #FFFFFF;
     height: 22px;
     margin-bottom: 0;
+    margin-right: 20px;
     border-radius: 3px;
     margin-left: 10px;
     box-shadow: none !important;
     border: 1px solid #E3E3E3;
+}
+.subnav-controls .checkboxitem {
+    line-height: 32px;
+}
+.subnav-controls button.check-box-button {
+    margin-left: 10px;
+    margin-right: 20px;
 }
 .subnav-controls h2 {
     margin-left: 10px;
@@ -922,6 +949,12 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     display: inline-block;
     font-size: 18px;
     color: rgb(166, 166, 166);
+}
+.subnav-controls .viewProfileText > ul > li {
+    padding-left: 20px;
+    text-align: left;
+    color: #666666;
+    line-height: 16px;
 }
 .doc-title {
     display: inline-block;
@@ -981,6 +1014,10 @@ form.inputs {
 .loginLabel {
     text-align:left;
     margin-left: 42px;
+}
+
+.login-logo {
+    margin-bottom: 10px;
 }
 
 .navlogin input {
@@ -1288,6 +1325,30 @@ form.inputs {
 .info-box > .body-box > .standard-button{
     padding: 0 0 20px 0;
 }
+
+.info-box > .body-box > .ownershipPermissions > span {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #8D8D8D;
+    padding-right: 10px;
+}
+.settingtable {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+table.settingtable tr > td {
+    height: 30px;
+}
+table.settingtable tr > td:first-child {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #A6A6A6;
+}
+table.settingtable tr > td:last-child {
+    font-size: 12px;
+    color: #666666;
+}
 ul.last-edited {
     display: inline-block;
     padding: 20px 0 20px 0;
@@ -1325,6 +1386,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .activity-feed2 > li > ul {
+    width: 100%;
     vertical-align: middle;
     display: inline-block;
 }
@@ -1341,9 +1403,19 @@ ul.spaced-list > li:nth-child(odd) {
     color: #656565;
 }
 
+.body-box .activity-feed2 > li > ul > li {
+    width: -webkit-calc(100% - 20px) !important;
+    width: -moz-calc(100% - 20px) !important;
+    width: calc(100% - 20px) !important;
+    padding: 8px 10px 10px 10px;
+}
+
 .activity-feed2 > li > ul > li > span {
     display: inline-block;
-    width: 230px;
+    min-width: 220px;
+    max-width: -webkit-calc(100% - 20px) !important;
+    max-width: -moz-calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
 }
 
 .activity-feed2 > li:last-of-type {
@@ -1451,6 +1523,10 @@ ul.spaced-list > li:nth-child(odd) {
     height: 180px;
 }
 
+.status-table > tbody.empty-table:first-child > tr > td {
+    text-align: center;
+}
+
 .status-table > tbody.empty-table > tr > td > span {
     font-size: 14px;
     text-transform:none;
@@ -1479,6 +1555,30 @@ ul.spaced-list > li:nth-child(odd) {
 
 .status-table > tbody:first-child > tr > th:last-child {
     padding-right: 20px;
+}
+
+.body-box > table.status-table.investor {
+    margin: 20px 0 20px 0 !important;
+    width: -moz-calc(100% - 20px) !important;
+    width: -webkit-calc(100% - 20px) !important;
+    width: calc(100% - 20px) !important;
+}
+
+.body-box > table.status-table > tbody.empty-table > tr > td > span {
+    font-family:'FS Elliot Web Regular', sans-serif;
+}
+
+
+.body-box > table.status-table.investor > tbody > tr > th:first-child {
+    width: -moz-calc(50%) !important;
+    width: -webkit-calc(50%) !important;
+    width: calc(50%) !important;
+}
+
+.body-box > table.status-table.investor > tbody > tr > th:nth-child(2) {
+    width: -moz-calc(50%-50px) !important;
+    width: -webkit-calc(50%-50px) !important;
+    width: calc(50%-50px) !important;
 }
 
 .sign-button {
@@ -1552,6 +1652,9 @@ ul.spaced-list > li:nth-child(odd) {
 }
 .investor.status-table > tbody > tr > td.status-toggle.status-icon {
     width: auto;
+}
+.body-box > table.status-table.investor > tbody > tr > td.status-toggle.status-icon {
+    width: 28px;
 }
 
 .status-toggle > .circle {
@@ -1637,6 +1740,9 @@ ul.spaced-list > li:nth-child(odd) {
     cursor:pointer;
     padding-left: 10px;
     width: 230px;
+}
+.status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
+    padding-left: 20px;
 }
 .status-table.investor > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
@@ -1893,6 +1999,9 @@ a.oldschool-link  {
     border: none;
     text-shadow: none;
 }
+.standard-button.btn-group > .btn.on{
+    background-color: #15A085 !important;
+}
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;
@@ -1902,6 +2011,9 @@ a.oldschool-link  {
     width: 130px;
     min-height: 32px;
     position: relative;
+}
+.standard-button.btn-group > button.btn {
+    font-size: 12px;
 }
 .standard-button > button:hover {
     background-color: #15A085;
@@ -1917,17 +2029,53 @@ a.oldschool-link  {
     color: #FFFFFF;
 }
 
+.standard-button.arrow-right > button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .standard-button.arrow-right > button:after {
     content: ' ';
     display: block;
     position: absolute;
     width: 0;
     height: 0;
-    border-top: 14px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 14px solid #3498DB;
-    top: 1px;
-    right: -13px;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 13px solid #F1F1F1;
+    top: 0px;
+    right: -12px;
+}
+
+.standard-button.gray.arrow-right > button:hover:after {
+    border-left: 13px solid #E3E3E3;
+}
+
+.standard-button.darkgray.arrow-right > button:after {
+    border-left: 13px solid #C7C7C7;
+}
+/*
+.standard-button.blue.arrow-right > button:hover:after {
+    border-left: 13px solid #2980B9;
+}
+*/
+
+.standard-button.cutout-left > button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.standard-button.cutout-left > button:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 13px solid white;
+    top: 0px;
+    left: -1px;
 }
 
 .standard-button.red > button {
@@ -1944,10 +2092,6 @@ a.oldschool-link  {
     background-color: #2980B9;
 }
 
-.standard-button.blue.arrow-right > button:hover:after {
-    border-left: 14px solid #2980B9;
-}
-
 .standard-button.gray > button {
     background-color: #F1F1F1;
     color: #666666;
@@ -1956,6 +2100,14 @@ a.oldschool-link  {
 .standard-button.gray > button:hover {
     background-color: #E3E3E3;
     color: #666666;
+}
+
+.standard-button.darkgray > button {
+    background-color: #C7C7C7;
+    color: #666666;
+}
+
+.standard-button.darkgray > button:hover {
 }
 
 .small-standard-button > button {
@@ -2226,6 +2378,47 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .check-box-button.selected > span {
     display: inline-block;
 }
+
+/* Radial (radio) Button Styling */
+
+.radio-button {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: solid 1px #C7C7C7;
+}
+.radio-button:before {
+    content: '';
+    display:block;
+}
+.radio-button:hover:before {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #C7C7C7;
+    border: solid 2px #FFFFFF;
+    left: 0px;
+    top: 0px;
+}
+.radio-button.selected,
+.radio-button.selected:hover {
+    border: solid 1px #1ABC96;
+}
+.radio-button.selected:before ,
+.radio-button.selected:hover:before {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #1ABC96;
+    border: solid 2px #FFFFFF;
+    left: 0px;
+    top: 0px;
+}
+
 
 /* Icon Box styling */
 
@@ -2685,6 +2878,10 @@ button.icon-button:hover {
     width: 160px;
     float: right;
 }
+
+.modal .add-person input {
+    width: 260px;
+}
 .modal input[type='checkbox'] {
     width: 30px;
 }
@@ -2723,9 +2920,7 @@ button.icon-button:hover {
 }
 .my-loading-spinner-container {
     display: block;
-    padding-top: 40px;
-    padding-left: 180px;
-    height: 60px;
+    padding-top: 60px;
 }
 .modalText {
     padding: 10px 0 0 0;
@@ -2780,6 +2975,124 @@ button.icon-button:hover {
 .shareModal .modalText {
     margin-bottom: 20px;
 }
+
+.wideModal.modal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.profile-modal.modal > div.modalText {
+    padding: 0 20px 0 20px;
+    text-align: left;
+}
+
+.profile-modal.modal > div.modalText .input-list > span {
+    float: left;
+    margin-left: 132px;
+}
+
+.profile-modal.modal > div.modalText > div > div.profile-image {
+    width: 76px;
+    height: 76px;
+    border: 1px solid #E3E3E3;
+}
+
+.profile-modal.modal > div.modalText .input-list > div {
+    margin: 0 0 10px 50px;
+}
+.profile-modal.modal > div.modalText .input-list > div > button {
+    margin-left: -3px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
+    text-transform: uppercase;
+    font-size: 10px;
+    width: 80px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 5px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div > input {
+    float: none;
+}
+
+.profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {
+    margin-right: 5px;
+    margin-left: -3px;
+}
+
+.profile-modal.modal > div.modalText .input-list > div.city-state > input:last-of-type {
+    width: 30px;
+    margin: 0;
+}
+
+.profile-modal.modal > div.modalText form.image-button {
+    position: absolute;
+    top: 140px;
+    width: 76px;
+}
+
+.profile-modal.modal div.fileinputs {
+    position: relative;
+    height: 30px;
+}
+
+
+.profile-modal.modal div.profile-fakefile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    line-height: 30px;
+}
+
+.profile-modal.modal div.profile-fakefile > div {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.profile-modal.modal div.profile-fakefile > span {
+    display: inline-block;
+    width: 76px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: #F1F1F1;
+    color: #666666;
+    border-radius: 3px;
+}
+
+.profile-modal.modal input.file {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.profile-modal.modal > div.modalText.settings {
+    padding: 0 20px 5px 20px;
+}
+
+.modalText.settings > div {
+    margin-bottom: 10px;
+}
+
+.modalText.settings > div > span {
+    width: 170px;
+    text-align: right;
+    line-height: 30px;
+    display: inline-block;
+}
+
+.modalText.settings > div > ul {
+    float: right;
+}
+
+
 /* Dropdown */
 .menu_dropdown {
     display: block;
@@ -3016,6 +3329,13 @@ h2.onboard {
 }
 
 .dynamic-page .span12 .status-table {
+    margin: 0 40px 0 40px;
+    width: -moz-calc(100% - 80px) !important;
+    width: -webkit-calc(100% - 80px) !important;
+    width: calc(100% - 80px) !important;
+}
+
+.dynamic-page .span12.home-top-row {
     margin: 0 40px 0 40px;
     width: -moz-calc(100% - 80px) !important;
     width: -webkit-calc(100% - 80px) !important;

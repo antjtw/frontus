@@ -141,7 +141,7 @@
             </div>
             <div class="body-box">
                 <ul class="activity-feed2">
-                    <li ng-repeat="events in eventGroups  | fromNowSort">
+                    <li ng-repeat="events in eventGroups  | fromNowSort | limitTo:50">
                         <span>{{events[0]}}</span>
                         <ul>
                             <li ng-repeat="event in events.slice(2)">
@@ -190,9 +190,13 @@
                     Email
                 </li>
                 <li class="investor-address">
+                    <span ng-bind="address1()"></span>
+                    <span ng-bind="address2()"></span>
+                <!--
                     <span ng-show="person.street">{{person.street}}</span>
                     <span ng-show="person.city || person.state">{{person.city}}, {{person.state}}</span>
                     <span ng-show="person.postalcode">{{person.postalcode}}</span>
+                -->
                 </li>
                 <li ng-show="person.street || person.city || person.state || person.postalcode">
                     Address
@@ -317,7 +321,7 @@
     </div>
     <div class="modalText">
         <div class="row-fluid">
-            <div class="span3">
+            <div class="span3 profile-image">
                 <img id="updateImage" ng-src="{{photoURL}}">
                 <form class="form-inline image-button">
                     <fieldset>

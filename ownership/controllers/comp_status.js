@@ -150,7 +150,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.gotoPerson = function (person) {
         var link;
-        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/investor/profile/') : '');
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/account/profile/') : '');
         if (link) {
             document.location.href=link;
         }

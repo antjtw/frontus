@@ -181,15 +181,17 @@ table.docLibrary > tbody > tr:first-child > td {
     margin: 0;
 }
 
+/*
 .modalText.dshare > ul {
     width: 469px;
 }
+*/
 
 .modalText.dshare > ul > li {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    padding: 5px 20px 5px 20px;
+    padding: 5px 40px 5px 40px;
 }
 
 .modalText.dshare > ul > li > span {
@@ -496,9 +498,18 @@ h1.error-message {
 */
 
 div.progress-bar {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     margin-top: 15px;
+}
+
+.progress .bar {
+    background-color: #1ABC96;
+    background-image: none !important;
+    text-shadow: none !important;
+    -webkit-box-shadow: none !important;
+       -moz-box-shadow: none !important;
+            box-shadow: none !important;
 }
 
 .drop-target.not-available {
@@ -528,7 +539,7 @@ div.progress-bar {
 }
 
 .single-share-input .select2-container {
-    width: 300px;
+    width: 330px;
 }
 
 .select2-results .select2-highlighted {
@@ -574,6 +585,10 @@ div.progress-bar {
     background-color: #E2E2E2;
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.select2-search-choice > div {
+    text-align: left;
 }
 
 .select2-container-multi.select2-container-active .select2-choices {

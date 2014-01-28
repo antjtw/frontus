@@ -71,20 +71,21 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     });
 
                     angular.forEach($scope.issues, function(issue) {
-                        var offset = issue.date.getTimezoneOffset();
-                        issue.date = issue.date.addMinutes(offset);
+                        issue.date = calculate.timezoneOffset(issue.date);
                         if (issue.vestingbegins) {
-                            issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                            issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                            issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                         }
                     });
 
 
                     for (var i = 0, l = $scope.trans.length; i < l; i++) {
-                        var offset = $scope.trans[i].date.getTimezoneOffset();
-                        $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
+                        $scope.trans[i].date = calculate.timezoneOffset($scope.trans[i].date);
                         if ($scope.trans[i].vestingbegins) {
-                            $scope.trans[i].vestingbegins = $scope.trans[i].vestingbegins.addMinutes(offset);
+                            $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
+                            $scope.trans[i].vestingbeginsdisplay = calculate.monthDiff($scope.trans[i].vestingbegins,$scope.trans[i].date);
                         }
+
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
@@ -158,8 +159,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 tran.convert = [];
                                 angular.forEach(convert, function(con) {
                                     if (con.tranto == tran.tran_id) {
-                                        var offset = con.date.getTimezoneOffset();
-                                        con.date = con.date.addMinutes(offset);
+                                        con.date = calculate.timezoneOffset(con.date);
                                         if (con.method == "Split") {
                                             con.split = new Fraction(con.split);
                                         }
@@ -168,8 +168,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 });
 
                                 angular.forEach(transfer, function(transf) {
-                                    var offset = transf.date.getTimezoneOffset();
-                                    transf.date = transf.date.addMinutes(offset);
+                                    transf.date = calculate.timezoneOffset(transf.date);
                                     if (transf.tranto == tran.tran_id) {
                                         var final = angular.copy(transf);
                                         final.direction = "To";
@@ -280,18 +279,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         tran['active'] = true
                         first = first + 1
                     }
-                    if (String(tran['partpref']) == "true") {
-                        tran.partpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.partpref = $scope.tf[1];
-                    }
-                    if (String(tran['liquidpref']) == "true") {
-                        tran.liquidpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.liquidpref = $scope.tf[1];
-                    }
+                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -321,19 +311,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
 
-        // Set Boolean Values for the Angularjs Select
-        if (String($scope.activeIssue.partpref) == "true") {
-            $scope.activeIssue.partpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.partpref = $scope.tf[1];
-        }
-        if (String($scope.activeIssue.liquidpref) == "true") {
-            $scope.activeIssue.liquidpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.liquidpref = $scope.tf[1];
-        }
+        $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
+        $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
+        $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
         }

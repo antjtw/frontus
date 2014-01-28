@@ -1,7 +1,7 @@
 .footerBar {
     display: none !important;
 }
-navbar {
+navbar .navbar {
     display: none !important;
 }
 .docViewer {
@@ -32,7 +32,7 @@ navbar {
     padding-top: 120px;
 }
 
-.affix + .docPanelContainer.annotable {
+.affix + .docPanelContainer.annotatedPageBar {
     padding-top: 160px;
 }
 
@@ -45,7 +45,19 @@ navbar {
     bottom: 0;
 }
 
-.tools {
+.docViewerAction {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 14px;
+    color: #1E2D3D;
+    display: inline-block;
+    vertical-align: middle;
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+}
+
+.docViewerControls > div > div.tools {
     margin-left: 20px;
     padding-top: 15px;
     min-width: 210px;
@@ -88,6 +100,11 @@ navbar {
     padding-top: 6px;
 }
 
+.pageTurn > ul > li > span {
+    font-size: 18px;
+    color: #666666;
+}
+
 .docViewerControls {
     min-height: 60px;
     width: 100%;
@@ -95,7 +112,7 @@ navbar {
     background-color: #F1F1F1;
 }
 
-.docViewerControls > .pageTurn > ul > li:first-child {
+.docViewerControls .pageTurn > ul > li:first-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -108,7 +125,7 @@ navbar {
     box-sizing: border-box;
 }
 
-.docViewerControls > .pageTurn > ul > li:last-child {
+.docViewerControls .pageTurn > ul > li:last-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -140,7 +157,12 @@ navbar {
 
 .docActions > div > button {
     display: block;
-    margin-left: 10px;
+}
+
+.last-saved {
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-top: 23px;
 }
 
 .page-bar {
@@ -233,37 +255,54 @@ navbar {
     vertical-align: middle;
 }
 
-.docViewerTitle > div {
-    max-width: 430px;
-}
-
-.docViewerTitle > div > .docName {
+.docViewerTitle .docName {
     margin-top: 14px;
     margin-left: 20px;
     font-size: 14px;
     color: #1E2D3D
 }
 
-.docViewerTitle > div > .docStatus {
+.docViewerTitle .docStatus {
     margin-left: 20px;
     font-size: 10px;
     text-transform: uppercase;
 }
 
-.docViewerTitle > .lastUpdated {
-    margin-top: 20px;
-    margin-right: 20px;
+.docViewerTitle .lastUpdated {
+    margin-top: 0px;
+    margin-left: 20px;
     text-transform: uppercase;
-    text-align: right;
+    text-align: left;
     font-size: 10px;
 }
 
-.docViewerTitle > .lastUpdated > button {
+.docViewerTitle .lastUpdated > button {
     border: none;
     background-color: white;
     color: #1E2D3D;
     padding-left: 20px;
     font-size: 16px;
+}
+
+.stageControls {
+    position: absolute;
+    left:-webkit-calc(50% - 140px);
+    left:-moz-calc(50% - 140px);
+    left: calc(50% - 140px);
+    margin: 14px auto;
+    width: 280px;
+    color: #666666;
+}
+
+.stageControls > div.disabled > button {
+    cursor: default;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.docViewerTitle div.small-standard-button {
+    padding-top: 14px;
+    padding-right: 20px;
 }
 
 .docPanel {
@@ -279,6 +318,93 @@ navbar {
     left: 0px;
     right: 0px;
     margin: 0px auto;
+}
+
+.confirmPanelContainer {
+    left: 0px;
+    right: 0px;
+    margin: 0px auto;
+}
+.confirmPanel {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+.confirmPanel > div {
+    width: 100%;
+    height: 100%;
+}
+.confirmPanel > .my-loading-spinner-container > div {
+    left: 50%;
+    height: 60px;
+}
+.confirmBody {
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 380px;
+    height: 100%;
+    min-height: 40px;
+}
+
+.confirmBody > .radioOption {
+    height: 40px;
+}
+
+.confirmBody > .radioOption > li:first-child {
+    padding-right: 20px;
+}
+
+.confirmBody > .radioOption > li:last-child > span:first-child {
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.confirmBody > .radioOption > li:last-child > span {
+    color: #666666;
+}
+
+.confirmBody > .radioOption textarea.messageText {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 6px;
+    margin-bottom: 30px;
+    color: #666666;
+}
+
+.confirmBody > .checkboxOption {
+    width: 320px;
+    margin: 0 auto;
+}
+
+.confirmBody > .checkboxOption > li:last-child {
+    padding-left: 20px;
+}
+
+.confirmBody > .checkboxOption > li:last-child > span {
+    color: #666666;
+}
+
+.confirmFooter {
+    height: 12px;
+}
+
+.confirmButton {
+    position: absolute;
+    right: 20px;
+    top: 75px;
+}
+.backButton {
+    position: absolute;
+    left: 20px;
+    top: 75px;
+}
+.backButton > button > span {
+    font-size: 16px;
+    padding-right: 1px;
+}
+.backButton > button > span:before {
+    vertical-align: middle;
 }
 
 .draggable {

@@ -16,7 +16,7 @@
                                     <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
                                     <div class="standard-button">
-                                        <button class="btn" ng-disabled="!fieldCheck(username);" ng-click="doLogin()">Log In</button>
+                                        <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
                                     </div>
                                     <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
@@ -79,11 +79,11 @@
                             <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li ng-show="navState.role==='issuer'">
-                                <a class="menuProfileText button" href="/investor/profile">My Account</a>
+                            <li>
+                                <a class="menuProfileText button" href="/account/profile">My Account</a>
                             </li>
-                            <li ng-class="{topItem: navState.role!=='issuer'}">
-                            <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            <li>
+                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
                             </li>
                         </ul>
                     </li>
@@ -134,7 +134,7 @@
                     </li>
                     <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
                     </li>
-                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/people') != -1}"><a class="button" href="/company/profile/people">People</a>
+                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/') != -1}"><a class="button" href="/company/profile/people">People</a>
                     </li>
                 </ul>
             </div>

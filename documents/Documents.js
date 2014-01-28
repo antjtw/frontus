@@ -21,12 +21,12 @@ function getCanvasOffset(ev) {
     return [offx, offy];
 }
 
-function getNoteBounds(nx, pageBar) {
+function getNoteBounds(nx, pageBar, not_visible) {
     // [LEFT, TOP, WIDTH, HEIGHT]
     var top_padding = pageBar ? 161 : 120;
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop) {
+    if (!dp.offsetTop && not_visible) {
         bds[1]-=top_padding;
     }
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
@@ -239,7 +239,7 @@ directive('draggable', ['$window', '$document',
             ]
         };
     }
-])
+]);
 
 var docs = angular.module('documents', ['ui.bootstrap', 'brijj', 'draggable'], function() {});
 
@@ -289,7 +289,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 dp.height((dp.width()/$scope.image.width)*$scope.image.height);
                 $scope.dp.width = dp.width();
                 $scope.dp.height = dp.height();
-            };
+            }
         };
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
@@ -301,7 +301,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.nextPage($scope.currentPage);
             }
         };
-        
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
         refreshDocImage = function() {
             var docpanel = document.querySelector(".docPanel");
@@ -332,21 +331,41 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.loadPages();
         });
 
+        $scope.stage = 0;
+        $scope.confirmValue = 0;
+        if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
         $scope.pageScroll = 0;
         $scope.pageBarSize = 10;
-        //$scope.showPageBar = true;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
             offset: {top: 40}
         });
-        
+
+        $scope.setStage = function(n) {
+            $scope.setConfirmValue(0);
+            $scope.stage = n;
+            if ($scope.stage === 0) {
+                refreshDocImage();
+            }
+        };
+        $scope.setConfirmValue = function(n) {
+            if ($scope.confirmValue === n) {
+                $scope.confirmValue = 0;
+            } else {
+                $scope.confirmValue = n;
+            }
+            if ($scope.confirmValue !== -1) {
+                $scope.messageText = "Add an optional message...";
+            }
+        };
+
         $scope.setAnnotable = function() {
                 $scope.isAnnotable = $scope.annotable();
         };
-        
+
         $scope.annotable = function() {
             return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
         };
@@ -360,7 +379,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPageBar = function() {
-            console.log($scope.annotatedPages);
             if ($scope.docLength > 1 && $scope.annotatedPages.length > 0) {
                 return true;
             } else {
@@ -368,6 +386,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.resetMsg = function() {
+            if ($scope.rejectMessage === "Add an optional message...") {
+                $scope.rejectMessage = "";
+            }
+        };
+        $scope.countersignAction = function(conf, msg) {
+            $scope.$emit('countersignAction', [conf, msg]);
+        };
+        $scope.finalizeAction = function(conf, msg) {
+            $scope.$emit('finalizeAction', [conf, msg]);
+        };
 
         $scope.$emit('docViewerReady');
 
@@ -403,7 +432,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 return '';
             }
         };
-        
+
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
@@ -483,10 +512,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
-        
+
         $window.addEventListener('beforeunload', function(event) {
             void(event);
-            var ndx = $scope.getNoteData();
+            var ndx = $scope.getNoteData(false);
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
@@ -519,8 +548,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.$on('event:leave', $scope.leave);
 
-        $scope.leave = function(event) {
-            if ($scope.invq) {
+        $scope.leave = function() {
+            if ($rootScope.lastPage) {
+                document.location.href = $rootScope.lastPage;
+            } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
             } else {
                 $location.path('/company-list').search({});
@@ -528,7 +559,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPages = function() {
-            return $scope.range($scope.pageScroll, 
+            return $scope.range($scope.pageScroll,
                                 Math.min($scope.pageScroll + $scope.pageBarSize,
                                          $scope.annotatedPages.length)
                                 ).map(function(i){return $scope.annotatedPages[i];});
@@ -929,19 +960,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.signable = function(doc) {
-            return doc && doc.signature_deadline && !doc.when_signed;
+            return $scope.invq && doc && doc.signature_deadline && !doc.when_signed;
         };
 
         $scope.rejectable = function(doc) {
-            return (doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
+            // reject reject signature OR countersignature
+            return (!$scope.invq && doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.countersignable = function(doc) {
-            return doc && doc.when_signed && !doc.when_countersigned;
+            return !$scope.invq && doc && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {
-            return doc && doc.when_countersigned && !doc.when_finalized;
+            return $scope.invq && doc && doc.when_countersigned && !doc.when_finalized;
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
@@ -1001,13 +1033,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
 
-        $scope.getNoteData = function() {
+        $scope.getNoteData = function(stamping) {
             var noteData = [];
-            
+
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx, $scope.showPageBar());
+                var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
@@ -1026,14 +1058,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
                 }
-                
+
                 noteData.push(ndx);
             }
             return JSON.stringify(noteData);
         };
 
         $scope.saveNoteData = function(clicked) {
-            var nd = $scope.getNoteData();
+            $scope.last_save = new Date().getTime();
+            var nd = $scope.getNoteData(false);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
@@ -1059,7 +1092,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
             });
         };
-
     }
 ]);
 

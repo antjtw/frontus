@@ -1,35 +1,55 @@
 <div class="maincontent">
 <div class="container dynamic-page">
 
-<div modal="capShare" close="close()" options="shareopts">
+<div modal="capShare" close="close()" options="transferopts">
     <div class="modalHeader">
         <span>Share Cap Table</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
     </div>
-    <div>
-        <p>Shareholders only see their personal holdings by default, change this by visiting their profile
-            to grant full access. Sharing with non-shareholders grants full-access.
+    <div class="share-modal-main">
+        <p>Select shareholders and their permissions
         </p>
-        <form>
-            <ul>
-                <li>
-                    <input ng-model="selectAll" ng-change="turnOnShares();" class="checkbox" type="checkbox">
-                    <span>Name</span>
-                    <span>Email</span>
-                </li>
-                <li ng-repeat="row in rows | shareList">
-                    <input class="checkbox" ng-model="row.send" type="checkbox" tabindex="-1">
-                    <span class="capshareNames">{{row.name}}</span>
-                    <input ng-class="{'content':!row.email, 'error':emailCheck(row.send, row.email)}"
-                           ng-disabled="row.emailkey" ng-model="row.email" ng-change="row.send = autoCheck(row.email)">
-                </li>
-            </ul>
-            <ul class="extrasAdd">
-                <li ng-repeat="person in extraPeople">
-                    <input ng-change="addRemove();" ng-model="person.email" placeholder="Add Non Shareholder">
-                </li>
-            </ul>
-        </form>
+
+        <div class="docLibrary full-width">
+            <table class="captable tableView modal-table">
+                <tbody>
+                    <tr class="column-label">
+                        <th>Name</th>
+                        <th></th>
+                        <th>Email</th>
+                        <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.permissions"></span></th>
+                    </tr>
+                </tbody>
+                <tbody class="scrollable-body">
+                    <tr ng-repeat="row in rows | shareList">
+                        <td>
+                            <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </td>
+                        <td style="width: 225px;">{{row.name}}</td>
+                        <td style="width: 210px;"><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
+                                   ng-disabled="row.emailkey" ng-model="row.email" ng-change="updateSendRow(row);"></td>
+                        <td style="width: 210px;">
+                            <ul class="dropdown-list drop-selector">
+                                <li class="dropdown standard">
+                                    <a class="dropdown-toggle">
+                                        {{row.permission}}<span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><span ng-click="row.permission = 'Personal'">Personal</span></li>
+                                        <li><span ng-click="row.permission = 'Full'">Full</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Share with contacts not listed in your cap table</p>
+        <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="extraPeople">
+        </div>
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -563,14 +583,14 @@
                     <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                       <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
-                          <input class="name-row" placeholder="Add Name" style="width:140px;" ng-model="row.name" ng-change="nameChangeLR(row)"
+                          <input class="name-row" placeholder="Add Name" style="width:140px;"
+                                 ng-model="row.name"
+                                 ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
                                  onkeydown="testForEnter();">
                         </span>
                         <span ng-switch-when="0">
-                          <input class="name-row" disabled style="width:180px;" ng-model="row.name" ng-change="nameChangeLR(row)"
-                                 ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
-                                 onkeydown="testForEnter();">
+                          <input class="name-row" disabled style="width:180px;" ng-model="row.name">
                         </span>
                       </span>
                 </td>
@@ -747,7 +767,7 @@
                         <!-- Equity Tab -->
                         <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
 
-                            <p class="rightTitle common-toggle" ng-show="commonshow"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                            <p class="rightTitle common-toggle"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
 
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.common"></span>
                             </p>
@@ -785,7 +805,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalauth"></span>
                             </p>
 
-                            <div class="rightTitle double"><span>Liquidation Preference</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle double"><span>Liquidation Preference</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -801,7 +821,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
                             </div>
 
-                            <div class="rightTitle double"><span>Participating Preferred</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle double"><span>Participating Preferred</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -818,7 +838,7 @@
                             </div>
 
 
-                            <div class="rightTitle"><span>Drag Along</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle"><span>Drag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -834,7 +854,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
                             </div>
 
-                            <div class="rightTitle"><span>Tag Along</span>
+                            <div ng-hide="activeIssue.common" class="rightTitle"><span>Tag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -850,8 +870,8 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
                             </div>
 
-                            <span ng-show="showPari(allowKeys)" class="paripassu-list">
-                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.">Pari Passu With</span>
+                            <span ng-show="showPari(allowKeys) && !activeIssue.common" class="paripassu-list">
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span>Pari Passu With</span>
                                     <ul class="dropdown-list drop-selector">
                                         <li class="dropdown standard">
                                             <a class="dropdown-toggle">
@@ -864,6 +884,7 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
                                     <button class="icon-button" ng-click="addIssuePari(activeIssue.paripassu)"><span data-icon="&#xe053;" aria-hidden="true"></span></button>
                                 </div>
                             </span>
@@ -912,14 +933,10 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
                               </p>
 
-                              <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                          id="vestingbegins{{activeIssue.$$hashKey}}"
-                                                                                          ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
-                                                                                          ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
-                                                                                          type="text"
-                                                                                          ng-model="activeIssue.vestingbegins"
-                                                                                          data-date-format={{settings.lowercasedate}}
-                                                                                          bs-datepicker>
+                              <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text" ng-model="activeIssue.vestingbeginsdisplay"
+                                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestingbegins\')'}"
+                                                                                                     onkeydown="testForEnter();">
+
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
                               </p>
 
@@ -1070,7 +1087,7 @@
                             </p>
 
 
-                            <div ng-hide="toggleView();" class="rightTitle double"><span>Liquidation Preference</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Liquidation Preference</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1086,7 +1103,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle double"><span>Participating Preferred</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Participating Preferred</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1102,7 +1119,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.partpref"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle"><span>Drag Along</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle"><span>Drag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1118,7 +1135,7 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
                             </div>
 
-                            <div ng-hide="toggleView();" class="rightTitle"><span>Tag Along</span>
+                            <div ng-hide="commonstock(tran)" class="rightTitle"><span>Tag Along</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
                                         <a class="dropdown-toggle">
@@ -1152,14 +1169,10 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
                             </p>
 
-                            <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                                        id="vestingbegins{{tran.$$hashKey}}"
-                                                                                        ui-event="{keydown:'saveTranDate(tran, \'vestingbegins\', $event)', blur:'saveTranDate(tran, \'vestingbegins\', \'blur\')'}"
-                                                                                        ng-change="saveTranDate(tran, 'vestingbegins')"
-                                                                                        type="text"
-                                                                                        ng-model="tran.vestingbegins"
-                                                                                        data-date-format={{settings.lowercasedate}}
-                                                                                        bs-datepicker>
+                            <p class="rightTitle double"><span>Vesting Cliff (months)</span><input type="text"
+                                                                                                   onkeydown="testForEnter();"
+                                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                   ng-model="tran.vestingbeginsdisplay">
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
                             </p>
 
@@ -1288,7 +1301,7 @@
 
                               <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span></p>
 
-                              <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span></p>
+                              <p ng-show="activeIssue.vestingbeginsdisplay" class="belowTitle"><span ng-bind="activeIssue.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">VESTING CLIFF (MONTHS)</span></p>
 
                               <p ng-show="activeIssue.vestcliff" class="belowTitle"><span ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span></p>
 
@@ -1353,7 +1366,7 @@
 
                                     <p ng-show="tran.terms" class="belowTitle"><span ng-bind="tran.terms"></span><span tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span></p>
 
-                                    <p ng-show="tran.vestingbegins" class="belowTitle"><span ng-bind="tran.vestingbegins | date:settings.shortdate"></span><span tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span></p>
+                                    <p ng-show="tran.vestingbeginsdisplay" class="belowTitle"><span ng-bind="tran.vestingbeginsdisplay"></span><span tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">Vesting Cliff (months)</span></p>
 
                                     <p ng-show="tran.vestcliff" class="belowTitle"><span ng-bind="tran.vestcliff"></span><span tooltip-placement="top" tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span></p>
 
@@ -1418,8 +1431,6 @@
                                     <li>A financial instrument representing ownership, debt, or rights to ownership (e.g. Common, Series A, 2012 Option Pool)</li>
                                     <li>Why should I enter terms?</li>
                                     <li>These terms influence capitalization calculations, the more terms you enter the more accurate your information</li>
-                                    <li>What does dilution mean?</li>
-                                    <li>This represents the total outstanding shares if all debt is converted & options/grants are exercised</li>
                                 </ul>
                             </div>
                         </span>

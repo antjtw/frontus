@@ -234,7 +234,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         $scope.getActivityFeed = function() {
             $scope.activity = [];
-            SWBrijj.tblm('global.get_company_activity').then(function(feed) {
+            SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
                 $scope.eventGroups = [];
@@ -692,7 +692,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.docIsComplete = function(doc) {
-            return (doc.signature_deadline && doc.when_confirmed) ||
+            return (doc.signature_deadline && doc.when_finalized) ||
                 (!doc.signature_deadline && doc.last_viewed);
         };
 
@@ -795,6 +795,25 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$apply();
             }
         };
+        
+        $scope.address1 = function() {
+            if ($scope.person) {
+                return $scope.person.street;
+            }
+        };
+        $scope.address2 = function() {
+            if ($scope.person) {
+                if ($scope.person.city && $scope.person.state && $scope.person.postalcode) {
+                    return $scope.person.city + ", " + $scope.person.state + " " + $scope.person.postalcode;
+                } else if ($scope.person.city || $scope.person.state) {
+                    return ($scope.person.city || "") + ($scope.person.state || "") + " " + ($scope.person.postalcode || "");
+                } else if ($scope.person.postalcode) {
+                    return $scope.person.postalcode;
+                } else {
+                    return null;
+                }
+            }
+        };
 
         $scope.profileUpdate = function (person) {
             SWBrijj.proc("account.contact_update", person.name, person.street, person.city, person.state, person.postalcode).then(function (x) {
@@ -806,6 +825,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
                         $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
+                        $rootScope.userURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);
@@ -960,7 +980,7 @@ angular.module('HomeApp').filter('investordescription', function() {
             else if (activity == "signed") return "You signed "+document;
             else if (activity == "rejected") return person + " rejected your signature on " +document;
             else if (activity == "countersigned") return person + " countersigned "+document;
-            else if (activity == "finalized") return person + " approved " + document;
+            else if (activity == "finalized") return "You approved " + document;
             else  {
                 return activity + " by "+person;
             }
@@ -983,6 +1003,6 @@ app.filter('fromNowSort', function () {
             });
         }
 
-        return events
+        return events;
     };
 });

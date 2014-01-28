@@ -1,10 +1,19 @@
 @font-face {
 	font-family: 'logo';
 	src:url('sharewave.eot');
-	src:url('sharewave.eot?#iefix') format('embedded-opentype'),
-		url('sharewave.woff') format('woff'),
-		url('sharewave.ttf') format('truetype'),
-		url('sharewave.svg#sharewave') format('svg');
+	src:url('sharewave.woff') format('woff'),
+            url('sharewave.ttf') format('truetype'),
+            url('sharewave.svg#sharewave') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+// Chrome fix http://stackoverflow.com/questions/13674808/chrome-svg-font-rendering-breaks-layout/14345363#14345363
+@font-face {
+	font-family: 'logo';
+	src:url('sharewave.eot');
+	src:url('sharewave.svg#sharewave') format('svg'),
+            url('sharewave.woff') format('woff'),
+            url('sharewave.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }

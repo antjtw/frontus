@@ -16,7 +16,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.captabletips.totalgranted = "The sum total of shares granted";
     $scope.captabletips.price = "The price each granted share can be purchased at when vested";
     $scope.captabletips.terms = "The total number of months until fully vested";
-    $scope.captabletips.vestingbegins = "The date the vesting cliff percentage becomes vested";
+    $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
     $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
 
@@ -46,10 +46,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         $scope.schedules = schedules;
         angular.forEach($scope.schedules, function(schedule) {
             schedule.shown = false;
-            if (schedule.vestingbegins) {
-                var offset = schedule.vestingbegins.getTimezoneOffset();
-                schedule.vestingbegins = schedule.vestingbegins.addMinutes(offset);
-            }
         });
     });
 
@@ -102,17 +98,18 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 angular.forEach($scope.issues, function (issue) {
                     issue.key = issue.issue;
                     issue.shown = false;
-                    var offset = issue.date.getTimezoneOffset();
-                    issue.date = issue.date.addMinutes(offset);
+                    issue.date = calculate.timezoneOffset(issue.date);
                     if (issue.vestingbegins) {
-                        issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                        issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                        issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                     }
                     angular.forEach($scope.trans, function(tran) {
                         if (tran.issue == issue.issue) {
-                            tran.date = tran.date.addMinutes(offset);
+                            tran.date = calculate.timezoneOffset(tran.date);
                             tran.datekey = tran['date'].toUTCString();
                             if (tran.vestingbegins) {
-                                tran.vestingbegins = tran.vestingbegins.addMinutes(offset);
+                                tran.vestingbegins = calculate.timezoneOffset(tran.vestingbegins);
+                                tran.vestingbeginsdisplay = calculate.monthDiff(tran.vestingbegins,tran.date);
                             }
                             tran.state = false;
                             tran.investorkey = angular.copy(tran.investor);
@@ -305,17 +302,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    issue[field] = date;
-                    var offset = issue[field].getTimezoneOffset();
-                    issue[field] = issue[field].addMinutes(offset);
+                    issue[field] = calculate.timezoneOffset(date);
                     $scope.saveIssueCheck(issue, field);
                     keyPressed = false;
                 }
             }
         } else { // User is using calendar
             if (issue[field] instanceof Date) {
-                var offset = issue[field].getTimezoneOffset();
-                issue[field] = issue[field].addMinutes(offset);
+                issue[field] = calculate.timezoneOffset(issue[field]);
                 $scope.saveIssueCheck(issue, field);
                 keyPressed = false;
             }
@@ -367,11 +361,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 var tagalong = $scope.strToBool(issue['tagalong']);
                 var common = $scope.strToBool(issue['common']);
 
+                if (item == 'vestingbegins' || (item == 'date' && !isNaN(parseInt(issue.vestingbeginsdisplay)))) {
+                    var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
+                    issue.vestingbegins = vestcliffdate;
+                }
+
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
-                }
-                else {
-                    var vestcliffdate = issue['vestingbegins']
                 }
 
                 if ($scope.allowKeys.indexOf(issue.issue) != -1) {
@@ -627,9 +623,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
-                    transaction[field] = date;
-                    var offset = transaction[field].getTimezoneOffset();
-                    transaction[field] = transaction[field].addMinutes(offset);
+                    transaction[field] = calculate.timezoneOffset(date);
                     keyPressed = false;
                     $scope.saveTran(transaction);
                 }
@@ -637,8 +631,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         } else { // User is using calendar
             //Fix the dates to take into account timezone differences.
             if (transaction[field] instanceof Date) {
-                var offset = transaction[field].getTimezoneOffset();
-                transaction[field] = transaction[field].addMinutes(offset);
+                transaction[field] = calculate.timezoneOffset(transaction[field]);
                 keyPressed = false;
                 $scope.saveTran(transaction);
             }
@@ -659,13 +652,13 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
             else {
                 var d1 = transaction['date'].toUTCString();
-                if (transaction['vestingbegins'] == undefined) {
-                    var vestcliffdate = null
+
+                var vestcliffdate = null;
+                if (!isNaN(parseInt(transaction.vestingbeginsdisplay))) {
+                    vestcliffdate = angular.copy(transaction.date).addMonths(parseInt(transaction.vestingbeginsdisplay));
+                    transaction.vestingbegins = vestcliffdate;
                 }
 
-                else {
-                    var vestcliffdate = (transaction['vestingbegins']).toUTCString();
-                }
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
                 }
@@ -1014,7 +1007,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             activeTran.vestcliff = schedule.vestcliff;
             activeTran.terms = schedule.terms;
             activeTran.vestfreq = schedule.vestfreq;
-            activeTran.vestingbegins = schedule.vestingbegins;
+            activeTran.vestingbeginsdisplay = schedule.vestingbegins;
             $scope.saveTran(activeTran);
         }
         else {
@@ -1044,6 +1037,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             });
         });
         return total;
+    };
+
+    $scope.resetSideBar = function() {
+        $scope.sideBar = 'x';
+        angular.forEach($scope.issues, function(issue) {
+            angular.forEach(issue.trans, function(tran) {
+                tran.fields = [false,false,false,false];
+            });
+        });
     };
 
 

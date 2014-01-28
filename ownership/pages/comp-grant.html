@@ -103,7 +103,7 @@
 
 <div class="row-fluid">
 
-<div class="headsection row-fluid" ng-click="sideBar = 'x'">
+<div class="headsection row-fluid" ng-click="resetSideBar();">
 
     <ul class="maintabs head-text">
         <li><a href="/ownership/company-captable">Capitalization</a></li>
@@ -116,7 +116,7 @@
     </div>
 </div>
 
-<div class="row-fluid" ng-click="sideBar = 'x'">
+<div class="row-fluid" ng-click="resetSideBar();">
     <div class="captable-controls subnav-controls">
         <div>
             <div class="pull-left" ng-show="issues.length!==0">
@@ -366,20 +366,25 @@
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
                      class="rightTitle double"><span>Vesting Term (months)</span><input
                           ui-event="{blur : 'saveTran(activeTran)'}"
-                          ng-model="activeTran.terms"></p>
+                          ng-model="activeTran.terms">
+                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                          bs-tooltip="captabletips.terms"></span>
+                  </p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                     class="rightTitle"><span>Vesting Cliff Date</span><input id="{{activeTran.$$hashKey}}"
-                                                                              ui-event="{keydown:'saveTranDate(activeTran, \'vestingbegins\', $event)', blur:'saveTranDate(activeTran, \'vestingbegins\', \'blur\')'}"
-                                                                              ng-change="saveTranDate(activeTran, 'vestingbegins')"
-                                                                              type="text"
-                                                                              ng-model="activeTran.vestingbegins"
-                                                                              data-date-format={{settings.lowercasedate}}
-                                                                              bs-datepicker></p>
+                     class="rightTitle double"><span>Vesting Cliff (Months)</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                                                                                  ng-model="activeTran.vestingbeginsdisplay">
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestingbegins"></span>
+
+                  </p>
 
                   <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
                      class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                                                                           ng-model="activeTran.vestcliff"></p>
+                                                                           ng-model="activeTran.vestcliff">
+                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                          bs-tooltip="captabletips.vestcliff"></span>
+                  </p>
 
 
                   <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
@@ -396,6 +401,9 @@
                               </ul>
                           </li>
                       </ul>
+
+                      <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
+                            bs-tooltip="captabletips.vestfreq"></span>
                   </div>
               </div>
 
@@ -534,14 +542,7 @@
                             bs-tooltip="captabletips.terms"></span>
                   </p>
 
-                  <p class="rightTitle"><span>Vesting Cliff Date</span><input ng-disabled="toggleView();"
-                                                                              id="vestingbegins{{activeIssue.$$hashKey}}"
-                                                                              ng-change="saveIssueCheckDate(activeIssue, 'vestingbegins')"
-                                                                              ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'vestingbegins\', $event)', blur:'saveIssueCheckDate(activeIssue, \'vestingbegins\', \'blur\')'}"
-                                                                              type="text"
-                                                                              ng-model="activeIssue.vestingbegins"
-                                                                              data-date-format={{settings.lowercasedate}}
-                                                                              bs-datepicker>
+                  <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text" ui-event="{blur : 'saveIssueCheck(activeIssue, \'vestingbegins\')'}" ng-model="activeIssue.vestingbeginsdisplay">
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                             bs-tooltip="captabletips.vestingbegins"></span>
                   </p>
@@ -612,8 +613,8 @@
                   </p>
 
                   <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span
-                          ng-bind="activeIssue.vestingbegins | date:settings.shortdate"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF DATE</span>
+                          ng-bind="activeIssue.vestingbeginsdisplay"></span><span
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF (Months)</span>
                   </p>
 
                   <p ng-show="activeIssue.vestcliff" class="belowTitle"><span
@@ -664,8 +665,8 @@
                   </p>
 
                   <p ng-show="activeTran.vestingbegins" class="belowTitle"><span
-                          ng-bind="activeTran.vestingbegins | date:settings.shortdate"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span>
+                          ng-bind="activeTran.vestingbeginsdisplay"></span><span
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                   </p>
 
                   <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span
@@ -755,8 +756,8 @@
                     </p>
 
                     <p ng-show="schedule.vestingbegins" class="belowTitle"><span
-                            ng-bind="schedule.vestingbegins | date:settings.shortdate"></span><span
-                            tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff Date</span>
+                            ng-bind="schedule.vestingbegins"></span><span
+                            tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                     </p>
 
                     <p ng-show="schedule.vestcliff" class="belowTitle"><span ng-bind="schedule.vestcliff"></span><span
@@ -787,10 +788,8 @@
                               bs-tooltip="captabletips.terms"></span>
                     </p>
 
-                    <p class="rightTitle"><span>Vesting Cliff Date</span><input type="text"
-                                                                                ng-model="newschedule.vestingbegins"
-                                                                                data-date-format={{settings.lowercasedate}}
-                                                                                bs-datepicker>
+                    <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text"
+                                                                                ng-model="newschedule.vestingbegins">
                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                               bs-tooltip="captabletips.vestingbegins"></span>
                     </p>

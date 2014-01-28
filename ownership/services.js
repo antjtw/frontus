@@ -730,6 +730,27 @@ ownership.service('calculate', function () {
         }
     };
 
+    this.booltoYN = function (object, field, options) {
+        if (String(object[field]) == "true") {
+            object[field] = options[0];
+        }
+        else if (String(object[field]) == "false") {
+            object[field] = options[1];
+        }
+        return object[field]
+    };
+
+    this.timezoneOffset = function (date) {
+        return date.addMinutes(date.getTimezoneOffset());
+    };
+
+    this.monthDiff = function(d1, d2) {
+        var diffYears = d1.getFullYear()-d2.getFullYear();
+        var diffMonths = d1.getMonth()-d2.getMonth();
+
+        return (diffYears*12 + diffMonths);
+    }
+
 });
 
 ownership.service('switchval', function () {

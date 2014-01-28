@@ -5,7 +5,7 @@
 
             <ul class="maintabs head-text">
                 <li><a href="/documents/company-list">Documents</a></li>
-                <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
+                <li class="selectedtab"><a href="/documents/company-view?doc={{document.doc_id}}&page=1"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
             </ul>
 
         </div>
@@ -117,7 +117,7 @@
                         <ul class="last-edited spaced-list">
                             <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                             <li ng-show="lastsent">Sent</li>
-                            <li>{{lastedit | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li>{{lastedit || document.last_updated | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                             <li>Last Edited</li>
                             <!--
                             <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
