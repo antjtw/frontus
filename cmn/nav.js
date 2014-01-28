@@ -397,7 +397,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             var notifications = [];
             angular.forEach(notes, function(note) {
                 if (type == "issuer") {
-                    if (note.signature_status == 2) {
+                    if (note.signature_status == 2 || note.signature_status == 3) {
                         notifications.push(note);
                     }
                 }
@@ -441,7 +441,6 @@ navm.filter('notifications', function () {
         var document = note.docname;
         var investor = note.investor;
         var url = "";
-        console.log(note);
         if (note.signature_status == -1) {
             url = '/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
@@ -459,8 +458,12 @@ navm.filter('notifications', function () {
             url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
-        else if (note.signature_status == 3) {
+        else if (note.signature_status == 3 && note.signature_flow == 2) {
             url = '/documents/investor-view?doc=' + note.doc_id;
+            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+        }
+        else if (note.signature_status == 3 && note.signature_flow == 1) {
+            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.investor;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };

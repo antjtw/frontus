@@ -1148,24 +1148,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.rejectSignature(data[1]);
             }
         };
-        $scope.rejectSignature = function(msg) {
-            $scope.processing = true;
-            if (msg === "Add an optional message...") {
-                msg = "";
-            }
-            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
-                $scope.$emit("notification:success", "Document signature rejected.");
-                void(data);
-                $scope.$broadcast('rejectSignature');
-                // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
-                //cd.when_signed = null;
-                $scope.leave();
-                //$location.path('/company-list').search({});
-            }).except(function(x) {
-                void(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
-        };
         
         $scope.countersignDocument = function() {
             $scope.processing = true;
@@ -1212,7 +1194,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             if (msg === "Add an optional message...") {
                 msg = "";
             }
-            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
+            console.log($scope.docId);
+/*            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
                 $scope.$broadcast('rejectSignature');
@@ -1221,7 +1204,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
+            });*/
         };
 
         $scope.remind = function(doc_id, user_email) {
