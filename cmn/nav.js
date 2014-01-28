@@ -439,20 +439,27 @@ navm.filter('notifications', function () {
     return function (note) {
         var document = note.docname;
         var investor = note.investor;
+        var url = "";
+        console.log(note);
         if (note.signature_status == -1) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 1) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            if (note.template_id) {
+                url = '/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
+            }
+            else {
+                url = '/documents/investor-view?doc=' + note.doc_id;
+            }
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            var url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
+            url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };
