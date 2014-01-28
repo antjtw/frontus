@@ -744,6 +744,10 @@ div.progress-bar {
     text-align: center;
 }
 
+.templatePanel > p:nth-child(4) {
+    display: none;
+}
+
 .templatePanel > p:nth-child(-n+2) span.template-label {
     width: 230px;
     text-align: right;
