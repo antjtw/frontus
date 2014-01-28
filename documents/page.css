@@ -718,6 +718,7 @@ div.progress-bar {
     text-align: center;
     padding: 40px 0;
     margin-bottom: 50px;
+    font-size: 20px;
 }
 
 .templatePanel > p:first-of-type > span:first-of-type {
@@ -766,6 +767,10 @@ div.progress-bar {
     resize: none;
     width: 100%;
     height: 60px;
+}
+
+.templatePanel input.length2 {
+    width: 30px;
 }
 
 span.text-attribute {

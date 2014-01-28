@@ -407,7 +407,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
-            if ($scope.documents.length == 0) {
+            if ($scope.documents.length == 0  && window.location.hostname == "www.sharewave.com") {
                 _kmq.push(['record', 'doc uploader']);
             }
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
@@ -921,6 +921,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 });
         };
+
+        $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+        });
     }
 ]);
 
@@ -1289,6 +1293,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
+            'tokenSeparators': [",", " "],
             'placeholder': 'Enter email address & press enter'
         };
 

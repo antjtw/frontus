@@ -1,3 +1,4 @@
+<div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 
 <div class="row-fluid">
@@ -22,7 +23,7 @@
                                     <a ng-click="setViewBy('document')" class="button">Document</a>
                                 </li>
                                 <li>
-                                    <a ng-click="setViewBy('investor')" class="button">Investor</a>
+                                    <a ng-click="setViewBy('investor')" class="button">Name</a>
                                 </li>
                             </ul>
                         </li>
@@ -186,7 +187,7 @@
         <table class="status-table" ng-show="investorDocs && viewBy==='investor'">
             <tbody>
             <tr>
-                <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Investor</th>
+                <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Name</th>
                 <th colspan="2" class="left doc-status-header" ng-click="setInvestorOrder('statusRatio')">Status</th>
                 <th></th>
             </tr>
@@ -278,7 +279,7 @@
         </table>
     </div>
 </div>
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
+<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
     <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
         {{sideToggleName}}
     </button>
@@ -502,3 +503,5 @@
         </div>
     </div>
 </div>
+</div>
+<div class="push"></div>

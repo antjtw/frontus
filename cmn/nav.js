@@ -360,10 +360,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.notifications = function() {
-            _kmq.push(['identify', $rootScope.navState.userid]);
+            if (window.location.hostname == "www.sharewave.com") {
+                _kmq.push(['identify', $rootScope.navState.userid]);
+            }
             if ($rootScope.navState.role == "issuer") {
-                _kmq.push(['set', {'role':'issuer'}]);
                 if (window.location.hostname == "www.sharewave.com") {
+                    _kmq.push(['set', {'role':'issuer'}]);
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                 }
 
@@ -377,7 +379,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
             else {
-                _kmq.push(['set', {'role':'shareholder'}]);
+                if (window.location.hostname == "www.sharewave.com") {
+                    _kmq.push(['set', {'role':'shareholder'}]);
+                }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
@@ -435,20 +439,27 @@ navm.filter('notifications', function () {
     return function (note) {
         var document = note.docname;
         var investor = note.investor;
+        var url = "";
+        console.log(note);
         if (note.signature_status == -1) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 1) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            if (note.template_id) {
+                url = '/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
+            }
+            else {
+                url = '/documents/investor-view?doc=' + note.doc_id;
+            }
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            var url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
+            url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3) {
-            var url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };

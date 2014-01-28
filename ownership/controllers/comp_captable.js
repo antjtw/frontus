@@ -608,11 +608,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
-
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
-                    if ($scope.issues.length == 1) {
-                        _kmq.push(['record', 'cap table creator']);
-                    }
                     $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
                     var index = -1;
@@ -709,6 +705,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             else {
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
+                if ($scope.issues.length == 1 && window.location.hostname == "www.sharewave.com") {
+                    _kmq.push(['record', 'cap table creator']);
+                }
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
