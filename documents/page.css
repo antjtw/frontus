@@ -713,18 +713,52 @@ div.progress-bar {
     line-height: 20px;
 }
 
-.templatePanel > p:first-of-type {
-    border: 1px solid #E3E3E3;
-    text-align: center;
-    padding: 40px 0;
-    margin-bottom: 50px;
-    font-size: 20px;
+.templatePanel dl:first-of-type {
+    margin-top: 50px;
 }
 
-.templatePanel > p:first-of-type > span:first-of-type {
-    font-size: 24px;
+.templatePanel > p:nth-child(-n+3) {
     color: #1D2C3C;
 }
+
+.templatePanel > p:nth-child(-n+2) {
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel > p:nth-child(1) {
+    margin-top: 50px;
+}
+
+.templatePanel > p:nth-child(2) {
+    margin-top: 0;
+    visibility: hidden;
+}
+
+.templatePanel > p:nth-child(2) input, .templatePanel > p:nth-child(2) span {
+    visibility: visible;
+}
+
+.templatePanel > p:nth-child(3) {
+    font-size: 20px;
+    text-align: center;
+}
+
+.templatePanel > p:nth-child(-n+2) span.template-label {
+    width: 230px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.templatePanel > p:nth-child(2) span.template-label {
+    width: 220px;
+}
+
 
 .templatePanel dl dt {
     display: none;

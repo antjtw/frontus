@@ -41,4 +41,5 @@
 
 .right-rail .social-list li> span {
     margin-left: 20px;
+    vertical-align: top;
 }

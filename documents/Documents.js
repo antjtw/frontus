@@ -467,7 +467,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
-                                            replace = "<input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
+                                            replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
                                         }
                                         else {
                                             if (attribute.attribute_type == "text") {
@@ -777,7 +777,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1) && (document.location.pathname.indexOf("-view") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
