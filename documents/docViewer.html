@@ -147,7 +147,7 @@
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid" ng-class="{'annotatedPageBar':showPageBar()}">
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}"/>
-        <div template-viewer html=html ng-class="'investor': person.role" class="templatePanel" ng-show="$parent.templateId"/>
+        <div template-viewer html=html ng-class="{'investor': navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
