@@ -151,7 +151,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
+        $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
+            $rootScope.homecollapsed = !$rootScope.homecollapsed;
             if (type == "login") {
                 $scope.isCollapsed = !$scope.isCollapsed;
                 if (!$scope.isRegisterCollapsed) {

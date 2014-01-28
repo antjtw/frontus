@@ -19,6 +19,10 @@ body {
     height: auto !important;
     /*height: 100%; */
     margin: 0 auto -112px;
+    -webkit-transition: margin 0.35s ease;
+    -moz-transition: margin 0.35s ease;
+    -o-transition: margin 0.35s ease;
+    transition: margin 0.35s ease;
 }
 
 
@@ -505,7 +509,7 @@ div.fixednav{
 }
 
 .fixednavoffset {
-    margin-top: 80px;
+    margin-top: 60px;
 }
 
 .topnav {
@@ -861,6 +865,11 @@ div.fixednav{
     background-color: rgb(247, 141, 30);
     border-bottom: 2px solid rgb(236, 112, 29);
 }
+
+.homedrop {
+    margin-top: 240px;
+}
+
 /* Head Section */
 .headsection {
     height: 100px;
