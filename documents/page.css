@@ -757,6 +757,10 @@ div.progress-bar {
     text-align: center;
 }
 
+.templatePanel.investor > p:nth-child(3) {
+    font-size: 30px;
+}
+
 .templatePanel > p:nth-child(4) {
     display: none;
 }
