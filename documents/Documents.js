@@ -459,13 +459,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                         var first = thing.substring(0,7);
                                         if (first == "company") {
                                             var max_length = "";
+                                            var extra_class = "";
                                             if (attribute.max_length) {
                                                 max_length = " maxlength=" + attribute.max_length;
+                                                extra_class = " length" + attribute.max_length;
                                             }
 
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
-                                            replace = "<input" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
+                                            replace = "<input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
                                         }
                                         else {
                                             if (attribute.attribute_type == "text") {
@@ -520,12 +522,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                         if (first != "company") {
 
                                             var max_length = "";
+                                            var extra_class = "";
                                             if (attribute.max_length) {
                                                 max_length = " maxlength=" + attribute.max_length;
+                                                extra_class = " length" + attribute.max_length;
                                             }
 
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span class='template-label'>" +attribute.label + "</span><input" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
                                             }
                                             else if (attribute.attribute_type == "check-box") {
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
