@@ -1293,6 +1293,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             'multiple': true,
             'simple_tags': true,
             'tags': $scope.vInvestors,
+            'tokenSeparators': [",", " "],
             'placeholder': 'Enter email address & press enter'
         };
 
