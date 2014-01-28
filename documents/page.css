@@ -714,7 +714,9 @@ div.progress-bar {
 }
 
 .templatePanel dl:first-of-type {
-    margin-top: 50px;
+    margin-top: 40px;
+    margin-left: -50px;
+    margin-bottom: 60px;
 }
 
 .templatePanel > p:nth-child(-n+3) {
