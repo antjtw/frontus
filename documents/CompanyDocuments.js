@@ -266,7 +266,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.messageText = "Explain the reason for rejecting this document.";
+        $scope.messageText = "Add an optional message...";
         $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -710,7 +710,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
-            $scope.messageText = "Explain the reason for rejecting this document.";
+            $scope.messageText = "Add an optional message...";
             $scope.signeeded = "No";
         };
 
@@ -722,7 +722,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.fakePlaceholder = function() {
-            if ($scope.messageText == "Explain the reason for rejecting this document.") {
+            if ($scope.messageText == "Add an optional message...") {
                 $scope.messageText = "";
             }
         };
@@ -730,7 +730,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
             if ($scope.messageText==="") {
-                $scope.messageText = "Explain the reason for rejecting this document.";
+                $scope.messageText = "Add an optional message...";
             }
         };
 
@@ -747,7 +747,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 date = null;
             }
-            if (message === "Explain the reason for rejecting this document.") {
+            if (message === "Add an optional message...") {
                 message = "";
             }
             angular.forEach(emails, function(person) {
@@ -1504,21 +1504,21 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         // Sharing modal functions
 
         $scope.shareDocOpen = function() {
-            $scope.messageText = "Explain the reason for rejecting this document.";
+            $scope.messageText = "Add an optional message...";
             $scope.signeeded = "No";
             $scope.shareDocModal = true;
         };
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
-            $scope.messageText = "Explain the reason for rejecting this document.";
+            $scope.messageText = "Add an optional message...";
             $scope.signeeded = "No";
         };
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
             if ($scope.messageText==="") {
-                $scope.messageText = "Explain the reason for rejecting this document.";
+                $scope.messageText = "Add an optional message...";
             }
         };
 
@@ -1563,7 +1563,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             } else {
                 date = null;
             }
-            if (message === "Explain the reason for rejecting this document.") {
+            if (message === "Add an optional message...") {
                 message = "";
             }
             angular.forEach(emails, function(person) {
