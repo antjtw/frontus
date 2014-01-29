@@ -23,7 +23,7 @@
                                     <a ng-click="setViewBy('document')" class="button">Document</a>
                                 </li>
                                 <li>
-                                    <a ng-click="setViewBy('investor')" class="button">Name</a>
+                                    <a ng-click="setViewBy('name')" class="button">Name</a>
                                 </li>
                             </ul>
                         </li>
@@ -74,7 +74,7 @@
             </tr>
             </tbody>
         </table>
-        <table class="status-table" ng-show="!investorDocs && viewBy==='investor'">
+        <table class="status-table" ng-show="!investorDocs && viewBy==='name'">
             <tbody class="empty-table">
             <tr>
                 <td>
@@ -184,7 +184,7 @@
             </tr>
             </tbody>
         </table>
-        <table class="status-table" ng-show="investorDocs && viewBy==='investor'">
+        <table class="status-table" ng-show="investorDocs && viewBy==='name'">
             <tbody>
             <tr>
                 <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Name</th>
@@ -215,7 +215,7 @@
                     <div ng-hide="docIsComplete(investor)" class="circle"
                          ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div>
                 </td>
-                <td class="shareholder-column status-column issuer pointer" ng-click="viewProfile(investor)">
+                <td class="shareholder-column status-column issuer pointer">
                     <ul>
                         <li>{{shortDocStatus(investor)}}</li>
                         <li>{{formatDocStatusRatio(investor)}}</li>

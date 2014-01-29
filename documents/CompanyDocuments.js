@@ -1957,7 +1957,7 @@ docviews.filter('fromNow', function() {
 docviews.filter('viewByPrinter', function() {
     return function(viewby) {
         if (viewby == "document") return "Document";
-        else if (viewby == "investor") return "Investor";
+        else if (viewby == "name") return "Name";
         else return order;
     };
 });
