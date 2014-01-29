@@ -266,7 +266,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.messageText = "Add an optional message...";
+        $scope.messageText = "Explain the reason for rejecting this document.";
         $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -710,7 +710,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
-            $scope.messageText = "Add an optional message...";
+            $scope.messageText = "Explain the reason for rejecting this document.";
             $scope.signeeded = "No";
         };
 
@@ -722,7 +722,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.fakePlaceholder = function() {
-            if ($scope.messageText == "Add an optional message...") {
+            if ($scope.messageText == "Explain the reason for rejecting this document.") {
                 $scope.messageText = "";
             }
         };
@@ -730,7 +730,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
             if ($scope.messageText==="") {
-                $scope.messageText = "Add an optional message...";
+                $scope.messageText = "Explain the reason for rejecting this document.";
             }
         };
 
@@ -747,7 +747,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 date = null;
             }
-            if (message === "Add an optional message...") {
+            if (message === "Explain the reason for rejecting this document.") {
                 message = "";
             }
             angular.forEach(emails, function(person) {
@@ -1150,7 +1150,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Add an optional message...") {
+            // TODO
+            if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
@@ -1209,7 +1210,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Add an optional message...") {
+            // TODO
+            if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
@@ -1520,21 +1522,21 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         // Sharing modal functions
 
         $scope.shareDocOpen = function() {
-            $scope.messageText = "Add an optional message...";
+            $scope.messageText = "Explain the reason for rejecting this document.";
             $scope.signeeded = "No";
             $scope.shareDocModal = true;
         };
 
         $scope.shareDocClose = function() {
             $scope.shareDocModal = false;
-            $scope.messageText = "Add an optional message...";
+            $scope.messageText = "Explain the reason for rejecting this document.";
             $scope.signeeded = "No";
         };
 
         $scope.changeSig = function(value) {
             $scope.signeeded = value;
             if ($scope.messageText==="") {
-                $scope.messageText = "Add an optional message...";
+                $scope.messageText = "Explain the reason for rejecting this document.";
             }
         };
 
@@ -1579,7 +1581,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             } else {
                 date = null;
             }
-            if (message === "Add an optional message...") {
+            if (message === "Explain the reason for rejecting this document.") {
                 message = "";
             }
             angular.forEach(emails, function(person) {
@@ -1926,7 +1928,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
-                $scope.leave()
+                $scope.leave();
                 //$location.path('/investor-list').search({});
             }).except(function(x) {
                 console.log(x);
@@ -1937,7 +1939,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.rejectCountersignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Add an optional message...") {
+            // TODO
+            if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
             //var dce = angular.element(".docPanel").scope();

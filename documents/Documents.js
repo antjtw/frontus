@@ -552,7 +552,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.stage = 0;
         $scope.confirmValue = 0;
         $scope.infoValue = 1;
-        if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
+        if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
@@ -577,7 +577,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.confirmValue = n;
             }
             if ($scope.confirmValue !== -1) {
-                $scope.messageText = "Add an optional message...";
+                $scope.messageText = "Explain the reason for rejecting this document.";
+                //"Add an optional message...";
             }
         };
 
@@ -614,7 +615,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.resetMsg = function() {
-            if ($scope.rejectMessage === "Add an optional message...") {
+            if ($scope.rejectMessage === "Explain the reason for rejecting this document.") {
                 $scope.rejectMessage = "";
             }
         };
