@@ -1191,7 +1191,8 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Add an optional message...") {
+            // TODO
+            if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
             console.log($scope.docId);
@@ -1910,7 +1911,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
-                $scope.leave()
+                $scope.leave();
                 //$location.path('/investor-list').search({});
             }).except(function(x) {
                 console.log(x);
@@ -1921,7 +1922,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.rejectCountersignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Add an optional message...") {
+            // TODO
+            if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
             //var dce = angular.element(".docPanel").scope();
