@@ -1148,25 +1148,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 $scope.rejectSignature(data[1]);
             }
         };
-        $scope.rejectSignature = function(msg) {
-            $scope.processing = true;
-            // TODO
-            if (msg === "Explain the reason for rejecting this document.") {
-                msg = "";
-            }
-            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
-                $scope.$emit("notification:success", "Document signature rejected.");
-                void(data);
-                $scope.$broadcast('rejectSignature');
-                // TODO FIX THIS WHEN_SIGNED IS NOT BEING BLANKED OUT
-                //cd.when_signed = null;
-                $scope.leave();
-                //$location.path('/company-list').search({});
-            }).except(function(x) {
-                void(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
-        };
         
         $scope.countersignDocument = function() {
             $scope.processing = true;
@@ -1214,6 +1195,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
+            console.log($scope.docId);
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
@@ -1883,6 +1865,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+                console.log($rootScope.lastPage);
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
