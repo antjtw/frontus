@@ -743,7 +743,10 @@ div.progress-bar {
 }
 
 .templatePanel.investor > p:nth-child(2) {
-    display: none;
+    visibility: visible;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 16px;
 }
 
 .templatePanel > p:nth-child(2) > br:first-child {
