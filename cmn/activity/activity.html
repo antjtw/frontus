@@ -9,7 +9,7 @@
                 <div>
                     <ul>
                         <li>
-                            <span ng-bind-html-unsafe="event | description:type"></span>
+                            <span ng-bind-html-unsafe="event | description:[type, user]"></span>
                         </li>
                         <li>
                             <span>{{event.when}}</span>
