@@ -947,8 +947,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             var index = $scope.trans.indexOf(tran);
             $scope.trans.splice(index, 1);
             var index = $scope.activeTran.indexOf(tran);
-            $scope.activeTran.splice(index, 1);
-            if ($scope.activeTran.length < 1) {
+            if (index != -1) {
+                $scope.activeTran.splice(index, 1);
+            }
+            if ($scope.activeTran.length == 0) {
                 var anewTran = {};
                 anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (tran.issue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
                 angular.forEach($scope.issues, function (issue) {
