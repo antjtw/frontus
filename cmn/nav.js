@@ -45,7 +45,7 @@ navm.factory('navState', [function () {
         name: document.sessionState.name,
         role: document.sessionState.role,
         userid: document.sessionState.userid,
-        userhash: document.sessionState.userhash,
+        userhash: document.sessionState.intercom,
         tester: document.sessionState.userid && document.sessionState.userid.match(/r0ml/|/r0bert/),
         path: undefined
     };
