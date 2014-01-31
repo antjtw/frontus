@@ -637,7 +637,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     // Sorts out updating transactions if changes in issues need to be passed down
                     angular.forEach($scope.trans, function (tran) {
                         if (tran.issue == issue.key) {
-                            if (item == "vestcliff") {
+                            if (item == "vestingbegins") {
                                 tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
                             }
                             else {
