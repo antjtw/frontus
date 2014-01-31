@@ -117,7 +117,6 @@ active.filter('description', function() {
             }
             else if (type == "document") {
                 var document = ac.docname;
-                console.log(ac);
                 var url = '/documents/investor-view?doc=' + ac.docid + "&page=1";
                 if (activity == "received") return "You received <a href=" + url + ">" + caplength(document, 35) + "</a>" + " from " + company;
                 else if (activity == "viewed") return "You viewed <a href=" + url + ">" + + caplength(document, 35) + "</a>";
