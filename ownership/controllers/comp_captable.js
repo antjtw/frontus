@@ -602,9 +602,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                 if (item == 'vestingbegins' || (item == 'date' && !isNaN(parseInt(issue.vestingbeginsdisplay)))) {
                     var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
-                    issue.vestingbegins = vestcliffdate;
+                    issue['vestingbegins'] = vestcliffdate;
                 }
-
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
@@ -630,6 +629,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
                     angular.forEach($scope.issues, function (x) {
                         $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                        if (x.issue == issue.issue && vestcliffdate) {
+                            x.vestingbegins = vestcliffdate;
+                        }
                     });
 
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
