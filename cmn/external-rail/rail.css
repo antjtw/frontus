@@ -39,7 +39,7 @@
     margin-top: 10px;
 }
 
-.right-rail .social-list li> span {
+.right-rail .social-list li> a > span:last-of-type {
     margin-left: 20px;
     vertical-align: top;
 }
