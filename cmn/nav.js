@@ -362,7 +362,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.notifications = function() {
             if (window.location.hostname == "www.sharewave.com") {
+                var _kmq = _kmq || [];
                 _kmq.push(['identify', $rootScope.navState.userid]);
+                console.log(_kmq);
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com") {
