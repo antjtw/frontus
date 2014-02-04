@@ -190,6 +190,12 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             $scope.files = [];
             for (var i = 0; i < element.files.length; i++) {
                 $scope.files.push(element.files[i]);
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL($scope.files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    document.getElementById("updateImage").src = oFREvent.target.result;
+                };
                 $scope.$apply();
             }
         };
