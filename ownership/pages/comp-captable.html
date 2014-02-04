@@ -1372,7 +1372,7 @@
                             </h1>
                         </div>
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
+                            <tab ng-repeat="tran in activeTran | orderBy:'date'" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
