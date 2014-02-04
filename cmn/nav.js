@@ -361,13 +361,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.notifications = function() {
-            if (window.location.hostname == "www.sharewave.com") {
-                var _kmq = _kmq || [];
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                 _kmq.push(['identify', $rootScope.navState.userid]);
-                console.log(_kmq);
             }
             if ($rootScope.navState.role == "issuer") {
-                if (window.location.hostname == "www.sharewave.com") {
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                     _kmq.push(['set', {'role':'issuer'}]);
                 }
@@ -382,7 +380,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
             else {
-                if (window.location.hostname == "www.sharewave.com") {
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder'}]);
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
