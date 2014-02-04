@@ -411,7 +411,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
-            if ($scope.documents.length == 0  && (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com")) {
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                 _kmq.push(['record', 'doc uploader']);
             }
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
