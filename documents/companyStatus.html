@@ -79,7 +79,8 @@
                           <span ng-show="person.when_countersigned" tooltip-placement="top" tooltip="{{formatDate(person.when_countersigned)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
-                        <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                        <span ng-show="(!person.signature_deadline && !person.when_signed)" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                        <span ng-show="person.signature_flow == 1" tooltip-placement="top" tooltip="Countersignature not required">N/A</span>
                     </td>
                     <td class="tooltip-date">
                         <span ng-show="person.when_finalized" tooltip-placement="top" tooltip="{{formatDate(person.when_finalized)}}" class="ng-scope">
