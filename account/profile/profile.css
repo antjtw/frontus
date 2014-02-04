@@ -134,6 +134,7 @@ h1.profile-name {
 
 .investor-attributes .text-input > input {
     margin-bottom: 0;
+    width: 160px;
 }
 
 .investor-attributes > ul > li {
@@ -147,7 +148,9 @@ h1.profile-name {
 }
 
 .investor-attributes > ul > li > button.check-box-button + span {
-    width: 220px;
+    width: -moz-calc(100% - 110px);
+    width: -webkit-calc(100% - 110px);
+    width: calc(100% - 110px);
     display: inline-block;
 }
 
