@@ -79,6 +79,7 @@ app.controller('CompanySelfCtrl', ['$scope','$location','$routeParams','SWBrijj'
     $scope.activate = function() {
       SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
           if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
+              console.log("pushing to analytics");
               _kmq.push(['trackSubmit', '.btn', 'Company Registration Submit']);
               dataLayer.push({'eventCategory' : 'registration', 'eventAction' : 'submit', 'eventLabel' : 'button', 'event' : 'GAevent'});
           }
