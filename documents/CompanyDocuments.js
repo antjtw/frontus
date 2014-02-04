@@ -354,13 +354,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
 
-        /*
         var mimetypes = ["application/pdf",
                          "application/msword",
                          "application/vnd.ms-powerpoint",
                          "text/csv"];
-        */
-        var mimetypes = ["application/pdf"];
+        //var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
