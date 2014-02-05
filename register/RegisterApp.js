@@ -115,9 +115,15 @@ app.controller('PeopleCtrl', ['$scope','$location','$routeParams','SWBrijj',
     $scope.doActivate = function() {
       SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(y) {
           if ($scope.redirect) {
+            if ($scope.redirect.indexOf("?") != -1) {
+                $scope.redirect = $scope.redirect + "&reg=first"
+            }
+            else {
+                $scope.redirect = $scope.redirect + "?reg=first"
+            }
             document.location.href = $scope.redirect;
           } else {
-            document.location.href = y + "?msg=first";
+            document.location.href = y + "?reg=first";
           }
         });
     };
