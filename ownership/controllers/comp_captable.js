@@ -590,7 +590,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var tagalong = $scope.strToBool(issue['tagalong']);
                 var common = $scope.strToBool(issue['common']);
 
-                if (item == 'vestingbegins' || (item == 'date' && !isNaN(parseInt(issue.vestingbeginsdisplay)))) {
+                if (!isNaN(parseInt(issue.vestingbeginsdisplay))) {
                     var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
                     issue['vestingbegins'] = vestcliffdate;
                 }
@@ -1398,7 +1398,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         tran.optundersec = issue.optundersec;
         tran.price = issue.price;
         tran.terms = issue.terms;
-        tran.vestingbegins = issue.vestingbegins;
+        tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
         tran.vestcliff = issue.vestcliff;
         tran.vestfreq = issue.vestfreq;
         tran.debtundersec = issue.debtundersec;
