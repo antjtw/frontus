@@ -1692,14 +1692,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.splitvalue = function(issue) {
         var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
-        if (!isNaN(ratio)) {
+        if (isFinite($scope.totalinissue(issue) / ratio)) {
             return ($scope.totalinissue(issue) / ratio);
         }
     };
 
     $scope.splitppshare = function(issue) {
         var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
-        if (!isNaN(ratio)) {
+        if (isFinite(ratio)) {
             if (issue.type == "Equity") {
                 return (issue.ppshare * ratio);
             }
