@@ -561,17 +561,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         else {
             if (!angular.equals(testcopy, $scope.issueRevert)) {
-                angular.forEach($scope.trans, function(tran) {
-                    if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                        if (tran.units != null || tran.paid != null) {
-                            $scope.imodalUp(issue, field);
-                            x = true;
-                        }
-                    }
-                });
-                if (x == false) {
                     $scope.saveIssue(issue, field);
-                }
             }
             else {
                 return;
@@ -635,27 +625,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
 
                     $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
-
-                    // Sorts out updating transactions if changes in issues need to be passed down
-                    angular.forEach($scope.trans, function (tran) {
-                        if (tran.issue == issue.key) {
-                            if (item == "vestingbegins") {
-                                tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
-                            }
-                            else {
-                                tran[item] = issue[item];
-                            }
-                            if (item == "issue" && tran["optundersec"] && tran["optundersec"] == issue.key) {
-                                tran.optundersec = issue[item];
-                            }
-                            else if (item == "issue" && tran["debtundersec"] && tran["debtundersec"] == issue.key) {
-                                tran.debtundersec = issue[item];
-                            }
-                            if (tran.tran_id != undefined) {
-                                $scope.saveTran(tran);
-                            }
-                        }
-                    });
 
                     // In the case where the issue is changed and there are other issues that use it as the underlying
                     if (item == "issue") {

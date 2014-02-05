@@ -324,15 +324,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
         else {
             if (!angular.equals(testcopy, $scope.issueRevert)) {
-                angular.forEach($scope.trans, function(tran) {
-                    if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                        $scope.imodalUp(issue, field);
-                        x = true;
-                    }
-                });
-                if (x == false) {
-                    $scope.saveIssue(issue, field);
-                }
+                $scope.saveIssue(issue, field);
             }
             else {
                 return;
@@ -376,22 +368,6 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], calculate.toFloat(issue['premoney']), calculate.toFloat(issue['postmoney']), calculate.toFloat(issue['ppshare']), calculate.toFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], calculate.toFloat(issue['price']), calculate.toFloat(issue['terms']), vestcliffdate, calculate.toFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], calculate.toFloat(issue['interestrate']), issue['interestratefreq'], calculate.toFloat(issue['valcap']), calculate.toFloat(issue['discount']), calculate.toFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
-
-                    // Sorts out updating transactions if changes in issues need to be passed down
-                    angular.forEach($scope.trans, function (tran) {
-                        if (tran.issue == issue.key) {
-                            tran[item] = issue[item];
-                            if (item == "issue" && tran["optundersec"] && tran["optundersec"] == issue.key) {
-                                tran.optundersec = issue[item];
-                            }
-                            else if (item == "issue" && tran["debtundersec"] && tran["debtundersec"] == issue.key) {
-                                tran.debtundersec = issue[item];
-                            }
-                            if (tran.tran_id != undefined) {
-                                $scope.saveTran(tran);
-                            }
-                        }
-                    });
 
                     // In the case where the issue is changed and there are other issues that use it as the underlying
                     if (item == "issue") {
