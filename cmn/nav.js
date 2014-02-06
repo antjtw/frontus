@@ -60,6 +60,13 @@ navm.directive('notifications', function() {
         },
         templateUrl: '/cmn/navnotifications.html',
         controller: ['$scope', function($scope) {
+
+            $scope.oldestDate = function(note) {
+                if (note.when_countersigned) {
+
+                }
+            };
+
         }]
     }
 });
