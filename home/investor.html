@@ -29,7 +29,7 @@
                             </div>
                             <div ng-show="docsummary.num > 0" class="view-button">
                                 <div class="small-standard-button standard-button gray">
-                                    <button class="btn" ng-click="gotopage('/documents/investor-list')">View</button>
+                                    <button id='a_home_doc_inv_front' class="btn" ng-click="gotopage('/documents/investor-list')">View</button>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 </td>
                             </tr>
                         <tr ng-click="gotopage('/documents/investor-list')" ng-show="docs.length > 5">
-                            <td colspan="2" class="blue-link">view all</td>
+                            <td id='a_home_doc_inv_back' colspan="2" class="blue-link">view all</td>
                         </tr>
                         </tbody>
                     </table>
@@ -90,7 +90,7 @@
                                 <d3myownership class="personal-ownership" data='graphdata'></d3myownership>
                                 <div class="view-button">
                                     <div class="small-standard-button standard-button gray">
-                                        <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                                        <button id='a_home_own_inv_front' class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                     </table>
                     <div class="view-button">
                         <div class="small-standard-button standard-button gray">
-                            <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                            <button id='a_home_own_inv_back' class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@
                                 <d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
                                 <div class="view-button">
                                     <div class="small-standard-button standard-button gray">
-                                        <button class="btn" ng-click="gotopage('/ownership/investor-grants')">View</button>
+                                        <button id='a_home_vesting_inv_front' class="btn" ng-click="gotopage('/ownership/investor-grants')">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -264,7 +264,7 @@
                     </table>
                     <div class="view-button">
                         <div class="small-standard-button standard-button gray">
-                            <button class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
+                            <button id='a_home_vesting_inv_back' class="btn" ng-click="gotopage('/ownership/investor-captable')">View</button>
                         </div>
                     </div>
                 </div>

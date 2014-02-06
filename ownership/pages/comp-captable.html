@@ -56,7 +56,7 @@
             <button class="btn" ng-click="close();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
+            <button id='a_own_share_modal' class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
         </div>
     </div>
 </div>
@@ -517,7 +517,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button green">
-            <button class="btn" ng-click="tourclose(); moveTour();">Start the Tour</button>
+            <button id='a_own_tour_start_modal' class="btn" ng-click="tourclose(); moveTour();">Start the Tour</button>
         </div>
         <div class="pull-left text-button">
             <button ng-click="tourclose();">I'm a pro, skip the tour</button>
@@ -566,7 +566,7 @@
                 <div class="pull-right">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
                     <div style="margin-left: 0;" class="standard-button">
-                        <button ng-click="modalUp();" class="btn">Share</span></button>
+                        <button id='a_own_tour_share_subnav' ng-click="modalUp();" class="btn">Share</span></button>
                     </div>
                 </div>
             </div>
@@ -1509,7 +1509,7 @@
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
         <h2>Need Help?</h2>
-        <button class="btn">Tour</button>
+        <button id='a_own_tour_start_bar' class="btn">Tour</button>
     </div>
     <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
         <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">
