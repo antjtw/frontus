@@ -63,7 +63,13 @@ navm.directive('notifications', function() {
 
             $scope.oldestDate = function(note) {
                 if (note.when_countersigned) {
-
+                    return note.when_countersigned;
+                }
+                else if (note.when_signed) {
+                    return note.when_signed;
+                }
+                else {
+                    return note.when_shared;
                 }
             };
 
