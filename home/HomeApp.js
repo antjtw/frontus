@@ -1,5 +1,5 @@
 
-var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'commonServices', 'd3', 'homeDirectives']);
+var app = angular.module('HomeApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'ownerServices', 'commonServices', 'd3', 'homeDirectives', 'activityDirective']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -236,22 +236,13 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             $scope.activity = [];
             SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
                 var originalfeed = feed;
+                console.log(originalfeed);
                 //Generate the groups for the activity feed
-                $scope.eventGroups = [];
-                var uniqueGroups = [];
+                $scope.feed = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent") {
-                        var timegroup = moment(event.time).from(event.timenow);
-                        if (uniqueGroups.indexOf(timegroup) > -1) {
-                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
-                        }
-                        else {
-                            $scope.eventGroups[$scope.eventGroups.length] = [];
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                            uniqueGroups.push(timegroup);
-                        }
+                        event.when = moment(event.time).from(event.timenow);
+                        $scope.feed.push(event);
                     }
                 });
             });
@@ -450,21 +441,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
-                $scope.eventGroups = [];
-                var uniqueGroups = [];
+
+                var originalfeed = feed;
+                //Generate the groups for the activity feed
+                $scope.feed = [];
                 angular.forEach(originalfeed, function(event) {
                     if (event.activity != "sent" && event.activity != "viewed") {
-                        var timegroup = moment(event.time).from(event.timenow);
-                        if (uniqueGroups.indexOf(timegroup) > -1) {
-                            $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
-                        }
-                        else {
-                            $scope.eventGroups[$scope.eventGroups.length] = [];
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event.time);
-                            $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                            uniqueGroups.push(timegroup);
-                        }
+                        event.when = moment(event.time).from(event.timenow);
+                        $scope.feed.push(event);
                     }
                 });
             });
@@ -895,99 +879,6 @@ function initFail(x) {
 angular.module('HomeApp').filter('fromNow', function() {
     return function(date) {
         return moment(date).fromNow();
-    }
-});
-
-/* Filter to select the activity icon for document status */
-angular.module('HomeApp').filter('icon', function() {
-    return function(activity) {
-        if (activity == "sent") return "icon-email";
-        else if (activity == "received") return "icon-email";
-        else if (activity == "viewed") return "icon-view";
-        else if (activity == "reminder") return "icon-redo";
-        else if (activity == "edited") return "icon-pencil";
-        else if (activity == "signed") return "icon-pen";
-        else if (activity == "uploaded") return "icon-star";
-        else if (activity == "transcoded") return "icon-star";
-        else if (activity == "rejected") return "icon-circle-delete";
-        else if (activity == "countersigned") return "icon-countersign";
-        else if (activity == "finalized") return "icon-lock";
-        else return "hunh?";
-    }
-});
-
-/* Filter to format the activity description on document status */
-angular.module('HomeApp').filter('description', function() {
-    return function(ac) {
-        var activity = ac.activity;
-        var person;
-        if (ac.name) {
-            person = ac.name;
-        }
-        else {
-            person = ac.email;
-        }
-        var type = ac.type;
-        if (type == "ownership") {
-            if (activity == "received") return "Capitalization Table sent to " + person;
-            else if (activity == "viewed") return "Capitalization Table viewed by "+person;
-            else return "Something with Capitalization Table";
-        }
-        else {
-            var document = ac.docname;
-            if (activity == "sent") return "";
-            else if (activity == "viewed") return document + " viewed by "+person;
-            else if (activity == "reminder") return "Reminded "+person + " about " +document;
-            else if (activity == "edited") return document + " edited by "+person;
-            else if (activity == "signed") return document + " signed by "+person;
-            else if (activity == "uploaded") return document + " uploaded by "+person;
-            else if (activity == "transcoded") return document + " uploaded by "+person;
-            else if (activity == "received") return document + " sent to "+person;
-            else if (activity == "rejected") return "Signature on " +document + " rejected by "+person;
-            else if (activity == "countersigned") return document + " countersigned by "+person;
-            else if (activity == "finalized") return document + " approved by " + person;
-            else return activity + " by "+person;
-        }
-    }
-});
-
-/* Filter to format the activity description on document status */
-angular.module('HomeApp').filter('investordescription', function() {
-    return function(ac) {
-        var activity = ac.activity;
-        var company = ac.company_name;
-        if (company == null) {
-            company = ac.company;
-        }
-        var person;
-        if (ac.name) {
-            person = ac.name;
-        }
-        else {
-            person = ac.email;
-        }
-        var type = ac.type;
-        if (type == "ownership") {
-            if (activity == "received") return "You received " + company + "'s cap table";
-            else if (activity == "viewed") return "You viewed " + company + "'s cap table";
-            else return "Something happened with "+company +"'s cap table";
-        }
-        else if (type == "document") {
-            var document = ac.docname;
-            if (activity == "received") return "You received " + document + " from " + company;
-            else if (activity == "viewed") return "You viewed " + document;
-            else if (activity == "reminder") return "You were reminded about" +document;
-            else if (activity == "signed") return "You signed "+document;
-            else if (activity == "rejected") return person + " rejected your signature on " +document;
-            else if (activity == "countersigned") return person + " countersigned "+document;
-            else if (activity == "finalized") return "You approved " + document;
-            else  {
-                return activity + " by "+person;
-            }
-        }
-        else {
-            return "";
-        }
     }
 });
 

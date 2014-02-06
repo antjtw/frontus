@@ -1,0 +1,38 @@
+<div class="row-fluid">
+    <div class="span5 offset4 gateway text-center">
+        <div>
+            <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
+            <p class="tagline">the best way to manage shareholders<p>
+        </div>
+        <div class="spacer20"></div>
+        <div>
+            <div ng-hide="showError">
+                <h2>Automatic Log Out Due to Inactivity</h2>
+                <p>We hadn't heard from you for about 25 minutes, so <br> for your security we logged you out of your account. <br> Log back in below to continue.</p>
+            </div>
+            <div ng-show="showError" class="textalert loginErrorBox text-center">
+                <h2>Invalid email/password combination.</h2>
+            </div>
+        </div>
+        <form id="login" class="text-center inputs" ng-submit="doLogin()">
+            <fieldset>
+                <div class="field text-right">
+                    <span>Email Address</span>
+                    <input type="text" class="loginInput" autocomplete="off"
+                    tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                </div>
+                <div class="field text-right">
+                    <span>Password</span>
+                    <input class="loginInput" autocomplete="off" tabindex="2"
+                    name="password" type="password" ng-model="password">
+                </div>                           
+                <div class="loginfooter">
+                    <a id="forgotButton" class="button pull-left forgot" ng-href="forgot">Forgot Password?</a>
+                    <div class="standard-button pull-right loginbtn">
+                        <button class="btn" ng-disabled="fieldCheck()" ng-click="doLogin()">Log In</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

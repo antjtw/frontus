@@ -56,7 +56,7 @@
             <button class="btn" ng-click="close();">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
+            <button id='a_own_share_modal' class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
         </div>
     </div>
 </div>
@@ -458,6 +458,46 @@
     </div>
 </div>
 
+<div modal="capAccess" close="accessclose()" options="shareopts">
+    <div class="modalHeader">
+        <span>Change Permissions</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="accessclose()"></span>
+    </div>
+    <div class="modalText">
+        <form class="capaccess-form">
+            <p>Shareholders only see their personal holdings by default,<br> non-shareholders will see the full table unless revoked.</p>
+            <div class="cf capaccess-drop">
+                <span>CURRENT</span>
+                <li class="dropdown standard pull-left">
+
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{selectedI.level}}<span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <span ng-click="selectVisibility('No View', selectedI)">No View</span>
+                                    <span ng-click="selectVisibility('Personal View', selectedI)">Personal View</span>
+                                    <span ng-click="selectVisibility('Full View', selectedI)">Full View</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="accessclose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="changeVisibility(selectedI); accessclose();">Change</button>
+        </div>
+    </div>
+</div>
+
 <!-- Tour Modal -->
 <div modal="tourModal" close="tourclose();" options="touropts">
     <div class="modalHeader">
@@ -477,7 +517,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button green">
-            <button class="btn" ng-click="tourclose(); moveTour();">Start the Tour</button>
+            <button id='a_own_tour_start_modal' class="btn" ng-click="tourclose(); moveTour();">Start the Tour</button>
         </div>
         <div class="pull-left text-button">
             <button ng-click="tourclose();">I'm a pro, skip the tour</button>
@@ -526,7 +566,7 @@
                 <div class="pull-right">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" bs-tooltip="tourmessages.share"><span>?</span></span>
                     <div style="margin-left: 0;" class="standard-button">
-                        <button ng-click="modalUp();" class="btn">Share</span></button>
+                        <button id='a_own_tour_share_subnav' ng-click="modalUp();" class="btn">Share</span></button>
                     </div>
                 </div>
             </div>
@@ -884,7 +924,7 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
+                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.paripassu"></span>
                                     <button class="icon-button" ng-click="addIssuePari(activeIssue.paripassu)"><span data-icon="&#xe053;" aria-hidden="true"></span></button>
                                 </div>
                             </span>
@@ -1285,7 +1325,7 @@
                             <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">TAG ALONG</span></p>
 
                             <p ng-show="activeIssue.paripassu[0].pariwith" ng-repeat="pari in activeIssue.paripassu"  class="belowTitle">
-                                <span ng-bind="pari.pariwith"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">PARI PASSU WITH</span>
+                                <span ng-bind="pari.pariwith"></span><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority">PARI PASSU WITH</span>
                             </p>
                         </div>
                           <!-- Options Tab -->
@@ -1332,7 +1372,7 @@
                             </h1>
                         </div>
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
+                            <tab ng-repeat="tran in activeTran | orderBy:'date'" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
@@ -1404,7 +1444,19 @@
 
                       <span ng-switch-when="3">
                         <div class="headsection row-fluid">
-                            <h1>{{activeInvestorName}}</h1>
+                            <h1>{{activeInvestorName}}
+                                <ul class="dropdown-list transaction-icon pull-right" ng-show="activeInvestorEmail">
+                                    <li class="dropdown standard menu-drop">
+                                        <a class="dropdown-toggle">
+                                            <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-click="accessmodalUp(activeInvestorEmail);">Edit Permissions</li>
+                                            <li ng-show="activeInvestorRealName" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">View Profile</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </h1>
 
                             <p ng-show="activeInvestorEmail">Info on this shareholder</p>
                         </div>
@@ -1457,7 +1509,7 @@
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
         <h2>Need Help?</h2>
-        <button class="btn">Tour</button>
+        <button id='a_own_tour_start_bar' class="btn">Tour</button>
     </div>
     <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
         <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">

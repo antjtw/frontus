@@ -324,15 +324,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         }
         else {
             if (!angular.equals(testcopy, $scope.issueRevert)) {
-                angular.forEach($scope.trans, function(tran) {
-                    if (issue[field] != tran[field] && tran[field] != "" && issue['issue'] == tran['issue']) {
-                        $scope.imodalUp(issue, field);
-                        x = true;
-                    }
-                });
-                if (x == false) {
-                    $scope.saveIssue(issue, field);
-                }
+                $scope.saveIssue(issue, field);
             }
             else {
                 return;
@@ -373,25 +365,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if ($scope.allowKeys.indexOf(issue.issue) != -1) {
                     issue.issue = issue.issue + " (1)";
                 }
-                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], parseFloat(issue['premoney']), parseFloat(issue['postmoney']), parseFloat(issue['ppshare']), parseFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], parseFloat(issue['price']), parseFloat(issue['terms']), vestcliffdate, parseFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], parseFloat(issue['interestrate']), issue['interestratefreq'], parseFloat(issue['valcap']), parseFloat(issue['discount']), parseFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
+                SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], calculate.toFloat(issue['premoney']), calculate.toFloat(issue['postmoney']), calculate.toFloat(issue['ppshare']), calculate.toFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], calculate.toFloat(issue['price']), calculate.toFloat(issue['terms']), vestcliffdate, calculate.toFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], calculate.toFloat(issue['interestrate']), issue['interestratefreq'], calculate.toFloat(issue['valcap']), calculate.toFloat(issue['discount']), calculate.toFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
-
-                    // Sorts out updating transactions if changes in issues need to be passed down
-                    angular.forEach($scope.trans, function (tran) {
-                        if (tran.issue == issue.key) {
-                            tran[item] = issue[item];
-                            if (item == "issue" && tran["optundersec"] && tran["optundersec"] == issue.key) {
-                                tran.optundersec = issue[item];
-                            }
-                            else if (item == "issue" && tran["debtundersec"] && tran["debtundersec"] == issue.key) {
-                                tran.debtundersec = issue[item];
-                            }
-                            if (tran.tran_id != undefined) {
-                                $scope.saveTran(tran);
-                            }
-                        }
-                    });
 
                     // In the case where the issue is changed and there are other issues that use it as the underlying
                     if (item == "issue") {
@@ -418,7 +394,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             else {
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
-                SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], parseFloat(issue['price'])).then(function (data) {
+                SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], calculate.toFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
                     $scope.issuekeys.push(issue.key);
@@ -671,7 +647,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
                 }
-                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), parseFloat(transaction['units']), d1, String(transaction['type']), parseFloat(transaction['amount']), parseFloat(transaction['premoney']), parseFloat(transaction['postmoney']), parseFloat(transaction['ppshare']), parseFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], parseFloat(transaction['price']), parseFloat(transaction['terms']), vestcliffdate, parseFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], parseFloat(transaction['interestrate']), transaction['interestratefreq'], parseFloat(transaction['valcap']), parseFloat(transaction['discount']), parseFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
+                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), calculate.toFloat(transaction['units']), d1, String(transaction['type']), calculate.toFloat(transaction['amount']), calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     if (transaction.tran_id == '') {
                         transaction.tran_id = data[1][0];

@@ -92,21 +92,46 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             $scope.editData = null;
         };
         
-        $scope.profileUpdate = function(user) {
-            SWBrijj.proc("account.contact_update", user.name, user.street, user.city, user.state, user.postalcode).then(function(x) {
+        $scope.profileUpdate = function(attr, value) {
+            SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
                 void(x);
-                if ($scope.files) {
-                    $scope.uploadFile();
-                }
                 $scope.$emit("notification:success", "Profile successfully updated");
-                $scope.name = user.name;
-                $scope.street = user.street;
-                $scope.city = user.city;
-                $scope.state = user.state;
-                $scope.postalcode = user.postalcode;
+                $scope[attr] = value;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later");
+            });
+        };
+
+        $scope.booleanUpdate = function(attribute, value) {
+            if (value == null) {
+                value = false;
+            }
+            value = value == "true" ? "false": "true";
+            SWBrijj.procm("smartdoc.update_investor_attributes", attribute, String(value)).then(function(x) {
+                $scope.investor_attributes[attribute][0] = value;
+            }).except(function(err) {
+                    console.log(err);
+                });
+        };
+
+        $scope.setInvestor = function(attributetrue, attributefalse) {
+            $scope.investor_attributes[attributetrue][0] = "true";
+            $scope.investor_attributes[attributefalse][0] = "false";
+            SWBrijj.procm("smartdoc.update_investor_attributes", attributetrue, String($scope.investor_attributes[attributetrue][0])).then(function(x) {
+                SWBrijj.procm("smartdoc.update_investor_attributes", attributefalse, String($scope.investor_attributes[attributefalse][0])).then(function(x) {
+                });
+            });
+        };
+
+        $scope.attributeUpdate = function(attribute, value) {
+            if (attribute == "investorIsNotAnAccreditedInvestor") {
+                $scope.investor_attributes['investorIsAnAccreditedInvestor'][0] = value == "true" ? "false": "true";
+
+            }
+            SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
+                $scope.investor_attributes[attribute][0] = value;
+            }).except(function(err) {
             });
         };
 
@@ -136,6 +161,23 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             }
         };
 
+        $scope.getInvestorInformation = function() {
+            SWBrijj.tblm('smartdoc.my_profile').then(function(data) {
+                // Imports the investor attributes
+                $scope.investor_attributes = {};
+                // Accreditation is worked out based on whether other attributes exist
+                $scope.investor_attributes['investorIsAnAccreditedInvestor'] = ['false',''];
+                angular.forEach(data, function(attr) {
+                    $scope.investor_attributes[attr.attribute] = [attr.answer, attr.label];
+                    if ((attr.attribute == "investorMeetsNetWorthRequirement" && attr.answer=="true") || (attr.attribute == "investorMeetsIncomeRequirement" && attr.answer=="true")) {
+                        $scope.investor_attributes['investorIsAnAccreditedInvestor'][0] = "true";
+                    }
+                });
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+
         /** @name SWBrijj#tbl
          * @function
          * @param {string} table_name */
@@ -143,6 +185,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             initPage($scope, x);
             $scope.photoURL = '/photo/user?id=' + $scope.email;
             $scope.namekey = $scope.name;
+            $scope.getInvestorInformation();
         }).except(initFail);
 
         $scope.uploadFile = function() {

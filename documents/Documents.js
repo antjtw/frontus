@@ -266,6 +266,35 @@ docs.directive('docViewer', function() {
     };
 });
 
+docs.directive('templateViewer', function($compile) {
+    return {
+        restrict: 'EA',
+        scope: {
+            html: '='
+        },
+        templateUrl: 'template.html',
+        controller: 'TemplateViewController',
+        link: function (scope, iElement, iAttrs) {
+
+            scope.$watch("html", function(newVals, oldVals) {
+                return scope.add(newVals);
+            }, true);
+
+            scope.add = function(raw_html) {
+            var html = angular.element($compile(raw_html)(scope));
+            iElement.append(html);
+
+            }
+
+        }
+    };
+});
+
+docs.controller('TemplateViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+    }
+]);
+
 docs.filter('fromNow', function() {
     return function(date, servertime) {
         return moment(date).from(servertime);
@@ -331,9 +360,199 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.loadPages();
         });
 
+        $scope.get_attribute = function(attribute, type, attributes) {
+            if (type == "company") {
+                if (attribute == "companyName") {
+                    return attributes.name;
+                }
+                else if (attribute == "companyState") {
+                    return attributes.state;
+                }
+            }
+        };
+
+        var regExp = /\(([^)]+)\)/;
+        $scope.template_share = function(email, attributes, message, sign, deadline) {
+            $scope.processing = true;
+            var shareto = "";
+
+            angular.forEach(email, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                shareto += "," +  matches[1];
+            });
+
+            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
+                $scope.$emit("notification:success", "Successfully shared document");
+                $location.path('/company-list').search({});
+            }).except(function(err) {
+                $scope.processing = false;
+                console.log(err);
+            });
+        };
+
+        $scope.signTemplate = function(attributes, saved, signed) {
+            // This is hideous and can go away when the user profile is updated at the backend
+            $scope.processing = true;
+            cleanatt = {};
+            for (var key in attributes) {
+                if (key == 'investorName') {
+                    cleanatt['name'] = attributes[key];
+                }
+                else if (key == 'investorState') {
+                    cleanatt['state'] = attributes[key];
+                }
+                else if (key == 'investorCountry') {
+                    cleanatt['country'] = attributes[key];
+                }
+                else if (key == 'investorAddress') {
+                    cleanatt['street'] = attributes[key];
+                }
+                else if (key == 'investorPhone') {
+                    cleanatt['phone'] = attributes[key];
+                }
+                cleanatt[key] = attributes[key];
+            }
+            attributes = JSON.stringify(cleanatt);
+            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
+                $scope.$emit("notification:success", "Signed Document");
+                $location.path('/investor-list').search({});
+            }).except(function(err) {
+                $scope.processing = false;
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                console.log(err);
+            });
+        };
+
+
+        $scope.$on('initTemplateView', function(event, templateId, subId) {
+            $scope.templateId = templateId;
+            $scope.isAnnotable = false;
+            $scope.docLength = 0;
+            $scope.stage = -1;
+            $scope.template_original = true;
+            $scope.used_attributes = {};
+            $scope.template_email = [];
+
+            SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
+                $scope.lib = {};
+                $scope.lib.docname = meta[0].template_name;
+            });
+
+            if ($rootScope.navState.role == "issuer") {
+                SWBrijj.procm('smartdoc.render_template', $scope.templateId).then(function(code) {
+                    SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
+                        var attributes = attributes;
+                        SWBrijj.tblm('account.my_company').then(function(company_info) {
+                            $scope.company_info = company_info[0];
+                            var raw_html = code[0].render_template;
+
+                            //Sort through all the !!! and make the appropriate replacement
+                            while (raw_html.match(/!!![^!]+!!!/g)) {
+                                var thing = raw_html.match(/!!![^!]+!!!/);
+                                thing = thing[0].substring(3,(thing[0].length)-3);
+                                var replace = "";
+                                angular.forEach(attributes, function (attribute) {
+                                    if (thing == attribute.attribute ) {
+                                        var first = thing.substring(0,7);
+                                        if (first == "company") {
+                                            var max_length = "";
+                                            var extra_class = "";
+                                            if (attribute.max_length) {
+                                                max_length = " maxlength=" + attribute.max_length;
+                                                extra_class = " length" + attribute.max_length;
+                                            }
+
+                                            replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
+                                            $scope.used_attributes[attribute.attribute] = replace;
+                                            replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
+                                        }
+                                        else {
+                                            if (attribute.attribute_type == "text") {
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input disabled type='text'>"
+                                            }
+                                            else if (attribute.attribute_type == "check-box") {
+                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' class='check-box-button'></button>"
+                                            }
+                                            else if (attribute.attribute_type == "textarea") {
+                                                replace = "<textarea placeholder='" + attribute.label +"' disabled></textarea>"
+                                            }
+                                        }
+                                    }
+                                });
+                                raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
+                            }
+                            $scope.html = raw_html;
+                        });
+                    });
+                });
+            }
+            else {
+                $scope.forsigning = true;
+                SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
+                    SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
+                        SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
+                            var raw_html = html[0].render_investor_template;
+                            $scope.investor_attributes = {};
+                            angular.forEach(inv_attributes, function(attr) {
+                                $scope.investor_attributes[attr.attribute] = attr.answer;
+                            });
+                            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
+                            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
+                            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
+                            $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
+                            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
+                            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+                            $scope.investor_attributes['signatoryTitle'] = "";
+                            $scope.investor_attributes['signatoryName'] = "";
+                            $scope.investor_attributes['investorSignature'] = "";
+
+                            //Sort through all the !!! and make the appropriate replacement
+                            while (raw_html.match(/!!![^!]+!!!/g)) {
+                                var thing = raw_html.match(/!!![^!]+!!!/);
+                                thing = thing[0].substring(3,(thing[0].length)-3);
+                                var replace = "";
+                                angular.forEach(attributes, function (attribute) {
+                                    if (thing == attribute.attribute ) {
+                                        var first = thing.split("_")[0];
+
+                                        if (first != "company") {
+
+                                            var max_length = "";
+                                            var extra_class = "";
+                                            if (attribute.max_length) {
+                                                max_length = " maxlength=" + attribute.max_length;
+                                                extra_class = " length" + attribute.max_length;
+                                            }
+
+                                            if (attribute.attribute_type == "text") {
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                            }
+                                            else if (attribute.attribute_type == "check-box") {
+                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
+                                            }
+                                            else if (attribute.attribute_type == "textarea") {
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><textarea ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>"
+                                            }
+                                        }
+                                    }
+                                });
+                                raw_html = raw_html.replace(/!!![^!]+!!!/, replace);
+                            }
+                            $scope.html = raw_html;
+                        });
+                    });
+                });
+            }
+        });
+
         $scope.stage = 0;
         $scope.confirmValue = 0;
-        if (!$scope.rejectMessage) {$scope.rejectMessage = "Add an optional message...";}
+        $scope.infoValue = 1;
+        if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
@@ -358,7 +577,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.confirmValue = n;
             }
             if ($scope.confirmValue !== -1) {
-                $scope.messageText = "Add an optional message...";
+                $scope.messageText = "Explain the reason for rejecting this document.";
+                //"Add an optional message...";
+            }
+        };
+
+        $scope.setinfoValue = function(n) {
+            if ($scope.infoValue === n) {
+                $scope.infoValue = 0;
+            } else {
+                $scope.infoValue = n;
             }
         };
 
@@ -371,11 +599,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.investorCanAnnotate = function() {
-            return (!$scope.lib.when_signed && $scope.lib.signature_deadline);
+            return (!$scope.lib.when_signed && $scope.lib.signature_deadline && $scope.lib.signature_flow===2);
         };
 
         $scope.issuerCanAnnotate = function() {
-            return !$scope.lib.when_countersigned && $scope.lib.when_signed;
+            return !$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2;
         };
 
         $scope.showPageBar = function() {
@@ -387,7 +615,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.resetMsg = function() {
-            if ($scope.rejectMessage === "Add an optional message...") {
+            if ($scope.rejectMessage === "Explain the reason for rejecting this document.") {
                 $scope.rejectMessage = "";
             }
         };
@@ -482,7 +710,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     // restoreNotes
                     var annots = JSON.parse(aa);
                     if (annots.length > 100) {
-                        console.log("Error, too many notes.");
                         //$scope.removeAllNotes();
                         return;
                     }
@@ -531,9 +758,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-            var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
-            // I expect this returns true (meaning updated).  If not, the data is lost
-            if (!res) alert('failed to save annotations');
+            if (!$scope.templateId && $scope.lib) {
+                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+                // I expect this returns true (meaning updated).  If not, the data is lost
+                if (!res) alert('failed to save annotations');
+            }
         });
 
         /* Save the notes when navigating away */
@@ -549,7 +778,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage) {
+            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
@@ -969,11 +1198,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.countersignable = function(doc) {
-            return !$scope.invq && doc && doc.when_signed && !doc.when_countersigned;
+            return !$scope.invq && doc && doc.signature_flow===2 && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {
-            return $scope.invq && doc && doc.when_countersigned && !doc.when_finalized;
+            return (!$scope.invq && doc && doc.signature_flow===1 && doc.when_signed && !doc.when_finalized) ||
+                   ($scope.invq && doc && doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
@@ -1071,8 +1301,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
             }
+            if ($scope.html) {
+                return;
+            }
 
-            if (nd == $scope.lib.annotations) {
+            if (nd == $scope.lib.annotations || !nd) {
                 // When there are no changes
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved Annotations");
@@ -1091,6 +1324,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
             });
+        };
+
+        $scope.booleanUpdate = function(attribute, value) {
+            if (value == null) {
+                value = false;
+            }
+            $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
     }
 ]);

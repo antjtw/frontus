@@ -3,6 +3,11 @@ var ownership = angular.module('ownerServices', []);
 // Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
 ownership.service('calculate', function () {
 
+    this.toFloat = function(value) {
+        value = isNaN(parseFloat(value)) ? null : parseFloat(value);
+        return value;
+    };
+
     // The remainder calculated for outstanding units rows.
     this.whatsleft = function (total, issue, rows) {
         var leftover = total;

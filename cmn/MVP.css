@@ -19,6 +19,10 @@ body {
     height: auto !important;
     /*height: 100%; */
     margin: 0 auto -112px;
+    -webkit-transition: margin 0.35s ease;
+    -moz-transition: margin 0.35s ease;
+    -o-transition: margin 0.35s ease;
+    transition: margin 0.35s ease;
 }
 
 
@@ -60,6 +64,10 @@ label {
     text-align:left;
     /* zoom:1; */
     /* ie7 junk */
+}
+
+input:disabled {
+    cursor: default !important;
 }
 
 .modal-backdrop {
@@ -110,6 +118,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 textarea, input, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     background-color: #FFFFFF;
     border: 1px solid #E3E3E3;
+    box-shadow: none;
 }
 
 textarea:focus, input:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
@@ -200,6 +209,7 @@ h1 {
     font-weight: normal;
     color: rgb(30, 45, 61);
 }
+
 h2 {
     font-family:'FS Elliot Web Regular', sans-serif !important;
     font-size: 14px;
@@ -207,6 +217,7 @@ h2 {
     font-weight: normal;
     color: rgb(30, 45, 61);
 }
+
 .bodyText, .bodyText input, .bodyText a {
     font-family:'FS Elliot Web Regular', sans-serif;
     font-size: 12px;
@@ -488,6 +499,17 @@ h2 {
 
 .maincontent.openflow {
     overflow: visible;
+}
+
+div.fixednav{
+    position: fixed;
+    z-index: 1000000;
+    width: 100%;
+    top: 0;
+}
+
+.fixednavoffset {
+    margin-top: 60px;
 }
 
 .topnav {
@@ -843,6 +865,11 @@ h2 {
     background-color: rgb(247, 141, 30);
     border-bottom: 2px solid rgb(236, 112, 29);
 }
+
+.homedrop {
+    margin-top: 220px;
+}
+
 /* Head Section */
 .headsection {
     height: 100px;
@@ -1082,7 +1109,7 @@ form.inputs {
     background-color: rgb(28, 202, 161);
 }
 .textalert.loginErrorBox {
-    width:300px;
+    width:330px;
     background-color: rgb(166, 166, 166);
     border-radius: 0;
     margin: auto;
@@ -1374,57 +1401,57 @@ ul.spaced-list > li:nth-child(odd) {
     padding-top: 14px;
 }
 
+.info-box.activity-feed-box .body-box {
+    margin: 0;
+    height: 536px;
+}
+
 .activity-feed2 {
-    margin-top: 10px;
-    height: auto;
+    height: 536px;
+    overflow: auto;
 }
 
-.activity-feed2 > li > span {
-    text-transform: uppercase;
-    font-size: 10px;
-    margin-left: 10px;
-}
-
-.activity-feed2 > li > ul {
-    width: 100%;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.activity-feed2 > li > ul > li {
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 282px;
-    border: 1px solid #F1F1F1;
-    display: inline-block;
-    padding: 8px 0 10px 10px;
-    color: #656565;
-}
-
-.body-box .activity-feed2 > li > ul > li {
-    width: -webkit-calc(100% - 20px) !important;
-    width: -moz-calc(100% - 20px) !important;
-    width: calc(100% - 20px) !important;
-    padding: 8px 10px 10px 10px;
-}
-
-.activity-feed2 > li > ul > li > span {
-    display: inline-block;
-    min-width: 220px;
-    max-width: -webkit-calc(100% - 20px) !important;
-    max-width: -moz-calc(100% - 20px) !important;
-    max-width: calc(100% - 20px) !important;
+.activity-feed2 > li {
+    min-height: 50px;
+    border-bottom: 1px solid #E3E3E3;
 }
 
 .activity-feed2 > li:last-of-type {
-    margin-bottom: 15px;
+    border-bottom: none;
 }
 
-.activity-feed2 > li > ul > li > i {
+.activity-feed2 a {
+    color: #3397DA;
+}
+
+.activity-feed2 > li > div:first-of-type {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    margin-top: 10px;
     vertical-align: top;
-    padding-top: 4px;
+}
+
+.activity-feed2 > li > div:last-of-type {
+    display: inline-block;
+    min-height: 50px;
+    width: -moz-calc(100% - 58px) !important;
+    width: -webkit-calc(100% - 58px) !important;
+    width: calc(100% - 58px) !important;
+}
+
+.activity-feed2 > li > div:last-of-type > ul > li {
+    line-height: 16px;
+}
+
+.activity-feed2 > li > div:last-of-type > ul > li:first-of-type {
+    margin-top: 8px;
+    color: #666666;
+}
+
+.activity-feed2 > li > div:last-of-type > ul > li:last-of-type {
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
 /* Document Status */
@@ -1634,13 +1661,22 @@ ul.spaced-list > li:nth-child(odd) {
     color:#1ABC96;
 }
 
+.leftFullTableBlock .status-table > tbody > tr > td.status-toggle {
+    min-width: 27px;
+}
 .status-table > tbody > tr > td.status-toggle {
     font-size: 14px;
     border-right: 1px solid transparent;
     padding-left: 0px;
     padding-right: 0px;
     text-align:center;
-    width: 28px;
+    min-width: 40px;
+}
+.leftFullTableBlock .status-table > tbody > tr.selectedrow > td.status-toggle {
+    max-width: 18px;
+}
+.status-table > tbody > tr.selectedrow > td.status-toggle {
+    min-width: 40px;
 }
 
 .status-table > tbody > tr > td.status-toggle.pointer {
@@ -1703,7 +1739,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column {
-    width: 160px;
     text-align: left;
     padding-left: 20px;
 }
@@ -1727,7 +1762,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.status-column {
-    width: 200px;
     text-align: left;
     padding-left: 0px;
 }
@@ -1739,7 +1773,6 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column.docname-column {
     cursor:pointer;
     padding-left: 10px;
-    width: 230px;
 }
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
@@ -2205,6 +2238,7 @@ ul.nav.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     font-size: 12px;
     height: 30px;
 }
+
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     width: auto;
     padding-left: 8px;
@@ -2213,12 +2247,122 @@ ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle {
     color: #666666;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark {
-    background-color: #E3E3E3;
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    line-height: 30px;
+    text-align: center;
+    width: 50px;
+    text-shadow: none;
+    font-size: 12px;
+    height: 30px;
 }
 
-ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.dark:hover {
-    background-color: #C7C7C7;
+
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle > span.note-flag {
+    position: absolute;
+    left: 20px;
+    top: 2px;
+    font-size: 18px;
+    color: #C6C6C6;
+}
+
+ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-toggle > span.note-number {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    background-color: #EB6F1C;
+    color: #FFFFFF;
+    border-radius: 2px;
+    height: 15px;
+    width: 15px;
+    line-height: 15px;
+}
+
+.topnav.navbar .nav.dropdown-list.notifications > li > .dropdown-menu:before {
+    right: 155px;
+    top: -7px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul {
+    border: 1px solid #33485D;
+    border-radius: 3px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
+    border-radius: 0;
+    background-color: #33485D;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 30px;
+    cursor: default;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type:hover {
+    background-color: #33485D;
+    color: #FFFFFF;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    color: #656565;
+    height: 50px;
+    cursor: default;
+}
+
+.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
+    background-color: #FFFFFF;
+    color: #656565;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul {
+    width: 323px;
+    min-width: 100px;
+    padding: 0 0 0 0;
+    margin-top: 10px;
+    margin-right: -135px;
+}
+
+
+.nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    margin-top: 7px;
+    vertical-align: top;
+}
+
+.nav.dropdown-list.notifications > li > ul > li > div:last-of-type {
+    display: inline-block;
+    min-height: 50px;
+    width: -moz-calc(100% - 58px) !important;
+    width: -webkit-calc(100% - 58px) !important;
+    width: calc(100% - 58px) !important;
+}
+
+.nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
+    line-height: 44px;
+}
+
+.nav.dropdown-list.notifications > li > ul > li a {
+    color: #3397DA;
+}
+.nav.dropdown-list.notifications > li > ul > li > div.no-notifications {
+    text-align: center;
+    width: 301px !important;
+    line-height: 45px;
+    margin: 0;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active {
+    background-color: #FFFFFF;
+}
+
+ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle.active:hover {
+    background-color: #E3E3E3;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > a.dropdown-toggle:before {
@@ -2336,7 +2480,10 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 }
 
 .dropdown-toggle.dark {
-    background-color: #E3E3E3;
+    background-color: #E3E3E3 !important;
+}
+.dropdown-toggle.dark:hover {
+    background-color: #C7C7C7 !important;
 }
 
 
@@ -2364,6 +2511,11 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 
 .check-box-button:hover {
     background-color: #E3E3E3;
+}
+
+.check-box-button:hover:disabled {
+    background-color: #FFFFFF;
+    cursor: default;
 }
 
 .check-box-button:hover > span {
@@ -3167,8 +3319,8 @@ button.icon-button:hover {
     margin-top:-10px;
     margin-left: 20px;
     width:260px;
-    padding-bottom:7px;
-    padding-top:7px;
+    padding-bottom:15px;
+    padding-top:15px;
     background-color: rgb(52, 73, 94);
     color: rgb(255, 255, 255);
     border-radius: 5px;

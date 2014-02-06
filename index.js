@@ -32,6 +32,8 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             $scope.modalUp();
         }
 
+       $scope.registertoggle = false;
+
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         $scope.fieldCheck = function(email) {
             return re.test(email);

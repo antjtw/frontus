@@ -7,24 +7,28 @@
         <div class="spacer30"></div>
         <div>
             <div ng-show="showError" class="textalert loginErrorBox text-center">
-                Invalid username/password <br> combination.
+                <h2>Invalid email/password combination.</h2>
             </div>
         </div>
 
         <form id="login" class="text-center inputs" ng-submit="doLogin()">
             <fieldset>
-                <label>
-                    <input placeholder="USERNAME" class="loginInput" autocomplete="off" tabindex="1" data-autocapitalize="off" name="username"
-                           type="text" ng-model="username"/>
-                </label>
-                <label>
-                    <input placeholder="PASSWORD" class="loginInput" autocomplete="off" tabindex="2" name="password"
-                           type="password" ng-model="password" />
-                </label>
-                <div class="spacer30"></div>
-                <button type="submit" ng-disabled="fieldCheck()" ng-class="loginClass()" tabindex="3">Log in</button>
-                <a id="forgotButton" class="button text-center" ng-href="forgot">Forgot Password?</a>
-                <br>
+                <div class="field text-right">
+                    <span>Email Address</span>
+                    <input type="text" class="loginInput" autocomplete="off"
+                    tabindex="1" autocapitalize="off" name="username" ng-model="username">
+                </div>
+                <div class="field text-right">
+                    <span>Password</span>
+                    <input class="loginInput" autocomplete="off" tabindex="2"
+                    name="password" type="password" ng-model="password">
+                </div>                           
+                <div class="loginfooter">
+                    <a id="forgotButton" class="button pull-left forgot" ng-href="forgot">Forgot Password?</a>
+                    <div class="standard-button pull-right loginbtn">
+                        <button class="btn" ng-disabled="fieldCheck()" ng-click="doLogin()">Log In</button>
+                    </div>
+                </div>
             </fieldset>
         </form>
     </div>

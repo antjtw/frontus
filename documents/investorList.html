@@ -1,3 +1,4 @@
+<div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
   <div class="row-fluid">
     <div class="headsection row-fluid">
@@ -34,7 +35,7 @@
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                     <tr class="empty-row"/>
                     <tr ng-class="{selectedrow:doc.shown}">
-                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc.doc_id)">
+                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
                             <ul>
                                 <li>{{doc.docname | caplength:40}}</li>
                                 <li>{{docStatus(doc)}}</li>
@@ -52,8 +53,8 @@
                         </td>
                         <td class="sign-button toggle-column">
                             <div class="standard-button small-standard-button">
-                                <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc.doc_id)">Sign</button>
-                                <button ng-show="isPendingFinalization(doc)" class="btn" ng-click="gotoDoc(doc.doc_id)">Approve</button>
+                                <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc)">Sign</button>
+                                <button ng-show="isPendingFinalization(doc)" class="btn" ng-click="gotoDoc(doc)">Approve</button>
                             </div>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">
@@ -61,7 +62,7 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-click="gotoDoc(doc.doc_id)">View Document</li>
+                                        <li ng-click="gotoDoc(doc)">View Document</li>
                                         <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                         <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                                     </ul>
@@ -76,3 +77,6 @@
     </div>
   </div>
 </div>
+</div>
+<div class="minimumGap"></div>
+<div class="push"></div>

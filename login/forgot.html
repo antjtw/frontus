@@ -4,22 +4,23 @@
       <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
       <p class="tagline">the best way to manage shareholders<p>
     </div>
-    <div class="border-bottom40"></div>
-
+    <div class="spacer20"></div>
     <h2>Forgot Password?</h2>
-    <p>Enter your email address and we'll send you instructions.</p>
+    <p>To reset your account password, enter the email <br> address you registered with, and we'll send your <br> instructions on their way.</p>
     <div class="text-error">{{fed}}</div>
     <form id="login" class="text-center inputs">
       <fieldset>
-        <label>
-        <input required class="loginInput FI" placeholder="Email Address" tabindex="1"
-               data-autocapitalize="off" autocomplete="off" name="username" type="email" ng-model="username" />
-          </label>
-        <div class="spacer30"></div>                  
-        <button ng-disabled="forgotDisabled()" ng-click="doForgot()" ng-class="forgotClass()"
-                tabindex="3">Send Instructions</button>
-
-        <a id="cancelButton" class="button text-center" ng-href=".">Return to Login</a>
+        <div class="field text-right">
+            <span>Email Address</span>
+            <input required type="email" class="loginInput FI" autocomplete="off"
+            tabindex="1" autocapitalize="off" autocomplete="off" name="username" ng-model="username">
+        </div>
+        <div class="loginfooter">
+          <a id="cancelButton" class="button pull-left return" ng-href=".">Return to Login</a>
+          <div class="standard-button pull-right loginbtn">
+            <button class="btn" ng-disabled="forgotDisabled()" ng-click="doForgot()">Reset Password</button>
+          </div>
+        </div>
         <br>
       </fieldset>
     </form>

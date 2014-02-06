@@ -1,0 +1,24 @@
+<li class="dropdown standard menu-drop" ng-show="$parent.navState.userid">
+    <a class="dropdown-toggle a_nav_notification_toggle">
+        <span class="note-flag" data-icon="&#xe603;" aria-hidden="true"></span>
+        <span ng-show="(notes.length > 0)" class="note-number">{{notes.length}}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li>Notifications</li>
+        <li ng-show="notes.length == 0">
+            <div class="no-notifications">
+                Good Job! You're up to date.
+            </div>
+        </li>
+        <li ng-repeat="note in notes">
+            <div><img src="/img/activity/{{note.signature_status | noteicon}}.png"></div>
+            <div>
+                <ul>
+                    <li>
+                        <span class='a_nav_notification_link' ng-bind-html-unsafe="note | notifications"></span>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</li>

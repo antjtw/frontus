@@ -1,3 +1,45 @@
+.subnav-controls.doclist-controls {
+    margin-bottom: 0;
+}
+
+.listcontainer {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin: 20px auto 0 auto;
+}
+
+
+h2.large-h2 {
+    font-size: 20px;
+    margin: 20px 0 20px 15px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.smart-doc-list {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.smart-doc-list > ul > li {
+    border: 1px solid #E3E3E3;
+    overflow: visible;
+    height: 60px;
+}
+
+.smart-doc-list > ul > li >ul >li{
+    display: inline-block;
+    float: left;
+    line-height: 60px;
+    color: #666666;
+    margin-left: 10px;
+}
+
+.smart-doc-list > ul > li >ul >li:last-of-type {
+    float: right;
+    margin-right: 10px;
+}
+
 .thisone {
     color: #1ABC96;
 }
@@ -137,7 +179,6 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .doc-name-header {
     padding-left: 20px;
-    min-width: 450px;
 }
 
 .doc-status-header {
@@ -606,4 +647,243 @@ div.progress-bar {
 
 .select2-container-multi .select2-choices .select2-search-field input {
     font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+/* CSS for the captable style sliding right panel */
+
+.span4.capright {
+    float: right;
+    margin-left: 0;
+    width: 350px;
+    min-height: 850px;
+    border-left: 6px solid #E3E3E3;
+}
+
+.slidingcss25 {
+    transition: all 0.25s;
+    -moz-transition:all 0.25s; /* Firefox 4 */;
+    -webkit-transition: all 0.25s; /* Safari and Chrome */
+    -o-transition: all 0.25s; /* Opera */
+}
+
+.span4.capright.button-offset {
+    margin-top: -19px;
+    position: relative;
+}
+
+.span4.capright > button {
+    top: 330px;
+    position:relative;
+
+    left: -68px;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    border-radius: 0;
+    border: none;
+    background-color: #E3E3E3;
+    box-shadow: none;
+    width: 108px;
+    line-height: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #1E2D3D;
+}
+
+.span4.capright > button:active {
+    color: #1E2D3D;
+}
+
+/* Template CSS */
+
+.templatePanel {
+    margin: 0 100px 80px 100px;
+}
+
+.templatePanel .center {
+    width: 100%;
+    text-align: center;
+}
+
+.templatePanel p {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.templatePanel dl:first-of-type {
+    margin-top: 40px;
+    margin-left: -50px;
+    margin-bottom: 60px;
+}
+
+.templatePanel > p:nth-child(-n+3) {
+    color: #1D2C3C;
+}
+
+.templatePanel > p:nth-child(-n+2) {
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel > p:nth-child(1) {
+    margin-top: 50px;
+}
+
+.templatePanel.investor > p:nth-child(1) {
+    text-align: center;
+    font-size: 20px;
+}
+
+.templatePanel > p:nth-child(2) {
+    margin-top: 0;
+    visibility: hidden;
+}
+
+.templatePanel.investor > p:nth-child(2) {
+    visibility: visible;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.templatePanel > p:nth-child(2) > br:first-child {
+    display: none;
+}
+
+.templatePanel > p:nth-child(2) input, .templatePanel > p:nth-child(2) span {
+    visibility: visible;
+}
+
+.templatePanel > p:nth-child(3) {
+    font-size: 20px;
+    text-align: center;
+}
+
+.templatePanel.investor > p:nth-child(3) {
+    font-size: 30px;
+}
+
+.templatePanel > p:nth-child(4) {
+    display: none;
+}
+
+.templatePanel > p:nth-child(-n+2) span.template-label {
+    width: 230px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.templatePanel > p:nth-child(2) span.template-label {
+    width: 220px;
+}
+
+
+.templatePanel dl dt {
+    display: none;
+}
+
+.templatePanel dl dd > p {
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel dl dd > p span.template-label {
+    width: 220px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.templatePanel ol {
+    margin-left: 50px;
+}
+
+.templatePanel ol > li {
+    margin-top: 30px;
+}
+
+.templatePanel ol > li > p {
+    position: relative;
+}
+
+.templatePanel ol > li > p > button {
+    position: absolute;
+    left: -50px;
+}
+
+.templatePanel textarea {
+    resize: none;
+    width: 100%;
+    height: 60px;
+}
+
+.templatePanel input.length2 {
+    width: 30px;
+}
+
+span.text-attribute {
+    display: block;
+    width: 350px;
+    margin: 0 auto 0 auto;
+}
+
+.inline-radio {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.inline-radio > li {
+    float: left;
+}
+
+.inline-radio > li:nth-child(n+1) {
+    margin-left: 10px;
+}
+
+div.template-share {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+div.template-share > div {
+    margin-bottom: 10px;
+}
+
+div.template-share > div > span {
+    text-transform: uppercase;
+    width: 307px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+}
+
+div.template-share > div > div.select2-container {
+    margin-bottom: 0;
+    width: 314px;
+}
+
+div.template-share > div > textarea {
+    width: 300px;
+    height: 80px;
+    resize: none;
+}
+
+input[type='text']:disabled, textarea:disabled {
+    background: url("/img/stripe-pattern.png") repeat;
+}
+
+.templatePanel .check-box-button:disabled, .check-box-button:disabled:hover {
+    background: url("/img/stripe-pattern.png") repeat;
 }

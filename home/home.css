@@ -68,13 +68,13 @@
     margin: 20px 0 0 0;
 }
 
+.info-box {
+    border: none;
+}
+
 .info-box.all-gray {
     background-color: #F1F1F1;
     min-height: 300px;
-}
-
-.info-box.all-gray .activity-feed2 > li > ul > li {
-    border: 1px solid #C6C6C6;
 }
 
 /* Flip tiles */
@@ -150,10 +150,20 @@
     margin: 0 0 0 30px;
 }
 
-.front.info-box > .body-box, .back.info-box > .body-box {
+.info-box > .head-box {
+    border: 1px solid #E3E3E3;
+    border-bottom: none;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.info-box > .body-box, .back.info-box > .body-box {
     background-color: #FFFFFF;
     margin: 0;
     height: 268px;
+    border: 1px solid #E3E3E3;
+    border-top: none;
 }
 
 .front.info-box > div.body-box > div > div:last-child {
@@ -196,7 +206,7 @@
 
 .onboarding-row > div {
     margin: 50px 0 40px 0;
-    width: 216px;
+    width: 214px;
     text-align: center;
 }
 

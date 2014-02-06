@@ -1,3 +1,4 @@
+<div class="maincontent openflow">
 <div class="container dynamic-page">
 
     <div class="row-fluid">
@@ -16,7 +17,7 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
-                <div class="pull-right">
+                <div class="pull-right" ng-hide="docversions[0].template_id">
                     <div class="standard-button">
                         <button ng-click="shareDocOpen();" class="btn">Share
                         </button>
@@ -40,7 +41,7 @@
             <table class="status-table doc-status" ng-show="docversions.length!==0">
                 <tbody>
                 <tr>
-                    <th ng-click="setOrder('name')">Shareholder</th>
+                    <th ng-click="setOrder('name')">Name</th>
                     <th style="width: 10%" ng-click="setOrder('when_shared')">Sent</th>
                     <th style="width: 10%" ng-click="setOrder('last_viewed')">Viewed</th>
                     <th style="width: 10%" ng-click="setOrder('when_signed')">Signed</th>
@@ -78,7 +79,8 @@
                           <span ng-show="person.when_countersigned" tooltip-placement="top" tooltip="{{formatDate(person.when_countersigned)}}" class="ng-scope">
                               <span class="status-icon" data-icon="&#xe023;" aria-hidden="true"></span>
                           </span>
-                        <span ng-show="!person.signature_deadline && !person.when_signed" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                        <span ng-show="(!person.signature_deadline && !person.when_signed)" tooltip-placement="top" tooltip="VIEW ONLY">N/A</span>
+                        <span ng-show="person.signature_flow == 1" tooltip-placement="top" tooltip="Countersignature not required">N/A</span>
                     </td>
                     <td class="tooltip-date">
                         <span ng-show="person.when_finalized" tooltip-placement="top" tooltip="{{formatDate(person.when_finalized)}}" class="ng-scope">
@@ -129,25 +131,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="info-box">
-                    <div class="head-box">
-                        <h2>Activity</h2>
-                    </div>
-                    <div class="body-box">
-                        <ul class="activity-feed2">
-                            <li ng-repeat="events in eventGroups | fromNowSortandFilter">
-                                <span>{{events[0]}}</span>
-                                <ul>
-                                    <li ng-repeat="event in events.slice(2)">
-                                        <i class="{{event.activity | icon}}"></i>
-                                        <span>{{event.name || event.person}} {{event | description}}</span>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div>
+                <div activity-feed user='navState.userid' activity="feed" type="issdoc"></div>
             </div>
         </div>
     </div>
@@ -187,7 +174,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray"><button class="btn" ng-click="shareDocClose()">Cancel</button></div>
-        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="shareDocClose(); share(messageText, recipient, signeeded);">Confirm</button></div>
+        <div class="standard-button"><button class="btn" ng-disabled="checkmany(recipient);" ng-click="share(messageText, recipient, signeeded); shareDocClose();">Confirm</button></div>
     </div>
 </div>
 
@@ -209,3 +196,6 @@
         <!--<button class="button subText greenButton" ng-click="remclose(); remind(messageText, reminder);">Remind</button>-->
     </div>
 </div>
+</div>
+<div class="minimumGap"></div>
+<div class="push"></div>

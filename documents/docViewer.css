@@ -4,6 +4,9 @@
 navbar .navbar {
     display: none !important;
 }
+.modal-backdrop {
+    background-color: #E3E3E3;
+}
 .docViewer {
     z-index: 1041 !important;
     position: absolute;
@@ -341,7 +344,7 @@ navbar .navbar {
 .confirmBody {
     margin: 0 auto;
     padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 60px;
     width: 380px;
     height: 100%;
     min-height: 40px;
@@ -404,6 +407,13 @@ navbar .navbar {
     padding-right: 1px;
 }
 .backButton > button > span:before {
+    vertical-align: middle;
+}
+.forwardButton > button > span {
+    font-size: 16px;
+    padding-left: 6px;
+}
+.forwardButton > button > span:before {
     vertical-align: middle;
 }
 

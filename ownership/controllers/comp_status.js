@@ -41,21 +41,15 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
     });
 
     SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
+
         var originalfeed = feed;
         //Generate the groups for the activity feed
-        $scope.eventGroups = [];
-        var uniqueGroups = [];
+        $scope.feed = [];
         angular.forEach(originalfeed, function(event) {
-            var timegroup = moment(event.event_time).from(event.timenow);
-            if (uniqueGroups.indexOf(timegroup) > -1) {
-                $scope.eventGroups[uniqueGroups.indexOf(timegroup)].push(event);
-            }
-            else {
-                $scope.eventGroups[$scope.eventGroups.length] = [];
-                $scope.eventGroups[$scope.eventGroups.length-1].push(timegroup);
-                $scope.eventGroups[$scope.eventGroups.length-1].push(event.event_time);
-                $scope.eventGroups[$scope.eventGroups.length-1].push(event);
-                uniqueGroups.push(timegroup);
+            if (event.activity != "sent") {
+                event.when = moment(event.event_time).from(event.timenow);
+                event.type = "ownership"
+                $scope.feed.push(event);
             }
         });
     });

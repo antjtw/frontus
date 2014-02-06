@@ -2318,6 +2318,20 @@ margin-top: 0.9em;
             margin: 0;
         }
 
+        .copy ul > li {
+        	list-style-type: disc;
+        	margin-left: 20px;
+        	color: #34495E;
+        }
+
+        .copy ul > li > span{
+        	color: #7f8c8d;
+        	font-family: 'FS Elliot Web Regular', sans-serif;
+        	font-weight: normal;
+        	font-size: 14px;
+        }
+
+
         h2 {
             text-align: center;
         }

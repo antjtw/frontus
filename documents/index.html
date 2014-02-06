@@ -22,6 +22,7 @@
   <script src="/cmn/Upload.js"></script>
   <script src="/cmn/services.js"></script>
   <script src="/documents/CompanyDocuments.js"></script>
+  <script src="/cmn/activity/activity.js"></script>
 
 </head>
 
@@ -30,12 +31,8 @@
 
   <navbar></navbar>
 
-  <div class="maincontent openflow">
-    <h1 class='error-message' ng-show='false'>{{ errorMessage }}</h1>
     <div ng-view></div>
-  </div>
-  <div class="minimumGap"></div>
-  <div class="push"></div>
+
 </div>
 <!--{{/i/foot.inc}}-->
 <!--{{/i/foot_js.inc}}-->
