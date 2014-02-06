@@ -32,7 +32,7 @@
                         <div class="row-fluid">
                             <span>Want more information? <span class="blue-link" ng-click="flipTile(1);">Learn more</span></span>
                             <div class="pull-right standard-button green">
-                                <button class="btn" ng-click="gotopage('/documents/company-list')">Upload Documents</button>
+                                <button id='a_home_doc_pre' class="btn" ng-click="gotopage('/documents/company-list')">Upload Documents</button>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="span6 no-graph">
                                 <div class="standard-button green">
-                                    <button class="btn" ng-click="gotopage('/documents/company-list')">View Documents</button>
+                                    <button id='a_home_doc_post' class="btn" ng-click="gotopage('/documents/company-list')">View Documents</button>
                                 </div>
                                 <span class="blue-link" ng-click="flipTile(1);">Learn More about Documents</span>
                             </div>
@@ -166,7 +166,7 @@
                         <div class="row-fluid">
                             <span>New to Equity? <span class="blue-link" ng-click="flipTile(2);">Learn more</span></span>
                             <div class="pull-right standard-button green">
-                                <button class="btn" ng-click="gotopage('/ownership/company-captable')">Start Now</button>
+                                <button id='a_home_own_pre' class="btn" ng-click="gotopage('/ownership/company-captable')">Start Now</button>
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,7 @@
                             <div class="span6">
                                 <d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
                                 <div class="standard-button green">
-                                    <button class="btn" ng-click="gotopage('/ownership/company-captable')">View Ownership</button>
+                                    <button id='a_home_own_post' class="btn" ng-click="gotopage('/ownership/company-captable')">View Ownership</button>
                                 </div>
                                 <span class="blue-link" ng-click="flipTile(2);">Learn More about Ownership</span>
                             </div>

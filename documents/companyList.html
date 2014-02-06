@@ -42,7 +42,7 @@
 
                 <div class="pull-right" ng-show="documents.length!==0">
                     <div class="standard-button">
-                        <button ng-click="multishareOpen();" class="btn">Share
+                        <button id='a_doc_share' ng-click="multishareOpen();" class="btn">Share
                         </button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                 </td>
                 <td>
                     <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
-                        <button class="btn" ng-click="shareDocOpen(doc)">Share</button>
+                        <button class="btn a_share_list" ng-click="shareDocOpen(doc)">Share</button>
                     </div>
                     <ul class="dropdown-list">
                         <li class="dropdown standard menu-drop">
@@ -497,7 +497,7 @@
             <button class="btn" ng-click="gotoscreen(1);">Back</button>
         </div>
         <div ng-show="sharemodalscreen == '2'" class="standard-button green">
-            <button class="btn" ng-disabled="checkmany(multipeople);" ng-click="sharetoMany(); multishareClose();">
+            <button id='a_share_modal' class="btn" ng-disabled="checkmany(multipeople);" ng-click="sharetoMany(); multishareClose();">
                 Send
             </button>
         </div>
