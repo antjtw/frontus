@@ -11,7 +11,7 @@
             </div>
         </li>
         <li ng-repeat="note in notes | orderBy:oldestDate">
-            <div><img src="/img/activity/{{note.signature_status | noteicon}}.png"></div>
+            <div><img ng-src="/img/activity/{{note.signature_status | noteicon}}.png"></div>
             <div>
                 <ul>
                     <li>
