@@ -18,9 +18,9 @@
                         <li><a href="/terms">TERMS OF USE</span></a></li>
                     </ul>
                 </div>
-                <span class="copyright pull-right hidden-phone">COPYRIGHT 2013 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
+                <span class="copyright pull-right hidden-phone">COPYRIGHT 2013-2014 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
                 <br class="visible-phone">
-                <span class="copyright pull-left visible-phone">COPYRIGHT 2013 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
+                <span class="copyright pull-left visible-phone">COPYRIGHT 2013-2014 SHAREWAVE LLC, ALL RIGHTS RESERVED</span>
             </div>
         </footer>
     </div>

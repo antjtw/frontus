@@ -60,6 +60,19 @@ navm.directive('notifications', function() {
         },
         templateUrl: '/cmn/navnotifications.html',
         controller: ['$scope', function($scope) {
+
+            $scope.oldestDate = function(note) {
+                if (note.when_countersigned) {
+                    return note.when_countersigned;
+                }
+                else if (note.when_signed) {
+                    return note.when_signed;
+                }
+                else {
+                    return note.when_shared;
+                }
+            };
+
         }]
     }
 });
@@ -361,11 +374,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         };
 
         $scope.notifications = function() {
-            if (window.location.hostname == "www.sharewave.com") {
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                 _kmq.push(['identify', $rootScope.navState.userid]);
             }
             if ($rootScope.navState.role == "issuer") {
-                if (window.location.hostname == "www.sharewave.com") {
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                     _kmq.push(['set', {'role':'issuer'}]);
                 }
@@ -380,7 +393,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
             else {
-                if (window.location.hostname == "www.sharewave.com") {
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder'}]);
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {

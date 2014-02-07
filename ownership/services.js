@@ -3,6 +3,11 @@ var ownership = angular.module('ownerServices', []);
 // Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
 ownership.service('calculate', function () {
 
+    this.toFloat = function(value) {
+        value = isNaN(parseFloat(value)) ? null : parseFloat(value);
+        return value;
+    };
+
     // The remainder calculated for outstanding units rows.
     this.whatsleft = function (total, issue, rows) {
         var leftover = total;
@@ -79,7 +84,8 @@ ownership.service('calculate', function () {
 
     // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
     this.debt = function (rows, issue, row) {
-        var mon = parseFloat(issue.premoney);
+        return null;
+/*        var mon = parseFloat(issue.premoney);
         if (isNaN(parseFloat(mon))) {
             return null
         }
@@ -92,7 +98,7 @@ ownership.service('calculate', function () {
                 }
             });
         }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)
+        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)*/
     };
 
     // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array.
