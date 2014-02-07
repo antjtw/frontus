@@ -2430,6 +2430,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    // CSV Generation
+
+    $scope.downloadCsv = function() {
+        SWBrijj.procd('captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+            document.location.href = x;
+        });
+    };
+
     // Functions derived from services for use in the table
 
     //switches the sidebar based on the type of the issue
