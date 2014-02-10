@@ -77,27 +77,6 @@ navm.directive('notifications', function() {
     }
 });
 
-idleTime = 0;
-$(document).ready(function () {
-    //Increment the idle time counter every minute.
-    var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
-
-    //Zero the idle timer on mouse movement.
-    $(this).mousemove(function (e) {
-        idleTime = 0;
-    });
-    $(this).keypress(function (e) {
-        idleTime = 0;
-    });
-});
-
-function timerIncrement() {
-    idleTime = idleTime + 1;
-    if (idleTime > 28) { // 1 minutes
-        document.location.href = "/login/logout?timeout";
-    }
-}
-
 /** @unused NavCtrl */
 /* Not really, but referenced in angular attribute in .inc file */
 navm.directive('navbar', function () {
@@ -421,7 +400,31 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
             });
             return notifications
+        };
+
+        var idleTime = 0;
+
+        function timerIncrement() {
+            if ($rootScope.navState.userid) {
+                idleTime = idleTime + 1;
+            }
+            if (idleTime > 1) { // 1 minutes
+                document.location.href = "/login/logout?timeout";
+            }
         }
+
+        $(document).ready(function () {
+            //Increment the idle time counter every minute.
+            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+            //Zero the idle timer on mouse movement.
+            $(this).mousemove(function (e) {
+                idleTime = 0;
+            });
+            $(this).keypress(function (e) {
+                idleTime = 0;
+            });
+        });
 
     }]);
 

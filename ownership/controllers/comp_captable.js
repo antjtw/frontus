@@ -2437,7 +2437,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // CSV Generation
 
     $scope.downloadCsv = function() {
-        SWBrijj.procd('captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+        SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
             document.location.href = x;
         });
     };
