@@ -120,7 +120,7 @@
                 </td>
                 <td>
                     <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
-                        <button class="btn a_share_list" ng-click="shareDocOpen(doc)">Share</button>
+                        <button class="btn a_share_list" ng-click="prepareDocument(doc)">Share</button>
                     </div>
                     <ul class="dropdown-list">
                         <li class="dropdown standard menu-drop">
@@ -460,11 +460,13 @@
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li>{{doc.docname | caplength:40}}</li>
+                    <!--
                     <li ng-show="doc.picked">
                         <button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');"
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li ng-show="doc.picked" class="capital-text">Signature?</li>
+                    -->
                 </ul>
             </li>
         </ul>

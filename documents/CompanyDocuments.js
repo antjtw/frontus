@@ -316,6 +316,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 document.location.href = url;
             });
         };
+        $scope.prepareDocument = function(doc) {
+            $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+        };
 
         // Document Upload pieces
         // Modal Up and Down Functions
@@ -982,6 +985,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.templateKey = parseInt($routeParams.template, 10);
         $scope.subId = parseInt($routeParams.subid, 10);
         $scope.urlInves = $routeParams.investor;
+        $scope.prepare = ($routeParams.prepare==='true') ? true : false;
         $scope.invq = false;
         $scope.counterparty = !! $scope.urlInves;
         $scope.tester = false;
@@ -1501,6 +1505,9 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             alert("failed");
         }
 
+        $scope.prepareDocument = function(doc) {
+            $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+        };
         // Sharing modal functions
 
         $scope.shareDocOpen = function() {

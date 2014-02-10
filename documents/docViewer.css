@@ -388,6 +388,10 @@ navbar .navbar {
     color: #666666;
 }
 
+.confirmBody .email-text {
+    margin-top: 20px;
+}
+
 .confirmFooter {
     height: 12px;
 }
