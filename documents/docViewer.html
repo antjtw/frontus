@@ -159,18 +159,12 @@
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
             <div ng-show="prepareable(lib)">
-                <div class='confirmBody'>
-                    <div class="modalText dshare">
-                        <ul>
-                            <li>
-                                <span>Email Addresses</span>
-                                <div class="single-share-input">
-                                    <input ui-select2="select2Options" ng-model="$parent.recipient">
-                                </div>
-                            </li>
-                        </ul>
-                        <textarea class="email-text" rows="4" cols="60" placeholder="Add an optional message..." ng-model="$parent.messageText"></textarea>
+                <div class='confirmBody shareDoc'>
+                    <span>Email Addresses</span>
+                    <div class="single-share-input">
+                        <input ui-select2="select2Options" ng-model="$parent.recipient">
                     </div>
+                    <textarea class="email-text" rows="4" cols="60" placeholder="Add an optional message..." ng-model="$parent.messageText"></textarea>
                 </div>
             </div>
             <div ng-show="signable(lib)">
