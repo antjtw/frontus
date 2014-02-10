@@ -1207,6 +1207,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
                 }
+                transaction['ppshare'] = parseFloat(transaction['ppshare']);
+                if (isNaN(transaction['ppshare'])) {
+                    transaction['ppshare'] = null;
+                }
                 angular.forEach($scope.rows, function (row) {
                     if ((row.name == transaction.investor) && row.email) {
                         transaction.email = row.email;
@@ -1217,13 +1221,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
                 // Autocomplete for Equity transactions, fill out the third of units, amount or price per share
                 if (transaction.type == "Equity") {
-                    if (transaction.units && transaction.amount && !transaction.ppshare) {
+                    if (transaction.units && transaction.amount && transaction.ppshare != 0 && !transaction.ppshare) {
                         transaction.ppshare = parseFloat(transaction.amount) / parseFloat(transaction.units);
                     }
-                    else if (!transaction.units && transaction.amount && transaction.ppshare) {
+                    else if (!transaction.units && transaction.units != 0 && transaction.amount && transaction.ppshare) {
                         transaction.units = parseFloat(transaction.amount) / parseFloat(transaction.ppshare);
                     }
-                    else if (transaction.units && !transaction.amount && transaction.ppshare) {
+                    else if (transaction.units && !transaction.amount && transaction.amount != 0 && transaction.ppshare) {
                         transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
                     }
                 }
