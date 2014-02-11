@@ -1011,6 +1011,21 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
         });
 
+        $scope.helpModalUp = function () {
+            $scope.tourModal = true;
+        };
+
+        $scope.tourclose = function () {
+            $scope.sideToggle = false;
+            $scope.tourModal = false;
+        };
+
+        $scope.touropts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'helpModal modal'
+        };
+
         $scope.docKey = parseInt($routeParams.doc, 10);
         $scope.templateKey = parseInt($routeParams.template, 10);
         $scope.subId = parseInt($routeParams.subid, 10);
@@ -1031,6 +1046,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.library = $scope.urlInves ? "document.my_counterparty_library" : "document.my_company_library";
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
+
+        if ($scope.prepare) {
+            $scope.helpModalUp();
+        }
 
         $scope.getData = function() {
             if ($scope.docKey) {
