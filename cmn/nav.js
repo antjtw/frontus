@@ -408,7 +408,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($rootScope.navState.userid) {
                 idleTime = idleTime + 1;
             }
-            if (idleTime > 1) { // 1 minutes
+            if (idleTime > 28) { // 1 minutes
                 document.location.href = "/login/logout?timeout";
             }
         }
