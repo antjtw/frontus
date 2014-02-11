@@ -393,6 +393,9 @@ button.greyButton {
 .modalText.deleteDocModal {
     width: 360px;
     margin-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
 }
 
 .modalText.esign {
