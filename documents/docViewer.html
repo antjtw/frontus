@@ -51,7 +51,7 @@
                         </li>
                     </ul>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || finalizable(lib))}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button class="btn" ng-click="setStage(1);">
                             Next
@@ -65,7 +65,7 @@
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
                     <div class="pull-right standard-button green forwardButton">
                         <button class="btn" ng-click="setStage(1);">
-                            Share
+                            Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -88,11 +88,18 @@
                         Back
                     </button>
                 </div>
+                <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
                 <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
+                    <button class="btn"
+                            ng-show="prepareable(lib)"
+                            ng-disabled="processing || checkmany(recipient)"
+                            ng-click="shareDocument(lib, messageText, recipient);">
+                        Share
+                    </button>
                     <button class="btn"
                             ng-show="signable(lib)"
                             ng-disabled="processing || confirmValue===0"
@@ -151,6 +158,15 @@
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
+            <div ng-show="prepareable(lib)">
+                <div class='confirmBody shareDoc'>
+                    <span>Email Addresses</span>
+                    <div class="single-share-input">
+                        <input ui-select2="select2Options" ng-model="$parent.recipient">
+                    </div>
+                    <textarea class="email-text" rows="4" cols="60" placeholder="Add an optional message..." ng-model="$parent.messageText"></textarea>
+                </div>
+            </div>
             <div ng-show="signable(lib)">
                 <div class='confirmBody'>
                     <ul class="checkboxOption">

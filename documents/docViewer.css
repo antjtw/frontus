@@ -350,6 +350,14 @@ navbar .navbar {
     min-height: 40px;
 }
 
+.confirmBody.shareDoc {
+    text-align: left;
+}
+
+.confirmBody.shareDoc .single-share-input .select2-container {
+    width: 450px;
+}
+
 .confirmBody > .radioOption {
     height: 40px;
 }
@@ -386,6 +394,10 @@ navbar .navbar {
 
 .confirmBody > .checkboxOption > li:last-child > span {
     color: #666666;
+}
+
+.confirmBody .email-text {
+    margin-top: 20px;
 }
 
 .confirmFooter {

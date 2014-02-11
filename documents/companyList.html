@@ -120,7 +120,7 @@
                 </td>
                 <td>
                     <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
-                        <button class="btn a_share_list" ng-click="shareDocOpen(doc)">Share</button>
+                        <button class="btn a_share_list" ng-click="prepareDocument(doc)">Share</button>
                     </div>
                     <ul class="dropdown-list">
                         <li class="dropdown standard menu-drop">
@@ -147,8 +147,10 @@
                     </ul>
                 </td>
                 <td class="status-toggle status-icon">
-                    <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green"
+                    <div ng-show="versionIsComplete(version) && !version.when_retracted" data-icon="&#xe023;" class="circle green"
                          aria-hidden="true"></div>
+                    <div ng-show="versionIsComplete(version) && version.when_retracted" class="circle green"
+                        aria-hidden="true"><span>-</span></div>
                     <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                 </td>
                 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
@@ -173,6 +175,7 @@
                                 <span data-icon="&#xe011;" aria-hidden="true"></span>
                             </a>
                             <ul ng-hide="toggleView();" class="dropdown-menu">
+                                <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
                                 <li ng-click="viewStatus(doc)">View Status</li>
                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
@@ -425,6 +428,23 @@
         </div>
     </div>
 </div>
+<div modal="retractDocModal" close="retractVersionClose()" options="opts" class="updateTitleModal">
+    <div class="modalHeader">
+        <span>Retract Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="retractVersionClose()"></span>
+    </div>
+    <div class="modalText deleteDocModal">
+        <span>Are you sure you want to retract {{docForModal.docname}} from {{docForModal.name || docForModal.investor}}?</span>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="retractVersionClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="retractVersion(docForModal); retractVersionClose();">Confirm</button>
+        </div>
+    </div>
+</div>
 
 <div modal="deleteDocModal" close="deleteDocClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
@@ -432,7 +452,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="deleteDocClose()"></span>
     </div>
     <div class="modalText deleteDocModal">
-        <span>Are you sure you want to delete </span><br>
+        <span>Are you sure you want to delete </span>
         <span>{{docForModal.docname}}?</span>
     </div>
     <div class="modal-footer">
@@ -460,11 +480,13 @@
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li>{{doc.docname | caplength:40}}</li>
+                    <!--
                     <li ng-show="doc.picked">
                         <button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');"
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li ng-show="doc.picked" class="capital-text">Signature?</li>
+                    -->
                 </ul>
             </li>
         </ul>

@@ -393,6 +393,9 @@ button.greyButton {
 .modalText.deleteDocModal {
     width: 360px;
     margin-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
 }
 
 .modalText.esign {
@@ -886,4 +889,30 @@ input[type='text']:disabled, textarea:disabled {
 
 .templatePanel .check-box-button:disabled, .check-box-button:disabled:hover {
     background: url("/img/stripe-pattern.png") repeat;
+}
+
+.helpModal {
+    margin-left: -360px;
+    width:718px;
+}
+
+.helpModal ul > li {
+    text-align: left;
+    display: block;
+    margin-left: 20px;
+    height: 100px;
+    overflow: auto;
+    font-size: 14px;
+    color: #666666;
+}
+
+.helpModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+}
+
+.helpModal ul > li > span {
+    display: inline-block;
+    width: 300px;
+    float: right;
 }
