@@ -1,16 +1,18 @@
 <script type="text/javascript">
-var _kmq = _kmq || [];
-var _kmk = _kmk || '6fca73192583d11a98c3793b72f5975712a17c5c';
-function _kms(u){
-  setTimeout(function(){
-    var d = document, f = d.getElementsByTagName('script')[0],
-    s = d.createElement('script');
-    s.type = 'text/javascript'; s.async = true; s.src = u;
-    f.parentNode.insertBefore(s, f);
-  }, 1);
+if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
+    var _kmq = _kmq || [];
+    var _kmk = _kmk || '6fca73192583d11a98c3793b72f5975712a17c5c';
+    function _kms(u){
+      setTimeout(function(){
+        var d = document, f = d.getElementsByTagName('script')[0],
+        s = d.createElement('script');
+        s.type = 'text/javascript'; s.async = true; s.src = u;
+        f.parentNode.insertBefore(s, f);
+      }, 1);
+    }
+    _kms('//i.kissmetrics.com/i.js');
+    _kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
 }
-_kms('//i.kissmetrics.com/i.js');
-_kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
 </script>
 
 <!--[if lt IE 9]>
