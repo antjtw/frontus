@@ -598,9 +598,28 @@ div.fixednav{
     width: 30px;
     text-align: center;
 }
+
+.topnav .nav.content-pages > li > a {
+    text-align: center;
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 18px;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #C6C6C6;
+    font-family:'FS Elliot Web Light', sans-serif;
+}
+
+.topnav .nav.content-pages > li > a:hover {
+   color: rgb(166, 166, 166);
+}
+
 .topnav .nav.nav-logo > li > a {
     margin: 0 0 0 40px;
     padding: 0 0 0 0;
+    width: 140px;
+    text-align: left;
 }
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);
