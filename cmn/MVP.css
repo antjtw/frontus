@@ -1703,6 +1703,11 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 10px;
 }
 
+.status-toggle > .circle > span {
+    font-size: 20px;
+    line-height: 14px;
+}
+
 .sub-row > .status-toggle > .circle {
     color: #F1F1F1;
 }

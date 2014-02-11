@@ -147,8 +147,10 @@
                     </ul>
                 </td>
                 <td class="status-toggle status-icon">
-                    <div ng-show="versionIsComplete(version)" data-icon="&#xe023;" class="circle green"
+                    <div ng-show="versionIsComplete(version) && !version.when_retracted" data-icon="&#xe023;" class="circle green"
                          aria-hidden="true"></div>
+                    <div ng-show="versionIsComplete(version) && version.when_retracted" class="circle green"
+                        aria-hidden="true"><span>-</span></div>
                     <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                 </td>
                 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
