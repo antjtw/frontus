@@ -748,6 +748,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
+                            $scope.annotatedPages.push(annot[0][0]);
                             switch (annot[1]) {
                                 case "check":
                                     sticky = $scope.newCheckX(annot[0][0]);
@@ -866,6 +867,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var z = ev.currentTarget;
             while (z.attributes.draggable === undefined) z = z.parentElement;
             z.parentElement.removeChild(z);
+            var index = $scope.annotatedPages.indexOf($scope.currentPage);
+            if (index > -1) {
+                $scope.annotatedPages.splice(index, 1);
+            }
             for (var i = 0; i < $scope.notes.length; i++) {
                 if ($scope.notes[i][0] === z) {
                     $scope.notes.splice(i, 1);
@@ -928,6 +933,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1033,6 +1039,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newCheck = function(event) {
             var aa = $scope.newCheckX($scope.currentPage);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1053,12 +1060,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var d = new Date();
             var fmtdat = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
             var aa = $scope.newBoxX($scope.currentPage, fmtdat);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
             return aa;
         };
 
         $scope.newPad = function(event) {
             var aa = $scope.newPadX($scope.currentPage, []);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1371,6 +1380,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
     }
 ]);
+
+docs.filter('unique', function() {
+    return function(pages) {
+        var output = [];
+        angular.forEach(pages, function(page) {
+            if(output.indexOf(page) === -1) {
+                output.push(page);
+            }
+        });
+        return output;
+    };
+});
 
 /* Looking for a way to detect if I need to reload the page because the user has been logged out
  */
