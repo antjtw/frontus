@@ -1389,6 +1389,7 @@ docs.filter('unique', function() {
                 output.push(page);
             }
         });
+        output.sort(function(a,b){return a-b});
         return output;
     };
 });
