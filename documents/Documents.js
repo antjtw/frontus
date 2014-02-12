@@ -1230,7 +1230,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.prepareable = function(doc) {
-            return !$scope.invq && doc && !doc.signature_flow && !template_original;
+            return !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
         };
 
         $scope.signable = function(doc) {
