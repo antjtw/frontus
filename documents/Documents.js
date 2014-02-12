@@ -1381,7 +1381,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
     }
 ]);
 
-docs.filter('unique', function() {
+docs.filter('uniqueandorder', function() {
     return function(pages) {
         var output = [];
         angular.forEach(pages, function(page) {
