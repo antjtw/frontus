@@ -356,6 +356,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.library = library;
             $scope.pageQueryString = pageQueryString;
             $scope.pages = pages;
+            $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
         });
