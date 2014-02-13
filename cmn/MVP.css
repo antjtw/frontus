@@ -525,6 +525,7 @@ div.fixednav{
 
 .topnav.navheight > div > ul.nav-logo {
     margin-top: 16px;
+    margin-right: 40px;
 }
 
 .topnav.navheight > div > ul.nav-item {
@@ -598,9 +599,30 @@ div.fixednav{
     width: 30px;
     text-align: center;
 }
+
+.topnav .nav.content-pages > li > a {
+    text-align: center;
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    margin-right: 0;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #C6C6C6;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.1em;
+}
+
+.topnav .nav.content-pages > li > a:hover {
+   color: #FFFFFF;
+}
+
 .topnav .nav.nav-logo > li > a {
     margin: 0 0 0 40px;
     padding: 0 0 0 0;
+    width: 140px;
+    text-align: left;
 }
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);

@@ -139,7 +139,7 @@
                 <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
                     <span ng-hide="pageScroll===0" data-icon="&#xe032;"></span>
                 </li>
-                <li ng-repeat="page in showPages() track by $id($index)"
+                <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
                     ng-class="{'cur-page':page===currentPage}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">
