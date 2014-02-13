@@ -170,6 +170,17 @@ directive('draggable', ['$window', '$document',
                         });
                         return false;
                     };
+                    $scope.newmousemove = function($event) {
+                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        $element.css({
+                            height: dy + 'px',
+                            width: dx + 'px'
+                        });
+                        $scope.fixBox($element.find('textarea')[0]);
+                        return false;
+                    };
+
 
                     var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
 
@@ -207,6 +218,27 @@ directive('draggable', ['$window', '$document',
                         }
                         $document.bind('scroll', $scope.mousemove);
                         $document.bind('mousemove', $scope.mousemove);
+                        $document.bind('mouseup', $scope.mouseup);
+                    };
+
+                    $scope.newinitdrag = function(ev) {
+                        var dp = document.querySelector(".docPanel");
+                        var dpr = dp.getBoundingClientRect(); // top/left of docPanel
+                        var dprl = dpr.left - dp.offsetLeft; // left of document itself
+                        var dprt = dpr.top - dp.offsetTop; // top of document itself
+                        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
+                        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+                        $scope.initialMouseX = ev.clientX;
+                        $scope.initialMouseY = ev.clientY;
+                        $scope.initialScrollX = $window.scrollX;
+                        $scope.initialScrollY = $window.scrollY;
+                        if (document.attachEvent) {
+                            document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.addEventListener) {
+                            document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.bind('scroll', $scope.newmousemove);
+                        $document.bind('mousemove', $scope.newmousemove);
                         $document.bind('mouseup', $scope.mouseup);
                     };
 
@@ -936,6 +968,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var aa = $scope.newBoxX($scope.currentPage, '', null);
             $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
+        };
+        $scope.newnewBox = function(event) {
+            var aa = $scope.newBoxX($scope.currentPage, '', null);
+            aa.scope().newinitdrag(event);
         };
 
         $scope.fixBox = function(bb) {

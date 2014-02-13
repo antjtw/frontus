@@ -153,7 +153,7 @@
         </div>
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid" ng-class="{'annotatedPageBar':showPageBar()}">
-        <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}"/>
+        <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
