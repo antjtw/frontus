@@ -1964,7 +1964,7 @@ a.oldschool-link  {
     border-right: 0;
 }
 .footerBar {
-    height: 112px;
+    min-height: 112px;
     background-color: rgb(30, 45, 61);
 }
 #copyrightBar {

@@ -2,7 +2,7 @@
 
 .home #hero{
     background-color: #1E2D3D;
-    height: 400px;
+    min-height: 400px;
     position: relative;
 }
 
@@ -66,8 +66,10 @@
     color: #666666;
     font-family: 'FS Elliot Web Light', sans-serif !important;
     font-size: 24px;
-    line-height: 28px;
+    line-height: 32px;
     font-weight: normal;
+    max-width: 800px;
+    margin:  0 auto 0 auto;
 }
 
 .home h3 {
@@ -81,7 +83,7 @@
     color: rgb(141, 141, 141);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
-    line-height: 22px;
+    line-height: 18px;
     font-weight: normal;
 }
 
@@ -269,6 +271,10 @@
     line-height: 18px;
 }
 
+.home .emp-options {
+    float: right;
+}
+
 /* form */
 
 #CompanyRegister-form {
@@ -304,11 +310,6 @@
     font-size: 14px ; 
     font-family: 'FS Elliot Web Thin', sans-serif;
 
-}
-
-
-#esign h2 {
-    padding: 0 40px;
 }
 
 /* Homepage carousel */

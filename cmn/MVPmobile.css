@@ -1,11 +1,25 @@
 
 @media (max-width: 1024px) {
 	.container {
-		width: 100%;
+		width: 80%;
 	}
 	.navbounder {
 		width: 100%;
 	}
+
+    .home .button.greenButton {
+        margin-top: 10px;
+        display: block;
+        border-radius: 3px;
+    }
+
+    .home input {
+        border-radius: 3px;
+    }
+
+    div.span5.home-ike {
+        display: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -26,6 +40,10 @@
 		padding: 0 5% 0 5%;
 	}
 
+    .home .emp-options {
+        float: none;
+    }
+
 	/* Home page Styling */
 	.navbounder {
 		box-sizing:border-box;
@@ -40,7 +58,8 @@
 	.home #hero{
     	background-color: #1E2D3D;
 		width: 80%;
-        height: 400px;
+        min-height: 400px;
+        padding-bottom: 20px;
     }
 
 	.home .button {
@@ -53,9 +72,14 @@
 		width: auto;
 	}
 
-	.videoRow > h2 {
+	.home h2 {
 		font-size: 18px;
+        line-height: 22px;
 	}
+
+    .home .trio-icons > div.span4 {
+        margin-top: 30px;
+    }
 
 	.videoModal.modal {
 		height: 200px;
@@ -97,15 +121,9 @@
 		-moz-box-sizing:border-box;
 		width: 100%;
         margin-bottom:10px;
-        border-radius: 3px;
 	}
 
-    .home .button.greenButton {
-        border-radius: 3px;
-    }
-
     .home .thanks {
-        width: 300px;
         height: 200px;
     }
 
@@ -147,6 +165,10 @@
 	.videoIframe {
 		height: 100px;
 	}
+
+    .topnav .nav.nav-logo > li > a {
+        margin-left: 10px;
+    }
 }
 
 @media (max-width: 320px) {
