@@ -454,7 +454,8 @@ navbar .navbar {
     display:block;
     margin: 0;
     list-style-type:none;
-    cursor:pointer
+    cursor:pointer;
+    overflow: auto;
 }
 
 .draggable li {
@@ -501,6 +502,7 @@ navbar .navbar {
     overflow: hidden;
     line-height: normal;
     resize: both;
+    word-wrap: break-word;
 }
 
 .hidden {

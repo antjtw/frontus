@@ -35,29 +35,29 @@
                                 <li>
                                     <ul>
                                         <li>Full Name</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Address</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>City</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
                                         <li>State</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
                                         <li>Zip Code</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <ul>
                                         <li>Telephone</li>
-                                        <li><input type="text" ui-event="{blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
+                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
                                     </ul>
                                 </li>
                                 <li>

@@ -36,7 +36,7 @@ function getNoteBounds(nx, pageBar, not_visible) {
     if (ntyp == 'text') {
         var t = nx.querySelector('textarea');
         z = t.offset;
-        ibds = [z[0], z[1], z[2], z[3]];
+        ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
     } else if (ntyp == 'canvas') {
         var c = nx.querySelector('canvas');
         z = c.offset;
@@ -69,11 +69,11 @@ directive('draggable', ['$window', '$document',
             scope: true,
             template: '<div class="sticky">' +
                         '<ul>' +
-                            '<li ng-show="isAnnotable" ng-click="dragMe($event)" style="padding-right:10px"><span data-icon="&#xe043;"</span></li>' +
-                            '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
-                            '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
+                            '<li ng-show="isAnnotable" style="padding-right:10px"><span data-icon="&#xe043;" aria-hidden="true"/></li>' +
+                            '<li ng-show="growable" ng-mousedown="$event.stopPropagation();"  ng-click="smallerMe($event); $event.stopPropagation()" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
+                            '<li ng-show="growable" ng-mousedown="$event.stopPropagation();"  ng-click="biggerMe($event); $event.stopPropagation()" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
                             '<li></li>' +
-                            '<li ng-show="isAnnotable" ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' +
+                            '<li ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></li>' +
                         '</ul>' +
                         '<span ng-transclude></span>' +
                       '</div>',
@@ -177,7 +177,9 @@ directive('draggable', ['$window', '$document',
                             height: dy + 'px',
                             width: dx + 'px'
                         });
-                        $scope.fixBox($element.find('textarea')[0]);
+                        var bb = $element[0].querySelector("textarea");
+                        bb.style.height = dy - 36 + "px";
+                        bb.style.width = dx - 22 + "px";
                         return false;
                     };
 
@@ -194,6 +196,18 @@ directive('draggable', ['$window', '$document',
                         $document.unbind('scroll', $scope.mousemove);
                         $document.unbind('mousemove', $scope.mousemove);
                         $document.unbind('mouseup', $scope.mouseup);
+                        return false;
+                    };
+
+                    $scope.newmouseup = function(ev) {
+                        if (document.detachEvent) {
+                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.removeEventListener) {
+                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.unbind('scroll', $scope.mousemove);
+                        $document.unbind('mousemove', $scope.newmousemove);
+                        $document.unbind('mouseup', $scope.newmouseup);
                         return false;
                     };
 
@@ -232,18 +246,26 @@ directive('draggable', ['$window', '$document',
                         $scope.initialMouseY = ev.clientY;
                         $scope.initialScrollX = $window.scrollX;
                         $scope.initialScrollY = $window.scrollY;
+                        var dx = ev.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
+                        var dy = ev.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        var mousex = $scope.startX + dx;
+                        var mousey = $scope.startY + dy;
+                        $element.css({
+                            top: (topLocation($element.height(), mousey)) + 'px',
+                            left: (leftLocation($element.width(), mousex)) + 'px'
+                        });
                         if (document.attachEvent) {
                             document.attachEvent('on'+mousewheelevt, $scope.mousemove);
                         } else if (document.addEventListener) {
                             document.addEventListener(mousewheelevt, $scope.mousemove, false);
                         }
-                        $document.bind('scroll', $scope.newmousemove);
+                        $document.bind('scroll', $scope.mousemove);
                         $document.bind('mousemove', $scope.newmousemove);
-                        $document.bind('mouseup', $scope.mouseup);
+                        $document.bind('mouseup', $scope.newmouseup);
                     };
 
                     $scope.biggerMe = function(ev) {
-                        void(ev);
+                        ev.stopPropagation();
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
                         elem.css('font-size', restrictFontSize(parseInt(fs.substr(0, fs.length - 2), 10) + 2));
@@ -251,7 +273,7 @@ directive('draggable', ['$window', '$document',
                     };
 
                     $scope.smallerMe = function(ev) {
-                        void(ev);
+                        ev.stopPropagation();
                         var elem = $element.find('textarea');
                         var fs = elem.css('font-size');
                         elem.css('font-size', restrictFontSize(parseInt(fs.substr(0, fs.length - 2), 10) - 2));
@@ -781,6 +803,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
+                            $scope.annotatedPages.push(annot[0][0]);
                             switch (annot[1]) {
                                 case "check":
                                     sticky = $scope.newCheckX(annot[0][0]);
@@ -798,6 +821,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 top: Math.max(0, annot[0][1][1]),
                                 left: Math.max(0, annot[0][1][0])
                             });
+                            var bb = sticky[0].querySelector("textarea");
+                            bb.style.width = annot[0][2][2]-14 + "px";
+                            bb.style.height = annot[0][2][3]-10 + "px";
                         }
                     } // json struct
                 }
@@ -899,6 +925,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var z = ev.currentTarget;
             while (z.attributes.draggable === undefined) z = z.parentElement;
             z.parentElement.removeChild(z);
+            var index = $scope.annotatedPages.indexOf($scope.currentPage);
+            if (index > -1) {
+                $scope.annotatedPages.splice(index, 1);
+            }
             for (var i = 0; i < $scope.notes.length; i++) {
                 if ($scope.notes[i][0] === z) {
                     $scope.notes.splice(i, 1);
@@ -961,18 +991,19 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
+
         $scope.newnewBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().newinitdrag(event);
         };
 
         $scope.fixBox = function(bb) {
             var pad;
             var enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
-            bb.style.width = '140px';
-            bb.style.height = '40px';
             var crs = countCRs(bb.value);
             if (bb.clientHeight < bb.scrollHeight) {
                 pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb, 'padding-bottom');
@@ -1014,7 +1045,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div><textarea wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
+                              '<fieldset><div><textarea style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
@@ -1023,10 +1054,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
             boundBoxByPage(bb);
 
-            bb.addEventListener('input', function(e) {
-                void(e);
-                $scope.fixBox(bb);
-            });
             window.addEventListener('resize', function() {
                 $scope.moveBox(aa[0]);
             });
@@ -1044,10 +1071,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.find('textarea').css('fontSize', style[0]);
             }
             bb.value = val;
-            $scope.fixBox(bb);
-            window.setTimeout(function() {
-                if (bb.offsetWidth) $scope.fixBox(bb);
-            }, 850);
 
             return aa;
         };
@@ -1070,6 +1093,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newCheck = function(event) {
             var aa = $scope.newCheckX($scope.currentPage);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1090,12 +1114,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var d = new Date();
             var fmtdat = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
             var aa = $scope.newBoxX($scope.currentPage, fmtdat);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
             return aa;
         };
 
         $scope.newPad = function(event) {
             var aa = $scope.newPadX($scope.currentPage, []);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1343,7 +1369,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], bnds[2], bnds[3]];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
@@ -1361,7 +1387,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     se = nx.querySelector("canvas");
                     val.push(se.strokes);
                 }
-
                 noteData.push(ndx);
             }
             return JSON.stringify(noteData);
@@ -1394,6 +1419,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
+           console.log(nd);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
@@ -1408,6 +1434,19 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
     }
 ]);
+
+docs.filter('uniqueandorder', function() {
+    return function(pages) {
+        var output = [];
+        angular.forEach(pages, function(page) {
+            if(output.indexOf(page) === -1) {
+                output.push(page);
+            }
+        });
+        output.sort(function(a,b){return a-b});
+        return output;
+    };
+});
 
 /* Looking for a way to detect if I need to reload the page because the user has been logged out
  */
