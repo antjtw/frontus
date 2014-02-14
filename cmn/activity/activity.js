@@ -48,9 +48,10 @@ active.filter('icon', function() {
             else if (activity == "rejected") return "doc-rejected";
             else if (activity == "countersigned") return "doc-countersign";
             else if (activity == "finalized") return "doc-final";
+            else if (activity == "retracted") return "doc-retract";
             else return "hunh?";
         }
-    }
+    };
 });
 
 /* Filter to format the activity description on document status */
@@ -93,6 +94,7 @@ active.filter('description', function() {
                 else if (activity == "rejected") return "Signature on " +"<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " rejected by "+person;
                 else if (activity == "countersigned") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " countersigned by "+person;
                 else if (activity == "finalized") return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " approved by " + person;
+                else if (activity == "retracted") return "Retracted " + caplength(document, 35) + " from " + person;
                 else return activity + " by "+person;
             }
         }

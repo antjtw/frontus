@@ -69,11 +69,11 @@ directive('draggable', ['$window', '$document',
             scope: true,
             template: '<div class="sticky">' +
                         '<ul>' +
-                            '<li ng-click="dragMe($event)" style="padding-right:10px"><span data-icon="&#xe043;"</span></li>' +
+                            '<li ng-show="isAnnotable" ng-click="dragMe($event)" style="padding-right:10px"><span data-icon="&#xe043;"</span></li>' +
                             '<li ng-show="growable" ng-click="smallerMe($event)" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
                             '<li ng-show="growable" ng-click="biggerMe($event)" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
                             '<li></li>' +
-                            '<li ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' +
+                            '<li ng-show="isAnnotable" ng-click="closeMe($event)"><span data-icon="&#xe01b;"></span></li>' +
                         '</ul>' +
                         '<span ng-transclude></span>' +
                       '</div>',
@@ -170,6 +170,17 @@ directive('draggable', ['$window', '$document',
                         });
                         return false;
                     };
+                    $scope.newmousemove = function($event) {
+                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        $element.css({
+                            height: dy + 'px',
+                            width: dx + 'px'
+                        });
+                        $scope.fixBox($element.find('textarea')[0]);
+                        return false;
+                    };
+
 
                     var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
 
@@ -207,6 +218,27 @@ directive('draggable', ['$window', '$document',
                         }
                         $document.bind('scroll', $scope.mousemove);
                         $document.bind('mousemove', $scope.mousemove);
+                        $document.bind('mouseup', $scope.mouseup);
+                    };
+
+                    $scope.newinitdrag = function(ev) {
+                        var dp = document.querySelector(".docPanel");
+                        var dpr = dp.getBoundingClientRect(); // top/left of docPanel
+                        var dprl = dpr.left - dp.offsetLeft; // left of document itself
+                        var dprt = dpr.top - dp.offsetTop; // top of document itself
+                        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
+                        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+                        $scope.initialMouseX = ev.clientX;
+                        $scope.initialMouseY = ev.clientY;
+                        $scope.initialScrollX = $window.scrollX;
+                        $scope.initialScrollY = $window.scrollY;
+                        if (document.attachEvent) {
+                            document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.addEventListener) {
+                            document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        $document.bind('scroll', $scope.newmousemove);
+                        $document.bind('mousemove', $scope.newmousemove);
                         $document.bind('mouseup', $scope.mouseup);
                     };
 
@@ -356,6 +388,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.library = library;
             $scope.pageQueryString = pageQueryString;
             $scope.pages = pages;
+            $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
         });
@@ -569,6 +602,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
+            $scope.saveNoteData();
         };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
@@ -577,7 +611,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.confirmValue = n;
             }
             if ($scope.confirmValue !== -1) {
-                $scope.messageText = "Explain the reason for rejecting this document.";
+                //$scope.messageText = "Explain the reason for rejecting this document.";
                 //"Add an optional message...";
             }
         };
@@ -603,7 +637,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.issuerCanAnnotate = function() {
-            return !$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2;
+            return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2)
+                   || ($scope.lib && $scope.prepare);
         };
 
         $scope.showPageBar = function() {
@@ -618,6 +653,33 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.rejectMessage === "Explain the reason for rejecting this document.") {
                 $scope.rejectMessage = "";
             }
+        };
+        $scope.shareDocument = function(doc, message, emails) {
+            var tosee = "";
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches === null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            var date = Date.parse('22 November 2113');
+            SWBrijj.procm("document.share_document",
+                          $scope.docId,
+                          0, '',
+                          tosee.substring(1).toLowerCase(),
+                          message,
+                          2,
+                          date
+                          ).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document shared");
+                $location.path('/company-list').search({});
+                //$route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
         };
         $scope.countersignAction = function(conf, msg) {
             $scope.$emit('countersignAction', [conf, msg]);
@@ -669,10 +731,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                 if ($scope.lib && $scope.lib.annotations.length > 0) {
+                    // don't load annotations twice
                     return;
                 }
                 $scope.lib = data;
                 $scope.reqDocStatus($scope.docId);
+                $scope.setAnnotable();
 
 
                 // data structure contents
@@ -705,37 +769,38 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 //
                 // [i][3] style -> font size -- anything else?
 
-                var aa = data.annotations;
-                if (aa) {
-                    // restoreNotes
-                    var annots = JSON.parse(aa);
-                    if (annots.length > 100) {
-                        //$scope.removeAllNotes();
-                        return;
-                    }
-                    var sticky;
-                    for (var i = 0; i < annots.length; i++) {
-                        var annot = annots[i];
-                        switch (annot[1]) {
-                            case "check":
-                                sticky = $scope.newCheckX(annot[0][0]);
-                                break;
-                            case "text":
-                                sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
-                                break;
-                            case "canvas":
-                                sticky = $scope.newPadX(annot[0][0], annot[2][0]);
-                                break;
+                if ($scope.isAnnotable) {
+                    var aa = data.annotations;
+                    if (aa) {
+                        // restoreNotes
+                        var annots = JSON.parse(aa);
+                        if (annots.length > 100) {
+                            //$scope.removeAllNotes();
+                            return;
                         }
+                        var sticky;
+                        for (var i = 0; i < annots.length; i++) {
+                            var annot = annots[i];
+                            switch (annot[1]) {
+                                case "check":
+                                    sticky = $scope.newCheckX(annot[0][0]);
+                                    break;
+                                case "text":
+                                    sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
+                                    break;
+                                case "canvas":
+                                    sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                    break;
+                            }
 
-                        // the notes were pushed in the newXXX function
-                        sticky.css({
-                            top: Math.max(0, annot[0][1][1]),
-                            left: Math.max(0, annot[0][1][0])
-                        });
-                    }
-                } // json struct
-                $scope.setAnnotable();
+                            // the notes were pushed in the newXXX function
+                            sticky.css({
+                                top: Math.max(0, annot[0][1][1]),
+                                left: Math.max(0, annot[0][1][0])
+                            });
+                        }
+                    } // json struct
+                }
             });
         };
 
@@ -746,7 +811,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
-            if ((!$scope.lib) || ndx == $scope.lib.annotations) return; // no changes
+            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable) return; // no changes
 
             /** @name SWBrijj#_sync
              * @function
@@ -897,6 +962,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
             aa.scope().initdrag(event);
+        };
+        $scope.newnewBox = function(event) {
+            var aa = $scope.newBoxX($scope.currentPage, '', null);
+            aa.scope().newinitdrag(event);
         };
 
         $scope.fixBox = function(bb) {
@@ -1188,6 +1257,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
+        $scope.prepareable = function(doc) {
+            return !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
+        };
+
         $scope.signable = function(doc) {
             return $scope.invq && doc && doc.signature_deadline && !doc.when_signed;
         };
@@ -1301,6 +1374,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
             }
+            if (!$scope.isAnnotable) return;
             if ($scope.html) {
                 return;
             }
