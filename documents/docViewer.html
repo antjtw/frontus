@@ -23,7 +23,7 @@
         <div class="docViewerControls">
             <!--Annotation Controls-->
             <div ng-show="stage===0 || stage==-1">
-                <div ng-cloak class="tools pull-left" ng-class="{hidden: !isAnnotable}">
+                <div ng-hide="true" ng-cloak class="tools pull-left" ng-class="{hidden: !isAnnotable}">
                     <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
                     <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
@@ -133,7 +133,7 @@
                 </div>
             </div>
         </div>
-        <div class="page-bar" ng-show="showPageBar() && stage===0">
+        <div class="page-bar">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
                 <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
@@ -152,8 +152,9 @@
             </ul>
         </div>
     </div>
-    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid" ng-class="{'annotatedPageBar':showPageBar()}">
+    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
         <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
+
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">

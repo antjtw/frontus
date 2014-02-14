@@ -68,13 +68,8 @@ directive('draggable', ['$window', '$document',
             transclude: true,
             scope: true,
             template: '<div class="sticky">' +
-                        '<ul>' +
-                            '<li ng-show="isAnnotable" style="padding-right:10px"><span data-icon="&#xe043;" aria-hidden="true"/></li>' +
-                            '<li ng-show="growable" ng-mousedown="$event.stopPropagation();"  ng-click="smallerMe($event); $event.stopPropagation()" style="padding-left:10px"><span data-icon="&#xe040;" aria-hidden="true"/></li>' +
-                            '<li ng-show="growable" ng-mousedown="$event.stopPropagation();"  ng-click="biggerMe($event); $event.stopPropagation()" style="padding-left:10px"><span data-icon="&#xe041;" aria-hidden="true"/></li>' +
-                            '<li></li>' +
-                            '<li ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></li>' +
-                        '</ul>' +
+                            '<span class="dragger" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
+                            '<span class="close-button" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
                         '<span ng-transclude></span>' +
                       '</div>',
             link: function(scope, elm, attrs) {
@@ -91,7 +86,7 @@ directive('draggable', ['$window', '$document',
 
             controller: ["$scope", "$element",
                 function($scope, $element) {
-                    var dragicon = $element.find("ul>li:first-child");
+                    var dragicon = $element.find("span.dragger");
 
                     /* This is the drag - code -- its been moved to work on the drag widget */
                     $scope.mousedown = function($event) {
@@ -178,8 +173,8 @@ directive('draggable', ['$window', '$document',
                             width: dx + 'px'
                         });
                         var bb = $element[0].querySelector("textarea");
-                        bb.style.height = dy - 36 + "px";
-                        bb.style.width = dx - 22 + "px";
+                        bb.style.height = dy - 10 + "px";
+                        bb.style.width = dx - 14 + "px";
                         return false;
                     };
 
@@ -219,8 +214,9 @@ directive('draggable', ['$window', '$document',
                         var dpr = dp.getBoundingClientRect(); // top/left of docPanel
                         var dprl = dpr.left - dp.offsetLeft; // left of document itself
                         var dprt = dpr.top - dp.offsetTop; // top of document itself
-                        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
-                        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+                        $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
+                        var bb = $element[0].querySelector("textarea");
+                        $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
                         $scope.initialScrollX = $window.scrollX;
@@ -997,6 +993,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newnewBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
+            console.log("here");
             $scope.annotatedPages.push($scope.currentPage);
             aa.scope().newinitdrag(event);
         };
@@ -1045,13 +1042,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div><textarea style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
+                              '<fieldset><div class="textarea-container"><textarea style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
 
             var bb = aa[0].querySelector("textarea");
-
+            bb.style.width = 0 + "px";
+            bb.style.height = 0 + "px";
             boundBoxByPage(bb);
 
             window.addEventListener('resize', function() {
@@ -1369,7 +1367,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], bnds[2], bnds[3]];
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height]
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];

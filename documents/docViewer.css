@@ -476,10 +476,6 @@ navbar .navbar {
 }
 .draggable > span {
     display: block;
-    margin-left: 4px;
-    margin-right: 4px;
-    /* Don't know why -- but this needs to be -5px instead of 4px */
-    margin-bottom: 4px;
     padding: 0;
     clear: both;
     box-sizing: border-box;
@@ -555,6 +551,56 @@ navbar .navbar {
     text-align: center;
     font-family: 'FS Elliot Web Light', sans-serif;
     font-weight: normal;
+}
+
+.sticky {
+    position: relative;
+}
+
+.sticky .close-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
+.sticky .close-button > span {
+    background-color: #1D2C3C;
+    color: #F1F1F1;
+    width: 20px;
+    height: 20px;
+    line-height: 22px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.sticky .dragger {
+    position: absolute;
+    left: -10px;
+    background-color: #FFBA00;
+    height: 100%;
+}
+
+.sticky .dragger > span {
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    width: 10px;
+}
+
+.sticky .dragger > span > span {
+    position: absolute;
+    top: 50%;
+    margin-top: -9px;
+    cursor: pointer;
+}
+
+.sticky textarea {
+    border-radius: 0;
+}
+
+div.textarea-container {
+    line-height: 0;
 }
 
 
