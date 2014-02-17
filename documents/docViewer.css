@@ -553,6 +553,10 @@ navbar .navbar {
     height: 100%;
 }
 
+.stick .dragger.redrequired {
+    background-color: #E64B3B;
+}
+
 .sticky .dragger > span {
     height: 100%;
     position: relative;
@@ -581,6 +585,12 @@ navbar .navbar {
 
 .sticky-menu > ul > li {
     margin: 5px 20px;
+}
+
+.sticky-menu ul.required-row > li {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
 }
 
 

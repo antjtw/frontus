@@ -68,7 +68,7 @@ directive('draggable', ['$window', '$document',
             transclude: true,
             scope: true,
             template: '<div class="sticky">' +
-                            '<span class="dragger" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
+                            '<span class="dragger" ng-class="{\'redrequired\':$$nextSibling.required == \'Yes\'}" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
                             '<span ng-transclude></span>' +
                       '</div>',
@@ -822,7 +822,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     sticky = $scope.newCheckX(annot[0][0]);
                                     break;
                                 case "text":
-                                    var newattr = [null, null];
+                                    var newattr = [null, null, null];
                                     if (5 == annot.length) {
                                         newattr = annot[4]
                                     }
@@ -866,7 +866,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-            if (!$scope.templateId && $scope.lib) {
+             if (!$scope.templateId && $scope.lib) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -1113,6 +1113,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             '</li>' +
                                         '</ul>' +
                                     '</li>' +
+                                    '<li>' +
+                                        '<ul class="required-row">' +
+                                            '<li>' +
+                                            '<button ng-class="{\'selected\':required}" ng-click="toggleRequired(this)" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>' +
+                                            '</li>' +
+                                            '<li>' +
+                                            'Required?' +
+                                            '</li>' +
+                                        '</ul>' +
+                                    '</li>' +
                                 '</ul>' +
                               '</span>' +
                               '</div>')($scope);
@@ -1139,6 +1149,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             ta.scope().annotext = val;
             ta.scope().whosign = newattr ? newattr[0] : "Investor";
             ta.scope().whattype = newattr ? newattr[1] : "Text";
+            ta.scope().required = newattr ? newattr[2] : null;
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
@@ -1154,6 +1165,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setAnnot = function($event, value) {
             $event.whattype = value;
+        };
+
+        $scope.toggleRequired = function($event) {
+            $event.required = $event.required ? null : "Yes";
         };
 
         $scope.newSignature = function(event) {
@@ -1459,8 +1474,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var se, lh;
 
                 if (typ == 'text') {
-                    newstyle.push(angular.element(nx).scope().$$nextSibling.whosign)
-                    newstyle.push(angular.element(nx).scope().$$nextSibling.whattype)
+                    newstyle.push(angular.element(nx).scope().$$nextSibling.whosign);
+                    newstyle.push(angular.element(nx).scope().$$nextSibling.whattype);
+                    newstyle.push(angular.element(nx).scope().$$nextSibling.required);
                     se = nx.querySelector("textarea");
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
