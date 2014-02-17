@@ -432,8 +432,6 @@ navbar .navbar {
 .draggable {
     border: 0 solid red;
     position:absolute;
-    background-color: rgb(162,226,209);
-    opacity: 0.7;
     cursor: default;
     width: auto;
     height: auto;
@@ -446,34 +444,6 @@ navbar .navbar {
       */
 }
 
-.draggable li > span {
-    color: rgb(31,176,130);
-}
-
-.draggable ul {
-    display:block;
-    margin: 0;
-    list-style-type:none;
-    cursor:pointer;
-    overflow: auto;
-}
-
-.draggable li {
-    float: left;
-    display:table;
-    padding-top: 2px;
-    padding-left: 1px;
-}
-
-.draggable ul > li:first-child {
-    cursor: move;
-    padding-left: 4px;
-}
-
-.draggable ul > li:last-child {
-    float: right;
-    padding-right: 4px;
-}
 .draggable > span {
     display: block;
     padding: 0;
@@ -499,6 +469,7 @@ navbar .navbar {
     line-height: normal;
     resize: both;
     word-wrap: break-word;
+    opacity: 0.7;
 }
 
 .hidden {
@@ -561,6 +532,7 @@ navbar .navbar {
     position: absolute;
     top: -10px;
     right: -10px;
+    z-index: 1;
 }
 
 .sticky .close-button > span {
@@ -598,6 +570,19 @@ navbar .navbar {
 .sticky textarea {
     border-radius: 0;
 }
+
+.sticky-menu {
+    position: absolute;
+    background-color: #1D2C3C;
+    width: 200px;
+    margin: 10px 0 0 -100px;
+    left: 50%;
+}
+
+.sticky-menu > ul > li {
+    margin: 5px 20px;
+}
+
 
 div.textarea-container {
     line-height: 0;

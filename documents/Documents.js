@@ -70,7 +70,7 @@ directive('draggable', ['$window', '$document',
             template: '<div class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
-                        '<span ng-transclude></span>' +
+                            '<span ng-transclude></span>' +
                       '</div>',
             link: function(scope, elm, attrs) {
                 // the elm[0] is to unwrap the angular element
@@ -200,9 +200,26 @@ directive('draggable', ['$window', '$document',
                         } else if (document.removeEventListener) {
                             document.removeEventListener(mousewheelevt, $scope.mousemove, false);
                         }
+                        var bb = $element[0].querySelector("textarea");
                         $document.unbind('scroll', $scope.mousemove);
                         $document.unbind('mousemove', $scope.newmousemove);
                         $document.unbind('mouseup', $scope.newmouseup);
+                        if (parseInt(bb.style.width) == 0 || parseInt(bb.style.height) < 12) {
+                            var x = bb.parentElement.parentElement.parentElement.parentElement;
+                            x.parentElement.removeChild(x);
+                            var index = $scope.annotatedPages.indexOf($scope.currentPage);
+                            if (index > -1) {
+                                $scope.annotatedPages.splice(index, 1);
+                            }
+                            for (var i = 0; i < $scope.notes.length; i++) {
+                                if ($scope.notes[i][0] === x) {
+                                    $scope.notes.splice(i, 1);
+                                    return;
+                                }
+                            }
+                        }
+                        angular.element(bb.parentElement).scope().getme = true;
+                        $scope.$apply();
                         return false;
                     };
 
@@ -805,7 +822,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     sticky = $scope.newCheckX(annot[0][0]);
                                     break;
                                 case "text":
-                                    sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3]);
+                                    var newattr = [null, null];
+                                    if (5 == annot.length) {
+                                        newattr = annot[4]
+                                    }
+                                    sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
                                     break;
                                 case "canvas":
                                     sticky = $scope.newPadX(annot[0][0], annot[2][0]);
@@ -993,7 +1014,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newnewBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
-            console.log("here");
             $scope.annotatedPages.push($scope.currentPage);
             aa.scope().newinitdrag(event);
         };
@@ -1039,10 +1059,63 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        $scope.newBoxX = function(page, val, style) {
+        $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset></div>')($scope);
+                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
+                                '<ul>' +
+                                    '<li>' +
+                                        '<ul>' +
+                                            '<li>' +
+                                                '<span>Who needs to sign?</span>' +
+                                            '</li>' +
+                                            '<li>' +
+                                                '<ul class="dropdown-list drop-selector">' +
+                                                    '<li class="dropdown standard">' +
+                                                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                                                            '{{ whosign }}' +
+                                                        '</a>' +
+                                                        '<ul class="dropdown-menu">' +
+                                                            '<li>' +
+                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Investor</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">Issuer</a>' +
+                                                            '</li>' +
+                                                        '</ul>' +
+                                                    '</li>' +
+                                                '</ul>' +
+                                            '</li>' +
+                                        '</ul>' +
+                                    '</li>' +
+                                    '<li>' +
+                                        '<ul>' +
+                                            '<li>' +
+                                                '<span>Type of Annotation?</span>' +
+                                            '</li>' +
+                                            '<li>' +
+                                                '<ul class="dropdown-list drop-selector">' +
+                                                    '<li class="dropdown standard">' +
+                                                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+                                                            '{{ whattype }}' +
+                                                        '</a>' +
+                                                        '<ul class="dropdown-menu">' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'Text\')" class="button">Text</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'Signature\')" class="button">Signature</a>' +
+                                                            '</li>' +
+                                                        '</ul>' +
+                                                    '</li>' +
+                                                '</ul>' +
+                                            '</li>' +
+                                        '</ul>' +
+                                    '</li>' +
+                                '</ul>' +
+                              '</span>' +
+                              '</div>')($scope);
             aa.scope().ntype = 'text';
             aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
@@ -1064,6 +1137,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
             var ta = aa.find('textarea');
             ta.scope().annotext = val;
+            ta.scope().whosign = newattr ? newattr[0] : "Investor";
+            ta.scope().whattype = newattr ? newattr[1] : "Text";
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
@@ -1071,6 +1146,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             bb.value = val;
 
             return aa;
+        };
+
+        $scope.setSign = function($event, value) {
+            $event.whosign = value;
+        };
+
+        $scope.setAnnot = function($event, value) {
+            $event.whattype = value;
         };
 
         $scope.newSignature = function(event) {
@@ -1371,10 +1454,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
-                var ndx = [pos, typ, val, style];
+                var newstyle = []
+                var ndx = [pos, typ, val, style, newstyle];
                 var se, lh;
 
                 if (typ == 'text') {
+                    newstyle.push(angular.element(nx).scope().$$nextSibling.whosign)
+                    newstyle.push(angular.element(nx).scope().$$nextSibling.whattype)
                     se = nx.querySelector("textarea");
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
@@ -1417,7 +1503,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-           console.log(nd);
+            console.log(nd);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
