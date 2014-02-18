@@ -68,7 +68,7 @@ directive('draggable', ['$window', '$document',
             transclude: true,
             scope: true,
             template: '<div class="sticky">' +
-                            '<span class="dragger" ng-class="{\'redrequired\':$$nextSibling.required == \'Yes\'}" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
+                            '<span class="dragger" ng-class="{\'redrequired\':stickyrequired(this)}" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
                             '<span ng-transclude></span>' +
                       '</div>',
@@ -758,6 +758,22 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.openBox = function(ev) {
+            if ($rootScope.navState.role == "issuer") {
+                ev.getme = true;
+            }
+        };
+
+        $scope.closeBox = function(ev) {
+            if ($rootScope.navState.role == "issuer") {
+                ev.getme = false;
+            }
+        };
+
+        $scope.stickyrequired = function(ev) {
+            return ev.$$nextSibling.required ? true : false;
+        };
+
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
@@ -1062,7 +1078,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1120,6 +1136,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             '</li>' +
                                             '<li>' +
                                             'Required?' +
+                                            '</li>' +
+                                        '</ul>' +
+                                    '</li>' +
+                                    '<li>' +
+                                        '<ul>' +
+                                            '<li>' +
+                                            '<button ng-click="closeBox(this)" class="button">Close</button>' +
                                             '</li>' +
                                         '</ul>' +
                                     '</li>' +

@@ -553,7 +553,7 @@ navbar .navbar {
     height: 100%;
 }
 
-.stick .dragger.redrequired {
+.sticky .dragger.redrequired {
     background-color: #E64B3B;
 }
 

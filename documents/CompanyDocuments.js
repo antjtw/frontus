@@ -1012,7 +1012,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.helpModalUp = function () {
-            $scope.tourModal = true;
+            //$scope.tourModal = true;
         };
 
         $scope.tourclose = function () {
