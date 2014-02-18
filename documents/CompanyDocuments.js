@@ -1124,10 +1124,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
              * @param {string} procname
              * @param {...*}
              */
-            SWBrijj.spoof_procm(cd.investor, cd.company, "investor", "document.sign_document", cd.doc_id, "[]").then(function(data) {
+          /* FIXME: this has changed */
+           /* SWBrijj.spoof_procm(cd.investor, cd.company, "investor", "document.sign_document", cd.doc_id, "[]").then(function(data) {
                 cd.when_signed = data;
                 $route.reload();
             });
+            */
         };
 
         $scope.loadDocumentActivity = function() {
@@ -1936,7 +1938,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
+          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)).then(function(data) {
+            // SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
