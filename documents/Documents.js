@@ -84,8 +84,8 @@ directive('draggable', ['$window', '$document',
                 });
             },
 
-            controller: ["$scope", "$element",
-                function($scope, $element) {
+            controller: ["$scope", "$element", "$rootScope",
+                function($scope, $element, $rootScope) {
                     var dragicon = $element.find("span.dragger");
 
                     /* This is the drag - code -- its been moved to work on the drag widget */
@@ -95,6 +95,12 @@ directive('draggable', ['$window', '$document',
                     };
 
                     dragicon.bind('mousedown', $scope.mousedown);
+
+                    $scope.$watch('$$nextSibling.annotext', function(newValue, oldValue) {
+                        if ($rootScope.navState.role == "issuer" && $scope.$$nextSibling.whosign == "Investor") {
+                            $scope.$$nextSibling.annotext = "";
+                        }
+                    });
 
                     topLocation = function(elementHeight, mouseY) {
                         var docPanel = document.querySelector('.docPanel');
@@ -1184,6 +1190,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setSign = function($event, value) {
             $event.whosign = value;
+            if (value == "Investor") {
+                $event.annotext = "";
+            }
         };
 
         $scope.setAnnot = function($event, value) {
