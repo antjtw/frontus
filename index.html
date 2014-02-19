@@ -281,7 +281,7 @@
                         <button class="btn" ng-click="friendClose();">Cancel</button>
                     </div>
                     <div class="standard-button green">
-                        <button class="btn" ng-click="friendClose(); tellafriend();">Send Invite</button>
+                        <button class="btn" ng-disabled="!(fieldCheck(taf.sendEmail) && taf.yourname)" ng-click="friendClose(); tellafriend();">Send Invite</button>
                     </div>
                 </div>
             </div>

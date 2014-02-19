@@ -317,7 +317,8 @@
 }
 
 .modal.externalmodal {
-
+    margin-left: -200px;
+    width: 400px;
 }
 
 .modal.externalmodal.fade.in {
@@ -351,10 +352,8 @@
 }
 
 .externalmodal .input-row > input {
-    width: 180px;
+    width: 200px;
     height: 26px;
-    float: none;
-    margin-left: 10px;
 }
 
 

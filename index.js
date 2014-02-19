@@ -88,8 +88,11 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             console.log($scope.taf.yourname);
             var cm = $scope.taf.custommessage ? $scope.taf.custommessage : "";
             SWBrijj.tellafriend($scope.taf.yourname, $scope.taf.sendEmail, cm).then(function(x) {
-                console.log(x);
-            })
+                void(x);
+                $scope.$emit('notification:success', 'Invitation sent!');
+            }).except(function (x) {
+                    $scope.$emit('notification:fail', 'Oops. Something went wrong.');
+                });
         }
 
     }]);
