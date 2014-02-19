@@ -67,7 +67,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -782,6 +782,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stickyrequired = function(ev) {
             return ev.$$nextSibling.required ? true : false;
+        };
+
+        $scope.stickyfilled = function(ev) {
+            return ev.$$nextSibling.annotext.length > 0 ? true : false;
         };
 
         $scope.loadAnnotations = function() {

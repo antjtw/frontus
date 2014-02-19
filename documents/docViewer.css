@@ -529,6 +529,10 @@ navbar .navbar {
     border: 1px solid #E64B3B;
 }
 
+.draggable.greenrequired div > textarea {
+    border: 1px solid #149F84;
+}
+
 .sticky {
     position: relative;
 }
@@ -556,10 +560,18 @@ navbar .navbar {
     left: -10px;
     background-color: #FFBA00;
     height: 100%;
+    -webkit-transition: background-color linear 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    transition: background-color 0.2s;
 }
 
 .sticky.redrequired .dragger {
     background-color: #E64B3B;
+}
+
+.sticky.greenrequired .dragger {
+    background-color: #149F84;
 }
 
 .sticky .dragger > span {
