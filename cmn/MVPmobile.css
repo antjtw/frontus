@@ -155,6 +155,20 @@
         padding-bottom: 30px;
     }
 
+    .modal.externalmodal {
+        margin: 0;
+        width: auto;
+    }
+
+    .home .inviteRow h2 {
+        display: block;
+        margin: 0 20px 10px 20px;
+    }
+
+    .home .standard-button.blue.invite {
+        padding-left: 0;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -174,6 +188,29 @@
     .topnav .nav.nav-logo > li > a {
         margin-left: 10px;
     }
+
+    .externalmodal .input-row {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .externalmodal .input-row > p {
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: left;
+    }
+
+    .externalmodal .input-row > input {
+        display: block;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 @media (max-width: 320px) {
@@ -185,4 +222,8 @@
 	.videoIframe {
 		height: 80px;
 	}
+
+    .externalmodal .standard-button > button {
+        width: 100px;
+    }
 }
