@@ -429,49 +429,6 @@ navbar .navbar {
     vertical-align: middle;
 }
 
-.draggable {
-    border: 0 solid red;
-    position:absolute;
-    cursor: default;
-    width: auto;
-    height: auto;
-
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    /*resize: both;
-    overflow: hidden;
-      */
-}
-
-.draggable > span {
-    display: block;
-    padding: 0;
-    clear: both;
-    box-sizing: border-box;
-}
-
-.draggable .check-annotation {
-    background-color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-.draggable span > canvas {
-    box-sizing: border-box;
-    margin-bottom: -4px;
-    cursor: crosshair;
-}
-
-.draggable div > textarea {
-    margin-bottom: 0;
-    word-wrap: normal;
-    overflow: hidden;
-    line-height: normal;
-    resize: both;
-    word-wrap: break-word;
-    opacity: 0.7;
-}
-
 .hidden {
     visibility: hidden;
 }
@@ -524,6 +481,54 @@ navbar .navbar {
     font-weight: normal;
 }
 
+.draggable {
+    border: 0 solid red;
+    position:absolute;
+    cursor: default;
+    width: auto;
+    height: auto;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    /*resize: both;
+    overflow: hidden;
+      */
+}
+
+.draggable > span {
+    display: block;
+    padding: 0;
+    clear: both;
+    box-sizing: border-box;
+}
+
+.draggable .check-annotation {
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.draggable span > canvas {
+    box-sizing: border-box;
+    margin-bottom: -4px;
+    cursor: crosshair;
+}
+
+.draggable div > textarea {
+    margin-bottom: 0;
+    word-wrap: normal;
+    overflow: hidden;
+    line-height: normal;
+    resize: both;
+    word-wrap: break-word;
+    opacity: 0.7;
+    border: 1px solid #FFBA00;
+}
+
+.draggable.redrequired div > textarea {
+    border: 1px solid #E64B3B;
+}
+
 .sticky {
     position: relative;
 }
@@ -553,7 +558,7 @@ navbar .navbar {
     height: 100%;
 }
 
-.sticky .dragger.redrequired {
+.sticky.redrequired .dragger {
     background-color: #E64B3B;
 }
 
