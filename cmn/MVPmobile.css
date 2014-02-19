@@ -20,6 +20,11 @@
     div.span5.home-ike {
         display: none;
     }
+
+    .home .button.center-button {
+        text-align: center;
+        margin: 10px auto 0 auto;
+    }
 }
 
 @media (max-width: 767px) {
