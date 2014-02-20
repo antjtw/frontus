@@ -67,9 +67,9 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div class="sticky">' +
-                            '<span class="dragger" ng-class="{\'redrequired\':$$nextSibling.required == \'Yes\'}" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
-                            '<span class="close-button" ng-show="isAnnotable" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
+                            '<span class="dragger" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
+                            '<span class="close-button" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
                             '<span ng-transclude></span>' +
                       '</div>',
             link: function(scope, elm, attrs) {
@@ -84,8 +84,8 @@ directive('draggable', ['$window', '$document',
                 });
             },
 
-            controller: ["$scope", "$element",
-                function($scope, $element) {
+            controller: ["$scope", "$element", "$rootScope",
+                function($scope, $element, $rootScope) {
                     var dragicon = $element.find("span.dragger");
 
                     /* This is the drag - code -- its been moved to work on the drag widget */
@@ -95,6 +95,12 @@ directive('draggable', ['$window', '$document',
                     };
 
                     dragicon.bind('mousedown', $scope.mousedown);
+
+                    $scope.$watch('$$nextSibling.annotext', function(newValue, oldValue) {
+                        if ($rootScope.navState.role == "issuer" && $scope.$$nextSibling.whosign == "Investor") {
+                            $scope.$$nextSibling.annotext = "";
+                        }
+                    });
 
                     topLocation = function(elementHeight, mouseY) {
                         var docPanel = document.querySelector('.docPanel');
@@ -757,6 +763,30 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.openBox = function(ev) {
+            if ($rootScope.navState.role == "issuer") {
+                ev.getme = true;
+            }
+        };
+
+        $scope.closeBox = function(ev) {
+            if ($rootScope.navState.role == "issuer") {
+                ev.getme = false;
+            }
+        };
+
+        $scope.investorFixed= function(ev) {
+            return ev.$$nextSibling.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
+        };
+
+        $scope.stickyrequired = function(ev) {
+            return ev.$$nextSibling.required ? true : false;
+        };
+
+        $scope.stickyfilled = function(ev) {
+            return ev.$$nextSibling.annotext.length > 0 ? true : false;
+        };
+
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
@@ -808,6 +838,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     if (aa) {
                         // restoreNotes
                         var annots = JSON.parse(aa);
+                        console.log(annots);
                         if (annots.length > 100) {
                             //$scope.removeAllNotes();
                             return;
@@ -1061,7 +1092,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1122,6 +1153,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             '</li>' +
                                         '</ul>' +
                                     '</li>' +
+                                    '<li>' +
+                                        '<ul>' +
+                                            '<li>' +
+                                            '<button ng-click="closeBox(this)" class="button">Close</button>' +
+                                            '</li>' +
+                                        '</ul>' +
+                                    '</li>' +
                                 '</ul>' +
                               '</span>' +
                               '</div>')($scope);
@@ -1146,9 +1184,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
             var ta = aa.find('textarea');
             ta.scope().annotext = val;
-            ta.scope().whosign = newattr ? newattr[0] : "Investor";
-            ta.scope().whattype = newattr ? newattr[1] : "Text";
-            ta.scope().required = newattr ? newattr[2] : null;
+            ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
+            ta.scope().whosign = newattr ? newattr.whosign : "Investor";
+            ta.scope().whattype = newattr ? newattr.whattype : "Text";
+            ta.scope().required = newattr ? newattr.required : null;
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
@@ -1160,6 +1199,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setSign = function($event, value) {
             $event.whosign = value;
+            if (value == "Investor") {
+                $event.annotext = "";
+            }
         };
 
         $scope.setAnnot = function($event, value) {
@@ -1468,14 +1510,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
-                var newstyle = []
+                var newstyle = {}
                 var ndx = [pos, typ, val, style, newstyle];
                 var se, lh;
 
                 if (typ == 'text') {
-                    newstyle.push(angular.element(nx).scope().$$nextSibling.whosign);
-                    newstyle.push(angular.element(nx).scope().$$nextSibling.whattype);
-                    newstyle.push(angular.element(nx).scope().$$nextSibling.required);
+                    newstyle['investorfixed'] = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
+                    newstyle['whosign'] = (angular.element(nx).scope().$$nextSibling.whosign);
+                    newstyle['whattype'] = (angular.element(nx).scope().$$nextSibling.whattype);
+                    newstyle['required'] = (angular.element(nx).scope().$$nextSibling.required);
                     se = nx.querySelector("textarea");
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
@@ -1518,7 +1561,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-            console.log(nd);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
@@ -1531,6 +1573,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
+
+        $scope.notesComplete = function () {
+            var returnvalue = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (n.notetype == "text") {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        returnvalue = true;
+                    }
+                }
+            }
+            return returnvalue
+        }
     }
 ]);
 
