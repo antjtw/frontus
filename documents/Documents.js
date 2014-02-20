@@ -839,7 +839,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     if (aa) {
                         // restoreNotes
                         var annots = JSON.parse(aa);
-                        console.log(annots);
+                        if (data.iss_annotations) {
+                            annots = annots.concat(JSON.parse(data.iss_annotations));
+                        }
                         if (annots.length > 100) {
                             //$scope.removeAllNotes();
                             return;
@@ -882,6 +884,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             var ndx = $scope.getNoteData(false);
+            var ndx_inv = ndx[0];
+            var ndx_iss = ndx[1];
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
@@ -897,8 +901,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-             if (!$scope.templateId && $scope.lib) {
-                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx]);
+                if (!$scope.templateId && $scope.lib) {
+                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
             }
@@ -1532,26 +1536,29 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }
                 noteData.push(ndx);
             }
-            return JSON.stringify(noteData);
+            var divided = [[], []];
+            angular.forEach(noteData, function (note) {
+                if (note[4].whosign == "Issuer") {
+                    divided[1].push(note);
+                }
+                else {
+                    divided[0].push(note)
+                }
+            });
+            return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
         };
 
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
             var nd = $scope.getNoteData(false);
+            var nd_inv = nd[0];
+            var nd_iss = nd[1];
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 return;
             }
             if (!$scope.isAnnotable) return;
             if ($scope.html) {
-                return;
-            }
-
-            if (nd == $scope.lib.annotations || !nd) {
-                // When there are no changes
-                if (clicked) {
-                    $scope.$emit("notification:success", "Saved Annotations");
-                }
                 return;
             }
 
@@ -1562,7 +1569,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd).then(function(data) {
+
+            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
             });
@@ -1581,8 +1589,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i][0];
                 if (n.notetype == "text") {
                     var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        returnvalue = true;
+                    if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0 ) {
+                        if (angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') {
+                            returnvalue = true;
+                        }
+                        else if (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer') {
+                            returnvalue = true;
+                        }
                     }
                 }
             }
