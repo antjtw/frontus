@@ -75,11 +75,6 @@
     color: rgb(102, 102, 102);
 }
 
-.static .header-section {
-    max-width: 550px;
-
-}
-
 .static .header-section h1 {
     font-size: 42px;
     font-family: 'FS Elliot Web Light', sans-serif !important;
