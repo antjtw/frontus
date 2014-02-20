@@ -510,7 +510,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.used_attributes = {};
             $scope.template_email = [];
 
-            SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
+            SWBrijj.tblmm('smartdoc.document','template_id', $scope.templateId).then(function(meta) {
                 $scope.lib = {};
                 $scope.lib.docname = meta[0].template_name;
             });
