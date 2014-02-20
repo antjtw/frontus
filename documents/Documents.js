@@ -788,95 +788,113 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return ev.$$nextSibling.annotext.length > 0 ? true : false;
         };
 
+        $scope.createAttributes = function (inv_attributes) {
+                $scope.investor_attributes = {};
+                $scope.attributes = [];
+                angular.forEach(inv_attributes, function(attr) {
+                    $scope.investor_attributes[attr.attribute] = attr.answer;
+                });
+                $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
+                $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
+                $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
+                $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
+                $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
+                $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+                $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+        };
+
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
-            SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                if ($scope.lib && $scope.lib.annotations.length > 0) {
-                    // don't load annotations twice
-                    return;
-                }
-                $scope.lib = data;
-                $scope.reqDocStatus($scope.docId);
-                $scope.setAnnotable();
+            SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
+                $scope.createAttributes(inv_attributes);
+                SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                    if ($scope.lib && $scope.lib.annotations.length > 0) {
+                        // don't load annotations twice
+                        return;
+                    }
+                    $scope.lib = data;
+                    $scope.reqDocStatus($scope.docId);
+                    $scope.setAnnotable();
 
 
-                // data structure contents
-                // aa -> [annot0...annotn-1]
-                // [i] annoti -> [position, type, value, style]
-                //
-                // [i][0] position -> [page, coords, size, 700, 956]
-                //
-                // [i][0][0] page -> 0...n-1
-                //
-                // [i][0][1] coords (bds) -> [x, y, _, _]
-                // [i][0][1][0] x
-                // [i][0][1][1] y
-                // [i][0][1][2] ?
-                // [i][0][1][3] ?
-                //
-                // [i][0][2] size (ibds) -> [_, _, width, height]
-                // [i][0][2][0] ?
-                // [i][0][2][1] ?
-                // [i][0][2][2] width or horizontal offset
-                // [i][0][2][3] height or vertical offset
-                //
-                // [i][0][3] 700 dp.clientWidth
-                //
-                // [i][0][4] 956 dp.clientHeight
-                //
-                // [i][1] type -> check or text or canvas
-                //
-                // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
-                //
-                // [i][3] style -> font size -- anything else?
+                    // data structure contents
+                    // aa -> [annot0...annotn-1]
+                    // [i] annoti -> [position, type, value, style]
+                    //
+                    // [i][0] position -> [page, coords, size, 700, 956]
+                    //
+                    // [i][0][0] page -> 0...n-1
+                    //
+                    // [i][0][1] coords (bds) -> [x, y, _, _]
+                    // [i][0][1][0] x
+                    // [i][0][1][1] y
+                    // [i][0][1][2] ?
+                    // [i][0][1][3] ?
+                    //
+                    // [i][0][2] size (ibds) -> [_, _, width, height]
+                    // [i][0][2][0] ?
+                    // [i][0][2][1] ?
+                    // [i][0][2][2] width or horizontal offset
+                    // [i][0][2][3] height or vertical offset
+                    //
+                    // [i][0][3] 700 dp.clientWidth
+                    //
+                    // [i][0][4] 956 dp.clientHeight
+                    //
+                    // [i][1] type -> check or text or canvas
+                    //
+                    // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
+                    //
+                    // [i][3] style -> font size -- anything else?
 
-                if ($scope.isAnnotable) {
-                    var aa = data.annotations;
-                    if (aa) {
-                        // restoreNotes
-                        var annots = JSON.parse(aa);
-                        if (data.iss_annotations) {
-                            annots = annots.concat(JSON.parse(data.iss_annotations));
-                        }
-                        if (annots.length > 100) {
-                            //$scope.removeAllNotes();
-                            return;
-                        }
-                        var sticky;
-                        for (var i = 0; i < annots.length; i++) {
-                            var annot = annots[i];
-                            $scope.annotatedPages.push(annot[0][0]);
-                            switch (annot[1]) {
-                                case "check":
-                                    sticky = $scope.newCheckX(annot[0][0]);
-                                    break;
-                                case "text":
-                                    var newattr = [null, null, null];
-                                    if (5 == annot.length) {
-                                        newattr = annot[4]
-                                    }
-                                    sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
-                                    break;
-                                case "canvas":
-                                    sticky = $scope.newPadX(annot[0][0], annot[2][0]);
-                                    break;
+                    if ($scope.isAnnotable) {
+                        var aa = data.annotations;
+                        if (aa) {
+                            // restoreNotes
+                            var annots = JSON.parse(aa);
+                            if (data.iss_annotations) {
+                                annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
+                            if (annots.length > 100) {
+                                //$scope.removeAllNotes();
+                                return;
+                            }
+                            var sticky;
+                            for (var i = 0; i < annots.length; i++) {
+                                var annot = annots[i];
+                                $scope.annotatedPages.push(annot[0][0]);
+                                switch (annot[1]) {
+                                    case "check":
+                                        sticky = $scope.newCheckX(annot[0][0]);
+                                        break;
+                                    case "text":
+                                        var newattr = [null, null, null];
+                                        if (5 == annot.length) {
+                                            newattr = annot[4]
+                                        }
+                                        sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
+                                        break;
+                                    case "canvas":
+                                        sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                        break;
+                                }
 
-                            // the notes were pushed in the newXXX function
-                            sticky.css({
-                                top: Math.max(0, annot[0][1][1]),
-                                left: Math.max(0, annot[0][1][0])
-                            });
-                            var bb = sticky[0].querySelector("textarea");
-                            bb.style.width = annot[0][2][2]-14 + "px";
-                            bb.style.height = annot[0][2][3]-10 + "px";
-                        }
-                    } // json struct
-                }
+                                // the notes were pushed in the newXXX function
+                                sticky.css({
+                                    top: Math.max(0, annot[0][1][1]),
+                                    left: Math.max(0, annot[0][1][0])
+                                });
+                                var bb = sticky[0].querySelector("textarea");
+                                bb.style.width = annot[0][2][2]-14 + "px";
+                                bb.style.height = annot[0][2][3]-10 + "px";
+                            }
+                        } // json struct
+                    }
+                });
             });
         };
 
@@ -1097,7 +1115,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea placeholder="{{whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea placeholder="{{annotext || whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1141,6 +1159,21 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot(this, \'Signature\')" class="button">Signature</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'investorName\')" class="button">Name</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'investorStreet\')" class="button">Address</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'investorState\')" class="button">State</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'investorEmail\')" class="button">Email</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot(this, \'signatureDate\')" class="button">Date</a>' +
                                                             '</li>' +
                                                         '</ul>' +
                                                     '</li>' +
@@ -1188,10 +1221,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
 
             var ta = aa.find('textarea');
-            ta.scope().annotext = val;
             ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
             ta.scope().whosign = newattr ? newattr.whosign : "Investor";
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
+            console.log($scope.investor_attributes);
+            ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
             ta.scope().required = newattr ? newattr.required : null;
             ta.width(ta.width());
             if (style) {
@@ -1202,15 +1236,28 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return aa;
         };
 
+        $scope.smartValue = function ($event) {
+            if (($rootScope.navState.role == "issuer" && $event.whosign == "Issuer") || $rootScope.navState.role == "investor" && $event.whosign == "Investor") {
+                $event.annotext = $event.annotext.length == 0 && $event.whattype in $scope.investor_attributes ? $scope.investor_attributes[$event.whattype] : $event.annotext;
+            }
+            else {
+                $event.annotext = $event.annotext.length == 0 ? "" : $event.annotext;
+            }
+        };
+
         $scope.setSign = function($event, value) {
             $event.whosign = value;
             if (value == "Investor") {
                 $event.annotext = "";
             }
+            else {
+                $scope.smartValue($event);
+            }
         };
 
         $scope.setAnnot = function($event, value) {
             $event.whattype = value;
+            $scope.smartValue($event);
         };
 
         $scope.toggleRequired = function($event) {
