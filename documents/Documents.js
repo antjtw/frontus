@@ -452,7 +452,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 shareto += "," +  matches[1];
             });
 
-            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
+            SWBrijj.smartdoc_share_template($scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
@@ -510,12 +510,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
 
             if ($rootScope.navState.role == "issuer") {
-                SWBrijj.procm('smartdoc.render_template', $scope.templateId).then(function(code) {
+                SWBrijj.smartdoc_render_template($scope.templateId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         var attributes = attributes;
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
-                            var raw_html = code[0].render_template;
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {

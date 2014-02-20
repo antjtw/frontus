@@ -1233,7 +1233,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.finalizeDocument = function() {
             $scope.processing = true;
-            SWBrijj.procm("document.issuer_finalize", $scope.docId).then(function(data) {
+            SWBrijj.document_issuer_finalize($scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
@@ -1967,7 +1967,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.finalizeDocument = function() {
             $scope.processing = true;
             //var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
+            SWBrijj.document_finalize($scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
