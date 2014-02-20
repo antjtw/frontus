@@ -1,7 +1,7 @@
 /* Marketing Pages */
 
 .static {
-    padding-top: 65px;
+    padding-top: 75px;
 }
 
 .static p, .static a {
@@ -76,6 +76,8 @@
 }
 
 .static .header-section {
+    max-width: 550px;
+
 }
 
 .static .header-section h1 {
