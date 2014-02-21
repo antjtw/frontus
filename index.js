@@ -72,19 +72,28 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
         $scope.opts = {
             backdropFade: true,
             dialogFade:true,
-            dialogClass: 'videoModal modal'
+            dialogClass: 'externalmodal modal'
         };
 
-        $scope.modalUp = function () {
-            $scope.video = true;
+        $scope.tellFriendUp = function () {
+            $scope.taf = {'yourname': "", 'sendEmail': "", 'customemessage': ""};
+            $scope.tafModal = true;
         };
 
-        $scope.close = function () {
-            $scope.closeMsg = 'I was closed at: ' + new Date();
-            $scope.video = false;
+        $scope.friendClose = function () {
+            $scope.tafModal = false;
         };
 
-
+        $scope.tellafriend = function() {
+            console.log($scope.taf.yourname);
+            var cm = $scope.taf.custommessage ? $scope.taf.custommessage : "";
+            SWBrijj.tellafriend($scope.taf.yourname, $scope.taf.sendEmail, cm).then(function(x) {
+                void(x);
+                $scope.$emit('notification:success', 'Invitation sent!');
+            }).except(function (x) {
+                    $scope.$emit('notification:fail', 'Oops. Something went wrong.');
+                });
+        }
 
     }]);
 
