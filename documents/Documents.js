@@ -1224,7 +1224,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
             ta.scope().whosign = newattr ? newattr.whosign : "Investor";
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
-            console.log($scope.investor_attributes);
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
             ta.scope().required = newattr ? newattr.required : null;
             ta.width(ta.width());
