@@ -261,6 +261,7 @@
     color: #fff;
     font-family: 'FS Elliot Web Thin', sans-serif !important;
     line-height: 24px;
+    max-width: none;
 }
 
 .home .thanks p{
