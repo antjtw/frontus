@@ -91,16 +91,23 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             $scope.profileModal = false;
             $scope.editData = null;
         };
+
+        $scope.profileCheck = function (attr, value) {
+            $scope.profilecheck = $scope.profilecheck || {};
+            $scope.profilecheck[attr] = value;
+        };
         
         $scope.profileUpdate = function(attr, value) {
-            SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
-                void(x);
-                $scope.$emit("notification:success", "Profile successfully updated");
-                $scope[attr] = value;
-            }).except(function(x) {
-                void(x);
-                $scope.$emit("notification:fail", "Something went wrong, please try again later");
-            });
+            if ($scope.profilecheck.attr != value && value != undefined) {
+                SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
+                    void(x);
+                    $scope.$emit("notification:success", "Profile successfully updated");
+                    $scope[attr] = value;
+                }).except(function(x) {
+                        void(x);
+                        $scope.$emit("notification:fail", "Something went wrong, please try again later");
+                });
+            }
         };
 
         $scope.booleanUpdate = function(attribute, value) {

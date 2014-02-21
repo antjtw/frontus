@@ -150,6 +150,14 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         }
     };
 
+    // CSV Generation
+
+    $scope.downloadCsv = function() {
+        SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+            document.location.href = x;
+        });
+    };
+
     $scope.opts = {
         backdropFade: true,
         dialogFade: true

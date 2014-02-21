@@ -1,32 +1,47 @@
 /* Homepage */
 
-@media (max-height: 800px) {
-    .home .paginator{
-        position:absolute;
-        bottom:0;
-        left:50%;
-    }
-
-    .home #hero{
-        background: url(/img/top-image-1920-2.jpg) no-repeat center;
-        background-size:cover;
-        height: 800px;
-    }
+.home #hero{
+    background-color: #1E2D3D;
+    min-height: 400px;
+    position: relative;
 }
 
-@media (min-height: 800px) {
-    .home .paginator{
-        position:absolute;
-        bottom:0;
-        left:50%;
-    }
+.home #hero h1, #security h1{
+    color: #FFF;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+}
 
-    .home #hero{
-        background: url(/img/top-image-1920-2.jpg) no-repeat center;
-        background-size:cover;
-        height: 800px;
-        position: relative;
-    }
+#hero .span5 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.home .button.greenButton {
+    margin-left: -1px;
+}
+
+.home .standard-button.blue.invite {
+    display: inline;
+    padding-left: 50px;
+    width: 130px;
+}
+
+.home .standard-button.blue.invite button {
+    border: solid 1px #fff;
+    background-color: #2980B9;
+    font-size: 14px;
+}
+
+.home .footer .standard-button.blue.invite button {
+    border: solid 1px #666666;
+    background-color: #E3E3E3;
+    color: #1E2D3D;
+}
+
+.home .standard-button.blue.invite button > span{
+    padding-left: 10px;
+    vertical-align: middle;
 }
 
 .home .loginInput {
@@ -40,104 +55,62 @@
 }
 
 .home h1 {
-    color: rgb(255, 255, 255);
-    font-family: 'FS Elliot Web Thin', sans-serif;
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
     font-size: 42px;
     line-height: 45px;
     font-weight: normal;
 }
 
 .home h2 {
-    color: rgb(30, 45, 61);
-    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #666666;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
     font-size: 24px;
-    line-height: 28px;
+    line-height: 32px;
     font-weight: normal;
+    max-width: 800px;
+    margin:  0 auto 0 auto;
 }
 
 .home h3 {
-    color: rgb(255, 255, 255);
-    font-family: 'FS Elliot Web Light', sans-serif;
-    font-size: 18px;
-    font-weight: normal;
-    line-height: 18px;
-    letter-spacing: 1px;
+    color: #fff;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .home p {
     color: rgb(141, 141, 141);
     font-family: 'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
-    line-height: 22px;
+    line-height: 18px;
     font-weight: normal;
 }
 
-.home .thanks p{
-    color: #1E2D3D;
-}
-
-.home .currency{
-    color: #1E2D3D;
-    font-family: 'FS Elliot Web Light', sans-serif;
-    font-size: 24px;
-    line-height: 22px;
-    font-weight: normal;
-    vertical-align: top;
-    display: inline;
-}
-
-.home .price{
-    color: #1E2D3D;
-    font-family: 'FS Elliot Web Light', sans-serif;
-    font-size: 80px;
-    line-height: 64px;
-    font-weight: normal;
-    display: inline-block;
-}
-
-.home .frequency{
-    color: #1E2D3D;
-    font-family: 'FS Elliot Web Light', sans-serif;
-    font-size: 18px;
-    line-height: 22px;
-    font-weight: normal;
-    display: inline;
-    margin-left: -8px;
-}
-
-.videoModal.modal {
-    width: 50%;
-    height: 400px;
-    margin-left: -25%;
-    left: 50%;
-}
-
-.videoIframe {
-    width: 100%;
-    height: 400px;
-}
-
-.home .videoRow {
+.home .inviteRow {
     text-align: center;
-    padding: 15px 0 15px 0;
-    cursor: pointer;
+    padding: 25px 0;
+    background-color: #3498DB;
 }
 
-.home .videoRow > h2 {
-    margin-left: 10px;
+.home .inviteRow h2 {
     display: inline;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    font-size: 20px;
+    color: #FFF;
+    vertical-align: middle;
 }
 
-.home .videoRow .arrow-right {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-    width: 0;
-    height: 0;
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
-    border-left: 30px solid rgb(26, 188, 150);
+.home .inviteRow.footer {
+    background-color: #E3E3E3;
 }
+
+.home .inviteRow.footer h2 {
+    color: #1E2D3D;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+
+}
+
 
 .home .btn-mini {
     color: rgb(141, 141, 141);
@@ -192,10 +165,6 @@
     border-bottom: 10px solid rgb(241, 241, 241);
 }
 
-.home .even {
-    background-color: rgb(241, 241, 241);
-}
-
 .home .button {
     width: 130px;
     height: 42px;
@@ -226,11 +195,9 @@
     width: 140px;
     height: 40px;
     text-align:center;
-    padding: 0 0 0 0;
-    margin: 7px;
+    margin: 5px 7px 0 0;
     color: rgb(255, 255, 255);
     border-radius: 3px;
-
 }
 
 .home .button.socialbtn > span:first-child {
@@ -290,154 +257,107 @@
     font-size: 0;
 }
 
-.home .thanks {
-    position: relative;
-    width: 520px;
-    height: 240px;
+.home .thanks h2 {
+    color: #fff;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    line-height: 24px;
 }
 
-.home .thanks .block {
-    background-color: #F1F1F1;
-    filter:alpha(opacity=70); /* IE */
-    -moz-opacity:0.7; /* Mozilla */
-    opacity: 0.7; /* CSS3 */
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%; width:100%;
-    border-radius: 3px;
+.home .thanks p{
+    color: #fff;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    font-size: 14px;
+    margin: 0px;
+    line-height: 18px;
+}
+
+.home .emp-options {
+    float: right;
+}
+
+/* form */
+
+#CompanyRegister-form {
+    padding-top:20px;
+}
+
+#comms {
+   background: url(/img/backgrounds/bgnoise_lg.png);
+}
+
+#register {
+    background: url(/img/backgrounds/bgnoise_lg.png);
+}
+
+/* Security */
+#security {
+   background: url(/img/backgrounds/vault-blue.png) no-repeat center; 
+   height: 416px;
+}
+
+#security .lock {
+    margin-top: -30px;
+    padding-bottom: 30px;
+}
+
+#security .seals {
+    background-color: #1E2D3D;
+    padding: 20px 0;
+}
+
+#security .seals h4 {
+    color: #fff;
+    font-size: 14px ; 
+    font-family: 'FS Elliot Web Thin', sans-serif;
 
 }
 
-.home .thanks .text {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    padding-top: 20px;
-
+.trio-icons > div > img {
+    margin-bottom: 10px;
 }
 
-
-/* Homepage carousel */
-
-.carousel-indicators {
-    display: none;
+.modal.externalmodal {
+    margin-left: -200px;
+    width: 400px;
 }
 
-.carousel-control.left{
-    background: url(/img/orange-left.png) no-repeat !important;
+.modal.externalmodal.fade.in {
+    top: 20%;
 }
 
-.carousel-control.right{
-    background: url(/img/orange-right.png) no-repeat !important;
-}
-.carousel-control {
-    border: 0;
-    font-weight: 100;
-    font-size: 1px;
-}
-
-.carousel-linked-nav,
-.item img {
-    display: block;
-    margin: 0 auto;
+.externalmodal .optional-message > textarea {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin: 10px 20px 0 20px;
 }
 
-.carousel-linked-nav {
-    width: 120px;
-    margin-bottom: 20px;
+.externalmodal .input-row {
+    min-height: 30px;
+    margin-bottom: 5px;
 }
 
-.carousel-inner {
-    border: 1px solid rgb(227, 227, 227);
-    width: 85%;
-    margin: auto;
+.externalmodal .input-row > p {
+    display: inline-block;
+    width: 140px;
+    text-align: right;
+    margin: 0;
+    line-height: 30px;
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
-.carouseltabs {
-    width:85%;
-    margin:auto;
-}
-
-
-/* Parallax Communication Graphics */
-
-.comms {
-    position: relative;
-    width: 820px;
-    margin: 0 auto 0 auto;
-}
-
-.comms img {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.comms img.bkg {
-    z-index: 10;
-    position: relative;
-}
-
-.comms img.ike {
-    z-index: 20;
-}
-
-.comms img.jet {
-    z-index: 30;
-}
-
-.comms img.check {
-    z-index: 40;
-}
-
-.comms .dots {
-    position: relative;
-    z-index:0;
-    top:-120px;
-    left:70px;
-    width:100%;
-    height:7px;
-    background:url(/img/dot.png) repeat-x;
+.externalmodal .input-row > input {
+    width: 200px;
+    height: 26px;
+    padding-left: 5px;
 }
 
 
-/* Parallax features */
-
-.signature {
-    position: relative;
-}
-
-.signature img {
-    position: absolute;
-}
-
-.signature img.dottedline {
-    z-index: 1;
-}
-
-.signature img.sign {
-    z-index: 2;
-}
-
-.signature img.pen {
-    z-index: 3;
-}
-
-.permission {
-    position: relative;
-}
-
-.permission img {
-    position: absolute;
-}
-
-.permission img.keyhole {
-    z-index: 0;
-}
-
-.signature img.key {
-    z-index: 1;
-}
 
 
 

@@ -60,30 +60,22 @@ navm.directive('notifications', function() {
         },
         templateUrl: '/cmn/navnotifications.html',
         controller: ['$scope', function($scope) {
+
+            $scope.oldestDate = function(note) {
+                if (note.when_countersigned) {
+                    return note.when_countersigned;
+                }
+                else if (note.when_signed) {
+                    return note.when_signed;
+                }
+                else {
+                    return note.when_shared;
+                }
+            };
+
         }]
     }
 });
-
-idleTime = 0;
-$(document).ready(function () {
-    //Increment the idle time counter every minute.
-    var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
-
-    //Zero the idle timer on mouse movement.
-    $(this).mousemove(function (e) {
-        idleTime = 0;
-    });
-    $(this).keypress(function (e) {
-        idleTime = 0;
-    });
-});
-
-function timerIncrement() {
-    idleTime = idleTime + 1;
-    if (idleTime > 28) { // 1 minutes
-        document.location.href = "/login/logout?timeout";
-    }
-}
 
 /** @unused NavCtrl */
 /* Not really, but referenced in angular attribute in .inc file */
@@ -119,7 +111,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return M;
         })();
 
-        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/"];
+        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
@@ -408,7 +400,31 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
             });
             return notifications
+        };
+
+        var idleTime = 0;
+
+        function timerIncrement() {
+            if ($rootScope.navState.userid) {
+                idleTime = idleTime + 1;
+            }
+            if (idleTime > 28) { // 1 minutes
+                document.location.href = "/login/logout?timeout";
+            }
         }
+
+        $(document).ready(function () {
+            //Increment the idle time counter every minute.
+            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+            //Zero the idle timer on mouse movement.
+            $(this).mousemove(function (e) {
+                idleTime = 0;
+            });
+            $(this).keypress(function (e) {
+                idleTime = 0;
+            });
+        });
 
     }]);
 
