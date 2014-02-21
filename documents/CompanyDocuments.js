@@ -1207,7 +1207,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData(true)).then(function(data) {
+            SWBrijj.document_countersign( $scope.docId, dce.getNoteData(true)).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
