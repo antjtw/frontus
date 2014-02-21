@@ -213,7 +213,7 @@ h1 {
 h2 {
     font-family:'FS Elliot Web Regular', sans-serif !important;
     font-size: 14px;
-    line-height:20px;
+    line-height:26px;
     font-weight: normal;
     color: rgb(30, 45, 61);
 }
@@ -526,6 +526,10 @@ div.fixednav{
 .topnav.navheight > div > ul.nav-logo {
     margin-top: 16px;
     margin-right: 40px;
+}
+
+ul.nav-logo > li > a > img {
+    cursor:pointer;
 }
 
 .topnav.navheight > div > ul.nav-item {
