@@ -523,6 +523,7 @@ navbar .navbar {
     word-wrap: break-word;
     opacity: 0.7;
     border: 1px solid #FFBA00;
+    color: #000000;
 }
 
 .draggable.redrequired div > textarea {
@@ -555,6 +556,11 @@ navbar .navbar {
     cursor: pointer;
 }
 
+.sticky .close-button > span:before {
+    line-height: 19px;
+    margin-left: 1px;
+}
+
 .sticky .dragger {
     position: absolute;
     left: -10px;
@@ -581,11 +587,18 @@ navbar .navbar {
     width: 10px;
 }
 
+
 .sticky .dragger > span > span {
     position: absolute;
     top: 50%;
     margin-top: -9px;
+    margin-left: -3px;
     cursor: pointer;
+    height: 16px;
+}
+
+.sticky .dragger > span > span::before {
+    color: #FFFFFF;
 }
 
 .sticky textarea {
@@ -598,10 +611,41 @@ navbar .navbar {
     width: 200px;
     margin: 10px 0 0 -100px;
     left: 50%;
+    border-radius: 3px;
+}
+
+.sticky-menu:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -8px;
+    left: 88px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #1D2C3C;
 }
 
 .sticky-menu > ul > li {
     margin: 5px 20px;
+}
+
+.sticky-menu > ul > li > ul {
+    margin-top: 15px;
+}
+
+.sticky-menu > ul > li:first-of-type > ul {
+    margin-top: 10px;
+}
+
+.sticky-menu > ul > li:last-of-type > ul {
+    margin-bottom: 15px;
+}
+
+.sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
+    color: #FFFFFF;
+    font-size: 10px;
+    text-transform: uppercase;
 }
 
 .sticky-menu ul.required-row > li {

@@ -68,8 +68,8 @@ directive('draggable', ['$window', '$document',
             transclude: true,
             scope: true,
             template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
-                            '<span class="dragger" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe043;"></span></span></span>' +
-                            '<span class="close-button" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe01b;"></span></span>' +
+                            '<span class="dragger" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
+                            '<span class="close-button" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
                       '</div>',
             link: function(scope, elm, attrs) {
@@ -1186,7 +1186,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                             '<li>' +
                                             '<button ng-class="{\'selected\':required}" ng-click="toggleRequired(this)" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>' +
                                             '</li>' +
-                                            '<li>' +
+                                            '<li class="required-text">' +
                                             'Required?' +
                                             '</li>' +
                                         '</ul>' +
