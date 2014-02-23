@@ -1939,7 +1939,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
             var dce = angular.element(".docPanel").scope();
           SWBrijj.sign_document($scope.docId,dce.getNoteData(true)).then(function(data) {
-            // SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
                 doc.when_signed = data;
                 dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
