@@ -339,6 +339,8 @@ address {
 }
 
 
+
+
 @media (min-width: 1000px) {
     .feature-block .screen {
         width: 514px;
@@ -352,6 +354,13 @@ address {
     }
 }
 
+
+@media (max-width: 1000px) {
+    .feature-block .screen {
+        display: none;
+    }
+
+}
 
 
 @media (max-width: 380px) {
