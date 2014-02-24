@@ -169,6 +169,10 @@
         padding-left: 0;
     }
 
+    .feature-block .text {
+        display: block;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -210,6 +214,11 @@
         width: 100%;
         margin-left: 0;
         margin-right: 0;
+    }
+
+    .static .feature-block {
+        margin-left: 40px;
+        padding-top: 80px;
     }
 }
 
