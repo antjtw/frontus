@@ -458,7 +458,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 shareto += "," +  matches[1];
             });
 
-            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
+            SWBrijj.smartdoc_share_template($scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
@@ -490,7 +490,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 cleanatt[key] = attributes[key];
             }
             attributes = JSON.stringify(cleanatt);
-            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
+            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
@@ -510,18 +510,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.used_attributes = {};
             $scope.template_email = [];
 
-            SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
+            SWBrijj.tblmm('smartdoc.document','template_id', $scope.templateId).then(function(meta) {
                 $scope.lib = {};
                 $scope.lib.docname = meta[0].template_name;
             });
 
             if ($rootScope.navState.role == "issuer") {
-                SWBrijj.procm('smartdoc.render_template', $scope.templateId).then(function(code) {
+                SWBrijj.smartdoc_render_template($scope.templateId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         var attributes = attributes;
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
-                            var raw_html = code[0].render_template;
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -565,10 +564,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             else {
                 $scope.forsigning = true;
-                SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
+                SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                            var raw_html = html[0].render_investor_template;
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
