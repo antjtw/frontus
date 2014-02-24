@@ -236,20 +236,21 @@ address {
 }
 
 .features .header-section {
-    padding: 90px 60px;
-    background: url(/img/backgrounds/bgnoise_lg.png);
+    padding: 70px;
+    /* background: url(/img/backgrounds/bgnoise_lg.png); */
+    background-color: #F1F1F1;
     text-align: center;
 }
 
 .features .header-section .header {
     margin: 0 auto;
     max-width: 1040px;
-    text-align: left;
+    text-align: center;
 }
 
 .static .feature-block {
     margin-left: 60px;
-    padding-top: 200px;
+    padding-top: 120px;
     text-align: center;
 }
 
@@ -314,7 +315,7 @@ address {
 
 .features .collab {
     padding: 40px 0;
-    margin-top: 200px;
+    margin-top: 100px;
     background: url(/img/backgrounds/bgnoise_lg.png);
 }
 
@@ -338,6 +339,8 @@ address {
 }
 
 
+
+
 @media (min-width: 1000px) {
     .feature-block .screen {
         width: 514px;
@@ -351,6 +354,13 @@ address {
     }
 }
 
+
+@media (max-width: 1000px) {
+    .feature-block .screen {
+        display: none;
+    }
+
+}
 
 
 @media (max-width: 380px) {
