@@ -26,9 +26,9 @@ function getNoteBounds(nx, pageBar, not_visible) {
     var top_padding = pageBar ? 161 : 120;
     var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
     var dp = document.querySelector('.docPanel');
-    if (!dp.offsetTop && not_visible) {
-        bds[1]-=top_padding;
-    }
+    //if (!dp.offsetTop && not_visible) {
+    //    bds[1]-=top_padding;
+    //}
     // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
     // this could be set as a static value during other pad calculations
     var ntyp = nx.notetype;
@@ -68,8 +68,8 @@ directive('draggable', ['$window', '$document',
             transclude: true,
             scope: true,
             template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
-                            '<span class="dragger" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
-                            '<span class="close-button" ng-show="isAnnotable && investorFixed(this)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
+                            '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
+                            '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
                       '</div>',
             link: function(scope, elm, attrs) {
@@ -702,8 +702,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }
                 tosee += "," +  matches[1];
             });
-            var date = Date.parse('22 November 2113');
-            SWBrijj.procm("document.share_document",
+            var date = '22 November 2113';
+            SWBrijj.document_share_stamp(
                           $scope.docId,
                           0, '',
                           tosee.substring(1).toLowerCase(),
@@ -762,8 +762,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.fieldDisabled = function() {
+            return $scope.countersignable($scope.lib)
+        };
+
         $scope.openBox = function(ev) {
-            if ($rootScope.navState.role == "issuer") {
+            if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
                 ev.getme = true;
             }
         };
@@ -783,7 +787,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.stickyfilled = function(ev) {
-            return ev.$$nextSibling.annotext.length > 0 ? true : false;
+            return ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0 ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
@@ -809,6 +813,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 $scope.createAttributes(inv_attributes);
+                console.log($scope.library);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                     if ($scope.lib && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
@@ -849,50 +854,53 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     //
                     // [i][3] style -> font size -- anything else?
 
-                    if ($scope.isAnnotable) {
-                        var aa = data.annotations;
-                        if (aa) {
-                            // restoreNotes
-                            var annots = JSON.parse(aa);
-                            if (data.iss_annotations) {
-                                annots = annots.concat(JSON.parse(data.iss_annotations));
-                            }
-                            if (annots.length > 100) {
-                                //$scope.removeAllNotes();
-                                return;
-                            }
-                            var sticky;
-                            for (var i = 0; i < annots.length; i++) {
-                                var annot = annots[i];
-                                $scope.annotatedPages.push(annot[0][0]);
-                                switch (annot[1]) {
-                                    case "check":
-                                        sticky = $scope.newCheckX(annot[0][0]);
-                                        break;
-                                    case "text":
-                                        var newattr = [null, null, null];
-                                        if (5 == annot.length) {
-                                            newattr = annot[4]
-                                        }
-                                        sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
-                                        break;
-                                    case "canvas":
-                                        sticky = $scope.newPadX(annot[0][0], annot[2][0]);
-                                        break;
-                                }
 
-                                // the notes were pushed in the newXXX function
-                                sticky.css({
-                                    top: Math.max(0, annot[0][1][1]),
-                                    left: Math.max(0, annot[0][1][0])
-                                });
-                                var bb = sticky[0].querySelector("textarea");
-                                bb.style.width = annot[0][2][2]-14 + "px";
-                                bb.style.height = annot[0][2][3]-10 + "px";
+                    var aa = data.annotations;
+                    if (aa) {
+                        // restoreNotes
+                        var annots = JSON.parse(aa);
+                        if (data.iss_annotations) {
+                            annots = annots.concat(JSON.parse(data.iss_annotations));
+                        }
+                        if (annots.length > 100) {
+                            //$scope.removeAllNotes();
+                            return;
+                        }
+                        var sticky;
+                        for (var i = 0; i < annots.length; i++) {
+                            var annot = annots[i];
+                            var newattr = [null, null, null];
+                            if (5 == annot.length) {
+                                newattr = annot[4]
                             }
-                        } // json struct
-                    }
-                });
+                            if ($scope.isAnnotable) {
+                                if ($scope.countersignable($scope.lib) && newattr.whattype == "Signature" || !$scope.countersignable($scope.lib)) {
+                                    $scope.annotatedPages.push(annot[0][0]);
+                                    switch (annot[1]) {
+                                        case "check":
+                                            sticky = $scope.newCheckX(annot[0][0]);
+                                            break;
+                                        case "text":
+                                            sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
+                                            break;
+                                        case "canvas":
+                                            sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                            break;
+                                    }
+
+                                    // the notes were pushed in the newXXX function
+                                    sticky.css({
+                                        top: Math.max(0, annot[0][1][1]),
+                                        left: Math.max(0, annot[0][1][0])
+                                    });
+                                    var bb = sticky[0].querySelector("textarea");
+                                    bb.style.width = annot[0][2][2]-14 + "px";
+                                    bb.style.height = annot[0][2][3]-10 + "px";
+                                }
+                            }
+                        }
+                    } // json struct
+                })
             });
         };
 
@@ -917,7 +925,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-                if (!$scope.templateId && $scope.lib) {
+                if (!$scope.templateId && $scope.lib && $scope.isAnnotable) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -984,10 +992,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             $scope.notes = [];
         };
-
-        $scope.$on('rejectSignature', function(event) {
-            $scope.removeAllNotes();
-        });
 
         $scope.closeMe = function(ev) {
             var z = ev.currentTarget;
@@ -1064,9 +1068,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.newnewBox = function(event) {
-            var aa = $scope.newBoxX($scope.currentPage, '', null);
-            $scope.annotatedPages.push($scope.currentPage);
-            aa.scope().newinitdrag(event);
+            if ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
+                var aa = $scope.newBoxX($scope.currentPage, '', null);
+                $scope.annotatedPages.push($scope.currentPage);
+                aa.scope().newinitdrag(event);
+            }
         };
 
         $scope.fixBox = function(bb) {
@@ -1113,7 +1119,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea placeholder="{{annotext || whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea ng-disabled="fieldDisabled()" placeholder="{{annotext || whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1613,7 +1619,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-
+            console.log(nd_iss);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
