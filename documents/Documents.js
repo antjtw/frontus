@@ -417,7 +417,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 shareto += "," +  matches[1];
             });
 
-            SWBrijj.procm("smartdoc.share_template", $scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
+            SWBrijj.smartdoc_share_template($scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
                 $scope.$emit("notification:success", "Successfully shared document");
                 $location.path('/company-list').search({});
             }).except(function(err) {
@@ -449,7 +449,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 cleanatt[key] = attributes[key];
             }
             attributes = JSON.stringify(cleanatt);
-            SWBrijj.procm('smartdoc.investor_sign_and_save', $scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
+            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
@@ -469,18 +469,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.used_attributes = {};
             $scope.template_email = [];
 
-            SWBrijj.procm('smartdoc.doc_meta', $scope.templateId).then(function(meta) {
+            SWBrijj.tblmm('smartdoc.document','template_id', $scope.templateId).then(function(meta) {
                 $scope.lib = {};
                 $scope.lib.docname = meta[0].template_name;
             });
 
             if ($rootScope.navState.role == "issuer") {
-                SWBrijj.procm('smartdoc.render_template', $scope.templateId).then(function(code) {
+                SWBrijj.smartdoc_render_template($scope.templateId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         var attributes = attributes;
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
-                            var raw_html = code[0].render_template;
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -524,10 +523,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             else {
                 $scope.forsigning = true;
-                SWBrijj.procm('smartdoc.render_investor_template', $scope.subId).then(function(html) {
+                SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                            var raw_html = html[0].render_investor_template;
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
@@ -781,6 +779,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
+                            $scope.annotatedPages.push(annot[0][0]);
                             switch (annot[1]) {
                                 case "check":
                                     sticky = $scope.newCheckX(annot[0][0]);
@@ -899,6 +898,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var z = ev.currentTarget;
             while (z.attributes.draggable === undefined) z = z.parentElement;
             z.parentElement.removeChild(z);
+            var index = $scope.annotatedPages.indexOf($scope.currentPage);
+            if (index > -1) {
+                $scope.annotatedPages.splice(index, 1);
+            }
             for (var i = 0; i < $scope.notes.length; i++) {
                 if ($scope.notes[i][0] === z) {
                     $scope.notes.splice(i, 1);
@@ -961,6 +964,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newBox = function(event) {
             var aa = $scope.newBoxX($scope.currentPage, '', null);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
         $scope.newnewBox = function(event) {
@@ -1070,6 +1074,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.newCheck = function(event) {
             var aa = $scope.newCheckX($scope.currentPage);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1090,12 +1095,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var d = new Date();
             var fmtdat = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
             var aa = $scope.newBoxX($scope.currentPage, fmtdat);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
             return aa;
         };
 
         $scope.newPad = function(event) {
             var aa = $scope.newPadX($scope.currentPage, []);
+            $scope.annotatedPages.push($scope.currentPage);
             aa.scope().initdrag(event);
         };
 
@@ -1408,6 +1415,19 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
     }
 ]);
+
+docs.filter('uniqueandorder', function() {
+    return function(pages) {
+        var output = [];
+        angular.forEach(pages, function(page) {
+            if(output.indexOf(page) === -1) {
+                output.push(page);
+            }
+        });
+        output.sort(function(a,b){return a-b});
+        return output;
+    };
+});
 
 /* Looking for a way to detect if I need to reload the page because the user has been logged out
  */

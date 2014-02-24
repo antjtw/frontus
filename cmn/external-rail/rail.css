@@ -25,6 +25,11 @@
     text-transform: uppercase;
 }
 
+.right-rail > ul > li > a {
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
+}
+
 .right-rail > div {
     margin-top: 60px;
 }
@@ -40,6 +45,6 @@
 }
 
 .right-rail .social-list li> a > span:last-of-type {
-    margin-left: 20px;
+    margin-left: 10px;
     vertical-align: top;
 }
