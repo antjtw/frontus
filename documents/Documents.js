@@ -829,7 +829,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.annotatedPages.sort(function(a,b){return a-b;});
                 $scope.loadAnnotations();
             });
-       };
+        };
 
         $scope.pageImageUrl = function() {
             if ($scope.pageQueryString && $scope.currentPage) {
