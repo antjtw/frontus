@@ -948,9 +948,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     var aa = data.annotations;
                     if (aa) {
                         // restoreNotes
-                        var annots = JSON.parse(aa);
-                        if (data.iss_annotations) {
-                            annots = annots.concat(JSON.parse(data.iss_annotations));
+                        var annots
+                        if ($scope.countersignable($scope.lib) && data.iss_annotations) {
+                            annots = JSON.parse(data.iss_annotations);
+                        }
+                        else {
+                            annots = JSON.parse(aa);
+                            if (data.iss_annotations) {
+                                annots = annots.concat(JSON.parse(data.iss_annotations));
+                            }
                         }
                         if (annots.length > 100) {
                             //$scope.removeAllNotes();
@@ -1353,9 +1359,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setAnnot = function($event, value) {
             $event.whattype = value;
-            console.log($scope.attributelabels);
             $event.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
             $scope.smartValue($event);
+            console.log($event);
+            ApplyLineBreaks($event);
+
         };
 
         $scope.toggleRequired = function($event) {
