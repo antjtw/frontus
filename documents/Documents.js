@@ -1362,8 +1362,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $event.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
             $event.annotext = "";
             $scope.smartValue($event);
-            console.log($event);
-            ApplyLineBreaks($event);
 
         };
 
