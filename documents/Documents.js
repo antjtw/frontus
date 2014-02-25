@@ -1,3 +1,78 @@
+//Adds line breaks to the text areas
+function ApplyLineBreaks(oTextarea) {
+    if (oTextarea.wrap) {
+        oTextarea.setAttribute("wrap", "off");
+    }
+    else {
+        oTextarea.setAttribute("wrap", "off");
+        var newArea = oTextarea.cloneNode(true);
+        newArea.value = oTextarea.value;
+        oTextarea.parentNode.replaceChild(newArea, oTextarea);
+        oTextarea = newArea;
+    }
+
+    var strRawValue = oTextarea.value;
+    oTextarea.value = "";
+    var nEmptyWidth = oTextarea.scrollWidth;
+    var nLastWrappingIndex = -1;
+
+    function testBreak(strTest) {
+        oTextarea.value = strTest;
+        return oTextarea.scrollWidth > nEmptyWidth;
+    }
+    function findNextBreakLength(strSource, nLeft, nRight) {
+        var nCurrent;
+        if(typeof(nLeft) == 'undefined') {
+            nLeft = 0;
+            nRight = -1;
+            nCurrent = 64;
+        }
+        else {
+            if (nRight == -1)
+                nCurrent = nLeft * 2;
+            else if (nRight - nLeft <= 1)
+                return Math.max(2, nRight);
+            else
+                nCurrent = nLeft + (nRight - nLeft) / 2;
+        }
+        var strTest = strSource.substr(0, nCurrent);
+        var bLonger = testBreak(strTest);
+        if(bLonger)
+            nRight = nCurrent;
+        else
+        {
+            if(nCurrent >= strSource.length)
+                return null;
+            nLeft = nCurrent;
+        }
+        return findNextBreakLength(strSource, nLeft, nRight);
+    }
+
+    var i = 0, j;
+    var strNewValue = "";
+    while (i < strRawValue.length) {
+        var breakOffset = findNextBreakLength(strRawValue.substr(i));
+        if (breakOffset === null) {
+            strNewValue += strRawValue.substr(i);
+            break;
+        }
+        nLastWrappingIndex = -1;
+        var nLineLength = breakOffset - 1;
+        for (j = nLineLength - 1; j >= 0; j--) {
+            var curChar = strRawValue.charAt(i + j);
+            if (curChar == ' ' || curChar == '-' || curChar == '+') {
+                nLineLength = j + 1;
+                break;
+            }
+        }
+        strNewValue += strRawValue.substr(i, nLineLength) + "\n";
+        i += nLineLength;
+    }
+    oTextarea.value = strNewValue;
+    oTextarea.setAttribute("wrap", "hard");
+    return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
+}
+
 function getIntProperty(se, z) {
     var lh = getComputed(se, z);
     lh = parseFloat(lh.replace("px", ""));
@@ -772,6 +847,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.addLineBreaks = function(ev) {
+            ApplyLineBreaks(ev.target);
+        };
+
         $scope.closeBox = function(ev) {
             if ($rootScope.navState.role == "issuer") {
                 ev.getme = false;
@@ -1119,7 +1198,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea ng-disabled="fieldDisabled()" placeholder="{{annotext || whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattype}}" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1577,6 +1656,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     newstyle['whattype'] = (angular.element(nx).scope().$$nextSibling.whattype);
                     newstyle['required'] = (angular.element(nx).scope().$$nextSibling.required);
                     se = nx.querySelector("textarea");
+                    console.log(se.value);
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
                 } else if (typ == 'check') {

@@ -516,11 +516,9 @@ navbar .navbar {
 
 .draggable div > textarea {
     margin-bottom: 0;
-    word-wrap: normal;
     overflow: hidden;
     line-height: normal;
     resize: both;
-    word-wrap: break-word;
     opacity: 0.7;
     border: 1px solid #FFBA00;
     color: #000000;
