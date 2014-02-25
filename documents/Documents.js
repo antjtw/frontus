@@ -888,7 +888,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorName'] = "Name";
             $scope.attributelabels['investorState'] = "State";
             $scope.attributelabels['investorCountry'] = "Country";
-            $scope.attributelabels['investorStreet'] = "Street";
+            $scope.attributelabels['investorStreet'] = "Address";
             $scope.attributelabels['investorPhone'] = "Phone";
             $scope.attributelabels['investorEmail'] = "Email";
             $scope.attributelabels['signatureDate'] = "Date";
