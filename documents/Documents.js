@@ -1360,6 +1360,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.setAnnot = function($event, value) {
             $event.whattype = value;
             $event.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
+            $event.annotext = "";
             $scope.smartValue($event);
             console.log($event);
             ApplyLineBreaks($event);
