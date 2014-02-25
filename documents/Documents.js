@@ -1068,7 +1068,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.newnewBox = function(event) {
-            if ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
+            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
                 var aa = $scope.newBoxX($scope.currentPage, '', null);
                 $scope.annotatedPages.push($scope.currentPage);
                 aa.scope().newinitdrag(event);

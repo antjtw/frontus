@@ -13,7 +13,7 @@ navbar .navbar {
     top: 40px;
     left: 0px;
     right: 0px;
-    max-width: 928px;
+    width: 928px;
     margin: 0 auto;
     background-color: white;
 }
