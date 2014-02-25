@@ -656,7 +656,9 @@ navbar .navbar {
 }
 
 .sticky-menu .standard-button > button {
-
+    width: 42px;
+    padding-left: 6px;
+    margin-left: 10px;
 }
 
 
