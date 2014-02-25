@@ -881,14 +881,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
             $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
             $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
-            $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
+            $scope.investor_attributes['investorStreet'] = angular.copy($rootScope.person.street);
             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
             $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             $scope.attributelabels['investorName'] = "Name";
             $scope.attributelabels['investorState'] = "State";
             $scope.attributelabels['investorCountry'] = "Country";
-            $scope.attributelabels['investorAddress'] = "Address";
+            $scope.attributelabels['investorStreet'] = "Street";
             $scope.attributelabels['investorPhone'] = "Phone";
             $scope.attributelabels['investorEmail'] = "Email";
             $scope.attributelabels['signatureDate'] = "Date";
