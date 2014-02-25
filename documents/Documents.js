@@ -870,18 +870,27 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.createAttributes = function (inv_attributes) {
-                $scope.investor_attributes = {};
-                $scope.attributes = [];
-                angular.forEach(inv_attributes, function(attr) {
-                    $scope.investor_attributes[attr.attribute] = attr.answer;
-                });
-                $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
-                $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-                $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
-                $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
-                $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
-                $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
-                $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+            $scope.investor_attributes = {};
+            $scope.attributelabels = {};
+            angular.forEach(inv_attributes, function(attr) {
+                $scope.investor_attributes[attr.attribute] = attr.answer;
+                $scope.attributelabels[attr.attribute] = attr.label;
+            });
+            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
+            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
+            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
+            $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
+            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
+            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+            $scope.attributelabels['investorName'] = "Name";
+            $scope.attributelabels['investorState'] = "State";
+            $scope.attributelabels['investorCountry'] = "Country";
+            $scope.attributelabels['investorAddress'] = "Address";
+            $scope.attributelabels['investorPhone'] = "Phone";
+            $scope.attributelabels['investorEmail'] = "Email";
+            $scope.attributelabels['signatureDate'] = "Date";
+
         };
 
         $scope.loadAnnotations = function() {
@@ -1198,7 +1207,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattype}}" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattypelabel}}" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1234,7 +1243,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 '<ul class="dropdown-list drop-selector">' +
                                                     '<li class="dropdown standard">' +
                                                         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whattype }}' +
+                                                            '{{ whattypelabel }}' +
                                                         '</a>' +
                                                         '<ul class="dropdown-menu">' +
                                                             '<li>' +
@@ -1309,6 +1318,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
             ta.scope().whosign = newattr ? newattr.whosign : "Investor";
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
+            ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
             ta.scope().required = newattr ? newattr.required : null;
             ta.width(ta.width());
@@ -1341,6 +1351,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setAnnot = function($event, value) {
             $event.whattype = value;
+            console.log($scope.attributelabels);
+            $event.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
             $scope.smartValue($event);
         };
 
