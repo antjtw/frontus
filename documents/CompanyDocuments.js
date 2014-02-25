@@ -773,6 +773,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         var regExp = /\(([^)]+)\)/;
 
         $scope.share = function(message, emails, sign) {
+            $scope.processing = true;
             sign = sign == "Yes";
             var tosee = "";
             if (sign) {
@@ -803,6 +804,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {
+                $scope.processing = false;
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                 $scope.signeeded = "No";

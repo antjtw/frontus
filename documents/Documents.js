@@ -769,6 +769,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
         $scope.shareDocument = function(doc, message, emails) {
+            $scope.processing = true;
             var tosee = "";
             angular.forEach(emails, function(person) {
                 var matches = regExp.exec(person.id);
@@ -791,6 +792,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $location.path('/company-list').search({});
                 //$route.reload();
             }).except(function(x) {
+                    $scope.processing = false;
                     void(x);
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
@@ -1655,6 +1657,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var nx = n[0];
                 var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height]
+                console.log($scope.dp);
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
