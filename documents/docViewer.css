@@ -612,6 +612,7 @@ navbar .navbar {
     margin: 10px 0 0 -100px;
     left: 50%;
     border-radius: 3px;
+    z-index: 5;
 }
 
 .sticky-menu:before {
@@ -652,6 +653,10 @@ navbar .navbar {
     display: inline-block;
     float: left;
     margin-right: 10px;
+}
+
+.sticky-menu .standard-button > button {
+
 }
 
 

@@ -1198,7 +1198,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     '<li>' +
                                         '<ul>' +
                                             '<li>' +
-                                            '<button ng-click="closeBox(this)" class="button">Close</button>' +
+                                                '<div class="standard-button">' +
+                                                    '<button ng-click="closeBox(this)" class="btn">Close</button>' +
+                                                '</div>' +
                                             '</li>' +
                                         '</ul>' +
                                     '</li>' +
