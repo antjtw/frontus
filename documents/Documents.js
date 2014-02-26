@@ -1116,6 +1116,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     return;
                 }
             }
+            $scope.$apply();
         };
 
         $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
@@ -1341,7 +1342,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
-            ta.scope().required = newattr ? newattr.required : true;
+            if ($rootScope.navState.role == "issuer") {
+                ta.scope().required = newattr ? newattr.required : true;
+            } else {
+                ta.scope().required = newattr ? newattr.required : null;
+            }
+
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
