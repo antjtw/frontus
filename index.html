@@ -62,7 +62,7 @@
  				<div class="inviteRow">
  					<h2>Are you a shareholder? Invite your companies to join. </h2>
 		            <div class="standard-button blue invite">
-                        <button class="btn" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span></button>
+                        <button class="btn" id="a_hp_taf_top" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span></button>
                     </div>
  				</div>
  			</div>
@@ -245,7 +245,7 @@
  				<div class="inviteRow footer">
  					<h2>Are you a shareholder? Invite your companies to join. </h2>
 		            <div class="standard-button blue invite">
-                        <button class="btn" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span></button>
+                        <button class="btn" id="a_hp_taf_bot" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span></button>
                     </div>
  				</div>
  			</div>
@@ -273,7 +273,7 @@
                         <button class="btn" ng-click="friendClose();">Cancel</button>
                     </div>
                     <div class="standard-button green">
-                        <button class="btn" ng-disabled="!(fieldCheck(taf.sendEmail) && taf.yourname)" ng-click="friendClose(); tellafriend();">Send Invite</button>
+                        <button class="btn" id="a_hp_taf_submit" ng-disabled="!(fieldCheck(taf.sendEmail) && taf.yourname)" ng-click="friendClose(); tellafriend();">Send Invite</button>
                     </div>
                 </div>
             </div>
