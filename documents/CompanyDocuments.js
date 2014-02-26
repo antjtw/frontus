@@ -700,7 +700,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.viewInvestorCopy = function(version) {
-            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
 
         // Toggles sidebar back and forth
@@ -1055,14 +1055,28 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         $scope.getData = function() {
             if ($scope.docKey) {
-                SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+                var field = "original";
+                var tempdocid = $scope.docKey;
+                var flag = !isNaN(parseInt($scope.urlInves));
+                if (flag) {
+                    field = "doc_id";
+                    tempdocid = parseInt($scope.urlInves);
+                }
+                SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                     if ($scope.counterparty) {
-                        for (var i = 0; i < data.length; i++) {
-                            var doc = data[i];
-                            if (doc.investor == $scope.urlInves) {
-                                $scope.version = doc;
-                                $scope.getVersion(doc);
-                                return;
+                        if (flag) {
+                            $scope.version = data[0];
+                            $scope.getVersion(data[0]);
+                            return;
+                        }
+                        else {
+                            for (var i = 0; i < data.length; i++) {
+                                var doc = data[i];
+                                if (doc.investor == $scope.urlInves) {
+                                    $scope.version = doc;
+                                    $scope.getVersion(doc);
+                                    return;
+                                }
                             }
                         }
                     } else {
@@ -1486,7 +1500,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.viewInvestorCopy = function(investor) {
-            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1" + "&investor=" + investor);
+            console.log(investor);
+            $location.url("/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
         };
 
         $scope.rejectSignature = function(cd) {
