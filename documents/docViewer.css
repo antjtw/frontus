@@ -21,10 +21,9 @@ navbar .navbar {
 
 .docViewerHeader.affix {
     position: fixed;
-    left: 0px;
-    right: 0px;
     top: 0px;
     max-width: 928px;
+    width: 928px;
     margin: 0 auto;
 }
 
@@ -41,11 +40,9 @@ navbar .navbar {
 }
 
 .docViewerHeader.affix-top {
-    left: 62px;
 }
 
 .docViewerHeader.affix-bottom {
-    left: 62px;
     bottom: 0;
 }
 
