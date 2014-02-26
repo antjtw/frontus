@@ -1241,14 +1241,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 '<ul class="dropdown-list drop-selector">' +
                                                     '<li class="dropdown standard">' +
                                                         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whosign }}' +
+                                                            '{{ whosignlabel }}' +
                                                         '</a>' +
                                                         '<ul class="dropdown-menu">' +
                                                             '<li>' +
-                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Investor</a>' +
+                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Recipient</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">Issuer</a>' +
+                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">{{navState.name}}</a>' +
                                                             '</li>' +
                                                         '</ul>' +
                                                     '</li>' +
@@ -1339,6 +1339,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var ta = aa.find('textarea');
             ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
             ta.scope().whosign = newattr ? newattr.whosign : "Investor";
+            ta.scope().whosignlabel = ta.scope().whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
@@ -1368,6 +1369,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setSign = function($event, value) {
             $event.whosign = value;
+            $event.whosignlabel = $event.whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             if (value == "Investor") {
                 $event.annotext = "";
             }
