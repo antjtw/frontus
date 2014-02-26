@@ -129,18 +129,12 @@
         <div ng-show="stage===0" class="page-bar">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
-                <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
-                    <span ng-hide="pageScroll===0" data-icon="&#xe032;"></span>
-                </li>
                 <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
                     ng-class="{'cur-page':page===currentPage}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">
                     <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
                     <span> {{page}}</span>
-                </li>
-                <li class="page-icons button" ng-click="pageBarRight();">
-                    <span ng-show="morePages()" data-icon="&#xe033;"></span>
                 </li>
             </ul>
         </div>
