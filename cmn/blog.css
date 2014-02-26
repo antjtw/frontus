@@ -90,8 +90,8 @@ h2 {
 }
 
 .navbounder {
-	width: 1024px;
-	margin: 0 auto 0 auto;
+	margin: 0 auto;
+    padding: 0 40px;
 }
 
 .topnav {
