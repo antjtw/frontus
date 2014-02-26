@@ -525,6 +525,10 @@ navbar .navbar {
     color: #000000;
 }
 
+.draggable.signature textarea {
+    font-family: 'Arizonia', serif;
+}
+
 .draggable.redrequired div > textarea {
     border: 1px solid #E64B3B;
 }

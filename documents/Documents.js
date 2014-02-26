@@ -142,7 +142,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -176,6 +176,17 @@ directive('draggable', ['$window', '$document',
                             $scope.$$nextSibling.annotext = "";
                         }
                     });
+
+                    $scope.$watch('$$nextSibling.whattype', function(newval, oldval) {
+                        console.log(newval);
+                        var elem = $element.find('textarea');
+                        if (newval == "Signature") {
+                            elem.css('font-size', 18);
+                        }
+                        else {
+                            elem.css('font-size', 12);
+                        }
+                    }, true);
 
                     topLocation = function(elementHeight, mouseY) {
                         var docPanel = document.querySelector('.docPanel');
@@ -867,6 +878,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return ev.$$nextSibling.required ? true : false;
         };
 
+        $scope.signatureField = function (element) {
+            return element.$$nextSibling.whattype == "Signature"  ? true : false;
+        };
+
         $scope.stickyfilled = function(ev) {
             return ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0 ? true : false;
         };
@@ -1255,25 +1270,25 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                         '</a>' +
                                                         '<ul class="dropdown-menu">' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'Text\')" class="button">Text</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'Signature\')" class="button">Signature</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorName\')" class="button">Name</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorStreet\')" class="button">Address</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorStreet\')" class="button">Address</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorState\')" class="button">State</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorState\')" class="button">State</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorEmail\')" class="button">Email</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorEmail\')" class="button">Email</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'signatureDate\')" class="button">Date</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'signatureDate\')" class="button">Date</a>' +
                                                             '</li>' +
                                                         '</ul>' +
                                                     '</li>' +
@@ -1357,11 +1372,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        $scope.setAnnot = function($event, value) {
-            $event.whattype = value;
-            $event.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
-            $event.annotext = "";
-            $scope.smartValue($event);
+        $scope.setAnnot = function($event, sticky, value) {
+            sticky.whattype = value;
+            sticky.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
+            sticky.annotext = "";
+            $scope.smartValue(sticky);
 
         };
 
