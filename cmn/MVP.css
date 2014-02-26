@@ -2649,7 +2649,7 @@ button.icon-button:hover {
     background-color: #F1F1F1;
     border-radius: 3px;
     margin: 0;
-    color: rgb(102, 102, 102);
+    color: #666666;
 }
 .navbar.bottomnav .nav > .standard .dropdown-toggle {
     border-radius: 0;

@@ -611,8 +611,8 @@ navbar .navbar {
 .sticky-menu {
     position: absolute;
     background-color: #1D2C3C;
-    width: 200px;
-    margin: 10px 0 0 -100px;
+    width: 190px;
+    margin: 10px 0 0 -95px;
     left: 50%;
     border-radius: 3px;
     z-index: 5;
@@ -624,7 +624,7 @@ navbar .navbar {
     height: 0;
     position: absolute;
     top: -8px;
-    left: 88px;
+    left: 85px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-bottom: 8px solid #1D2C3C;
@@ -638,12 +638,8 @@ navbar .navbar {
     margin-top: 15px;
 }
 
-.sticky-menu > ul > li:first-of-type > ul {
-    margin-top: 10px;
-}
-
 .sticky-menu > ul > li:last-of-type > ul {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
@@ -660,8 +656,19 @@ navbar .navbar {
 
 .sticky-menu .standard-button > button {
     width: 42px;
-    padding-left: 6px;
     margin-left: 10px;
+    background-color: transparent;
+    padding: 0;
+    min-height: 20px;
+    line-height: 20px;
+    box-shadow: none;
+    color: #3498DB;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.sticky-menu .standard-button > button:hover {
+    color: #2980B9;
 }
 
 

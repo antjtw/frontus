@@ -1343,7 +1343,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
-            ta.scope().required = newattr ? newattr.required : null;
+            ta.scope().required = newattr ? newattr.required : true;
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
