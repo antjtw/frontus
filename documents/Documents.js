@@ -178,7 +178,6 @@ directive('draggable', ['$window', '$document',
                     });
 
                     $scope.$watch('$$nextSibling.whattype', function(newval, oldval) {
-                        console.log(newval);
                         var elem = $element.find('textarea');
                         if (newval == "Signature") {
                             elem.css('font-size', 18);
@@ -247,8 +246,8 @@ directive('draggable', ['$window', '$document',
                         // absolute mouse location (current): $event.clientX, $event.clientY
                         // absolute change in mouse location: dx, dy
                         // relative mouse location: mousex, mousey
-                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -258,8 +257,8 @@ directive('draggable', ['$window', '$document',
                         return false;
                     };
                     $scope.newmousemove = function($event) {
-                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         $element.css({
                             height: dy + 'px',
                             width: dx + 'px'
@@ -328,8 +327,8 @@ directive('draggable', ['$window', '$document',
                         $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.initialScrollX = $window.scrollX;
-                        $scope.initialScrollY = $window.scrollY;
+                        $scope.initialScrollX = document.documentElement.scrollLeft;
+                        $scope.initialScrollY = document.documentElement.scrollTop;
                         if (document.attachEvent) {
                             document.attachEvent('on'+mousewheelevt, $scope.mousemove);
                         } else if (document.addEventListener) {
@@ -349,10 +348,10 @@ directive('draggable', ['$window', '$document',
                         $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.initialScrollX = $window.scrollX;
-                        $scope.initialScrollY = $window.scrollY;
-                        var dx = ev.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = ev.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        $scope.initialScrollX = document.documentElement.scrollLeft;
+                        $scope.initialScrollY = document.documentElement.scrollTop;
+                        var dx = ev.clientX - $scope.initialMouseX;
+                        var dy = ev.clientY - $scope.initialMouseY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -918,7 +917,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 $scope.createAttributes(inv_attributes);
-                console.log($scope.library);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                     if ($scope.lib && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
@@ -1230,7 +1228,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattypelabel}}" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1481,7 +1479,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var nx = n[0];
                 var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height]
-                console.log($scope.dp);
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
@@ -1495,7 +1492,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     newstyle['whattype'] = (angular.element(nx).scope().$$nextSibling.whattype);
                     newstyle['required'] = (angular.element(nx).scope().$$nextSibling.required);
                     se = nx.querySelector("textarea");
-                    console.log(se.value);
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
                 } else if (typ == 'check') {
@@ -1540,7 +1536,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-            console.log(nd_iss);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");
