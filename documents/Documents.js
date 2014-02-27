@@ -1,5 +1,6 @@
 //Adds line breaks to the text areas
 function ApplyLineBreaks(oTextarea) {
+    var max = 3;
     if (oTextarea.wrap) {
         oTextarea.setAttribute("wrap", "off");
     }
@@ -67,6 +68,13 @@ function ApplyLineBreaks(oTextarea) {
         }
         strNewValue += strRawValue.substr(i, nLineLength) + "\n";
         i += nLineLength;
+    }
+    var re = /\n/g;
+    var lastre = /\n(?!.*\n)/;
+    var count = strNewValue.match(re);
+    if (count && max <= count.length) {
+        strNewValue = strNewValue.split("\n", 3).join("\n");
+        console.log(strNewValue);
     }
     oTextarea.value = strNewValue;
     oTextarea.setAttribute("wrap", "hard");
@@ -1229,7 +1237,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattypelabel}}" ui-event="{focus : \'openBox(this)\', blur : \'addLineBreaks($event)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
