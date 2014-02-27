@@ -907,6 +907,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.investor_attributes['investorStreet'] = angular.copy($rootScope.person.street);
             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+            $scope.investor_attributes['investorPostalcode'] = angular.copy($rootScope.person.postalcode);
             $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             $scope.attributelabels['investorName'] = "Name";
             $scope.attributelabels['investorState'] = "State";
@@ -914,6 +915,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorStreet'] = "Address";
             $scope.attributelabels['investorPhone'] = "Phone";
             $scope.attributelabels['investorEmail'] = "Email";
+            $scope.attributelabels['investorPostalcode'] = "Zip code";
             $scope.attributelabels['signatureDate'] = "Date";
 
         };
@@ -1291,6 +1293,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorState\')" class="button">State</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                            '<a ng-click="setAnnot($event, this, \'investorPostalcode\')" class="button">Zip code</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorEmail\')" class="button">Email</a>' +
