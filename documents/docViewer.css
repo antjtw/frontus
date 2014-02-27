@@ -531,6 +531,17 @@ navbar .navbar {
     border-bottom-right-radius: 3px;
 }
 
+.draggable div > textarea.roundedcorners {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 .draggable.signature textarea {
     font-family: 'Arizonia', serif;
 }
