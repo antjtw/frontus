@@ -700,7 +700,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.viewInvestorCopy = function(version) {
-            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
 
         // Toggles sidebar back and forth
@@ -773,6 +773,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         var regExp = /\(([^)]+)\)/;
 
         $scope.share = function(message, emails, sign) {
+            $scope.processing = true;
             sign = sign == "Yes";
             var tosee = "";
             if (sign) {
@@ -803,6 +804,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {
+                $scope.processing = false;
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                 $scope.signeeded = "No";
@@ -1012,7 +1014,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.helpModalUp = function () {
-            $scope.tourModal = true;
+            //$scope.tourModal = true;
         };
 
         $scope.tourclose = function () {
@@ -1052,15 +1054,29 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         }
 
         $scope.getData = function() {
-            if ($scope.docKey) {
-                SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+            var flag = !isNaN(parseInt($scope.urlInves));
+            if ($scope.docKey || flag) {
+                var field = "original";
+                var tempdocid = $scope.docKey;
+                if (flag) {
+                    field = "doc_id";
+                    tempdocid = parseInt($scope.urlInves);
+                }
+                SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                     if ($scope.counterparty) {
-                        for (var i = 0; i < data.length; i++) {
-                            var doc = data[i];
-                            if (doc.investor == $scope.urlInves) {
-                                $scope.version = doc;
-                                $scope.getVersion(doc);
-                                return;
+                        if (flag) {
+                            $scope.version = data[0];
+                            $scope.getVersion(data[0]);
+                            return;
+                        }
+                        else {
+                            for (var i = 0; i < data.length; i++) {
+                                var doc = data[i];
+                                if (doc.investor == $scope.urlInves) {
+                                    $scope.version = doc;
+                                    $scope.getVersion(doc);
+                                    return;
+                                }
                             }
                         }
                     } else {
@@ -1484,7 +1500,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.viewInvestorCopy = function(investor) {
-            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1" + "&investor=" + investor);
+            console.log(investor);
+            $location.url("/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
         };
 
         $scope.rejectSignature = function(cd) {
@@ -1936,9 +1953,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)).then(function(data) {
+          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)[0]).then(function(data) {
                 doc.when_signed = data;
-                dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
                 $scope.leave();

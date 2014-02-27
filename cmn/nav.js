@@ -471,7 +471,7 @@ navm.filter('notifications', function () {
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            url = '/documents/company-view?doc=' + note.original + "&investor=" + investor;
+            url = '/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
@@ -479,7 +479,7 @@ navm.filter('notifications', function () {
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
-            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.investor;
+            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };
