@@ -1,6 +1,7 @@
 //Adds line breaks to the text areas
 function ApplyLineBreaks(oTextarea) {
-    var max = 3;
+    var max = Math.floor(parseInt(oTextarea.style.height)/12);
+    console.log(max);
     if (oTextarea.wrap) {
         oTextarea.setAttribute("wrap", "off");
     }
@@ -73,7 +74,7 @@ function ApplyLineBreaks(oTextarea) {
     var lastre = /\n(?!.*\n)/;
     var count = strNewValue.match(re);
     if (count && max <= count.length) {
-        strNewValue = strNewValue.split("\n", 3).join("\n");
+        strNewValue = strNewValue.split("\n", max).join("\n");
         console.log(strNewValue);
     }
     oTextarea.value = strNewValue;
@@ -868,7 +869,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.addLineBreaks = function(ev) {
-            ApplyLineBreaks(ev.target);
+            ev.target = ApplyLineBreaks(ev.target);
         };
 
         $scope.closeBox = function(ev) {
