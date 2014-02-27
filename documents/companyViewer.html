@@ -2,26 +2,18 @@
 <div class="container">
 
 <div modal="tourModal" close="tourclose();" options="touropts">
-    <div class="modalHeader">
-        <span>Prepare document for signatures</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="tourclose();"></span>
-    </div>
     <div class="modalText">
         <div class="row-fluid">
             <div class="span6">
-                <ul>
-                    <li>1. <span>Click the icons to activate different types of markers</span></li>
-                    <li>2. <span>Drag the markers where you need the recipients to annotate</span></li>
-                    <li>3. <span>Click the next button and choose the email addresses of the recipients you need signatures from</span></li>
-                    <li class='blue-link'><span ng-click="tourclose();">Ok. I got it!</span></li>
-                </ul>
+                <img src="http://placekitten.com/320/240">              
             </div>
-            <div class="span6">
-                <ul>
-                    <li><img src="/img/dochelp/tools.png"></li>
-                    <li><img src="/img/dochelp/markers.png"></li>
-                    <li><img src="/img/dochelp/button.png"></li>
-                </ul>
+            <div class="span5 ">
+                 <h6>how to prepare your document...</h6>
+                 <p>
+                    <span class="subtitle">Select where annotations should occur</span>
+                    Draw areas within your document in which your recipents can annotate. Once drawn, pop up preferences appear for that marker to choose who, what, and if it's a required or optional field to complete.
+                 </p>  
+                <p class='blue-link'><span ng-click="tourclose();">Ok, I got it!</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
             </div>
         </div>
     </div>

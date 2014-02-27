@@ -2318,6 +2318,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
+
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2327,6 +2328,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     font-size: 14px;
     line-height: 30px;
     cursor: default;
+
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type:hover {
@@ -2344,6 +2346,10 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     cursor: default;
 }
 
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
+    border-top: 1px solid #E3E3E3;
+}
+
 .topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
     background-color: #FFFFFF;
     color: #656565;
@@ -2356,7 +2362,6 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     margin-top: 10px;
     margin-right: -135px;
 }
-
 
 .nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
     display: inline-block;
@@ -2372,6 +2377,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     width: -moz-calc(100% - 58px) !important;
     width: -webkit-calc(100% - 58px) !important;
     width: calc(100% - 58px) !important;
+
 }
 
 .nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
