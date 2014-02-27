@@ -220,12 +220,12 @@ navbar .navbar {
 }
 
 .page-bar > ul > li.page-tabs.cur-page {
-    background-color: #1ABC96 !important;
+    background-color: #8D8D8D !important;
     color: #FFFFFF !important;
 }
 
 .page-bar > ul > li.page-tabs.cur-page:hover {
-    background-color: #15A085 !important;
+    background-color: #666666 !important;
 }
 
 .page-jumper {
@@ -519,7 +519,7 @@ navbar .navbar {
     resize: both;
     opacity: 0.7;
     border: 1px solid #FFBA00;
-    color: #000000;
+    color: #2980B9;
 
     -webkit-border-top-right-radius: 3px;
     -webkit-border-bottom-right-radius: 3px;
