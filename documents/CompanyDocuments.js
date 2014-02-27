@@ -1316,6 +1316,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             'tokenSeparators': [",", " "],
             'placeholder': 'Enter email address & press enter'
         };
+
+        $scope.drawTime = function() {
+            return $scope.$$childTail.isAnnotable;
+        }
     }
 ]);
 

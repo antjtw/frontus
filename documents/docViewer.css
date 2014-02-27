@@ -682,4 +682,8 @@ div.textarea-container {
     line-height: 0;
 }
 
+.drawcursor {
+    cursor: crosshair;
+}
+
 

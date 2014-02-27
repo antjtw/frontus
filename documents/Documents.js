@@ -269,12 +269,12 @@ directive('draggable', ['$window', '$document',
                         var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
                         var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         $element.css({
-                            height: dy + 'px',
-                            width: dx + 'px'
+                            height: dy + 6 + 'px',
+                            width: dx + 6 + 'px'
                         });
                         var bb = $element[0].querySelector("textarea");
-                        bb.style.height = dy - 10 + "px";
-                        bb.style.width = dx - 14 + "px";
+                        bb.style.height = dy - 4 + "px";
+                        bb.style.width = dx - 8 + "px";
                         return false;
                     };
 
@@ -1231,7 +1231,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
             }
             if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
-                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
+                aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
         };
 
