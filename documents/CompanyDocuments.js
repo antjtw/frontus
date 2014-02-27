@@ -1054,10 +1054,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         }
 
         $scope.getData = function() {
-            if ($scope.docKey) {
+            var flag = !isNaN(parseInt($scope.urlInves));
+            if ($scope.docKey || flag) {
                 var field = "original";
                 var tempdocid = $scope.docKey;
-                var flag = !isNaN(parseInt($scope.urlInves));
                 if (flag) {
                     field = "doc_id";
                     tempdocid = parseInt($scope.urlInves);
