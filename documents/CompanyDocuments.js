@@ -1318,7 +1318,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.drawTime = function() {
-            return $scope.$$childTail.isAnnotable;
+            return $scope.$$childTail.isAnnotable && (!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor")
         }
     }
 ]);
