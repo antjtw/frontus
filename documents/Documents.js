@@ -540,14 +540,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        $scope.loadpreviousshares = function() {
-            SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
-                $scope.alreadyshared = [];
-                angular.forEach(is, function(i) {
-                    $scope.alreadyshared.push(i.unretracted_shares);
+        if ($rootScope.navState.role == 'issuer') {
+            $scope.loadpreviousshares = function() {
+                SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                    $scope.alreadyshared = [];
+                    angular.forEach(is, function(i) {
+                        $scope.alreadyshared.push(i.unretracted_shares);
+                    });
                 });
-            });
-        };
+            };
+        }
+
 
         var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
