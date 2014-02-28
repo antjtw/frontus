@@ -525,6 +525,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
+
+            $scope.loadpreviousshares();
         });
 
         $scope.get_attribute = function(attribute, type, attributes) {
@@ -536,6 +538,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     return attributes.state;
                 }
             }
+        };
+
+        $scope.loadpreviousshares = function() {
+            SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                $scope.alreadyshared = [];
+                angular.forEach(is, function(i) {
+                    $scope.alreadyshared.push(i.unretracted_shares);
+                });
+            });
         };
 
         var regExp = /\(([^)]+)\)/;
@@ -786,6 +797,25 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.rejectMessage = "";
             }
         };
+
+        // This should work but the view doesn't update. Need fixing
+/*        $scope.$watch('recipient', function(newValue, oldValue) {
+            var removeinvestor = -1;
+            angular.forEach(newValue, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches === null) {
+                    matches = ["", person.id];
+                }
+                if ($scope.alreadyshared.indexOf(matches[1]) > -1) {
+                    $scope.$emit("notification:fail", "You've already shared to this user");
+                    removeinvestor = $scope.recipient.indexOf(person);
+                }
+            });
+            if (removeinvestor != -1) {
+                $scope.recipient.splice(removeinvestor, 1);
+            }
+        });*/
+
         $scope.shareDocument = function(doc, message, emails) {
             $scope.processing = true;
             var tosee = "";
