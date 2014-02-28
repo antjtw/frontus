@@ -1938,9 +1938,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)).then(function(data) {
+          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)[0]).then(function(data) {
                 doc.when_signed = data;
-                dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
                 $scope.leave();
