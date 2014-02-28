@@ -638,6 +638,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
                 }
+
+                if (transaction.units) {
+                    transaction.units = String(transaction.units).replace(/\,/g,'');
+                }
+                if (transaction.amount) {
+                    transaction.amount = String(transaction.amount).replace(/\,/g,'');
+                }
+
                 // Convert amount to a float but remove the NaNs if amount is undefined
                 transaction['amount'] = parseFloat(transaction['amount']);
                 if (isNaN(transaction['amount'])) {
