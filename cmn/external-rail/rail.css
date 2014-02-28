@@ -1,0 +1,50 @@
+.right-rail h1 {
+    margin-bottom: 0;
+}
+
+.right-rail {
+    margin-left: 20px;
+    position: fixed;
+}
+
+.right-rail .standard-button {
+    display: inline-block;
+}
+
+.right-rail input {
+    margin-bottom: 0;
+}
+
+.right-rail > ul {
+
+}
+
+.right-rail > ul > li {
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.right-rail > ul > li > a {
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
+}
+
+.right-rail > div {
+    margin-top: 60px;
+}
+
+.right-rail .social-list, .right-rail .social-list a {
+    color: #666666;
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.right-rail .social-list li {
+    margin-top: 10px;
+}
+
+.right-rail .social-list li> a > span:last-of-type {
+    margin-left: 10px;
+    vertical-align: top;
+}

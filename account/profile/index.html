@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html data-ng-app="ProfileApp">
+    
+    <head>
+        <!--{{/i/head_css.inc}}-->
+        <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
+        <link type="text/css" rel="stylesheet" href="/account/profile/profile.css">
+        <!--{{/i/head_js.inc}}-->
+        <title>Sharewave Investor Profile</title>
+        <script src="ProfileApp.js" type="text/javascript"></script>
+    </head>
+    
+    <body>
+        <div class="wrap">
+            <navbar></navbar>
+            <div class="maincontent openflow">
+                <div class="coreEdit" data-ng-view=""></div>
+            </div>
+            <div class="minimumGap"></div>
+            <div class="push"></div>
+        </div>
+        <!--{{/i/foot.inc}}-->
+        <!--{{/i/foot_js.inc}}-->
+    </body>
+
+</html>

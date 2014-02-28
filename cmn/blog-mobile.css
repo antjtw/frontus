@@ -1,0 +1,53 @@
+
+@media (max-width: 1024px) {
+	.container {
+		width: 80%;
+	}
+	.navbounder {
+		width: 100%;
+		padding: 0 10% 0 10%;
+	}
+}
+
+@media (max-width: 767px) {
+	/* General Styling changes */
+	input[type='email'],textarea {font-size:16px;}
+
+	body {
+		padding : 0;
+	}
+
+	.minimumGap {
+		min-height:50px;
+	}
+
+	/* Home page Styling */
+	.navbounder {
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		padding: 0 10% 0 10%;
+	}
+
+	/* Team Page Styling */
+
+	.container.static {
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		padding: 20px 20px 0 20px;
+	}
+
+    /* Upgrade Browser page */
+
+}
+
+@media (max-width: 480px) {
+
+    .topnav .nav.nav-logo > li > a {
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+
+
+}

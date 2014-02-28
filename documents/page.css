@@ -1,3 +1,45 @@
+.subnav-controls.doclist-controls {
+    margin-bottom: 0;
+}
+
+.listcontainer {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin: 20px auto 0 auto;
+}
+
+
+h2.large-h2 {
+    font-size: 20px;
+    margin: 20px 0 20px 15px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.smart-doc-list {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.smart-doc-list > ul > li {
+    border: 1px solid #E3E3E3;
+    overflow: visible;
+    height: 60px;
+}
+
+.smart-doc-list > ul > li >ul >li{
+    display: inline-block;
+    float: left;
+    line-height: 60px;
+    color: #666666;
+    margin-left: 10px;
+}
+
+.smart-doc-list > ul > li >ul >li:last-of-type {
+    float: right;
+    margin-right: 10px;
+}
+
 .thisone {
     color: #1ABC96;
 }
@@ -5,13 +47,25 @@
     cursor: pointer;
 }
 
-div.maincontent {
-    max-width: 1280px;
+.typeahead.dropdown-menu li {
+    text-align: left;
+}
+.typeahead.dropdown-menu > li > a {
+    padding: 3px 10px;
 }
 
 .button.subText {
     float: right;
     margin-left: 10px;
+}
+
+.buttonAddDoc {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.headsection.head-border-bottom {
+    border-bottom: 1px solid rgb(227, 227, 227);
 }
 
 .draggable textarea {
@@ -21,6 +75,10 @@ div.maincontent {
 
 .companyDocViewer {
     border-left: 1px solid #E3E3E3;
+}
+
+.subnav-controls.flush-controls {
+    margin-bottom: 0px;
 }
 
 .docVersiontab > ul {
@@ -77,8 +135,12 @@ div.maincontent {
 }
 
 .documentStatus {
-  font-size: 50%;
-  padding-left: 4em;
+  font-family: 'FS Elliot Web Regular', sans-serif !important;
+  font-size: 10px;
+  color: #A6A6A6;
+  vertical-align: middle;
+  padding-left: 51px;
+  letter-spacing: 1px;
 }
 
 .activity-feed {
@@ -97,8 +159,34 @@ table.docLibrary > tbody > tr:first-child > td {
     cursor: pointer;
 }
 
+.status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
+    text-align: center;
+//    width: 60px;
+}
+
+.status-table.doc-status > tbody:first-child > tr > th:first-child {
+    padding-left: 20px;
+}
+
+.status-table .doc-share-button {
+    display: inline-block;
+    margin-right: 20px;
+}
+
 .status-showing td {
     background-color: #f1f1f1;
+}
+
+.doc-name-header {
+    padding-left: 20px;
+}
+
+.doc-status-header {
+
+}
+
+.subnav-controls > div > div.pull-right.smallSpace {
+    margin-right: 20px;
 }
 
 
@@ -134,31 +222,34 @@ table.docLibrary > tbody > tr:first-child > td {
     margin: 0;
 }
 
+/*
 .modalText.dshare > ul {
     width: 469px;
 }
+*/
 
 .modalText.dshare > ul > li {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    padding: 5px 20px 5px 20px;
-    border-bottom: 1px solid #E3E3E3;
+    padding: 5px 40px 5px 40px;
 }
 
 .modalText.dshare > ul > li > span {
     float: left;
-    line-height: 28px;
+    width: 120px;
+    line-height: 35px;
 }
 
 .modalText.dshare > ul > li > .dropdown-list {
     float: left;
-    margin-left: 18px;
+    margin-left: 5px;
     margin-top: 3px;
 }
 
 .modalText.dshare > ul > li > input[type=text] {
     width: 300px;
+    height: 24px;
 }
 
 
@@ -219,15 +310,22 @@ button.greyButton {
 }
 
 .modal {
-  margin-left: -180px;
+  margin-left: -160px;
   width: auto;
   background-color: #FFFFFF;
   border: 0;
-  border-radius: 0px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 
 .sign-modal {
     width: 380px;
+}
+
+.modalSize {
+    width: 380px;
+    height: 229px;
 }
 
 .sign-modal label {
@@ -247,8 +345,57 @@ button.greyButton {
     margin-top: 4px;
 }
 
+.messageSection {
+    margin-top: 20px;
+    height: 80px;
+}
+
+.messageText {
+    display: inline-block;
+    resize: none;
+    width: 326px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.modal-buttons {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.leftModalButton {
+    display: inline-block;
+    margin-left: 10px !important;
+}
+
+.rightModalButton {
+    display: inline-block;
+    margin-right: 20px !important;
+    float:right;
+}
+
 .modalText.uploadModal p {
     margin-bottom: 10px;
+}
+
+.modalText.updateTitleModal > input {
+    display: inline-block;
+    width: 300px;
+    margin: 0 25px 0 0;
+}
+
+.modalText.updateTitleModal {
+    float: none;
+    margin-bottom:60px;
+}
+
+.modalText.deleteDocModal {
+    width: 360px;
+    margin-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
 }
 
 .modalText.esign {
@@ -256,6 +403,61 @@ button.greyButton {
     margin: 5px 0 20px 18px;
     display: block;
     text-align: left;
+}
+
+.modal.multishareModal {
+    width: 540px;
+    margin-left: -270px;
+}
+
+.modal.multishareModal > .modalText > span {
+    box-sizing: border-box;
+    text-align: left;
+    display: inline-block;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+    margin: 0 0 10px 20px;
+}
+
+.modal.multishareModal > .modalText > ul {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 260px;
+}
+
+.modal.multishareModal > .modalText > ul > li {
+
+}
+
+.modal.multishareModal > .modalText > ul > li > ul {
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+    height: 30px;
+    display: inline-block;
+    margin: 0 20px 0 20px;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li {
+    float: left;
+    line-height: 30px;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(1) {
+    margin: 0 10px 0 0;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(2) {
+    width: 330px;
+    text-align: left;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(3) {
+    margin: 0 10px 0 0;
+}
+
+.modal.multishareModal > .modalText > ul > li > ul > li:nth-child(4) {
 }
 
 .chkboxtext {
@@ -318,6 +520,8 @@ h1.error-message {
     width: 15em;
     height: 2.5em;
     border: 2px solid #DDD;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
     border-radius: 8px;
     text-align: center;
     color: rgb(52, 73, 94);
@@ -338,9 +542,18 @@ h1.error-message {
 */
 
 div.progress-bar {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     margin-top: 15px;
+}
+
+.progress .bar {
+    background-color: #1ABC96;
+    background-image: none !important;
+    text-shadow: none !important;
+    -webkit-box-shadow: none !important;
+       -moz-box-shadow: none !important;
+            box-shadow: none !important;
 }
 
 .drop-target.not-available {
@@ -352,4 +565,354 @@ div.progress-bar {
 
 .icon-large {
     font-size: 1.4em;
+}
+
+.status-table .empty-table > tr {
+    text-align: center;
+    font-family: 'FS Elliot Web Regular', sans-serif !important;
+}
+
+.status-table tbody.empty-table > tr > td {
+    text-align: center !important;
+}
+
+/* Select2 Styling */
+
+.sharepeople-input .select2-container {
+    width: 500px;
+}
+
+.single-share-input .select2-container {
+    width: 330px;
+}
+
+.select2-results .select2-highlighted {
+    background: #1ABC96;
+}
+
+.select2-results .select2-highlighted .select2-result-label {
+    color: #fff;
+}
+
+.select2-drop {
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.select2-drop:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    border-bottom: 6px solid #E3E3E3;
+    top: -6px;
+    right: 9px !important;
+}
+
+.select2-search-choice-close {
+    top: 5px;
+}
+
+.select2-container-multi .select2-choices {
+    background-image: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #E2E2E2;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    background-image: none;
+    background-color: #E2E2E2;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.select2-search-choice > div {
+    text-align: left;
+}
+
+.select2-container-multi.select2-container-active .select2-choices {
+    border: 1px solid #E2E2E2;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    box-shadow: none;
+
+}
+
+.select2-drop-active {
+    border: 1px solid #E2E2E2;
+}
+
+.select2-container-multi .select2-choices .select2-search-field input {
+    font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+/* CSS for the captable style sliding right panel */
+
+.span4.capright {
+    float: right;
+    margin-left: 0;
+    width: 350px;
+    min-height: 850px;
+    border-left: 6px solid #E3E3E3;
+}
+
+.slidingcss25 {
+    transition: all 0.25s;
+    -moz-transition:all 0.25s; /* Firefox 4 */;
+    -webkit-transition: all 0.25s; /* Safari and Chrome */
+    -o-transition: all 0.25s; /* Opera */
+}
+
+.span4.capright.button-offset {
+    margin-top: -19px;
+    position: relative;
+}
+
+.span4.capright > button {
+    top: 330px;
+    position:relative;
+
+    left: -68px;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    border-radius: 0;
+    border: none;
+    background-color: #E3E3E3;
+    box-shadow: none;
+    width: 108px;
+    line-height: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #1E2D3D;
+}
+
+.span4.capright > button:active {
+    color: #1E2D3D;
+}
+
+/* Template CSS */
+
+.templatePanel {
+    margin: 0 100px 80px 100px;
+}
+
+.templatePanel .center {
+    width: 100%;
+    text-align: center;
+}
+
+.templatePanel p {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.templatePanel dl:first-of-type {
+    margin-top: 40px;
+    margin-left: -50px;
+    margin-bottom: 60px;
+}
+
+.templatePanel > p:nth-child(-n+3) {
+    color: #1D2C3C;
+}
+
+.templatePanel > p:nth-child(-n+2) {
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel > p:nth-child(1) {
+    margin-top: 50px;
+}
+
+.templatePanel.investor > p:nth-child(1) {
+    text-align: center;
+    font-size: 20px;
+}
+
+.templatePanel > p:nth-child(2) {
+    margin-top: 0;
+    visibility: hidden;
+}
+
+.templatePanel.investor > p:nth-child(2) {
+    visibility: visible;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.templatePanel > p:nth-child(2) > br:first-child {
+    display: none;
+}
+
+.templatePanel > p:nth-child(2) input, .templatePanel > p:nth-child(2) span {
+    visibility: visible;
+}
+
+.templatePanel > p:nth-child(3) {
+    font-size: 20px;
+    text-align: center;
+}
+
+.templatePanel.investor > p:nth-child(3) {
+    font-size: 30px;
+}
+
+.templatePanel > p:nth-child(4) {
+    display: none;
+}
+
+.templatePanel > p:nth-child(-n+2) span.template-label {
+    width: 230px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.templatePanel > p:nth-child(2) span.template-label {
+    width: 220px;
+}
+
+
+.templatePanel dl dt {
+    display: none;
+}
+
+.templatePanel dl dd > p {
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+
+.templatePanel dl dd > p span.template-label {
+    width: 220px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.templatePanel ol {
+    margin-left: 50px;
+}
+
+.templatePanel ol > li {
+    margin-top: 30px;
+}
+
+.templatePanel ol > li > p {
+    position: relative;
+}
+
+.templatePanel ol > li > p > button {
+    position: absolute;
+    left: -50px;
+}
+
+.templatePanel textarea {
+    resize: none;
+    width: 100%;
+    height: 60px;
+}
+
+.templatePanel input.length2 {
+    width: 30px;
+}
+
+span.text-attribute {
+    display: block;
+    width: 350px;
+    margin: 0 auto 0 auto;
+}
+
+.inline-radio {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.inline-radio > li {
+    float: left;
+}
+
+.inline-radio > li:nth-child(n+1) {
+    margin-left: 10px;
+}
+
+div.template-share {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+div.template-share > div {
+    margin-bottom: 10px;
+}
+
+div.template-share > div > span {
+    text-transform: uppercase;
+    width: 307px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+}
+
+div.template-share > div > div.select2-container {
+    margin-bottom: 0;
+    width: 314px;
+}
+
+div.template-share > div > textarea {
+    width: 300px;
+    height: 80px;
+    resize: none;
+}
+
+input[type='text']:disabled, textarea:disabled {
+    background: url("/img/stripe-pattern.png") repeat;
+}
+
+.templatePanel .check-box-button:disabled, .check-box-button:disabled:hover {
+    background: url("/img/stripe-pattern.png") repeat;
+}
+
+.helpModal {
+    margin-left: -360px;
+    width:718px;
+}
+
+.helpModal ul > li {
+    text-align: left;
+    display: block;
+    margin-left: 20px;
+    height: 100px;
+    overflow: auto;
+    font-size: 14px;
+    color: #666666;
+}
+
+.helpModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+}
+
+.helpModal ul > li > span {
+    display: inline-block;
+    width: 300px;
+    float: right;
 }

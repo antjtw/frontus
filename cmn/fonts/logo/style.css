@@ -1,24 +1,34 @@
 @font-face {
-    font-family: 'logo';
-    src:url('fonts/sharewave.eot');
-    src:url('fonts/sharewave.eot?#iefix') format('embedded-opentype'),
-    url('fonts/sharewave.woff') format('woff'),
-    url('fonts/sharewave.ttf') format('truetype'),
-    url('fonts/sharewave.svg#sharewave') format('svg');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'logo';
+	src:url('sharewave.eot');
+	src:url('sharewave.woff') format('woff'),
+            url('sharewave.ttf') format('truetype'),
+            url('sharewave.svg#sharewave') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+// Chrome fix http://stackoverflow.com/questions/13674808/chrome-svg-font-rendering-breaks-layout/14345363#14345363
+@font-face {
+	font-family: 'logo';
+	src:url('sharewave.eot');
+	src:url('sharewave.svg#sharewave') format('svg'),
+            url('sharewave.woff') format('woff'),
+            url('sharewave.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-logo]:before {
-    font-family: 'logo';
-    content: attr(data-logo);
-    speak: none;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
+
+	font-family: 'logo';
+	content: attr(data-logo);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
 }
 
 /* Use the following CSS code if you want to have a class per icon */

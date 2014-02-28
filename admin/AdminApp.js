@@ -41,7 +41,8 @@ app.directive('ngModelOnblur', function() {
   };
 });
 
-app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', function($scope, $rootScope, SWBrijj, $location) {
+app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', 'navState',
+  function($scope, $rootScope, SWBrijj, $location, navState) {
 
     /** @name SWBrijj#proc
      * @function
@@ -53,7 +54,6 @@ app.controller('AdminCtrl',['$scope','$rootScope', 'SWBrijj', '$location', funct
 
     /** @name Object#except
      * @type {function( function(!Object) )} */
-
 
   // var dropbox = $scope.$element.querySelector(".dropbox"); // $element seems to be an array of elements
     $scope.dropText = 'Drop files here...';

@@ -3,6 +3,11 @@
   Deny from all
 </Files>
 
+<Files maintenance.html>
+  Order Deny,Allow
+  Allow from all
+</Files>
+
 <Files .htaccess>
   Order Deny,Allow
   Deny from all

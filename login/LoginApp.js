@@ -12,6 +12,7 @@ var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locati
       when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
       when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
       when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
+      when('/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -23,7 +24,6 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     $scope.password = "";
     if ($routeParams.error) {
       $scope.showError = true;
-      $scope.username = $routeParams.error;
     } else {
       $scope.showError = false;
     }
@@ -58,15 +58,20 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     }
 }]);
 
-app.controller('LogoutCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {
+app.controller('LogoutCtrl', ['$scope','SWBrijj' , '$routeParams', function($scope, SWBrijj, $routeParams) {
   $scope.doLogout = function() {
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     /** @name SWBrijj#logout
      *  @function
      */
     SWBrijj.logout().then(function(x) {
-      void(x);
-      document.location.href='/?logout';
+        void(x);
+        if ($routeParams.timeout) {
+            document.location.href='/login/timeout';
+        }
+        else {
+            document.location.href='/?logout';
+        }
     });
   }
 }]);
@@ -74,7 +79,7 @@ app.controller('LogoutCtrl', ['$scope','SWBrijj', function($scope, SWBrijj) {
 //Controller for the home page
 app.controller('HomeCtrl', ['$scope', function($scope) {
     $scope.user = function(){
-      document.location.href = '/investor/profile';
+      document.location.href = '/account/profile';
 //      return $routeParams.userName;
     };
 }]);

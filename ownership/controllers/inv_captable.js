@@ -8,7 +8,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     var company = navState.company;
     $scope.currentCompany = company;
-    console.log(company);
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -33,7 +32,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     });
 
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
-        console.log(data);
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -42,7 +40,6 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
         // Pivot shenanigans
         SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
-            console.log(trans);
             $scope.trans = trans
 
             SWBrijj.tblm('ownership.this_company_options').then(function (x) {
@@ -74,17 +71,21 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                     });
 
                     angular.forEach($scope.issues, function(issue) {
-                        var offset = issue.date.getTimezoneOffset();
-                        issue.date = issue.date.addMinutes(offset);
+                        issue.date = calculate.timezoneOffset(issue.date);
                         if (issue.vestingbegins) {
-                            issue.vestingbegins = issue.vestingbegins.addMinutes(offset);
+                            issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
+                            issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
                         }
                     });
 
 
                     for (var i = 0, l = $scope.trans.length; i < l; i++) {
-                        var offset = $scope.trans[i].date.getTimezoneOffset();
-                        $scope.trans[i].date = $scope.trans[i].date.addMinutes(offset);
+                        $scope.trans[i].date = calculate.timezoneOffset($scope.trans[i].date);
+                        if ($scope.trans[i].vestingbegins) {
+                            $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
+                            $scope.trans[i].vestingbeginsdisplay = calculate.monthDiff($scope.trans[i].vestingbegins,$scope.trans[i].date);
+                        }
+
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
                             $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
@@ -95,10 +96,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                 $scope.trans[i].premoney = issue.premoney;
                                 $scope.trans[i].postmoney = issue.postmoney;
                             }
-                            ;
                         });
                     }
-                    ;
 
                     // Generate the rows from the transactions
                     // u represents units throughout, a price
@@ -135,6 +134,53 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                                     row[tran.issue] = {"u": null, "a": null, "ukey": null, "akey": null};
                                 }
                             }
+                        });
+                    });
+
+                    // Get the company's Paripassu's on issues
+                    SWBrijj.tblm('ownership.this_company_paripassu').then(function (links) {
+                        var links = links;
+                        angular.forEach($scope.issues, function(issue) {
+                            issue.paripassu = [];
+                            angular.forEach(links, function(pari) {
+                                if (pari.issue == issue.issue) {
+                                    issue.paripassu.push(pari);
+                                }
+                            });
+                            if (issue.paripassu.length == 0) {
+                                issue.paripassu.push({"company":issue.company, "issue": issue.issue, "pariwith": null});
+                            }
+                        })
+                    });
+
+                    SWBrijj.tblm('ownership.this_company_conversion').then(function (convert) {
+                        SWBrijj.tblm('ownership.this_company_transfer').then(function (transfer) {
+                            angular.forEach($scope.trans, function (tran) {
+                                tran.convert = [];
+                                angular.forEach(convert, function(con) {
+                                    if (con.tranto == tran.tran_id) {
+                                        con.date = calculate.timezoneOffset(con.date);
+                                        if (con.method == "Split") {
+                                            con.split = new Fraction(con.split);
+                                        }
+                                        tran.convert.push(con);
+                                    }
+                                });
+
+                                angular.forEach(transfer, function(transf) {
+                                    transf.date = calculate.timezoneOffset(transf.date);
+                                    if (transf.tranto == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "To";
+                                        tran.convert.push(final);
+                                    }
+                                    else if (transf.tranfrom == tran.tran_id) {
+                                        var final = angular.copy(transf);
+                                        final.direction = "From";
+                                        tran.convert.push(final);
+                                    }
+                                });
+                            });
                         });
                     });
 
@@ -233,18 +279,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
                         tran['active'] = true
                         first = first + 1
                     }
-                    if (String(tran['partpref']) == "true") {
-                        tran.partpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.partpref = $scope.tf[1];
-                    }
-                    if (String(tran['liquidpref']) == "true") {
-                        tran.liquidpref = $scope.tf[0];
-                    }
-                    else {
-                        tran.liquidpref = $scope.tf[1];
-                    }
+                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
                     $scope.activeTran.push(tran);
                 }
             }
@@ -274,19 +311,9 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
 
-        // Set Boolean Values for the Angularjs Select
-        if (String($scope.activeIssue.partpref) == "true") {
-            $scope.activeIssue.partpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.partpref = $scope.tf[1];
-        }
-        if (String($scope.activeIssue.liquidpref) == "true") {
-            $scope.activeIssue.liquidpref = $scope.tf[0];
-        }
-        else {
-            $scope.activeIssue.liquidpref = $scope.tf[1];
-        }
+        $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
+        $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
+        $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
         if ($scope.activeIssue.name == "") {
             $scope.activeIssue.date = (Date.today()).toUTCString();
         }
@@ -336,17 +363,23 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     };
 
+    $scope.canHover = function (row) {
+        if (row['u'] || row['a']) {
+            return true
+        }
+        else {
+            return false
+        }
+    };
+
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = $scope.formatAmount(amount);
-        if (output) {
-            output = "$" + output
-        }
-        return (output);
+        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+        return output;
     };
 
     // Functions derived from services for use in the table

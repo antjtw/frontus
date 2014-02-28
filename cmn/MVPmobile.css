@@ -1,11 +1,30 @@
 
 @media (max-width: 1024px) {
 	.container {
-		width: 100%;
+		width: 80%;
 	}
 	.navbounder {
 		width: 100%;
 	}
+
+    .home .button.greenButton {
+        margin-top: 10px;
+        display: block;
+        border-radius: 3px;
+    }
+
+    .home input {
+        border-radius: 3px;
+    }
+
+    div.span5.home-ike {
+        display: none;
+    }
+
+    .home .button.center-button {
+        text-align: center;
+        margin: 10px auto 0 auto;
+    }
 }
 
 @media (max-width: 767px) {
@@ -26,6 +45,10 @@
 		padding: 0 5% 0 5%;
 	}
 
+    .home .emp-options {
+        float: none;
+    }
+
 	/* Home page Styling */
 	.navbounder {
 		box-sizing:border-box;
@@ -38,9 +61,10 @@
 	}
 
 	.home #hero{
-        background: url(/img/top-image-800-2.jpg) no-repeat center;
+    	background-color: #1E2D3D;
 		width: 80%;
-        height: 400px;
+        min-height: 400px;
+        padding-bottom: 20px;
     }
 
 	.home .button {
@@ -53,9 +77,14 @@
 		width: auto;
 	}
 
-	.videoRow > h2 {
+	.home h2 {
 		font-size: 18px;
+        line-height: 22px;
 	}
+
+    .home .trio-icons > div.span4 {
+        margin-top: 30px;
+    }
 
 	.videoModal.modal {
 		height: 200px;
@@ -96,7 +125,12 @@
 		box-sizing:border-box;
 		-moz-box-sizing:border-box;
 		width: 100%;
+        margin-bottom:10px;
 	}
+
+    .home .thanks {
+        height: 200px;
+    }
 
 	.row-fluid.iconMobile > div:first-child {
 		width:40%
@@ -121,6 +155,24 @@
         padding-bottom: 30px;
     }
 
+    .modal.externalmodal {
+        margin: 0;
+        width: auto;
+    }
+
+    .home .inviteRow h2 {
+        display: block;
+        margin: 0 20px 10px 20px;
+    }
+
+    .home .standard-button.blue.invite {
+        padding-left: 0;
+    }
+
+    .feature-block .text {
+        display: block;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -136,6 +188,38 @@
 	.videoIframe {
 		height: 100px;
 	}
+
+    .topnav .nav.nav-logo > li > a {
+        margin-left: 10px;
+    }
+
+    .externalmodal .input-row {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .externalmodal .input-row > p {
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: left;
+    }
+
+    .externalmodal .input-row > input {
+        display: block;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .static .feature-block {
+        margin-left: 40px;
+        padding-top: 80px;
+    }
 }
 
 @media (max-width: 320px) {
@@ -147,4 +231,8 @@
 	.videoIframe {
 		height: 80px;
 	}
+
+    .externalmodal .standard-button > button {
+        width: 100px;
+    }
 }

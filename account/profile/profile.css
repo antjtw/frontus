@@ -1,0 +1,168 @@
+/* Investor Profile */
+
+textarea {
+    resize: none;
+}
+
+.editPasswordBlock {
+    margin-top:-8px;
+}
+
+.viewProfilePhoto {
+    height:136px;
+    width:136px;
+    border: none;
+    overflow:hidden;
+}
+
+.editProfilePhoto {
+    height:136px;
+    width:136px;
+    border: none;
+    overflow:hidden;
+}
+
+.permission-block {
+    height: 41px;
+    white-space: nowrap;
+}
+
+.permission-block > div:first-child {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    width: 100%;
+}
+
+.permission-block .permission-label {
+    line-height: 30px;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+h1.profile-name {
+    margin: 4px 0;
+}
+
+.recipientInfo .temp-text {
+    font-style: italic;
+}
+
+.info-box > .body-box {
+    background-color: #FFFFFF;
+    margin: 0;
+    min-height: 420px;
+    border-top: none;
+}
+
+.personal-information {
+    padding-top: 30px;
+}
+
+.personal-information > li > ul {
+    display: block;
+    overflow: auto;
+}
+
+.personal-information > li > ul > li {
+    float: left;
+    display: inline-block;
+}
+
+.personal-information > li > ul > li:nth-child(odd) {
+    width: 90px;
+    margin-right: 10px;
+    text-align: right;
+    text-transform: uppercase;
+    font-size: 10px;
+    line-height: 30px;
+}
+
+.personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
+    width: 60px;
+}
+
+.personal-information input {
+    width: 180px;
+}
+
+.personal-information input.short-input {
+    width: 70px;
+}
+
+.check-box-button.profile-box {
+
+}
+
+.investor-attributes > ul {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+.investor-attributes .radioOption {
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.investor-attributes .radioOption > li:first-child {
+    width: 100%;
+    display: inline-block;
+    margin-left: 0px;
+    margin-right: 10px;
+    text-align: left;
+}
+
+.investor-attributes .radioOption > li {
+    width: 100%;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    margin-left: 80px;
+}
+
+.investor-attributes .radioOption > li > button {
+    margin-right: 10px;
+}
+
+.investor-attributes .text-input > span {
+    width: 70px;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: right;
+}
+
+.investor-attributes .text-input > input {
+    margin-bottom: 0;
+    width: 160px;
+}
+
+.investor-attributes > ul > li {
+    margin-top: 20px;
+}
+
+.investor-attributes > ul > li > button.check-box-button {
+    margin-left: 80px;
+    vertical-align: top;
+    margin-right: 5px;
+}
+
+.investor-attributes > ul > li > button.check-box-button + span {
+    width: -moz-calc(100% - 110px);
+    width: -webkit-calc(100% - 110px);
+    width: calc(100% - 110px);
+    display: inline-block;
+}
+
+li.profile-image > img {
+    width: 106px;
+    height: 106px;
+    border-radius: 3px;
+    border: 1px solid #E3E3E3;
+}
+
+
+li.profile-image > div {
+    text-align: center;
+    margin-top: 10px;
+}

@@ -13,18 +13,20 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
             $scope.userStatus[i].shown = false;
+            $scope.userStatus[i].name =  ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
         }
+        Intercom('update', {company : {'captable_shares':$scope.userStatus.length}});
         SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
-            console.log(activities);
             angular.forEach($scope.userStatus, function (person) {
                 angular.forEach(activities, function (activity) {
                     if (activity.email == person.email) {
                         var act = activity.activity;
                         var time;
-                      time = activity.event_time;
+                        time = activity.event_time;
                         person[act] = time;
                     }
                 });
+                person.viewedbool = person.viewed ? "viewed" : "unviewed";
             });
         });
         SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
@@ -38,31 +40,27 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         })
     });
 
-    // SWBrijj.procm("ownership.get_company_activity_cluster").then(function(data) {
-    SWBrijj.tblm("ownership.company_activity_feed", ["name", "email", "activity", "event_time"]).then(function(data) {
-        $scope.activity = data;
-        $scope.shared_dates = [];
-        for (var i = 0; i < $scope.activity.length; i++) {
-            $scope.activity[i].timeAgo = moment($scope.activity[i].event_time).fromNow();
-            if ($scope.activity[i].name == null || $scope.activity[i].name.length < 2) {
-                $scope.activity[i].name = $scope.activity[i].email;
+    SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
+
+        var originalfeed = feed;
+        //Generate the groups for the activity feed
+        $scope.feed = [];
+        angular.forEach(originalfeed, function(event) {
+            if (event.activity != "sent") {
+                event.when = moment(event.event_time).from(event.timenow);
+                event.type = "ownership"
+                $scope.feed.push(event);
             }
-            $scope.activity[i].link = "/company/profile/view?id=" + $scope.activity[i].email;
-            if ($scope.activity[i].activity == "received") {
-                $scope.activity[i].activity = "Shared with ";
-                $scope.activity[i].icon = 'icon-redo';
-                $scope.shared_dates.push(new Date($scope.activity[i].whendone));
-            }
-            else if ($scope.activity[i].activity == "viewed") {
-                $scope.activity[i].activity = "Viewed by ";
-                $scope.activity[i].icon = 'icon-view';
-            }
-        }
+        });
     });
 
     $scope.activityOrder = function(card) {
         return -card.event_time;
     };
+
+    $scope.peopleOrder = 'name'
+
+    $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
     $scope.opendetails = function(selected) {
         $scope.userStatus.forEach(function(name) {
@@ -86,7 +84,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                     peep.level = person.level
                 }
             });
-            $scope.$emit("notification:success", "Changed ownership table access level");
+            $scope.$emit("notification:success", "Successfully changed permissions");
         }).except(function(x) {
               void(x);
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
@@ -142,6 +140,22 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         }
+    };
+
+    $scope.gotoPerson = function (person) {
+        var link;
+        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/account/profile/') : '');
+        if (link) {
+            document.location.href=link;
+        }
+    };
+
+    // CSV Generation
+
+    $scope.downloadCsv = function() {
+        SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+            document.location.href = x;
+        });
     };
 
     $scope.opts = {

@@ -37,65 +37,111 @@ you can use the generic selector below, but it's slower:
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
+
 .icon-warning:before {
-	content: "\e000";
+	content: "\e0000";
 }
 .icon-view:before {
 	content: "\e001";
 }
-.icon-arrow-down:before {
-	content: "\e002";
+.icon-twitter-bird:before {
+	content: "\e035";
 }
-.icon-arrow-up:before {
-	content: "\e003";
+.icon-tweeter:before {
+	content: "\e02a";
 }
-.icon-arrow-right:before {
-	content: "\e004";
+.icon-text-smaller:before {
+	content: "\e040";
 }
-.icon-arrow-left:before {
-	content: "\e005";
+.icon-text-edit:before {
+	content: "\e042";
 }
-.icon-doc2:before {
-	content: "\e006";
+.icon-text-bigger:before {
+	content: "\e041";
 }
-.icon-doc-download:before {
-	content: "\e007";
+.icon-t:before {
+	content: "\e01d";
 }
-.icon-doc-upload:before {
-	content: "\e008";
-}
-.icon-doc:before {
-	content: "\e009";
+.icon-star:before {
+	content: "\e020";
 }
 .icon-profile:before {
 	content: "\e00a";
 }
-.icon-profile-pic:before {
-	content: "\e00b";
-}
-.icon-delete:before {
-	content: "\e00c";
-}
-.icon-pen:before {
-	content: "\e00d";
+.icon-pie:before {
+	content: "\e012";
 }
 .icon-pencil:before {
 	content: "\e00e";
 }
-.icon-delete2:before {
-	content: "\e00f";
+.icon-pen:before {
+	content: "\e00d";
+}
+.icon-minus:before {
+	content: "\e02f";
+}
+.icon-magnify:before {
+	content: "\e01e";
+}
+.icon-linkedin2:before {
+	content: "\e036";
+}
+.icon-linkedin:before {
+	content: "\e029";
+}
+.icon-lightening:before {
+	content: "\e01f";
+}
+.icon-key:before {
+	content: "\e026";
+}
+.icon-grid:before {
+	content: "\e050";
+}
+.icon-graph2:before {
+	content: "\e021";
+}
+.icon-grab:before {
+	content: "\e043";
+}
+.icon-giter:before {
+	content: "\e02b";
+}
+.icon-facebook-f:before {
+	content: "\e037";
+}
+.icon-email:before {
+	content: "\e024";
+}
+.icon-doc2:before {
+	content: "\e006";
+}
+.icon-doc:before {
+	content: "\e009";
+}
+.icon-doc-upload:before {
+	content: "\e008";
+}
+.icon-doc-download:before {
+	content: "\e007";
 }
 .icon-delete3:before {
 	content: "\e010";
 }
-.icon-cog:before {
-	content: "\e011";
+.icon-delete2:before {
+	content: "\e00f";
 }
-.icon-pie:before {
-	content: "\e012";
+.icon-delete:before {
+	content: "\e00c";
 }
-.icon-circle-down:before {
-	content: "\e013";
+.icon-countersign:before {
+	content: "\e02e";
+}
+.icon-circle:before {
+	content: "\e051";
+}
+.icon-circle-upload:before {
+	content: "\e01a";
 }
 .icon-circle-up:before {
 	content: "\e014";
@@ -112,62 +158,89 @@ you can use the generic selector below, but it's slower:
 .icon-circle-left:before {
 	content: "\e018";
 }
+.icon-circle-info:before {
+	content: "\e044";
+}
 .icon-circle-download:before {
 	content: "\e019";
 }
-.icon-circle-upload:before {
-	content: "\e01a";
+.icon-circle-down:before {
+	content: "\e013";
 }
 .icon-circle-delete:before {
 	content: "\e01b";
 }
-.icon-cicle-minus:before {
-	content: "\e01c";
-}
-.icon-untitled:before {
-	content: "\e01d";
-}
-.icon-magnify:before {
-	content: "\e01e";
-}
-.icon-lightening:before {
-	content: "\e01f";
-}
-.icon-star:before {
-	content: "\e020";
-}
-.icon-graph2:before {
-	content: "\e021";
-}
-.icon-graph1:before {
-	content: "\e022";
-}
-.icon-check:before {
-	content: "\e023";
-}
-.icon-email:before {
-	content: "\e024";
-}
-.icon-calendar:before {
-	content: "\e025";
-}
-.icon-key:before {
-	content: "\e026";
-}
-.icon-redo:before {
-	content: "\e027";
+.icon-circle-check:before {
+	content: "\e052";
 }
 .icon-chat:before {
 	content: "\e028";
 }
-.icon-linkedin:before {
-	content: "\e029";
+.icon-calendar:before {
+	content: "\e025";
 }
-.icon-tweeter:before {
-	content: "\e02a";
+.icon-back:before {
+	content: "\e136";
 }
-.icon-giter:before {
-	content: "\e02b";
+.icon-arrow-up:before {
+	content: "\e003";
+}
+.icon-arrow-right:before {
+	content: "\e004";
+}
+.icon-arrow-left:before {
+	content: "\e005";
+}
+.icon-arrow-down:before {
+	content: "\e002";
+}
+.icon-arrow-2up:before {
+	content: "\e034";
+}
+.icon-arrow-2right:before {
+	content: "\e033";
+}
+.icon-arrow-2left:before {
+	content: "\e032";
+}
+.icon-arrow-2down:before {
+	content: "\e031";
+}
+.icon-admin:before {
+	content: "\e045";
+}
+.icon-cicle-minus:before {
+	content: "\e01c";
+}
+.icon-check:before {
+	content: "\e023";
+}
+.icon-cog:before {
+	content: "\e011";
+}
+.icon-conversion:before {
+	content: "\e039";
+}
+.icon-graph1:before {
+	content: "\e022";
+}
+.icon-grabber:before {
+	content: "\e11a";
+}
+.icon-plus:before {
+	content: "\e053";
+}
+.icon-profile-pic:before {
+	content: "\e00b";
+}
+.icon-location:before {
+	content: "\e600";
+}
+.icon-facebook:before {
+	content: "\e601";
+}
+.icon-redo:before {
+	content: "\e027";
 }
 .icon-lock:before {
 	content: "\e02c";
