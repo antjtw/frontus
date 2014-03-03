@@ -962,7 +962,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+            $scope.stretchheight = {height: String(newValue + 150) + "px"}
         });
     }
 ]);
@@ -1014,7 +1014,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.helpModalUp = function () {
-            //$scope.tourModal = true;
+            $scope.tourModal = true;
         };
 
         $scope.tourclose = function () {

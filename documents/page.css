@@ -894,6 +894,7 @@ input[type='text']:disabled, textarea:disabled {
 .helpModal {
     margin-left: -360px;
     width:718px;
+    z-index: 1060;
 }
 
 .helpModal ul > li {
@@ -939,4 +940,9 @@ input[type='text']:disabled, textarea:disabled {
 
 .helpModal .modalText > div > div > img {
     margin-top: 10px;
+}
+
+.helpModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
 }
