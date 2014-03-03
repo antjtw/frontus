@@ -916,3 +916,28 @@ input[type='text']:disabled, textarea:disabled {
     width: 300px;
     float: right;
 }
+
+.helpModal .modalText h6 {
+    color: #15A085;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.helpModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.helpModal .subtitle {
+    color: #000;
+    display: block;
+
+}
+
+.helpModal .modalText > div > div > img {
+    margin-top: 10px;
+}
+>>>>>>> dexter
