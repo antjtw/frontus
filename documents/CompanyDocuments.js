@@ -727,7 +727,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.retract_document", version.doc_id).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
-                $route.reload();
+                version.when_retracted = new Date.today();
+                version.last_event.activity = "retracted";
+                version.last_event.event_time = new Date.today();
+                version.last_event.timenow = new Date.today();
+                version.last_event.person = $rootScope.person.name;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
