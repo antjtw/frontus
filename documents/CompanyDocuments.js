@@ -965,7 +965,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+            $scope.stretchheight = {height: String(newValue + 150) + "px"}
         });
     }
 ]);
@@ -1017,7 +1017,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.helpModalUp = function () {
-            //$scope.tourModal = true;
+            $scope.tourModal = true;
         };
 
         $scope.tourclose = function () {
@@ -1319,6 +1319,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             'tokenSeparators': [",", " "],
             'placeholder': 'Enter email address & press enter'
         };
+
+        $scope.drawTime = function() {
+            return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"))
+        }
     }
 ]);
 

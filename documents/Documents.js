@@ -1,7 +1,6 @@
 //Adds line breaks to the text areas
 function ApplyLineBreaks(oTextarea) {
     var max = Math.floor(parseInt(oTextarea.style.height)/12);
-    console.log(max);
     if (oTextarea.wrap) {
         oTextarea.setAttribute("wrap", "off");
     }
@@ -269,12 +268,12 @@ directive('draggable', ['$window', '$document',
                         var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
                         var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         $element.css({
-                            height: dy + 'px',
-                            width: dx + 'px'
+                            height: dy + 6 + 'px',
+                            width: dx + 6 + 'px'
                         });
                         var bb = $element[0].querySelector("textarea");
-                        bb.style.height = dy - 10 + "px";
-                        bb.style.width = dx - 14 + "px";
+                        bb.style.height = dy - 4 + "px";
+                        bb.style.width = dx - 8 + "px";
                         return false;
                     };
 
@@ -526,6 +525,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
+
+            $scope.loadpreviousshares();
         });
 
         $scope.get_attribute = function(attribute, type, attributes) {
@@ -538,6 +539,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }
             }
         };
+
+            $scope.loadpreviousshares = function() {
+                if ($rootScope.navState.role == 'issuer') {
+                    SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                        $scope.alreadyshared = [];
+                        angular.forEach(is, function(i) {
+                            $scope.alreadyshared.push(i.unretracted_shares);
+                        });
+                    });
+                }
+            };
+
 
         var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
@@ -787,6 +800,25 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.rejectMessage = "";
             }
         };
+
+        // This should work but the view doesn't update. Need fixing
+/*        $scope.$watch('recipient', function(newValue, oldValue) {
+            var removeinvestor = -1;
+            angular.forEach(newValue, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches === null) {
+                    matches = ["", person.id];
+                }
+                if ($scope.alreadyshared.indexOf(matches[1]) > -1) {
+                    $scope.$emit("notification:fail", "You've already shared to this user");
+                    removeinvestor = $scope.recipient.indexOf(person);
+                }
+            });
+            if (removeinvestor != -1) {
+                $scope.recipient.splice(removeinvestor, 1);
+            }
+        });*/
+
         $scope.shareDocument = function(doc, message, emails) {
             $scope.processing = true;
             var tosee = "";
@@ -907,6 +939,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.investor_attributes['investorStreet'] = angular.copy($rootScope.person.street);
             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+            $scope.investor_attributes['investorPostalcode'] = angular.copy($rootScope.person.postalcode);
             $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             $scope.attributelabels['investorName'] = "Name";
             $scope.attributelabels['investorState'] = "State";
@@ -914,6 +947,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorStreet'] = "Address";
             $scope.attributelabels['investorPhone'] = "Phone";
             $scope.attributelabels['investorEmail'] = "Email";
+            $scope.attributelabels['investorPostalcode'] = "Zip code";
             $scope.attributelabels['signatureDate'] = "Date";
 
         };
@@ -1231,14 +1265,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
             }
             if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
-                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
+                aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
         };
 
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1291,6 +1325,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorState\')" class="button">State</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                            '<a ng-click="setAnnot($event, this, \'investorPostalcode\')" class="button">Zip code</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorEmail\')" class="button">Email</a>' +
