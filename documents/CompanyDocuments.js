@@ -357,13 +357,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
 
+        /*
         var mimetypes = ["application/pdf",
                          "application/msword",
                          "application/vnd.ms-powerpoint",
                          "text/csv"];
-        //var mimetypes = ["application/pdf"];
+        */
+        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
@@ -371,11 +372,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
-                /*
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    //$scope.fileError = "Please choose a .pdf, .doc, .ppt or .csv";
                     $scope.fileError = "Please choose a pdf";
-                */
                 } else {
                     $scope.files.push(element.files[i]);
                 }
