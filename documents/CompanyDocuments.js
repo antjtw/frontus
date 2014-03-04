@@ -728,7 +728,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.retract_document", version.doc_id).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
-                $route.reload();
+                version.when_retracted = new Date.today();
+                version.last_event.activity = "retracted";
+                version.last_event.event_time = new Date.today();
+                version.last_event.timenow = new Date.today();
+                version.last_event.person = $rootScope.person.name;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -1301,10 +1305,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
+                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
+                console.log("zero people");
                 anybad = true;
             }
             return anybad;
@@ -1779,7 +1785,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.exportOriginalToPdf = function(doc) {
-            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.original.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genInvestorOriginalPdf', doc.original.toString()).then(function(url) {
                 document.location.href = url;
             });
         };

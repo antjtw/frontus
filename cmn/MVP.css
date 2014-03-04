@@ -1729,6 +1729,10 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 10px;
 }
 
+.status-toggle > .circle:before {
+    font-size: 10px;
+}
+
 .status-toggle > .circle > span {
     font-size: 20px;
     line-height: 14px;
