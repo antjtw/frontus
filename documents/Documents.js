@@ -748,7 +748,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
-            if (!$scope.templateId && $scope.lib && $scope.isAnnotable) {
+            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                 $scope.saveNoteData();
             }
         };
