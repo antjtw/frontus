@@ -748,7 +748,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
-            $scope.saveNoteData();
+            if (!$scope.templateId && $scope.lib && $scope.isAnnotable) {
+                $scope.saveNoteData();
+            }
         };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
