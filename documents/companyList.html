@@ -40,19 +40,26 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
-                <div class="pull-right" ng-show="documents.length!==0">
-                    <div class="standard-button">
-                        <button id='a_doc_share' ng-click="multishareOpen();" class="btn">Share
-                        </button>
-                    </div>
+                <div class="box-button pull-right" ng-class="{selected:showShare}" ng-show="documents.length!==0" ng-click="toggleShare();">
+                    <ul>
+                        <li>
+                            <span data-icon="&#xe024;" aria-hidden="true"></span>
+                        </li>
+                        <li>
+                            <span>Share</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="pull-right">
-                    <div class="standard-button small-standard-button blue">
-                        <button ng-click="documentUploadOpen();" class="btn">Upload
-                        </button>
-                    </div>
+                <div class="box-button pull-right" ng-class="{selected: uploadModal}" ng-click="documentUploadOpen();">
+                    <ul>
+                        <li>
+                            <span data-icon="&#xe017;" aria-hidden="true"></span>
+                        </li>
+                        <li>
+                            <span>Add Files</span>
+                        </li>
+                    </ul>
                 </div>
-
             </div>
             <div class="DivHelper"></div>
         </div>
@@ -78,6 +85,7 @@
             <tbody class="empty-table">
             <tr>
                 <td>
+                    <!-- todo update ng-click -->
                     <span>Welcome! </span><span class="link" ng-click="multishareOpen();">Share a document</span><span> to get started.</span>
                 </td>
             </tr>
@@ -119,9 +127,11 @@
                     </ul>
                 </td>
                 <td>
+                    <!--
                     <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
                         <button class="btn a_share_list" ng-click="prepareDocument(doc)">Share</button>
                     </div>
+                    -->
                     <ul class="dropdown-list">
                         <li class="dropdown standard menu-drop">
                             <a class="dropdown-toggle">
@@ -365,6 +375,7 @@
     </div>
 </div>
 
+<!--
 <div modal="shareDocModal" close="shareDocClose()" options="wideopts">
     <div class="modalHeader">
         Share "{{docToShare.docname | caplength:35}}"
@@ -409,6 +420,7 @@
         </div>
     </div>
 </div>
+-->
 
 <div modal="updateTitleModal" close="updateTitleClose()" options="opts">
     <div class="modalHeader">
@@ -465,6 +477,7 @@
     </div>
 </div>
 
+<!--
 <div modal="multishareModal" close="multishareClose()" options="multishareopts">
     <div class="modalHeader">
         <span>Share Documents</span>
@@ -480,13 +493,6 @@
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li>{{doc.docname | caplength:40}}</li>
-                    <!--
-                    <li ng-show="doc.picked">
-                        <button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');"
-                                class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                    </li>
-                    <li ng-show="doc.picked" class="capital-text">Signature?</li>
-                    -->
                 </ul>
             </li>
         </ul>
@@ -497,14 +503,6 @@
         <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="multipeople">
         </div>
-        <!--        <ul>
-                    <li ng-repeat="person in sharePeople">
-                        <ul>
-                            <li><button ng-class="{'selected':person.share}" ng-click="checkShareBox(person, 'share');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
-                            <li>{{person.investor}}</li>
-                        </ul>
-                    </li>
-                </ul>-->
     </div>
     <div class="modal-footer">
         <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray">
@@ -525,5 +523,6 @@
         </div>
     </div>
 </div>
+-->
 </div>
 <div class="push"></div>
