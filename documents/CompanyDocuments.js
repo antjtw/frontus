@@ -1922,6 +1922,21 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.processing = false;
 
+        $scope.helpModalUp = function () {
+            $scope.tourModal = true;
+        };
+
+        $scope.tourclose = function () {
+            $scope.sideToggle = false;
+            $scope.tourModal = false;
+        };
+
+        $scope.touropts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'helpModal modal'
+        };
+
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
@@ -1934,6 +1949,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                         return;
                     }
                     $scope.document = data;
+
+                    if ($scope.signable()) {
+                        $scope.helpModalUp();
+                    }
+
                     $scope.initDocView();
                 }).except(function(x) {
                     void(x);
@@ -1947,6 +1967,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
+
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 console.log($rootScope.lastPage);
