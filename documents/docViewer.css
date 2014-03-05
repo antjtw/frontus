@@ -13,6 +13,7 @@ navbar .navbar {
     top: 40px;
     left: 0px;
     right: 0px;
+    width: 928px;
     max-width: 928px;
     margin: 0 auto;
     background-color: white;
@@ -20,10 +21,9 @@ navbar .navbar {
 
 .docViewerHeader.affix {
     position: fixed;
-    left: 0px;
-    right: 0px;
     top: 0px;
     max-width: 928px;
+    width: 928px;
     margin: 0 auto;
 }
 
@@ -40,11 +40,9 @@ navbar .navbar {
 }
 
 .docViewerHeader.affix-top {
-    left: 62px;
 }
 
 .docViewerHeader.affix-bottom {
-    left: 62px;
     bottom: 0;
 }
 
@@ -205,7 +203,7 @@ navbar .navbar {
     padding-right: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
-    margin-right: 6px;
+    margin-left: 6px;
     border-radius: 3px;
     background-color: #E3E3E3;
     background-position: top;
@@ -222,12 +220,12 @@ navbar .navbar {
 }
 
 .page-bar > ul > li.page-tabs.cur-page {
-    background-color: #1ABC96 !important;
+    background-color: #8D8D8D !important;
     color: #FFFFFF !important;
 }
 
 .page-bar > ul > li.page-tabs.cur-page:hover {
-    background-color: #15A085 !important;
+    background-color: #666666 !important;
 }
 
 .page-jumper {
@@ -429,80 +427,6 @@ navbar .navbar {
     vertical-align: middle;
 }
 
-.draggable {
-    border: 0 solid red;
-    position:absolute;
-    background-color: rgb(162,226,209);
-    opacity: 0.7;
-    cursor: default;
-    width: auto;
-    height: auto;
-
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    /*resize: both;
-    overflow: hidden;
-      */
-}
-
-.draggable li > span {
-    color: rgb(31,176,130);
-}
-
-.draggable ul {
-    display:block;
-    margin: 0;
-    list-style-type:none;
-    cursor:pointer
-}
-
-.draggable li {
-    float: left;
-    display:table;
-    padding-top: 2px;
-    padding-left: 1px;
-}
-
-.draggable ul > li:first-child {
-    cursor: move;
-    padding-left: 4px;
-}
-
-.draggable ul > li:last-child {
-    float: right;
-    padding-right: 4px;
-}
-.draggable > span {
-    display: block;
-    margin-left: 4px;
-    margin-right: 4px;
-    /* Don't know why -- but this needs to be -5px instead of 4px */
-    margin-bottom: 4px;
-    padding: 0;
-    clear: both;
-    box-sizing: border-box;
-}
-
-.draggable .check-annotation {
-    background-color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-.draggable span > canvas {
-    box-sizing: border-box;
-    margin-bottom: -4px;
-    cursor: crosshair;
-}
-
-.draggable div > textarea {
-    margin-bottom: 0;
-    word-wrap: normal;
-    overflow: hidden;
-    line-height: normal;
-    resize: both;
-}
-
 .hidden {
     visibility: hidden;
 }
@@ -553,6 +477,224 @@ navbar .navbar {
     text-align: center;
     font-family: 'FS Elliot Web Light', sans-serif;
     font-weight: normal;
+}
+
+.draggable {
+    border: 0 solid red;
+    position:absolute;
+    cursor: default;
+    width: auto;
+    height: auto;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    /*resize: both;
+    overflow: hidden;
+      */
+}
+
+.draggable > span {
+    display: block;
+    padding: 0;
+    clear: both;
+    box-sizing: border-box;
+}
+
+.draggable .check-annotation {
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.draggable span > canvas {
+    box-sizing: border-box;
+    margin-bottom: -4px;
+    cursor: crosshair;
+}
+
+.draggable div > textarea {
+    margin-bottom: 0;
+    overflow: hidden;
+    line-height: normal;
+    resize: both;
+    opacity: 0.7;
+    border: 1px solid #FFBA00;
+    color: #2980B9;
+
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.draggable div > textarea.roundedcorners {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.draggable.signature textarea {
+    font-family: 'Arizonia', serif;
+}
+
+.draggable.redrequired div > textarea {
+    border: 1px solid #E64B3B;
+}
+
+.draggable.greenrequired div > textarea {
+    border: 1px solid #149F84;
+}
+
+.sticky {
+    position: relative;
+}
+
+.sticky .close-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 1;
+}
+
+.sticky .close-button > span {
+    background-color: #1D2C3C;
+    color: #F1F1F1;
+    width: 20px;
+    height: 20px;
+    line-height: 22px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.sticky .close-button > span:before {
+    line-height: 19px;
+    margin-left: 1px;
+}
+
+.sticky .dragger {
+    position: absolute;
+    left: -10px;
+    background-color: #FFBA00;
+    height: 100%;
+    -webkit-transition: background-color linear 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+}
+
+.sticky.redrequired .dragger {
+    background-color: #E64B3B;
+}
+
+.sticky.greenrequired .dragger {
+    background-color: #149F84;
+}
+
+.sticky .dragger > span {
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    width: 10px;
+}
+
+
+.sticky .dragger > span > span {
+    position: absolute;
+    top: 50%;
+    margin-top: -9px;
+    margin-left: -3px;
+    cursor: pointer;
+    height: 16px;
+}
+
+.sticky .dragger > span > span::before {
+    color: #FFFFFF;
+}
+
+.sticky textarea {
+    border-radius: 0;
+}
+
+.sticky-menu {
+    position: absolute;
+    background-color: #1D2C3C;
+    width: 190px;
+    margin: 10px 0 0 -95px;
+    left: 50%;
+    border-radius: 3px;
+    z-index: 5;
+}
+
+.sticky-menu:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -8px;
+    left: 85px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #1D2C3C;
+}
+
+.sticky-menu > ul > li {
+    margin: 5px 20px;
+}
+
+.sticky-menu > ul > li > ul {
+    margin-top: 15px;
+}
+
+.sticky-menu > ul > li:last-of-type > ul {
+    margin-bottom: 20px;
+}
+
+.sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
+    color: #FFFFFF;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.sticky-menu ul.required-row > li {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+.sticky-menu .standard-button > button {
+    width: 42px;
+    margin-left: 10px;
+    background-color: transparent;
+    padding: 0;
+    min-height: 20px;
+    line-height: 20px;
+    box-shadow: none;
+    color: #3498DB;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.sticky-menu .standard-button > button:hover {
+    color: #2980B9;
+}
+
+
+div.textarea-container {
+    line-height: 0;
+}
+
+.drawcursor {
+    cursor: crosshair;
 }
 
 

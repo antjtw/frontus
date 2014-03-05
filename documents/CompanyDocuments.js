@@ -357,13 +357,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
 
+        /*
         var mimetypes = ["application/pdf",
                          "application/msword",
                          "application/vnd.ms-powerpoint",
                          "text/csv"];
-        //var mimetypes = ["application/pdf"];
+        */
+        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
@@ -371,11 +372,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
-                /*
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    //$scope.fileError = "Please choose a .pdf, .doc, .ppt or .csv";
                     $scope.fileError = "Please choose a pdf";
-                */
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -429,11 +427,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.$apply();
                 $route.reload();
             }).except(function(x) {
+                /*
                 if ($scope.tester === true) {
                     $scope.fileError = x.message;
                 } else {
                     $scope.fileError = "Oops, something went wrong. Please try again.";
                 }
+                */
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress = false;
@@ -700,7 +701,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.viewInvestorCopy = function(version) {
-            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
 
         // Toggles sidebar back and forth
@@ -727,7 +728,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.retract_document", version.doc_id).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
-                $route.reload();
+                version.when_retracted = new Date.today();
+                version.last_event.activity = "retracted";
+                version.last_event.event_time = new Date.today();
+                version.last_event.timenow = new Date.today();
+                version.last_event.person = $rootScope.person.name;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -773,6 +778,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         var regExp = /\(([^)]+)\)/;
 
         $scope.share = function(message, emails, sign) {
+            $scope.processing = true;
             sign = sign == "Yes";
             var tosee = "";
             if (sign) {
@@ -803,6 +809,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.signeeded = "No";
                 $route.reload();
             }).except(function(x) {
+                $scope.processing = false;
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                 $scope.signeeded = "No";
@@ -960,7 +967,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+            $scope.stretchheight = {height: String(newValue + 150) + "px"}
         });
     }
 ]);
@@ -1052,15 +1059,29 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         }
 
         $scope.getData = function() {
-            if ($scope.docKey) {
-                SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.docKey).then(function(data) {
+            var flag = !isNaN(parseInt($scope.urlInves));
+            if ($scope.docKey || flag) {
+                var field = "original";
+                var tempdocid = $scope.docKey;
+                if (flag) {
+                    field = "doc_id";
+                    tempdocid = parseInt($scope.urlInves);
+                }
+                SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                     if ($scope.counterparty) {
-                        for (var i = 0; i < data.length; i++) {
-                            var doc = data[i];
-                            if (doc.investor == $scope.urlInves) {
-                                $scope.version = doc;
-                                $scope.getVersion(doc);
-                                return;
+                        if (flag) {
+                            $scope.version = data[0];
+                            $scope.getVersion(data[0]);
+                            return;
+                        }
+                        else {
+                            for (var i = 0; i < data.length; i++) {
+                                var doc = data[i];
+                                if (doc.investor == $scope.urlInves) {
+                                    $scope.version = doc;
+                                    $scope.getVersion(doc);
+                                    return;
+                                }
                             }
                         }
                     } else {
@@ -1205,7 +1226,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.countersign", $scope.docId, dce.getNoteData(true)).then(function(data) {
+            SWBrijj.document_countersign( $scope.docId, dce.getNoteData(true)[1]).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');
@@ -1231,7 +1252,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.finalizeDocument = function() {
             $scope.processing = true;
-            SWBrijj.procm("document.issuer_finalize", $scope.docId).then(function(data) {
+            SWBrijj.document_issuer_finalize($scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
@@ -1284,10 +1305,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
+                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
+                console.log("zero people");
                 anybad = true;
             }
             return anybad;
@@ -1300,6 +1323,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             'tokenSeparators': [",", " "],
             'placeholder': 'Enter email address & press enter'
         };
+
+        $scope.drawTime = function() {
+            return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"))
+        }
     }
 ]);
 
@@ -1484,7 +1511,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.viewInvestorCopy = function(investor) {
-            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1" + "&investor=" + investor);
+            console.log(investor);
+            $location.url("/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
         };
 
         $scope.rejectSignature = function(cd) {
@@ -1757,7 +1785,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.exportOriginalToPdf = function(doc) {
-            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.original.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genInvestorOriginalPdf', doc.original.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
@@ -1936,9 +1964,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.sign_document", $scope.docId, dce.getNoteData(true)).then(function(data) {
+          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)[0]).then(function(data) {
                 doc.when_signed = data;
-                dce.removeAllNotes();
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
                 $scope.leave();
@@ -1964,7 +1991,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.finalizeDocument = function() {
             $scope.processing = true;
             //var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.finalize", $scope.docId).then(function(data) {
+            SWBrijj.document_finalize($scope.docId).then(function(data) {
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
