@@ -1,0 +1,18 @@
+.new-nav {
+    position: fixed;
+    height: -moz-calc(100% - 80px);
+    height: -webkit-calc(100% - 80px);
+    height: calc(100% - 40px);
+    top: 40px;
+    left: -100px;
+    width:  120px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: left 0.35s ease;
+    -moz-transition: left 0.35s ease;
+    -o-transition: left 0.35s ease;
+    transition: left 0.35s ease;
+}
+
+.new-nav:hover {
+    left: 0px;
+}

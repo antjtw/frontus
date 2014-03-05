@@ -3,6 +3,7 @@
 <head>
     <!--{{/i/head_css.inc}}-->
     <link type="text/css" rel="stylesheet" href="/home/home.css">
+    <link type="text/css" rel="stylesheet" href="/cmn/newnav.css">
     <!--{{/i/head_js.inc}}-->
     <title>Sharewave Home</title>
     <script src="HomeApp.js" type="text/javascript"></script>
@@ -17,6 +18,22 @@
 <div class="wrap">
     <navbar></navbar>
     <div class="container">
+        <div class="new-nav">
+            <ul>
+                </li>
+                <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
+                    ng-repeat="company in companies | filter: {role:'investor'}"> <a class="button" ng-click="switch(company)">{{company.name}}</a>
+
+                </li>
+                </li>
+                <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
+                    ng-repeat="company in companies | filter: {role:'issuer'}"> <a class="button" ng-click="switch(company)">
+                    {{company.name}}
+                </a>
+
+                </li>
+            </ul>
+        </div>
         <div class="row-fluid">
             <div class="maincontent">
                 <div class="coreEdit" style="min-height: 750px;" data-ng-view=""></div>
