@@ -72,11 +72,12 @@ viz.controller('waterfallController',['$scope','$location','$route','$rootScope'
     };
 
     $scope.formatAmount = function (amount) {
-        return calculate.funcformatAmount(amount);
+        var value = calculate.funcformatAmount(amount);
+        return value != null ? value : 0;
     };
 
     $scope.formatDollarAmount = function(amount) {
-        var output = calculate.funcformatAmount(amount);
+        var output = $scope.formatAmount(amount);
         return ("$" + output);
     };
 
