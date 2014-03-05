@@ -540,14 +540,17 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        $scope.loadpreviousshares = function() {
-            SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
-                $scope.alreadyshared = [];
-                angular.forEach(is, function(i) {
-                    $scope.alreadyshared.push(i.unretracted_shares);
-                });
-            });
-        };
+            $scope.loadpreviousshares = function() {
+                if ($rootScope.navState.role == 'issuer') {
+                    SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                        $scope.alreadyshared = [];
+                        angular.forEach(is, function(i) {
+                            $scope.alreadyshared.push(i.unretracted_shares);
+                        });
+                    });
+                }
+            };
+
 
         var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
@@ -745,7 +748,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
-            $scope.saveNoteData();
+            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+                $scope.saveNoteData();
+            }
         };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
@@ -1074,7 +1079,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-                if (!$scope.templateId && $scope.lib && $scope.isAnnotable) {
+                if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');

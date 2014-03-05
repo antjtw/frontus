@@ -83,7 +83,7 @@
                 </div>
                 <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
+                <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
@@ -179,8 +179,7 @@
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                         </li>
                         <li class="pull-left">
-                            <span>Countersign Document</span><br>
-                            <span>Electonically countersign this document.</span>
+                            <span>Approve Document</span><br>
                         </li>
                     </ul>
                     <br>

@@ -471,7 +471,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="multishareClose()"></span>
     </div>
     <div ng-show="sharemodalscreen == '1'" class="modalText">
-        <span>Select the document(s) you want to share.</span>
+        <span>Select the document(s) you would like to share for viewing only. If you need to request signatures, share from the individual document line.</span>
         <ul>
             <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
                 <ul ng-hide="doc.versions[0].template_id">

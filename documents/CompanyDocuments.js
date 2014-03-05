@@ -357,13 +357,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // File manipulation
 
-        // removed for now "application/vnd.openxmlformats-officedocument.wordpressingml.document","application/vnd.openxmlformats-officedocument.wordpressingml.template","application/msword"
 
+        /*
         var mimetypes = ["application/pdf",
                          "application/msword",
                          "application/vnd.ms-powerpoint",
                          "text/csv"];
-        //var mimetypes = ["application/pdf"];
+        */
+        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
@@ -371,11 +372,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
-                /*
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    //$scope.fileError = "Please choose a .pdf, .doc, .ppt or .csv";
                     $scope.fileError = "Please choose a pdf";
-                */
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -429,11 +427,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.$apply();
                 $route.reload();
             }).except(function(x) {
+                /*
                 if ($scope.tester === true) {
                     $scope.fileError = x.message;
                 } else {
                     $scope.fileError = "Oops, something went wrong. Please try again.";
                 }
+                */
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.files = [];
                 $scope.dropText = moreDocs;
                 $scope.showProgress = false;
@@ -727,7 +728,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.retract_document", version.doc_id).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
-                $route.reload();
+                version.when_retracted = new Date.today();
+                version.last_event.activity = "retracted";
+                version.last_event.event_time = new Date.today();
+                version.last_event.timenow = new Date.today();
+                version.last_event.person = $rootScope.person.name;
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -962,7 +967,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 40) + "px"}
+            $scope.stretchheight = {height: String(newValue + 150) + "px"}
         });
     }
 ]);
@@ -1014,7 +1019,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         });
 
         $scope.helpModalUp = function () {
-            //$scope.tourModal = true;
+            $scope.tourModal = true;
         };
 
         $scope.tourclose = function () {
@@ -1300,10 +1305,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
+                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
+                console.log("zero people");
                 anybad = true;
             }
             return anybad;
@@ -1778,7 +1785,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.exportOriginalToPdf = function(doc) {
-            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.original.toString()).then(function(url) {
+            SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genInvestorOriginalPdf', doc.original.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
@@ -1915,6 +1922,21 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.processing = false;
 
+        $scope.helpModalUp = function () {
+            $scope.tourModal = true;
+        };
+
+        $scope.tourclose = function () {
+            $scope.sideToggle = false;
+            $scope.tourModal = false;
+        };
+
+        $scope.touropts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'helpModal modal'
+        };
+
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
@@ -1927,6 +1949,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                         return;
                     }
                     $scope.document = data;
+
+                    if ($scope.signable()) {
+                        $scope.helpModalUp();
+                    }
+
                     $scope.initDocView();
                 }).except(function(x) {
                     void(x);
@@ -1940,6 +1967,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
+
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 console.log($rootScope.lastPage);
