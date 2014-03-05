@@ -83,7 +83,7 @@
                 </div>
                 <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
+                <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
@@ -126,12 +126,9 @@
                 </div>
             </div>
         </div>
-        <div class="page-bar">
+        <div ng-show="stage===0" class="page-bar">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
-                <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
-                    <span ng-hide="pageScroll===0" data-icon="&#xe032;"></span>
-                </li>
                 <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
                     ng-class="{'cur-page':page===currentPage}"
                     class="page-tabs button"
@@ -139,14 +136,11 @@
                     <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
                     <span> {{page}}</span>
                 </li>
-                <li class="page-icons button" ng-click="pageBarRight();">
-                    <span ng-show="morePages()" data-icon="&#xe033;"></span>
-                </li>
             </ul>
         </div>
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
-        <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
+        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
     </div>
@@ -185,8 +179,7 @@
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                         </li>
                         <li class="pull-left">
-                            <span>Countersign Document</span><br>
-                            <span>Electonically countersign this document.</span>
+                            <span>Approve Document</span><br>
                         </li>
                     </ul>
                     <br>

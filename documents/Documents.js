@@ -1,3 +1,86 @@
+//Adds line breaks to the text areas
+function ApplyLineBreaks(oTextarea) {
+    var max = Math.floor(parseInt(oTextarea.style.height)/12);
+    if (oTextarea.wrap) {
+        oTextarea.setAttribute("wrap", "off");
+    }
+    else {
+        oTextarea.setAttribute("wrap", "off");
+        var newArea = oTextarea.cloneNode(true);
+        newArea.value = oTextarea.value;
+        oTextarea.parentNode.replaceChild(newArea, oTextarea);
+        oTextarea = newArea;
+    }
+
+    var strRawValue = oTextarea.value;
+    oTextarea.value = "";
+    var nEmptyWidth = oTextarea.scrollWidth;
+    var nLastWrappingIndex = -1;
+
+    function testBreak(strTest) {
+        oTextarea.value = strTest;
+        return oTextarea.scrollWidth > nEmptyWidth;
+    }
+    function findNextBreakLength(strSource, nLeft, nRight) {
+        var nCurrent;
+        if(typeof(nLeft) == 'undefined') {
+            nLeft = 0;
+            nRight = -1;
+            nCurrent = 64;
+        }
+        else {
+            if (nRight == -1)
+                nCurrent = nLeft * 2;
+            else if (nRight - nLeft <= 1)
+                return Math.max(2, nRight);
+            else
+                nCurrent = nLeft + (nRight - nLeft) / 2;
+        }
+        var strTest = strSource.substr(0, nCurrent);
+        var bLonger = testBreak(strTest);
+        if(bLonger)
+            nRight = nCurrent;
+        else
+        {
+            if(nCurrent >= strSource.length)
+                return null;
+            nLeft = nCurrent;
+        }
+        return findNextBreakLength(strSource, nLeft, nRight);
+    }
+
+    var i = 0, j;
+    var strNewValue = "";
+    while (i < strRawValue.length) {
+        var breakOffset = findNextBreakLength(strRawValue.substr(i));
+        if (breakOffset === null) {
+            strNewValue += strRawValue.substr(i);
+            break;
+        }
+        nLastWrappingIndex = -1;
+        var nLineLength = breakOffset - 1;
+        for (j = nLineLength - 1; j >= 0; j--) {
+            var curChar = strRawValue.charAt(i + j);
+            if (curChar == ' ' || curChar == '-' || curChar == '+') {
+                nLineLength = j + 1;
+                break;
+            }
+        }
+        strNewValue += strRawValue.substr(i, nLineLength) + "\n";
+        i += nLineLength;
+    }
+    var re = /\n/g;
+    var lastre = /\n(?!.*\n)/;
+    var count = strNewValue.match(re);
+    if (count && max <= count.length) {
+        strNewValue = strNewValue.split("\n", max).join("\n");
+        console.log(strNewValue);
+    }
+    oTextarea.value = strNewValue;
+    oTextarea.setAttribute("wrap", "hard");
+    return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
+}
+
 function getIntProperty(se, z) {
     var lh = getComputed(se, z);
     lh = parseFloat(lh.replace("px", ""));
@@ -67,7 +150,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -101,6 +184,16 @@ directive('draggable', ['$window', '$document',
                             $scope.$$nextSibling.annotext = "";
                         }
                     });
+
+                    $scope.$watch('$$nextSibling.whattype', function(newval, oldval) {
+                        var elem = $element.find('textarea');
+                        if (newval == "Signature") {
+                            elem.css('font-size', 18);
+                        }
+                        else {
+                            elem.css('font-size', 12);
+                        }
+                    }, true);
 
                     topLocation = function(elementHeight, mouseY) {
                         var docPanel = document.querySelector('.docPanel');
@@ -161,8 +254,8 @@ directive('draggable', ['$window', '$document',
                         // absolute mouse location (current): $event.clientX, $event.clientY
                         // absolute change in mouse location: dx, dy
                         // relative mouse location: mousex, mousey
-                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -172,15 +265,15 @@ directive('draggable', ['$window', '$document',
                         return false;
                     };
                     $scope.newmousemove = function($event) {
-                        var dx = $event.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = $event.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                         $element.css({
-                            height: dy + 'px',
-                            width: dx + 'px'
+                            height: dy + 6 + 'px',
+                            width: dx + 6 + 'px'
                         });
                         var bb = $element[0].querySelector("textarea");
-                        bb.style.height = dy - 10 + "px";
-                        bb.style.width = dx - 14 + "px";
+                        bb.style.height = dy - 4 + "px";
+                        bb.style.width = dx - 8 + "px";
                         return false;
                     };
 
@@ -242,8 +335,8 @@ directive('draggable', ['$window', '$document',
                         $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.initialScrollX = $window.scrollX;
-                        $scope.initialScrollY = $window.scrollY;
+                        $scope.initialScrollX = document.documentElement.scrollLeft;
+                        $scope.initialScrollY = document.documentElement.scrollTop;
                         if (document.attachEvent) {
                             document.attachEvent('on'+mousewheelevt, $scope.mousemove);
                         } else if (document.addEventListener) {
@@ -263,10 +356,10 @@ directive('draggable', ['$window', '$document',
                         $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
                         $scope.initialMouseX = ev.clientX;
                         $scope.initialMouseY = ev.clientY;
-                        $scope.initialScrollX = $window.scrollX;
-                        $scope.initialScrollY = $window.scrollY;
-                        var dx = ev.clientX - $scope.initialMouseX + $window.scrollX - $scope.initialScrollX;
-                        var dy = ev.clientY - $scope.initialMouseY + $window.scrollY - $scope.initialScrollY;
+                        $scope.initialScrollX = document.documentElement.scrollLeft;
+                        $scope.initialScrollY = document.documentElement.scrollTop;
+                        var dx = ev.clientX - $scope.initialMouseX;
+                        var dy = ev.clientY - $scope.initialMouseY;
                         var mousex = $scope.startX + dx;
                         var mousey = $scope.startY + dy;
                         $element.css({
@@ -432,6 +525,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
+
+            $scope.loadpreviousshares();
         });
 
         $scope.get_attribute = function(attribute, type, attributes) {
@@ -444,6 +539,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }
             }
         };
+
+            $scope.loadpreviousshares = function() {
+                if ($rootScope.navState.role == 'issuer') {
+                    SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                        $scope.alreadyshared = [];
+                        angular.forEach(is, function(i) {
+                            $scope.alreadyshared.push(i.unretracted_shares);
+                        });
+                    });
+                }
+            };
+
 
         var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
@@ -641,7 +748,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
-            $scope.saveNoteData();
+            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+                $scope.saveNoteData();
+            }
         };
         $scope.setConfirmValue = function(n) {
             if ($scope.confirmValue === n) {
@@ -693,7 +802,27 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.rejectMessage = "";
             }
         };
+
+        // This should work but the view doesn't update. Need fixing
+/*        $scope.$watch('recipient', function(newValue, oldValue) {
+            var removeinvestor = -1;
+            angular.forEach(newValue, function(person) {
+                var matches = regExp.exec(person.id);
+                if (matches === null) {
+                    matches = ["", person.id];
+                }
+                if ($scope.alreadyshared.indexOf(matches[1]) > -1) {
+                    $scope.$emit("notification:fail", "You've already shared to this user");
+                    removeinvestor = $scope.recipient.indexOf(person);
+                }
+            });
+            if (removeinvestor != -1) {
+                $scope.recipient.splice(removeinvestor, 1);
+            }
+        });*/
+
         $scope.shareDocument = function(doc, message, emails) {
+            $scope.processing = true;
             var tosee = "";
             angular.forEach(emails, function(person) {
                 var matches = regExp.exec(person.id);
@@ -716,6 +845,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $location.path('/company-list').search({});
                 //$route.reload();
             }).except(function(x) {
+                    $scope.processing = false;
                     void(x);
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
@@ -752,7 +882,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.annotatedPages.sort(function(a,b){return a-b;});
                 $scope.loadAnnotations();
             });
-       };
+        };
 
         $scope.pageImageUrl = function() {
             if ($scope.pageQueryString && $scope.currentPage) {
@@ -772,6 +902,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.addLineBreaks = function(ev) {
+            ev.target = ApplyLineBreaks(ev.target);
+        };
+
         $scope.closeBox = function(ev) {
             if ($rootScope.navState.role == "issuer") {
                 ev.getme = false;
@@ -786,23 +920,38 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return ev.$$nextSibling.required ? true : false;
         };
 
+        $scope.signatureField = function (element) {
+            return element.$$nextSibling.whattype == "Signature"  ? true : false;
+        };
+
         $scope.stickyfilled = function(ev) {
             return ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0 ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
-                $scope.investor_attributes = {};
-                $scope.attributes = [];
-                angular.forEach(inv_attributes, function(attr) {
-                    $scope.investor_attributes[attr.attribute] = attr.answer;
-                });
-                $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
-                $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-                $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
-                $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
-                $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
-                $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
-                $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+            $scope.investor_attributes = {};
+            $scope.attributelabels = {};
+            angular.forEach(inv_attributes, function(attr) {
+                $scope.investor_attributes[attr.attribute] = attr.answer;
+                $scope.attributelabels[attr.attribute] = attr.label;
+            });
+            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
+            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
+            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
+            $scope.investor_attributes['investorStreet'] = angular.copy($rootScope.person.street);
+            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
+            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
+            $scope.investor_attributes['investorPostalcode'] = angular.copy($rootScope.person.postalcode);
+            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+            $scope.attributelabels['investorName'] = "Name";
+            $scope.attributelabels['investorState'] = "State";
+            $scope.attributelabels['investorCountry'] = "Country";
+            $scope.attributelabels['investorStreet'] = "Address";
+            $scope.attributelabels['investorPhone'] = "Phone";
+            $scope.attributelabels['investorEmail'] = "Email";
+            $scope.attributelabels['investorPostalcode'] = "Zip code";
+            $scope.attributelabels['signatureDate'] = "Date";
+
         };
 
         $scope.loadAnnotations = function() {
@@ -813,7 +962,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 $scope.createAttributes(inv_attributes);
-                console.log($scope.library);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                     if ($scope.lib && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
@@ -858,9 +1006,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     var aa = data.annotations;
                     if (aa) {
                         // restoreNotes
-                        var annots = JSON.parse(aa);
-                        if (data.iss_annotations) {
-                            annots = annots.concat(JSON.parse(data.iss_annotations));
+                        var annots
+                        if ($scope.countersignable($scope.lib) && data.iss_annotations) {
+                            annots = JSON.parse(data.iss_annotations);
+                        }
+                        else {
+                            annots = JSON.parse(aa);
+                            if (data.iss_annotations) {
+                                annots = annots.concat(JSON.parse(data.iss_annotations));
+                            }
                         }
                         if (annots.length > 100) {
                             //$scope.removeAllNotes();
@@ -925,7 +1079,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-                if (!$scope.templateId && $scope.lib && $scope.isAnnotable) {
+                if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -1007,6 +1161,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     return;
                 }
             }
+            $scope.$apply();
         };
 
         $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
@@ -1068,7 +1223,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.newnewBox = function(event) {
-            if ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
+            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
                 var aa = $scope.newBoxX($scope.currentPage, '', null);
                 $scope.annotatedPages.push($scope.currentPage);
                 aa.scope().newinitdrag(event);
@@ -1112,14 +1267,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
             }
             if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
-                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
+                aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
         };
 
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea ng-disabled="fieldDisabled()" placeholder="{{annotext || whattype}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1131,14 +1286,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 '<ul class="dropdown-list drop-selector">' +
                                                     '<li class="dropdown standard">' +
                                                         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whosign }}' +
+                                                            '{{ whosignlabel }}' +
                                                         '</a>' +
                                                         '<ul class="dropdown-menu">' +
                                                             '<li>' +
-                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Investor</a>' +
+                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Recipient</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">Issuer</a>' +
+                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">{{navState.name}}</a>' +
                                                             '</li>' +
                                                         '</ul>' +
                                                     '</li>' +
@@ -1155,29 +1310,32 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 '<ul class="dropdown-list drop-selector">' +
                                                     '<li class="dropdown standard">' +
                                                         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whattype }}' +
+                                                            '{{ whattypelabel }}' +
                                                         '</a>' +
                                                         '<ul class="dropdown-menu">' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'Text\')" class="button">Text</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'Signature\')" class="button">Signature</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorName\')" class="button">Name</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorStreet\')" class="button">Address</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorStreet\')" class="button">Address</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorState\')" class="button">State</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorState\')" class="button">State</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'investorEmail\')" class="button">Email</a>' +
+                                                            '<a ng-click="setAnnot($event, this, \'investorPostalcode\')" class="button">Zip code</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot(this, \'signatureDate\')" class="button">Date</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'investorEmail\')" class="button">Email</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                                '<a ng-click="setAnnot($event, this, \'signatureDate\')" class="button">Date</a>' +
                                                             '</li>' +
                                                         '</ul>' +
                                                     '</li>' +
@@ -1198,7 +1356,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     '<li>' +
                                         '<ul>' +
                                             '<li>' +
-                                            '<button ng-click="closeBox(this)" class="button">Close</button>' +
+                                                '<div class="standard-button">' +
+                                                    '<button ng-click="closeBox(this)" class="btn">Close</button>' +
+                                                '</div>' +
                                             '</li>' +
                                         '</ul>' +
                                     '</li>' +
@@ -1227,9 +1387,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var ta = aa.find('textarea');
             ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
             ta.scope().whosign = newattr ? newattr.whosign : "Investor";
+            ta.scope().whosignlabel = ta.scope().whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             ta.scope().whattype = newattr ? newattr.whattype : "Text";
+            ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes ? $scope.investor_attributes[newattr.whattype] : val;
-            ta.scope().required = newattr ? newattr.required : null;
+            if ($rootScope.navState.role == "issuer") {
+                ta.scope().required = newattr ? newattr.required : true;
+            } else {
+                ta.scope().required = newattr ? newattr.required : null;
+            }
+
             ta.width(ta.width());
             if (style) {
                 aa.find('textarea').css('fontSize', style[0]);
@@ -1250,6 +1417,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setSign = function($event, value) {
             $event.whosign = value;
+            $event.whosignlabel = $event.whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             if (value == "Investor") {
                 $event.annotext = "";
             }
@@ -1258,211 +1426,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        $scope.setAnnot = function($event, value) {
-            $event.whattype = value;
-            $scope.smartValue($event);
+        $scope.setAnnot = function($event, sticky, value) {
+            sticky.whattype = value;
+            sticky.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
+            sticky.annotext = "";
+            $scope.smartValue(sticky);
+
         };
 
         $scope.toggleRequired = function($event) {
             $event.required = $event.required ? null : "Yes";
-        };
-
-        $scope.newSignature = function(event) {
-            var aa = $scope.newSignatureX($scope.currentPage, '', null);
-            aa.scope().initdrag(event);
-        };
-
-        $scope.newSignatureX = function(page, val, style) {
-            // TODO refactor to create a newPad with the image piped in as initial contents
-            $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
-                              '<img src="http://www.couponingtodisney.com/wp-content/uploads/2012/12/Mickey-Mouse-Signature.jpg" width="100"/></div>')($scope);
-            aa.scope().ntype = 'signature';
-            aa[0].notetype = 'signature';
-            aa.scope().growable = true;
-            return aa;
-        };
-
-        $scope.newCheck = function(event) {
-            var aa = $scope.newCheckX($scope.currentPage);
-            $scope.annotatedPages.push($scope.currentPage);
-            aa.scope().initdrag(event);
-        };
-
-        $scope.newCheckX = function(page) {
-            $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
-                '<span class="check-annotation" data-icon="&#xe023;"></i>' +
-                '</div>')($scope);
-            aa.scope().ntype = 'check';
-            aa[0].notetype = 'check';
-            window.addEventListener('resize', function() {
-                $scope.fixBox(aa);
-            });
-            return aa;
-        };
-
-        $scope.newDate = function(event) {
-            var d = new Date();
-            var fmtdat = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
-            var aa = $scope.newBoxX($scope.currentPage, fmtdat);
-            $scope.annotatedPages.push($scope.currentPage);
-            aa.scope().initdrag(event);
-            return aa;
-        };
-
-        $scope.newPad = function(event) {
-            var aa = $scope.newPadX($scope.currentPage, []);
-            $scope.annotatedPages.push($scope.currentPage);
-            aa.scope().initdrag(event);
-        };
-
-        $scope.fixPad = function(aa) {
-            var z = aa.find('canvas')[0];
-            // width() and height() fns are very slow
-            z.width = (aa.width() - 8);
-            z.height = (aa.height() - 27);
-            z.offset = [z.offsetLeft, z.offsetTop, z.offsetWidth, z.offsetHeight];
-            aa.css('max-width', ($scope.maxPadWidth(aa[0].offsetLeft)) + 'px');
-            aa.css('max-height', ($scope.maxPadHeight(aa[0].offsetTop)) + 'px');
-            var strokes = z.strokes;
-            var ctx = z.getContext('2d');
-            ctx.lineCap = 'round';
-            ctx.color = 'blue';
-            ctx.lineWidth = 2;
-            // ctx.setAlpha(0.5);
-            for (var i = 0; i < strokes.length; i++) {
-                var line = strokes[i];
-
-                ctx.beginPath();
-                ctx.moveTo(line[1], line[2]);
-                ctx.lineTo(line[3], line[4]);
-                //ctx.strokeStyle = line[0];
-                ctx.stroke();
-            }
-        };
-
-        $scope.movePad = function(aa) {
-            var dp = $('.docPanel')[0];
-            dpBottom = dp.offsetTop + dp.offsetHeight;
-            dpRight = dp.offsetLeft + dp.offsetWidth;
-            if (parseInt(aa.style.top,10) + aa.offsetHeight > dpBottom) {
-                aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
-            }
-            if (parseInt(aa.style.left,10) + aa.offsetWidth > dpRight) {
-                aa.style.setProperty('left', (dpRight - aa.offsetWidth) + 'px');
-            }
-        };
-
-        $scope.newPadX = function(page, lines) {
-            $scope.restoredPage = page;
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '"class="row-fluid draggable">' +
-                '<canvas style="background-color:white"></canvas></div>')($scope);
-            aa.scope().ntype = 'canvas';
-            aa[0].notetype = 'canvas';
-
-            aa.css({
-                resize: 'both',
-                overflow: 'hidden'
-            });
-            window.addEventListener('resize', function() {
-                $scope.movePad(aa[0]);
-            });
-
-            aa[0].addEventListener('mouseup', function(e) {
-                void(e);
-                $scope.fixPad(aa);
-                $scope.resizeDown = false;
-            });
-            aa[0].addEventListener('mousemove', function(e) {
-                if (e.which !== 0)
-                    $scope.fixPad(aa);
-            });
-            // I don't, in fact, get the mousedown event
-
-            var canvas = aa[0].querySelector('canvas');
-            var ctx = canvas.getContext('2d');
-            ctx.lineCap = 'round';
-            ctx.color = "blue";
-            ctx.lineWidth = 2;
-            ctx.fillStyle = "white";
-            // ctx.setAlpha(0);
-            ctx.fillRect(0, 0, 200, 200);
-            // ctx.setAlpha(0.5);
-
-            canvas.addEventListener('mousedown', function(e) {
-                canvas.down = true;
-                var offs = getCanvasOffset(e);
-                canvas.X = offs[0];
-                canvas.Y = offs[1];
-            }, false);
-
-            canvas.addEventListener('mouseover', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseout', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseup', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.strokes = [];
-
-            canvas.addEventListener('mousemove', function(e) {
-                if (canvas.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.X, canvas.Y);
-                    var offs = getCanvasOffset(e);
-                    ctx.lineTo(offs[0], offs[1]);
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
-                    ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
-                }
-                /* BEZIER CURVES?
-                if (canvas.down) {
-                    var inProgress, offs, cp1x, cp1y, cp2x, cp2y;
-                    if (!inProgress) {
-                        ctx.beginPath();
-                        ctx.moveTo(canvas.X, canvas.Y);
-                        offs = getCanvasOffset(e);
-                        inProgress = true;
-                        skip1 = true;
-                        skip2 = false;
-                    } else {
-                        if (skip1) {
-                            cp1x = canvas.X;
-                            cp1y = canvas.Y;
-                            skip1 = false;
-                            skip2 = true;
-                        }
-                        if (skip2) {
-                            cp2x = canvas.X;
-                            cp2y = canvas.Y;
-                            skip1 = false;
-                            skip2 = false;
-                        } else {
-                            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, canvas.X, canvas.Y);
-                            skip1 = true;
-                            skip2 = false;
-                        }
-                    }
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
-                    ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
-                }
-                */
-            }, true); // cancel bubble
-            canvas.strokes = lines;
-            $scope.fixPad(aa);
-            return aa;
         };
 
         $scope.acceptSign = function(sig) {
@@ -1619,7 +1592,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @param {boolean}
              * @param {json}
              */
-            console.log(nd_iss);
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved Annotations");

@@ -276,6 +276,14 @@
     float: right;
 }
 
+.home p.checkemail {
+    margin-top: 10px;
+}
+
+.home p.social {
+    margin:20px 0 5px 0;
+}
+
 /* form */
 
 #CompanyRegister-form {
