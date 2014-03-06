@@ -341,14 +341,12 @@
      <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
      <div class="shareForm">
          <span>Recipients</span>
-         <div>
-             <input type="text">
+         <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="multipeople">
          </div>
          <span>Message</span>
-         <div>
-             <input type="text">
-         </div>
-         <div>
+         <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
+         <div class="controls">
              <div class="standard-button pull-right">
                  <button class="btn">Share Documents</button>
              </div>

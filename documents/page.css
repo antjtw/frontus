@@ -578,8 +578,25 @@ div.progress-bar {
 
 /* Select2 Styling */
 
+textarea.email-text {
+    width: 270px;
+}
+.shareForm {
+    padding-top: 40px;
+}
+.shareForm > .sharepeople-input {
+    padding-bottom: 40px;
+}
 .sharepeople-input .select2-container {
-    width: 500px;
+    width: 100%;
+}
+.shareForm > .controls {
+    padding-top: 20px;
+}
+.shareForm > .controls > span {
+    line-height: 32px;
+    padding-right: 60px;
+    color: #3498DB;
 }
 
 .single-share-input .select2-container {
