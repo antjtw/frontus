@@ -659,7 +659,16 @@ div.progress-bar {
     margin-left: 0;
     width: 350px;
     min-height: 850px;
+    border-left: 6px solid white;
+    padding-top: 14px;
+    padding-left: 20px;
+    padding-right: 40px;
+}
+.span4.capright.showSharebar {
     border-left: 6px solid #E3E3E3;
+}
+.right-bar-header {
+    letter-spacing: 1px;
 }
 
 .slidingcss25 {
@@ -669,33 +678,17 @@ div.progress-bar {
     -o-transition: all 0.25s; /* Opera */
 }
 
-.span4.capright.button-offset {
-    margin-top: -19px;
-    position: relative;
+.fadeHide {
+    // text should be hidden width height and width transitions
+    // all else can't be squished...i don't think
+    opacity: 0;
+    //height: 0;
+    transition: opacity 0.25s linear;
+    //transition: height 0.25s linear;
 }
-
-.span4.capright > button {
-    top: 330px;
-    position:relative;
-
-    left: -68px;
-    -webkit-transform:rotate(90deg);
-    -moz-transform:rotate(90deg);
-    -o-transform:rotate(90deg);
-    -ms-transform:rotate(90deg);
-    border-radius: 0;
-    border: none;
-    background-color: #E3E3E3;
-    box-shadow: none;
-    width: 108px;
-    line-height: 10px;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: #1E2D3D;
-}
-
-.span4.capright > button:active {
-    color: #1E2D3D;
+.fadeShow {
+    opacity: 1;
+    transition: opacity 0.25s linear;
 }
 
 /* Template CSS */

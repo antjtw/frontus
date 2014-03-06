@@ -84,6 +84,22 @@ docviews.directive('myLoadingSpinner', function() {
     };
 });
 
+/*
+docviews.directive('fader', function() {
+    // looks for ngShow and ngHide
+    // transitions ngHide with zero delay
+    // transitions ngShow with .25s delay
+    return {
+        restrict: 'A',
+        require: ['?ngShow', '?ngHide'],
+        scope: {showDelay: '@'},
+        link: function(scope, element, attrs) {
+
+        }
+    };
+});
+*/
+
 docviews.run(function($rootScope, $document) {
     $document.on('click', function(event) {
         void(event);
@@ -107,7 +123,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return;
         }
 
-        $scope.sideToggleName = "Hide";
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -258,6 +273,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return $scope.maxRatio === 1000;
         };
 
+        $scope.hideSharebar = true;
         $scope.viewBy = 'document';
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
@@ -706,12 +722,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // Toggles sidebar back and forth
         $scope.toggleSide = function () {
-            if (!$scope.sideToggle) {
-                $scope.sideToggleName = "Hide";
-                return false;
+            // save previous filter state
+            // remove all filters
+            // animations
+            if (!$scope.hideSharebar) {
+                $scope.hideSharebar = true;
             } else {
-                $scope.sideToggleName = "Templates";
-                return true;
+                $scope.hideSharebar = false;
             }
         };
 
@@ -1023,7 +1040,7 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.tourclose = function () {
-            $scope.sideToggle = false;
+            $scope.hideSharebar = false;
             $scope.tourModal = false;
         };
 
