@@ -29,7 +29,8 @@ var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'u
     $routeProvider.
     when('/company-list', {
         templateUrl: 'companyList.html',
-        controller: 'CompanyDocumentListController'
+        controller: 'CompanyDocumentListController',
+        reloadOnSearch: false
     }).
     when('/company-view', {
         templateUrl: 'companyViewer.html',
@@ -751,11 +752,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             // save previous filter state
             // remove all filters
             // animations
+            var s = $location.search();
             if (!$scope.hideSharebar) {
+                s={};
                 $scope.hideSharebar = true;
             } else {
+                s.search=true;
                 $scope.hideSharebar = false;
             }
+            $location.search(s);
         };
         $scope.toggleForShare = function(doc) {
             // $scope.docShareState = [{doc_id: ###, shareType: #}, ..]
