@@ -115,14 +115,18 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$rootScope', '$route', 'SWBrijj',
+docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj',
         'navState',
-    function($scope, $modal, $q, $location, $rootScope, $route, SWBrijj, navState) {
+    function($scope, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
             return;
         }
-
+        if ($routeParams.search) {
+            $scope.hideSharebar = false;
+        } else {
+            $scope.hideSharebar = true;
+        }
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -154,7 +158,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         }).except(function(x) {
             });
 
-        SWBrijj.tblm('document.my_company_library', ['doc_id', 'template_id', 'company', 'docname', 'last_updated', 'uploaded_by']).then(function(data) {
+        SWBrijj.tblm('document.my_company_library', ['doc_id', 'template_id', 'company', 'docname',
+                                                     'last_updated', 'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
             $scope.documents = data;
             if ($scope.documents.length === 0) {
                 $scope.noDocs = true;
@@ -273,7 +278,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return $scope.maxRatio === 1000;
         };
 
-        $scope.hideSharebar = true;
+        $scope.docShareState = [];
         $scope.viewBy = 'document';
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
@@ -721,6 +726,27 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         // Toggles sidebar back and forth
+        $scope.upsertShareItem = function(item, list) {
+            var updated = false;
+            var listcopy = angular.copy(list);
+            angular.forEach(listcopy, function(el) {
+                if (el.doc_id == item.doc_id) {
+                    el.shareType = item.shareType;
+                    updated = true;
+                }
+            });
+            if (!updated) {
+                listcopy.push({"doc_id": item.doc_id, "shareType": item.shareType});
+            }
+            return listcopy;
+        };
+        $scope.removeShareItem = function(item, list) {
+            return list.filter(function(el) {return !(item.doc_id==el.doc_id && item.shareType==el.shareType);});
+        };
+        $scope.updateShareType = function(doc, tp) {
+            doc.shareType = tp;
+            $scope.docShareState = $scope.upsertShareItem(doc, $scope.docShareState);
+        };
         $scope.toggleSide = function () {
             // save previous filter state
             // remove all filters
@@ -730,6 +756,33 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else {
                 $scope.hideSharebar = false;
             }
+        };
+        $scope.toggleForShare = function(doc) {
+            // $scope.docShareState = [{doc_id: ###, shareType: #}, ..]
+            if (!doc.forShare) {
+                $scope.docShareState = $scope.upsertShareItem(doc, $scope.docShareState);
+                doc.forShare = true;
+            } else {
+                $scope.docShareState = $scope.removeShareItem(doc, $scope.docShareState);
+                doc.forShare = false;
+            }
+            console.log($scope.docShareState);
+        };
+        $scope.getShareType = function(doc) {
+            if (!doc) {return 0;}
+            if (!doc.shareType) {doc.shareType = 0;}
+            return doc.shareType;
+        };
+        $scope.formatShareType = function(tp) {
+            if (!tp || tp <= 0) {
+                return 'View Only';
+            } else if (tp > 0) {
+                return 'Request Signature';
+            }
+        };
+        $scope.docIsPrepared = function(doc) {
+            return doc && doc != "null" &&
+                ((doc.annotations && doc.annotations.length>5) || (doc.iss_annotations && doc.iss_annotations.length>5));
         };
 
         $scope.retractVersionOpen = function(version) {

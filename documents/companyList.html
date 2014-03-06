@@ -118,7 +118,7 @@
                     </div>
                     <div ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                          ng-show="!hideSharebar">
-                         <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="doc.forShare=!doc.forShare">
+                         <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
                              <span data-icon="&#xe023;" aria-hidden="true"></span>
                          </button>
                     </div>
@@ -150,24 +150,22 @@
                     </ul>
                 </td>
                 <td>
-                    <!--
-                    <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
-                        <button class="btn a_share_list" ng-click="prepareDocument(doc)">Share</button>
-                    </div>
-                    -->
                      <ul class="dropdown-list drop-selector"
                          ng-show="!hideSharebar"
                          ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                          <li class="dropdown standard">
                              <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
-                                 {{doc.shareType}}
+                                 {{ formatShareType(getShareType(doc)) }}
                              </a>
                              <ul class="dropdown-menu">
                                  <li>
-                                     <a class="button">View Only</a>
+                                     <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
                                  </li>
-                                 <li>
-                                     <a class="button">Request Signature</a>
+                                 <li ng-show="docIsPrepared(doc)">
+                                     <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
+                                 </li>
+                                 <li ng-show="!docIsPrepared(doc)">
+                                     <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
                                  </li>
                              </ul>
                          </li>
