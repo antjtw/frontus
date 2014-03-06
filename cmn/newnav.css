@@ -1,7 +1,7 @@
 .new-nav {
     position: fixed;
-    height: -moz-calc(100% - 80px);
-    height: -webkit-calc(100% - 80px);
+    height: -moz-calc(100% - 40px);
+    height: -webkit-calc(100% - 40px);
     height: calc(100% - 40px);
     top: 40px;
     left: -100px;

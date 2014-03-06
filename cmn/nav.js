@@ -143,6 +143,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
+
+        $scope.switchCandP = function (company, url) {
+            SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                document.location.href = url;
+            });
+        }
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
             $rootScope.homecollapsed = !$rootScope.homecollapsed;
@@ -180,6 +186,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (company.role == 'investor') {
                     $scope.hasInvest = true;
                 }
+                company.reasondic = $scope.initReasons(company.reasons);
             });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
