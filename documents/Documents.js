@@ -189,6 +189,10 @@ directive('draggable', ['$window', '$document',
                         var elem = $element.find('textarea');
                         if (newval == "Signature") {
                             elem.css('font-size', 18);
+                            if (elem.height() < 37) {
+                                elem.css('height', 37);
+                                elem[0].parentNode.parentNode.parentNode.parentNode.style.height = 47 + "px";
+                            }
                         }
                         else {
                             elem.css('font-size', 12);

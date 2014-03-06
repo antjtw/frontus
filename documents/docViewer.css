@@ -544,6 +544,9 @@ navbar .navbar {
 
 .draggable.signature textarea {
     font-family: 'Arizonia', serif;
+    background-image: url('/img/signature-texture.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
 }
 
 .draggable.redrequired div > textarea {

@@ -1305,12 +1305,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
-                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
-                console.log("zero people");
                 anybad = true;
             }
             return anybad;
