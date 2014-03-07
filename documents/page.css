@@ -704,9 +704,27 @@ textarea.email-text {
     transition: opacity 0.25s linear, visibility 0 linear 0.26s;
 }
 .fadeShow {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0 linear, opacity 0.25s linear;
+    visibility: visible;fadeShow 0.25s linear;
+    -webkit-animation:fadeShow 0.25s linear;
+    -moz-animation:fadeShow 0.25s linear;
+    -o-animation: fadeShow 0.25s linear;
+    animation: fadeShow 0.25s linear;
+}
+@keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-webkit-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-moz-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-o-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color:inherit;}
 }
 
 /* Template CSS */
