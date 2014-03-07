@@ -108,11 +108,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.path('/investor-list'); // goes into a bottomless recursion ?
             return;
         }
-        if ($routeParams.share) {
-            $scope.hideSharebar = false;
-        } else {
-            $scope.hideSharebar = true;
-        }
+        $scope.syncShareAndURL = function() {
+            if ($routeParams.share) {
+                $scope.hideSharebar = false;
+            } else {
+                $scope.hideSharebar = true;
+            }
+        };
+        $scope.$on('$routeUpdate', $scope.syncShareAndURL);
+        $scope.syncShareAndURL();
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -312,7 +316,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.messageText = "Add an optional message...";
+        $scope.messageText = "This does not accept a message. Please provide an email template for 'multishares' that accepts a custom message."; //"Add an optional message...";
         $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -766,9 +770,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $scope.docShareState = $scope.upsertShareItem(doc, $scope.docShareState);
         };
         $scope.toggleSide = function () {
-            // save previous filter state
-            // remove all filters
-            // animations
             var s = $location.search();
             if (!$scope.hideSharebar) {
                 s={};
