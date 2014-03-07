@@ -150,7 +150,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -578,6 +578,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
+
+
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
             $scope.processing = true;
@@ -746,6 +748,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             offset: {top: 40}
         });
 
+        $scope.signatureURL = '/photo/user?id=signature:';
+
         $scope.setStage = function(n) {
             $scope.setConfirmValue(0);
             $scope.stage = n;
@@ -904,6 +908,33 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
                 ev.getme = true;
             }
+            if (ev.whattype == "ImgSignature" && ((ev.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (ev.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                $scope.sigModalUp();
+            }
+        };
+
+        $scope.uploadSignature = function() {
+            $scope.signatureURL = "/img/image-loader-140.gif";
+            var fd = new FormData();
+            $scope.progressVisible = true;
+            for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+
+            SWBrijj.uploadSignature(fd).then(function(x) {
+                void(x);
+                // console.log(x);
+                $scope.signatureURL = '/photo/user?id=signature:';
+            }).except(function(x) {
+                    void(x);
+                    // console.log(x);
+                });
+        };
+
+        $scope.setFiles = function(element) {
+            $scope.files = [];
+            for (var i = 0; i < element.files.length; i++) {
+                $scope.files.push(element.files[i]);
+                $scope.$apply();
+            }
         };
 
         $scope.addLineBreaks = function(ev) {
@@ -928,8 +959,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return element.$$nextSibling.whattype == "Signature"  ? true : false;
         };
 
+        $scope.imageField = function (element) {
+            return element.$$nextSibling.whattype == "ImgSignature" ? true : false;
+        };
+
         $scope.stickyfilled = function(ev) {
-            return ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0 ? true : false;
+            return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent) ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
@@ -955,8 +990,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorEmail'] = "Email";
             $scope.attributelabels['investorPostalcode'] = "Zip code";
             $scope.attributelabels['signatureDate'] = "Date";
+            $scope.attributelabels['ImgSignature'] = "Signature Image";
 
         };
+
+        SWBrijj.procm('account.have_signature').then(function(sig) {
+            $scope.signaturepresent = sig;
+        });
 
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
@@ -1321,7 +1361,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                                 '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Text Signature</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                            '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Scribble Signature</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +
@@ -1615,7 +1658,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i][0];
                 if (n.notetype == "text") {
                     var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0 ) {
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
                         if (angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') {
                             returnvalue = true;
                         }
@@ -1627,6 +1672,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
             return returnvalue
         }
+
+        $scope.sigModalUp = function () {
+            $scope.signatureModal = true;
+        };
+
+        $scope.sigclose = function () {
+            $scope.signatureModal = false;
+        };
     }
 ]);
 

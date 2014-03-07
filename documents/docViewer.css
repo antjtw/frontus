@@ -549,6 +549,15 @@ navbar .navbar {
     background-repeat: no-repeat;
 }
 
+.draggable.imagesignature textarea {
+    opacity: 1.0;
+    font-family: 'Arizonia', serif;
+    background-image: url('/photo/user?id=signature:');
+    background-size: contain;
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+
 .draggable.redrequired div > textarea {
     border: 1px solid #E64B3B;
 }

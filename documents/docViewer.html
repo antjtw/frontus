@@ -1,6 +1,44 @@
 <script src="/cmn/spin.js"></script>
 <link type="text/css" rel="stylesheet" href="/documents/docViewer.css">
 <div class="modal-backdrop" style="opacity:0.9;"></div>
+
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Pick your Signature
+        </p>
+    </div>
+    <div class="modalText">
+        <div class="row-fluid">
+            <div class="span6">
+                <img src="{{signatureURL}}">
+            </div>
+            <div class="span5 gif-text">
+                <p>
+                    Helpful text
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="fakefile">
+                                <span>CHOOSE FILE</span>
+                                <div ng-show="files.length">
+                                    <span>{{files[0].name | fileLength}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div class="modal-footer">
+                    <div class="standard-button green">
+                        <button class="btn" ng-click="uploadSignature();">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="docViewer" ng-hide="hidePage">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
