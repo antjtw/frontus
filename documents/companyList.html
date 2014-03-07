@@ -109,18 +109,22 @@
                 <td class="status-toggle"
                     ng-class="{'pointer':doc.versions[0]&&hideSharebar, 'status-toggle-on': doc.shown}"
                     ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
-                    <div ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                         ng-hide="!hideSharebar">
-                        <span ng-hide="doc.shown || !doc.versions[0]"
-                              data-icon="&#xe017;" aria-hidden="true"></span>
-                        <span ng-show="doc.shown && doc.versions[0]"
-                              data-icon="&#xe01c;" aria-hidden="true"></span>
-                    </div>
-                    <div ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                         ng-show="!hideSharebar">
-                         <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
-                             <span data-icon="&#xe023;" aria-hidden="true"></span>
-                         </button>
+                    <div ng-switch on="hideSharebar">
+                        <div ng-switch-when="true"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                             ng-hide="!hideSharebar">
+                            <span ng-hide="doc.shown || !doc.versions[0]"
+                                  data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="doc.shown && doc.versions[0]"
+                                  data-icon="&#xe01c;" aria-hidden="true"></span>
+                        </div>
+                        <div ng-switch-when="false"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                             ng-show="!hideSharebar">
+                             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
+                             </button>
+                        </div>
                     </div>
                 </td>
                 <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">

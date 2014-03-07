@@ -101,6 +101,23 @@ docviews.directive('fader', function() {
     };
 });
 */
+/*
+docviews.factory('sessionData', [$rootScope, function($rootScope) {
+    var service = {
+        data: [],
+        SaveState: function() {
+            sessionStorage.sharewave = angular.toJson(data);
+        },
+        LoadState: function() {
+            service.data = angular.fromJson(sessionStorage.sharewave);
+        }
+    }
+    $rootScope.$on("savestate", service.SaveState);
+    $rootScope.$on("restorestate", service.RestoreState);
+    return service;
+}]);
+*/
+
 
 docviews.run(function($rootScope, $document) {
     $document.on('click', function(event) {
