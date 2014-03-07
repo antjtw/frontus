@@ -85,39 +85,6 @@ docviews.directive('myLoadingSpinner', function() {
     };
 });
 
-/*
-docviews.directive('fader', function() {
-    // take a boolean that shows or hides
-    // looks for ngShow and ngHide
-    // transitions ngHide with zero delay
-    // transitions ngShow with .25s delay
-    return {
-        restrict: 'A',
-        require: ['?ngShow', '?ngHide'],
-        scope: {showDelay: '@'},
-        link: function(scope, element, attrs) {
-
-        }
-    };
-});
-*/
-/*
-docviews.factory('sessionData', [$rootScope, function($rootScope) {
-    var service = {
-        data: [],
-        SaveState: function() {
-            sessionStorage.sharewave = angular.toJson(data);
-        },
-        LoadState: function() {
-            service.data = angular.fromJson(sessionStorage.sharewave);
-        }
-    }
-    $rootScope.$on("savestate", service.SaveState);
-    $rootScope.$on("restorestate", service.RestoreState);
-    return service;
-}]);
-*/
-
 
 docviews.run(function($rootScope, $document) {
     $document.on('click', function(event) {
@@ -171,6 +138,31 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             }
         });
+        $scope.getShareState = function() {
+            var st = angular.fromJson(sessionStorage.sharewave);
+            if (Array.isArray(st)) {
+                console.log(st);
+                return st;
+            } else {
+                return [];
+            }
+        };
+        $scope.saveShareState = function(st) {
+            if (Array.isArray(st)) {
+                sessionStorage.sharewave = angular.toJson(st);
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        $scope.docShareState = $scope.getShareState();
+        $scope.$on('$locationChangeStart', function (event, next, current) {
+            $scope.saveShareState($scope.docShareState);
+        });
+        window.onbeforeunload = function() {
+            $scope.saveShareState($scope.docShareState);
+        };
 
         SWBrijj.tblm('smartdoc.document').then(function(data) {
             $scope.smarttemplates = data;
@@ -183,9 +175,22 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if ($scope.documents.length === 0) {
                 $scope.noDocs = true;
             } else {
+                $scope.initShareState();
                 $scope.loadDocumentVersions();
             }
         });
+        $scope.initShareState = function() {
+            if ($scope.docShareState.length > 0) {
+                angular.forEach($scope.documents, function(doc) {
+                    angular.forEach($scope.docShareState, function(docToShare) {
+                        if (doc.doc_id==docToShare.doc_id) {
+                            doc.forShare = true;
+                            doc.signature_flow = docToShare.signature_flow;
+                        }
+                    });
+                });
+            }
+        };
 
         $scope.loadDocumentVersions = function () {
             SWBrijj.tblm("document.my_counterparty_library").then(function(data) {
@@ -297,7 +302,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return $scope.maxRatio === 1000;
         };
 
-        $scope.docShareState = [];
         $scope.viewBy = 'document';
         $scope.docOrder = 'docname';
         $scope.shareOrder = 'docname';
