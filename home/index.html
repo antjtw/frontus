@@ -3,7 +3,6 @@
 <head>
     <!--{{/i/head_css.inc}}-->
     <link type="text/css" rel="stylesheet" href="/home/home.css">
-    <link type="text/css" rel="stylesheet" href="/cmn/newnav.css">
     <!--{{/i/head_js.inc}}-->
     <title>Sharewave Home</title>
     <script src="HomeApp.js" type="text/javascript"></script>
@@ -18,33 +17,7 @@
 <div class="wrap">
     <navbar></navbar>
     <div class="container">
-        <div class="new-nav">
-            <accordion close-others="true">
-                <accordion-group is-open="company.current" ng-repeat="company in companies">
-                    <accordion-heading>
-                        <span>{{company.name}}</span>
-                    </accordion-heading>
-                    <ul>
-                        <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-captable')">Cap Table</a>
-                        </li>
-                        <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-grants')">Grants Table</a>
-                        </li>
-                        <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-status')">Ownership Status</a>
-                        </li>
-                        <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/documents/company-list')">Documents</a>
-                        </li>
-                        <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/ownership/investor-captable')">Cap Table</a>
-                        </li>
-                        <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/ownership/investor-grants')">Grants Table</a>
-                        </li>
-                        <li ng-show="company.reasondic.doc"><a class="button" ng-click="switchCandP(company, '/documents/investor-list')">Documents</a>
-                        </li>
-                        <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/company/profile/people')">People</a>
-                        </li>
-                    </ul>
-                </accordion-group>
-            </accordion>
-        </div>
+        <verticalnav></verticalnav>
         <div class="row-fluid">
             <div class="maincontent">
                 <div class="coreEdit" style="min-height: 750px;" data-ng-view=""></div>

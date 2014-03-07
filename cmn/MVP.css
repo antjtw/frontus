@@ -479,7 +479,7 @@ h2 {
 }
 /* Navigation Bar at Top of Page */
 .navBarLoggedIn {
-    height:70px;
+    height:40px !important;
 }
 .navBarLoggedOut {
     height:80px;

@@ -87,6 +87,14 @@ navm.directive('navbar', function () {
     };
 });
 
+navm.directive('verticalnav', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/cmn/verticalnav.html',
+        controller: 'NavCtrl'
+    };
+});
+
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
     function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
 
@@ -144,10 +152,20 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             });
         };
 
+
+        $scope.gotoURL = function(url) {
+            document.location.href = url;
+        }
         $scope.switchCandP = function (company, url) {
-            SWBrijj.switch_company(company.company, company.role).then(function (data) {
-                document.location.href = url;
-            });
+            if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
+                SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    $scope.gotoURL(url);
+                });
+            }
+            else {
+                $scope.gotoURL(url);
+            }
+
         }
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {

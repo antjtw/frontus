@@ -113,44 +113,5 @@
                 <ul class="nav pull-right nav-item dropdown-list notifications" notifications notes="notes"></ul>
             </div>
         </div>
-        <div class="bottomnav navbar row-fluid" ng-hide="noNav">
-            <div class="navbounder">
-                <ul class="menuHeaderText nav dropdown-list">
-                    <li class="dropdown standard menu-drop">
-                        <a class="dropdown-toggle" ng-class="{'active': navState.path.substring(0,6)==='/home/'}"
-                           ng-click="companies.length===1 && gotohome()">
-                            {{navState.name}}
-                            <span class='for-r0ml'> ({{navState.role}})</span>
-                            <span ng-show="companies.length!==1" class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
-                            <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
-                        </a>
-
-                        <ul class="dropdown-menu" ng-class="{'active': navState.path.substring(0,6)=== '/home/'}"
-                        ng-show="companies.length > 1">
-                            <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span>
-                            </li>
-                            <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
-                            ng-repeat="company in companies | filter: {role:'investor'}"> <a class="button" ng-click="switch(company)">{{company.name}}</a>
-
-                            </li>
-                            <li ng-show="hasAdmin" class="dropdown-label"><span>ADMIN</span>
-                            </li>
-                            <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
-                            ng-repeat="company in companies | filter: {role:'issuer'}"> <a class="button" ng-click="switch(company)">
-                            {{company.name}}
-                        </a>
-
-                            </li>
-                        </ul>
-                    </li>
-                    <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a>
-                    </li>
-                    <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
-                    </li>
-                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/') != -1}"><a class="button" href="/company/profile/people">People</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
 </div>

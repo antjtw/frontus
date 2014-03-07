@@ -11,6 +11,7 @@
     -moz-transition: left 0.35s ease;
     -o-transition: left 0.35s ease;
     transition: left 0.35s ease;
+    z-index: 10000;
 }
 
 .new-nav:hover {
