@@ -329,9 +329,11 @@
         <p>Please select any document, presentation or image (20MB max)</p>
         <form class="form-inline">
             <fieldset>
+                <!--
                 <div ng-show="fileError" class="upload-errors">
                     <span>{{fileError}}</span>
                 </div>
+                -->
                 <div class="fileinputs">
                     <input ng-hide="showProgress || showProcessing" type="file" class='file'
                            onchange="angular.element(this).scope().setFiles(this);"/>
