@@ -698,14 +698,15 @@ textarea.email-text {
 .fadeHide {
     // text should be hidden width height and width transitions
     // all else can't be squished...i don't think
+    visibility: hidden;
     opacity: 0;
     //height: 0;
-    transition: opacity 0.25s linear;
-    //transition: height 0.25s linear;
+    transition: opacity 0.25s linear, visibility 0 linear 0.26s;
 }
 .fadeShow {
+    visibility: visible;
     opacity: 1;
-    transition: opacity 0.25s linear;
+    transition: visibility 0 linear, opacity 0.25s linear;
 }
 
 /* Template CSS */

@@ -151,7 +151,7 @@
                 </td>
                 <td>
                      <ul class="dropdown-list drop-selector"
-                         ng-show="!hideSharebar"
+                         ng-show="!hideSharebar && doc.forShare"
                          ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                          <li class="dropdown standard">
                              <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
@@ -348,7 +348,7 @@
          <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
          <div class="controls">
              <div class="standard-button pull-right">
-                 <button class="btn">Share Documents</button>
+                 <button class="btn" ng-click="shareDocuments(docShareState, multipeople, messageText)">Share Documents</button>
              </div>
              <span class="pull-right">Cancel</span>
          </div>
