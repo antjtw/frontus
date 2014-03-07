@@ -382,7 +382,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    $scope.$emit("notification:fail", "Sorry, "+element.files[i].type+" is not supported.");
+                    $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
                     //$scope.fileError = "Please choose a .pdf, .doc, .docx, .odt, .txt, .rtf, .ppt, .pptx, .odp, .jpg, .png, or a .tiff.";
                 } else {
                     $scope.files.push(element.files[i]);
