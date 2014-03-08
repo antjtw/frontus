@@ -709,4 +709,23 @@ div.textarea-container {
     cursor: crosshair;
 }
 
+.sigmodal.modalText {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 40px;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+div.imgsig {
+    height: 200px;
+    border: #1ABC96 solid 2px;
+}
+div.imgsig > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
 
