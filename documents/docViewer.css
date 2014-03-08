@@ -560,6 +560,7 @@ navbar .navbar {
     background-position: left top;
     background-repeat: no-repeat;
     color: transparent;
+    background-color: transparent;
 }
 
 .draggable.imagesignature.mysignature.processing textarea {
