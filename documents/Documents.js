@@ -903,11 +903,27 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return $scope.countersignable($scope.lib)
         };
 
-        $scope.openBox = function(ev) {
+        $scope.openBox = function(ev, event) {
             if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
                 ev.getme = true;
             }
             if (ev.whattype == "ImgSignature" && ((ev.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (ev.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                var textarea = event.currentTarget;
+                var width = parseInt(textarea.style.width);
+                var height = parseInt(textarea.style.height);
+                var boxwidth = 330;
+                var boxheight = 200;
+                if (height > width) {
+                    var ratio = boxheight / height;
+                    height = boxheight;
+                    width = width * ratio
+                }
+                else {
+                    var ratio = boxwidth / width;
+                    width = boxwidth;
+                    height = height * ratio;
+                }
+                $scope.signaturestyle = {height: String(height), width: String(width) };
                 $scope.sigModalUp();
             }
         };
@@ -1329,7 +1345,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
