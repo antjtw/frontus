@@ -74,7 +74,6 @@ function ApplyLineBreaks(oTextarea) {
     var count = strNewValue.match(re);
     if (count && max <= count.length) {
         strNewValue = strNewValue.split("\n", max).join("\n");
-        console.log(strNewValue);
     }
     oTextarea.value = strNewValue;
     oTextarea.setAttribute("wrap", "hard");
@@ -150,7 +149,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -963,8 +962,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return element.$$nextSibling.whattype == "ImgSignature" ? true : false;
         };
 
+        $scope.imageMine = function (element) {
+            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Investor") ? true : false;
+        };
+
         $scope.stickyfilled = function(ev) {
-            return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent) ? true : false;
+            return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent && (($rootScope.navState.role == "issuer" && ev.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && ev.$$nextSibling.whosign == "Investor"))) ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
@@ -995,7 +998,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         SWBrijj.procm('account.have_signature').then(function(sig) {
-            $scope.signaturepresent = sig;
+            $scope.signaturepresent = sig[0].have_signature;
         });
 
         $scope.loadAnnotations = function() {
@@ -1314,6 +1317,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
         };
+
+        $scope.placeholdertext = function() {
+
+        }
 
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
@@ -1659,12 +1666,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (n.notetype == "text") {
                     var contents = n.querySelector("textarea");
                     if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        if (angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             returnvalue = true;
                         }
-                        else if (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer') {
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             returnvalue = true;
                         }
                     }

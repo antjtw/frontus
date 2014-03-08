@@ -552,10 +552,27 @@ navbar .navbar {
 .draggable.imagesignature textarea {
     opacity: 1.0;
     font-family: 'Arizonia', serif;
+}
+
+.draggable.imagesignature.mysignature textarea {
     background-image: url('/photo/user?id=signature:');
     background-size: contain;
     background-position: left top;
     background-repeat: no-repeat;
+    color: transparent;
+}
+
+.draggable.imagesignature.mysignature textarea::-webkit-input-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea:-moz-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea::-moz-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea:-ms-input-placeholder {
+    opacity: 0;
 }
 
 .draggable.redrequired div > textarea {
