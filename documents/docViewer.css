@@ -731,6 +731,7 @@ div.textarea-container {
     padding-right: 20px;
     padding-bottom: 10px;
     padding-top: 40px;
+    margin-bottom: 0;
 }
 .sigmodal + .modal-footer > .standard-button {
     padding-left: 20px;

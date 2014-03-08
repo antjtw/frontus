@@ -1095,7 +1095,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 newattr = annot[4]
                             }
                             if ($scope.isAnnotable) {
-                                if ($scope.countersignable($scope.lib) && newattr.whattype == "Signature" || !$scope.countersignable($scope.lib)) {
+                                if ($scope.countersignable($scope.lib) && (newattr.whattype == "Signature" || newattr.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
                                     $scope.annotatedPages.push(annot[0][0]);
                                     switch (annot[1]) {
                                         case "check":
