@@ -562,6 +562,11 @@ navbar .navbar {
     color: transparent;
 }
 
+.draggable.imagesignature.mysignature.processing textarea {
+    background-image: none;
+    color: transparent;
+}
+
 .draggable.imagesignature.mysignature textarea::-webkit-input-placeholder {
     opacity: 0;
 }

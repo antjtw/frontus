@@ -149,7 +149,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing()}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -924,22 +924,25 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     height = height * ratio;
                 }
                 $scope.signaturestyle = {height: String(height), width: String(width) };
+                $scope.currentsignature = textarea;
                 $scope.sigModalUp();
             }
         };
 
-        $scope.uploadSignature = function() {
+        $scope.uploadSignatureNow = function() {
             $scope.signatureURL = "/img/image-loader-140.gif";
+            $scope.signatureprocessing = true;
             var fd = new FormData();
             $scope.progressVisible = true;
             for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
 
             SWBrijj.uploadSignature(fd).then(function(x) {
-                void(x);
-                // console.log(x);
                 $scope.signatureURL = '/photo/user?id=signature:';
+                $scope.signatureprocessing = false;
+                $scope.progressVisible = false;
                 $scope.signaturepresent = true;
-                $scope.sigclose();
+                $scope.signatureModal = false;
+                $scope.$apply();
             }).except(function(x) {
                 void(x);
                 $scope.progressVisible = false;
@@ -984,6 +987,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.imageMine = function (element) {
             return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Investor") ? true : false;
+        };
+
+        $scope.signatureProcessing = function () {
+            return $scope.signatureprocessing;
         };
 
         $scope.stickyfilled = function(ev) {
