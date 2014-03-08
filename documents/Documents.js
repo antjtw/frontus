@@ -922,10 +922,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 void(x);
                 // console.log(x);
                 $scope.signatureURL = '/photo/user?id=signature:';
+                $scope.signaturepresent = true;
+                $scope.sigclose();
             }).except(function(x) {
-                    void(x);
+                void(x);
+                $scope.progressVisible = false;
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
                     // console.log(x);
-                });
+            });
         };
 
         $scope.setFiles = function(element) {
@@ -1371,7 +1375,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                                 '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Text Signature</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                            '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Scribble Signature</a>' +
+                                                            '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Signature Image</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +

@@ -8,12 +8,12 @@
             Pick your Signature
         </p>
     </div>
-    <div class="modalText">
+    <div class="sigmodal modalText">
         <div class="row-fluid">
-            <div class="span6">
+            <div class="imgsig span6">
                 <img src="{{signatureURL}}">
             </div>
-            <div class="span5 gif-text">
+            <div class="span6 gif-text">
                 <p>
                     Helpful text
                 </p>
@@ -23,19 +23,25 @@
                             <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
                             <div class="fakefile">
                                 <span>CHOOSE FILE</span>
-                                <div ng-show="files.length">
+                                <div ng-show="files.length>0">
                                     <span>{{files[0].name | fileLength}}</span>
                                 </div>
                             </div>
                         </div>
                     </fieldset>
                 </form>
-                <div class="modal-footer">
-                    <div class="standard-button green">
-                        <button class="btn" ng-click="uploadSignature();">Upload</button>
-                    </div>
-                </div>
             </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green">
+            <button class="btn"
+                    ng-click="uploadSignature();"
+                    ng-disabled="files.length===0">Upload</button>
+        </div>
+        <div class="pull-right standard-button gray">
+            <button class="btn"
+                    ng-click="sigclose();">Cancel</button>
         </div>
     </div>
 </div>
