@@ -935,13 +935,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var fd = new FormData();
             $scope.progressVisible = true;
             for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
-
+            $scope.signatureModal = false;
             SWBrijj.uploadSignature(fd).then(function(x) {
                 $scope.signatureURL = '/photo/user?id=signature:';
                 $scope.signatureprocessing = false;
                 $scope.progressVisible = false;
                 $scope.signaturepresent = true;
-                $scope.signatureModal = false;
+                $scope.$emit("notification:success", "Signature uploaded");
                 $scope.$apply();
             }).except(function(x) {
                 void(x);
