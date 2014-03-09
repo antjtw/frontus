@@ -744,9 +744,19 @@ div.textarea-container {
 }
 div.imgsig {
     height: 200px;
-    border: #1ABC96 solid 2px;
+    white-space: nowrap;
 }
-div.imgsig > img {
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
     margin: 0 !important;
     height: 100%;
     float: left;
