@@ -925,6 +925,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }
                 $scope.signaturestyle = {height: String(height), width: String(width) };
                 $scope.currentsignature = textarea;
+                $scope.signatureURL = '/photo/user?id=signature:';
                 $scope.sigModalUp();
             }
         };
