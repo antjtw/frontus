@@ -941,6 +941,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.signatureprocessing = false;
                 $scope.progressVisible = false;
                 $scope.signaturepresent = true;
+                var elements = document.getElementsByClassName('draggable imagesignature mysignature');
+                angular.forEach(elements, function(element) {
+                    element = element.querySelector("textarea");
+                    if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
+                        element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
+                    }
+                    else {
+                        element.style.backgroundImage = 'url(/photo/user?id=signature:)';
+                    }
+                })
                 $scope.$emit("notification:success", "Signature uploaded");
                 $scope.$apply();
             }).except(function(x) {
