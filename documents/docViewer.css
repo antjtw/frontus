@@ -544,6 +544,41 @@ navbar .navbar {
 
 .draggable.signature textarea {
     font-family: 'Arizonia', serif;
+    background-image: url('/img/signature-texture.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+
+.draggable.imagesignature textarea {
+    opacity: 1.0;
+    font-family: 'Arizonia', serif;
+}
+
+.draggable.imagesignature.mysignature textarea {
+    background-image: url('/photo/user?id=signature:');
+    background-size: contain;
+    background-position: left top;
+    background-repeat: no-repeat;
+    color: transparent;
+    background-color: transparent;
+}
+
+.draggable.imagesignature.mysignature.processing textarea {
+    background-image: url('/img/image-loader-140.gif');
+    color: transparent;
+}
+
+.draggable.imagesignature.mysignature textarea::-webkit-input-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea:-moz-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea::-moz-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea:-ms-input-placeholder {
+    opacity: 0;
 }
 
 .draggable.redrequired div > textarea {
@@ -695,6 +730,42 @@ div.textarea-container {
 
 .drawcursor {
     cursor: crosshair;
+}
+
+.sigmodal.modalText {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 40px;
+    margin-bottom: 0;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+div.imgsig {
+    height: 200px;
+    white-space: nowrap;
+}
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
+.sigmodal .gif-text > p {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-right: 30px;
 }
 
 

@@ -402,13 +402,22 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         // File manipulation
 
 
-        /*
-        var mimetypes = ["application/pdf",
-                         "application/msword",
-                         "application/vnd.ms-powerpoint",
-                         "text/csv"];
-        */
-        var mimetypes = ["application/pdf"];
+        var mimetypes = ["application/pdf", // .pdf
+                         // microsoft office
+                         "application/msword", // .doc
+                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+                         "application/vnd.ms-powerpoint", // .ppt
+                         "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+                         // open office
+                         "application/vnd.oasis.opendocument.text", // .odt
+                         "application/vnd.oasis.opendocument.presentation", // .odp
+                         "application/vnd.oasis.opendocument.image", // .odi
+                         "image/png", // .png
+                         "image/tiff", // .tiff
+                         "image/jpeg", // .jpg
+                         "text/plain", // .txt
+                         "application/rtf", // .rtf
+                         ];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
@@ -417,7 +426,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    $scope.fileError = "Please choose a pdf";
+                    $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                    //$scope.fileError = "Please choose a .pdf, .doc, .docx, .odt, .txt, .rtf, .ppt, .pptx, .odp, .jpg, .png, or a .tiff.";
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -1281,12 +1291,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
-                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
-                console.log("zero people");
                 anybad = true;
             }
             return anybad;
@@ -1808,6 +1816,21 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.processing = false;
 
+        $scope.helpModalUp = function () {
+            $scope.tourModal = true;
+        };
+
+        $scope.tourclose = function () {
+            $scope.sideToggle = false;
+            $scope.tourModal = false;
+        };
+
+        $scope.touropts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'helpModal modal'
+        };
+
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
@@ -1820,6 +1843,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                         return;
                     }
                     $scope.document = data;
+
+                    if ($scope.signable()) {
+                        $scope.helpModalUp();
+                    }
+
                     $scope.initDocView();
                 }).except(function(x) {
                     void(x);
@@ -1833,6 +1861,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
+
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 console.log($rootScope.lastPage);
