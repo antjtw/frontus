@@ -902,6 +902,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.checkmany = function(people) {
             var anybad = false;
+            var regExp = /\(([^)]+)\)/;
             angular.forEach(people, function(person) {
                 var email;
                 var matches = regExp.exec(person.id);
@@ -941,8 +942,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             tosee = tosee == "" ? "!!!" : tosee;
             SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), JSON.stringify(docsToShare), Date.parse('22 November 2113')
             ).then(function(data) {
-                console.log(data);
-                $scope.docShareState = [];
+                void(data);
+                $scope.saveShareState([]);
                 $scope.$emit("notification:success", "Documents Shared");
                 $location.search({});
                 $route.reload();
