@@ -578,8 +578,25 @@ div.progress-bar {
 
 /* Select2 Styling */
 
+textarea.email-text {
+    width: 270px;
+}
+.shareForm {
+    padding-top: 40px;
+}
+.shareForm > .sharepeople-input {
+    padding-bottom: 40px;
+}
 .sharepeople-input .select2-container {
-    width: 500px;
+    width: 100%;
+}
+.shareForm > .controls {
+    padding-top: 20px;
+}
+.shareForm > .controls > span {
+    line-height: 32px;
+    padding-right: 60px;
+    color: #3498DB;
 }
 
 .single-share-input .select2-container {
@@ -659,7 +676,16 @@ div.progress-bar {
     margin-left: 0;
     width: 350px;
     min-height: 850px;
+    border-left: 6px solid white;
+    padding-top: 14px;
+    padding-left: 20px;
+    padding-right: 40px;
+}
+.span4.capright.showSharebar {
     border-left: 6px solid #E3E3E3;
+}
+.right-bar-header {
+    letter-spacing: 1px;
 }
 
 .slidingcss25 {
@@ -669,33 +695,54 @@ div.progress-bar {
     -o-transition: all 0.25s; /* Opera */
 }
 
-.span4.capright.button-offset {
-    margin-top: -19px;
-    position: relative;
+.fadeHide {
+    // text should be hidden width height and width transitions
+    // all else can't be squished...i don't think
+    visibility: hidden;
+    opacity: 0;
+    //height: 0;
+    transition: opacity 0.25s linear, visibility 0 linear 0.26s;
 }
-
-.span4.capright > button {
-    top: 330px;
-    position:relative;
-
-    left: -68px;
-    -webkit-transform:rotate(90deg);
-    -moz-transform:rotate(90deg);
-    -o-transform:rotate(90deg);
-    -ms-transform:rotate(90deg);
-    border-radius: 0;
-    border: none;
-    background-color: #E3E3E3;
-    box-shadow: none;
-    width: 108px;
-    line-height: 10px;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: #1E2D3D;
+.subnav-controls.doclist-controls .fadeHide {
+    -webkit-transform: translate3d(-500px, 0, 0);
+    -moz-transform: translate3d(-500px, 0, 0);
+    -ms-transform: translate3d(-500px, 0, 0);
+    -o-transform: translate3d(-500px, 0, 0);
+    transform: translate3d(-500px, 0, 0);
+    transition: all 0.25s linear;
 }
-
-.span4.capright > button:active {
-    color: #1E2D3D;
+/*
+.animate-enter {
+    -webkit-transition: 1s linear all;
+    transition: 1s linear all;
+    opacity: 0;
+}
+.animate-enter.animate-enter-active {
+    opacity: 1;
+}
+*/
+.fadeShow {
+    visibility: visible;fadeShow 0.25s linear;
+    -webkit-animation:fadeShow 0.25s linear;
+    -moz-animation:fadeShow 0.25s linear;
+    -o-animation: fadeShow 0.25s linear;
+    animation: fadeShow 0.25s linear;
+}
+@keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-webkit-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-moz-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-o-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color:inherit;}
 }
 
 /* Template CSS */
