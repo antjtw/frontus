@@ -352,7 +352,9 @@
          <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
          <div class="controls">
              <div class="standard-button pull-right">
-                 <button class="btn" ng-click="shareDocuments(docShareState, multipeople, messageText)">Share Documents</button>
+                 <button class="btn"
+                         ng-click="shareDocuments(docShareState, multipeople, messageText)"
+                         ng-disabled="checkmany(multipeople) || !docShareState.length>0">Share Documents</button>
              </div>
              <span class="pull-right pointer" ng-click="toggleSide();">Cancel</span>
          </div>
