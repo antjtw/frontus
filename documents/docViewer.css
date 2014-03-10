@@ -780,6 +780,7 @@ div.imgsig > div > img {
 
 .scribblewindow > canvas {
     cursor: default;
+    background-color: transparent;
 }
 
 
