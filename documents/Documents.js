@@ -923,7 +923,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     width = boxwidth;
                     height = height * ratio;
                 }
-                $scope.signaturestyle = {height: String(height), width: String(width) };
+                $scope.signaturestyle = {height: String(180), width: String(330) };
                 $scope.currentsignature = textarea;
                 $scope.signatureURL = '/photo/user?id=signature:';
                 $scope.sigModalUp();
@@ -1040,6 +1040,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorPostalcode'] = "Zip code";
             $scope.attributelabels['signatureDate'] = "Date";
             $scope.attributelabels['ImgSignature'] = "Signature Image";
+            $scope.attributelabels['Signature'] = "Signature Text";
 
         };
 
@@ -1414,7 +1415,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                                 '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Text Signature</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                             '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Signature Image</a>' +
