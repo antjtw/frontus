@@ -125,12 +125,14 @@
                         Back
                     </button>
                 </div>
+                <!-- todo delete -->
                 <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
                 <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
+                    <!-- todo delete -->
                     <button class="btn"
                             ng-show="prepareable(lib)"
                             ng-disabled="processing || checkmany(recipient)"
@@ -155,6 +157,7 @@
                             ng-click="finalizeAction(confirmValue, rejectMessage);">
                         Confirm
                     </button>
+                    <!-- todo delete -->
                     <button class="btn"
                             ng-show="template_original && !forsigning"
                             ng-disabled="processing || checkmany(template_email)"
@@ -190,6 +193,7 @@
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
+            <!-- todo delete -->
             <div ng-show="prepareable(lib)">
                 <div class='confirmBody shareDoc'>
                     <span>Email Addresses</span>
@@ -315,6 +319,7 @@
                 </div>
             </div>
 
+            <!-- todo delete -->
             <div ng-show="template_original && !forsigning">
                 <div class="template-share">
                     <div>
