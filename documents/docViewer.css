@@ -778,6 +778,11 @@ div.imgsig > div > img {
     border: #1ABC96 solid 1px;
 }
 
+.scribblewindow > canvas {
+    cursor: default;
+}
+
+
 .modal.helpModal div.fileinputs {
     display: inline-block;
     float: left;
