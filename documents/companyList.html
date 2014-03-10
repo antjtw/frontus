@@ -186,11 +186,12 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-click="viewStatus(doc)">View Status</li>
-                                        <li ng-click="viewOriginal(doc)">View Original</li>
-                                        <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                        <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
-                                        <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
+                                        <li ng-show="doc.doc_id" ng-click="viewStatus(doc)">View Status</li>
+                                        <li ng-show="doc.doc_id" ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-show="!doc.doc_id && doc.template_id" ng-click="viewTemplate(doc.template_id)">View Original</li>
+                                        <li ng-show="doc.doc_id" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <li ng-show="!doc.versions[0] && doc.doc_id" ng-click="updateTitleOpen(doc)">Rename</li>
+                                        <li ng-show="!doc.versions[0] && doc.doc_id" ng-click="deleteDocOpen(doc)">Delete</li>
                                     </ul>
                                 </li>
                             </ul>

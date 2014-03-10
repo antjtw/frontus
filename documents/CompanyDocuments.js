@@ -166,23 +166,51 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         window.onbeforeunload = function() {
             $scope.saveShareState($scope.docShareState);
         };
+        $scope.mergeSmartIntoDumb = function() {
+            var smartdocs = [];
+            angular.forEach($scope.documents, function(doc) {
+                if (doc.template_id) {
+                    smartdocs.push(doc.template_id);
+                }
+            });
+            angular.forEach($scope.smarttemplates, function(smart) {
+                if (smartdocs.indexOf(smart.template_id) === -1) {
+                    $scope.documents.push(
+                        {"docname": smart.template_name,
+                         "uploaded_by": null,
+                         "company": null,
+                         "doc_id": null,
+                         "template_id": smart.template_id,
+                         "last_updated": null,
+                         "annotations": null,
+                         "versions": null,
+                        });
+                }
+            });
+        };
 
-        SWBrijj.tblm('smartdoc.document').then(function(data) {
-            $scope.smarttemplates = data;
-        }).except(function(x) {
-        });
-
-        SWBrijj.tblm('document.my_company_library',
-                ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
-                 'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
-            $scope.documents = data;
-            if ($scope.documents.length === 0) {
-                $scope.noDocs = true;
-            } else {
-                $scope.initShareState();
-                $scope.loadDocumentVersions();
-            }
-        });
+        $scope.loadSmartDocuments = function() {
+            SWBrijj.tblm('smartdoc.document').then(function(data) {
+                $scope.smarttemplates = data;
+                $scope.loadDocuments();
+            }).except(function(x) {
+            });
+        };
+        $scope.loadSmartDocuments();
+        $scope.loadDocuments = function() {
+            SWBrijj.tblm('document.my_company_library',
+                    ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
+                     'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
+                $scope.documents = data;
+                $scope.mergeSmartIntoDumb();
+                if ($scope.documents.length === 0) {
+                    $scope.noDocs = true;
+                } else {
+                    $scope.initShareState();
+                    $scope.loadDocumentVersions();
+                }
+            });
+        };
         $scope.initShareState = function() {
             if ($scope.docShareState.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
@@ -540,7 +568,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatus = function(doc) {
-            if (doc.versions) {
+            if (doc.versions && doc.versions.length>0) {
                 return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
                     doc.versions[0].last_event.event_time :
                     doc.last_updated)).from($rootScope.servertime);
@@ -744,7 +772,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.viewStatus = function(doc) {
-            $location.url("/company-status?doc=" + doc.doc_id);
+            if (doc.doc_id) {
+                $location.url("/company-status?doc=" + doc.doc_id);
+            }
         };
         $scope.viewVersionStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.original);
