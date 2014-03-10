@@ -145,7 +145,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.getShareState = function() {
             var st = angular.fromJson(sessionStorage.sharewave);
             if (Array.isArray(st)) {
-                console.log(st);
                 return st;
             } else {
                 return [];
@@ -171,10 +170,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         SWBrijj.tblm('smartdoc.document').then(function(data) {
             $scope.smarttemplates = data;
         }).except(function(x) {
-            });
+        });
 
-        SWBrijj.tblm('document.my_company_library', ['doc_id', 'template_id', 'company', 'docname',
-                                                     'last_updated', 'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
+        SWBrijj.tblm('document.my_company_library',
+                ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
+                 'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
             $scope.documents = data;
             if ($scope.documents.length === 0) {
                 $scope.noDocs = true;
@@ -512,7 +512,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.opendetailsExclusive = function(selected) {
             $scope.documents.forEach(function(doc) {
-                if (selected.doc_id == doc.doc_id) {
+                if (selected.indexOf(doc.doc_id) !== -1) {
                     doc.shown = doc.shown !== true;
                 } else {
                     doc.shown = false;
@@ -785,11 +785,43 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (!$scope.hideSharebar) {
                 s={};
                 $scope.hideSharebar = true;
+                $scope.restoreViewState();
             } else {
                 s.share=true;
+                $scope.saveAndClearViewState();
                 $scope.hideSharebar = false;
             }
             $location.search(s);
+        };
+        $scope.saveAndClearViewState = function() {
+            $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
+                                searchQuery:  $scope.clearSearchFilter()};
+        };
+        $scope.restoreViewState = function() {
+            $scope.restoreSearchFilter($scope.viewState.searchQuery);
+            $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
+            delete $scope.viewState;
+        };
+        $scope.clearSelectedDocs = function() {
+            var res = [];
+            $scope.documents.forEach(function(doc) {
+                if (doc.shown) {
+                    res.push(doc.doc_id);
+                    doc.shown = false;
+                }
+            });
+            return res;
+        };
+        $scope.clearSearchFilter = function() {
+            var res = $scope.query;
+            $scope.query = "";
+            return res;
+        };
+        $scope.restoreSearchFilter = function(q) {
+            $scope.query = q;
+        };
+        $scope.restoreSelectedDocs = function(docs) {
+            $scope.opendetailsExclusive(docs);
         };
         $scope.toggleForShare = function(doc) {
             // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
