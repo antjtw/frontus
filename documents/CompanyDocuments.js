@@ -918,65 +918,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             'placeholder': 'Enter email address & press enter'
         };
 
-        /*
-        $scope.multishareOpen = function() {
-            $scope.multishareModal = true;
-            $scope.sharemodalscreen = "1";
-            $scope.sharedocs = [];
-            angular.forEach($scope.documents, function(doc) {
-                $scope.sharedocs.push({'doc_id':doc.doc_id, 'docname':doc.docname, 'picked': false, 'signature': false, 'versions': doc.versions})
-            });
-        };
-
-        $scope.multishareClose = function() {
-            $scope.multishareModal = false;
-        };
-
-        $scope.multishareopts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'modal multishareModal'
-        };
-
-        $scope.oneSelected = function(list, field) {
-            var count = 0;
-            angular.forEach(list, function(item) {
-                count = item[field] ? count + 1: count;
-            });
-            return count;
-        };
-
-        $scope.gotoscreen = function(page) {
-            if (page == "2") {
-            }
-            $scope.sharemodalscreen = page;
-        };
-        */
-
-        /*
-        $scope.checkShareBox = function(doc, field) {
-            doc[field] = !doc[field];
-            if (field == "picked" && doc[field] == false) {
-                doc['signature'] = false
-            }
-        };
-
-        $scope.sharetoMany = function() {
-            var forsign = "";
-            var forview = "";
+        $scope.shareDocuments = function(docsToShare, emails, message) {
             var tosee = "";
-            angular.forEach($scope.sharedocs, function(doc) {
-                if (doc.picked) {
-                    if (doc.signature) {
-                        forsign += "," + doc.doc_id;
-                    }
-                    else {
-                        forview += "," + doc.doc_id;
-                    }
-                }
-            });
-            forsign = forsign == "" ? "!!!" : forsign;
-            forview = forview == "" ? "!!!" : forview;
             var regExp = /\(([^)]+)\)/;
             angular.forEach($scope.multipeople, function(person) {
                 var matches = regExp.exec(person.id);
@@ -986,35 +929,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee == "" ? "!!!" : tosee;
-            SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), forview.substring(1), forsign.substring(1), Date.parse('22 November 2113')).then(function(data) {
-                console.log(data);
-                $scope.$emit("notification:success", "Documents shared");
-                $route.reload();
-            }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
-        };
-        */
-        $scope.shareDocuments = function(docsToShare, emails, message) {
-            console.log("message:");
-            console.log(message);
-            console.log("emails:");
-            console.log(emails);
-            console.log("docsToShare:");
-            console.log(docsToShare);
-            /*
-            SWBrijj.procm("document.multishare", message, emails, JSON.stringify(docsToShare), Date.parse('22 November 2113')
+            SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), JSON.stringify(docsToShare), Date.parse('22 November 2113')
             ).then(function(data) {
                 console.log(data);
+                $scope.docShareState = [];
                 $scope.$emit("notification:success", "Documents Shared");
                 $location.search({});
                 $route.reload();
             }).except(function(err) {
-                void(err);
+                console.log(err);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
-            */
         };
 
         $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
