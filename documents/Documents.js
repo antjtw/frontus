@@ -933,9 +933,16 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.uploadSignatureNow = function() {
             $scope.signatureURL = "/img/image-loader-140.gif";
             $scope.signatureprocessing = true;
-            var fd = new FormData();
             $scope.progressVisible = true;
-            for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+            if ($scope.scribblemode) {
+                var canvas = document.getElementById("scribbleboard");
+                var fd = canvas.toDataURL();
+            }
+            else {
+                var fd = new FormData();
+                for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+            }
+            console.log(fd);
             $scope.signatureModal = false;
             SWBrijj.uploadSignature(fd).then(function(x) {
                 $scope.signatureURL = '/photo/user?id=signature:';
@@ -953,6 +960,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     }
                 })
                 $scope.$emit("notification:success", "Signature uploaded");
+                $scope.scribblemode = false;
                 $scope.$apply();
             }).except(function(x) {
                 void(x);
@@ -960,6 +968,62 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                     // console.log(x);
             });
+        };
+
+        $scope.createNewSignature = function() {
+            $scope.scribblemode = true;
+
+            var canvas = document.getElementById("scribbleboard");
+
+            var ctx = canvas.getContext('2d');
+            canvas.height = 180;
+            canvas.width = 330;
+            console.log(ctx);
+            console.log(canvas);
+            ctx.lineCap = 'round';
+            ctx.color = "blue";
+            ctx.lineWidth = 2;
+            ctx.fillStyle = "white";
+            // ctx.setAlpha(0);
+            ctx.fillRect(0, 0, 200, 200);
+            // ctx.setAlpha(0.5);
+
+            canvas.addEventListener('mousedown', function(e) {
+                canvas.down = true;
+                var offs = getCanvasOffset(e);
+                canvas.X = offs[0];
+                canvas.Y = offs[1];
+            }, false);
+
+            canvas.addEventListener('mouseover', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.addEventListener('mouseout', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.addEventListener('mouseup', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.strokes = [];
+
+            canvas.addEventListener('mousemove', function(e) {
+                if (canvas.down) {
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.X, canvas.Y);
+                    var offs = getCanvasOffset(e);
+                    ctx.lineTo(offs[0], offs[1]);
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
+                }
+            }, true);
         };
 
         $scope.setFiles = function(element) {
@@ -973,7 +1037,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 oFReader.onload = function (oFREvent) {
                     document.getElementById("signaturevisual").src = oFREvent.target.result;
                 };
-
+                $scope.scribblemode = false;
                 $scope.$apply();
             }
         };
@@ -1733,6 +1797,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.sigclose = function () {
             $scope.signatureModal = false;
+            $scope.scribblemode = false;
         };
     }
 ]);

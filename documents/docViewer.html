@@ -11,8 +11,11 @@
     <div class="sigmodal modalText">
         <div class="row-fluid">
             <div class="imgsig span6">
-                <div ng-style="{{signaturestyle}}" >
+                <div ng-hide="scribblemode" ng-style="{{signaturestyle}}" >
                     <img id="signaturevisual" ng-src="{{signatureURL}}">
+                </div>
+                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                    <canvas id="scribbleboard"></canvas>
                 </div>
                 <div class="DivHelper"></div>
             </div>
@@ -27,6 +30,9 @@
                             <div class="fakefile">
                                 <span>CHOOSE FILE</span>
                             </div>
+                        </div>
+                        <div class="scribblebutton">
+                            <button ng-click="createNewSignature()">Draw Signature</button>
                         </div>
                     </fieldset>
                 </form>

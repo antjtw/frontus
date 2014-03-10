@@ -768,4 +768,31 @@ div.imgsig > div > img {
     margin-right: 30px;
 }
 
+.modal.helpModal input.file {
+    float: left;
+    width: 50%;
+    margin-left: 15px;
+}
+
+.scribblewindow {
+    border: #1ABC96 solid 1px;
+}
+
+.modal.helpModal div.fileinputs {
+    display: inline-block;
+    float: left;
+}
+
+.scribblebutton > button {
+    float: left;
+    margin-left: 20px;
+    display: block;
+    width: 162px;
+    height: 34px;
+    text-align: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgb(227, 227, 227);
+    text-transform: uppercase;
+}
+
 
