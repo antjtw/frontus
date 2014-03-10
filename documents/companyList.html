@@ -154,42 +154,48 @@
                     </ul>
                 </td>
                 <td>
-                     <ul class="dropdown-list drop-selector"
-                         ng-show="!hideSharebar && doc.forShare"
-                         ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                         <li class="dropdown standard">
-                             <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
-                                 {{ formatShareType(getShareType(doc)) }}
-                             </a>
-                             <ul class="dropdown-menu">
-                                 <li>
-                                     <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
-                                 </li>
-                                 <li ng-show="docIsPrepared(doc)">
-                                     <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
-                                 </li>
-                                 <li ng-show="!docIsPrepared(doc)">
-                                     <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
+                    <div ng-switch on="hideSharebar">
+                        <div ng-switch-when="false"
+                             ng-show="!hideSharebar && doc.forShare"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                             <ul class="dropdown-list drop-selector">
+                                 <li class="dropdown standard">
+                                     <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
+                                         {{ formatShareType(getShareType(doc)) }}
+                                     </a>
+                                     <ul class="dropdown-menu">
+                                         <li>
+                                             <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
+                                         </li>
+                                         <li ng-show="docIsPrepared(doc)">
+                                             <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
+                                         </li>
+                                         <li ng-show="!docIsPrepared(doc)">
+                                             <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
+                                         </li>
+                                     </ul>
                                  </li>
                              </ul>
-                         </li>
-                     </ul>
-                    <ul class="dropdown-list"
-                        ng-hide="!hideSharebar"
-                        ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                        <li class="dropdown standard menu-drop">
-                            <a class="dropdown-toggle">
-                                <span data-icon="&#xe011;" aria-hidden="true"></span>
-                            </a>
-                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                <li ng-click="viewStatus(doc)">View Status</li>
-                                <li ng-click="viewOriginal(doc)">View Original</li>
-                                <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
-                                <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
+                         </div>
+                         <div ng-switch-when="true"
+                              ng-show="hideSharebar"
+                              ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="viewStatus(doc)">View Status</li>
+                                        <li ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
+                                        <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
