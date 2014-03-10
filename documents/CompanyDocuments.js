@@ -364,7 +364,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                          "application/vnd.ms-powerpoint",
                          "text/csv"];
         */
-        var mimetypes = ["application/pdf"];
 
         $scope.setFiles = function(element) {
             $scope.files = [];
@@ -372,8 +371,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < element.files.length; i++) {
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
-                } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                    $scope.fileError = "Please choose a pdf";
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -1307,12 +1304,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
                 }
                 email = matches[1];
                 if (!re.test(email)) {
-                    console.log(email);
                     anybad = true;
                 }
             });
             if (people && people.length === 0) {
-                console.log("zero people");
                 anybad = true;
             }
             return anybad;
@@ -1924,6 +1919,21 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
         $scope.processing = false;
 
+        $scope.helpModalUp = function () {
+            $scope.tourModal = true;
+        };
+
+        $scope.tourclose = function () {
+            $scope.sideToggle = false;
+            $scope.tourModal = false;
+        };
+
+        $scope.touropts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'helpModal modal'
+        };
+
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
@@ -1936,6 +1946,11 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                         return;
                     }
                     $scope.document = data;
+
+                    if ($scope.signable()) {
+                        $scope.helpModalUp();
+                    }
+
                     $scope.initDocView();
                 }).except(function(x) {
                     void(x);
@@ -1949,6 +1964,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.signable = function() {
             return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
         };
+
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 console.log($rootScope.lastPage);
