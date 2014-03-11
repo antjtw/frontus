@@ -943,7 +943,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     var fd = new FormData();
                     for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
                 }
-                console.log(fd);
                 $scope.signatureModal = false;
                 SWBrijj.uploadSignature(fd).then(function(x) {
                     $scope.signatureURL = '/photo/user?id=signature:';
@@ -966,6 +965,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 }).except(function(x) {
                         void(x);
                         $scope.progressVisible = false;
+                        $scope.signatureprocessing = false;
+                        $scope.signatureURL = '/photo/user?id=signature:';
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         // console.log(x);
                     });
