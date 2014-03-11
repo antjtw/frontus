@@ -366,7 +366,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.messageText = "This does not accept a message. Please provide an email template for 'multishares' that accepts a custom message."; //"Add an optional message...";
+        $scope.messageText = "Add an optional message...";
         $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -1047,6 +1047,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.shareDocuments = function(docsToShare, emails, message) {
+            if (message == "Add an optional message...") {
+                message = null;
+            };
             var tosee = "";
             var regExp = /\(([^)]+)\)/;
             angular.forEach($scope.multipeople, function(person) {
@@ -1057,7 +1060,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee == "" ? "!!!" : tosee;
-            SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), JSON.stringify(docsToShare), Date.parse('22 November 2113')
+            SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), JSON.stringify(docsToShare), message, Date.parse('22 November 2113')
             ).then(function(data) {
                 void(data);
                 $scope.saveShareState([]);
