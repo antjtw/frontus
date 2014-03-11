@@ -576,9 +576,6 @@ navbar .navbar {
 .draggable.imagesignature.mysignature textarea::-moz-placeholder {
     opacity: 0;
 }
-.draggable.imagesignature.mysignature textarea:-ms-input-placeholder {
-    opacity: 0;
-}
 
 .draggable.redrequired div > textarea {
     border: 1px solid #E64B3B;
