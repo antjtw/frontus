@@ -153,7 +153,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             delete sessionStorage.docPrepareState;
             if (st) {
                 angular.forEach($scope.documents, function(doc) {
-                    if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
+                    if ((st.template_id===doc.template_id || st.doc_id===doc.doc_id) && $scope.docIsPrepared(doc)) {
                         $scope.updateShareType(doc, 2);
                     }
                 }); 
