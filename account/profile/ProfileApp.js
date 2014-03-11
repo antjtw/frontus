@@ -291,6 +291,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 }).except(function(x) {
                         void(x);
                         $scope.progressVisible = false;
+                        $scope.signatureprocessing = false;
+                        $scope.signatureURL = '/photo/user?id=signature:';
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         // console.log(x);
                     });
