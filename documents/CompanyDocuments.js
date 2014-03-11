@@ -153,8 +153,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             delete sessionStorage.docPrepareState;
             if (st) {
                 angular.forEach($scope.documents, function(doc) {
-                    if ((st.template_id===doc.template_id || st.doc_id===doc.doc_id) && $scope.docIsPrepared(doc)) {
-                        $scope.updateShareType(doc, 2);
+                    if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
+                        if ($scope.docIsPrepared(doc)) {
+                            $scope.updateShareType(doc, 2);
+                            $scope.$emit("notification:success",
+                                "Success! Document prepared for signature.");
+                        } else {
+                            $scope.$emit("notification:fail",
+                                "Oops, the document is not ready for signature. Please try again.");
+                        }
                     }
                 }); 
             }
