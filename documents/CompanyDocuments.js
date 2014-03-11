@@ -370,7 +370,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                          "application/vnd.oasis.opendocument.image", // .odi
                          "image/png", // .png
                          "image/tiff", // .tiff
-                         "image/jpeg", // .jpg
                          "text/plain", // .txt
                          "application/rtf", // .rtf
                          ];
