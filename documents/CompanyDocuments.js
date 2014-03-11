@@ -170,6 +170,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var smartdocs = [];
             angular.forEach($scope.documents, function(doc) {
                 if (doc.template_id) {
+                    SWBrijj.tblm('account.my_companies', ['name', 'state']
+                        ).then(function(data) {
+                            if (data[0].name && data[0].state) {
+                                doc.is_prepared=true;
+                            }
+                    });
                     smartdocs.push(doc.template_id);
                 }
             });
@@ -184,6 +190,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                          "last_updated": null,
                          "annotations": null,
                          "versions": null,
+                         "is_prepared": smart.is_prepared
                         });
                 }
             });
@@ -391,7 +398,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.prepareDocument = function(doc) {
-            $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+            if (doc.template_id) {
+                $location.url("/company-view?template=" + doc.template_id);
+            } else {
+                $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+            }
         };
 
         // Document Upload pieces
@@ -876,9 +887,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return 'Request Signature';
             }
         };
+        $scope.smartdocIsPrepared = function(doc) {
+            return doc.template_id && doc.is_prepared;
+        };
         $scope.docIsPrepared = function(doc) {
-            return doc && doc != "null" &&
-                ((doc.annotations && doc.annotations.length>5) || (doc.iss_annotations && doc.iss_annotations.length>5));
+            if (!doc) {return false;}
+            if (doc.template_id) {
+                return $scope.smartdocIsPrepared(doc);
+            } else {
+                return (doc.annotations && doc.annotations.length>5) 
+                    || (doc.iss_annotations && doc.iss_annotations.length>5);
+            }
         };
 
         $scope.retractVersionOpen = function(version) {
