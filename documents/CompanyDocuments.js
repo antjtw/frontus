@@ -101,8 +101,7 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj',
-        'navState',
+docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
     function($scope, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -143,43 +142,40 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         });
         $scope.getShareState = function() {
-            var st = angular.fromJson(sessionStorage.sharewave);
-            if (Array.isArray(st)) {
-                return st;
-            } else {
-                return [];
-            }
+            // TODO when should we clear this out?
+            return angular.fromJson(sessionStorage.sharewave);
         };
-        $scope.getPrepareState = function() {
+        $scope.emptyShareState = function() {
+            return {doclist: [], emails: [], message: ""};
+        };
+        $scope.loadPrepareState = function() {
             var st = angular.fromJson(sessionStorage.docPrepareState);
             delete sessionStorage.docPrepareState;
+            if (st) {
+                angular.forEach($scope.documents, function(doc) {
+                    if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
+                        $scope.updateShareType(doc, 2);
+                    }
+                }); 
+            }
             return st;
         };
-        $scope.saveShareState = function(st) {
-            if (Array.isArray(st)) {
-                sessionStorage.sharewave = angular.toJson(st);
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $scope.justPrepared = function(doc) {
-            // TODO do we also want to set the shareType for this doc?
-            if (!$scope.docPrepareState) {return false;}
-            if ($scope.docPrepareState.doc_id) {
-                return $scope.docPrepareState.doc_id === doc.doc_id;
-            } else if ($scope.docPrepareState.template_id) {
-                return $scope.docPrepareState.template_id === doc.template_id;
+        $scope.saveShareState = function(clear) {
+            if (clear) {
+                sessionStorage.sharewave = angular.toJson($scope.emptyShareState());
+            } else  {
+                //$scope.docShareState.emails = $scope.multipeople;
+                $scope.docShareState.message = $scope.messageText;
+                console.log($scope.docShareState);
+                sessionStorage.sharewave = angular.toJson($scope.docShareState);
             }
         };
 
-        $scope.docShareState = $scope.getShareState();
-        $scope.docPrepareState = $scope.getPrepareState();
         $scope.$on('$locationChangeStart', function (event, next, current) {
-            $scope.saveShareState($scope.docShareState);
+            $scope.saveShareState();
         });
         window.onbeforeunload = function() {
-            $scope.saveShareState($scope.docShareState);
+            $scope.saveShareState();
         };
         $scope.mergeSmartIntoDumb = function() {
             var smartdocs = [];
@@ -229,14 +225,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     $scope.noDocs = true;
                 } else {
                     $scope.initShareState();
+                    $scope.loadPrepareState();
                     $scope.loadDocumentVersions();
                 }
             });
         };
         $scope.initShareState = function() {
-            if ($scope.docShareState.length > 0) {
+            $scope.docShareState = $scope.getShareState();
+            if ($scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
-                    angular.forEach($scope.docShareState, function(docToShare) {
+                    angular.forEach($scope.docShareState.doclist, function(docToShare) {
                         if (doc.doc_id==docToShare.doc_id) {
                             doc.forShare = true;
                             doc.signature_flow = docToShare.signature_flow;
@@ -244,6 +242,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     });
                 });
             }
+            $scope.messageText = $scope.docShareState.message;
+            $scope.multipeople = $scope.docShareState.emails; 
         };
 
         $scope.loadDocumentVersions = function () {
@@ -366,7 +366,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.messageText = "Add an optional message...";
         $scope.query = "";
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -837,8 +836,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return list.filter(function(el) {return !(item.doc_id==el.doc_id && item.signature_flow==el.signature_flow);});
         };
         $scope.updateShareType = function(doc, tp) {
+            if (doc.template_id && tp > 0) {
+                tp = 1;
+            }
             doc.signature_flow = tp;
-            $scope.docShareState = $scope.upsertShareItem(doc, $scope.docShareState);
+            $scope.docShareState.doclist = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
         };
         $scope.toggleSide = function () {
             var s = $location.search();
@@ -860,6 +862,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                                 viewBy: $scope.clearViewBy()};
         };
         $scope.restoreViewState = function() {
+            if (!$scope.viewState) {return;}
             $scope.restoreSearchFilter($scope.viewState.searchQuery);
             $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
             $scope.restoreHideCompleted($scope.viewState.maxRatio);
@@ -903,13 +906,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.toggleForShare = function(doc) {
             // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
             if (!doc.forShare) {
-                $scope.docShareState = $scope.upsertShareItem(doc, $scope.docShareState);
+                $scope.docShareState.doclist = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
                 doc.forShare = true;
             } else {
-                $scope.docShareState = $scope.removeShareItem(doc, $scope.docShareState);
+                $scope.docShareState.doclist = $scope.removeShareItem(doc, $scope.docShareState.doclist);
                 doc.forShare = false;
             }
-            console.log($scope.docShareState);
         };
         $scope.getShareType = function(doc) {
             if (!doc) {return 0;}
@@ -1037,7 +1039,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return anybad;
         };
 
-        $scope.multipeople = [];
         $scope.select2Options = {
             'multiple': true,
             'simple_tags': true,
@@ -1049,22 +1050,22 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.shareDocuments = function(docsToShare, emails, message) {
             if (message == "Add an optional message...") {
                 message = null;
-            };
+            }
             var tosee = "";
             var regExp = /\(([^)]+)\)/;
-            angular.forEach($scope.multipeople, function(person) {
+            angular.forEach(emails, function(person) {
                 var matches = regExp.exec(person.id);
-                if (matches == null) {
+                if (matches === null) {
                     matches = ["", person.id];
                 }
                 tosee += "," +  matches[1];
             });
-            tosee = tosee == "" ? "!!!" : tosee;
+            tosee = tosee === "" ? "!!!" : tosee;
             SWBrijj.procm("document.multishare", tosee.substring(1).toLowerCase(), JSON.stringify(docsToShare), message, Date.parse('22 November 2113')
             ).then(function(data) {
                 void(data);
-                $scope.saveShareState([]);
-                $scope.$emit("notification:success", "Documents Shared");
+                $scope.saveShareState($scope.emptyShareState());
+                $scope.$emit("notification:success", "Documents shared");
                 $location.search({});
                 $route.reload();
             }).except(function(err) {

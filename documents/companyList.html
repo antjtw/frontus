@@ -105,7 +105,7 @@
             </tbody>
             <tbody ng-animate="'animate'" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
             <tr class="empty-row"></tr>
-            <tr ng-class="{selectedrow:doc.shown, preparedDoc:justPrepared(doc)}">
+            <tr ng-class="{selectedrow:doc.shown}">
                 <td class="status-toggle"
                     ng-class="{'pointer':doc.versions[0]&&hideSharebar, 'status-toggle-on': doc.shown}"
                     ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
@@ -355,15 +355,15 @@
      <div class="shareForm">
          <span>Recipients</span>
          <div class="sharepeople-input">
-            <input ui-select2="select2Options" ng-model="multipeople">
+            <input ui-select2="select2Options" ng-model="docShareState.emails">
          </div>
          <span>Message</span>
          <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
          <div class="controls">
              <div class="standard-button pull-right">
                  <button class="btn"
-                         ng-click="shareDocuments(docShareState, multipeople, messageText)"
-                         ng-disabled="checkmany(multipeople) || !docShareState.length>0">Share Documents</button>
+                         ng-click="shareDocuments(docShareState.doclist, docShareState.emails, messageText)"
+                         ng-disabled="checkmany(docShareState.emails) || !docShareState.doclist.length>0">Share Documents</button>
              </div>
              <span class="pull-right pointer" ng-click="toggleSide();">Cancel</span>
          </div>
@@ -422,53 +422,6 @@
     </div>
 </div>
 
-<!--
-<div modal="shareDocModal" close="shareDocClose()" options="wideopts">
-    <div class="modalHeader">
-        Share "{{docToShare.docname | caplength:35}}"
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="shareDocClose()"></span>
-    </div>
-    <div class="modalText dshare">
-        <ul>
-            <li>
-                <span>Email Addresses</span>
-
-                <div class="single-share-input">
-                    <input ui-select2="select2Options" ng-model="recipient">
-                </div>
-            </li>
-            <li>
-                <span>Get Signature?</span>
-                <ul class="dropdown-list drop-selector">
-                    <li class="dropdown standard">
-                        <a class="dropdown-toggle">
-                            {{signeeded}}<span class="invisible-drop">'</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a ng-click="changeSig('No')">No</a>
-                                <a ng-click="changeSig('Yes')">Yes</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="shareDocClose()">Cancel</button>
-        </div>
-        <div class="standard-button">
-            <button class="btn" ng-disabled="checkmany(recipient);"
-                    ng-click="share(messageText, recipient, signeeded); shareDocClose();">Confirm
-            </button>
-        </div>
-    </div>
-</div>
--->
-
 <div modal="updateTitleModal" close="updateTitleClose()" options="opts">
     <div class="modalHeader">
         <span>Rename Document</span>
@@ -524,52 +477,5 @@
     </div>
 </div>
 
-<!--
-<div modal="multishareModal" close="multishareClose()" options="multishareopts">
-    <div class="modalHeader">
-        <span>Share Documents</span>
-        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="multishareClose()"></span>
-    </div>
-    <div ng-show="sharemodalscreen == '1'" class="modalText">
-        <span>Select the document(s) you would like to share for viewing only. If you need to request signatures, share from the individual document line.</span>
-        <ul>
-            <li ng-repeat="doc in sharedocs | orderBy:shareOrder">
-                <ul ng-hide="doc.versions[0].template_id">
-                    <li>
-                        <button ng-class="{'selected':doc.picked}" ng-click="checkShareBox(doc, 'picked');"
-                                class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                    </li>
-                    <li>{{doc.docname | caplength:40}}</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div ng-show="sharemodalscreen == '2'" class="modalText">
-        <span>Add recipients for your selected documents.</span>
-
-        <div class="sharepeople-input">
-            <input ui-select2="select2Options" ng-model="multipeople">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray">
-            <button class="btn" ng-click="multishareClose()">Cancel</button>
-        </div>
-        <div ng-show="sharemodalscreen == '1'" class="standard-button blue">
-            <button ng-disabled="!oneSelected(sharedocs, 'picked');" class="btn" ng-click="gotoscreen(2);">Select
-                People
-            </button>
-        </div>
-        <div ng-show="sharemodalscreen == '2'" class="pull-left standard-button blue">
-            <button class="btn" ng-click="gotoscreen(1);">Back</button>
-        </div>
-        <div ng-show="sharemodalscreen == '2'" class="standard-button green">
-            <button id='a_share_modal' class="btn" ng-disabled="checkmany(multipeople);" ng-click="sharetoMany(); multishareClose();">
-                Send
-            </button>
-        </div>
-    </div>
-</div>
--->
 </div>
 <div class="push"></div>

@@ -63,10 +63,10 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div ng-show="template_original || prepareable(lib)" class="small-standard-button standard-button green">
+                    <div ng-show="(template_original && isAnnotable) || prepareable(lib)" class="small-standard-button standard-button green">
                         <button class="btn" ng-click="leave()">Done</button>
                     </div>
-                    <div ng-hide="template_original || prepareable(lib)" class="small-standard-button standard-button gray">
+                    <div ng-hide="(template_original && isAnnotable) || prepareable(lib)" class="small-standard-button standard-button gray">
                         <button class="btn" ng-click="leave()">Exit</button>
                     </div>
                 </div>
@@ -97,15 +97,13 @@
                         </li>
                     </ul>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib))}">
-                    <!--
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
                             Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
-                    -->
                     <div class="pull-right tools" ng-class="{hidden: !isAnnotable || countersignable(lib)}">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
