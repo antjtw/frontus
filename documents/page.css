@@ -726,8 +726,16 @@ textarea.email-text {
     // all else can't be squished...i don't think
     visibility: hidden;
     opacity: 0;
-    //height: 0;
-    transition: opacity 0.25s linear, visibility 0 linear 0.26s;
+    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
+}
+.shareholder-column.docname-column .fadeHide {
+    -webkit-transform: translate3d(0, 10px, 0);
+    -moz-transform: translate3d(0, 10px, 0);
+    -ms-transform: translate3d(0, 10px, 0);
+    -o-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+    line-height: 4px !important;
+    transition: all 0.25s ease-in-out;
 }
 .subnav-controls.doclist-controls .fadeHide,
 .subnav-controls.doclist-controls .fadeHide + div {
@@ -736,52 +744,65 @@ textarea.email-text {
     -ms-transform: translate3d(-359px, 0, 0);
     -o-transform: translate3d(-359px, 0, 0);
     transform: translate3d(-359px, 0, 0);
-    transition: all 0.25s linear;
+    transition: all 0.25s ease-in-out;
 }
-.subnav-controls.doclist-controls .fadeShow,
-.subnav-controls.doclist-controls .fadeShow + div {
-    -webkit-animation: slideIn 0.25s linear;
-    -moz-animation: slideIn 0.25s linear;
-    -ms-animation: slideIn 0.25s linear;
-    -o-animation: slideIn 0.25s linear;
-    animation: slideIn 0.25s linear;
-}
-@keyframes slideIn {
-    0% {margin-left: -400px;}
-    100% {margin-left: inherit;}
-}
-@-webkit-keyframes slideIn {
-    0% {margin-left: -400px;}
-    100% {margin-left: inherit;}
-}
-@-moz-keyframes slideIn {
-    0% {margin-left: -400px;}
-    100% {margin-left: inherit;}
-}
-@-o-keyframes slideIn {
-    0% {margin-left: -400px;}
-    100% {margin-left: inherit;}
-}
+.animate-enter,
+.animate-leave {
+    -webkit-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    position: relative;
+    display: table-row-group;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space:nowrap;
+} 
+
+.animate-leave.animate-leave-active,
+.animate-enter {
+    opacity: 0;
 /*
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    transition: all 0.25s linear;
+    width: 0px;
+    height: 0px;
 */
 }
 
-/*
-.animate-enter {
-    -webkit-transition: 1s linear all;
-    transition: 1s linear all;
-    opacity: 0;
-}
-.animate-enter.animate-enter-active {
+.animate-enter.animate-enter-active, 
+.animate-leave {
     opacity: 1;
-}
+/*
+    width: 150px;
+    height: 30px;
 */
+}
+    
+.subnav-controls.doclist-controls .fadeShow,
+.subnav-controls.doclist-controls .fadeShow + div {
+    -webkit-animation: slideIn 0.25s ease-in-out;
+    -moz-animation: slideIn 0.25s ease-in-out;
+    -ms-animation: slideIn 0.25s ease-in-out;
+    -o-animation: slideIn 0.25s ease-in-out;
+    animation: slideIn 0.25s ease-in-out;
+}
+@keyframes slideIn {
+    0% {margin-left: -359px;}
+    100% {margin-left: inherit;}
+}
+@-webkit-keyframes slideIn {
+    0% {margin-left: -359px;}
+    100% {margin-left: inherit;}
+}
+@-moz-keyframes slideIn {
+    0% {margin-left: -359px;}
+    100% {margin-left: inherit;}
+}
+@-o-keyframes slideIn {
+    0% {margin-left: -359px;}
+    100% {margin-left: inherit;}
+}
+
 .fadeShow {
     visibility: visible;
     -webkit-animation:fadeShow 0.25s linear;
