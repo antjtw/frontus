@@ -931,43 +931,49 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.uploadSignatureNow = function() {
-            $scope.signatureURL = "/img/image-loader-140.gif";
-            $scope.signatureprocessing = true;
-            $scope.progressVisible = true;
-            if ($scope.scribblemode) {
-                var canvas = document.getElementById("scribbleboard");
-                var fd = canvas.toDataURL();
+            if ($scope.files || $scope.scribblemode) {
+                $scope.signatureURL = "/img/image-loader-140.gif";
+                $scope.signatureprocessing = true;
+                $scope.progressVisible = true;
+                if ($scope.scribblemode) {
+                    var canvas = document.getElementById("scribbleboard");
+                    var fd = canvas.toDataURL();
+                }
+                else {
+                    var fd = new FormData();
+                    for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                }
+                console.log(fd);
+                $scope.signatureModal = false;
+                SWBrijj.uploadSignature(fd).then(function(x) {
+                    $scope.signatureURL = '/photo/user?id=signature:';
+                    $scope.signatureprocessing = false;
+                    $scope.progressVisible = false;
+                    $scope.signaturepresent = true;
+                    var elements = document.getElementsByClassName('draggable imagesignature mysignature');
+                    angular.forEach(elements, function(element) {
+                        element = element.querySelector("textarea");
+                        if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
+                            element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
+                        }
+                        else {
+                            element.style.backgroundImage = 'url(/photo/user?id=signature:)';
+                        }
+                    })
+                    $scope.$emit("notification:success", "Signature uploaded");
+                    $scope.scribblemode = false;
+                    $scope.$apply();
+                }).except(function(x) {
+                        void(x);
+                        $scope.progressVisible = false;
+                        $scope.$emit("notification:fail", "Oops, something went wrong.");
+                        // console.log(x);
+                    });
             }
             else {
-                var fd = new FormData();
-                for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                $scope.signatureModal = false;
             }
-            console.log(fd);
-            $scope.signatureModal = false;
-            SWBrijj.uploadSignature(fd).then(function(x) {
-                $scope.signatureURL = '/photo/user?id=signature:';
-                $scope.signatureprocessing = false;
-                $scope.progressVisible = false;
-                $scope.signaturepresent = true;
-                var elements = document.getElementsByClassName('draggable imagesignature mysignature');
-                angular.forEach(elements, function(element) {
-                    element = element.querySelector("textarea");
-                    if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
-                        element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
-                    }
-                    else {
-                        element.style.backgroundImage = 'url(/photo/user?id=signature:)';
-                    }
-                })
-                $scope.$emit("notification:success", "Signature uploaded");
-                $scope.scribblemode = false;
-                $scope.$apply();
-            }).except(function(x) {
-                void(x);
-                $scope.progressVisible = false;
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    // console.log(x);
-            });
+
         };
 
         $scope.createNewSignature = function() {
