@@ -856,13 +856,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.saveAndClearViewState = function() {
             $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
                                 searchQuery:  $scope.clearSearchFilter(),
-                                maxRatio: $scope.clearHideCompleted()};
+                                maxRatio: $scope.clearHideCompleted(),
+                                viewBy: $scope.clearViewBy()};
         };
         $scope.restoreViewState = function() {
             $scope.restoreSearchFilter($scope.viewState.searchQuery);
             $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
             $scope.restoreHideCompleted($scope.viewState.maxRatio);
+            $scope.setViewBy($scope.viewState.viewBy);
             delete $scope.viewState;
+        };
+        $scope.clearViewBy = function() {
+            var res = $scope.viewBy;
+            $scope.setViewBy('document');
+            return res;
         };
         $scope.clearHideCompleted = function() {
             var res = $scope.maxRatio;
