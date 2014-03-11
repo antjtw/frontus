@@ -1259,7 +1259,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1)) {
+            if ($rootScope.lastPage
+                    && ($rootScope.lastPage.indexOf("/register/") === -1)
+                    && ($rootScope.lastPage.indexOf("/login/") === -1)
+                    && ($rootScope.lastPage.indexOf("-view") === -1)) {
+                if ($rootScope.lastPage.indexOf("/company-list?share")
+                        !== -1) {
+                    if ($scope.template_original) {
+                        sessionStorage.docPrepareState = angular.toJson({"template_id": $scope.templateId});
+                    } else {
+                        sessionStorage.docPrepareState = angular.toJson({"doc_id": $scope.docId});
+                    }
+                }
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
@@ -1616,7 +1627,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.prepareable = function(doc) {
-            return !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
+            return $scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
         };
 
         $scope.signable = function(doc) {
@@ -1739,6 +1750,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveSmartdocData = function(clicked) {
+            if (!$scope.user_attributes) {return;}
             SWBrijj.proc("account.company_attribute_update",
                     "state", $scope.used_attributes.companyState
             ).then(function(x) {

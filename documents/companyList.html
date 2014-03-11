@@ -44,7 +44,7 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
-                <div class="box-button pull-right" ng-class="{selected:showShare}" ng-show="documents.length!==0" ng-click="toggleSide();">
+                <div class="box-button pull-right" ng-class="{selected:!hideSharebar}" ng-show="documents.length!==0" ng-click="toggleSide();">
                     <ul>
                         <li>
                             <span data-icon="&#xe024;" aria-hidden="true"></span>
@@ -105,7 +105,7 @@
             </tbody>
             <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
             <tr class="empty-row"></tr>
-            <tr ng-class="{selectedrow:doc.shown}">
+            <tr ng-class="{selectedrow:doc.shown, preparedDoc:justPrepared(doc)}">
                 <td class="status-toggle"
                     ng-class="{'pointer':doc.versions[0]&&hideSharebar, 'status-toggle-on': doc.shown}"
                     ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">

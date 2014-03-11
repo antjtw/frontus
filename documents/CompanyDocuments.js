@@ -150,6 +150,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return [];
             }
         };
+        $scope.getPrepareState = function() {
+            var st = angular.fromJson(sessionStorage.docPrepareState);
+            delete sessionStorage.docPrepareState;
+            return st;
+        };
         $scope.saveShareState = function(st) {
             if (Array.isArray(st)) {
                 sessionStorage.sharewave = angular.toJson(st);
@@ -158,8 +163,18 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 return false;
             }
         };
+        $scope.justPrepared = function(doc) {
+            // TODO do we also want to set the shareType for this doc?
+            if (!$scope.docPrepareState) {return false;}
+            if ($scope.docPrepareState.doc_id) {
+                return $scope.docPrepareState.doc_id === doc.doc_id;
+            } else if ($scope.docPrepareState.template_id) {
+                return $scope.docPrepareState.template_id === doc.template_id;
+            }
+        };
 
         $scope.docShareState = $scope.getShareState();
+        $scope.docPrepareState = $scope.getPrepareState();
         $scope.$on('$locationChangeStart', function (event, next, current) {
             $scope.saveShareState($scope.docShareState);
         });
@@ -371,7 +386,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
+            if ($scope.hideSharebar) {
+                return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
+            } else {
+                return obj.forShare || (!$scope.query || re.test(obj.docname));
+            }
         };
         $scope.investorSearchFilter = function(obj) {
             var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
@@ -836,12 +855,22 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.saveAndClearViewState = function() {
             $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
-                                searchQuery:  $scope.clearSearchFilter()};
+                                searchQuery:  $scope.clearSearchFilter(),
+                                maxRatio: $scope.clearHideCompleted()};
         };
         $scope.restoreViewState = function() {
             $scope.restoreSearchFilter($scope.viewState.searchQuery);
             $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
+            $scope.restoreHideCompleted($scope.viewState.maxRatio);
             delete $scope.viewState;
+        };
+        $scope.clearHideCompleted = function() {
+            var res = $scope.maxRatio;
+            $scope.maxRatio = 1000;
+            return res;
+        };
+        $scope.restoreHideCompleted = function(oldratio) {
+            $scope.maxRatio = oldratio;
         };
         $scope.clearSelectedDocs = function() {
             var res = [];

@@ -724,15 +724,15 @@ textarea.email-text {
     0% {margin-left: -400px;}
     100% {margin-left: inherit;}
 }
-@-webkit-keyframes fadeShow {
+@-webkit-keyframes slideIn {
     0% {margin-left: -400px;}
     100% {margin-left: inherit;}
 }
-@-moz-keyframes fadeShow {
+@-moz-keyframes slideIn {
     0% {margin-left: -400px;}
     100% {margin-left: inherit;}
 }
-@-o-keyframes fadeShow {
+@-o-keyframes slideIn {
     0% {margin-left: -400px;}
     100% {margin-left: inherit;}
 }
