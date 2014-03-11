@@ -1238,6 +1238,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             /** @name $scope#lib#original
              * @type {int} */
                 if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+                    // TODO saveSmartdocData here!
                 var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                 // I expect this returns true (meaning updated).  If not, the data is lost
                 if (!res) alert('failed to save annotations');
@@ -1252,6 +1253,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // TODO why?
             if (newUrl.match(/login([?]|$)/)) return;
             $scope.saveNoteData();
+            $scope.saveSmartdocData();
         });
 
         $scope.$on('event:leave', $scope.leave);
@@ -1736,6 +1738,21 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
         };
 
+        $scope.saveSmartdocData = function(clicked) {
+            SWBrijj.proc("account.company_attribute_update",
+                    "state", $scope.used_attributes.companyState
+            ).then(function(x) {
+                void(x);
+            });
+            SWBrijj.proc("account.company_attribute_update",
+                    "name", $scope.used_attributes.companyName
+            ).then(function(x) {
+                void(x);
+            });
+            if (clicked) {
+                $scope.$emit("notification:success", "Saved annotations");
+            }
+        };
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
             var nd = $scope.getNoteData(false);
@@ -1759,7 +1776,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
-                if (clicked) $scope.$emit("notification:success", "Saved Annotations");
+                if (clicked) $scope.$emit("notification:success", "Saved annotations");
             });
         };
 

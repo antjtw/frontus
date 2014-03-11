@@ -106,11 +106,9 @@
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
-                    <div class="pull-right standard-button green forwardButton">
-                        <button class="btn" ng-click="setStage(1);">
-                            Next
-                            <span data-icon="&#xe016;" aria-hidden="true"></span>
-                        </button>
+                    <div class="pull-right tools" >
+                        <!--<div class="pull-right tools" ng-class="{hidden: !isAnnotable || countersignable(lib)}">-->
+                        <button ng-click="saveSmartdocData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && !forsigning}">
@@ -118,11 +116,6 @@
                         <button class="btn" ng-click="setStage(1);">Review</button>
                     </div>
                 </div>
-                <!--
-                <div ng-cloak class="pull-right last-saved" ng-class="{hidden: !(isAnnotable || finalizable(lib))}" ng-show="last_save">
-                    <span>last saved {{last_save | date:(settings.longdate+', yyyy, h:mm a')}}</span>
-                </div>
-                -->
             </div>
             <div class="docViewerAction" ng-show="stage===1">
                 <div class="standard-button small-standard-button blue backButton">
@@ -131,20 +124,11 @@
                         Back
                     </button>
                 </div>
-                <!-- todo delete -->
-                <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
                 <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
-                    <!-- todo delete -->
-                    <button class="btn"
-                            ng-show="prepareable(lib)"
-                            ng-disabled="processing || checkmany(recipient)"
-                            ng-click="shareDocument(lib, messageText, recipient);">
-                        Share
-                    </button>
                     <button class="btn"
                             ng-show="signable(lib)"
                             ng-disabled="processing || confirmValue===0"
@@ -162,13 +146,6 @@
                             ng-disabled="processing || confirmValue===0"
                             ng-click="finalizeAction(confirmValue, rejectMessage);">
                         Confirm
-                    </button>
-                    <!-- todo delete -->
-                    <button class="btn"
-                            ng-show="template_original && !forsigning"
-                            ng-disabled="processing || checkmany(template_email)"
-                            ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
-                        Send
                     </button>
                     <button class="btn"
                             ng-disabled="!confirmValue"
@@ -199,16 +176,6 @@
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
-            <!-- todo delete -->
-            <div ng-show="prepareable(lib)">
-                <div class='confirmBody shareDoc'>
-                    <span>Email Addresses</span>
-                    <div class="single-share-input">
-                        <input ui-select2="select2Options" ng-model="$parent.recipient">
-                    </div>
-                    <textarea class="email-text" rows="4" cols="60" placeholder="Add an optional message..." ng-model="$parent.messageText"></textarea>
-                </div>
-            </div>
             <div ng-show="signable(lib)">
                 <div class='confirmBody'>
                     <ul class="checkboxOption">
@@ -322,21 +289,6 @@
                             </textarea>
                         </li>
                     </ul>
-                </div>
-            </div>
-
-            <!-- todo delete -->
-            <div ng-show="template_original && !forsigning">
-                <div class="template-share">
-                    <div>
-                        <span>Email Address(es)</span>
-                        <input ui-select2="select2Options" ng-model="$parent.template_email">
-                    </div>
-                    <div>
-                        <span></span>
-                        <textarea placeholder="Add an optional message..." ng-model="$parent.template_message">
-                        </textarea>
-                    </div>
                 </div>
             </div>
 
