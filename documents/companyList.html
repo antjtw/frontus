@@ -321,12 +321,12 @@
 
 <div modal="documentUploadModal" close="documentUploadClose()" options="narrowopts">
     <div class="modalHeader">
-        <span>Upload a document</span>
+        <span>Upload Documents</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
     </div>
 
     <div class="modalText uploadModal">
-        <p>Please select any document, presentation or image (20MB max)</p>
+        <p>Please select any document, presentation or image (20MB max per file)</p>
         <form class="form-inline">
             <fieldset>
                 <!--
@@ -335,15 +335,12 @@
                 </div>
                 -->
                 <div class="fileinputs">
-                    <input ng-hide="showProgress || showProcessing" type="file" class='file'
+                    <input multiple ng-hide="showProgress || showProcessing" type="file" class='file'
                            onchange="angular.element(this).scope().setFiles(this);"/>
 
                     <div ng-hide="showProgress" class="fakefile">
-                        <span>CHOOSE FILE</span>
+                        <span>CHOOSE FILES</span>
 
-                        <div ng-show="files.length">
-                            <span>{{files[0].name | caplength:20}}</span>
-                        </div>
                     </div>
                     <div ng-show="showProgress" class="progress-bar">
                         <progress percent="loadProgress"></progress>
@@ -354,6 +351,11 @@
                 </div>
             </fieldset>
         </form>
+        <div class="multiple-files" ng-show="files.length">
+            <ul>
+                <li ng-repeat="file in files">{{file.name | caplength:20}}</li>
+            </ul>
+        </div>
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">

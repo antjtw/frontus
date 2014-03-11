@@ -377,6 +377,32 @@ button.greyButton {
 
 .modalText.uploadModal p {
     margin-bottom: 10px;
+    width: 140px;
+    display: inline-block;
+    float: left;
+}
+
+.modalText.uploadModal form {
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.modal .uploadModal div.fakefile {
+    margin-left: 7px;
+}
+
+.modal .uploadModal div.fakefile > span {
+    width: 128px;
+}
+
+.uploadModal .multiple-files {
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.uploadModal .multiple-files > ul > li {
+    border-bottom: 1px solid rgb(227, 227, 227);
 }
 
 .modalText.updateTitleModal > input {
@@ -969,4 +995,8 @@ input[type='text']:disabled, textarea:disabled {
 .helpModal + .modal-backdrop {
     z-index: 1050;
     background-color: #33485D;
+}
+
+.modal .uploadModal div.fileinputs {
+    display: inline-block;
 }
