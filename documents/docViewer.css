@@ -560,7 +560,6 @@ navbar .navbar {
     background-position: left top;
     background-repeat: no-repeat;
     color: transparent;
-    background-color: transparent;
 }
 
 .draggable.imagesignature.mysignature.processing textarea {
@@ -575,9 +574,6 @@ navbar .navbar {
     opacity: 0;
 }
 .draggable.imagesignature.mysignature textarea::-moz-placeholder {
-    opacity: 0;
-}
-.draggable.imagesignature.mysignature textarea:-ms-input-placeholder {
     opacity: 0;
 }
 
