@@ -729,6 +729,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.rows.splice(index, 1);
                 }
             });
+            angular.forEach($scope.trans, function(tran) {
+                if (tran.issue == issue.key) {
+                    var index = $scope.trans.indexOf(tran);
+                    $scope.trans.splice(index, 1);
+                }
+            })
             if ($scope.issues.length == 0 || ($scope.issues[$scope.issues.length-1].name != "")) {
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
             }
