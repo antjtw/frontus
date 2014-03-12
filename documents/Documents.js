@@ -577,8 +577,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
-
-
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
             $scope.processing = true;
@@ -1757,7 +1755,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveSmartdocData = function(clicked) {
-            if (!$scope.user_attributes) {return;}
+            if (!$scope.used_attributes) {return;}
             SWBrijj.proc("account.company_attribute_update",
                     "state", $scope.used_attributes.companyState
             ).then(function(x) {

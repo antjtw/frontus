@@ -173,7 +173,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             } else  {
                 //$scope.docShareState.emails = $scope.multipeople;
                 $scope.docShareState.message = $scope.messageText;
-                console.log($scope.docShareState);
                 sessionStorage.sharewave = angular.toJson($scope.docShareState);
             }
         };
