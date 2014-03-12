@@ -1449,7 +1449,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     '<li>' +
                                         '<ul>' +
                                             '<li>' +
-                                                '<span>Who needs to sign?</span>' +
+                                                '<span>Who needs to complete?</span>' +
                                             '</li>' +
                                             '<li>' +
                                                 '<ul class="dropdown-list drop-selector">' +
