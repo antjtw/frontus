@@ -1459,7 +1459,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                     '<li>' +
                                         '<ul>' +
                                             '<li>' +
-                                                '<span>Who needs to sign?</span>' +
+                                                '<span>Who needs to complete?</span>' +
                                             '</li>' +
                                             '<li>' +
                                                 '<ul class="dropdown-list drop-selector">' +
@@ -1805,24 +1805,26 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.notesComplete = function () {
             var returnvalue = false;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i][0];
-                if (n.notetype == "text") {
-                    var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                            returnvalue = true;
+            if (!$scope.countersignable($scope.lib)) {
+                for (var i = 0; i < $scope.notes.length; i++) {
+                    var n = $scope.notes[i][0];
+                    if (n.notetype == "text") {
+                        var contents = n.querySelector("textarea");
+                        if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                            if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                                returnvalue = true;
+                            }
                         }
-                    }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                            returnvalue = true;
+                        else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                            if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                                returnvalue = true;
+                            }
                         }
                     }
                 }
             }
             return returnvalue
-        }
+        };
 
         $scope.sigModalUp = function () {
             $scope.signatureModal = true;
