@@ -1125,7 +1125,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 $scope.createAttributes(inv_attributes);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                    if ($scope.lib && $scope.lib.annotations.length > 0) {
+                    if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
                         return;
                     }
