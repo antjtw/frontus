@@ -1080,11 +1080,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee === "" ? "!!!" : tosee;
-            SWBrijj.procm("document.multishare",
+            SWBrijj.document_multishare(
                           tosee.substring(1).toLowerCase(),
                           JSON.stringify(docsToShare),
                           message,
-                          Date.parse('22 November 2113')
+                          "22 November 2113"
             ).then(function(data) {
                 void(data);
                 $scope.saveShareState($scope.emptyShareState());
