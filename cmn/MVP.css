@@ -2432,6 +2432,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .bottomnav .nav > .standard.menu-drop .dropdown-menu > li {
     padding: 0 0 0 20px;
 }
+
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child {
+    font-family: 'FS Elliot Web Italic', sans-serif;
+    color: #A6A6A6;
+}
+
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
