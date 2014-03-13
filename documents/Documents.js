@@ -528,7 +528,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
-
             $scope.loadpreviousshares();
         });
 
@@ -1632,7 +1631,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.prepareable = function(doc) {
-            return $scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
+            return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
         };
 
         $scope.signable = function(doc) {

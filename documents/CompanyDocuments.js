@@ -171,6 +171,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (clear) {
                 sessionStorage.sharewave = angular.toJson($scope.emptyShareState());
             } else  {
+                if (!$scope.docShareState) {
+                    $scope.docShareState = $scope.emptyShareState();
+                }
                 //$scope.docShareState.emails = $scope.multipeople;
                 $scope.docShareState.message = $scope.messageText;
                 sessionStorage.sharewave = angular.toJson($scope.docShareState);
@@ -828,18 +831,28 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var updated = false;
             var listcopy = angular.copy(list);
             angular.forEach(listcopy, function(el) {
-                if (el.doc_id == item.doc_id) {
+                if (el.doc_id == item.doc_id
+                    || (!el.doc_id && !item.doc_id
+                        && el.template_id==item.template_id)) {
                     el.signature_flow = item.signature_flow;
                     updated = true;
                 }
             });
             if (!updated) {
-                listcopy.push({"doc_id": item.doc_id, "signature_flow": item.signature_flow});
+                listcopy.push(
+                        {"doc_id": item.doc_id,
+                         "template_id": item.template_id,
+                         "signature_flow": item.signature_flow
+                        });
             }
             return listcopy;
         };
         $scope.removeShareItem = function(item, list) {
-            return list.filter(function(el) {return !(item.doc_id==el.doc_id && item.signature_flow==el.signature_flow);});
+            return list.filter(function(el) {
+                return !(item.doc_id==el.doc_id
+                         && item.template_id==el.template_id
+                         && item.signature_flow==el.signature_flow);
+            });
         };
         $scope.updateShareType = function(doc, tp) {
             if (doc.template_id && tp > 0) {
