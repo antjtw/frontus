@@ -118,7 +118,7 @@
                 <ul class="menuHeaderText nav dropdown-list">
                     <li class="dropdown standard menu-drop">
                         <a class="dropdown-toggle" ng-class="{'active': navState.path.substring(0,6)==='/home/'}">
-                            {{navState.name}}
+                            {{navState.name | caplength:20}}
                             <span class='for-r0ml'> ({{navState.role}})</span>
                             <span class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
                             <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
