@@ -3293,6 +3293,7 @@ button.icon-button:hover {
 
 
 .modal .input-row-new {
+    width: 320px;
     height: 40px;
     margin: 20px 20px 0 20px;
 }
@@ -3300,7 +3301,7 @@ button.icon-button:hover {
 .modal .input-row-new > p {
     margin: 0;
     float: left;
-    width: 110px;
+    width: 100px;
     text-align: right;
     line-height: 32px;
     text-transform: uppercase;
