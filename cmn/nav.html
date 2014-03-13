@@ -128,18 +128,18 @@
                             <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span>
                             </li>
                             <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
-                            ng-repeat="company in companies | filter: {role:'investor'}"> <a class="button" ng-click="switch(company)">{{company.name}}</a>
+                            ng-repeat="company in companies | filter: {role:'investor'}"> <a class="button" ng-click="switch(company)">{{company.name  | caplength:20}}</a>
 
                             </li>
                             <li ng-show="hasAdmin" class="dropdown-label"><span>ADMIN</span>
                             </li>
                             <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
                             ng-repeat="company in companies | filter: {role:'issuer'}"> <a class="button" ng-click="switch(company)">
-                            {{company.name}}
+                            {{company.name  | caplength:20}}
                         </a>
 
                             </li>
-                            <li class="button" ng-click="addCompanyModalUp();">Create New Company</li>
+                            <li class="button" ng-click="addCompanyModalUp();">Create a new company</li>
                         </ul>
                     </li>
                     <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a>
@@ -160,8 +160,6 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addCompanyModalClose()"></span>
     </div>
     <div class="modalText">
-        <p>Enter new company name
-        </p>
         <div class="input-row-new">
             <p>Company Name</p>
             <input ng-model="newCompany" maxlength="30">
