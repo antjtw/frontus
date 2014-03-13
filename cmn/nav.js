@@ -439,6 +439,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         };
 
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade: true
+        };
+
         var idleTime = 0;
 
         function timerIncrement() {

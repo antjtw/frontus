@@ -157,18 +157,21 @@
 
 <div modal="addCompanyModal" close="addCompanyModalClose()" options="opts">
     <div class="modalHeader">
-        <span>Add a new company</span>
+        <span>Create a new company</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addCompanyModalClose()"></span>
     </div>
     <div class="modalText">
-        <p>Blah blah blah
+        <p>Enter new company name
         </p>
-        <div class="input-row">
+        <div class="input-row-new">
             <p>Company Name</p>
             <input ng-model="newCompany">
         </div>
     </div>
     <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="addCompanyModalClose();">Cancel</button>
+        </div>
         <div class="standard-button green">
             <button class="btn" ng-click="addCompanyModalClose(); createNewCompany(newCompany);">Create</button>
         </div>
