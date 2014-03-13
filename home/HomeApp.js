@@ -32,7 +32,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
 
         if ($routeParams.cc) {
             $scope.$emit('notification:success', 'Successfully created new company');
-            return;
         }
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
