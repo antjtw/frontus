@@ -256,6 +256,35 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             dialogClass: 'helpModal modal'
         };
 
+        $scope.uploadSuccess = function() {
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.signatureprocessing = false;
+            $scope.progressVisible = false;
+            $scope.signaturepresent = true;
+            var elements = document.getElementsByClassName('draggable imagesignature mysignature');
+            angular.forEach(elements, function(element) {
+                element = element.querySelector("textarea");
+                if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
+                }
+                else {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:)';
+                }
+            })
+            $scope.$emit("notification:success", "Signature uploaded");
+            $scope.scribblemode = false;
+            $scope.$apply();
+        };
+
+        $scope.uploadFail = function() {
+            void(x);
+            $scope.progressVisible = false;
+            $scope.signatureprocessing = false;
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+            // console.log(x);
+        };
+
         $scope.uploadSignatureNow = function() {
             if ($scope.files || $scope.scribblemode) {
                 $scope.signatureURL = "/img/image-loader-140.gif";
@@ -264,38 +293,23 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 if ($scope.scribblemode) {
                     var canvas = document.getElementById("scribbleboard");
                     var fd = canvas.toDataURL();
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureString(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
                 }
                 else {
                     var fd = new FormData();
                     for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureImage(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
                 }
-                $scope.signatureModal = false;
-                SWBrijj.uploadSignature(fd).then(function(x) {
-                    $scope.signatureURL = '/photo/user?id=signature:';
-                    $scope.signatureprocessing = false;
-                    $scope.progressVisible = false;
-                    $scope.signaturepresent = true;
-                    var elements = document.getElementsByClassName('draggable imagesignature mysignature');
-                    angular.forEach(elements, function(element) {
-                        element = element.querySelector("textarea");
-                        if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
-                            element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
-                        }
-                        else {
-                            element.style.backgroundImage = 'url(/photo/user?id=signature:)';
-                        }
-                    })
-                    $scope.$emit("notification:success", "Signature uploaded");
-                    $scope.scribblemode = false;
-                    $scope.$apply();
-                }).except(function(x) {
-                        void(x);
-                        $scope.progressVisible = false;
-                        $scope.signatureprocessing = false;
-                        $scope.signatureURL = '/photo/user?id=signature:';
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                        // console.log(x);
-                    });
             }
             else {
                 $scope.signatureModal = false;
