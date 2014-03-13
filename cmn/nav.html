@@ -125,8 +125,7 @@
                             <span ng-show="companies.length!==1" class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
                         </a>
 
-                        <ul class="dropdown-menu" ng-class="{'active': navState.path.substring(0,6)=== '/home/'}"
-                        ng-show="companies.length > 1">
+                        <ul class="dropdown-menu" ng-class="{'active': navState.path.substring(0,6)=== '/home/'}">
                             <li ng-show="hasInvest" class="dropdown-label"><span>INVESTMENTS</span>
                             </li>
                             <li class="button" ng-class="{'selected-company':company.company==navState.company && company.role==navState.role}"
@@ -141,6 +140,7 @@
                         </a>
 
                             </li>
+                            <li class="button" ng-click="createCompanyModal();">Create New Company</li>
                         </ul>
                     </li>
                     <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a>
@@ -151,6 +151,31 @@
                     </li>
                 </ul>
             </div>
+        </div>
+    </div>
+</div>
+
+<div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Edit this row's email?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <p>Changing the email address of this row will invite a new email to get a personal view of the captable.
+            If the account associated with the old email has a personal view of the captable
+            they will no longer be able to see it.
+        </p>
+        <div class="input-row">
+            <p>Email Address</p>
+            <input ng-model="newEmail">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="alterEmailModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="alterEmailModalClose(); alterEmail();">Change</button>
         </div>
     </div>
 </div>

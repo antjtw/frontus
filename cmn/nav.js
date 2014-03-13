@@ -402,6 +402,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return notifications
         };
 
+        $scope.createCompanyModal = function() {
+        };
+
+        $scope.closeModal = function() {
+
+        }
+
         var idleTime = 0;
 
         function timerIncrement() {
