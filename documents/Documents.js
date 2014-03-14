@@ -316,6 +316,7 @@ directive('draggable', ['$window', '$document',
                             for (var i = 0; i < $scope.notes.length; i++) {
                                 if ($scope.notes[i][0] === x) {
                                     $scope.notes.splice(i, 1);
+                                    $scope.$apply();
                                     return;
                                 }
                             }
@@ -1431,9 +1432,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     }
                 }
             }
-            console.log(page);
-            console.log(some);
-            console.log(allfilled);
             return some && !allfilled
         };
 
