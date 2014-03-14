@@ -215,6 +215,16 @@ navbar .navbar {
     box-sizing: border-box;
 }
 
+.page-bar > ul > li.page-tabs.red-tab, .page-bar > ul > li.page-tabs.red-tab.green-tab {
+    background-color: #E74C3C;
+    color: #FFFFFF;
+}
+
+.page-bar > ul > li.page-tabs.green-tab {
+    background-color: #1ABC96;
+    color: #FFFFFF;
+}
+
 .page-bar > ul > li.page-tabs:hover {
     background-color: #C7C7C7;
 }
@@ -222,6 +232,14 @@ navbar .navbar {
 .page-bar > ul > li.page-tabs.cur-page {
     background-color: #8D8D8D !important;
     color: #FFFFFF !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page.green-tab {
+    background-color: #15A085 !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page.red-tab, .page-bar > ul > li.page-tabs.cur-page.red-tab.green-tab {
+    background-color: #C44032 !important;
 }
 
 .page-bar > ul > li.page-tabs.cur-page:hover {
@@ -578,11 +596,15 @@ navbar .navbar {
 }
 
 .draggable.redrequired div > textarea {
-    border: 1px solid #E64B3B;
+    border: 1px solid #E74C3C;
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #149F84;
+    border: 1px solid #1ABC96;
+}
+
+.draggable.otherperson div > textarea {
+    border: 1px solid #2980B9;
 }
 
 .sticky {
@@ -624,11 +646,15 @@ navbar .navbar {
 }
 
 .sticky.redrequired .dragger {
-    background-color: #E64B3B;
+    background-color: #E74C3C;
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #149F84;
+    background-color: #1ABC96;
+}
+
+.sticky.otherperson .dragger {
+    background-color: #2980B9;
 }
 
 .sticky .dragger > span {

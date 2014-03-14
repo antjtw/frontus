@@ -149,7 +149,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing()}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing(), \'otherperson\':whosignssticky(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -1101,6 +1101,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent && (($rootScope.navState.role == "issuer" && ev.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && ev.$$nextSibling.whosign == "Investor"))) ? true : false;
         };
 
+        $scope.whosignssticky = function(element) {
+            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Investor") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Issuer") ? true : false;
+        };
+
         $scope.createAttributes = function (inv_attributes) {
             $scope.investor_attributes = {};
             $scope.attributelabels = {};
@@ -1278,7 +1282,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1) && ($rootScope.lastPage.indexOf("/login") === -1)) {
+            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1) && ($rootScope.lastPage.indexOf("login") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
@@ -1379,6 +1383,54 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.jumpPage = function(value) {
             $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
+        };
+
+        $scope.hasUnfilled = function(page) {
+            var unfilled = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            unfilled = true;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            unfilled = true;
+                        }
+                    }
+                }
+            }
+            return unfilled
+        };
+
+        $scope.allFilled = function(page) {
+            var allfilled = true;
+            var some = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if ($scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            some = true;
+                            allfilled = false;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length != 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            allfilled = false;
+                            some = true;
+                        }
+                    }
+                }
+            }
+            console.log(page);
+            console.log(some);
+            console.log(allfilled);
+            return some && !allfilled
         };
 
         $scope.range = function(start, stop, step) {
@@ -1793,20 +1845,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.notesComplete = function () {
             var returnvalue = false;
-            if (!$scope.countersignable($scope.lib)) {
-                for (var i = 0; i < $scope.notes.length; i++) {
-                    var n = $scope.notes[i][0];
-                    if (n.notetype == "text") {
-                        var contents = n.querySelector("textarea");
-                        if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                            if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                                returnvalue = true;
-                            }
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (n.notetype == "text") {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            returnvalue = true;
                         }
-                        else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                            if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                                returnvalue = true;
-                            }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            returnvalue = true;
                         }
                     }
                 }
