@@ -140,11 +140,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
              * @param {string} role
              */
             SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
+                sessionStorage.clear();
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
 
         $scope.gotoURL = function(url) {
+            sessionStorage.clear();
             document.location.href = url;
         };
 
@@ -451,6 +453,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 idleTime = idleTime + 1;
             }
             if (idleTime > 28) { // 1 minutes
+                sessionStorage.clear();
                 document.location.href = "/login/logout?timeout";
             }
         }
