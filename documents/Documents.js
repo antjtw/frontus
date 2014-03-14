@@ -853,8 +853,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 //$route.reload();
             }).except(function(x) {
                     $scope.processing = false;
-                    void(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    if (x.message.indexOf("ERROR: duplicate key value violates unique constraint") != -1) {
+                        $scope.$emit("notification:fail", "Already shared to this user");
+                    }
+                    else {
+                        $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    }
             });
         };
         $scope.countersignAction = function(conf, msg) {

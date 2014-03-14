@@ -604,7 +604,7 @@ navbar .navbar {
 }
 
 .draggable.otherperson div > textarea {
-    border: 1px solid #2980B9;
+    border: 1px solid #E3E3E3;
 }
 
 .sticky {
@@ -654,7 +654,7 @@ navbar .navbar {
 }
 
 .sticky.otherperson .dragger {
-    background-color: #2980B9;
+    background-color: #E3E3E3;
 }
 
 .sticky .dragger > span {
