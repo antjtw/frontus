@@ -143,6 +143,23 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
+
+        $scope.gotoURL = function(url) {
+            document.location.href = url;
+        };
+
+        $scope.switchCandP = function (company, url) {
+            if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
+                SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    $scope.gotoURL(url);
+                });
+            }
+            else {
+                $scope.gotoURL(url);
+            }
+
+        };
+
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
             $rootScope.homecollapsed = !$rootScope.homecollapsed;
@@ -400,6 +417,31 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
             });
             return notifications
+        };
+
+        $scope.addCompanyModalUp = function() {
+            $scope.addCompanyModal = true;
+        };
+
+        $scope.addCompanyModalClose = function() {
+            $scope.addCompanyModal = false;
+        };
+
+        $scope.createNewCompany = function(name) {
+            if (name.length > 0) {
+                SWBrijj.procm('account.new_company', name).then(function (new_comp_id) {
+                    var company = {"company": new_comp_id[0].new_company, "role": "issuer"};
+                    $scope.switchCandP(company, "/home/company?cc");
+                });
+            }
+            else {
+                $scope.addCompanyModal = false;
+            }
+        };
+
+        $scope.opts = {
+            backdropFade: true,
+            dialogFade: true
         };
 
         var idleTime = 0;
