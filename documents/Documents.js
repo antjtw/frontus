@@ -149,7 +149,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing()}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing(), \'otherperson\':whosignssticky(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -927,6 +927,35 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.uploadSuccess = function() {
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.signatureprocessing = false;
+            $scope.progressVisible = false;
+            $scope.signaturepresent = true;
+            var elements = document.getElementsByClassName('draggable imagesignature mysignature');
+            angular.forEach(elements, function(element) {
+                element = element.querySelector("textarea");
+                if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
+                }
+                else {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:)';
+                }
+            })
+            $scope.$emit("notification:success", "Signature uploaded");
+            $scope.scribblemode = false;
+            $scope.$apply();
+        };
+
+        $scope.uploadFail = function() {
+            void(x);
+            $scope.progressVisible = false;
+            $scope.signatureprocessing = false;
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+            // console.log(x);
+        };
+
         $scope.uploadSignatureNow = function() {
             if ($scope.files || $scope.scribblemode) {
                 $scope.signatureURL = "/img/image-loader-140.gif";
@@ -935,38 +964,23 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if ($scope.scribblemode) {
                     var canvas = document.getElementById("scribbleboard");
                     var fd = canvas.toDataURL();
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureString(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
                 }
                 else {
                     var fd = new FormData();
                     for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureImage(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
                 }
-                $scope.signatureModal = false;
-                SWBrijj.uploadSignature(fd).then(function(x) {
-                    $scope.signatureURL = '/photo/user?id=signature:';
-                    $scope.signatureprocessing = false;
-                    $scope.progressVisible = false;
-                    $scope.signaturepresent = true;
-                    var elements = document.getElementsByClassName('draggable imagesignature mysignature');
-                    angular.forEach(elements, function(element) {
-                        element = element.querySelector("textarea");
-                        if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
-                            element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
-                        }
-                        else {
-                            element.style.backgroundImage = 'url(/photo/user?id=signature:)';
-                        }
-                    })
-                    $scope.$emit("notification:success", "Signature uploaded");
-                    $scope.scribblemode = false;
-                    $scope.$apply();
-                }).except(function(x) {
-                        void(x);
-                        $scope.progressVisible = false;
-                        $scope.signatureprocessing = false;
-                        $scope.signatureURL = '/photo/user?id=signature:';
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                        // console.log(x);
-                    });
             }
             else {
                 $scope.signatureModal = false;
@@ -1082,6 +1096,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.stickyfilled = function(ev) {
             return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent && (($rootScope.navState.role == "issuer" && ev.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && ev.$$nextSibling.whosign == "Investor"))) ? true : false;
+        };
+
+        $scope.whosignssticky = function(element) {
+            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Investor") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Issuer") ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
@@ -1375,6 +1393,54 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.jumpPage = function(value) {
             $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
+        };
+
+        $scope.hasUnfilled = function(page) {
+            var unfilled = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            unfilled = true;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            unfilled = true;
+                        }
+                    }
+                }
+            }
+            return unfilled
+        };
+
+        $scope.allFilled = function(page) {
+            var allfilled = true;
+            var some = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if ($scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            some = true;
+                            allfilled = false;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length != 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            allfilled = false;
+                            some = true;
+                        }
+                    }
+                }
+            }
+            console.log(page);
+            console.log(some);
+            console.log(allfilled);
+            return some && !allfilled
         };
 
         $scope.range = function(start, stop, step) {
@@ -1805,20 +1871,18 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.notesComplete = function () {
             var returnvalue = false;
-            if (!$scope.countersignable($scope.lib)) {
-                for (var i = 0; i < $scope.notes.length; i++) {
-                    var n = $scope.notes[i][0];
-                    if (n.notetype == "text") {
-                        var contents = n.querySelector("textarea");
-                        if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                            if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                                returnvalue = true;
-                            }
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (n.notetype == "text") {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            returnvalue = true;
                         }
-                        else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                            if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                                returnvalue = true;
-                            }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            returnvalue = true;
                         }
                     }
                 }
