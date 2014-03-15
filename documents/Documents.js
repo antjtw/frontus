@@ -74,7 +74,6 @@ function ApplyLineBreaks(oTextarea) {
     var count = strNewValue.match(re);
     if (count && max <= count.length) {
         strNewValue = strNewValue.split("\n", max).join("\n");
-        console.log(strNewValue);
     }
     oTextarea.value = strNewValue;
     oTextarea.setAttribute("wrap", "hard");
@@ -150,7 +149,7 @@ directive('draggable', ['$window', '$document',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this)}" class="sticky">' +
+            template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing(), \'otherperson\':whosignssticky(this)}" class="sticky">' +
                             '<span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"><span><span data-icon="&#xe11a;"></span></span></span>' +
                             '<span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()"><span data-icon="&#xe00f;"></span></span>' +
                             '<span ng-transclude></span>' +
@@ -317,6 +316,7 @@ directive('draggable', ['$window', '$document',
                             for (var i = 0; i < $scope.notes.length; i++) {
                                 if ($scope.notes[i][0] === x) {
                                     $scope.notes.splice(i, 1);
+                                    $scope.$apply();
                                     return;
                                 }
                             }
@@ -578,6 +578,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             });
         };
 
+
+
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
             $scope.processing = true;
@@ -746,6 +748,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             offset: {top: 40}
         });
 
+        $scope.signatureURL = '/photo/user?id=signature:';
+
         $scope.setStage = function(n) {
             $scope.setConfirmValue(0);
             $scope.stage = n;
@@ -850,8 +854,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 //$route.reload();
             }).except(function(x) {
                     $scope.processing = false;
-                    void(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    if (x.message.indexOf("ERROR: duplicate key value violates unique constraint") != -1) {
+                        $scope.$emit("notification:fail", "Already shared to this user");
+                    }
+                    else {
+                        $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    }
             });
         };
         $scope.countersignAction = function(conf, msg) {
@@ -900,9 +908,163 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return $scope.countersignable($scope.lib)
         };
 
-        $scope.openBox = function(ev) {
+        $scope.openBox = function(ev, event) {
             if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
                 ev.getme = true;
+            }
+            if (ev.whattype == "ImgSignature" && ((ev.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (ev.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                var textarea = event.currentTarget;
+                var width = parseInt(textarea.style.width);
+                var height = parseInt(textarea.style.height);
+                var boxwidth = 330;
+                var boxheight = 200;
+                if (height > width) {
+                    var ratio = boxheight / height;
+                    height = boxheight;
+                    width = width * ratio
+                }
+                else {
+                    var ratio = boxwidth / width;
+                    width = boxwidth;
+                    height = height * ratio;
+                }
+                $scope.signaturestyle = {height: String(180), width: String(330) };
+                $scope.currentsignature = textarea;
+                $scope.signatureURL = '/photo/user?id=signature:';
+                $scope.sigModalUp();
+            }
+        };
+
+        $scope.uploadSuccess = function() {
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.signatureprocessing = false;
+            $scope.progressVisible = false;
+            $scope.signaturepresent = true;
+            var elements = document.getElementsByClassName('draggable imagesignature mysignature');
+            angular.forEach(elements, function(element) {
+                element = element.querySelector("textarea");
+                if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
+                }
+                else {
+                    element.style.backgroundImage = 'url(/photo/user?id=signature:)';
+                }
+            })
+            $scope.$emit("notification:success", "Signature uploaded");
+            $scope.scribblemode = false;
+            $scope.$apply();
+        };
+
+        $scope.uploadFail = function() {
+            void(x);
+            $scope.progressVisible = false;
+            $scope.signatureprocessing = false;
+            $scope.signatureURL = '/photo/user?id=signature:';
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+            // console.log(x);
+        };
+
+        $scope.uploadSignatureNow = function() {
+            if ($scope.files || $scope.scribblemode) {
+                $scope.signatureURL = "/img/image-loader-140.gif";
+                $scope.signatureprocessing = true;
+                $scope.progressVisible = true;
+                if ($scope.scribblemode) {
+                    var canvas = document.getElementById("scribbleboard");
+                    var fd = canvas.toDataURL();
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureString(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
+                }
+                else {
+                    var fd = new FormData();
+                    for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                    $scope.signatureModal = false;
+                    SWBrijj.uploadSignatureImage(fd).then(function(x) {
+                        $scope.uploadSuccess();
+                    }).except(function(x) {
+                            $scope.uploadFail();
+                        });
+                }
+            }
+            else {
+                $scope.signatureModal = false;
+            }
+
+        };
+
+        $scope.createNewSignature = function() {
+            $scope.scribblemode = true;
+
+            var canvas = document.getElementById("scribbleboard");
+
+            var ctx = canvas.getContext('2d');
+            canvas.height = 180;
+            canvas.width = 330;
+            console.log(ctx);
+            console.log(canvas);
+            ctx.lineCap = 'round';
+            ctx.color = "blue";
+            ctx.lineWidth = 2;
+            ctx.fillStyle = "white";
+            // ctx.setAlpha(0);
+            ctx.fillRect(0, 0, 200, 200);
+            // ctx.setAlpha(0.5);
+
+            canvas.addEventListener('mousedown', function(e) {
+                canvas.down = true;
+                var offs = getCanvasOffset(e);
+                canvas.X = offs[0];
+                canvas.Y = offs[1];
+            }, false);
+
+            canvas.addEventListener('mouseover', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.addEventListener('mouseout', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.addEventListener('mouseup', function(e) {
+                void(e);
+                canvas.down = false;
+            });
+
+            canvas.strokes = [];
+
+            canvas.addEventListener('mousemove', function(e) {
+                if (canvas.down) {
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.X, canvas.Y);
+                    var offs = getCanvasOffset(e);
+                    ctx.lineTo(offs[0], offs[1]);
+                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                    ctx.stroke();
+                    canvas.X = offs[0];
+                    canvas.Y = offs[1];
+                }
+            }, true);
+        };
+
+        $scope.setFiles = function(element) {
+            $scope.files = [];
+            for (var i = 0; i < element.files.length; i++) {
+                $scope.files.push(element.files[i]);
+
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL($scope.files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    document.getElementById("signaturevisual").src = oFREvent.target.result;
+                };
+                $scope.scribblemode = false;
+                $scope.$apply();
             }
         };
 
@@ -928,8 +1090,24 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return element.$$nextSibling.whattype == "Signature"  ? true : false;
         };
 
+        $scope.imageField = function (element) {
+            return element.$$nextSibling.whattype == "ImgSignature" ? true : false;
+        };
+
+        $scope.imageMine = function (element) {
+            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Investor") ? true : false;
+        };
+
+        $scope.signatureProcessing = function () {
+            return $scope.signatureprocessing;
+        };
+
         $scope.stickyfilled = function(ev) {
-            return ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0 ? true : false;
+            return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent && (($rootScope.navState.role == "issuer" && ev.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && ev.$$nextSibling.whosign == "Investor"))) ? true : false;
+        };
+
+        $scope.whosignssticky = function(element) {
+            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Investor") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Issuer") ? true : false;
         };
 
         $scope.createAttributes = function (inv_attributes) {
@@ -955,8 +1133,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.attributelabels['investorEmail'] = "Email";
             $scope.attributelabels['investorPostalcode'] = "Zip code";
             $scope.attributelabels['signatureDate'] = "Date";
+            $scope.attributelabels['ImgSignature'] = "Signature Image";
+            $scope.attributelabels['Signature'] = "Signature Text";
 
         };
+
+        SWBrijj.procm('account.have_signature').then(function(sig) {
+            $scope.signaturepresent = sig[0].have_signature;
+        });
 
         $scope.loadAnnotations = function() {
             /** @name SWBrijj#tblm
@@ -1032,7 +1216,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 newattr = annot[4]
                             }
                             if ($scope.isAnnotable) {
-                                if ($scope.countersignable($scope.lib) && newattr.whattype == "Signature" || !$scope.countersignable($scope.lib)) {
+                                if ($scope.countersignable($scope.lib) && (newattr.whattype == "Signature" || newattr.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
                                     $scope.annotatedPages.push(annot[0][0]);
                                     switch (annot[1]) {
                                         case "check":
@@ -1103,7 +1287,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1)) {
+            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1) && ($rootScope.lastPage.indexOf("login") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
@@ -1206,6 +1390,51 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
+        $scope.hasUnfilled = function(page) {
+            var unfilled = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            unfilled = true;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            unfilled = true;
+                        }
+                    }
+                }
+            }
+            return unfilled
+        };
+
+        $scope.allFilled = function(page) {
+            var allfilled = true;
+            var some = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                if (angular.element(n).scope().page == page) {
+                    var contents = n.querySelector("textarea");
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if ($scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                            some = true;
+                            allfilled = false;
+                        }
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length != 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                            allfilled = false;
+                            some = true;
+                        }
+                    }
+                }
+            }
+            return some && !allfilled
+        };
+
         $scope.range = function(start, stop, step) {
             if (typeof stop == 'undefined') {
                 stop = start;
@@ -1275,16 +1504,20 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
+        $scope.placeholdertext = function() {
+
+        }
+
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
                                         '<ul>' +
                                             '<li>' +
-                                                '<span>Who needs to sign?</span>' +
+                                                '<span>Who needs to complete?</span>' +
                                             '</li>' +
                                             '<li>' +
                                                 '<ul class="dropdown-list drop-selector">' +
@@ -1321,7 +1554,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                                 '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
                                                             '</li>' +
                                                             '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature</a>' +
+                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature Text</a>' +
+                                                            '</li>' +
+                                                            '<li>' +
+                                                            '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Signature Image</a>' +
                                                             '</li>' +
                                                             '<li>' +
                                                                 '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +
@@ -1615,18 +1851,29 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 var n = $scope.notes[i][0];
                 if (n.notetype == "text") {
                     var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0 ) {
-                        if (angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') {
+                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             returnvalue = true;
                         }
-                        else if (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer') {
+                    }
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             returnvalue = true;
                         }
                     }
                 }
             }
             return returnvalue
-        }
+        };
+
+        $scope.sigModalUp = function () {
+            $scope.signatureModal = true;
+        };
+
+        $scope.sigclose = function () {
+            $scope.signatureModal = false;
+            $scope.scribblemode = false;
+        };
     }
 ]);
 

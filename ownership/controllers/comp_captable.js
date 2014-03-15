@@ -42,7 +42,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
     $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
-    $scope.captabletips.price = "The rate that interest accrues on this debt";
+    $scope.captabletips.price = "The price at which each granted share can be purchased when vested";
     $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
     $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
@@ -729,6 +729,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     $scope.rows.splice(index, 1);
                 }
             });
+            angular.forEach($scope.trans, function(tran) {
+                if (tran.issue == issue.key) {
+                    var index = $scope.trans.indexOf(tran);
+                    $scope.trans.splice(index, 1);
+                }
+            })
             if ($scope.issues.length == 0 || ($scope.issues[$scope.issues.length-1].name != "")) {
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
             }
