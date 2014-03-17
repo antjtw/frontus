@@ -108,7 +108,7 @@
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: prepareable(lib) || (!$parent.template_original && forsigning) || !templateId}">
                     <div class="pull-right tools" >
                         <button ng-click="saveSmartdocData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
