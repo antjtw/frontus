@@ -947,6 +947,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.smartdocIsPrepared = function(doc) {
             return doc.template_id && doc.is_prepared;
         };
+        // TODO iterate through annotations and make sure issuer required annotations
+        //      are filled out
         $scope.docIsPrepared = function(doc) {
             if (!doc) {return false;}
             if (doc.template_id) {

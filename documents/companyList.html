@@ -201,6 +201,7 @@
                     </div>
                 </td>
             </tr>
+            <!-- TODO animate show/hide by sliding down/up -->
             <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
                 <td class="status-toggle"></td>
                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
