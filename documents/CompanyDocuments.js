@@ -169,12 +169,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             $scope.$emit("notification:success",
                                 "Success! Document prepared for signature.");
                         } else {
+                            console.log(doc);
                             $scope.$emit("notification:fail",
                                 "Oops, the document is not ready for signature. Please try again.");
                         }
                     }
                 }); 
             }
+            $scope.loadDocumentVersions();
             return st;
         };
         $scope.saveShareState = function(clear) {
@@ -202,16 +204,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.mergeSmartIntoDumb = function() {
             var smartdocs = [];
             var prepared = null;
-            angular.forEach($scope.documents, function(doc) {
-                if (doc.template_id) {
-                    smartdocs.push(doc.template_id);
-                }
-            });
             SWBrijj.tblm('account.my_company', ['name', 'state']
             ).then(function(data) {
                 if (data[0].name && data[0].state && data[0].state!=="  ") {
                     prepared=true;
                 }
+                angular.forEach($scope.documents, function(doc) {
+                    if (doc.template_id) {
+                        smartdocs.push(doc.template_id);
+                        doc.is_prepared = prepared;
+                    }
+                });
                 angular.forEach($scope.smarttemplates, function(smart) {
                     if (smartdocs.indexOf(smart.template_id) === -1) {
                         $scope.documents.push(
@@ -227,6 +230,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             });
                     }
                 });
+                $scope.initShareState();
             });
 
         };
@@ -244,10 +248,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
                      'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
                 $scope.documents = data;
-                $scope.initShareState();
                 $scope.mergeSmartIntoDumb();
-                $scope.loadPrepareState();
-                $scope.loadDocumentVersions();
             });
         };
         $scope.initShareState = function() {
@@ -264,6 +265,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
             $scope.messageText = $scope.docShareState.message;
             $scope.multipeople = $scope.docShareState.emails; 
+            $scope.loadPrepareState();
         };
 
         $scope.loadDocumentVersions = function () {
