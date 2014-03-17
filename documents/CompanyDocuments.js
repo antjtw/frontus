@@ -1037,6 +1037,12 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             $scope.tourModal = false;
         };
 
+        $scope.sharinggot = function () {
+            SWBrijj.procm("account.update_user_settings", "knows_sharing", "true").then(function(data) {
+                void(data);
+            });
+        };
+
         $scope.touropts = {
             backdropFade: true,
             dialogFade: true,
@@ -1065,7 +1071,11 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
 
         if ($scope.prepare) {
-            $scope.helpModalUp();
+            SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
+                if (!data[0].knows_sharing) {
+                    $scope.helpModalUp();
+                }
+            });
         }
 
         $scope.getData = function() {
@@ -1945,6 +1955,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             dialogClass: 'helpModal modal'
         };
 
+        $scope.signinggot = function () {
+            SWBrijj.procm("account.update_user_settings", "knows_signing", "true").then(function(data) {
+                void(data);
+            });
+        };
+
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
@@ -1959,7 +1975,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                     $scope.document = data;
 
                     if ($scope.signable()) {
-                        $scope.helpModalUp();
+                        SWBrijj.tblm('account.user_settings', ["knows_signing"]).then(function(data) {
+                            if (!data[0].knows_signing) {
+                                console.log(data[0].knows_signing);
+                                $scope.helpModalUp();
+                            }
+                        });
                     }
 
                     $scope.initDocView();
