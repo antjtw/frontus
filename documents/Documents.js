@@ -1824,11 +1824,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             SWBrijj.proc("account.company_attribute_update",
                     "state", $scope.used_attributes.companyState
             ).then(function(x) {
+                console.log(x);
                 void(x);
             });
             SWBrijj.proc("account.company_attribute_update",
                     "name", $scope.used_attributes.companyName
             ).then(function(x) {
+                console.log(x);
                 void(x);
             });
             if (clicked) {

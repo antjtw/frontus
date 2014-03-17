@@ -143,7 +143,15 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         });
         $scope.getShareState = function() {
             // TODO when should we clear this out?
-            return angular.fromJson(sessionStorage.sharewave) || $scope.emptyShareState();
+            var st = angular.fromJson(sessionStorage.sharewave);
+            if (!st || st==[] || st.length===0
+                    || !st.emails
+                    || !st.doclist
+                    || !st.message) {
+                return $scope.emptyShareState();
+            } else {
+                return st;
+            }
         };
         $scope.emptyShareState = function() {
             return {doclist: [], emails: [], message: ""};
@@ -188,32 +196,35 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.mergeSmartIntoDumb = function() {
             var smartdocs = [];
+            var prepared = null;
             angular.forEach($scope.documents, function(doc) {
                 if (doc.template_id) {
-                    SWBrijj.tblm('account.my_companies', ['name', 'state']
-                        ).then(function(data) {
-                            if (data[0].name && data[0].state) {
-                                doc.is_prepared=true;
-                            }
-                    });
                     smartdocs.push(doc.template_id);
                 }
             });
-            angular.forEach($scope.smarttemplates, function(smart) {
-                if (smartdocs.indexOf(smart.template_id) === -1) {
-                    $scope.documents.push(
-                        {"docname": smart.template_name,
-                         "uploaded_by": null,
-                         "company": null,
-                         "doc_id": null,
-                         "template_id": smart.template_id,
-                         "last_updated": null,
-                         "annotations": null,
-                         "versions": null,
-                         "is_prepared": smart.is_prepared
-                        });
+            SWBrijj.tblm('account.my_company', ['name', 'state']
+            ).then(function(data) {
+                console.log(data);
+                if (data[0].name && data[0].state) {
+                    prepared=true;
                 }
+                angular.forEach($scope.smarttemplates, function(smart) {
+                    if (smartdocs.indexOf(smart.template_id) === -1) {
+                        $scope.documents.push(
+                            {"docname": smart.template_name,
+                             "uploaded_by": null,
+                             "company": null,
+                             "doc_id": null,
+                             "template_id": smart.template_id,
+                             "last_updated": null,
+                             "annotations": null,
+                             "versions": null,
+                             "is_prepared": prepared
+                            });
+                    }
+                });
             });
+
         };
 
         $scope.loadSmartDocuments = function() {
@@ -229,14 +240,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
                      'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
                 $scope.documents = data;
+                $scope.initShareState();
+                $scope.loadPrepareState();
                 $scope.mergeSmartIntoDumb();
-                if ($scope.documents.length === 0) {
-                    $scope.noDocs = true;
-                } else {
-                    $scope.initShareState();
-                    $scope.loadPrepareState();
-                    $scope.loadDocumentVersions();
-                }
+                $scope.loadDocumentVersions();
             });
         };
         $scope.initShareState = function() {
@@ -925,10 +932,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.toggleForShare = function(doc) {
             // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
             if (!doc.forShare) {
-                $scope.docShareState.doclist = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
+                $scope.docShareState.doclist
+                    = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
                 doc.forShare = true;
             } else {
-                $scope.docShareState.doclist = $scope.removeShareItem(doc, $scope.docShareState.doclist);
+                $scope.docShareState.doclist
+                    = $scope.removeShareItem(doc, $scope.docShareState.doclist);
                 doc.forShare = false;
             }
         };
