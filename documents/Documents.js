@@ -316,6 +316,7 @@ directive('draggable', ['$window', '$document',
                             for (var i = 0; i < $scope.notes.length; i++) {
                                 if ($scope.notes[i][0] === x) {
                                     $scope.notes.splice(i, 1);
+                                    $scope.$apply();
                                     return;
                                 }
                             }
@@ -850,8 +851,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 //$route.reload();
             }).except(function(x) {
                     $scope.processing = false;
-                    void(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    if (x.message.indexOf("ERROR: duplicate key value violates unique constraint") != -1) {
+                        $scope.$emit("notification:fail", "Already shared to this user");
+                    }
+                    else {
+                        $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    }
             });
         };
         $scope.countersignAction = function(conf, msg) {
@@ -1437,9 +1442,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     }
                 }
             }
-            console.log(page);
-            console.log(some);
-            console.log(allfilled);
             return some && !allfilled
         };
 
