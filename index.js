@@ -47,7 +47,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
          }*/
 
 
-        $scope.toggle = true;
+        $scope.toggle = false;
 
         $scope.opts = {
             backdropFade: true,
