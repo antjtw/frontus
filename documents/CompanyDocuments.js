@@ -143,7 +143,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         });
         $scope.getShareState = function() {
             // TODO when should we clear this out?
-            var st = angular.fromJson(sessionStorage.sharewave);
+            var st = angular.fromJson(sessionStorage.getItem("sharewave"));
+            console.log(st);
             if (!st || st==[] || st.length===0
                     || !st.emails
                     || !st.doclist
@@ -157,8 +158,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             return {doclist: [], emails: [], message: ""};
         };
         $scope.loadPrepareState = function() {
-            var st = angular.fromJson(sessionStorage.docPrepareState);
-            delete sessionStorage.docPrepareState;
+            var st = angular.fromJson(sessionStorage.getItem("docPrepareState"));
+            sessionStorage.removeItem("docPrepareState");
             if (st) {
                 angular.forEach($scope.documents, function(doc) {
                     if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
@@ -177,14 +178,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.saveShareState = function(clear) {
             if (clear) {
-                sessionStorage.sharewave = angular.toJson($scope.emptyShareState());
+                sessionStorage.removeItem("sharewave");
+                sessionStorage.setItem("sharewave",
+                        angular.toJson($scope.emptyShareState()));
             } else  {
                 if (!$scope.docShareState) {
                     $scope.docShareState = $scope.emptyShareState();
                 }
                 //$scope.docShareState.emails = $scope.multipeople;
                 $scope.docShareState.message = $scope.messageText;
-                sessionStorage.sharewave = angular.toJson($scope.docShareState);
+                sessionStorage.setItem("sharewave",
+                        angular.toJson($scope.docShareState));
             }
         };
 
@@ -204,8 +208,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
             SWBrijj.tblm('account.my_company', ['name', 'state']
             ).then(function(data) {
-                console.log(data);
-                if (data[0].name && data[0].state) {
+                if (data[0].name && data[0].state && data[0].state!=="  ") {
                     prepared=true;
                 }
                 angular.forEach($scope.smarttemplates, function(smart) {
@@ -241,12 +244,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                      'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
                 $scope.documents = data;
                 $scope.initShareState();
-                $scope.loadPrepareState();
                 $scope.mergeSmartIntoDumb();
+                $scope.loadPrepareState();
                 $scope.loadDocumentVersions();
             });
         };
         $scope.initShareState = function() {
+            console.log("initsharestate");
             $scope.docShareState = $scope.getShareState();
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
@@ -282,7 +286,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.setSigRequired = function(doc) {
-            if (doc.versions.filter(function(el) {return el.signature_deadline;}).length > 0) {
+            if (doc.versions && doc.versions.filter(function(el) {return el.signature_deadline;}).length > 0) {
                doc.signature_required = true;
             }
         };
@@ -725,7 +729,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.docStatusRatio = function(doc) {
-            if (doc) {
+            if (doc && doc.versions) {
                 var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
                 // This ensure documents with no versions appear before completed documents.
                 // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
@@ -737,6 +741,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
                 if (initRatio === Infinity) {initRatio = 0;}
                 return initRatio;
+            } else {
+                return 0;
             }
         };
 
@@ -943,12 +949,18 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.getShareType = function(doc) {
             if (!doc) {return 0;}
-            if (!doc.signature_flow) {doc.signature_flow = 0;}
+            if (!doc.signature_flow && !doc.template_id) {
+                doc.signature_flow = 0;
+            } else if (!doc.signature_flow && doc.template_id) {
+                doc.signature_flow = -1;
+            }
             return doc.signature_flow;
         };
         $scope.formatShareType = function(tp) {
-            if (!tp || tp <= 0) {
+            if (!tp || tp === 0) {
                 return 'View Only';
+            } else if (tp < 0) {
+                return 'Prepare for Signature';
             } else if (tp > 0) {
                 return 'Request Signature';
             }
@@ -1098,7 +1110,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                           "22 November 2113"
             ).then(function(data) {
                 void(data);
-                $scope.saveShareState($scope.emptyShareState());
+                $scope.saveShareState(true);
                 $scope.$emit("notification:success", "Documents shared");
                 $location.search({});
                 $route.reload();

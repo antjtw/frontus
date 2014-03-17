@@ -1266,10 +1266,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              * @type {int} */
                 if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                     // TODO saveSmartdocData here!
-                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
-                // I expect this returns true (meaning updated).  If not, the data is lost
-                if (!res) alert('failed to save annotations');
-            }
+                    var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
+                    // I expect this returns true (meaning updated).  If not, the data is lost
+                    if (!res) alert('failed to save annotations');
+                }
         });
 
         /* Save the notes when navigating away */
@@ -1286,6 +1286,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
+            if ($scope.template_original && $scope.isAnnotable) {
+                $scope.saveSmartdocData();
+            };
             if ($rootScope.lastPage
                     && ($rootScope.lastPage.indexOf("/register/") === -1)
                     && ($rootScope.lastPage.indexOf("/login/") === -1)
@@ -1293,9 +1296,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if ($rootScope.lastPage.indexOf("/company-list?share")
                         !== -1) {
                     if ($scope.template_original) {
-                        sessionStorage.docPrepareState = angular.toJson({"template_id": $scope.templateId});
+                        sessionStorage.setItem("docPrepareState", angular.toJson({"template_id": $scope.templateId}));
                     } else {
-                        sessionStorage.docPrepareState = angular.toJson({"doc_id": $scope.docId});
+                        sessionStorage.setItem("docPrepareState", angular.toJson({"doc_id": $scope.docId}));
                     }
                 }
                 document.location.href = $rootScope.lastPage;
@@ -1822,6 +1825,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveSmartdocData = function(clicked) {
+            console.log("here");
             if (!$scope.used_attributes) {return;}
             SWBrijj.proc("account.company_attribute_update",
                     "state", $scope.used_attributes.companyState
@@ -1835,6 +1839,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 console.log(x);
                 void(x);
             });
+            console.log("here2");
             if (clicked) {
                 $scope.$emit("notification:success", "Saved annotations");
             }
