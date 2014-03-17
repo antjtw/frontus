@@ -164,6 +164,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 angular.forEach($scope.documents, function(doc) {
                     if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
                         if ($scope.docIsPrepared(doc)) {
+                            console.log(doc);
                             $scope.updateShareType(doc, 2);
                             $scope.$emit("notification:success",
                                 "Success! Document prepared for signature.");
@@ -250,7 +251,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
         $scope.initShareState = function() {
-            console.log("initsharestate");
             $scope.docShareState = $scope.getShareState();
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
@@ -968,15 +968,29 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.smartdocIsPrepared = function(doc) {
             return doc.template_id && doc.is_prepared;
         };
-        // TODO iterate through annotations and make sure issuer required annotations
-        //      are filled out
+        $scope.dumbdocIsPrepared = function(doc) {
+            if (!doc) {return false;}
+            var res = true;
+            if (doc.iss_annotations && doc.iss_annotations.length>5) {
+                var notes = angular.fromJson(doc.iss_annotations);
+                angular.forEach(notes, function(note) {
+                    if (note[4].required && !note[2][0]) {
+
+                        res = false;
+                    }
+                });
+                return res;
+            } else if (doc.annotations && doc.annotations.length>5) {
+                return res;
+            }
+        };
+
         $scope.docIsPrepared = function(doc) {
             if (!doc) {return false;}
             if (doc.template_id) {
                 return $scope.smartdocIsPrepared(doc);
             } else {
-                return (doc.annotations && doc.annotations.length>5) 
-                    || (doc.iss_annotations && doc.iss_annotations.length>5);
+                return $scope.dumbdocIsPrepared(doc);
             }
         };
 
