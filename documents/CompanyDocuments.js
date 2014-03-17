@@ -169,7 +169,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             $scope.$emit("notification:success",
                                 "Success! Document prepared for signature.");
                         } else {
-                            console.log(doc);
+                            $scope.updateShareType(doc, -1);
                             $scope.$emit("notification:fail",
                                 "Oops, the document is not ready for signature. Please try again.");
                         }
@@ -841,7 +841,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
 
-        // Toggles sidebar back and forth
         $scope.upsertShareItem = function(item, list) {
             var updated = false;
             var listcopy = angular.copy(list);

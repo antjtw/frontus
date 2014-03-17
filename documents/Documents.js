@@ -1252,7 +1252,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
-            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable) return; // no changes
+            /*
+            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
+               console.log("OH NO!!!");
+               return; // no changes
+            }
+            */
 
             /** @name SWBrijj#_sync
              * @function
@@ -1264,11 +1269,24 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-                if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
-                    // TODO saveSmartdocData here!
+                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                     var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
-                    // I expect this returns true (meaning updated).  If not, the data is lost
                     if (!res) alert('failed to save annotations');
+                }
+                if ($scope.template_original && $scope.prepareable($scope.lib)) {
+                    var res2 = SWBrijj._sync('SWBrijj', 'proc',
+                            ["account.company_attribute_update",
+                             "name",
+                             $scope.used_attributes.companyName
+                             ]
+                    );
+                    var res3 = SWBrijj._sync('SWBrijj', 'proc',
+                            ["account.company_attribute_update",
+                             "state",
+                             $scope.used_attributes.companyState
+                             ]
+                    );
+                    if (!res2 || !res3) alert('failed to save annotations');
                 }
         });
 
@@ -1277,7 +1295,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             void(oldUrl);
             // don't save note data if I'm being redirected to log in
-            // TODO why?
             if (newUrl.match(/login([?]|$)/)) return;
             $scope.saveNoteData();
             $scope.saveSmartdocData();
@@ -1286,19 +1303,19 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($scope.template_original && $scope.isAnnotable) {
-                $scope.saveSmartdocData();
-            };
             if ($rootScope.lastPage
                     && ($rootScope.lastPage.indexOf("/register/") === -1)
                     && ($rootScope.lastPage.indexOf("/login/") === -1)
                     && ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if ($rootScope.lastPage.indexOf("/company-list?share")
-                        !== -1) {
+                if ($rootScope.lastPage.indexOf("/company-list?share") !== -1) {
                     if ($scope.template_original) {
-                        sessionStorage.setItem("docPrepareState", angular.toJson({"template_id": $scope.templateId}));
+                        sessionStorage.setItem("docPrepareState",
+                                angular.toJson({template_id: $scope.templateId,
+                                                doc_id: $scope.docId}));
                     } else {
-                        sessionStorage.setItem("docPrepareState", angular.toJson({"doc_id": $scope.docId}));
+                        sessionStorage.setItem("docPrepareState",
+                                angular.toJson({template_id: $scope.templateId,
+                                                doc_id: $scope.docId}));
                     }
                 }
                 document.location.href = $rootScope.lastPage;
@@ -1825,7 +1842,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveSmartdocData = function(clicked) {
-            console.log("here");
             if (!$scope.used_attributes) {return;}
             SWBrijj.proc("account.company_attribute_update",
                     "state", $scope.used_attributes.companyState
@@ -1839,7 +1855,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 console.log(x);
                 void(x);
             });
-            console.log("here2");
             if (clicked) {
                 $scope.$emit("notification:success", "Saved annotations");
             }
