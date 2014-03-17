@@ -111,7 +111,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return M;
         })();
 
-        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/"];
+        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/", "/pricing/", "/survey/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.

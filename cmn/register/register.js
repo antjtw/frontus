@@ -9,7 +9,7 @@ reg.directive('registerForm', function() {
         controller: ['$scope','SWBrijj', function($scope, SWBrijj) {
 
             $scope.user = {};
-            $scope.$parent.toggle = true;
+            $scope.$parent.toggle = false;
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             $scope.fieldCheck = function(email) {
