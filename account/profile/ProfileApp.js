@@ -150,8 +150,9 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             }
             SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
                 $scope.investor_attributes[attribute][0] = value;
+                $scope.$emit("notification:success", "Profile successfully updated");
             }).except(function(err) {
-            });
+                });
         };
 
         $scope.profileopts = {

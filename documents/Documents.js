@@ -679,11 +679,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
+                                console.log(attr);
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
                             });
                             $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
                             $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-                            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
                             $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
                             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
                             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
