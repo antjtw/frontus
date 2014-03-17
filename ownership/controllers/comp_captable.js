@@ -1976,7 +1976,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.isDebt = function(key) {
         var done = true;
         angular.forEach($scope.issues, function(issue) {
-            if (key == issue.issue && issue.type=="Debt") {
+            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe")) {
                 done = false
                 return false
             }

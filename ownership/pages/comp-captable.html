@@ -1065,6 +1065,24 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
                               </p>
                           </div>
+
+                        <!-- Safe tab -->
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Safe');">
+
+                              <p style="display: inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
+                                                                                                                   ng-model="activeIssue.valcap"
+                                                                                                                   onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                              </p>
+
+                              <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                        ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
+                                                                                        ng-model="activeIssue.discount"
+                                                                                        onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                              </p>
+                          </div>
                       </span>
 
 <!-- Transaction Side Bar when Editable -->
@@ -1102,7 +1120,7 @@
 
                             </p>
 
-                            <p class="rightTitle" ng-hide="tran.type =='Debt'"><span>Shares</span><input ng-disabled="toggleView();"
+                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>Shares</span><input ng-disabled="toggleView();"
                                                                                                          maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                                          ng-model="tran.units" onkeydown="testForEnter();"></p>
 
@@ -1288,6 +1306,26 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
                             </p>
                         </div>
+
+                        <!-- Safe Tab -->
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
+
+                            <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                onkeydown="testForEnter();"
+                                                                                                                ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                ng-model="tran.valcap">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                            </p>
+
+                            <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                      onkeydown="testForEnter();"
+                                                                                      ui-event="{blur : 'saveTran(tran)'}"
+                                                                                      ng-model="tran.discount">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                            </p>
+
+                        </div>
+
                         </tab>
                         <tab select="createTrantab();" heading="add"></tab>
                         </tabset>
@@ -1363,6 +1401,15 @@
 
                               <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">TERM (MONTHS)</span></p>
                           </div>
+
+                          <!-- Safe tab -->
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Safe');">
+
+                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
+
+                          </div>
                       </span>
 
 <!-- Transactions Side Bar when UnEditable -->
@@ -1425,6 +1472,16 @@
 
                                     <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span></p>
                                 </div>
+
+                                <!-- Safe Tab -->
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
+
+                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
+
+                                    <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span></p>
+
+                                </div>
+
                                 <div class="capGuide conversion-activity" ng-show="tran.convert.length > 0">
 
                                     <h2>Activity</h2>
