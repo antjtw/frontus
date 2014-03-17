@@ -241,7 +241,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
         $scope.initShareState = function() {
             $scope.docShareState = $scope.getShareState();
-            if ($scope.docShareState.doclist.length > 0) {
+            if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach($scope.docShareState.doclist, function(docToShare) {
                         if (doc.doc_id==docToShare.doc_id) {
