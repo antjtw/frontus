@@ -1729,6 +1729,10 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 10px;
 }
 
+.status-toggle > .circle:before {
+    font-size: 10px;
+}
+
 .status-toggle > .circle > span {
     font-size: 20px;
     line-height: 14px;
@@ -2318,6 +2322,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
+
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2327,6 +2332,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     font-size: 14px;
     line-height: 30px;
     cursor: default;
+
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type:hover {
@@ -2344,6 +2350,10 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     cursor: default;
 }
 
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
+    border-top: 1px solid #E3E3E3;
+}
+
 .topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
     background-color: #FFFFFF;
     color: #656565;
@@ -2356,7 +2366,6 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     margin-top: 10px;
     margin-right: -135px;
 }
-
 
 .nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
     display: inline-block;
@@ -2372,6 +2381,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     width: -moz-calc(100% - 58px) !important;
     width: -webkit-calc(100% - 58px) !important;
     width: calc(100% - 58px) !important;
+
 }
 
 .nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
@@ -2422,6 +2432,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .bottomnav .nav > .standard.menu-drop .dropdown-menu > li {
     padding: 0 0 0 20px;
 }
+
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child {
+    color: #A6A6A6;
+    font-style: italic;
+}
+
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
@@ -2649,7 +2665,7 @@ button.icon-button:hover {
     background-color: #F1F1F1;
     border-radius: 3px;
     margin: 0;
-    color: rgb(102, 102, 102);
+    color: #666666;
 }
 .navbar.bottomnav .nav > .standard .dropdown-toggle {
     border-radius: 0;
@@ -3273,6 +3289,30 @@ button.icon-button:hover {
 
 .modalText.settings > div > ul {
     float: right;
+}
+
+
+.modal .input-row-new {
+    width: 320px;
+    height: 40px;
+    margin: 20px 20px 0 20px;
+}
+
+.modal .input-row-new > p {
+    margin: 0;
+    float: left;
+    width: 100px;
+    text-align: right;
+    line-height: 32px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.modal .input-row-new > input {
+    float:right;
+    width: 200px;
+    height: 30px;
+    margin: 0;
 }
 
 

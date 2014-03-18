@@ -472,6 +472,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.grantUpdateLR = function(tran, type) {
         var currentgrants = 0;
         var grantlist = [];
+        if (tran[type]) {
+            tran[type] = String(tran[type]).replace(/\,/g,'');
+        }
         angular.forEach($scope.grants, function(grant) {
             if (grant.tran_id == tran.tran_id && grant.action == type && grant.unit != null) {
                 currentgrants += grant.unit;
@@ -540,6 +543,9 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             }
             var d1 = grant['date'].toUTCString();
             grant.action = type;
+            if (grant.unit) {
+                grant.unit = String(grant.unit).replace(/\,/g,'');
+            }
             grant.unit = parseFloat(grant.unit);
             SWBrijj.proc('ownership.update_grant', String(grant.grant_id), String(grant.tran_id), String(grant.action), d1, grant.unit).then(function (data) {
                 $scope.lastsaved = Date.now();
@@ -638,6 +644,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
                 }
+
+                if (transaction.units) {
+                    transaction.units = String(transaction.units).replace(/\,/g,'');
+                }
+                if (transaction.amount) {
+                    transaction.amount = String(transaction.amount).replace(/\,/g,'');
+                }
+
                 // Convert amount to a float but remove the NaNs if amount is undefined
                 transaction['amount'] = parseFloat(transaction['amount']);
                 if (isNaN(transaction['amount'])) {

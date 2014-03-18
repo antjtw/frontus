@@ -772,6 +772,9 @@ ownership.service('switchval', function () {
         else if (activetype == "Equity" && type == "Equity") {
             return true;
         }
+        else if (activetype == "Safe" && type == "Safe") {
+            return true;
+        }
         else {
             return false;
         }

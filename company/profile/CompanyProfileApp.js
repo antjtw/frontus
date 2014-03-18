@@ -496,7 +496,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
         $scope.viewInvestorCopy = function(version) {
-            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
         $scope.viewVersionStatus = function(version) {
             document.location.href = "/documents/company-status?doc=" + version.original;

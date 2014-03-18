@@ -2,26 +2,22 @@
 <div class="container">
 
 <div modal="tourModal" close="tourclose();" options="touropts">
-    <div class="modalHeader">
-        <span>Prepare document for signatures</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="tourclose();"></span>
+    <div class="modal-title">
+        <p>
+            How to Share Documents
+        </p>
     </div>
     <div class="modalText">
         <div class="row-fluid">
             <div class="span6">
-                <ul>
-                    <li>1. <span>Click the icons to activate different types of markers</span></li>
-                    <li>2. <span>Drag the markers where you need the recipients to annotate</span></li>
-                    <li>3. <span>Click the next button and choose the email addresses of the recipients you need signatures from</span></li>
-                    <li class='blue-link'><span ng-click="tourclose();">Ok. I got it!</span></li>
-                </ul>
+                <img src="/img/gif/issuer-modal.gif">
             </div>
-            <div class="span6">
-                <ul>
-                    <li><img src="/img/dochelp/tools.png"></li>
-                    <li><img src="/img/dochelp/markers.png"></li>
-                    <li><img src="/img/dochelp/button.png"></li>
-                </ul>
+            <div class="span5 gif-text">
+                 <p>
+                    <span class="subtitle">Prepare your document for sharing</span>
+                     Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information.
+                 </p>
+                <p class='blue-link'><span ng-click="tourclose(); sharinggot();">Ok, I got it!</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
             </div>
         </div>
     </div>

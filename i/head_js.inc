@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var _kmq = _kmq || [];
-if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
+if ((window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") && document.location.pathname.indexOf("timeout") == -1) {
     var _kmk = _kmk || '6fca73192583d11a98c3793b72f5975712a17c5c';
     function _kms(u){
       setTimeout(function(){

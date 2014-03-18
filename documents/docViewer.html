@@ -1,6 +1,56 @@
 <script src="/cmn/spin.js"></script>
 <link type="text/css" rel="stylesheet" href="/documents/docViewer.css">
 <div class="modal-backdrop" style="opacity:0.9;"></div>
+
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Pick your Signature
+        </p>
+    </div>
+    <div class="sigmodal modalText">
+        <div class="row-fluid">
+            <div class="imgsig span6">
+                <div ng-hide="scribblemode" ng-style="{{signaturestyle}}" >
+                    <img id="signaturevisual" ng-src="{{signatureURL}}">
+                </div>
+                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                    <canvas id="scribbleboard"></canvas>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <div class="span6 gif-text">
+                <p>
+                    Upload an image or draw out your signature. We'll scale it to fit the signature box, and store it in your profile for future use.
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="fakefile">
+                                <span>CHOOSE FILE</span>
+                            </div>
+                        </div>
+                        <div class="scribblebutton">
+                            <button ng-click="createNewSignature()">Draw Signature</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green" style="margin-right: 30px;">
+            <button class="btn"
+                    ng-click="uploadSignatureNow();"
+                    ng-disabled="files.length===0">Done</button>
+        </div>
+        <div class="pull-right standard-button gray">
+            <button class="btn"
+                    ng-click="sigclose();">Cancel</button>
+        </div>
+    </div>
+</div>
 <div class="docViewer" ng-hide="hidePage">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
@@ -23,13 +73,6 @@
         <div class="docViewerControls">
             <!--Annotation Controls-->
             <div ng-show="stage===0 || stage==-1">
-                <div ng-cloak class="tools pull-left" ng-class="{hidden: !isAnnotable}">
-                    <button ng-click="newPad($event)"><span data-icon="&#xe00d;" aria-hidden="true"></span></button>
-                    <button ng-click="newCheck($event)"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                    <button ng-click="newBox($event)"><span data-icon="&#xe01d;" aria-hidden="true"></span></button>
-                    <button ng-click="newDate($event)"><span data-icon="&#xe025;" aria-hidden="true"></span></button>
-                    <!-- <button ng-click="newSignature($event)"><span data-icon="&#xe02e;" aria-hidden="true"></span></button>  -->
-                </div>
                 <div class="pageTurn pull-left" ng-hide="template_original">
                     <ul>
                         <li class="button" ng-click="previousPage(currentPage)">
@@ -53,12 +96,12 @@
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
-                        <button class="btn" ng-click="setStage(1);">
+                        <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
                             Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
-                    <div class="pull-right tools" ng-class="{hidden: !isAnnotable}">
+                    <div class="pull-right tools" ng-class="{hidden: !isAnnotable || countersignable(lib)}">
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
@@ -90,7 +133,7 @@
                 </div>
                 <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                <span ng-show="countersignable(lib)">Confirm Electronic Countersignature</span>
+                <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
@@ -133,27 +176,22 @@
                 </div>
             </div>
         </div>
-        <div class="page-bar" ng-show="showPageBar() && stage===0">
+        <div ng-show="stage===0" class="page-bar">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
-                <li class="page-icons button" style="font-size: 150%;" ng-click="pageBarLeft();">
-                    <span ng-hide="pageScroll===0" data-icon="&#xe032;"></span>
-                </li>
                 <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
-                    ng-class="{'cur-page':page===currentPage}"
+                    ng-class="{'cur-page':page===currentPage, 'red-tab': hasUnfilled(page), 'green-tab': allFilled(page)}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">
                     <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
                     <span> {{page}}</span>
                 </li>
-                <li class="page-icons button" ng-click="pageBarRight();">
-                    <span ng-show="morePages()" data-icon="&#xe033;"></span>
-                </li>
             </ul>
         </div>
     </div>
-    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid" ng-class="{'annotatedPageBar':showPageBar()}">
-        <div class="docPanel" ng-show="docId" data-back-img="{{pageImageUrl()}}"/>
+    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
+        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
+
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
@@ -191,8 +229,7 @@
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                         </li>
                         <li class="pull-left">
-                            <span>Countersign Document</span><br>
-                            <span>Electonically countersign this document.</span>
+                            <span>Approve Document</span><br>
                         </li>
                     </ul>
                     <br>

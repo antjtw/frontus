@@ -339,6 +339,8 @@ address {
 }
 
 
+
+
 @media (min-width: 1000px) {
     .feature-block .screen {
         width: 514px;
@@ -352,6 +354,13 @@ address {
     }
 }
 
+
+@media (max-width: 1000px) {
+    .feature-block .screen {
+        display: none;
+    }
+
+}
 
 
 @media (max-width: 380px) {
@@ -382,4 +391,23 @@ address {
         max-width: 124px;
     }
 
+}
+
+/* Pricing page */
+
+.pricing.static {
+    text-align: center;
+    background-color: #34495E;
+    height: 220px;
+    padding-top: 100px;
+}
+
+.pricing.static h1, .pricing.static p {
+    color: #FFFFFF;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+}
+
+.pricing.static p {
+    font-size: 20px;
+    line-height: 26px;
 }
