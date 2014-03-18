@@ -1314,7 +1314,7 @@
                                                                                                                 onkeydown="testForEnter();"
                                                                                                                 ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                 ng-model="tran.valcap">
-                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcapsafe"></span>
                             </p>
 
                             <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
@@ -1405,7 +1405,7 @@
                           <!-- Safe tab -->
                           <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Safe');">
 
-                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">VALUATION CAP</span></p>
+                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">VALUATION CAP</span></p>
 
                               <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
 
@@ -1476,7 +1476,7 @@
                                 <!-- Safe Tab -->
                                 <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
 
-                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the debt notes convert to equity">Valuation Cap</span></p>
+                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">Valuation Cap</span></p>
 
                                     <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span></p>
 
