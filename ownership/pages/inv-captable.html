@@ -168,6 +168,17 @@
                             <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
 
                         </div>
+
+                        <!-- Warrant tab -->
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Warrant');">
+
+                              <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">TERM (MONTHS)</span></p>
+
+                              <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">STRIKE PRICE</span></p>
+
+                          </div>
                       </span>
 
 
@@ -237,6 +248,15 @@
                                     <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">Valuation Cap</span></p>
 
                                     <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span></p>
+
+                                </div>
+
+                                <!-- Warrant Tab -->
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
+
+                                    <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">Term (months)</span></p>
+
+                                    <p ng-show="tran.price" class="belowTitle"><span ng-bind="formatDollarAmount(tran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">Strike Price</span></p>
 
                                 </div>
 

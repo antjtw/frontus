@@ -38,6 +38,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
     $scope.captabletips.totalgranted = "The sum total of shares granted";
     $scope.captabletips.price = "The price each granted share can be purchased at when vested";
+    $scope.captabletips.pricewarrant = "The price each granted share can be purchased at";
     $scope.captabletips.terms = "The total number of months until fully vested";
     $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
@@ -48,6 +49,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
+    $scope.captabletips.termwarrant = "The term of the warrant before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock";
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
@@ -1154,10 +1156,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         // Remove any commas added to the numbers
         if (transaction.units) {
-            transaction.units = String(transaction.units).replace(/\,/g,'');
+            transaction.units = calculate.cleannumber(transaction.units);
         }
         if (transaction.amount) {
-            transaction.amount = String(transaction.amount).replace(/\,/g,'');
+            transaction.amount = calculate.cleannumber(transaction.amount);
         }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             transaction.units = transaction.unitskey;
@@ -1977,7 +1979,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.isDebt = function(key) {
         var done = true;
         angular.forEach($scope.issues, function(issue) {
-            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe")) {
+            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe" || issue.type=="Warrant")) {
                 done = false
                 return false
             }
