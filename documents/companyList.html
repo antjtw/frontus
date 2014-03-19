@@ -332,7 +332,7 @@
                          ng-click="shareDocuments(docShareState.doclist,
                                    docShareState.emails, messageText)"
                          ng-disabled="checkmany(docShareState.emails)
-                                      || !docShareState.doclist.length>0">
+                                      || !docsReadyToShare(docShareState.doclist)">
                      Share Documents
                  </button>
              </div>

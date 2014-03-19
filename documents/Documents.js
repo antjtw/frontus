@@ -675,11 +675,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             else {
                 $scope.forsigning = true;
                 SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
+                    console.log(raw_html);
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
-                                console.log(attr);
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
                             });
                             $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);

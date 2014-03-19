@@ -1095,6 +1095,30 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
             return anybad;
         };
+        $scope.docsReadyToShare = function(docs) {
+            if (!docs || docs.length===0) {return false;}
+            var count = 0;
+            angular.forEach($scope.documents, function(doc) {
+                if (doc.forShare) {
+                    count += 1;
+                }
+            });
+            if (count !== docs.length) {
+                console.log("counts don't match");
+                return false;
+            }
+            var res = true;
+            angular.forEach(docs, function(doc) {
+                // FIXME 'doc' is not the full doc, doesn't have is_prepared.
+                // get the full doc and check that
+                if (doc.signature_flow < 0) {
+                    res = false;
+                    console.log(doc);
+                    console.log("doc not ready");
+                }
+            });
+            return res;
+        };
 
         $scope.select2Options = {
             'multiple': true,
@@ -1118,6 +1142,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee === "" ? "!!!" : tosee;
+            console.log(JSON.stringify(docsToShare));
             SWBrijj.document_multishare(
                           tosee.substring(1).toLowerCase(),
                           JSON.stringify(docsToShare),
@@ -1434,7 +1459,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
-            // TODO
             if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
@@ -1633,8 +1657,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.documentshareOpen = function() {
-            // TODO open documentshare modal once implemented on this page
-            $location.path('/company-list');
+            $location.path('/company-list?share');
             $location.search({});
         };
 
@@ -2103,7 +2126,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.rejectCountersignature = function(msg) {
             $scope.processing = true;
-            // TODO
             if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
