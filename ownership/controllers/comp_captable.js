@@ -68,7 +68,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
     SWBrijj.procm('ownership.get_transaction_types').then(function (results) {
         angular.forEach(results, function (result) {
-            $scope.issuetypes.push(result['get_transaction_types']);
+            // Made a booboo in the database that is surprisingly hard to fix. Extra enum value "warrant" as opposed to "Warrant"
+            if (result['get_transaction_types'] != "warrant") {
+                $scope.issuetypes.push(result['get_transaction_types']);
+            }
         });
     });
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
