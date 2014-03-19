@@ -439,5 +439,24 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
     };
 
+    $scope.grantbyIssue = function (key) {
+        var type = "";
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == key) {
+                if (issue.type == "Option") {
+                    type = "options";
+                }
+                else if (issue.type == "Warrant") {
+                    type = "warrants";
+                }
+                else {
+                    type = "shares";
+                }
+
+            }
+        });
+        return type
+    };
+
 
 };

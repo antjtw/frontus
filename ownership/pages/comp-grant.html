@@ -687,7 +687,7 @@
                   <ul class="grant-list-view">
                       <li>
                           <span>Date</span>
-                          <span>Shares</span>
+                          <span>Options</span>
                       </li>
                       <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
                           <span ng-bind="act.date | date:settings.shortdate"></span>
@@ -703,7 +703,7 @@
                 <ul class="grant-list-view">
                     <li>
                         <span>Date</span>
-                        <span>Shares</span>
+                        <span>Options</span>
                     </li>
                     <li ng-show="act.unit"
                         ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
@@ -722,7 +722,7 @@
                 <ul class="grant-list-view">
                     <li>
                         <span>Date</span>
-                        <span>Shares</span>
+                        <span>Options</span>
                     </li>
                     <li ng-repeat="grant in activeTran.vested">
                         <span ng-bind="grant.date | date:settings.shortdate"></span>

@@ -28,7 +28,7 @@
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues">
-                    <span>SHARES</span>
+                    <span>{{grantbyIssue(one.issue)}}</span>
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
@@ -192,7 +192,7 @@
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
-                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
+                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>{{grantbyIssue(tran.issue)}}</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
