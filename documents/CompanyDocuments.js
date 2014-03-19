@@ -319,6 +319,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportVersionToPdf = function(version) {
+            $scope.$emit("notification:success", "Export in progress.");
             SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
