@@ -256,7 +256,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach($scope.docShareState.doclist, function(docToShare) {
-                        if (doc.doc_id==docToShare.doc_id) {
+                        if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
                             doc.forShare = true;
                             doc.signature_flow = docToShare.signature_flow;
                         }
