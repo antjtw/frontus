@@ -101,10 +101,10 @@
             <tr class="empty-row"></tr>
             <tr ng-class="{selectedrow:doc.shown}">
                 <td class="status-toggle"
-                    ng-class="{'pointer':doc.versions[0], 'status-toggle-on': doc.shown}"
+                    ng-class="{'pointer':(doc.versions[0] && allArchived(doc.versions)), 'status-toggle-on': (doc.shown && allArchived(doc.versions))}"
                     ng-click="!doc.versions[0] || opendetails(doc)">
-                    <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
-                    <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    <span ng-hide="!allArchived(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                    <span ng-show="doc.shown && (doc.versions[0] && allArchived(doc.versions))" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
                 <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                     <ul>

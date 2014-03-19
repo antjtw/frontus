@@ -603,10 +603,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                             }
                         });
                     }
-                    return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length - archived) +
-                        " / " +
-                        total +
-                        " documents";
+                    var docnumber = ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length - archived)
+                    if (!docnumber && !total) {
+                        return "All documents archived";
+                    }
+                    else {
+                        return docnumber +
+                            " / " +
+                            total +
+                            " documents";
+                    }
                 }
             }
         };
@@ -889,6 +895,21 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(x);
                 $scope.$emit("notification:fail", "Document deletion failed.");
             });
+        };
+
+        $scope.allArchived = function(versions) {
+            var result = 0;
+            if ($scope.archivestate) {
+                result = 1;
+            }
+            else {
+                angular.forEach(versions, function(version) {
+                    if (!version.archived) {
+                        result += 1;
+                    }
+                });
+            }
+            return result > 0 ? true : false;
         };
 
         $scope.archiveDoc = function(version) {
