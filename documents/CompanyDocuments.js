@@ -319,10 +319,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportVersionToPdf = function(version) {
+            SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id).then(function(url) {
+                document.location.href = url;
+            });
+        };
+        /*
+        $scope.exportVersionToPdf = function(version) {
             SWBrijj.procd('sharewave-' + version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
+        */
         $scope.prepareDocument = function(doc) {
             $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
         };
