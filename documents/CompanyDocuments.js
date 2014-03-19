@@ -895,7 +895,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.change_archive_state", version.doc_id, "true").then(function(data) {
                 void(data);
                 version.archived = true;
-                $scope.$emit("notification:success", version.docname + " archived.");
+                $scope.$emit("notification:success", "Document archived.");
             }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Document archive failed.");
@@ -906,7 +906,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             SWBrijj.procm("document.change_archive_state", version.doc_id, "false").then(function(data) {
                 void(data);
                 version.archived = false;
-                $scope.$emit("notification:success", version.docname + " unarchived.");
+                $scope.$emit("notification:success", "Document unarchived.");
             }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Document unarchive failed.");
