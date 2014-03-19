@@ -94,7 +94,7 @@
                         </li>
                     </ul>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib))}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
                             Next

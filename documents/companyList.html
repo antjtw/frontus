@@ -178,6 +178,7 @@
                                 <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
                                 <li ng-click="viewStatus(doc)">View Status</li>
                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
+                                <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocument(version)">Void Document</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
                                 <!--<li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                             </ul>

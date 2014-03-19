@@ -55,6 +55,7 @@
                             <div class="standard-button small-standard-button">
                                 <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc)">Sign</button>
                                 <button ng-show="isPendingFinalization(doc)" class="btn" ng-click="gotoDoc(doc)">Approve</button>
+                                <button ng-show="isPendingVoid(doc)" class="btn" ng-click="gotoDoc(doc)">Void</button>
                             </div>
                             <ul class="dropdown-list">
                                 <li class="dropdown standard menu-drop">

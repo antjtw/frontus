@@ -1710,6 +1710,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                    ($scope.invq && doc && doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
         };
 
+        $scope.voidable = function(doc) {
+            return (doc && doc.when_countersigned && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted);
+        };
+
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
 
         $scope.reqDocStatus = function(doc_id) {
