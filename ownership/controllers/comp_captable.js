@@ -1982,7 +1982,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.isDebt = function(key) {
         var done = true;
         angular.forEach($scope.issues, function(issue) {
-            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe" || issue.type=="Warrant")) {
+            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe")) {
                 done = false
                 return false
             }
@@ -2420,6 +2420,25 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (link) {
             document.location.href = link;
         }
+    };
+
+    $scope.grantbyIssue = function (key) {
+        var type = "";
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == key) {
+                if (issue.type == "Option") {
+                    type = "options";
+                }
+                else if (issue.type == "Warrant") {
+                    type = "warrants";
+                }
+                else {
+                    type = "shares";
+                }
+
+            }
+        });
+        return type
     };
 
     //switches the sidebar based on the type of the issue

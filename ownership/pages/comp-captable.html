@@ -610,7 +610,7 @@
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues | issueviewList">
-                    <span>SHARES</span>
+                    <span>{{grantbyIssue(one.issue)}}</span>
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
@@ -639,7 +639,7 @@
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
-                                 placeholder="shares"
+                                 placeholder="{{grantbyIssue(key)}}"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
                                  onkeydown="testForEnter();">
@@ -1155,7 +1155,7 @@
 
                             </p>
 
-                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe' || tran.type == 'Warrant'"><span>Shares</span><input ng-disabled="toggleView();"
+                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
                                                                                                          maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                                          ng-model="tran.units" onkeydown="testForEnter();"></p>
 

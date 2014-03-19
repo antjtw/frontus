@@ -204,19 +204,19 @@
                            ng-change="fauxupdating(tran)"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
                 <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
@@ -340,7 +340,7 @@
 
                   </p>
 
-                  <p class="rightTitle"><span>Units</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                  <p class="rightTitle"><span>Options</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                  ng-model="activeTran.units"></p>
 
                   <p class="rightTitle"><span>Strike Price</span><input ui-event="{blur : 'saveTran(activeTran)'}"
