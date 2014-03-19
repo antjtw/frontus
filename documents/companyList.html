@@ -10,36 +10,40 @@
                 <div class="subnav-controls doclist-controls">
                     <div>
                         <div class="pull-left" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>VIEW BY</span>
-
                             <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 {{ viewBy | viewByPrinter }}
                             </a>
-
                                     <ul class="dropdown-menu">
-                                        <li> <a ng-click="setViewBy('document')" class="button">Document</a>
-
+                                        <li>
+                                            <a ng-click="setViewBy('document')" class="button">Document</a>
                                         </li>
-                                        <li> <a ng-click="setViewBy('name')" class="button">Name</a>
-
+                                        <li> 
+                                            <a ng-click="setViewBy('name')" class="button">Name</a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>HIDE COMPLETED</span>
-
-                            <button class="check-box-button" ng-class="{'selected':maxRatio===2}"
-                            ng-click="toggleMaxRatio()"> <span data-icon="&#xe023;" aria-hidden="true"></span>
-
+                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                            <span>HIDE COMPLETED</span>
+                            <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
+                                <span data-icon="&#xe023;" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                            <span>SHOW ARCHIVED</span>
+                            <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
+                                <span data-icon="&#xe023;" aria-hidden="true"></span>
                             </button>
                         </div>
                         <div class="pull-left"> <span>SEARCH</span>
-
                             <input type="text" class="search-box" ng-model="query">
                         </div>
-                        <div class="box-button pull-right" ng-class="{selected:!hideSharebar}" ng-show="documents.length!==0"
-                        ng-click="toggleSide();">
+                        <div class="box-button pull-right"
+                             ng-class="{selected:!hideSharebar}"
+                             ng-show="documents.length!==0"
+                             ng-click="toggleSide();">
                             <ul>
                                 <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
@@ -59,24 +63,6 @@
                             </ul>
                         </div>
                     </div>
-                
-                <div class="pull-left checkboxitem">
-                    <span>HIDE COMPLETED</span>
-                    <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
-                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="pull-left checkboxitem">
-                    <span>SHOW ARCHIVED</span>
-                    <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
-                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="pull-left">
-                    <span>SEARCH</span>
-                    <input type="text" class="search-box" ng-model="query">
-                </div>
-
                     <div class="DivHelper"></div>
                 </div>
             </div>
