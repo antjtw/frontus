@@ -1192,6 +1192,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.shareDocuments = function(docsToShare, emails, message) {
+            $scope.processing = true;
             if (message == "Add an optional message...") {
                 message = null;
             }
@@ -1217,7 +1218,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.$emit("notification:success", "Documents shared");
                 $location.search({});
                 $route.reload();
+                $scope.processing=false;
             }).except(function(err) {
+                $scope.processing=false;
                 console.log(err);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });

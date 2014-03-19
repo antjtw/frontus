@@ -610,6 +610,10 @@ textarea.email-text {
 .shareForm {
     padding-top: 40px;
 }
+.shareForm .my-loading-spinner-container > div {
+    left: 50%;
+    height: 60px;
+}
 .shareForm > .sharepeople-input {
     padding-bottom: 40px;
 }

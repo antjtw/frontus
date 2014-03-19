@@ -1,3 +1,4 @@
+<script src="/cmn/spin.js"></script>
 <div class="maincontent openflow">
     <div class="container dynamic-page doclistFlow">
         <div class="row-fluid">
@@ -330,18 +331,20 @@
                  <h2 class="right-bar-header">SHARE DOCUMENTS</h1>
      <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
      <div class="shareForm">
+     <!--<div class="shareForm" my-loading-spinner="processing">-->
+     <div>
          <span>Recipients</span>
          <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="docShareState.emails">
          </div>
          <span>Message</span>
          <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
-         <div class="controls">
+         <div class="controls" my-loading-spinner="processing">
              <div class="standard-button pull-right">
                  <button class="btn"
                          ng-click="shareDocuments(docShareState.doclist,
                                    docShareState.emails, messageText)"
-                         ng-disabled="checkmany(docShareState.emails)
+                         ng-disabled="processing || checkmany(docShareState.emails)
                                       || !docsReadyToShare(docShareState.doclist)">
                      Share Documents
                  </button>
