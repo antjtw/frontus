@@ -207,11 +207,11 @@
             <tr class="empty-row"></tr>
             <tr ng-class="{selectedrow:investor.shown}">
                 <td class="status-toggle"
-                    ng-class="{'pointer':investor.versions[0], 'status-toggle-on':investor.shown}"
+                    ng-class="{'pointer':(investor.versions[0] && allArchived(investor.versions)), 'status-toggle-on':(investor.shown && allArchived(investor.versions))}"
                     ng-click="!investor.versions[0] || opendetails(investor)">
-                    <span ng-hide="investor.shown || !investor.versions[0]" data-icon="&#xe017;"
+                    <span ng-hide="!allArchived(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;"
                           aria-hidden="true"></span>
-                    <span ng-show="investor.shown && investor.versions[0]" data-icon="&#xe01c;"
+                    <span ng-show="investor.shown && (investor.versions[0] && allArchived(investor.versions))" data-icon="&#xe01c;"
                           aria-hidden="true"></span>
                 </td>
                 <td class="shareholder-column docname-column">
@@ -246,7 +246,7 @@
                 </td>
             </tr>
             <tr ng-show="investor.shown" class="sub-row"
-                ng-repeat="version in investor.versions | orderBy:versionOrder">
+                ng-repeat="version in investor.versions | archived: archivestate | orderBy:versionOrder">
                 <td class="status-toggle"></td>
                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                     <ul>
