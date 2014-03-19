@@ -321,6 +321,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.exportVersionToPdf = function(version) {
             SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id).then(function(url) {
                 document.location.href = url;
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
         /*
