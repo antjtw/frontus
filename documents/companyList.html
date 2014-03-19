@@ -35,6 +35,12 @@
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
+                <div class="pull-left checkboxitem">
+                    <span>SHOW ARCHIVED</span>
+                    <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </div>
                 <div class="pull-left">
                     <span>SEARCH</span>
                     <input type="text" class="search-box" ng-model="query">
@@ -138,7 +144,7 @@
                     </ul>
                 </td>
             </tr>
-            <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
+            <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | archived: archivestate | orderBy:versionOrder">
                 <td class="status-toggle"></td>
                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                     <ul>
@@ -155,7 +161,7 @@
                 </td>
                 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                     <ul>
-                        <li>{{shortVersionStatus(version)}}</li>
+                        <li>{{shortVersionStatus(version)}} <span ng-show="archivestate && version.archived"> & archived</span></li>
                         <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                     </ul>
                 </td>
@@ -178,6 +184,8 @@
                                 <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
                                 <li ng-click="viewStatus(doc)">View Status</li>
                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
+                                <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
+                                <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
                                 <!--<li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
                             </ul>

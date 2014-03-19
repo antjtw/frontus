@@ -270,6 +270,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         $scope.signeeded = "No";
         $scope.messageText = "Add an optional message...";
         $scope.query = "";
+        $scope.archivestate = false;
+
+        $scope.toggleArchived = function() {
+            $scope.archivestate = !$scope.archivestate;
+        };
 
         // Only allow docOrder to be set -- versionOrder is fixed
         $scope.setOrder = function(field) {
@@ -583,9 +588,24 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (doc.versions.length === 0) {
                     return "";
                 } else {
-                    return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length) +
+                    var total = 0;
+                    var archived = 0;
+                    if ($scope.archivestate) {
+                        total = doc.versions.length;
+                    }
+                    else {
+                        angular.forEach(doc.versions, function (version) {
+                            if (!version.archived) {
+                                total += 1;
+                            }
+                            else {
+                                archived += 1
+                            }
+                        });
+                    }
+                    return ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length - archived) +
                         " / " +
-                        doc.versions.length +
+                        total +
                         " documents";
                 }
             }
@@ -869,6 +889,28 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(x);
                 $scope.$emit("notification:fail", "Document deletion failed.");
             });
+        };
+
+        $scope.archiveDoc = function(version) {
+            SWBrijj.procm("document.change_archive_state", version.doc_id, "true").then(function(data) {
+                void(data);
+                version.archived = true;
+                $scope.$emit("notification:success", version.docname + " archived.");
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Document archive failed.");
+                });
+        };
+
+        $scope.unarchiveDoc = function(version) {
+            SWBrijj.procm("document.change_archive_state", version.doc_id, "false").then(function(data) {
+                void(data);
+                version.archived = false;
+                $scope.$emit("notification:success", version.docname + " unarchived.");
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Document unarchive failed.");
+                });
         };
 
         // Multisharing modal functions
@@ -1358,6 +1400,11 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         }
 
         $scope.signeeded = "No";
+        $scope.archivestate = false;
+
+        $scope.toggleArchived = function() {
+            $scope.archivestate = !$scope.archivestate;
+        };
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -2204,5 +2251,18 @@ docviews.directive('contenteditable', function() {
             // load init value from DOM
             ctrl.$setViewValue(elm.text());
         }
+    };
+});
+
+// Returns the rows not including the selected investor
+docviews.filter('archived', function () {
+    return function (versions, archive) {
+        var returnrows = [];
+        angular.forEach(versions, function (version) {
+            if (archive || version.archived == false) {
+                returnrows.push(version);
+            }
+        });
+        return returnrows;
     };
 });
