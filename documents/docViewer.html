@@ -63,10 +63,10 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div ng-show="(template_original && isAnnotable) || prepareable(lib)" class="small-standard-button standard-button green">
+                    <div ng-show="prepareable(lib)" class="small-standard-button standard-button green">
                         <button class="btn" ng-click="leave()">Done</button>
                     </div>
-                    <div ng-hide="(template_original && isAnnotable) || prepareable(lib)" class="small-standard-button standard-button gray">
+                    <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
                         <button class="btn" ng-click="leave()">Exit</button>
                     </div>
                 </div>
