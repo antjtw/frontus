@@ -1719,7 +1719,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.prepareable = function(doc) {
-            return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original);
+            return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
         };
 
         $scope.signable = function(doc) {
@@ -1844,13 +1844,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes) {return;}
             SWBrijj.proc("account.company_attribute_update",
-                    "state", $scope.used_attributes.companyState
+                    "state", ($scope.used_attributes.companyState || "")
             ).then(function(x) {
                 console.log(x);
                 void(x);
             });
             SWBrijj.proc("account.company_attribute_update",
-                    "name", $scope.used_attributes.companyName
+                    "name", ($scope.used_attributes.companyName || "")
             ).then(function(x) {
                 console.log(x);
                 void(x);
