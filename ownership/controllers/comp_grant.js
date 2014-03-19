@@ -646,10 +646,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 }
 
                 if (transaction.units) {
-                    transaction.units = String(transaction.units).replace(/\,/g,'');
+                    transaction.units = calculate.cleannumber(transaction.units);
                 }
                 if (transaction.amount) {
-                    transaction.amount = String(transaction.amount).replace(/\,/g,'');
+                    transaction.amount = calculate.cleannumber(transaction.amount);
                 }
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
