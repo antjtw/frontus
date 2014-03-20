@@ -675,7 +675,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             else {
                 $scope.forsigning = true;
                 SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
-                    console.log(raw_html);
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                             $scope.investor_attributes = {};
@@ -1842,7 +1841,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.saveSmartdocData = function(clicked) {
-            if (!$scope.used_attributes) {return;}
+            if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
             SWBrijj.proc("account.company_attribute_update",
                     "state", ($scope.used_attributes.companyState || "")
             ).then(function(x) {

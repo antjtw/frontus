@@ -150,8 +150,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             console.log(x);
         });
         $scope.getShareState = function() {
-            // TODO when should we clear this out?
             var st = angular.fromJson(sessionStorage.getItem("sharewave"));
+            sessionStorage.removeItem("sharewave");
             console.log(st);
             if (!st || st==[] || st.length===0
                     || !st.emails
