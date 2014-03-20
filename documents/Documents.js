@@ -983,8 +983,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     SWBrijj.uploadSignatureImage(fd).then(function(x) {
                         $scope.uploadSuccess();
                     }).except(function(x) {
-                            $scope.uploadFail();
-                        });
+                        $scope.uploadFail();
+                    });
                 }
             }
             else {

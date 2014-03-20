@@ -141,6 +141,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             }
         });
+        // Needed for docIsPrepared
+        SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
+            if (x[0].signature.length>0) {
+                $rootScope.person.has_signature = true;
+            }
+        }).except(function(x) {
+            console.log(x);
+        });
         $scope.getShareState = function() {
             // TODO when should we clear this out?
             var st = angular.fromJson(sessionStorage.getItem("sharewave"));
@@ -163,6 +171,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (st) {
                 angular.forEach($scope.documents, function(doc) {
                     if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
+                        console.log(doc);
                         if ($scope.docIsPrepared(doc)) {
                             console.log(doc);
                             $scope.updateShareType(doc, 2);
@@ -1011,9 +1020,19 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (doc.iss_annotations && doc.iss_annotations.length>5) {
                 var notes = angular.fromJson(doc.iss_annotations);
                 angular.forEach(notes, function(note) {
-                    if (note[4].required && !note[2][0]) {
-
-                        res = false;
+                    if (note[4].required) {
+                        switch (note[4].whattype) {
+                            case "Text":
+                                if (!note[2][0]) {res = false;}
+                                break;
+                            case "ImgSignature":
+                                if (!$rootScope.person.has_signature) {
+                                    res = false;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 });
                 return res;
@@ -1186,8 +1205,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 // get the full doc and check that
                 if (doc.signature_flow < 0) {
                     res = false;
+                    /*
                     console.log(doc);
                     console.log("doc not ready");
+                    */
                 }
             });
             return res;
