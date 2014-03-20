@@ -150,30 +150,26 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             console.log(x);
         });
         $scope.getShareState = function() {
-            var st = angular.fromJson(sessionStorage.getItem("sharewave"));
-            sessionStorage.removeItem("sharewave");
+            var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
             console.log(st);
+            sessionStorage.removeItem("sharewave");
             if (!st || st==[] || st.length===0
-                    || !st.emails
-                    || !st.doclist
-                    || !st.message) {
-                return $scope.emptyShareState();
+                    || !st.doclist) {
+                $scope.docShareState = $scope.emptyShareState();
             } else {
-                return st;
+                $scope.docShareState = st;
             }
         };
         $scope.emptyShareState = function() {
             return {doclist: [], emails: [], message: ""};
         };
         $scope.loadPrepareState = function() {
-            var st = angular.fromJson(sessionStorage.getItem("docPrepareState"));
+            var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
             sessionStorage.removeItem("docPrepareState");
-            if (st) {
+            if (st1) {
                 angular.forEach($scope.documents, function(doc) {
-                    if (st.template_id===doc.template_id || st.doc_id===doc.doc_id) {
-                        console.log(doc);
+                    if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
                         if ($scope.docIsPrepared(doc)) {
-                            console.log(doc);
                             $scope.updateShareType(doc, 2);
                             $scope.$emit("notification:success",
                                 "Success! Document prepared for signature.");
@@ -186,7 +182,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }); 
             }
             $scope.loadDocumentVersions();
-            return st;
+            return st1;
         };
         $scope.saveShareState = function(clear) {
             if (clear) {
@@ -261,10 +257,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             });
         };
         $scope.initShareState = function() {
-            $scope.docShareState = $scope.getShareState();
+            $scope.getShareState();
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach($scope.docShareState.doclist, function(docToShare) {
+                        console.log("here");
                         if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
                             doc.forShare = true;
                             doc.signature_flow = docToShare.signature_flow;
@@ -1087,6 +1084,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         //My parentheses format
         var regExp = /\(([^)]+)\)/;
 
+        /*
         $scope.share = function(message, emails, sign) {
             $scope.processing = true;
             sign = sign == "Yes";
@@ -1125,6 +1123,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.signeeded = "No";
             });
         };
+        */
 
         $scope.updateTitleOpen = function(doc) {
             $scope.docForModal = doc;
