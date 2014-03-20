@@ -837,9 +837,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 message = "";
             }
             angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 tosee += "," +  matches[1];
             });
@@ -951,11 +951,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var anybad = false;
             angular.forEach(people, function(person) {
                 var email;
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 email = matches[1];
+                console.log(email);
                 if (!re.test(email)) {
                     anybad = true;
                 }
@@ -1033,9 +1034,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             forview = forview == "" ? "!!!" : forview;
             var regExp = /\(([^)]+)\)/;
             angular.forEach($scope.multipeople, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 tosee += "," +  matches[1];
             });
@@ -1393,9 +1394,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             var anybad = false;
             angular.forEach(people, function(person) {
                 var email;
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 email = matches[1];
                 if (!re.test(email)) {
@@ -1709,6 +1710,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         var regExp = /\(([^)]+)\)/;
 
         $scope.fieldCheck = function(email) {
+            console.log(email);
             var matches = regExp.exec(email);
             if (matches == null) {
                 matches = ["", email];
@@ -1721,9 +1723,9 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             var anybad = false;
             angular.forEach(people, function(person) {
                 var email
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 email = matches[1];
                 if (!re.test(email)) {
@@ -1748,7 +1750,7 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
                 message = "";
             }
             angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
                     matches = ["", person.id];
                 }
