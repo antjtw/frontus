@@ -153,7 +153,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         });
         $scope.getShareState = function() {
             var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
-            console.log(st);
             sessionStorage.removeItem("sharewave");
             if (!st || st==[] || st.length===0
                     || !st.doclist) {
@@ -263,7 +262,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach($scope.docShareState.doclist, function(docToShare) {
-                        console.log("here");
                         if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
                             doc.forShare = true;
                             doc.signature_flow = docToShare.signature_flow;
@@ -1221,7 +1219,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     matches = ["", person];
                 }
                 email = matches[1];
-                console.log(email);
                 if (!re.test(email)) {
                     anybad = true;
                 }
@@ -1240,7 +1237,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 }
             });
             if (count !== docs.length) {
-                console.log("counts don't match");
                 return false;
             }
             var res = true;
@@ -1249,10 +1245,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 // get the full doc and check that
                 if (doc.signature_flow < 0) {
                     res = false;
-                    /*
-                    console.log(doc);
-                    console.log("doc not ready");
-                    */
                 }
             });
             return res;
@@ -1281,7 +1273,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 tosee += "," +  matches[1];
             });
             tosee = tosee === "" ? "!!!" : tosee;
-            console.log(JSON.stringify(docsToShare));
             SWBrijj.document_multishare(
                           tosee.substring(1).toLowerCase(),
                           JSON.stringify(docsToShare),
@@ -1613,7 +1604,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
-            console.log($scope.docId);
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
@@ -1857,7 +1847,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         };
 
         $scope.viewInvestorCopy = function(investor) {
-            console.log(investor);
             $location.url("/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
         };
 
@@ -1963,7 +1952,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         var regExp = /\(([^)]+)\)/;
 
         $scope.fieldCheck = function(email) {
-            console.log(email);
             var matches = regExp.exec(email);
             if (matches == null) {
                 matches = ["", email];
@@ -2320,7 +2308,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                     if ($scope.signable()) {
                         SWBrijj.tblm('account.user_settings', ["knows_signing"]).then(function(data) {
                             if (!data[0].knows_signing) {
-                                console.log(data[0].knows_signing);
                                 $scope.helpModalUp();
                             }
                         });
@@ -2342,7 +2329,6 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
-                console.log($rootScope.lastPage);
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
