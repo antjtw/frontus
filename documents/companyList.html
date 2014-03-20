@@ -187,7 +187,8 @@
                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                 <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
-                                <li ng-show="versionIsComplete(version)" ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
+                                <li ng-show="versionIsComplete(version)&&version.signature_flow>0"
+                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
                             </ul>
                         </li>
                     </ul>
@@ -283,7 +284,8 @@
                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                 <!--<li ng-click="exportOriginalDocidToPdf(version.original)">Export Original to PDF</li>-->
-                                <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
+                                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
                             </ul>
                         </li>
                     </ul>
