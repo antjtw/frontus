@@ -1220,7 +1220,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                     matches = ["", person];
                 }
                 email = matches[1];
-                console.log(email);
                 if (!re.test(email)) {
                     anybad = true;
                 }
