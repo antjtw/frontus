@@ -863,8 +863,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             $location.url("/company-view?doc=" + docid + "&page=1");
         };
 
-        $scope.viewTemplate = function(templateid) {
-            $location.url("/company-view?template=" + templateid);
+        $scope.viewTemplate = function(doc) {
+            $location.url("/company-view?template=" + doc.template_id);
         };
 
         $scope.viewStatus = function(doc) {
@@ -872,6 +872,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $location.url("/company-status?doc=" + doc.doc_id);
             }
         };
+
         $scope.viewVersionStatus = function(doc) {
             $location.url("/company-status?doc=" + doc.original);
         };
