@@ -2305,6 +2305,9 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
                         return;
                     }
                     $scope.document = data;
+                    if (data.signature_flow == 1 && !data.when_signed) {
+                        document.location.href = "/documents/investor-view?template=" + data.template_id + "&subid=" + data.doc_id;
+                    }
 
                     if ($scope.signable()) {
                         SWBrijj.tblm('account.user_settings', ["knows_signing"]).then(function(data) {

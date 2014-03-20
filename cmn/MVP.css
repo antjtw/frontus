@@ -946,6 +946,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 }
 .subnav-controls span {
     font-size: 10px;
+    text-transform: uppercase;
 }
 .subnav-controls button.check-box-button {
     margin-left: 10px;
