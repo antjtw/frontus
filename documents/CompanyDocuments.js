@@ -1894,6 +1894,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
+        };
 
         $scope.remind = function(doc_id, user_email) {
             /*
