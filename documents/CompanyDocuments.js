@@ -1219,8 +1219,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (compare) {
                 old_failed = $scope.checkmany(docsharestateCOPY.emails, docsharestateCOPY.doclist, false);
             }
-
-            // TODO store a copy of the old stuff and if the stuff doesn't work anymore throw a notification
             var anybad = false;
             var investors = [];
             var docids = [];
@@ -1256,16 +1254,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
             if (compare) {
                 docsharestateCOPY = angular.copy($scope.docShareState);
-                if (anybad && !old_failed) {
-                    $scope.$emit("notification:fail", "SOMETHING WENT WRONG! OMG!");
-                    // emit a useful notification
-                    /*
-                    if (notify=="recipient" && anybad) {
-                        $scope.$emit("notification:fail", "User already received 1 or more selected documents.");
-                    } else if (notify=="document" && anybad) {
-                        $scope.$emit("notification:fail", "Document already sent to 1 or more specified recipients.");
-                    }
-                    */
+                if (anybad && !old_failed && people && docs) {
+                    $scope.$emit("notification:fail", "Oops, recipients have already received these documents.");
                 }
             }
             return anybad;
