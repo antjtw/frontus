@@ -1426,12 +1426,15 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (angular.element(n).scope().page == page) {
                     var contents = n.querySelector("textarea");
                     if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        if (!$scope.signaturepresent
+                                && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                                    || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             unfilled = true;
                         }
                     }
                     else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                                || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             unfilled = true;
                         }
                     }

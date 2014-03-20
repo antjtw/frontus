@@ -103,6 +103,7 @@ docviews.run(function($rootScope, $document) {
 
 docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
     function($scope, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
+        $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
             return;
@@ -1028,6 +1029,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                                 }
                                 break;
                             default:
+                                if (!note[2][0]) {res = false;}
                                 break;
                         }
                     }
@@ -1209,8 +1211,21 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // Multisharing modal functions
 
-        $scope.checkmany = function(people) {
+        $scope.checkmany = function(people, docs, notify) {
+            // TODO store a copy of the old stuff and if the stuff doesn't work anymore throw a notification
             var anybad = false;
+            var investors = [];
+            var docids = [];
+            angular.forEach(docs, function(doc) {
+                docids.push(doc.doc_id);
+            });
+            angular.forEach($scope.documents, function(doc) {
+                if (docids.indexOf(doc.doc_id)!==-1) {
+                    angular.forEach(doc.versions, function(version) {
+                        investors.push(version.investor);
+                    });
+                }
+            });
             var regExp = /\(([^)]+)\)/;
             angular.forEach(people, function(person) {
                 var email;
@@ -1222,10 +1237,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 if (!re.test(email)) {
                     anybad = true;
                 }
+                if (investors.indexOf(person)!==-1) {
+                    anybad = true;
+                }
             });
             if (people && people.length === 0) {
                 anybad = true;
             }
+            /*
+            if (notify=="recipient" && anybad) {
+                $scope.$emit("notification:fail", "User already received 1 or more selected documents.");
+            } else if (notify=="document" && anybad) {
+                $scope.$emit("notification:fail", "Document already sent to 1 or more specified recipients.");
+            }
+            */
             return anybad;
         };
         $scope.docsReadyToShare = function(docs) {

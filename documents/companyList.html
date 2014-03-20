@@ -328,7 +328,7 @@
             <div ng-style="stretchheight" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
-                 <h2 class="right-bar-header">SHARE DOCUMENTS</h1>
+                 <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
      <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
      <div class="shareForm">
          <span>Recipients</span>
@@ -342,7 +342,7 @@
                  <button class="btn"
                          ng-click="shareDocuments(docShareState.doclist,
                                    docShareState.emails, messageText)"
-                         ng-disabled="processing || checkmany(docShareState.emails)
+                         ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist)
                                       || !docsReadyToShare(docShareState.doclist)">
                      Share Documents
                  </button>
