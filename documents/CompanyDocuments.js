@@ -1213,7 +1213,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         // Multisharing modal functions
 
         var docsharestateCOPY = angular.copy($scope.docShareState);
-        $scope.checkmany = function(people, docs, notify) {
+        $scope.checkmany = function(people, docs, compare) {
+            var old_failed = true;
+            var offender = "";
+            if (compare) {
+                old_failed = $scope.checkmany(docsharestateCOPY.emails, docsharestateCOPY.doclist, false);
+            }
+
             // TODO store a copy of the old stuff and if the stuff doesn't work anymore throw a notification
             var anybad = false;
             var investors = [];
@@ -1227,7 +1233,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                         if (!doc.when_retracted) {
                             investors.push(version.investor);
                         }
-                        console.log(version);
                     });
                 }
             });
@@ -1249,14 +1254,20 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             if (people && people.length === 0) {
                 anybad = true;
             }
-            /*
-            if (notify=="recipient" && anybad) {
-                $scope.$emit("notification:fail", "User already received 1 or more selected documents.");
-            } else if (notify=="document" && anybad) {
-                $scope.$emit("notification:fail", "Document already sent to 1 or more specified recipients.");
+            if (compare) {
+                docsharestateCOPY = angular.copy($scope.docShareState);
+                if (anybad && !old_failed) {
+                    $scope.$emit("notification:fail", "SOMETHING WENT WRONG! OMG!");
+                    // emit a useful notification
+                    /*
+                    if (notify=="recipient" && anybad) {
+                        $scope.$emit("notification:fail", "User already received 1 or more selected documents.");
+                    } else if (notify=="document" && anybad) {
+                        $scope.$emit("notification:fail", "Document already sent to 1 or more specified recipients.");
+                    }
+                    */
+                }
             }
-            */
-            docsharestateCOPY = angular.copy($scope.docShareState);
             return anybad;
         };
         $scope.docsReadyToShare = function(docs) {
