@@ -568,7 +568,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 console.log(arg);
             });
             var fd = new FormData();
-            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
                 _kmq.push(['record', 'doc uploader']);
             }
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
@@ -1271,7 +1271,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
             var tosee = "";
             var regExp = /\(([^)]+)\)/;
-            angular.forEach($scope.multipeople, function(person) {
+            angular.forEach($scope.docShareState.emails, function(person) {
                 var matches = regExp.exec(person);
                 if (matches == null) {
                     matches = ["", person];
