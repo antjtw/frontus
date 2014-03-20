@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div ng-show="prepareable(lib)" class="small-standard-button standard-button green">
+                    <div ng-show="prepareable(lib)" class="small-standard-button standard-button green" ng-class="{'red-needed' : allUnfilled()}">
                         <button class="btn" ng-click="leave()">Done</button>
                     </div>
                     <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
