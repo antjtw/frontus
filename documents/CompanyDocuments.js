@@ -142,12 +142,14 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         });
         // Needed for docIsPrepared
-        SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
-            if (x[0].signature.length>0) {
-                $rootScope.person.has_signature = true;
-            }
-        }).except(function(x) {
-            console.log(x);
+        $scope.$on("profile_loaded", function() {
+            SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
+                if (x[0].signature.length>0) {
+                    $rootScope.person.has_signature = true;
+                }
+            }).except(function(x) {
+                console.log(x);
+            });
         });
         $scope.getShareState = function() {
             var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
