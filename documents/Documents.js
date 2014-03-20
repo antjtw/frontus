@@ -562,9 +562,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var shareto = "";
 
             angular.forEach(email, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 shareto += "," +  matches[1];
             });
@@ -833,9 +833,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.processing = true;
             var tosee = "";
             angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 tosee += "," +  matches[1];
             });
