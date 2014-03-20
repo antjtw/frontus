@@ -869,6 +869,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.$emit('finalizeAction', [conf, msg]);
         };
 
+        $scope.voidAction = function(confirm, message) {
+            console.log(confirm);
+            console.log(message);
+        };
+
         $scope.$emit('docViewerReady');
 
         if ($routeParams.page) {
@@ -1711,7 +1716,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.voidable = function(doc) {
-            return (doc && doc.when_countersigned && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted);
+            return (doc && doc.when_countersigned && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted && $rootScope.navState.role == "investor");
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});

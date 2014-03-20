@@ -162,6 +162,12 @@
                         Confirm
                     </button>
                     <button class="btn"
+                            ng-show="voidable(lib)"
+                            ng-disabled="processing || confirmValue===0"
+                            ng-click="voidAction(confirmValue, rejectMessage);">
+                        Confirm
+                    </button>
+                    <button class="btn"
                             ng-show="template_original && !forsigning"
                             ng-disabled="processing || checkmany(template_email)"
                             ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
@@ -310,6 +316,41 @@
                             <span>Reject Document</span>
                             <br>
                             <span>Reject issuer's countersignature on this document.</span>
+                            <br>
+                            <textarea ng-show="confirmValue===-1"
+                                      class="messageText" rows="3"
+                                      ng-model="$parent.rejectMessage"
+                                      ng-click="resetMsg()">
+                            </textarea>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div ng-show="voidable(lib) && lib.signature_flow===2">
+                <div class="confirmBody">
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Accept Void</span>
+                            <br>
+                            <span>Accept the voiding of this document.</span>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button"
+                                    ng-class="{'selected':confirmValue===-1}"
+                                    ng-click="setConfirmValue(-1)">
+                            </button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Reject Void</span>
+                            <br>
+                            <span>Reject the voiding of this document.</span>
                             <br>
                             <textarea ng-show="confirmValue===-1"
                                       class="messageText" rows="3"
