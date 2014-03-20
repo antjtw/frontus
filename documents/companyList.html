@@ -113,8 +113,8 @@
                                             <span ng-show="allArchived(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                                         </div>
                                         <div ng-switch-when="false" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="!hideSharebar">
-                                            <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);"> <span data-icon="&#xe023;" aria-hidden="true"></span>
-
+                                            <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+                                                <span data-icon="&#xe023;" aria-hidden="true"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -224,8 +224,8 @@
                                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
-                                                <!--<li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>-->
-                                                <!--<li ng-show="navState.userid.indexOf('@sharewave.com')!==-1" ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
+                                                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -314,8 +314,8 @@
                                                 <li ng-click="viewDoc(version.original)">View Document</li>
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
-                                                <!--<li ng-click="exportOriginalDocidToPdf(version.original)">Export Original to PDF</li>-->
-                                                <!--<li ng-click="exportVersionToPdf(version)">Export Version to PDF</li>-->
+                                                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
                                             </ul>
                                         </li>
                                     </ul>

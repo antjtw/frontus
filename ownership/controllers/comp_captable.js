@@ -38,6 +38,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
     $scope.captabletips.totalgranted = "The sum total of shares granted";
     $scope.captabletips.price = "The price each granted share can be purchased at when vested";
+    $scope.captabletips.pricewarrant = "The price each granted share can be purchased at";
     $scope.captabletips.terms = "The total number of months until fully vested";
     $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
     $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
@@ -48,6 +49,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
+    $scope.captabletips.termwarrant = "The term of the warrant before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock";
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
@@ -66,7 +68,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
     SWBrijj.procm('ownership.get_transaction_types').then(function (results) {
         angular.forEach(results, function (result) {
-            $scope.issuetypes.push(result['get_transaction_types']);
+            // Made a booboo in the database that is surprisingly hard to fix. Extra enum value "warrant" as opposed to "Warrant"
+            if (result['get_transaction_types'] != "warrant") {
+                $scope.issuetypes.push(result['get_transaction_types']);
+            }
         });
     });
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
@@ -1154,10 +1159,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         // Remove any commas added to the numbers
         if (transaction.units) {
-            transaction.units = String(transaction.units).replace(/\,/g,'');
+            transaction.units = calculate.cleannumber(transaction.units);
         }
         if (transaction.amount) {
-            transaction.amount = String(transaction.amount).replace(/\,/g,'');
+            transaction.amount = calculate.cleannumber(transaction.amount);
         }
         if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
             transaction.units = transaction.unitskey;
@@ -2415,6 +2420,25 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         if (link) {
             document.location.href = link;
         }
+    };
+
+    $scope.grantbyIssue = function (key) {
+        var type = "";
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == key) {
+                if (issue.type == "Option") {
+                    type = "options";
+                }
+                else if (issue.type == "Warrant") {
+                    type = "warrants";
+                }
+                else {
+                    type = "shares";
+                }
+
+            }
+        });
+        return type
     };
 
     //switches the sidebar based on the type of the issue

@@ -437,11 +437,21 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.exportVersionToPdf = function(version) {
+            $scope.$emit("notification:success", "Export in progress.");
+            SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {
+                document.location.href = url;
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        };
+        /*
+        $scope.exportVersionToPdf = function(version) {
             SWBrijj.procd('sharewave-' + version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
         };
-
+        */
         $scope.prepareDocument = function(doc) {
             if (doc.template_id) {
                 $location.url("/company-view?template=" + doc.template_id);
@@ -1968,6 +1978,15 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd('sharewave-' + doc.original + '.pdf', 'application/pdf', 'document.genInvestorOriginalPdf', doc.original.toString()).then(function(url) {
                 document.location.href = url;
+            });
+        };
+        $scope.exportVersionToPdf = function(doc) {
+            $scope.$emit("notification:success", "Export in progress.");
+            SWBrijj.genInvestorPdf('sharewave-'+doc.doc_id+'-'+doc.investor+'.pdf', 'application/pdf', doc.doc_id, false).then(function(url) {
+                document.location.href = url;
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
