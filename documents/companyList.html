@@ -121,7 +121,7 @@
                                 </td>
                                 <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                                     <ul>
-                                        <li>{{doc.docname | caplength:40}}</li>
+                                        <li>{{doc.docname | caplength:40}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
                                         <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                                         ng-hide="!hideSharebar">{{docStatus(doc)}}</li>
                                     </ul>
@@ -163,17 +163,18 @@
                                             </ul>
                                         </div>
                                         <div ng-switch-when="true" ng-show="hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                                            <ul ng-show="doc.doc_id" class="dropdown-list">
+                                            <ul ng-show="doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)" class="dropdown-list">
                                                 <li class="dropdown standard menu-drop">
                                                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
                                                     </a>
                                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                        <li ng-click="viewStatus(doc)">View Status</li>
-                                                        <li ng-click="viewOriginal(doc)">View Original</li>
-                                                        <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                                        <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
-                                                        <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
+                                                        <li ng-show="(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
+                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
+                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
+                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
+                                                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -328,7 +329,7 @@
             <div ng-style="stretchheight" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
-                 <h2 class="right-bar-header">SHARE DOCUMENTS</h1>
+                 <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
      <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
      <div class="shareForm">
          <span>Recipients</span>
