@@ -946,6 +946,11 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 }
 .subnav-controls span {
     font-size: 10px;
+    text-transform: uppercase;
+}
+.subnav-controls button.check-box-button {
+    margin-left: 10px;
+    margin-right: 20px;
 }
 .subnav-controls .dropdown-toggle span {
     font-size: 14px;
@@ -1876,6 +1881,36 @@ a.oldschool-link  {
     background-color: rgb(141, 141, 141);
     color: rgb(241, 241, 241);
 }
+/*
+tr.preparedDoc {
+    background-color: white;
+    -webkit-animation: pulseBlue 1s linear 0.25s;
+    -moz-animation: pulseBlue 0.5s linear 0.25s;
+    -ms-animation: pulseBlue 0.5s linear 0.25s;
+    -o-animation: pulseBlue 0.5s linear 0.25s;
+    animation: pulseBlue 1s linear 0.25s;
+}
+@keyframes pulseBlue {
+    0% {opacity: 0.5; background-color: #3498DB !important;}
+    50% {opacity: 1; background-color: #3498DB !important;}
+    100% {opacity: 0; background-color: white;}
+}
+@-webkit-keyframes pulseBlue {
+    0% {opacity: 0.5; background-color: #3498DB !important;}
+    50% {opacity: 1; background-color: #3498DB !important;}
+    100% {opacity: 0; background-color: white;}
+}
+@-moz-keyframes pulseBlue {
+    0% {opacity: 0.5; background-color: #3498DB !important;}
+    50% {opacity: 1; background-color: #3498DB !important;}
+    100% {opacity: 0; background-color: white;}
+}
+@-o-keyframes pulseBlue {
+    0% {opacity: 0.5; background-color: #3498DB !important;}
+    50% {opacity: 1; background-color: #3498DB !important;}
+    100% {opacity: 0; background-color: white;}
+}
+*/
 /*.status-row.selectedrow:after {
     content: "";
     display: block;
@@ -2069,6 +2104,39 @@ a.oldschool-link  {
 }
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
+}
+.box-button {
+    width: 76px;
+    height: 60px;
+    margin-top: -14px;
+    color: #34495E;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.box-button:hover {
+    cursor: pointer;
+    background-color: white;
+}
+.box-button.selected {
+    background-color: white;
+    /*
+    border-top: #C7C7C7 2px solid;
+    border-left: #C7C7C7 2px solid;
+    border-right: #C7C7C7 2px solid;
+    border-bottom: #C7C7C7 2px solid;
+    */
+}
+.box-button.selected:hover {
+    background-color: #E3E3E3;
+}
+.box-button > ul {
+    padding-top: 14px;
+}
+.box-button > ul > li:nth-child(1) > span {
+    font-size: 10px;
+}
+.box-button > ul > li:nth-child(2) > span {
+    font-size: 12px;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
@@ -2432,6 +2500,12 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .bottomnav .nav > .standard.menu-drop .dropdown-menu > li {
     padding: 0 0 0 20px;
 }
+
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child {
+    color: #A6A6A6;
+    font-style: italic;
+}
+
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
@@ -3283,6 +3357,30 @@ button.icon-button:hover {
 
 .modalText.settings > div > ul {
     float: right;
+}
+
+
+.modal .input-row-new {
+    width: 320px;
+    height: 40px;
+    margin: 20px 20px 0 20px;
+}
+
+.modal .input-row-new > p {
+    margin: 0;
+    float: left;
+    width: 100px;
+    text-align: right;
+    line-height: 32px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.modal .input-row-new > input {
+    float:right;
+    width: 200px;
+    height: 30px;
+    margin: 0;
 }
 
 

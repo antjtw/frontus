@@ -610,7 +610,7 @@
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in issues | issueviewList">
-                    <span>SHARES</span>
+                    <span>{{grantbyIssue(one.issue)}}</span>
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
@@ -639,7 +639,7 @@
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
-                                 placeholder="shares"
+                                 placeholder="{{grantbyIssue(key)}}"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
                                  onkeydown="testForEnter();">
@@ -1065,6 +1065,59 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
                               </p>
                           </div>
+
+                        <!-- Safe tab -->
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Safe');">
+
+                              <p style="display: inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                   ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
+                                                                                                                   ng-model="activeIssue.valcap"
+                                                                                                                   onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                              </p>
+
+                              <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                        ui-event="{blur : 'saveIssueCheck(activeIssue, \'discount\')'}"
+                                                                                        ng-model="activeIssue.discount"
+                                                                                        onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                              </p>
+                          </div>
+
+                        <!-- Warrant tab -->
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Warrant');">
+
+                              <div class="rightTitle double"><span>Underlying Security</span>
+                                  <ul class="dropdown-list drop-selector">
+                                      <li class="dropdown standard">
+                                          <a class="dropdown-toggle">
+                                              {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
+                                          </a>
+                                          <ul ng-hide="toggleView();" class="dropdown-menu">
+                                              <li ng-repeat="i in allowKeys">
+                                                  <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
+                                              </li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                              </div>
+
+                              <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
+                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                                    ng-model="activeIssue.price"
+                                                                                    onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                              </p>
+
+                              <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
+                                                                                     ng-model="activeIssue.term"
+                                                                                     onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                              </p>
+
+                          </div>
                       </span>
 
 <!-- Transaction Side Bar when Editable -->
@@ -1102,7 +1155,7 @@
 
                             </p>
 
-                            <p class="rightTitle" ng-hide="tran.type =='Debt'"><span>Shares</span><input ng-disabled="toggleView();"
+                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
                                                                                                          maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                                          ng-model="tran.units" onkeydown="testForEnter();"></p>
 
@@ -1288,6 +1341,45 @@
                                 <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
                             </p>
                         </div>
+
+                        <!-- Safe Tab -->
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
+
+                            <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                onkeydown="testForEnter();"
+                                                                                                                ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                ng-model="tran.valcap">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcapsafe"></span>
+                            </p>
+
+                            <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                      onkeydown="testForEnter();"
+                                                                                      ui-event="{blur : 'saveTran(tran)'}"
+                                                                                      ng-model="tran.discount">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                            </p>
+
+                        </div>
+
+                        <!-- Warrant Tab -->
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
+
+                            <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                   onkeydown="testForEnter();"
+                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                   ng-model="tran.term">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                            </p>
+
+                            <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
+                                                                                  onkeydown="testForEnter();"
+                                                                                  ui-event="{blur : 'saveTran(tran)'}"
+                                                                                  ng-model="tran.price">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                            </p>
+
+                        </div>
+
                         </tab>
                         <tab select="createTrantab();" heading="add"></tab>
                         </tabset>
@@ -1363,6 +1455,26 @@
 
                               <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">TERM (MONTHS)</span></p>
                           </div>
+
+                          <!-- Safe tab -->
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Safe');">
+
+                              <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">VALUATION CAP</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
+
+                          </div>
+
+                          <!-- Warrant tab -->
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Warrant');">
+
+                              <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">TERM (MONTHS)</span></p>
+
+                              <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">STRIKE PRICE</span></p>
+
+                          </div>
                       </span>
 
 <!-- Transactions Side Bar when UnEditable -->
@@ -1376,7 +1488,7 @@
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
-                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
+                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>{{grantbyIssue(tran.issue)}}</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
@@ -1425,6 +1537,25 @@
 
                                     <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)</span></p>
                                 </div>
+
+                                <!-- Safe Tab -->
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
+
+                                    <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">Valuation Cap</span></p>
+
+                                    <p ng-show="tran.discount" class="belowTitle"><span ng-bind="tran.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount</span></p>
+
+                                </div>
+
+                                <!-- Warrant Tab -->
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
+
+                                    <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">Term (months)</span></p>
+
+                                    <p ng-show="tran.price" class="belowTitle"><span ng-bind="formatDollarAmount(tran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">Strike Price</span></p>
+
+                                </div>
+
                                 <div class="capGuide conversion-activity" ng-show="tran.convert.length > 0">
 
                                     <h2>Activity</h2>

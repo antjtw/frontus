@@ -215,6 +215,16 @@ navbar .navbar {
     box-sizing: border-box;
 }
 
+.page-bar > ul > li.page-tabs.red-tab, .page-bar > ul > li.page-tabs.red-tab.green-tab {
+    background-color: #E74C3C;
+    color: #FFFFFF;
+}
+
+.page-bar > ul > li.page-tabs.green-tab {
+    background-color: #1ABC96;
+    color: #FFFFFF;
+}
+
 .page-bar > ul > li.page-tabs:hover {
     background-color: #C7C7C7;
 }
@@ -222,6 +232,14 @@ navbar .navbar {
 .page-bar > ul > li.page-tabs.cur-page {
     background-color: #8D8D8D !important;
     color: #FFFFFF !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page.green-tab {
+    background-color: #15A085 !important;
+}
+
+.page-bar > ul > li.page-tabs.cur-page.red-tab, .page-bar > ul > li.page-tabs.cur-page.red-tab.green-tab {
+    background-color: #C44032 !important;
 }
 
 .page-bar > ul > li.page-tabs.cur-page:hover {
@@ -544,14 +562,49 @@ navbar .navbar {
 
 .draggable.signature textarea {
     font-family: 'Arizonia', serif;
+    background-image: url('/img/signature-texture.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+
+.draggable.imagesignature textarea {
+    opacity: 1.0;
+    font-family: 'Arizonia', serif;
+}
+
+.draggable.imagesignature.mysignature textarea {
+    background-image: url('/photo/user?id=signature:');
+    background-size: contain;
+    background-position: left top;
+    background-repeat: no-repeat;
+    color: transparent;
+}
+
+.draggable.imagesignature.mysignature.processing textarea {
+    background-image: url('/img/image-loader-140.gif');
+    color: transparent;
+}
+
+.draggable.imagesignature.mysignature textarea::-webkit-input-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea:-moz-placeholder {
+    opacity: 0;
+}
+.draggable.imagesignature.mysignature textarea::-moz-placeholder {
+    opacity: 0;
 }
 
 .draggable.redrequired div > textarea {
-    border: 1px solid #E64B3B;
+    border: 1px solid #E74C3C;
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #149F84;
+    border: 1px solid #1ABC96;
+}
+
+.draggable.otherperson div > textarea {
+    border: 1px solid #A6A6A6;
 }
 
 .sticky {
@@ -593,11 +646,15 @@ navbar .navbar {
 }
 
 .sticky.redrequired .dragger {
-    background-color: #E64B3B;
+    background-color: #E74C3C;
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #149F84;
+    background-color: #1ABC96;
+}
+
+.sticky.otherperson .dragger {
+    background-color: #A6A6A6;
 }
 
 .sticky .dragger > span {
@@ -695,6 +752,79 @@ div.textarea-container {
 
 .drawcursor {
     cursor: crosshair;
+}
+
+.sigmodal.modalText {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 40px;
+    margin-bottom: 0;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+div.imgsig {
+    height: 200px;
+    white-space: nowrap;
+}
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
+.sigmodal .gif-text > p {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-right: 30px;
+}
+
+.modal.helpModal input.file {
+    float: left;
+    width: 50%;
+    margin-left: 15px;
+}
+
+.scribblewindow {
+    border: #1ABC96 solid 1px;
+}
+
+.scribblewindow > canvas {
+    cursor: default;
+    background-color: transparent;
+}
+
+
+.modal.helpModal div.fileinputs {
+    display: inline-block;
+    float: left;
+}
+
+.scribblebutton > button {
+    float: left;
+    margin-left: 20px;
+    display: block;
+    width: 162px;
+    height: 34px;
+    text-align: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgb(227, 227, 227);
+    text-transform: uppercase;
+}
+
+.standard-button.green.red-needed > button {
+    background-color: #E74C3C;
 }
 
 

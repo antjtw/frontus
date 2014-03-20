@@ -1,6 +1,56 @@
 <script src="/cmn/spin.js"></script>
 <link type="text/css" rel="stylesheet" href="/documents/docViewer.css">
 <div class="modal-backdrop" style="opacity:0.9;"></div>
+
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Pick your Signature
+        </p>
+    </div>
+    <div class="sigmodal modalText">
+        <div class="row-fluid">
+            <div class="imgsig span6">
+                <div ng-hide="scribblemode" ng-style="{{signaturestyle}}" >
+                    <img id="signaturevisual" ng-src="{{signatureURL}}">
+                </div>
+                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                    <canvas id="scribbleboard"></canvas>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <div class="span6 gif-text">
+                <p>
+                    Upload an image or draw out your signature. We'll scale it to fit the signature box, and store it in your profile for future use.
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="fakefile">
+                                <span>CHOOSE FILE</span>
+                            </div>
+                        </div>
+                        <div class="scribblebutton">
+                            <button ng-click="createNewSignature()">Draw Signature</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green" style="margin-right: 30px;">
+            <button class="btn"
+                    ng-click="uploadSignatureNow();"
+                    ng-disabled="files.length===0">Done</button>
+        </div>
+        <div class="pull-right standard-button gray">
+            <button class="btn"
+                    ng-click="sigclose();">Cancel</button>
+        </div>
+    </div>
+</div>
 <div class="docViewer" ng-hide="hidePage">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
@@ -13,7 +63,10 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div class="small-standard-button standard-button gray">
+                    <div ng-show="prepareable(lib)" class="small-standard-button standard-button green" ng-class="{'red-needed' : allUnfilled()}">
+                        <button class="btn" ng-click="leave()">Done</button>
+                    </div>
+                    <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
                         <button class="btn" ng-click="leave()">Exit</button>
                     </div>
                 </div>
@@ -44,7 +97,7 @@
                         </li>
                     </ul>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(isAnnotable || signable(lib) || finalizable(lib))}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
                             Next
@@ -55,12 +108,9 @@
                         <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: (!$parent.template_original && forsigning) || !templateId}">
-                    <div class="pull-right standard-button green forwardButton">
-                        <button class="btn" ng-click="setStage(1);">
-                            Next
-                            <span data-icon="&#xe016;" aria-hidden="true"></span>
-                        </button>
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: prepareable(lib) || (!$parent.template_original && forsigning) || !templateId}">
+                    <div class="pull-right tools" >
+                        <button ng-click="saveSmartdocData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && !forsigning}">
@@ -68,11 +118,6 @@
                         <button class="btn" ng-click="setStage(1);">Review</button>
                     </div>
                 </div>
-                <!--
-                <div ng-cloak class="pull-right last-saved" ng-class="{hidden: !(isAnnotable || finalizable(lib))}" ng-show="last_save">
-                    <span>last saved {{last_save | date:(settings.longdate+', yyyy, h:mm a')}}</span>
-                </div>
-                -->
             </div>
             <div class="docViewerAction" ng-show="stage===1">
                 <div class="standard-button small-standard-button blue backButton">
@@ -81,18 +126,11 @@
                         Back
                     </button>
                 </div>
-                <span ng-show="prepareable(lib)">Share Document</span>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
                 <span ng-show="countersignable(lib)">Approve Signature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
-                    <button class="btn"
-                            ng-show="prepareable(lib)"
-                            ng-disabled="processing || checkmany(recipient)"
-                            ng-click="shareDocument(lib, messageText, recipient);">
-                        Share
-                    </button>
                     <button class="btn"
                             ng-show="signable(lib)"
                             ng-disabled="processing || confirmValue===0"
@@ -112,12 +150,6 @@
                         Confirm
                     </button>
                     <button class="btn"
-                            ng-show="template_original && !forsigning"
-                            ng-disabled="processing || checkmany(template_email)"
-                            ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
-                        Send
-                    </button>
-                    <button class="btn"
                             ng-disabled="!confirmValue"
                             ng-show="template_original && forsigning"
                             ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
@@ -130,7 +162,7 @@
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
                 <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
-                    ng-class="{'cur-page':page===currentPage}"
+                    ng-class="{'cur-page':page===currentPage, 'red-tab': hasUnfilled(page), 'green-tab': allFilled(page)}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">
                     <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
@@ -146,15 +178,6 @@
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
-            <div ng-show="prepareable(lib)">
-                <div class='confirmBody shareDoc'>
-                    <span>Email Addresses</span>
-                    <div class="single-share-input">
-                        <input ui-select2="select2Options" ng-model="$parent.recipient">
-                    </div>
-                    <textarea class="email-text" rows="4" cols="60" placeholder="Add an optional message..." ng-model="$parent.messageText"></textarea>
-                </div>
-            </div>
             <div ng-show="signable(lib)">
                 <div class='confirmBody'>
                     <ul class="checkboxOption">
@@ -268,20 +291,6 @@
                             </textarea>
                         </li>
                     </ul>
-                </div>
-            </div>
-
-            <div ng-show="template_original && !forsigning">
-                <div class="template-share">
-                    <div>
-                        <span>Email Address(es)</span>
-                        <input ui-select2="select2Options" ng-model="$parent.template_email">
-                    </div>
-                    <div>
-                        <span></span>
-                        <textarea placeholder="Add an optional message..." ng-model="$parent.template_message">
-                        </textarea>
-                    </div>
                 </div>
             </div>
 
