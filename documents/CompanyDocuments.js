@@ -320,7 +320,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.exportVersionToPdf = function(version) {
             $scope.$emit("notification:success", "Export in progress.");
-            SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id).then(function(url) {
+            SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
                 console.log(x);
@@ -1886,6 +1886,14 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
                 document.location.href = url;
             });
         };
+        $scope.exportVersionToPdf = function(doc) {
+            $scope.$emit("notification:success", "Export in progress.");
+            SWBrijj.genInvestorPdf('sharewave-'+doc.doc_id+'-'+doc.investor+'.pdf', 'application/pdf', doc.doc_id, false).then(function(url) {
+                document.location.href = url;
+            }).except(function(x) {
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
 
         $scope.remind = function(doc_id, user_email) {
             /*
