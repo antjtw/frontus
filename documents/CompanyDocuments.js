@@ -1212,6 +1212,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         // Multisharing modal functions
 
+        var docsharestateCOPY = angular.copy($scope.docShareState);
         $scope.checkmany = function(people, docs, notify) {
             // TODO store a copy of the old stuff and if the stuff doesn't work anymore throw a notification
             var anybad = false;
@@ -1223,7 +1224,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             angular.forEach($scope.documents, function(doc) {
                 if (docids.indexOf(doc.doc_id)!==-1) {
                     angular.forEach(doc.versions, function(version) {
-                        investors.push(version.investor);
+                        if (!doc.when_retracted) {
+                            investors.push(version.investor);
+                        }
+                        console.log(version);
                     });
                 }
             });
@@ -1252,6 +1256,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 $scope.$emit("notification:fail", "Document already sent to 1 or more specified recipients.");
             }
             */
+            docsharestateCOPY = angular.copy($scope.docShareState);
             return anybad;
         };
         $scope.docsReadyToShare = function(docs) {
