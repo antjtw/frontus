@@ -623,7 +623,7 @@ textarea.email-text {
 .shareForm > .controls {
     padding-top: 20px;
 }
-.shareForm > .controls > span {
+.shareForm > .controls span {
     line-height: 32px;
     padding-right: 60px;
     color: #3498DB;
