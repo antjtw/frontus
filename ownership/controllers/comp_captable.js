@@ -2271,7 +2271,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         // Handles the non-shareholder shares
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
-                if (people.text) {
+                if (people) {
                     var matches = regExp.exec(people);
                     if (matches == null) {
                         matches = ["", people];
@@ -2282,7 +2282,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $scope.$emit("notification:fail", "Email : " + people.text + " failed to send");
+                            $scope.$emit("notification:fail", "Email : " + people + " failed to send");
                         });
                 }
             });
