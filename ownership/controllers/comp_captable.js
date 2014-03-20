@@ -2271,10 +2271,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         // Handles the non-shareholder shares
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
-                if (people.text) {
-                    var matches = regExp.exec(people.text);
+                if (people) {
+                    var matches = regExp.exec(people);
                     if (matches == null) {
-                        matches = ["", people.text];
+                        matches = ["", people];
                     }
                     SWBrijj.procm("ownership.share_captable", matches[1].toLowerCase(), "").then(function (data) {
                         SWBrijj.proc('ownership.update_investor_captable', matches[1].toLowerCase(), 'Full View').then(function (data) {
@@ -2282,7 +2282,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $scope.$emit("notification:fail", "Email : " + people.text + " failed to send");
+                            $scope.$emit("notification:fail", "Email : " + people + " failed to send");
                         });
                 }
             });
@@ -2308,9 +2308,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
         angular.forEach($scope.extraPeople, function(people) {
-            var matches = regExp.exec(people.text);
+            var matches = regExp.exec(people);
             if (matches == null) {
-                matches = ["", people.text];
+                matches = ["", people];
             }
             if (matches[1] != null && matches[1] != "" && $scope.fieldCheck(matches[1])) {
                 checkcontent = true;
@@ -2318,7 +2318,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             else {
                 checkcontent = false;
             }
-            if (people.text) {
+            if (people) {
                 checksome = true;
             }
         });

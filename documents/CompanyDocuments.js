@@ -519,7 +519,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                          //"image/tiff", // .tiff
                          //"image/jpeg", // .jpg
                          "text/plain", // .txt
-                         "application/rtf", // .rtf
+                         "application/rtf" // .rtf
                          ];
 
         $scope.setFiles = function(element) {
@@ -1084,6 +1084,48 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         //Email
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+        //My parentheses format
+        var regExp = /\(([^)]+)\)/;
+
+        $scope.share = function(message, emails, sign) {
+            $scope.processing = true;
+            sign = sign == "Yes";
+            var tosee = "";
+            if (sign) {
+                var date = Date.parse('22 November 2113');
+            } else {
+                date = null;
+            }
+            if (message === "Add an optional message...") {
+                message = "";
+            }
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person);
+                if (matches == null) {
+                    matches = ["", person];
+                }
+                tosee += "," +  matches[1];
+            });
+            SWBrijj.procm("document.share_document",
+                              $scope.docToShare.doc_id,
+                              0, '',
+                              tosee.substring(1).toLowerCase(),
+                              message,
+                              Boolean(sign) ? 2 : 0,
+                              date
+                          ).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document shared");
+                $scope.signeeded = "No";
+                $route.reload();
+            }).except(function(x) {
+                $scope.processing = false;
+                void(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.signeeded = "No";
+            });
+        };
+
         $scope.updateTitleOpen = function(doc) {
             $scope.docForModal = doc;
             $scope.updateTitleModal = true;
@@ -1173,11 +1215,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             var regExp = /\(([^)]+)\)/;
             angular.forEach(people, function(person) {
                 var email;
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 email = matches[1];
+                console.log(email);
                 if (!re.test(email)) {
                     anybad = true;
                 }
@@ -1229,10 +1272,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
             var tosee = "";
             var regExp = /\(([^)]+)\)/;
-            angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person.id);
-                if (matches === null) {
-                    matches = ["", person.id];
+            angular.forEach($scope.multipeople, function(person) {
+                var matches = regExp.exec(person);
+                if (matches == null) {
+                    matches = ["", person];
                 }
                 tosee += "," +  matches[1];
             });
@@ -1599,9 +1642,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             var anybad = false;
             angular.forEach(people, function(person) {
                 var email;
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 email = matches[1];
                 if (!re.test(email)) {
@@ -1883,9 +1926,105 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         function failed() {
             alert("failed");
         }
+
         $scope.shareDocument = function(doc) {
             void(doc);
             $location.url("/company-list?share");
+        };
+
+        $scope.prepareDocument = function(doc) {
+            $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+        };
+        // Sharing modal functions
+
+        $scope.shareDocOpen = function() {
+            $scope.messageText = "Add an optional message...";
+            $scope.signeeded = "No";
+            $scope.shareDocModal = true;
+        };
+
+        $scope.shareDocClose = function() {
+            $scope.shareDocModal = false;
+            $scope.messageText = "Add an optional message...";
+            $scope.signeeded = "No";
+        };
+
+        $scope.changeSig = function(value) {
+            $scope.signeeded = value;
+            if ($scope.messageText==="") {
+                $scope.messageText = "Add an optional message...";
+            }
+        };
+
+        //Email
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //My parentheses format
+        var regExp = /\(([^)]+)\)/;
+
+        $scope.fieldCheck = function(email) {
+            console.log(email);
+            var matches = regExp.exec(email);
+            if (matches == null) {
+                matches = ["", email];
+            }
+            email = matches[1];
+            return re.test(email);
+        };
+
+        $scope.checkmany = function(people) {
+            var anybad = false;
+            angular.forEach(people, function(person) {
+                var email
+                var matches = regExp.exec(person);
+                if (matches == null) {
+                    matches = ["", person];
+                }
+                email = matches[1];
+                if (!re.test(email)) {
+                    anybad = true
+                }
+            });
+            if (people.length == 0) {
+                anybad = true
+            }
+            return anybad
+        };
+
+        $scope.share = function(message, emails, sign) {
+            sign = sign == "Yes";
+            var tosee = "";
+            if (sign) {
+                var date = Date.parse('22 November 2113');
+            } else {
+                date = null;
+            }
+            if (message === "Add an optional message...") {
+                message = "";
+            }
+            angular.forEach(emails, function(person) {
+                var matches = regExp.exec(person);
+                if (matches == null) {
+                    matches = ["", person.id];
+                }
+                tosee += "," +  matches[1];
+            });
+            SWBrijj.procm("document.share_document",
+                              $scope.document.doc_id,
+                              0, '',
+                              tosee.substring(1).toLowerCase(),
+                              message,
+                              Boolean(sign) ? 2 : 0,
+                              date
+                          ).then(function(data) {
+                void(data);
+                $scope.$emit("notification:success", "Document shared");
+                $scope.signeeded = "No";
+                $route.reload();
+            }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.signeeded = "No";
+                });
         };
 
     }
