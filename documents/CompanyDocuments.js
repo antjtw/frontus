@@ -101,8 +101,8 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-    function($scope, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
+docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
+    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -537,10 +537,26 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
         };
 
         $scope.checkReady = function() {
-            console.log($scope.uploadprogress);
+            // Cap at 10 then say error
+            var incrementer = 0;
             SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id']).then(function(data) {
-                console.log(data);
-                setTimeout($scope.checkReady, 1000);
+                angular.forEach(data, function(doc) {
+                        var index = $scope.uploadprogress.indexOf(doc.upload_id);
+                    if (index != -1) {
+                        $scope.uploadprogress.splice(index, 1);
+                        angular.forEach($scope.documents, function(document) {
+                            //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
+                            if (document.doc_id == doc.upload_id) {
+                                document.doc_id = doc.doc_id;
+                                document.uploading = false;
+                            }
+                        });
+                    }
+                });
+                if ($scope.uploadprogress.length != 0 && incrementer < 30) {
+                    incrementer += 1;
+                    $timeout($scope.checkReady, 2000);
+                }
             });
         };
 
@@ -600,7 +616,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                         uploading: true};
                     $scope.documents.push(newdocument);
                 }
-                $scope.checkReady();
+                $timeout($scope.checkReady, 2000);
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
 
