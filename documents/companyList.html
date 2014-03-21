@@ -163,7 +163,7 @@
                                             </ul>
                                         </div>
                                         <div ng-switch-when="true" ng-show="hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                                            <ul ng-show="doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)" class="dropdown-list">
+                                            <ul ng-show="(doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
                                                 <li class="dropdown standard menu-drop">
                                                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 

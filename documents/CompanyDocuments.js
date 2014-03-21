@@ -576,11 +576,27 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
             upxhr.then(function(x) {
-                void(x);
+                console.log(x);
+                for (var i = 0; i < files.length; i++) {
+                    console.log(files[i]);
+                    var newdocument = {uploaded_by: $rootScope.person.email,
+                        iss_annotations: null,
+                        company: $rootScope.navState.company,
+                        doc_id: x[i],
+                        template_id: null,
+                        last_updated:  new Date.today(),
+                        annotations: null,
+                        docname: files[i].name,
+                        versions:
+                            [  ],
+                        statusRatio: 0,
+                        uploading: true};
+                    $scope.documents.push(newdocument);
+                }
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
                 $scope.$apply();
-                $route.reload();
+
             }).except(function(x) {
                 /*
                 if ($scope.tester === true) {
@@ -657,7 +673,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions) {
-                if (doc.versions.length === 0) {
+                if (doc.uploading) {
+                    return "Processing";
+                }
+                else if (doc.versions.length === 0) {
                     return "Uploaded";
                 } else if (doc.signature_required && $scope.docIsComplete(doc)) {
                     return "Complete";
