@@ -536,15 +536,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
-        $scope.killpolling = function() {
-            clearInterval($scope.polling);
-        };
-
-        $scope.checkReady= function() {
+        $scope.checkReady = function() {
             console.log($scope.uploadprogress);
-           /* if ($scope.uploadprogress.length == 0) {
-                $scope.killpolling();
-            }   */
+            SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id']).then(function(data) {
+                console.log(data);
+                setTimeout($scope.checkReady, 1000);
+            });
         };
 
         $scope.uploadFile = function(files) {
@@ -603,7 +600,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                         uploading: true};
                     $scope.documents.push(newdocument);
                 }
-                $scope.polling = setInterval($scope.checkReady, 1000);
+                $scope.checkReady();
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
 
