@@ -1081,7 +1081,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                 version.signature_flow = sigflow;
                 $scope.$emit("notification:success", "Document switched to view only.");
             }).except(function(err) {
-                void(err);
+                console.log(err);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
