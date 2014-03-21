@@ -44,6 +44,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
     $scope.captabletips.price = "The price at which each granted share can be purchased when vested";
     $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
+    $scope.captabletips.valcapsafe = "The maximum pre-money valuation at which the safe converts to equity";
     $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
     $scope.captabletips.discount = "The percentage discount applied upon conversion";
     $scope.captabletips.term = "The term of the note before expiration";
