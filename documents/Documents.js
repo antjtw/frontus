@@ -1443,6 +1443,28 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return unfilled
         };
 
+        $scope.allUnfilled = function() {
+            var unfilled = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                var contents = n.querySelector("textarea");
+                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    if (!$scope.signaturepresent
+                        && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        unfilled = true;
+                    }
+                }
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        unfilled = true;
+                    }
+                }
+            }
+            return unfilled
+        };
+
         $scope.allFilled = function(page) {
             var allfilled = true;
             var some = false;

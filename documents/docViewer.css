@@ -823,4 +823,8 @@ div.imgsig > div > img {
     text-transform: uppercase;
 }
 
+.standard-button.green.red-needed > button {
+    background-color: #E74C3C;
+}
+
 
