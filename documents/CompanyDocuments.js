@@ -1115,6 +1115,18 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
+        $scope.switchSignatureFlow = function(version, sigflow) {
+            SWBrijj.procm("document.update_signature_flow", version.doc_id, sigflow).then(function(x) {
+                void(x);
+                version.when_signed = null;
+                version.when_countersigned = null;
+                version.signature_flow = sigflow;
+                $scope.$emit("notification:success", "Document switched to view only.");
+            }).except(function(err) {
+                void(err);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        };
 
         $scope.fakePlaceholder = function() {
             if ($scope.messageText == "Add an optional message...") {
