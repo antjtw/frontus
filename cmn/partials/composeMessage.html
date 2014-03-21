@@ -1,38 +1,48 @@
-<div class="pull-right standard-button">
-    <button class="btn" ng-click="composeModalOpen();">
-        Compose Message
-    </button
-</div>
-<div modal="composeModal" close="composeModalClose()" options="composeopts">
-    <div class="modalHeader">
-        <span>Compose Message</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-              ng-click="composeModalClose()">
-        </span>
+<div class="pull-right">
+    <div class="standard-button">
+        <button class="btn" ng-click="composeModalOpen();">
+            Compose Message
+        </button>
     </div>
-    <div class="modalText">
-        <div class="input-list">
-            <div>
-                <span>Recipients</span>
-                <input ui-select2="select2Options" ng-model="recipients">
-            </div>
-            <div>
-                <span>Message</span>
-                <textarea class="email-text" rows="4" cols="60"
-                          ng-model="messageText">
-                </textarea>
+    <div modal="composeModal" close="composeModalClose()" options="composeopts">
+        <div class="modalHeader">
+            <span>Compose Message</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+                  ng-click="composeModalClose()">
+            </span>
+        </div>
+        <div class="modalText">
+            <div class="input-list">
+                <div>
+                    <span>Recipients</span>
+                    <input ui-select2="select2Options"
+                           ng-model="message.recipients">
+                </div>
+                <div>
+                    <span>Subject</span>
+                    <input type="text" ng-model="message.subject">
+                </div>
+                <div>
+                    <span>Message</span>
+                    <textarea class="email-text" rows="4" cols="60"
+                              ng-model="message.text">
+                    </textarea>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="composeModalClose()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn"
-                    ng-click="sendMessage(); composeModalClose();">
-                Send
-            </button>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="composeModalClose()">
+                    Cancel
+                </button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn"
+                        ng-disabled="!readyToSend(message)"
+                        ng-click="sendMessage(message);">
+                    Send
+                </button>
+            </div>
         </div>
     </div>
 </div>
