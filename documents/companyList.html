@@ -119,7 +119,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
+                                <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
                                     <ul>
                                         <li>{{doc.docname | caplength:40}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
                                         <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
@@ -131,7 +131,7 @@
                                     <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
                                 </td>
                                 <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
-                                ng-click="viewStatus(doc)">
+                                ng-click="doc.uploading || viewStatus(doc)">
                                     <ul>
                                         <li>{{shortDocStatus(doc)}}</li>
                                         <li>{{formatDocStatusRatio(doc)}}</li>
@@ -163,7 +163,7 @@
                                             </ul>
                                         </div>
                                         <div ng-switch-when="true" ng-show="hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                                            <ul ng-show="doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)" class="dropdown-list">
+                                            <ul ng-show="(doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
                                                 <li class="dropdown standard menu-drop">
                                                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 

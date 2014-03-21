@@ -101,8 +101,8 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-    function($scope, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
+docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
+    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -536,6 +536,30 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.checkReady = function() {
+            // Cap at 10 then say error
+            var incrementer = 0;
+            SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id']).then(function(data) {
+                angular.forEach(data, function(doc) {
+                        var index = $scope.uploadprogress.indexOf(doc.upload_id);
+                    if (index != -1) {
+                        $scope.uploadprogress.splice(index, 1);
+                        angular.forEach($scope.documents, function(document) {
+                            //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
+                            if (document.doc_id == doc.upload_id) {
+                                document.doc_id = doc.doc_id;
+                                document.uploading = false;
+                            }
+                        });
+                    }
+                });
+                if ($scope.uploadprogress.length != 0 && incrementer < 30) {
+                    incrementer += 1;
+                    $timeout($scope.checkReady, 2000);
+                }
+            });
+        };
+
         $scope.uploadFile = function(files) {
             $scope.$on("upload:progress", function(evt, arg) {
                 $scope.loadProgress = 100 * (arg.loaded / arg.total);
@@ -576,11 +600,26 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
             upxhr.then(function(x) {
-                void(x);
+                $scope.uploadprogress = x;
+                for (var i = 0; i < files.length; i++) {
+                    var newdocument = {uploaded_by: $rootScope.person.email,
+                        iss_annotations: null,
+                        company: $rootScope.navState.company,
+                        doc_id: x[i],
+                        template_id: null,
+                        last_updated:  new Date.today(),
+                        annotations: null,
+                        docname: files[i].name,
+                        versions:
+                            [  ],
+                        statusRatio: 0,
+                        uploading: true};
+                    $scope.documents.push(newdocument);
+                }
+                $timeout($scope.checkReady, 2000);
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
-                $scope.$apply();
-                $route.reload();
+
             }).except(function(x) {
                 /*
                 if ($scope.tester === true) {
@@ -657,7 +696,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions) {
-                if (doc.versions.length === 0) {
+                if (doc.uploading) {
+                    return "Processing";
+                }
+                else if (doc.versions.length === 0) {
                     return "Uploaded";
                 } else if (doc.signature_required && $scope.docIsComplete(doc)) {
                     return "Complete";
