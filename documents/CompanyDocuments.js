@@ -536,6 +536,17 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
+        $scope.killpolling = function() {
+            clearInterval($scope.polling);
+        };
+
+        $scope.checkReady= function() {
+            console.log($scope.uploadprogress);
+           /* if ($scope.uploadprogress.length == 0) {
+                $scope.killpolling();
+            }   */
+        };
+
         $scope.uploadFile = function(files) {
             $scope.$on("upload:progress", function(evt, arg) {
                 $scope.loadProgress = 100 * (arg.loaded / arg.total);
@@ -576,9 +587,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
             var upxhr = SWBrijj.uploadFile(fd);
             upxhr.then(function(x) {
-                console.log(x);
+                $scope.uploadprogress = x;
                 for (var i = 0; i < files.length; i++) {
-                    console.log(files[i]);
                     var newdocument = {uploaded_by: $rootScope.person.email,
                         iss_annotations: null,
                         company: $rootScope.navState.company,
@@ -593,9 +603,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
                         uploading: true};
                     $scope.documents.push(newdocument);
                 }
+                $scope.polling = setInterval($scope.checkReady, 1000);
                 $scope.dropText = moreDocs;
                 $scope.documentUploadClose();
-                $scope.$apply();
 
             }).except(function(x) {
                 /*
