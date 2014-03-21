@@ -640,7 +640,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$modal', '$q', 
             }
         };
 
-        $scope.docStatus = function(doc) {
+        $scope.docStatusA = function(doc) {
             if (doc.versions && doc.versions.length>0) {
                 return "Last Updated " + moment(((doc.versions[0] && doc.versions[0].last_event) ?
                     doc.versions[0].last_event.event_time :
