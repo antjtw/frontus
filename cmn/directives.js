@@ -44,8 +44,7 @@ m.directive('composeMessage', function() {
                               category,
                               template,
                               msg.subject,
-                              msg.message,
-                              navState.name
+                              msg.message
                 ).then(function(x) {
                     $scope.$emit("notification:success",
                         "Message sent!");
