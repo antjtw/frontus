@@ -3247,7 +3247,18 @@ button.icon-button:hover {
     width: 540px;
     margin-left: -270px;
 }
-
+.compose-modal.modal > div.modalText .input-list > div {
+    margin: 0 0 10px 0;
+}
+.compose-modal.modal > div.modalText {
+    padding: 0 20px 0 20px;
+    text-align: left;
+}
+.compose-modal.modal > div.modalText .input-list input,
+.compose-modal.modal > div.modalText .input-list textarea {
+    // TODO calc this out
+    width: 350px;
+}
 .profile-modal.modal > div.modalText {
     padding: 0 20px 0 20px;
     text-align: left;
