@@ -3,7 +3,7 @@
 var docviews = angular.module('documentviews',
         ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives',
          'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email',
-         'commonServices', 'activityDirective'],
+         'commonServices', 'activityDirective', 'docServices'],
 function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
     $routeProvider.
