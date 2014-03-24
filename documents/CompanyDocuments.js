@@ -2127,7 +2127,6 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isPendingVoid = function(version) {
-            console.log(version);
             return version.signature_flow == 2 && !version.when_void_approved && version.when_void_requested;
         };
 
@@ -2213,7 +2212,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.getData = function () {
             if ($scope.docId) {
                 SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-                    if (navState.company != data.company) {
+                    if ($rootScope.navState.company != data.company) {
                         $location.path("/investor-list?");
                         return;
                     }
@@ -2232,6 +2231,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
 
                     $scope.initDocView();
                 }).except(function(x) {
+                        console.log("there");
                     void(x);
                     $location.path("/investor-list?");
                 });

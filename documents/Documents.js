@@ -816,8 +816,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.voidAction = function(confirm, message) {
-            console.log(confirm);
-            console.log(message);
+            SWBrijj.document_investor_void($scope.docId, confirm, message).then(function(data) {
+                console.log(data);
+            }).except(function(x) {
+                    console.log(x);
+                });
         };
 
         $scope.$emit('docViewerReady');
