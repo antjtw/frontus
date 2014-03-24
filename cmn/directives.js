@@ -37,8 +37,8 @@ m.directive('composeMessage', function() {
                 $scope.composeModal = true;
             };
             $scope.sendMessage = function(msg) {
-                var category = 'user-message';
-                var template = 'user-message.html';
+                var category = 'company-message';
+                var template = 'company-message.html';
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(msg.recipients),
                               category,
@@ -60,7 +60,7 @@ m.directive('composeMessage', function() {
                 $scope.getInvestors();
                 var anybad = false;
                 if (msg.recipients.length===0
-                    || msg.subject.length===""
+                    || msg.subject===""
                     || msg.text==="") {
                     return false;
                 }
