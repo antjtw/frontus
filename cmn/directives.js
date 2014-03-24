@@ -1,4 +1,4 @@
-var m = angular.module('commonDirectives', ['ui.select2', 'nav', 'brijj']);
+var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('composeMessage', function() {
     return {
