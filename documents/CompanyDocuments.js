@@ -697,7 +697,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
         $scope.shortVersionStatus = function(version) {
             if (!version) return "";
-            if ($scope.isPendingVoid(version)) {
+            if ($scope.isVoided(version)) {
+                return "Voided"
+            }
+            else if ($scope.isPendingVoid(version)) {
                 return "Void requested by you"
             }
             else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
@@ -859,6 +862,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         $scope.isPendingVoid = function(version) {
             return version.signature_flow == 2 && !version.when_void_approved && version.when_void_requested;
         };
+
+        $scope.isVoided = function(version) {
+            return version.signature_flow == 2 && version.when_void_approved && version.when_void_requested;
+        };
+
 
         $scope.docIsComplete = function(doc) {
             if (doc.versions) {
@@ -2065,32 +2073,6 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             }
         };
 
-        $scope.shortStatus = function(version) {
-            if (!version) return "";
-            if ($scope.isPendingVoid(version)) {
-                return "Void requested by company"
-            } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
-                return "Rejected by you";
-            } else if ($scope.wasJustRejected(version) &&
-                       !$scope.lastEventByInvestor(version)) {
-                return "Rejected by company";
-            } else if ($scope.isPendingSignature(version)){
-                return "Review and Sign";
-            } else if ($scope.isPendingCountersignature(version)){
-                return "Signed and Sent for Review";
-            } else if ($scope.isPendingFinalization(version)) {
-                return "Awaiting Your Approval";
-            } else if ($scope.isCompleteSigned(version)){
-                return "Completed";
-            } else if ($scope.isPendingView(version)){
-                return "Unviewed";
-            } else if ($scope.isCompleteViewed(version)){
-                return "Viewed";
-            } else {
-                return "Sent";
-            }
-        };
-
         $scope.lastEventByInvestor = function(doc) {
             return doc.last_event.person == navState.userid;
         };
@@ -2127,7 +2109,42 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isPendingVoid = function(version) {
-            return version.signature_flow == 2 && !version.when_void_approved && version.when_void_requested;
+            return version.signature_flow == 2 && !version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.isvoided = function(version) {
+            console.log(version);
+            return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.shortStatus = function(version) {
+            if (!version) return "";
+            console.log($scope.isvoided(version));
+            if ($scope.isvoided(version)) {
+                return "Voided"
+            }
+            else if ($scope.isPendingVoid(version)) {
+                return "Void requested by company"
+            } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+                return "Rejected by you";
+            } else if ($scope.wasJustRejected(version) &&
+                !$scope.lastEventByInvestor(version)) {
+                return "Rejected by company";
+            } else if ($scope.isPendingSignature(version)){
+                return "Review and Sign";
+            } else if ($scope.isPendingCountersignature(version)){
+                return "Signed and Sent for Review";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Your Approval";
+            } else if ($scope.isCompleteSigned(version)){
+                return "Completed";
+            } else if ($scope.isPendingView(version)){
+                return "Unviewed";
+            } else if ($scope.isCompleteViewed(version)){
+                return "Viewed";
+            } else {
+                return "Sent";
+            }
         };
 
     }

@@ -9,6 +9,10 @@ docs.service('basics', function () {
         switch (ev.activity) {
             case "retracted":
                 return 10;
+            case "void accepted":
+                return 9;
+            case "void requested":
+                return 8;
             case "finalized":
                 return 7;
             case "countersigned":
