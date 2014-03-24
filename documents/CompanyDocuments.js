@@ -2162,6 +2162,12 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             return;
         }
 
+        SWBrijj.tblm('document.audit_page_begin').then(function(done) {
+            console.log(done);
+        }).except(function(x) {
+                console.log(x);
+            });
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
