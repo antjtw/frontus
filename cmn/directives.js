@@ -6,8 +6,8 @@ m.directive('composeMessage', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', 'SWBrijj', 'navState',
-        function($scope, SWBrijj, navState) {
+        controller: ['$scope', 'SWBrijj',
+        function($scope, SWBrijj) {
             $scope.getInvestors = function() {
                 $scope.investors = [];
                 angular.forEach($scope.people, function(p) {
@@ -44,15 +44,16 @@ m.directive('composeMessage', function() {
                               category,
                               template,
                               msg.subject,
-                              msg.message
+                              msg.text
                 ).then(function(x) {
+                    void(x);
                     $scope.$emit("notification:success",
                         "Message sent!");
                     $scope.composeModalClose();
                 }).except(function(err) {
+                    void(err);
                     $scope.$emit("notification:fail",
                         "Oops, something went wrong.");
-                    $scope.composeModalClose();
                 });
             };
             $scope.readyToSend = function(msg) {
