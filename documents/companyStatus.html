@@ -23,12 +23,14 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
+                <!--
                 <div class="pull-right" ng-hide="docversions[0].template_id">
                     <div class="standard-button">
-                        <button ng-click="prepareDocument(document)" class="btn">Share
+                        <button ng-click="shareDocument(document)" class="btn">Share
                         </button>
                     </div>
                 </div>
+                -->
             </div>
             <div class="DivHelper"></div>
         </div>
@@ -38,7 +40,7 @@
                 <tr>
                     <td>
                         <span>Welcome! </span>
-                        <span class="link" ng-click="shareDocOpen();">Share with Investors</span>
+                        <span class="link" ng-click="shareDocument(document);">Share with Investors</span>
                         <span> to view status.</span>
                     </td>
                 </tr>
