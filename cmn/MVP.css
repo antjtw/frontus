@@ -2239,11 +2239,12 @@ tr.preparedDoc {
 }
 
 .standard-button.darkgray > button {
-    background-color: #C7C7C7;
+    background-color: #E3E3E3;
     color: #666666;
 }
 
 .standard-button.darkgray > button:hover {
+    background-color: #C7C7C7;
 }
 
 .small-standard-button > button {
