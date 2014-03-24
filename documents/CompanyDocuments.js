@@ -860,11 +860,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
 
         $scope.isPendingVoid = function(version) {
-            return version.signature_flow == 2 && !version.when_void_approved && version.when_void_requested;
+            return version.signature_flow == 2 && !version.when_void_accepted && version.when_void_requested;
         };
 
         $scope.isVoided = function(version) {
-            return version.signature_flow == 2 && version.when_void_approved && version.when_void_requested;
+            return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
         };
 
 
@@ -2113,7 +2113,6 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isvoided = function(version) {
-            console.log(version);
             return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
         };
 
