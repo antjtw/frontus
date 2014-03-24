@@ -29,7 +29,7 @@ m.directive('composeMessage', function() {
             $scope.select2Options = {
                 'multiple': true,
                 'simple_tags': true,
-                'tags': $scope.investors,
+                'tags': function(){return $scope.investors;},
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email address & press enter'
             };
