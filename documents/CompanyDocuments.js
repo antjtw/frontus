@@ -24,7 +24,7 @@ function setCursor(cursor) {
     }
 }
 
-var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email', 'commonServices', 'activityDirective'], function($routeProvider, $locationProvider) {
+var docviews = angular.module('documentviews', ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives', 'brijj', 'ui.bootstrap.progressbar', 'ui.select2', 'email', 'commonServices', 'activityDirective', 'docServices'], function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
     $routeProvider.
     when('/company-list', {
@@ -101,8 +101,8 @@ docviews.run(function($rootScope, $document) {
  ISSUER CONTROLLERS
  ************************************************************************************************/
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState) {
+docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
+    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -328,25 +328,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
 
         $scope.eventRank = function (ev) {
-            // signed or rejected can come either before or after each other depending on chronological ordering.
-            // ambiguity is resolve in $scope.compareEvents
-            switch (ev.activity) {
-                case "retracted":
-                    return 10;
-                case "finalized":
-                case "countersigned":
-                case "signed":
-                case "rejected":
-                    return 4;
-                case "viewed":
-                    return 3;
-                case "received":
-                    return 2;
-                case "uploaded":
-                    return 1;
-                default:
-                    return 0;
-            }
+            return basics.eventRank(ev);
         };
 
         $scope.constructDocumentsByInvestor = function() {
@@ -888,10 +870,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             }
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_flow>0 && version.when_finalized;
+            return basics.isCompleteSigned(version);
         };
         $scope.isCompleteViewed = function(version) {
-            return version.signature_flow===0 && version.last_viewed;
+            return basics.isCompleteViewed(version);
         };
         $scope.isCompleteRetracted = function(version) {
             return version.when_retracted;
@@ -1401,9 +1383,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
 /*********************************************************************************************************************/
 
-docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
+docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
         'navState',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState) {
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
         if (navState.role == 'investor') {
             $location.path('/investor-view');
             return;
@@ -1411,18 +1393,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
-        });
-
-        $scope.vInvestors = [];
-        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].name) {
-                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
-                }
-                else {
-                    $scope.vInvestors.push("(" +data[i].email+")");
-                }
-            }
         });
 
         // Set up event handlers
@@ -1475,14 +1445,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         $scope.counterparty = !! $scope.urlInves;
         $scope.tester = false;
         $scope.signeeded = "No";
-
-        // For Email sharing
-        $scope.recipients = [];
-        /* this investor list is used by the sharing email list drop-down */
-        $scope.vInvestors = [];
-        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) $scope.vInvestors.push(data[i].email);
-        });
 
         $scope.library = $scope.urlInves ? "document.my_counterparty_library" : "document.my_company_library";
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
@@ -1620,26 +1582,9 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.eventRank = function (ev) {
-            switch (ev.activity) {
-                case "finalized":
-                    return 7;
-                case "countersigned":
-                    return 6;
-                // signed or rejected can come either before or after each other depending on chronological ordering.
-                // ambiguity is resolve in $scope.compareEvents
-                case "signed":
-                case "rejected":
-                    return 4;
-                case "viewed":
-                    return 3;
-                case "received":
-                    return 2;
-                case "uploaded":
-                    return 1;
-                default:
-                    return 0;
-            }
+            return basics.eventRank(ev);
         };
+
         $scope.leave = function() {
             if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
                 document.location.href = $rootScope.lastPage;
@@ -1725,38 +1670,6 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
             */
         };
 
-        //Email
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        //My parentheses format
-        var regExp = /\(([^)]+)\)/;
-
-        $scope.checkmany = function(people) {
-            var anybad = false;
-            angular.forEach(people, function(person) {
-                var email;
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                email = matches[1];
-                if (!re.test(email)) {
-                    anybad = true;
-                }
-            });
-            if (people && people.length === 0) {
-                anybad = true;
-            }
-            return anybad;
-        };
-
-        $scope.select2Options = {
-            'multiple': true,
-            'simple_tags': true,
-            'tags': $scope.vInvestors,
-            'tokenSeparators': [",", " "],
-            'placeholder': 'Enter email address & press enter'
-        };
-
         $scope.drawTime = function() {
             return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"))
         }
@@ -1782,27 +1695,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
-
-        /* this investor list is used by the sharing email list drop-down */
-        $scope.vInvestors = [];
-        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].name) {
-                    $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
-                }
-                else {
-                    $scope.vInvestors.push("(" +data[i].email+")");
-                }
-            }
-        });
-
-        $scope.select2Options = {
-            'multiple': true,
-            'simple_tags': true,
-            'tags': $scope.vInvestors,
-            'tokenSeparators': [",", " "],
-            'placeholder': 'Enter email address & press enter'
-        };
 
         // Set up event handlers
         $scope.$on('event:loginRequired', function() {
@@ -2047,76 +1939,6 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
             }
         };
 
-        //Email
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        //My parentheses format
-        var regExp = /\(([^)]+)\)/;
-
-        $scope.fieldCheck = function(email) {
-            var matches = regExp.exec(email);
-            if (matches == null) {
-                matches = ["", email];
-            }
-            email = matches[1];
-            return re.test(email);
-        };
-
-        $scope.checkmany = function(people) {
-            var anybad = false;
-            angular.forEach(people, function(person) {
-                var email
-                var matches = regExp.exec(person);
-                if (matches == null) {
-                    matches = ["", person];
-                }
-                email = matches[1];
-                if (!re.test(email)) {
-                    anybad = true
-                }
-            });
-            if (people.length == 0) {
-                anybad = true
-            }
-            return anybad
-        };
-
-        $scope.share = function(message, emails, sign) {
-            sign = sign == "Yes";
-            var tosee = "";
-            if (sign) {
-                var date = Date.parse('22 November 2113');
-            } else {
-                date = null;
-            }
-            if (message === "Add an optional message...") {
-                message = "";
-            }
-            angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person);
-                if (matches == null) {
-                    matches = ["", person.id];
-                }
-                tosee += "," +  matches[1];
-            });
-            SWBrijj.procm("document.share_document",
-                              $scope.document.doc_id,
-                              0, '',
-                              tosee.substring(1).toLowerCase(),
-                              message,
-                              Boolean(sign) ? 2 : 0,
-                              date
-                          ).then(function(data) {
-                void(data);
-                $scope.$emit("notification:success", "Document shared");
-                $scope.signeeded = "No";
-                $route.reload();
-            }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.signeeded = "No";
-                });
-        };
-
     }
 ]);
 
@@ -2124,8 +1946,8 @@ docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams'
   INVESTOR CONTROLLERS
 *************************************************************************************************/
 
-docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$location', '$rootScope', 'navState',
-    function($scope, SWBrijj, $location, $rootScope, navState) {
+docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$location', '$rootScope', 'navState', 'basics',
+    function($scope, SWBrijj, $location, $rootScope, navState, basics) {
         if (navState.role == 'issuer') {
             $location.path("/company-list");
             return;
@@ -2171,23 +1993,7 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.eventRank = function (ev) {
-            // signed or rejected can come either before or after each other depending on chronological ordering.
-            // ambiguity is resolve in $scope.compareEvents
-            switch (ev.activity) {
-                case "finalized":
-                case "countersigned":
-                case "signed":
-                case "rejected":
-                    return 4;
-                case "viewed":
-                    return 3;
-                case "received":
-                    return 2;
-                case "uploaded":
-                    return 1;
-                default:
-                    return 0;
-            }
+            return basics.eventRank(ev);
         };
 
         $scope.setDocStatusRank = function(doc) {
@@ -2310,10 +2116,10 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
             return doc.signature_flow===0 && !doc.last_viewed;
         };
         $scope.isCompleteSigned = function(version) {
-            return version.signature_flow>0 && version.when_finalized;
+            return basics.isCompleteSigned(version);
         };
         $scope.isCompleteViewed = function(version) {
-            return version.signature_flow===0 && version.last_viewed;
+            return basics.isCompleteViewed(version);
         };
 
         $scope.docIsComplete = function(doc) {
@@ -2330,9 +2136,9 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
 /*************************************************************************************************/
 
-docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj',
+docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
         'navState',
-    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState) {
+    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics) {
         // Switch to company view if the role is issuer
         /** @name $routeParams#doc
          * @type {string} */

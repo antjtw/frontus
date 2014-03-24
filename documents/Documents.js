@@ -807,57 +807,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             }
         };
 
-        // This should work but the view doesn't update. Need fixing
-/*        $scope.$watch('recipient', function(newValue, oldValue) {
-            var removeinvestor = -1;
-            angular.forEach(newValue, function(person) {
-                var matches = regExp.exec(person.id);
-                if (matches === null) {
-                    matches = ["", person.id];
-                }
-                if ($scope.alreadyshared.indexOf(matches[1]) > -1) {
-                    $scope.$emit("notification:fail", "You've already shared to this user");
-                    removeinvestor = $scope.recipient.indexOf(person);
-                }
-            });
-            if (removeinvestor != -1) {
-                $scope.recipient.splice(removeinvestor, 1);
-            }
-        });*/
 
-        $scope.shareDocument = function(doc, message, emails) {
-            $scope.processing = true;
-            var tosee = "";
-            angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                tosee += "," +  matches[1];
-            });
-            var date = '22 November 2113';
-            SWBrijj.document_share_stamp(
-                          $scope.docId,
-                          0, '',
-                          tosee.substring(1).toLowerCase(),
-                          message,
-                          2,
-                          date
-                          ).then(function(data) {
-                void(data);
-                $scope.$emit("notification:success", "Document shared");
-                $location.path('/company-list').search({});
-                //$route.reload();
-            }).except(function(x) {
-                    $scope.processing = false;
-                    if (x.message.indexOf("ERROR: duplicate key value violates unique constraint") != -1) {
-                        $scope.$emit("notification:fail", "Already shared to this user");
-                    }
-                    else {
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    }
-            });
-        };
         $scope.countersignAction = function(conf, msg) {
             $scope.$emit('countersignAction', [conf, msg]);
         };
@@ -1562,10 +1512,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
         };
-
-        $scope.placeholdertext = function() {
-
-        }
 
         $scope.newBoxX = function(page, val, style, newattr) {
             $scope.restoredPage = page;
