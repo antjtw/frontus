@@ -1,6 +1,7 @@
+
 var app = angular.module('CompanyProfileApp',
         ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj',
-         'activityDirective', 'commonDirectives'],
+         'activityDirective', 'commonDirectives', 'angularPayments'],
 function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
@@ -38,6 +39,13 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState',
             document.location.href="/home";
             return;
         }
+        $scope.handleStripe = function(status, response) {
+            if(response.error) {
+                console.log(response);
+            } else {
+                console.log(response);
+            }
+        };
     }
 ]);
 
