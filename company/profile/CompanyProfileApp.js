@@ -1,4 +1,7 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
+var app = angular.module('CompanyProfileApp',
+        ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj',
+         'activityDirective', 'commonDirectives'],
+function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
     // $locationProvider.html5Mode(false).hashPrefix('!');
@@ -16,6 +19,10 @@ var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui
         controller: 'ViewerCtrl',
         templateUrl: 'viewer.html'
     }).
+    when('/billing', {
+        controller: 'BillingCtrl',
+        templateUrl: 'billing.html'
+    }).
     otherwise({
         redirectTo: '/'
     });
@@ -24,6 +31,15 @@ var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui
 function hidePopover() {
     angular.element('.popover').hide();
 }
+
+app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState',
+    function($scope, SWBrijj, navState) {
+        if (navState.role=='investor') {
+            document.location.href="/home";
+            return;
+        }
+    }
+]);
 
 app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     function($scope, $rootScope, SWBrijj, navState) {
