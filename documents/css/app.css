@@ -1044,7 +1044,7 @@ input[type='text']:disabled, textarea:disabled {
 .footerBar {
     display: none !important;
 }
-navbar .navbar {
+navbar .navbar + doc-viewer.modal-backdrop {
     display: none !important;
 }
 .modal-backdrop {
