@@ -6,7 +6,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         // Switch to company view if the role is issuer
         /** @name $routeParams#doc
          * @type {string} */
-        if ($rootScope.navState.role == 'issuer') {
+        if (navState.role == 'issuer') {
             $location.path("/company-view");
             return;
         }
@@ -78,6 +78,8 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
             if ($scope.docId) {
                 SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
                     if ($rootScope.navState.company != data.company) {
+                        console.log($rootScope.navState.company);
+                        console.log(data.company);
                         $location.path("/investor-list?");
                         return;
                     }
