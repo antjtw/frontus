@@ -1062,14 +1062,16 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
 
 
-        $scope.voidDocument = function(doc) {
-            SWBrijj.document_issuer_request_void(doc.doc_id).then(function(data) {
+        $scope.voidDocument = function(doc, message) {
+            SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
+                $scope.$emit("notification:success", "Void requested");
                 doc.when_void_requested = new Date.today();
                 doc.last_event.activity = "void requested";
                 doc.last_event.event_time = new Date.today();
                 doc.last_event.timenow = new Date.today();
                 doc.last_event.person = $rootScope.person.name;
             }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
                     console.log(x);
                 });
         };
