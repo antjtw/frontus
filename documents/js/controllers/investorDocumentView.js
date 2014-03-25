@@ -77,7 +77,7 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         $scope.getData = function () {
             if ($scope.docId) {
                 SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-                    if (navState.company != data.company) {
+                    if ($rootScope.navState.company != data.company) {
                         $location.path("/investor-list?");
                         return;
                     }
