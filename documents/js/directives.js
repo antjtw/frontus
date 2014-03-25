@@ -1,4 +1,5 @@
-'use strict';
+//'use strict';
+// this broke usersnap and intercom.io
 
 docviews.directive('library', function() {
     return {
