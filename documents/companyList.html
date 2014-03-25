@@ -231,7 +231,7 @@
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                                                     ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocument(version)">Void Document</li>
+                                                <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -327,7 +327,7 @@
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                                                     ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocument(version)">Void Document</li>
+                                                <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -468,6 +468,25 @@
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="reallyDeleteDoc(docForModal); deleteDocClose();">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div modal="voidDocModal" close="voidDocClose()" options="opts" class="updateTitleModal">
+    <div class="modalHeader">
+        <span>Void Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="voidDocClose()"></span>
+    </div>
+    <div class="modalText deleteDocModal">
+        <span>Are you sure you want to void</span>
+        <span>{{docForModal.docname}}?</span>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="voidDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="voidDocument(voiddocForModal); voidDocClose();">Confirm</button>
         </div>
     </div>
 </div>

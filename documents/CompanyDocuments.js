@@ -1226,10 +1226,23 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
         $scope.voidDocument = function(doc) {
             SWBrijj.document_issuer_request_void(doc.doc_id).then(function(data) {
-                console.log(data);
+                doc.when_void_requested = new Date.today();
+                doc.last_event.activity = "void requested";
+                doc.last_event.event_time = new Date.today();
+                doc.last_event.timenow = new Date.today();
+                doc.last_event.person = $rootScope.person.name;
             }).except(function(x) {
                     console.log(x);
                 });
+        };
+
+        $scope.voidDocOpen = function(doc) {
+            $scope.voiddocForModal = doc;
+            $scope.voidDocModal = true;
+        };
+
+        $scope.voidDocClose = function() {
+            $scope.voidDocModal = false;
         };
 
         $scope.allArchived = function(versions) {
