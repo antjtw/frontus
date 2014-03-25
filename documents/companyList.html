@@ -11,7 +11,9 @@
     <div class="row-fluid">
         <div class="subnav-controls doclist-controls">
             <div>
-                <div class="pull-left">
+                <div class="pull-left"
+                     ng-hide="!hideSharebar"
+                     ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                     <span>VIEW BY</span>
                     <ul class="dropdown-list drop-selector">
                         <li class="dropdown standard">
@@ -29,7 +31,9 @@
                         </li>
                     </ul>
                 </div>
-                <div class="pull-left checkboxitem">
+                <div class="pull-left checkboxitem"
+                     ng-hide="!hideSharebar"
+                     ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                     <span>HIDE COMPLETED</span>
                     <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
@@ -40,19 +44,26 @@
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
-                <div class="pull-right" ng-show="documents.length!==0">
-                    <div class="standard-button">
-                        <button id='a_doc_share' ng-click="multishareOpen();" class="btn">Share
-                        </button>
-                    </div>
+                <div class="box-button pull-right" ng-class="{selected:showShare}" ng-show="documents.length!==0" ng-click="toggleSide();">
+                    <ul>
+                        <li>
+                            <span data-icon="&#xe024;" aria-hidden="true"></span>
+                        </li>
+                        <li>
+                            <span>Share</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="pull-right">
-                    <div class="standard-button small-standard-button blue">
-                        <button ng-click="documentUploadOpen();" class="btn">Upload
-                        </button>
-                    </div>
+                <div class="box-button pull-right" ng-class="{selected: uploadModal}" ng-click="documentUploadOpen();">
+                    <ul>
+                        <li>
+                            <span data-icon="&#xe017;" aria-hidden="true"></span>
+                        </li>
+                        <li>
+                            <span>Add Files</span>
+                        </li>
+                    </ul>
                 </div>
-
             </div>
             <div class="DivHelper"></div>
         </div>
@@ -61,7 +72,7 @@
 
 <div class="row-fluid leftTabWindow">
 
-<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}"
+<div ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}"
      class="span8 recipientInfo statusBlock leftBlock">
     <div class="row-fluid listcontainer">
         <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
@@ -78,6 +89,7 @@
             <tbody class="empty-table">
             <tr>
                 <td>
+                    <!-- todo update ng-click -->
                     <span>Welcome! </span><span class="link" ng-click="multishareOpen();">Share a document</span><span> to get started.</span>
                 </td>
             </tr>
@@ -87,7 +99,7 @@
             <tbody>
             <tr>
                 <th colspan="2" style="width: 50%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
-                <th colspan="2" class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
+                <th colspan="2" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
                 <th></th>
             </tr>
             </tbody>
@@ -95,47 +107,96 @@
             <tr class="empty-row"></tr>
             <tr ng-class="{selectedrow:doc.shown}">
                 <td class="status-toggle"
-                    ng-class="{'pointer':doc.versions[0], 'status-toggle-on': doc.shown}"
-                    ng-click="!doc.versions[0] || opendetails(doc)">
-                    <span ng-hide="doc.shown || !doc.versions[0]" data-icon="&#xe017;" aria-hidden="true"></span>
-                    <span ng-show="doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    ng-class="{'pointer':doc.versions[0]&&hideSharebar, 'status-toggle-on': doc.shown}"
+                    ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
+                    <div ng-switch on="hideSharebar">
+                        <div ng-switch-when="true"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                             ng-hide="!hideSharebar">
+                            <span ng-hide="doc.shown || !doc.versions[0]"
+                                  data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="doc.shown && doc.versions[0]"
+                                  data-icon="&#xe01c;" aria-hidden="true"></span>
+                        </div>
+                        <div ng-switch-when="false"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                             ng-show="!hideSharebar">
+                             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
+                             </button>
+                        </div>
+                    </div>
                 </td>
                 <td class="shareholder-column docname-column" ng-click="viewStatus(doc)">
                     <ul>
                         <li>{{doc.docname | caplength:40}}</li>
-                        <li>{{docStatus(doc)}}</li>
+                        <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                            ng-hide="!hideSharebar">
+                            {{docStatus(doc)}}
+                        </li>
                     </ul>
                 </td>
-                <td class="status-toggle status-icon">
+                <td ng-hide="!hideSharebar"
+                    ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                    class="status-toggle status-icon">
                     <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green"
                          aria-hidden="true"></div>
                     <div ng-hide="docIsComplete(doc)" class="circle"
                          ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
                 </td>
-                <td class="shareholder-column status-column issuer pointer" ng-click="viewStatus(doc)">
+                <td ng-hide="!hideSharebar"
+                    ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                    class="shareholder-column status-column issuer pointer"
+                    ng-click="viewStatus(doc)">
                     <ul>
                         <li>{{shortDocStatus(doc)}}</li>
                         <li>{{formatDocStatusRatio(doc)}}</li>
                     </ul>
                 </td>
                 <td>
-                    <div class="standard-button small-standard-button gray doc-share-button" ng-hide="doc.template_id">
-                        <button class="btn a_share_list" ng-click="prepareDocument(doc)">Share</button>
-                    </div>
-                    <ul class="dropdown-list">
-                        <li class="dropdown standard menu-drop">
-                            <a class="dropdown-toggle">
-                                <span data-icon="&#xe011;" aria-hidden="true"></span>
-                            </a>
-                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                <li ng-click="viewStatus(doc)">View Status</li>
-                                <li ng-click="viewOriginal(doc)">View Original</li>
-                                <li ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                <li ng-show="!doc.versions[0]" ng-click="updateTitleOpen(doc)">Rename</li>
-                                <li ng-show="!doc.versions[0]" ng-click="deleteDocOpen(doc)">Delete</li>
+                    <div ng-switch on="hideSharebar">
+                        <div ng-switch-when="false"
+                             ng-show="!hideSharebar && doc.forShare"
+                             ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                             <ul class="dropdown-list drop-selector">
+                                 <li class="dropdown standard">
+                                     <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
+                                         {{ formatShareType(getShareType(doc)) }}
+                                     </a>
+                                     <ul class="dropdown-menu">
+                                         <li>
+                                             <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
+                                         </li>
+                                         <li ng-show="docIsPrepared(doc)">
+                                             <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
+                                         </li>
+                                         <li ng-show="!docIsPrepared(doc)">
+                                             <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
+                                         </li>
+                                     </ul>
+                                 </li>
+                             </ul>
+                         </div>
+                         <div ng-switch-when="true"
+                              ng-show="hideSharebar"
+                              ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-show="doc.doc_id" ng-click="viewStatus(doc)">View Status</li>
+                                        <li ng-show="doc.doc_id" ng-click="viewOriginal(doc)">View Original</li>
+                                        <li ng-show="!doc.doc_id && doc.template_id" ng-click="viewTemplate(doc.template_id)">View Original</li>
+                                        <li ng-show="doc.doc_id" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                        <li ng-show="!doc.versions[0] && doc.doc_id" ng-click="updateTitleOpen(doc)">Rename</li>
+                                        <li ng-show="!doc.versions[0] && doc.doc_id" ng-click="deleteDocOpen(doc)">Delete</li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <tr ng-show="doc.shown" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder">
@@ -282,39 +343,29 @@
         </table>
     </div>
 </div>
-<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
-    <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-        {{sideToggleName}}
-    </button>
-    <div class="row-fluid">
-        <h2 class="large-h2">Templates</h2>
-
-        <div class="smart-doc-list">
-            <ul>
-                <li ng-repeat="template in smarttemplates">
-                    <ul>
-                        <li>{{template.template_name}}</li>
-                        <li>
-                            <ul class="dropdown-list">
-                                <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle">
-                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-click="viewTemplate(template.template_id)">View</li>
-                                        <!--
-                                        <li ng-click="addToLibrary(template.template_id)">Share</li>
-                                        <li ng-click="generatePDF(template.template_id)">PDF</li>
-                                        -->
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
+<div ng-style="stretchheight"
+     ng-class="{rightNoTableBlock:hideSharebar,
+                showSharebar:!hideSharebar,
+                slidingcss25:oldSafari()}"
+     class="span4 capright button-offset">
+    <h2 class="right-bar-header">SHARE DOCUMENTS</h1>
+     <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
+     <div class="shareForm">
+         <span>Recipients</span>
+         <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="multipeople">
+         </div>
+         <span>Message</span>
+         <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
+         <div class="controls">
+             <div class="standard-button pull-right">
+                 <button class="btn"
+                         ng-click="shareDocuments(docShareState, multipeople, messageText)"
+                         ng-disabled="checkmany(multipeople) || !docShareState.length>0">Share Documents</button>
+             </div>
+             <span class="pull-right pointer" ng-click="toggleSide();">Cancel</span>
+         </div>
+     </div>
 </div>
 </div>
 </div>
@@ -369,6 +420,7 @@
     </div>
 </div>
 
+<!--
 <div modal="shareDocModal" close="shareDocClose()" options="wideopts">
     <div class="modalHeader">
         Share "{{docToShare.docname | caplength:35}}"
@@ -413,6 +465,7 @@
         </div>
     </div>
 </div>
+-->
 
 <div modal="updateTitleModal" close="updateTitleClose()" options="opts">
     <div class="modalHeader">
@@ -469,6 +522,7 @@
     </div>
 </div>
 
+<!--
 <div modal="multishareModal" close="multishareClose()" options="multishareopts">
     <div class="modalHeader">
         <span>Share Documents</span>
@@ -484,13 +538,6 @@
                                 class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                     </li>
                     <li>{{doc.docname | caplength:40}}</li>
-                    <!--
-                    <li ng-show="doc.picked">
-                        <button ng-class="{'selected':doc.signature}" ng-click="checkShareBox(doc, 'signature');"
-                                class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                    </li>
-                    <li ng-show="doc.picked" class="capital-text">Signature?</li>
-                    -->
                 </ul>
             </li>
         </ul>
@@ -501,14 +548,6 @@
         <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="multipeople">
         </div>
-        <!--        <ul>
-                    <li ng-repeat="person in sharePeople">
-                        <ul>
-                            <li><button ng-class="{'selected':person.share}" ng-click="checkShareBox(person, 'share');" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button></li>
-                            <li>{{person.investor}}</li>
-                        </ul>
-                    </li>
-                </ul>-->
     </div>
     <div class="modal-footer">
         <div ng-show="sharemodalscreen == '1'" class="pull-left standard-button gray">
@@ -529,5 +568,6 @@
         </div>
     </div>
 </div>
+-->
 </div>
 <div class="push"></div>

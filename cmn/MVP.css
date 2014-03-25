@@ -947,6 +947,10 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls span {
     font-size: 10px;
 }
+.subnav-controls button.check-box-button {
+    margin-left: 10px;
+    margin-right: 20px;
+}
 .subnav-controls .dropdown-toggle span {
     font-size: 14px;
 }
@@ -2069,6 +2073,35 @@ a.oldschool-link  {
 }
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
+}
+.box-button {
+    width: 76px;
+    height: 60px;
+    margin-top: -14px;
+    color: #34495E;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.box-button:hover {
+    cursor: pointer;
+}
+.box-button.selected {
+    background: white;
+    /*
+    border-top: #C7C7C7 2px solid;
+    border-left: #C7C7C7 2px solid;
+    border-right: #C7C7C7 2px solid;
+    border-bottom: #C7C7C7 2px solid;
+    */
+}
+.box-button > ul {
+    padding-top: 14px;
+}
+.box-button > ul > li:nth-child(1) > span {
+    font-size: 10px;
+}
+.box-button > ul > li:nth-child(2) > span {
+    font-size: 12px;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
