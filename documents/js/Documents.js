@@ -816,10 +816,19 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.voidAction = function(confirm, message) {
+            $scope.processing = true;
             SWBrijj.document_investor_void($scope.docId, confirm, message).then(function(data) {
-                console.log(data);
+                if (confirm == 1) {
+                    $scope.$emit("notification:success", "Void request accepted and document voided");
+                }
+                else {
+                    $scope.$emit("notification:success", "Void request rejected");
+                }
+                $scope.leave();
             }).except(function(x) {
                     console.log(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
                 });
         };
 
