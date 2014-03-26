@@ -1,7 +1,7 @@
 
 var app = angular.module('CompanyProfileApp',
         ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj',
-         'activityDirective', 'commonDirectives', 'angularPayments'],
+         'activityDirective', 'commonDirectives', 'commonServices', 'angularPayments'],
 function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
@@ -33,8 +33,8 @@ function hidePopover() {
     angular.element('.popover').hide();
 }
 
-app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState',
-    function($scope, SWBrijj, navState) {
+app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
+    function($scope, SWBrijj, navState, payments) {
         if (navState.role=='investor') {
             document.location.href="/home";
             return;
@@ -45,6 +45,11 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState',
             } else {
                 console.log(response);
             }
+        };
+        $scope.load_invoices = function() {
+            payments.customer_invoices().then(function(resp) {
+                console.log(data);
+            });
         };
     }
 ]);

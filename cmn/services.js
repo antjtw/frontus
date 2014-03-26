@@ -1,4 +1,11 @@
-var service = angular.module('commonServices', []);
+var service = angular.module('commonServices', ['brijj']);
+
+service.run(function($http, SWBrijj) {
+    SWBrijj.tblm('config.configuration', 'name', 'stripe'
+    ).then(function(data) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + data.value;
+    });
+});
 
 service.filter('caplength', function () {
     return function (word, length) {
@@ -11,4 +18,28 @@ service.filter('caplength', function () {
             }
         }
     };
+});
+
+service.factory('payments', function($http) {
+    var factory = {};
+    factory.create_customer = function(company, plan, discount) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/customers/'}
+        ).then(function(resp) {
+            console.log(resp);
+        });
+    };
+
+    factory.update_customer = function(customer,
+                                       newcard,
+                                       newplan,
+                                       newdiscount) {
+        // should this just take a key and a value?
+    };
+    factory.customer_invoices = function(customer) {
+        var key = factory.key;
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/invoices'});
+    };
+    return factory;
 });
