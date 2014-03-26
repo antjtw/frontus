@@ -55,7 +55,7 @@
         <div class="row-fluid docViewerTitle">
             <div>
                 <div class="pull-left">
-                    <div class="docName">{{lib.docname | caplength: 60}}</div>
+                    <div class="docName">{{lib.docname | caplength: 100}}</div>
                     <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
                     <div class="lastUpdated" ng-show="lib.last_updated">
                         Last Updated {{lib.last_updated | fromNow:servertime}}

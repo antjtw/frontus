@@ -399,14 +399,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             $scope.files = [];
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
-                if (element.files[i].name.length > 127) {
-                    element.files[i].name = element.files[i].name.substring(0, 127);
-                }
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
                     $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
-                    //$scope.fileError = "Please choose a .pdf, .doc, .docx, .odt, .txt, .rtf, .ppt, .pptx, .odp, .jpg, .png, or a .tiff.";
                 } else {
                     $scope.files.push(element.files[i]);
                 }
