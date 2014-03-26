@@ -29,9 +29,12 @@ service.filter('caplength', function () {
  */
 service.factory('payments', function($http, SWBrijj) {
     var s = {};
-    s.create_customer = function(company, plan, discount) {
-        return $http({method: 'GET',
-                      url: 'https://api.stripe.com/customers/'
+    s.create_customer = function(xcard, xplan, xcoupon) {
+        return $http({method: 'POST',
+                      url: 'https://api.stripe.com/customers/',
+                      params: {card: xcard,
+                               coupon: xcoupon,
+                               plan: xplan}
         });
     };
 
