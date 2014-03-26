@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState', '$route',
     function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState, $route) {

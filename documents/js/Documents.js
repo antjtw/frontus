@@ -431,7 +431,7 @@ docs.directive('docViewer', function() {
     return {
         restrict: 'EA',
         scope: true,
-        templateUrl: 'docViewer.html',
+        templateUrl: '/documents/partials/docViewer.html',
         controller: 'DocumentViewController'
     };
 });
@@ -442,7 +442,7 @@ docs.directive('templateViewer', function($compile) {
         scope: {
             html: '='
         },
-        templateUrl: 'template.html',
+        templateUrl: '/documents/partials/template.html',
         controller: 'TemplateViewController',
         link: function (scope, iElement, iAttrs) {
 

@@ -1,4 +1,3 @@
-// %%%%%%% page.css %%%%%%% //
 .subnav-controls.doclist-controls {
     margin-bottom: 0;
 }
@@ -1040,10 +1039,10 @@ input[type='text']:disabled, textarea:disabled {
     display: inline-block;
 }
 
-// %%%%%%% docViewer.css %%%%%%%%% // 
 .footerBar {
     display: none !important;
 }
+
 navbar .navbar + doc-viewer.modal-backdrop {
     display: none !important;
 }
