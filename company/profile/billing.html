@@ -30,80 +30,72 @@
                                 <div class="span6">
                                     <div>
                                          <h2>Plan Level</h2>
-
                                     </div> <span>
                                         Sharewave provides 3 levels of service.
                                         <a href="/pricing">Learn more.</a>
                                     </span>
-
-                                </div>
-                                <div class="span6">
-                                    <div>
-                                         <h2>Billing Period</h2>
-
-                                    </div> <span>
-                                        Sharewave provides monthly
-                                        or yearly payments.
-                                    </span>
-
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div>
-                                         <h2>Billing Contact</h2>
-
-                                    </div> <span>
-                                        Choose the user you wish to
-                                        receive billing notifications.
-                                    </span>
+                                    <ul class="dropdown-list drop-selector wide">
+                                        <li class="dropdown standard">
+                                            <a class="dropdown-toggle">
+                                                {{billing.currentPlan | billingPlans}}<span class="invisible-drop">'</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li ng-repeat="p in billing.plans">
+                                                    <a ng-click="updateSubscription(p);">{{p | billingPlans}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div>
                                          <h2>Credit Card Information</h2>
+                                         {{billing.stripe_payment_token}}
                                     </div>
                                     <form stripe-form="handleStripe" name="myForm">
-                                        <div class="input-list">
-                                            <div class="row-fluid span12">
-                                                <span>Full Name</span>
-                                                <input type="text"
-                                                       class="input-block-level">
+                                        <fieldset>
+                                            <div class="input-list">
+                                                <div class="row-fluid span12">
+                                                    <span>Full Name</span>
+                                                    <input type="text"
+                                                           class="input-block-level">
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span5">
+                                                        <span>Credit Card Number</span>
+                                                        <input type="text"
+                                                               class="input-block-level"
+                                                               ng-model="number"
+                                                               payments-validate="card"
+                                                               payments-format="card"
+                                                               payments-type-model="type"
+                                                               ng-class="myForm.number.$card.type"/>
+                                                    </div>
+                                                    <div class="span2">
+                                                        <span>CVC</span>
+                                                        <input type="text"
+                                                               class="input-block-level"
+                                                               ng-model="cvc"
+                                                               payments-validate="cvc"
+                                                               payments-format="cvc"
+                                                               payments-type-model="type"/>
+                                                    </div>
+                                                    <div class="span5">
+                                                        <span>Expiration Date</span>
+                                                        <input type="text"
+                                                               class="input-block-level"
+                                                               ng-model="expiry"
+                                                               payments-validate="expiry"
+                                                               payments-format="expiry"/>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="row-fluid">
-                                                <div class="span5">
-                                                    <span>Credit Card Number</span>
-                                                    <input type="text"
-                                                           class="input-block-level"
-                                                           ng-model="number"
-                                                           payments-validate="card"
-                                                           payments-format="card"
-                                                           payments-type-model="type"
-                                                           ng-class="myForm.number.$card.type"/>
-                                                </div>
-                                                <div class="span2">
-                                                    <span>CVC</span>
-                                                    <input type="text"
-                                                           class="input-block-level"
-                                                           ng-model="cvc"
-                                                           payments-validate="cvc"
-                                                           payments-format="cvc"
-                                                           payments-type-model="type"/>
-                                                </div>
-                                                <div class="span5">
-                                                    <span>Expiration Date</span>
-                                                    <input type="text"
-                                                           class="input-block-level"
-                                                           ng-model="expiry"
-                                                           payments-validate="expiry"
-                                                           payments-format="expiry"/>
-                                                </div>
+                                            <div class="standard-button pull-right">
+                                                <button type="submit" class="btn">Update</button>
                                             </div>
-                                        </div>
-                                        <div class="standard-button pull-right">
-                                            <button type="submit" class="btn">Update</button>
-                                        </div>
+                                        </fieldset>
                                     </form>
                                 </div>
                             </div>

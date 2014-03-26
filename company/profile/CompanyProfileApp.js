@@ -39,17 +39,70 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             document.location.href="/home";
             return;
         }
+        $scope.billing = {};
+        // TODO should we get these from the DB?
+        $scope.billing.plans = ['001', '002', '003', '000'];
+        SWBrijj.tblm('account.my_company',
+                     ['payment_plan', 'stripe_customer_id', 'stripe_payment_token']
+        ).then(function(data) {
+            console.log(data);
+            $scope.billing.currentPlan = data[0].payment_plan || '000';
+            $scope.billing.stripe_customer_id = data[0].stripe_customer_id;
+            $scope.billing.stripe_payment_token = data[0].stripe_payment_token;
+        }).except(function(err) {
+            void(err);
+        });
+        // this swaps the CC data for a stripe card token
         $scope.handleStripe = function(status, response) {
-            if(response.error) {
+            if (response.error) {
                 console.log(response);
             } else {
-                console.log(response);
+                SWBrijj.proc("account.company_attribute_update",
+                             "stripe_payment_token", response.id
+                ).then(function(x) {
+                    console.log(x);
+                    $scope.billing.stripe_payment_token = response.id;
+                    $scope.$emit("notification:success",
+                                 "Credit Card Accepted");
+                }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail",
+                                 "Invalid credit card. Please try again.");
+                });
+                    
             }
         };
-        $scope.load_invoices = function() {
-            payments.customer_invoices().then(function(resp) {
+        $scope.load_invoices = function(customerid) {
+            console.log("TODO");
+            /*
+            payments.get_invoices(customerid).then(function(resp) {
                 console.log(resp);
+                payments.get_upcoming_invoice(customerid).then(function(resp) {
+                    console.log(resp);
+                });
             });
+            */
+        };
+        $scope.updateSubscription = function(newplan) {
+            console.log("TODO");
+            /*
+            payments.update_subscription(newplan)
+            .then(function(x) {
+                SWBrijj.proc("account.company_attribute_update",
+                             "payment_plan", newplan)
+                .then(function(x) {
+                    $scope.billing.currentPlan = newplan;
+                }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail",
+                                 "Failed to update plan.");
+                });
+            }).except(function(x) {
+                void(x);
+                $scope.$emit("notification:fail",
+                             "Failed to update plan.");
+            });
+            */
         };
     }
 ]);
@@ -609,6 +662,22 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
     }
 ]);
 
+app.filter('billingPlans', function() {
+    return function(plan) {
+        switch (plan) {
+            case '000':
+                return "Zombie Mode";
+            case '001':
+                return "Plan 1";
+            case '002':
+                return "Plan 2";
+            case '003':
+                return "Plan 3";
+            default:
+                return "Error";
+        }
+    };
+});
 app.filter('fileLength', function() {
     return function(word) {
         if (word) {
