@@ -399,8 +399,8 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             $scope.files = [];
             $scope.fileError = "";
             for (var i = 0; i < element.files.length; i++) {
-                if (files[i].name.length > 127) {
-                    files[i].name = files[i].name.substring(0, 127);
+                if (element.files[i].name.length > 127) {
+                    element.files[i].name = element.files[i].name.substring(0, 127);
                 }
                 if (element.files[i].size > 20000000) {
                     $scope.fileError = "Please choose a smaller file";
