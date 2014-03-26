@@ -99,8 +99,11 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
         };
 
         $scope.activate = function() {
-            payments.create_customer($scope.stripe_card, '001', null).then(function(resp) {
+            payments.create_customer($scope.stripe_card, '001', null
+            ).then(function(resp) {
+                console.log(resp);
                 //pass stripe_card AND new customer id to doCompanySelfActivate
+                /*
                 SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
                     if (activated) {
                         document.location.href = activated + "?msg=first";
@@ -110,7 +113,8 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 });
-            }).except(function(x) {
+                */
+            }).error(function(x) {
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };

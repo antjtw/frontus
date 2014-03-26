@@ -29,6 +29,7 @@ service.filter('caplength', function () {
  */
 service.factory('payments', function($http, SWBrijj) {
     var s = {};
+        $http.defaults.useXDomain = true;
     s.create_customer = function(xcard, xplan, xcoupon) {
         return $http({method: 'POST',
                       url: 'https://api.stripe.com/customers/',
