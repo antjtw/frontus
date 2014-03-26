@@ -56,6 +56,12 @@
                                 </li>
                                 <li>
                                     <ul>
+                                        <li>Country</li>
+                                        <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
                                         <li>Telephone</li>
                                         <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
                                     </ul>

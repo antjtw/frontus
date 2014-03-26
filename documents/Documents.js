@@ -529,7 +529,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.template_original = false;
             refreshDocImage();
             $scope.loadPages();
-
             $scope.loadpreviousshares();
         });
 
@@ -562,9 +561,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             var shareto = "";
 
             angular.forEach(email, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches == null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 shareto += "," +  matches[1];
             });
@@ -577,8 +576,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 console.log(err);
             });
         };
-
-
 
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
@@ -686,7 +683,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             });
                             $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
                             $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-                            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
                             $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
                             $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
                             $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
@@ -833,9 +829,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.processing = true;
             var tosee = "";
             angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person.id);
+                var matches = regExp.exec(person);
                 if (matches === null) {
-                    matches = ["", person.id];
+                    matches = ["", person];
                 }
                 tosee += "," +  matches[1];
             });
@@ -986,8 +982,8 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     SWBrijj.uploadSignatureImage(fd).then(function(x) {
                         $scope.uploadSuccess();
                     }).except(function(x) {
-                            $scope.uploadFail();
-                        });
+                        $scope.uploadFail();
+                    });
                 }
             }
             else {
@@ -1151,7 +1147,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 $scope.createAttributes(inv_attributes);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                    if ($scope.lib && $scope.lib.annotations.length > 0) {
+                    if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
                         return;
                     }
@@ -1255,7 +1251,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             /** @name $scope#lib#annotations
              * @type {[Object]}
              */
-            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable) return; // no changes
+            /*
+            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
+               console.log("OH NO!!!");
+               return; // no changes
+            }
+            */
 
             /** @name SWBrijj#_sync
              * @function
@@ -1267,11 +1268,25 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             // This is a synchronous save
             /** @name $scope#lib#original
              * @type {int} */
-                if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
-                var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
-                // I expect this returns true (meaning updated).  If not, the data is lost
-                if (!res) alert('failed to save annotations');
-            }
+                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+                    var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
+                    if (!res) alert('failed to save annotations');
+                }
+                if ($scope.template_original && $scope.prepareable($scope.lib)) {
+                    var res2 = SWBrijj._sync('SWBrijj', 'proc',
+                            ["account.company_attribute_update",
+                             "name",
+                             $scope.used_attributes.companyName
+                             ]
+                    );
+                    var res3 = SWBrijj._sync('SWBrijj', 'proc',
+                            ["account.company_attribute_update",
+                             "state",
+                             $scope.used_attributes.companyState
+                             ]
+                    );
+                    if (!res2 || !res3) alert('failed to save annotations');
+                }
         });
 
         /* Save the notes when navigating away */
@@ -1279,15 +1294,29 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             void(oldUrl);
             // don't save note data if I'm being redirected to log in
-            // TODO why?
             if (newUrl.match(/login([?]|$)/)) return;
             $scope.saveNoteData();
+            $scope.saveSmartdocData();
         });
 
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && ($rootScope.lastPage.indexOf("/register/") === -1) && ($rootScope.lastPage.indexOf("-view") === -1) && ($rootScope.lastPage.indexOf("login") === -1)) {
+            if ($rootScope.lastPage
+                    && ($rootScope.lastPage.indexOf("/register/") === -1)
+                    && ($rootScope.lastPage.indexOf("/login/") === -1)
+                    && ($rootScope.lastPage.indexOf("-view") === -1)) {
+                if ($rootScope.lastPage.indexOf("/company-list?share") !== -1) {
+                    if ($scope.template_original) {
+                        sessionStorage.setItem("docPrepareState",
+                                angular.toJson({template_id: $scope.templateId,
+                                                doc_id: $scope.docId}));
+                    } else {
+                        sessionStorage.setItem("docPrepareState",
+                                angular.toJson({template_id: $scope.templateId,
+                                                doc_id: $scope.docId}));
+                    }
+                }
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
@@ -1397,14 +1426,39 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if (angular.element(n).scope().page == page) {
                     var contents = n.querySelector("textarea");
                     if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        if (!$scope.signaturepresent
+                                && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                                    || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             unfilled = true;
                         }
                     }
                     else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                                || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             unfilled = true;
                         }
+                    }
+                }
+            }
+            return unfilled
+        };
+
+        $scope.allUnfilled = function() {
+            var unfilled = false;
+            for (var i = 0; i < $scope.notes.length; i++) {
+                var n = $scope.notes[i][0];
+                var contents = n.querySelector("textarea");
+                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    if (!$scope.signaturepresent
+                        && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        unfilled = true;
+                    }
+                }
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
+                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        unfilled = true;
                     }
                 }
             }
@@ -1689,7 +1743,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.prepareable = function(doc) {
-            return !$scope.invq && doc && !doc.signature_flow && !$scope.template_original;
+            return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
         };
 
         $scope.signable = function(doc) {
@@ -1811,6 +1865,24 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
         };
 
+        $scope.saveSmartdocData = function(clicked) {
+            if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
+            SWBrijj.proc("account.company_attribute_update",
+                    "state", ($scope.used_attributes.companyState || "")
+            ).then(function(x) {
+                console.log(x);
+                void(x);
+            });
+            SWBrijj.proc("account.company_attribute_update",
+                    "name", ($scope.used_attributes.companyName || "")
+            ).then(function(x) {
+                console.log(x);
+                void(x);
+            });
+            if (clicked) {
+                $scope.$emit("notification:success", "Saved annotations");
+            }
+        };
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
             var nd = $scope.getNoteData(false);
@@ -1834,7 +1906,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
-                if (clicked) $scope.$emit("notification:success", "Saved Annotations");
+                if (clicked) $scope.$emit("notification:success", "Saved annotations");
             });
         };
 

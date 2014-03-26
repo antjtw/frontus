@@ -111,7 +111,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return M;
         })();
 
-        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/"];
+        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/", "/pricing/", "/survey/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
@@ -140,11 +140,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
              * @param {string} role
              */
             SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
+                sessionStorage.clear();
                 document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
             });
         };
 
         $scope.gotoURL = function(url) {
+            sessionStorage.clear();
             document.location.href = url;
         };
 
@@ -253,6 +255,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 Intercom('update', {'name' : $rootScope.person.name});
             }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            $scope.$broadcast("profile_loaded");
         });
 
         // Notification code
@@ -376,7 +379,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-                    _kmq.push(['set', {'role':'issuer'}]);
+                    _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
                 }
 
                 // Get Notifications for docs
@@ -390,7 +393,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder'}]);
+                    _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
@@ -451,6 +454,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 idleTime = idleTime + 1;
             }
             if (idleTime > 28) { // 1 minutes
+                sessionStorage.clear();
                 document.location.href = "/login/logout?timeout";
             }
         }

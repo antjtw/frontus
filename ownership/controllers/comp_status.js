@@ -58,7 +58,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         return -card.event_time;
     };
 
-    $scope.peopleOrder = 'name'
+    $scope.peopleOrder = 'name';
 
     $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 

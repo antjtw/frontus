@@ -12,17 +12,25 @@
         </div>
         <div class="subnav-controls">
             <div>
+                <div class="pull-left checkboxitem">
+                    <span>SHOW ARCHIVED</span>
+                    <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </div>
                 <div class="pull-left">
                     <span>Search</span>
                     <input type="text" class="search-box" ng-model="query">
                 </div>
 
+                <!--
                 <div class="pull-right" ng-hide="docversions[0].template_id">
                     <div class="standard-button">
                         <button ng-click="shareDocument(document)" class="btn">Share
                         </button>
                     </div>
                 </div>
+                -->
             </div>
             <div class="DivHelper"></div>
         </div>
@@ -50,7 +58,7 @@
                     <th style="width: 49px;"></th>
                 </tr>
                 </tbody>
-                <tbody ng-repeat="person in docversions | filter: query | orderBy: investorOrder">
+                <tbody ng-repeat="person in docversions | archived: archivestate | filter: query | orderBy: investorOrder">
                 <tr class="empty-row"/>
                 <tr ng-class="{selectedrow:person.shown}">
                     <td class="shareholder-column" >
