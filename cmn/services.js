@@ -1,5 +1,6 @@
 var service = angular.module('commonServices', ['brijj']);
 
+// Add Stripe authorization to default $http request headers.
 service.run(function($http, SWBrijj) {
     SWBrijj.tblm('config.configuration', 'name', 'stripe'
     ).then(function(data) {
@@ -20,26 +21,58 @@ service.filter('caplength', function () {
     };
 });
 
-service.factory('payments', function($http) {
-    var factory = {};
-    factory.create_customer = function(company, plan, discount) {
+/* STRIPE API SERVICE
+ * Always returns a promise.
+ *
+ * Controllers must coordinate between Stripe, DB and UI.
+ *
+ */
+service.factory('payments', function($http, SWBrijj) {
+    var s = {};
+    s.create_customer = function(company, plan, discount) {
         return $http({method: 'GET',
-                      url: 'https://api.stripe.com/customers/'}
-        ).then(function(resp) {
-            console.log(resp);
+                      url: 'https://api.stripe.com/customers/'
         });
     };
 
-    factory.update_customer = function(customer,
-                                       newcard,
-                                       newplan,
-                                       newdiscount) {
-        // should this just take a key and a value?
+    s.update_subscription = function(customer, newplan) {
+        // here i should take the customer object b/c
+        // i need both the customer id and the subscription id
     };
-    factory.customer_invoices = function(customer) {
-        var key = factory.key;
+
+    s.apply_coupon = function(customer, coupon) {
+        return $http({method: 'POST',
+                      url: ''
+        });
+    };
+    s.update_payment = function(customer, newcard) {
+        return $http({method: 'POST',
+                      url: ''
+        });
+    };
+    s.customer_invoices = function(customer) {
         return $http({method: 'GET',
-                      url: 'https://api.stripe.com/v1/invoices'});
+                      url: 'https://api.stripe.com/v1/invoices'
+        });
     };
-    return factory;
+    s.get_customer = function(customerid) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/customers/'+customerid
+        });
+    };
+    s.get_invoices = function(customerid) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/invoices',
+                      params: {customer: customerid,
+                               count: 3}
+        });
+    };
+    s.get_upcoming_invoice = function(customerid) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/invoices/upcoming',
+                      params: {customer: customerid}
+        });
+    };
+
+    return s;
 });

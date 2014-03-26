@@ -48,7 +48,7 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
         };
         $scope.load_invoices = function() {
             payments.customer_invoices().then(function(resp) {
-                console.log(data);
+                console.log(resp);
             });
         };
     }
