@@ -1070,7 +1070,8 @@ input[type='text']:disabled, textarea:disabled {
 navbar .navbar + doc-viewer.modal-backdrop {
     display: none !important;
 }
-.modal-backdrop {
+
+doc-viewer > .modal-backdrop {
     background-color: #E3E3E3;
 }
 .docViewer {
