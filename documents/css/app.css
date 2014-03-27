@@ -424,6 +424,13 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.voidDocModal {
+    width: 360px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+}
+
 .modalText.esign {
     padding: 10px 0 0 0;
     margin: 5px 0 20px 18px;
@@ -1037,6 +1044,23 @@ input[type='text']:disabled, textarea:disabled {
 
 .modal .uploadModal div.fileinputs {
     display: inline-block;
+}
+
+.message-block {
+    overflow: auto;
+    margin-top: 20px;
+}
+
+.message-block > span {
+    float: left;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.message-block > textarea {
+    resize: none;
+    float: right;
+    width: 280px;
 }
 
 .footerBar {

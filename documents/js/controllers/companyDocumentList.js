@@ -745,6 +745,10 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
         };
 
+        $scope.messageWritten = function(text) {
+            return !text || !text.length > 0;
+        };
+
 
         $scope.docIsComplete = function(doc) {
             if (doc.versions) {

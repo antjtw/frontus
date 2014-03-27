@@ -477,19 +477,21 @@
         <span>Void Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="voidDocClose()"></span>
     </div>
-    <div class="modalText deleteDocModal">
-        <span>Are you sure you want to void</span>
-        <span>{{docForModal.docname}}?</span>
+    <div class="modalText voidDocModal">
+        <span>Are you sure you want to void {{docForModal.docname}}? A request will be sent to the other party before voiding is complete</span>
 
-        <span>Message</span>
-        <textarea rows="4" cols="60" ng-model="voidText"></textarea>
+        <div class="message-block">
+            <span>Message</span>
+            <textarea rows="4" cols="60" ng-model="voidText"></textarea>
+        </div>
+
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
             <button class="btn" ng-click="voidDocClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="voidDocument(voiddocForModal, voidText); voidDocClose();">Confirm</button>
+            <button class="btn" ng-disabled="messageWritten(voidText)" ng-click="voidDocument(voiddocForModal, voidText); voidDocClose();">Confirm</button>
         </div>
     </div>
 </div>
