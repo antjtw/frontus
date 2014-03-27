@@ -528,6 +528,10 @@ div.fixednav{
     margin-right: 40px;
 }
 
+ul.nav-logo > li > a > img {
+    cursor:pointer;
+}
+
 .topnav.navheight > div > ul.nav-item {
     margin-top: 18px;
 }
