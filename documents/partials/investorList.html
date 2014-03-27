@@ -42,8 +42,8 @@
                             </ul>
                         </td>
                         <td class="status-toggle status-icon">
-                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-                            <div ng-hide="docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
+                            <div ng-show="!isPendingVoid(version) || docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+                            <div ng-show="isPendingVoid(version) || !docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
                         </td>
                         <td class="shareholder-column status-column">
                             <ul>
