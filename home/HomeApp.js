@@ -30,6 +30,10 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             return;
         }
 
+        if ($routeParams.cc) {
+            $scope.$emit('notification:success', 'Successfully created new company');
+        }
+
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
         //console.log($scope.uselessbrowser);
 
@@ -236,7 +240,6 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
             $scope.activity = [];
             SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
                 var originalfeed = feed;
-                console.log(originalfeed);
                 //Generate the groups for the activity feed
                 $scope.feed = [];
                 angular.forEach(originalfeed, function(event) {

@@ -1,4 +1,4 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective'], function($routeProvider, $locationProvider) {
+var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
     // $locationProvider.html5Mode(false).hashPrefix('!');
@@ -496,7 +496,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
         $scope.viewInvestorCopy = function(version) {
-            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.investor);
+            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
         $scope.viewVersionStatus = function(version) {
             document.location.href = "/documents/company-status?doc=" + version.original;

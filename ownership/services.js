@@ -716,6 +716,12 @@ ownership.service('calculate', function () {
         return convertTran.newtran;
     };
 
+    this.cleannumber = function(potentialnumber) {
+        var finalnumber = String(potentialnumber).replace(/\,/g,'');
+        finalnumber = String(finalnumber).replace(/\$/g , '');
+        return finalnumber
+    };
+
     // Converts strings to boolean
     this.strToBool = function (string) {
         switch (String(string).toLowerCase()) {
@@ -770,6 +776,12 @@ ownership.service('switchval', function () {
             return true;
         }
         else if (activetype == "Equity" && type == "Equity") {
+            return true;
+        }
+        else if (activetype == "Safe" && type == "Safe") {
+            return true;
+        }
+        else if (activetype == "Warrant" && type == "Warrant") {
             return true;
         }
         else {
