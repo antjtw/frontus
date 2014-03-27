@@ -122,7 +122,6 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.shortStatus = function(version) {
             if (!version) return "";
-            console.log($scope.isvoided(version));
             if ($scope.isvoided(version)) {
                 return "Voided"
             }

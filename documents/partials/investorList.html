@@ -42,8 +42,12 @@
                             </ul>
                         </td>
                         <td class="status-toggle status-icon">
-                            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-                            <div ng-hide="docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
+                            <div ng-show="docIsComplete(doc) && !doc.when_void_accepted && !isPendingVoid(doc)" data-icon="&#xe023;"
+                                 class="circle green" aria-hidden="true"></div>
+                            <div ng-show="docIsComplete(doc) && doc.when_void_accepted && !isPendingVoid(doc)" class="circle green"
+                                 aria-hidden="true"><span>x</span>
+                            </div>
+                            <div ng-show="isPendingVoid(doc) || !docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
                         </td>
                         <td class="shareholder-column status-column">
                             <ul>
