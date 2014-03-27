@@ -185,11 +185,11 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
         };
 
         $scope.isPendingVoid = function(version) {
-            return version.signature_flow == 2 && !version.when_void_accepted && version.when_void_requested;
+            return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
         };
 
         $scope.isvoided = function(version) {
-            return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
+            return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
 
     }

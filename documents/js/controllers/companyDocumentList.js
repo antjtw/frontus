@@ -738,11 +738,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
 
         $scope.isPendingVoid = function(version) {
-            return version.signature_flow == 2 && !version.when_void_accepted && version.when_void_requested;
+            return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
         };
 
         $scope.isVoided = function(version) {
-            return version.signature_flow == 2 && version.when_void_accepted && version.when_void_requested;
+            return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
 
         $scope.messageWritten = function(text) {
