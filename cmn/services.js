@@ -29,32 +29,16 @@ service.filter('caplength', function () {
  */
 service.factory('payments', function($http, SWBrijj) {
     var s = {};
-        $http.defaults.useXDomain = true;
-    s.create_customer = function(xcard, xplan, xcoupon) {
-        return $http({method: 'POST',
-                      url: 'https://api.stripe.com/customers/',
-                      params: {card: xcard,
-                               coupon: xcoupon,
-                               plan: xplan}
-        });
+    s.update_subscription = function(newplan) {
+        return SWBrijj.proc('account.update_my_plan', newplan);
     };
-
-    s.update_subscription = function(customer, newplan) {
-        // here i should take the customer object b/c
-        // i need both the customer id and the subscription id
+    s.update_payment = function(newcard) {
+        return SWBrijj.proc('account.update_my_cc', newcard);
     };
-
-    s.apply_coupon = function(customer, coupon) {
-        return $http({method: 'POST',
-                      url: ''
-        });
+    s.create_customer = function(newplan, newcard) {
+        return SWBrijj.proc('account.create_customer', newplan, newcard);
     };
-    s.update_payment = function(customer, newcard) {
-        return $http({method: 'POST',
-                      url: ''
-        });
-    };
-    s.customer_invoices = function(customer) {
+    s.customer_invoices = function() {
         return $http({method: 'GET',
                       url: 'https://api.stripe.com/v1/invoices'
         });
@@ -64,11 +48,11 @@ service.factory('payments', function($http, SWBrijj) {
                       url: 'https://api.stripe.com/v1/customers/'+customerid
         });
     };
-    s.get_invoices = function(customerid) {
+    s.get_invoices = function(customerid, n) {
         return $http({method: 'GET',
                       url: 'https://api.stripe.com/v1/invoices',
                       params: {customer: customerid,
-                               count: 3}
+                               count: n}
         });
     };
     s.get_upcoming_invoice = function(customerid) {
@@ -77,6 +61,5 @@ service.factory('payments', function($http, SWBrijj) {
                       params: {customer: customerid}
         });
     };
-
     return s;
 });

@@ -49,6 +49,9 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             $scope.billing.currentPlan = data[0].payment_plan || '000';
             $scope.billing.stripe_customer_id = data[0].stripe_customer_id;
             $scope.billing.stripe_payment_token = data[0].stripe_payment_token;
+            if (!$scope.billing.stripe_customer_id) {
+                $scope.getCustomerId();
+            }
         }).except(function(err) {
             void(err);
         });
@@ -71,6 +74,9 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                 });
                     
             }
+        };
+        $scope.getCustomer = function() {
+
         };
         $scope.load_invoices = function(customerid) {
             console.log("TODO");
