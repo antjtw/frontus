@@ -193,10 +193,13 @@
                                     </ul>
                                 </td>
                                 <td class="status-toggle status-icon">
-                                    <div ng-show="versionIsComplete(version) && !version.when_retracted" data-icon="&#xe023;"
+                                    <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted" data-icon="&#xe023;"
                                     class="circle green" aria-hidden="true"></div>
-                                    <div ng-show="versionIsComplete(version) && version.when_retracted" class="circle green"
+                                    <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted" class="circle green"
                                     aria-hidden="true"><span>-</span>
+                                    </div>
+                                    <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted" class="circle green"
+                                         aria-hidden="true"><span>x</span>
                                     </div>
                                     <div ng-hide="versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
                                 </td>
@@ -230,7 +233,7 @@
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
+                                                    ng-click="exportVersionToPdf(version)">Export Final to PDF</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow == 2 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>
@@ -478,7 +481,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="voidDocClose()"></span>
     </div>
     <div class="modalText voidDocModal">
-        <span>Are you sure you want to void {{docForModal.docname}}? A request will be sent to the other party before voiding is complete</span>
+        <span>Voiding a document will nullify the agreement, as if it had never existed. Your confirmation will send a void request to the other party, who must also agree to void the document before the process is complete.</span>
 
         <div class="message-block">
             <span>Message</span>

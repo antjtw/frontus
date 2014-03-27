@@ -1739,8 +1739,8 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-toggle > .circle > span {
-    font-size: 20px;
-    line-height: 14px;
+    font-size: 18px;
+    line-height: 13px;
 }
 
 .sub-row > .status-toggle > .circle {

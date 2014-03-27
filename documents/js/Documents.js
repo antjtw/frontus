@@ -818,7 +818,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.voidAction = function(confirm, message) {
             $scope.processing = true;
             if (message == "Explain the reason for rejecting this document.") {
-                message = "";
+                message = " ";
             }
             SWBrijj.document_investor_void($scope.docId, confirm, message).then(function(data) {
                 if (confirm == 1) {
