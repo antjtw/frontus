@@ -1066,6 +1066,9 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
 
         $scope.voidDocument = function(doc, message) {
+            if (!message || message.length == 0) {
+                message = " ";
+            }
             SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
                 $scope.$emit("notification:success", "Void requested");
                 doc.when_void_requested = new Date.today();
