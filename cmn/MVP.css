@@ -2135,8 +2135,13 @@ tr.preparedDoc {
 .box-button > ul > li:nth-child(1) > span {
     font-size: 10px;
 }
+
+.box-button > ul > li {
+    line-height: 15px;
+}
+
 .box-button > ul > li:nth-child(2) > span {
-    font-size: 12px;
+    font-size: 10px;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
