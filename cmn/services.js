@@ -28,7 +28,7 @@ service.filter('caplength', function () {
  */
 service.factory('payments', function($http, SWBrijj) {
     var s = {};
-    s.update_subscription = function(newplan) {
+    s.update_subscription = function(newplan, card) {
         return SWBrijj.proc('account.update_my_plan', newplan);
     };
     s.update_payment = function(newcard) {

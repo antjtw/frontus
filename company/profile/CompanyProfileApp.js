@@ -118,7 +118,7 @@ app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payme
         };
         $scope.updateSubscription = function(newplan) {
             if ($scope.billing.customer_id) {
-                payments.update_subscription(newplan)
+                payments.update_subscription(newplan, $scope.billing.payment_token)
                 .then(function(x) {
                     if (x[1][0] !== 1) {
                         $scope.$emit("notification:fail",
