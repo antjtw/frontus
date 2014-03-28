@@ -40,8 +40,10 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             return;
         }
         $scope.billing = {};
-        // TODO should we get these from the DB?
-        $scope.billing.plans = ['001', '002', '003', '000'];
+        $scope.update_card = false;
+        SWBrijj.tblm('account.payment_plans', ['plan']).then(function(data) {
+           $scope.billing.plans = data; 
+        });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             $scope.billing.currentPlan = data[1][3] || '000';
             $scope.billing.customer_id = data[1][1];
@@ -50,25 +52,49 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                 console.log("do something!");
                 //$scope.getCustomerId();
             } else {
+                $scope.get_customer();
                 $scope.load_invoices();
             }
         }).except(function(err) {
             void(err);
         });
         // this swaps the CC data for a stripe card token
+        $scope.toggleUpdateCard = function() {
+            $scope.update_card = !$scope.update_card;
+        };
+        $scope.showStripeForm = function() {
+            if ($scope.billing.current_card && !$scope.update_card) {
+                return "false";
+            } else {
+                return "true";
+            }
+        };
+        // TODO rename handleStripe
         $scope.handleStripe = function(status, response) {
             if (response.error) {
                 console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
-                $scope.billing.stripe_payment_token = response.id;
-                $scope.$emit("notification:success",
-                             "Credit Card Accepted");
+                $scope.billing.payment_token = response.id;
+                payments.update_payment($scope.billing.payment_token)
+                .then(function(x) {
+                    // TODO make sure the insert worked
+                    console.log(x);
+                    $scope.get_customer();
+                    $scope.toggleUpdateCard();
+                    $scope.$emit("notification:success",
+                                 "New Credit Card Submitted");
+                }).except(function(err) {
+                    console.log(err);
+                });
             }
         };
-        $scope.getCustomer = function() {
-
+        $scope.get_customer = function() {
+            payments.get_customer($scope.billing.customer_id)
+            .then(function(x) {
+                $scope.billing.current_card = x.data.cards.data[0];
+            });
         };
         $scope.load_invoices = function() {
             payments.get_invoices($scope.billing.customer_id, 3)
@@ -81,7 +107,6 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             payments.get_upcoming_invoice($scope.billing.customer_id)
             .then(function(resp) {
                 $scope.billing.invoices.push(resp.data);
-                console.log($scope.billing.invoices);
             });
         };
         $scope.updateSubscription = function(newplan) {
