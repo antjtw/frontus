@@ -43,6 +43,8 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
         $scope.update_card = false;
         SWBrijj.tblm('account.payment_plans', ['plan']).then(function(data) {
            $scope.billing.plans = data; 
+        }).except(function(err) {
+            console.log(err);
         });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             $scope.billing.currentPlan = data[1][3] || '000';
@@ -79,12 +81,15 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                 $scope.billing.payment_token = response.id;
                 payments.update_payment($scope.billing.payment_token)
                 .then(function(x) {
-                    // TODO make sure the insert worked
-                    console.log(x);
-                    $scope.get_customer();
-                    $scope.toggleUpdateCard();
-                    $scope.$emit("notification:success",
-                                 "New Credit Card Submitted");
+                    if (x[1][0] !== 1) {
+                        $scope.$emit("notification:fail",
+                                     "Oops, something went wrong. Please try again.");
+                    } else {
+                        $scope.get_customer();
+                        $scope.toggleUpdateCard();
+                        $scope.$emit("notification:success",
+                                     "New Credit Card Submitted");
+                    }
                 }).except(function(err) {
                     console.log(err);
                 });
@@ -110,25 +115,23 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             });
         };
         $scope.updateSubscription = function(newplan) {
-            if (newplan!=='000') {$scope.billing.currentPlan = newplan;}
-            /*
-            payments.update_subscription(newplan)
-            .then(function(x) {
-                SWBrijj.proc("account.company_attribute_update",
-                             "payment_plan", newplan)
+            if (newplan!=='000') {
+                payments.update_subscription(newplan)
                 .then(function(x) {
-                    $scope.billing.currentPlan = newplan;
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail",
-                                 "Failed to update plan.");
+                    if (x[1][0] !== 1) {
+                        $scope.$emit("notification:fail",
+                                     "Oops, please try again.");
+                    } else {
+                        $scope.billing.currentPlan = newplan;
+                        $scope.$emit("notification:success",
+                                     "Payment plan updated");
+                    }
+                }).except(function(err) {
                 });
-            }).except(function(x) {
-                void(x);
+            } else {
                 $scope.$emit("notification:fail",
-                             "Failed to update plan.");
-            });
-            */
+                             "Can't select zombie mode.");
+            }
         };
         $scope.create_customer = function(newcc, newplan) {
             SWBrijj.proc('account.create_customer', newcc, newplan).then(function(data) {

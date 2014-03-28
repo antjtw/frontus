@@ -2,8 +2,7 @@ var service = angular.module('commonServices', ['brijj']);
 
 // Add Stripe authorization to default $http request headers.
 service.run(function($http, SWBrijj) {
-    SWBrijj.tblm('config.configuration', 'name', 'stripe'
-    ).then(function(data) {
+    SWBrijj.tblm('config.configuration', 'name', 'stripe').then(function(data) {
         $http.defaults.headers.common.Authorization = 'Bearer ' + data.value;
     });
 });
