@@ -42,15 +42,15 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
         $scope.billing = {};
         // TODO should we get these from the DB?
         $scope.billing.plans = ['001', '002', '003', '000'];
-        SWBrijj.tblm('account.my_company',
-                     ['payment_plan', 'stripe_customer_id', 'stripe_payment_token']
-        ).then(function(data) {
-            console.log(data);
-            $scope.billing.currentPlan = data[0].payment_plan || '000';
-            $scope.billing.stripe_customer_id = data[0].stripe_customer_id;
-            $scope.billing.stripe_payment_token = data[0].stripe_payment_token;
-            if (!$scope.billing.stripe_customer_id) {
-                $scope.getCustomerId();
+        SWBrijj.tbl('account.my_company_payment').then(function(data) {
+            $scope.billing.currentPlan = data[1][3] || '000';
+            $scope.billing.customer_id = data[1][1];
+            $scope.billing.payment_token = data[1][2];
+            if (!$scope.billing.customer_id) {
+                console.log("do something!");
+                //$scope.getCustomerId();
+            } else {
+                $scope.load_invoices();
             }
         }).except(function(err) {
             void(err);
@@ -59,38 +59,33 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
         $scope.handleStripe = function(status, response) {
             if (response.error) {
                 console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
             } else {
-                SWBrijj.proc("account.company_attribute_update",
-                             "stripe_payment_token", response.id
-                ).then(function(x) {
-                    console.log(x);
-                    $scope.billing.stripe_payment_token = response.id;
-                    $scope.$emit("notification:success",
-                                 "Credit Card Accepted");
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail",
-                                 "Invalid credit card. Please try again.");
-                });
-                    
+                $scope.billing.stripe_payment_token = response.id;
+                $scope.$emit("notification:success",
+                             "Credit Card Accepted");
             }
         };
         $scope.getCustomer = function() {
 
         };
-        $scope.load_invoices = function(customerid) {
-            console.log("TODO");
-            /*
-            payments.get_invoices(customerid).then(function(resp) {
-                console.log(resp);
-                payments.get_upcoming_invoice(customerid).then(function(resp) {
-                    console.log(resp);
-                });
+        $scope.load_invoices = function() {
+            payments.get_invoices($scope.billing.customer_id, 3)
+            .then(function(resp) {
+                $scope.billing.invoices = resp.data.data;
+                $scope.load_upcoming_invoice();
             });
-            */
+        };
+        $scope.load_upcoming_invoice = function() {
+            payments.get_upcoming_invoice($scope.billing.customer_id)
+            .then(function(resp) {
+                $scope.billing.invoices.push(resp.data);
+                console.log($scope.billing.invoices);
+            });
         };
         $scope.updateSubscription = function(newplan) {
-            console.log("TODO");
+            if (newplan!=='000') {$scope.billing.currentPlan = newplan;}
             /*
             payments.update_subscription(newplan)
             .then(function(x) {
@@ -109,6 +104,13 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                              "Failed to update plan.");
             });
             */
+        };
+        $scope.create_customer = function(newcc, newplan) {
+            SWBrijj.proc('account.create_customer', newcc, newplan).then(function(data) {
+                console.log(data);
+            }).except(function(err) {
+                console.log(err);
+            });
         };
     }
 ]);

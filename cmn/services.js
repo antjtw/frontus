@@ -38,11 +38,6 @@ service.factory('payments', function($http, SWBrijj) {
     s.create_customer = function(newplan, newcard) {
         return SWBrijj.proc('account.create_customer', newplan, newcard);
     };
-    s.customer_invoices = function() {
-        return $http({method: 'GET',
-                      url: 'https://api.stripe.com/v1/invoices'
-        });
-    };
     s.get_customer = function(customerid) {
         return $http({method: 'GET',
                       url: 'https://api.stripe.com/v1/customers/'+customerid
