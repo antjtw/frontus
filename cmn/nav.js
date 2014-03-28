@@ -368,6 +368,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (doc.when_signed == null) return 1;
                 else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
                 else if (doc.when_finalized == null) return 3;
+                else if (doc.when_void_requested != null && doc.when_void_accepted == null) return 5;
                 else return 4;
             }
         };
@@ -397,6 +398,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
+                    console.log(x);
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
                     });
@@ -414,7 +416,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
                 else if (type == "investor") {
-                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1) {
+                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1 || note.signature_status == 5) {
                         notifications.push(note);
                     }
                 }
@@ -528,6 +530,10 @@ navm.filter('notifications', function () {
             url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
+        else if (note.signature_status == 5 && note.signature_flow == 2) {
+            url = '/documents/investor-view?doc=' + note.doc_id;
+            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
+        }
     };
 });
 
@@ -537,6 +543,7 @@ navm.filter('noteicon', function() {
         if (activity == 1) return "doc-sign-yel";
         else if (activity == 2) return "doc-countersign-yel";
         else if (activity == 3) return "doc-final-yel";
+        else if (activity == 5) return "doc-void-pending-yel";
         else if (activity == -1) return "doc-view-yel";
         else return "hunh?";
     }

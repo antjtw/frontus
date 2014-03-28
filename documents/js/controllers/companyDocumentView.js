@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
         'navState',

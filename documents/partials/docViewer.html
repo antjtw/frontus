@@ -55,7 +55,7 @@
         <div class="row-fluid docViewerTitle">
             <div>
                 <div class="pull-left">
-                    <div class="docName">{{lib.docname | caplength: 60}}</div>
+                    <div class="docName">{{lib.docname | caplength: 100}}</div>
                     <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
                     <div class="lastUpdated" ng-show="lib.last_updated">
                         Last Updated {{lib.last_updated | fromNow:servertime}}
@@ -96,7 +96,7 @@
                         </li>
                     </ul>
                 </div>
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib))}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
                             Next
@@ -147,6 +147,18 @@
                             ng-disabled="processing || confirmValue===0"
                             ng-click="finalizeAction(confirmValue, rejectMessage);">
                         Confirm
+                    </button>
+                    <button class="btn"
+                            ng-show="voidable(lib)"
+                            ng-disabled="processing || confirmValue===0"
+                            ng-click="voidAction(confirmValue, rejectMessage);">
+                        Confirm
+                    </button>
+                    <button class="btn"
+                            ng-show="template_original && !forsigning"
+                            ng-disabled="processing || checkmany(template_email)"
+                            ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
+                        Send
                     </button>
                     <button class="btn"
                             ng-disabled="!confirmValue"
@@ -282,6 +294,40 @@
                             <span>Reject Document</span>
                             <br>
                             <span>Reject issuer's countersignature on this document.</span>
+                            <br>
+                            <textarea ng-show="confirmValue===-1"
+                                      class="messageText" rows="3"
+                                      ng-model="$parent.rejectMessage"
+                                      ng-click="resetMsg()">
+                            </textarea>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-show="voidable(lib) && lib.signature_flow > 0">
+                <div class="confirmBody">
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Accept Void</span>
+                            <br>
+                            <span>Accept the voiding of this document.</span>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="radioOption">
+                        <li class="pull-left">
+                            <button class="radio-button"
+                                    ng-class="{'selected':confirmValue===-1}"
+                                    ng-click="setConfirmValue(-1)">
+                            </button>
+                        </li>
+                        <li class="pull-left">
+                            <span>Reject Void</span>
+                            <br>
+                            <span>Reject the voiding of this document.</span>
                             <br>
                             <textarea ng-show="confirmValue===-1"
                                       class="messageText" rows="3"

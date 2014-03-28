@@ -431,7 +431,7 @@ docs.directive('docViewer', function() {
     return {
         restrict: 'EA',
         scope: true,
-        templateUrl: 'docViewer.html',
+        templateUrl: '/documents/partials/docViewer.html',
         controller: 'DocumentViewController'
     };
 });
@@ -442,7 +442,7 @@ docs.directive('templateViewer', function($compile) {
         scope: {
             html: '='
         },
-        templateUrl: 'template.html',
+        templateUrl: '/documents/partials/template.html',
         controller: 'TemplateViewController',
         link: function (scope, iElement, iAttrs) {
 
@@ -813,6 +813,26 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
         $scope.finalizeAction = function(conf, msg) {
             $scope.$emit('finalizeAction', [conf, msg]);
+        };
+
+        $scope.voidAction = function(confirm, message) {
+            $scope.processing = true;
+            if (message == "Explain the reason for rejecting this document.") {
+                message = " ";
+            }
+            SWBrijj.document_investor_void($scope.docId, confirm, message).then(function(data) {
+                if (confirm == 1) {
+                    $scope.$emit("notification:success", "Void request accepted and document voided");
+                }
+                else {
+                    $scope.$emit("notification:success", "Void request rejected");
+                }
+                $scope.leave();
+            }).except(function(x) {
+                    console.log(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                });
         };
 
         $scope.$emit('docViewerReady');
@@ -1708,6 +1728,10 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         $scope.finalizable = function(doc) {
             return (!$scope.invq && doc && doc.signature_flow===1 && doc.when_signed && !doc.when_finalized) ||
                    ($scope.invq && doc && doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
+        };
+
+        $scope.voidable = function(doc) {
+            return (doc && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted && $rootScope.navState.role == "investor");
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});

@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 docviews.filter('fromNow', function() {
     return function(date, servertime) {

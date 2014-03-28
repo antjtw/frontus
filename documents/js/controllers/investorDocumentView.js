@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
         'navState',

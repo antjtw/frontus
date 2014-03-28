@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 var docviews = angular.module('documentviews',
         ['documents', 'upload', 'nav', 'ui.bootstrap', '$strap.directives',

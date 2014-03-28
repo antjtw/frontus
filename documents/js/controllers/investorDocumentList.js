@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 
 docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$location', '$rootScope', 'navState', 'basics',
@@ -122,10 +122,15 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.shortStatus = function(version) {
             if (!version) return "";
-            if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+            if ($scope.isvoided(version)) {
+                return "Voided"
+            }
+            else if ($scope.isPendingVoid(version)) {
+                return "Void requested by company"
+            } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
                 return "Rejected by you";
             } else if ($scope.wasJustRejected(version) &&
-                       !$scope.lastEventByInvestor(version)) {
+                !$scope.lastEventByInvestor(version)) {
                 return "Rejected by company";
             } else if ($scope.isPendingSignature(version)){
                 return "Review and Sign";
@@ -177,6 +182,14 @@ docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$lo
 
         $scope.docIsComplete = function(doc) {
             return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
+        };
+
+        $scope.isPendingVoid = function(version) {
+            return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.isvoided = function(version) {
+            return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
 
     }

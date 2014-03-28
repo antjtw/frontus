@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
     function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
@@ -333,13 +333,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
-        /*
-        $scope.exportVersionToPdf = function(version) {
-            SWBrijj.procd('sharewave-' + version.doc_id + '.pdf', 'application/pdf', 'document.genCounterpartyPdf', version.doc_id.toString()).then(function(url) {
-                document.location.href = url;
-            });
-        };
-        */
+
         $scope.prepareDocument = function(doc) {
             if (doc.template_id) {
                 $location.url("/company-view?template=" + doc.template_id);
@@ -409,7 +403,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                     $scope.fileError = "Please choose a smaller file";
                 } else if (mimetypes.indexOf(element.files[i].type) == -1) {
                     $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
-                    //$scope.fileError = "Please choose a .pdf, .doc, .docx, .odt, .txt, .rtf, .ppt, .pptx, .odp, .jpg, .png, or a .tiff.";
                 } else {
                     $scope.files.push(element.files[i]);
                 }
@@ -502,13 +495,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                 $scope.documentUploadClose();
 
             }).except(function(x) {
-                /*
-                if ($scope.tester === true) {
-                    $scope.fileError = x.message;
-                } else {
-                    $scope.fileError = "Oops, something went wrong. Please try again.";
-                }
-                */
                 $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 $scope.files = [];
                 $scope.dropText = moreDocs;
@@ -567,13 +553,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                     doc.last_updated)).from($rootScope.servertime);
             }
         };
-        /*
-        $scope.investorStatus = function(investor) {
-            if (investor && investor.versions) {
-                return "Last Updated " + moment(investor.versions[0] && investor.versions[0].last_event && investor.versions[0].last_event.event_time).from($rootScope.servertime);
-            }
-        };
-        */
 
         $scope.shortDocStatus = function(doc) {
             if (doc.versions) {
@@ -596,7 +575,13 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
         $scope.shortVersionStatus = function(version) {
             if (!version) return "";
-            if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+            if ($scope.isVoided(version)) {
+                return "Voided"
+            }
+            else if ($scope.isPendingVoid(version)) {
+                return "Void requested by you"
+            }
+            else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
                 return "Rejected by recipient";
             } else if ($scope.wasJustRejected(version) &&
                        !$scope.lastEventByInvestor(version)) {
@@ -751,6 +736,19 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         $scope.isPendingIssuerFinalization = function(version) {
             return (version.signature_flow===1 && version.when_signed && !version.when_finalized && !version.when_retracted);
         };
+
+        $scope.isPendingVoid = function(version) {
+            return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.isVoided = function(version) {
+            return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.messageWritten = function(text) {
+            return !text || !text.length > 0;
+        };
+
 
         $scope.docIsComplete = function(doc) {
             if (doc.versions) {
@@ -1022,47 +1020,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         //My parentheses format
         var regExp = /\(([^)]+)\)/;
 
-        /*
-        $scope.share = function(message, emails, sign) {
-            $scope.processing = true;
-            sign = sign == "Yes";
-            var tosee = "";
-            if (sign) {
-                var date = Date.parse('22 November 2113');
-            } else {
-                date = null;
-            }
-            if (message === "Add an optional message...") {
-                message = "";
-            }
-            angular.forEach(emails, function(person) {
-                var matches = regExp.exec(person);
-                if (matches == null) {
-                    matches = ["", person];
-                }
-                tosee += "," +  matches[1];
-            });
-            SWBrijj.procm("document.share_document",
-                              $scope.docToShare.doc_id,
-                              0, '',
-                              tosee.substring(1).toLowerCase(),
-                              message,
-                              Boolean(sign) ? 2 : 0,
-                              date
-                          ).then(function(data) {
-                void(data);
-                $scope.$emit("notification:success", "Document shared");
-                $scope.signeeded = "No";
-                $route.reload();
-            }).except(function(x) {
-                $scope.processing = false;
-                void(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.signeeded = "No";
-            });
-        };
-        */
-
         $scope.updateTitleOpen = function(doc) {
             $scope.docForModal = doc;
             $scope.updateTitleModal = true;
@@ -1103,9 +1060,35 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
                 $scope.$emit("notification:success", doc.docname + " deleted.");
                 $scope.documents.splice($scope.documents.indexOf(doc), 1);
             }).except(function(x) {
-                console.log(x);
                 $scope.$emit("notification:fail", "Document deletion failed.");
             });
+        };
+
+
+        $scope.voidDocument = function(doc, message) {
+            if (!message || message.length == 0) {
+                message = " ";
+            }
+            SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
+                $scope.$emit("notification:success", "Void requested");
+                doc.when_void_requested = new Date.today();
+                doc.last_event.activity = "void requested";
+                doc.last_event.event_time = new Date.today();
+                doc.last_event.timenow = new Date.today();
+                doc.last_event.person = $rootScope.person.name;
+            }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    console.log(x);
+                });
+        };
+
+        $scope.voidDocOpen = function(doc) {
+            $scope.voiddocForModal = doc;
+            $scope.voidDocModal = true;
+        };
+
+        $scope.voidDocClose = function() {
+            $scope.voidDocModal = false;
         };
 
         $scope.allArchived = function(versions) {
@@ -1264,3 +1247,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         });
     }
 ]);
+
+
+
