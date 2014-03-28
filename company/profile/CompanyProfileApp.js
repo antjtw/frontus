@@ -33,8 +33,8 @@ function hidePopover() {
     angular.element('.popover').hide();
 }
 
-app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
-    function($scope, SWBrijj, navState, payments) {
+app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payments',
+    function($scope, $route, SWBrijj, navState, payments) {
         if (navState.role=='investor') {
             document.location.href="/home";
             return;
@@ -47,15 +47,14 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             console.log(err);
         });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
-            $scope.billing.currentPlan = data[1][3] || '000';
-            $scope.billing.customer_id = data[1][1];
-            $scope.billing.payment_token = data[1][2];
-            if (!$scope.billing.customer_id) {
-                console.log("do something!");
-                //$scope.getCustomerId();
-            } else {
+            if (data.length == 2) {
+                $scope.billing.currentPlan = data[1][3] || '000';
+                $scope.billing.customer_id = data[1][1];
+                $scope.billing.payment_token = data[1][2];
                 $scope.get_customer();
                 $scope.load_invoices();
+            } else {
+                $scope.billing.currentPlan = '001';
             }
         }).except(function(err) {
             void(err);
@@ -71,28 +70,31 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                 return "true";
             }
         };
-        // TODO rename handleStripe
-        $scope.handleStripe = function(status, response) {
+        $scope.updatePayment = function(status, response) {
             if (response.error) {
                 console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
                 $scope.billing.payment_token = response.id;
-                payments.update_payment($scope.billing.payment_token)
-                .then(function(x) {
-                    if (x[1][0] !== 1) {
-                        $scope.$emit("notification:fail",
-                                     "Oops, something went wrong. Please try again.");
-                    } else {
-                        $scope.get_customer();
-                        $scope.toggleUpdateCard();
-                        $scope.$emit("notification:success",
-                                     "New Credit Card Submitted");
-                    }
-                }).except(function(err) {
-                    console.log(err);
-                });
+                if ($scope.billing.customer_id) {
+                    payments.update_payment($scope.billing.payment_token)
+                    .then(function(x) {
+                        if (x[1][0] !== 1) {
+                            $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                        } else {
+                            $scope.toggleUpdateCard();
+                            $scope.$emit("notification:success",
+                                         "New Credit Card Submitted");
+                        }
+                    }).except(function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Credit Card Verified");
+                }
             }
         };
         $scope.get_customer = function() {
@@ -115,7 +117,7 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
             });
         };
         $scope.updateSubscription = function(newplan) {
-            if (newplan!=='000') {
+            if ($scope.billing.customer_id) {
                 payments.update_subscription(newplan)
                 .then(function(x) {
                     if (x[1][0] !== 1) {
@@ -129,13 +131,20 @@ app.controller('BillingCtrl', ['$scope', 'SWBrijj', 'navState', 'payments',
                 }).except(function(err) {
                 });
             } else {
-                $scope.$emit("notification:fail",
-                             "Can't select zombie mode.");
+                $scope.billing.currentPlan = newplan;
             }
         };
         $scope.create_customer = function(newcc, newplan) {
-            SWBrijj.proc('account.create_customer', newcc, newplan).then(function(data) {
-                console.log(data);
+            SWBrijj.proc('account.create_customer', newcc, newplan)
+            .then(function(data) {
+                if (data.length==2) {
+                    $scope.$emit("notification:success",
+                                 "Billing information submitted");
+                    $route.reload();
+                } else {
+                    $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                }
             }).except(function(err) {
                 console.log(err);
             });
@@ -702,7 +711,7 @@ app.filter('billingPlans', function() {
     return function(plan) {
         switch (plan) {
             case '000':
-                return "Zombie Mode";
+                return "Cancel Subscription";
             case '001':
                 return "Plan 1";
             case '002':
