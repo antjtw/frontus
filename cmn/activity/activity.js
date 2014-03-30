@@ -49,6 +49,9 @@ active.filter('icon', function() {
             else if (activity == "countersigned") return "doc-countersign";
             else if (activity == "finalized") return "doc-final";
             else if (activity == "retracted") return "doc-retract";
+            else if (activity == "void requested") return "doc-void-request";
+            else if (activity == "void rejected") return "doc-void-reject";
+            else if (activity == "void accepted") return "doc-void-accept";
             else return "hunh?";
         }
     };
@@ -95,6 +98,9 @@ active.filter('description', function() {
                 else if (activity == "countersigned") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " countersigned by "+person;
                 else if (activity == "finalized") return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " approved by " + person;
                 else if (activity == "retracted") return "Retracted " + caplength(document, 35) + " from " + person;
+                else if (activity == "void requested") return " Void requested on " + person + "'s " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
+                else if (activity == "void rejected") return " Void rejected by " + person + " on " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
+                else if (activity == "void accepted") return " Void accepted by " + person + " on " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
                 else return activity + " by "+person;
             }
         }
@@ -126,6 +132,9 @@ active.filter('description', function() {
                 else if (activity == "signed") return "You signed <a href=" + url + ">" +caplength(document, 35) + "</a>";
                 else if (activity == "rejected") return person + " rejected your signature on <a href=" + url + ">" + caplength(document, 35) + "</a>";
                 else if (activity == "countersigned") return person + " countersigned <a href=" + url + ">" +caplength(document, 35) + "</a>";
+                else if (activity == "void requested") return person + " requested voiding <a href=" + url + ">" +caplength(document, 35) + "</a>";
+                else if (activity == "void rejected") return "You rejected the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
+                else if (activity == "void accepted") return "You accepted the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
                 else if (activity == "finalized") return "You approved <a href=" + url + ">" + caplength(document, 35) + "</a>";
                 else  {
                     return activity + " by "+person;
@@ -152,6 +161,9 @@ active.filter('description', function() {
             else if (activity == "rejected") return "Signature rejected by " +person;
             else if (activity == "countersigned") return "Countersigned by " + person;
             else if (activity == "finalized") return "Approved by " + person;
+            else if (activity == "void requested") return "Void request sent to " +person;
+            else if (activity == "void accepted") return "Void accepted by " + person;
+            else if (activity == "void rejected") return "Void rejected by " + person;
             else return activity + "ed Document";
         }
     }

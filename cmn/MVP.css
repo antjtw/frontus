@@ -1739,8 +1739,8 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-toggle > .circle > span {
-    font-size: 20px;
-    line-height: 14px;
+    font-size: 18px;
+    line-height: 13px;
 }
 
 .sub-row > .status-toggle > .circle {
@@ -2135,8 +2135,13 @@ tr.preparedDoc {
 .box-button > ul > li:nth-child(1) > span {
     font-size: 10px;
 }
+
+.box-button > ul > li {
+    line-height: 15px;
+}
+
 .box-button > ul > li:nth-child(2) > span {
-    font-size: 12px;
+    font-size: 10px;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
