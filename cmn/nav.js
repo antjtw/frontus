@@ -35,7 +35,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
 
 
 
-var navm = angular.module('nav', ['ui.bootstrap'], function () {
+var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments'], function () {
 });
 
 navm.factory('navState', [function () {
@@ -87,7 +87,9 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
+navm.controller('NavCtrl',
+        ['$scope', '$route', '$rootScope', 'SWBrijj',
+         '$q', 'navState', 'payments',
     function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
 
         $scope.companies = [];
@@ -338,6 +340,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return email != undefined ? re.test(email) : false;
         };
 
+        $scope.verifyPayment = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                //save cc token
+            }
+        };
         $scope.companySelfRegister = function () {
             if ($scope.fieldCheck($scope.registeremail)) {
                 SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {

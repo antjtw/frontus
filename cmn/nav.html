@@ -159,23 +159,75 @@
     </div>
 </div>
 
-<div modal="addCompanyModal" close="addCompanyModalClose()" options="opts">
+<div modal="addCompanyModal"
+     close="addCompanyModalClose()"
+     options="opts">
     <div class="modalHeader">
         <span>Create a new company</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addCompanyModalClose()"></span>
+        <span class="close" data-icon="&#xe00f;"
+              aria-hidden="true"
+              ng-click="addCompanyModalClose()">
+        </span>
     </div>
     <div class="modalText">
         <div class="input-row-new">
             <p>Company Name</p>
             <input ng-model="newCompany" maxlength="30">
         </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="addCompanyModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="addCompanyModalClose(); createNewCompany(newCompany);">Create</button>
-        </div>
+        <form style="width: 320px;"
+              stripe-form="verifyPayment"
+              name="myForm">
+            <fieldset>
+                <div class="input-list">
+                    <div class="row-fluid">
+                        <span>Full Name</span>
+                        <input type="text"
+                               class="input-block-level">
+                    </div>
+                    <div class="row-fluid">
+                        <span>Credit Card Number</span>
+                        <input type="text"
+                               class="input-block-level"
+                               ng-model="number"
+                               payments-validate="card"
+                               payments-format="card"
+                               payments-type-model="type"
+                               ng-class="myForm.number.$card.type"/>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <span>CVC</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="cvc"
+                                   payments-validate="cvc"
+                                   payments-format="cvc"
+                                   payments-type-model="type"/>
+                        </div>
+                        <div class="span6">
+                            <span>Expiration Date</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="expiry"
+                                   payments-validate="expiry"
+                                   payments-format="expiry"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left standard-button gray">
+                        <button class="btn"
+                                ng-click="addCompanyModalClose()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="standard-button pull-right">
+                        <button type="submit" class="btn">
+                            Verify Card
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     </div>
 </div>
