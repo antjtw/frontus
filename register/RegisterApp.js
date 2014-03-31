@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('RegisterApp', ['brijj', 'commonServices', 'angularPayments'], function($routeProvider, $locationProvider) {
+var app = angular.module('RegisterApp', ['brijj', 'commonServices'], function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
 
     $routeProvider.
@@ -27,6 +27,13 @@ var app = angular.module('RegisterApp', ['brijj', 'commonServices', 'angularPaym
         redirectTo: '/'
     });
 });
+
+/** @name $scope#activated
+ * @type {boolean} */
+/** @name $scope#redirect
+ * @type {string} */
+/** @name $scope#email
+ * @type {string} */
 
 app.controller('CompanyCtrl', ['$scope', '$location', '$routeParams', 'SWBrijj',
     function($scope, $location, $routeParams, SWBrijj) {
@@ -88,39 +95,22 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
                 document.location.href = "/login";
             }
         });
-        $scope.handleStripe = function(status, response) {
-            if (response.error) {
-                $scope.stripe_card = null;
-                console.log(response);
-            } else {
-                $scope.stripe_card = response.id;
-                console.log(response);
-            }
-        };
 
         $scope.activate = function() {
-            payments.create_customer($scope.stripe_card, '001', null
-            ).then(function(resp) {
-                console.log(resp);
-                //pass stripe_card AND new customer id to doCompanySelfActivate
-                /*
-                SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
-                    if (activated) {
-                        document.location.href = activated + "?msg=first";
-                    } else {
-                        document.location.href = '/login';
-                    }
-                }).except(function(x) {
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-                });
-                */
-            }).error(function(x) {
+            SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
+                if (activated) {
+
+                    document.location.href = activated + "?msg=first";
+                } else {
+                    document.location.href = '/login';
+                }
+            }).except(function(x) {
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
         $scope.fieldCheck = function() {
-            return !($scope.stripe_card && $scope.pname && $scope.password && $scope.cname);
+            return !($scope.pname && $scope.password && $scope.cname);
         };
     }
 ]);
