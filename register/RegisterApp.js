@@ -15,6 +15,10 @@ var app = angular.module('RegisterApp', ['brijj', 'commonServices'], function($r
         controller: 'CompanySelfCtrl',
         templateUrl: 'company-self.html'
     }).
+    when('/company-onestep', {
+        controller: 'CompanyOneStep',
+        templateUrl: 'company-onestep.html'
+    }).
     when('/people', {
         controller: 'PeopleCtrl',
         templateUrl: 'people.html'
@@ -115,6 +119,29 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
     }
 ]);
 
+app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
+    function($scope, $routeParams, SWBrijj) {
+        $scope.fieldCheck = function() {
+            return !($scope.pname && $scope.cname &&
+                     $scope.email && $scope.emailConfirm &&
+                     $scope.email==$scope.emailConfirm &&
+                     $scope.password && $scope.passwordConfirm &&
+                     $scope.password==$scope.passwordConfirm);
+        };
+        $scope.register = function() {
+            SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password, $scope.pname, $scope.cname).then(function(registered) {
+                if (registered) {
+                    document.location.href = registered + "?msg=first";
+                } else {
+                    document.location.href = "/login";
+                }
+            }).except(function(x) {
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        };
+
+    }
+]);
 app.controller('PeopleCtrl', ['$scope', '$location', '$routeParams', 'SWBrijj',
     function($scope, $location, $routeParams, SWBrijj) {
         $scope.code = $routeParams.code;
