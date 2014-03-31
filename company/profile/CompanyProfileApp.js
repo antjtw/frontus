@@ -1,23 +1,23 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
+var app = angular.module('CompanyProfileApp', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
     //this is used to assign the correct template and controller for each URL path
     $locationProvider.html5Mode(true).hashPrefix('');
     // $locationProvider.html5Mode(false).hashPrefix('!');
 
     $routeProvider.
-    when('/', {
+    when('/company/profile/', {
         controller: 'ContactCtrl',
         templateUrl: 'contact.html'
     }).
-    when('/people', {
+    when('/company/profile/people', {
         controller: 'PeopleCtrl',
         templateUrl: 'people.html'
     }).
-    when('/view', {
+    when('/company/profile/view', {
         controller: 'ViewerCtrl',
         templateUrl: 'viewer.html'
     }).
     otherwise({
-        redirectTo: '/'
+        redirectTo: '/company/profile'
     });
 });
 
