@@ -1643,9 +1643,9 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .body-box > table.status-table.investor > tbody > tr > th:nth-child(2) {
-    width: -moz-calc(50%-50px) !important;
-    width: -webkit-calc(50%-50px) !important;
-    width: calc(50%-50px) !important;
+    width: -moz-calc(50%- 50px) !important;
+    width: -webkit-calc(50%- 50px) !important;
+    width: calc(50%- 50px) !important;
 }
 
 .sign-button {
@@ -3590,36 +3590,7 @@ button.icon-button:hover {
 .divider {
     border-top: solid black 2px;
 }
-.start-intro {
-    margin-top:10px;
-    margin-left:80px;
-    width:100px;
-    display: block;
-    float:right;
-    opacity: 0.5;
-}
-.todo-list {
-    opacity: 0.5;
-    display: block;
-    width: 280px;
-    border: dashed 1px grey;
-    position: fixed;
-    right: 1em;
-    top: 140px;
-    padding-top: 10px;
-    background-color: rgb(255, 224, 255);
-}
-.sub-todo-list {
-    opacity: 0.5;
-    display: block;
-    width: 280px;
-    border: dashed 1px grey;
-    position: fixed;
-    right: 1em;
-    bottom: 120px;
-    padding-top: 10px;
-    background-color: rgb(224, 224, 255);
-}
+
 /* Div vertical trickery */
 .DivHelper {
     display: inline-block;
