@@ -9,14 +9,17 @@ app.config(function($routeProvider, $locationProvider){
     $locationProvider.html5Mode(true).hashPrefix('');
 
     $routeProvider.
-        when('/home/investor', {controller: 'InvestorCtrl', templateUrl:'/home/investor.html'}).
-        when('/home/company', {controller: 'CompanyCtrl', templateUrl:'/home/company.html'}).
-        otherwise({redirectTo:'/home/investor'});
+        when('/investor', {controller: 'InvestorCtrl', templateUrl:'/home/investor.html'}).
+        when('/company', {controller: 'CompanyCtrl', templateUrl:'/home/company.html'}).
+        when('/profile', {controller: 'ContactCtrl', templateUrl: '/account/profile/contact.html'}).
+        otherwise({redirectTo:'/investor'});
 });
 
 app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState', 'calculate',
     function($scope, $rootScope, $route, $location, $routeParams, SWBrijj, navState, calculate) {
 
+
+        console.log($route.current);
         $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
         $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
         $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
@@ -26,7 +29,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.default = "100%";
 
         if (navState.role == 'investor') {
-            $location.path('/home/investor');
+            $location.path('/investor');
             return;
         }
 
@@ -378,7 +381,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
-            $location.path('/home/company');
+            $location.path('/company');
             return;
         }
 
