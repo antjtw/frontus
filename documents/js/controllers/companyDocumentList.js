@@ -43,10 +43,12 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         });
         // Needed for docIsPrepared
         $scope.$on("profile_loaded", function() {
-            SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
+            SWBrijj.tblm('account.my_signature', ['signature']
+            ).then(function(x) {
                 if (x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
+                $scope.loadSmartDocuments();
             }).except(function(x) {
                 console.log(x);
             });
@@ -148,7 +150,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             }).except(function(x) {
             });
         };
-        $scope.loadSmartDocuments();
         $scope.loadDocuments = function() {
             SWBrijj.tblm('document.my_company_library',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
