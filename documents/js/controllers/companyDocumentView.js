@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
+app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
         'navState',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
         if (navState.role == 'investor') {

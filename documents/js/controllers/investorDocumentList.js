@@ -1,7 +1,7 @@
 //'use strict';
 
 
-docviews.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$location', '$rootScope', 'navState', 'basics',
+app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$location', '$rootScope', 'navState', 'basics',
     function($scope, SWBrijj, $location, $rootScope, navState, basics) {
         if (navState.role == 'issuer') {
             $location.path("/company-list");

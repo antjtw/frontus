@@ -1,5 +1,8 @@
 
-var app = angular.module('HomeApp', ['ngRoute', 'ngResource', 'ui.bootstrap', '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters', 'ownerDirectives', 'ownerServices', 'commonServices', 'd3', 'homeDirectives', 'activityDirective', 'commonDirectives', 'ui.select2']);
+var app = angular.module('HomeApp', ['ngRoute', 'ngResource', 'ui.bootstrap', '$strap.directives',
+    'ui.event', 'nav', 'brijj', 'ownerFilters', 'ownerDirectives', 'ownerServices', 'commonServices',
+    'd3', 'homeDirectives', 'activityDirective', 'commonDirectives', 'ui.select2',
+    'documents', 'upload', 'email', 'docServices']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -23,6 +26,12 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/ownership/company-status', {controller: 'statusController', templateUrl: '/ownership/pages/comp-status.html'}).
         when('/app/ownership/investor-captable', {controller: 'invCaptableController', templateUrl: '/ownership/pages/inv-captable.html'}).
         when('/app/ownership/investor-grants', {controller: 'invGrantController', templateUrl: '/ownership/pages/inv-grant.html'}).
+
+        when('/app/documents/company-list', {templateUrl: '/documents/partials/companyList.html', controller: 'CompanyDocumentListController', reloadOnSearch: false}).
+        when('/app/documents/company-view', {templateUrl: '/documents/partials/companyViewer.html',controller: 'CompanyDocumentViewController',reloadOnSearch: false}).
+        when('/app/documents/company-status', {templateUrl: '/documents/partials/companyStatus.html',controller: 'CompanyDocumentStatusController'}).
+        when('/app/documents/investor-list', {templateUrl: '/documents/partials/investorList.html',controller: 'InvestorDocumentListController'}).
+        when('/app/documents/investor-view', {templateUrl: '/documents/partials/investorViewer.html',controller: 'InvestorDocumentViewController',reloadOnSearch: false}).
 
         otherwise({redirectTo:'/app/home/investor'});
 });
@@ -913,3 +922,25 @@ app.filter('fromNowSort', function () {
         return events;
     };
 });
+
+function memoize( fn ) {
+    return function () {
+        var args = Array.prototype.slice.call(arguments),
+            hash = "",
+            i = args.length;
+        var currentArg = null;
+        while (i--) {
+            currentArg = args[i];
+            hash += (currentArg === Object(currentArg)) ?
+                JSON.stringify(currentArg) : currentArg;
+            fn.memoize || (fn.memoize = {});
+        }
+        return (hash in fn.memoize) ? fn.memoize[hash] :
+            fn.memoize[hash] = fn.apply(this, args);
+    };
+}
+
+// IE8 Shiv for checking for an array
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}

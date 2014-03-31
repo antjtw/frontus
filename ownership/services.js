@@ -891,3 +891,88 @@ ownership.service('sorting', function () {
     };
 
 });
+
+app.run(function ($rootScope) {
+
+    $rootScope.rowOrdering = function (row) {
+        var total = 0;
+        for (var key in row) {
+            if (row.hasOwnProperty(key)) {
+                if (key != "name") {
+                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
+                        total = total + parseFloat(row[key]['u']);
+                    }
+                }
+            }
+        }
+        return -total;
+    };
+
+//Calculates total grants in each issue
+    $rootScope.totalGranted = function (issue, trans) {
+        var granted = 0;
+        angular.forEach(trans, function (tran) {
+            if (tran.issue == issue && tran.type == "Option" && !isNaN(parseFloat(tran.units))) {
+                granted = granted + parseFloat(tran.units);
+                if (tran.forfeited) {
+                    granted = granted - tran.forfeited;
+                }
+            }
+        });
+        return granted;
+    };
+
+//Calculates total grant actions in grant table
+    $rootScope.totalGrantAction = function (type, grants) {
+        var total = 0;
+        angular.forEach(grants, function (grant) {
+            if (grant.action == type && !isNaN(parseFloat(grant.unit))) {
+                total = total + parseFloat(grant.unit);
+            }
+        });
+        return total;
+    };
+
+//Calculates total granted to and forfeited in grant table
+    $rootScope.totalTranAction = function (type, trans) {
+        var total = 0;
+        angular.forEach(trans, function (tran) {
+            if (type == "granted") {
+                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) > 0) {
+                    total = total + parseFloat(tran.units);
+                }
+            }
+            else if (type == "forfeited") {
+                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) < 0) {
+                    total = total + parseFloat(tran.units);
+                }
+            }
+        });
+        return total;
+    };
+
+//Calculates total vested in column
+    $rootScope.totalVestedAction = function (rows) {
+        var total = 0;
+        angular.forEach(rows, function (row) {
+            if (!isNaN(parseFloat(row.vested))) {
+                total = total + parseFloat(row.vested);
+            }
+        });
+        return total;
+    };
+
+    $rootScope.postIssues = function (keys, issue) {
+        console.log(keys);
+        console.log(issue);
+    };
+
+    $rootScope.myPercentage = function (everyone) {
+        return (100 - everyone);
+    };
+
+});
+
+function hidePopover() {
+    angular.element('.popover').hide();
+}

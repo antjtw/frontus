@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState', '$route',
+app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$rootScope', '$filter', '$location', 'SWBrijj', 'navState', '$route',
     function($scope, $routeParams, $rootScope, $filter, $location, SWBrijj, navState, $route) {
         if (navState.role == 'investor') {
             $location.path('/investor-list');

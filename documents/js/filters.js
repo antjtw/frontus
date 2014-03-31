@@ -1,12 +1,12 @@
 //'use strict';
 
-docviews.filter('fromNow', function() {
+app.filter('fromNow', function() {
     return function(date, servertime) {
         return moment(date).from(servertime);
     };
 });
 
-docviews.filter('viewByPrinter', function() {
+app.filter('viewByPrinter', function() {
     return function(viewby) {
         if (viewby == "document") return "Document";
         else if (viewby == "name") return "Name";
@@ -14,7 +14,7 @@ docviews.filter('viewByPrinter', function() {
     };
 });
 
-docviews.filter('fromNowSortandFilter', function() {
+app.filter('fromNowSortandFilter', function() {
     return function(events) {
         if (events) {
             events.sort(function (a, b) {
@@ -27,7 +27,7 @@ docviews.filter('fromNowSortandFilter', function() {
     };
 });
 
-docviews.filter('fileLength', function() {
+app.filter('fileLength', function() {
     return function(word) {
         if (word) {
             if (word.length > 21) {
@@ -40,19 +40,19 @@ docviews.filter('fileLength', function() {
     };
 });
 
-docviews.filter('lengthLimiter', function() {
+app.filter('lengthLimiter', function() {
     return function(word) {
         return word && word.length > 58 ? word.substring(0, 57) + "..." : word;
     };
 });
 
-docviews.filter('nameoremail', function() {
+app.filter('nameoremail', function() {
     return function(person) {
         var word = person.name || person.investor;
         return word.length > 24 ? word.substring(0, 23) + "..." : word;
     };
 });
-docviews.filter('archived', function () {
+app.filter('archived', function () {
     return function (versions, archive) {
         var returnrows = [];
         angular.forEach(versions, function (version) {

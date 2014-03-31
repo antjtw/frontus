@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
+app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
     function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
@@ -505,7 +505,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
 
         $scope.gotoDoc = function(docid) {
             var link;
-            link = "/documents/company-view?doc=" + docid;
+            link = "/app/documents/company-view?doc=" + docid;
             document.location.href = link;
         };
 
@@ -778,32 +778,32 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
 
         $scope.viewOriginal = function(doc) {
-            $location.url("/company-view?doc=" + doc.doc_id + "&page=1");
+            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1");
         };
         $scope.viewDoc = function(docid) {
-            $location.url("/company-view?doc=" + docid + "&page=1");
+            $location.url("/app/documents/company-view?doc=" + docid + "&page=1");
         };
 
         $scope.viewTemplate = function(doc) {
-            $location.url("/company-view?template=" + doc.template_id);
+            $location.url("/app/documents/company-view?template=" + doc.template_id);
         };
 
         $scope.viewStatus = function(doc) {
             if (doc.doc_id) {
-                $location.url("/company-status?doc=" + doc.doc_id);
+                $location.url("/app/documents/company-status?doc=" + doc.doc_id);
             }
         };
 
         $scope.viewVersionStatus = function(doc) {
-            $location.url("/company-status?doc=" + doc.original);
+            $location.url("/app/documents/company-status?doc=" + doc.original);
         };
 
         $scope.viewProfile = function(investor) {
-            document.location.href = "/company/profile/view?id=" + investor.versions[0].investor;
+            document.location.href = "/app/company/profile/view?id=" + investor.versions[0].investor;
         };
 
         $scope.viewInvestorCopy = function(version) {
-            $location.url("/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
+            $location.url("/app/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
 
         $scope.upsertShareItem = function(item, list) {

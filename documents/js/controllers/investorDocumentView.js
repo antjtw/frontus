@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
+app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
         'navState',
     function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics) {
         // Switch to company view if the role is issuer

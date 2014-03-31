@@ -149,7 +149,7 @@
                     </li>
                     <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/app/ownership/company-captable' : '/app/ownership/investor-captable'}}">Ownership</a>
                     </li>
-                    <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
+                    <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/app/documents/company-list' : '/app/documents/investor-list'}}">Documents</a>
                     </li>
                     <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile') != -1}"><a class="button" href="/app/company/profile/people">People</a>
                     </li>
