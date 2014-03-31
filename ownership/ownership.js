@@ -10,18 +10,18 @@
   */
 
 var owner = angular
-    .module('companyownership', ['ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'd3', 'ownerServices', 'ownerFilters', 'ownerDirectives', 'ui.select2', 'activityDirective']);
+    .module('companyownership', ['ngRoute', 'ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'd3', 'ownerServices', 'ownerFilters', 'ownerDirectives', 'ui.select2', 'activityDirective']);
 
 owner.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('');
 
     $routeProvider.
-        when('/company-captable', {templateUrl: 'pages/comp-captable.html', controller: captableController}).
-        when('/company-grants', {templateUrl: 'pages/comp-grant.html', controller: grantController}).
-        when('/company-status', {templateUrl: 'pages/comp-status.html', controller: statusController}).
-        when('/investor-captable', {templateUrl: 'pages/inv-captable.html', controller: invCaptableController}).
-        when('/investor-grants', {templateUrl: 'pages/inv-grant.html', controller: invGrantController}).
-        otherwise({redirectTo: '/investor-captable' });
+        when('/ownership/company-captable', {templateUrl: 'pages/comp-captable.html', controller: captableController}).
+        when('/ownership/company-grants', {templateUrl: 'pages/comp-grant.html', controller: grantController}).
+        when('/ownership/company-status', {templateUrl: 'pages/comp-status.html', controller: statusController}).
+        when('/ownership/investor-captable', {templateUrl: 'pages/inv-captable.html', controller: invCaptableController}).
+        when('/ownership/investor-grants', {templateUrl: 'pages/inv-grant.html', controller: invGrantController}).
+        otherwise({redirectTo: '/ownership/investor-captable' });
 });
 /*
 owner.factory('sharedData', function(SWBrijj, $q) {
