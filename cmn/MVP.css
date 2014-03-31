@@ -2101,6 +2101,7 @@ tr.preparedDoc {
     background: rgb(255, 255, 255) none;
     border: none;
     text-shadow: none;
+    box-shadow: none;
 }
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
