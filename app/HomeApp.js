@@ -9,9 +9,9 @@ app.config(function($routeProvider, $locationProvider){
     $locationProvider.html5Mode(true).hashPrefix('');
 
     $routeProvider.
-        when('/investor', {controller: 'InvestorCtrl', templateUrl:'investor.html'}).
-        when('/company', {controller: 'CompanyCtrl', templateUrl:'company.html'}).
-        otherwise({redirectTo:'/investor'});
+        when('/home/investor', {controller: 'InvestorCtrl', templateUrl:'/home/investor.html'}).
+        when('/home/company', {controller: 'CompanyCtrl', templateUrl:'/home/company.html'}).
+        otherwise({redirectTo:'/home/investor'});
 });
 
 app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$routeParams','SWBrijj', 'navState', 'calculate',
@@ -26,7 +26,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         $scope.default = "100%";
 
         if (navState.role == 'investor') {
-            $location.path('/investor');
+            $location.path('/home/investor');
             return;
         }
 
@@ -378,7 +378,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
     function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
 
         if (navState.role == 'issuer') {
-            $location.path('/company');
+            $location.path('/home/company');
             return;
         }
 
