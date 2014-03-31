@@ -1,4 +1,4 @@
-var active = angular.module('activityDirective', []);
+var active = angular.module('activityDirective', ['ngSanitize']);
 
 function caplength(word, length) {
     if (word) {
@@ -22,7 +22,6 @@ active.directive('activityFeed', function() {
         },
         templateUrl: '/cmn/activity/activity.html',
         controller: ['$scope', function($scope) {
-
         }]
     }
 });

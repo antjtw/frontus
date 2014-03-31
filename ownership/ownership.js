@@ -1,42 +1,5 @@
 'use strict';
 
-/* App Module */
-
-/*function calculateRedirect() {
-    var z = readCookie('role');
-    console.log("calculating redirect: "+z);
-    return z == 'issuer' ? '/company-captable' : '/investor-captable';
-}
-  */
-
-var owner = angular
-    .module('companyownership', ['ngRoute', 'ui.bootstrap', 'ui.event', '$strap.directives', 'nav', 'brijj', 'd3', 'ownerServices', 'ownerFilters', 'ownerDirectives', 'ui.select2', 'activityDirective']);
-
-owner.config(function ($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true).hashPrefix('');
-
-    $routeProvider.
-        when('/ownership/company-captable', {templateUrl: 'pages/comp-captable.html', controller: captableController}).
-        when('/ownership/company-grants', {templateUrl: 'pages/comp-grant.html', controller: grantController}).
-        when('/ownership/company-status', {templateUrl: 'pages/comp-status.html', controller: statusController}).
-        when('/ownership/investor-captable', {templateUrl: 'pages/inv-captable.html', controller: invCaptableController}).
-        when('/ownership/investor-grants', {templateUrl: 'pages/inv-grant.html', controller: invGrantController}).
-        otherwise({redirectTo: '/ownership/investor-captable' });
-});
-/*
-owner.factory('sharedData', function(SWBrijj, $q) {
-
-    var getCompanies = function() {
-       var deferred = $q.defer();
-        SWBrijj.procm('account.nav_companies').then(function(x) {
-            deferred.resolve(x);
-        });
-        return deferred.promise;
-    }
-
-    return { getCompanies:getCompanies };
-});*/
-
 
 /*
  * memoize.js
@@ -68,7 +31,7 @@ function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
-owner.run(function ($rootScope) {
+app.run(function ($rootScope) {
 
     $rootScope.rowOrdering = function (row) {
         var total = 0;

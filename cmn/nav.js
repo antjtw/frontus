@@ -99,6 +99,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         }
 
+        $scope.$on('$routeChangeSuccess', function(current, previous) {
+            console.log("here");
+            navState.path = document.location.pathname;
+        });
+
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
                 M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];

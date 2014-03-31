@@ -97,7 +97,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="menuProfileText button" href="/account/profile">My Account</a>
+                                <a class="menuProfileText button" href="/app/account/profile">My Account</a>
                             </li>
                             <li>
                                 <a class="menuProfileText button" href="/login/logout">Log Out</a>
@@ -147,11 +147,11 @@
                             <li class="button" ng-click="addCompanyModalUp();">Create a new company</li>
                         </ul>
                     </li>
-                    <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/ownership/company-captable' : '/ownership/investor-captable'}}">Ownership</a>
+                    <li ng-show="navState.reasons.own || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/ownership') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/app/ownership/company-captable' : '/app/ownership/investor-captable'}}">Ownership</a>
                     </li>
                     <li ng-show="navState.reasons.doc || navState.reasons.rol" ng-class="{active: navState.path.indexOf('/documents') != -1}"><a class="button" ng-href="{{navState.role=='issuer' ? '/documents/company-list' : '/documents/investor-list'}}">Documents</a>
                     </li>
-                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile/') != -1}"><a class="button" href="/company/profile/people">People</a>
+                    <li ng-show="navState.reasons.rol" ng-class="{active: navState.path.indexOf('/profile') != -1}"><a class="button" href="/app/company/profile/people">People</a>
                     </li>
                 </ul>
             </div>

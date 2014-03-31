@@ -1,7 +1,7 @@
 //'use strict';
 // this broke usersnap and intercom.io
 
-docviews.directive('library', function() {
+app.directive('library', function() {
     return {
         restrict: 'A',
         link: function(scope, elm, attrs) {
@@ -13,7 +13,7 @@ docviews.directive('library', function() {
     };
 });
 
-docviews.directive('myLoadingSpinner', function() {
+app.directive('myLoadingSpinner', function() {
     return {
         restrict: 'A',
         replace: true,
@@ -31,7 +31,7 @@ docviews.directive('myLoadingSpinner', function() {
     };
 });
 
-docviews.directive('restrictContentEditable', function() {
+app.directive('restrictContentEditable', function() {
     return {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
@@ -71,7 +71,7 @@ docviews.directive('restrictContentEditable', function() {
     };
 });
 
-docviews.directive('contenteditable', function() {
+app.directive('contenteditable', function() {
     return {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {

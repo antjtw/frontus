@@ -1,31 +1,8 @@
-var app = angular.module('CompanyProfileApp', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
-    //this is used to assign the correct template and controller for each URL path
-    $locationProvider.html5Mode(true).hashPrefix('');
-    // $locationProvider.html5Mode(false).hashPrefix('!');
-
-    $routeProvider.
-    when('/company/profile/', {
-        controller: 'ContactCtrl',
-        templateUrl: 'contact.html'
-    }).
-    when('/company/profile/people', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/company/profile/view', {
-        controller: 'ViewerCtrl',
-        templateUrl: 'viewer.html'
-    }).
-    otherwise({
-        redirectTo: '/company/profile'
-    });
-});
-
 function hidePopover() {
     angular.element('.popover').hide();
 }
 
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
+app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     function($scope, $rootScope, SWBrijj, navState) {
         if (navState.role == 'investor') {
             document.location.href = "/home";
