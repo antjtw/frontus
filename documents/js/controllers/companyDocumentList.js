@@ -42,15 +42,23 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             }
         });
         // Needed for docIsPrepared
+        var loaded_once = false;
         $scope.$on("profile_loaded", function() {
-            SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
+            if (loaded_once) {return;}
+            SWBrijj.tblm('account.my_signature', ['signature']
+            ).then(function(x) {
                 if (x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
+                $scope.loadSmartDocuments();
+                loaded_once = true;
             }).except(function(x) {
                 console.log(x);
             });
         });
+        if ($rootScope.person) {
+            $rootScope.$broadcast("profile_loaded");
+        }
         $scope.getShareState = function() {
             var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
             sessionStorage.removeItem("sharewave");
@@ -148,7 +156,6 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             }).except(function(x) {
             });
         };
-        $scope.loadSmartDocuments();
         $scope.loadDocuments = function() {
             SWBrijj.tblm('document.my_company_library',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
