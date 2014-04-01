@@ -1287,11 +1287,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                                 doc_id: $scope.docId}));
                     }
                 }
-                document.location.href = $rootScope.lastPage;
+                $location.path($rootScope.lastPage);
             } else if ($scope.invq) {
-                $location.path('/investor-list').search({});
+                $location.path('/app/documents/investor-list');
             } else {
-                $location.path('/company-list').search({});
+                $location.path('/app/documents/company-list');
             }
         };
 

@@ -62,6 +62,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
 
+    $scope.tourUp = function () {
+        $scope.tourModal = true;
+    };
+
 
     $scope.extraPeople = [];
 
@@ -1993,10 +1997,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     //Captable Delete Issue Modal
-
-    $scope.tourUp = function () {
-        $scope.tourModal = true;
-    };
 
     $scope.tourclose = function () {
         $scope.sideToggle = false;

@@ -109,7 +109,10 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
         };
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+            if ($rootScope.lastPage
+                && ($rootScope.lastPage.indexOf("/register/") === -1)
+                && ($rootScope.lastPage.indexOf("/login/") === -1)
+                && ($rootScope.lastPage.indexOf("-view") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});
