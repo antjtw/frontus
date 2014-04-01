@@ -203,6 +203,32 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             version.statusRank = $scope.eventRank(version.last_event);
         };
 
+        $scope.constructDocumentsByInvestor = function() {
+            $scope.investorDocs = null;
+            angular.forEach($scope.documents, function(doc) {
+                angular.forEach(doc.versions, function(version) {
+                    if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
+                        $scope.investorDocs[version.investor].versions.push(version);
+                    } else {
+                        if (!$scope.investorDocs) {$scope.investorDocs = {};}
+                        $scope.investorDocs[version.investor] = {'versions': [version],
+                                                                   'name': version.name,
+                                                                   'investor': version.investor};
+                    }
+                });
+            });
+            // convert dict to array for orderBy to work
+            var tmp = [];
+            angular.forEach($scope.investorDocs, function(investor) {
+                tmp.push(investor);
+            });
+            $scope.investorDocs = tmp;
+            angular.forEach($scope.investorDocs, function(investor) {
+                investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
+                investor.statusRatio = $scope.docStatusRatio(investor);
+            });
+        };
+
         $scope.loadDocumentActivity = function() {
             SWBrijj.tblm("document.recent_company_activity").then(function(data) {
                 angular.forEach($scope.documents, function(doc) {
@@ -230,31 +256,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             return basics.eventRank(ev);
         };
 
-        $scope.constructDocumentsByInvestor = function() {
-            $scope.investorDocs = null;
-            angular.forEach($scope.documents, function(doc) {
-                angular.forEach(doc.versions, function(version) {
-                    if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
-                        $scope.investorDocs[version.investor].versions.push(version);
-                    } else {
-                        if (!$scope.investorDocs) {$scope.investorDocs = {};}
-                        $scope.investorDocs[version.investor] = {'versions': [version],
-                                                                   'name': version.name,
-                                                                   'investor': version.investor};
-                    }
-                });
-            });
-            // convert dict to array for orderBy to work
-            var tmp = [];
-            angular.forEach($scope.investorDocs, function(investor) {
-                tmp.push(investor);
-            });
-            $scope.investorDocs = tmp;
-            angular.forEach($scope.investorDocs, function(investor) {
-                investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
-                investor.statusRatio = $scope.docStatusRatio(investor);
-            });
-        };
         $scope.noInvestors = function() {
             return Object.keys($scope.investorDocs).length !== 0;
         };
@@ -336,9 +337,9 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
 
         $scope.prepareDocument = function(doc) {
             if (doc.template_id) {
-                $location.url("/company-view?template=" + doc.template_id);
+                $location.url("/app/documents/company-view?template=" + doc.template_id);
             } else {
-                $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+                $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
             }
         };
 

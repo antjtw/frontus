@@ -158,11 +158,11 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
         };
 
         $scope.viewOriginal = function() {
-            $location.url("/company-view?doc=" + $scope.document.doc_id + "&page=1");
+            $location.url("/app/documents/company-view?doc=" + $scope.document.doc_id + "&page=1");
         };
 
         $scope.viewInvestorCopy = function(investor) {
-            $location.url("/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
+            $location.url("/app/documents/company-view?doc=" + investor.original + "&page=1" + "&investor=" + investor.doc_id);
         };
 
         $scope.rejectSignature = function(cd) {
@@ -234,11 +234,11 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
 
         $scope.shareDocument = function(doc) {
             void(doc);
-            $location.url("/company-list?share");
+            $location.url("/app/documents/company-list?share");
         };
 
         $scope.prepareDocument = function(doc) {
-            $location.url("/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
         };
         // Sharing modal functions
 

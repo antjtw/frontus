@@ -82,7 +82,7 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
         $scope.gotoDoc = function(doc) {
             var link;
             if (doc.template_id && !doc.when_signed) link = "/documents/investor-view?template=" + doc.template_id + "&subid=" + doc.doc_id;
-            else link = "/documents/investor-view?doc=" + doc.doc_id;
+            else link = "/app/documents/investor-view?doc=" + doc.doc_id;
             document.location.href = link;
         };
 
