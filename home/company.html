@@ -8,7 +8,7 @@
     </ul>
 </div>
 <div class="row-fluid home-top-row">
-    <div class="span8 flip-tile" ng-class="{'reverse':flipped1}">
+    <div ng-show="docsummary" class="span8 flip-tile" ng-class="{'reverse':flipped1}">
         <div class="flipper">
             <div class="front info-box">
                 <div class="head-box" ng-click="flipTile(1);">
@@ -142,7 +142,7 @@
     </div>
 </div>
 <div class="row-fluid home-bottom-row">
-    <div class="span8 flip-tile" ng-class="{'reverse':flipped2}">
+    <div ng-show="ownersummary" class="span8 flip-tile" ng-class="{'reverse':flipped2}">
         <div class="flipper">
             <div class="front info-box">
                 <div class="head-box" ng-click="flipTile(2);">
