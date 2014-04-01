@@ -17,11 +17,11 @@
 .home-top-row > div.issuer-profile {
     padding: 0 20px 0 20px;
     background-color: #F0F0F0;
-    float: right;
 }
 
 .home-top-row > div.issuer-profile {
     padding-top: 20px;
+    float: right;
 }
 
 .home-top-row > div.issuer-profile > div:first-child > div:first-child {
