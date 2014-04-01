@@ -10,8 +10,15 @@
         <div style="margin-left:0;" class="span12 statusBlock">
             <div class="row-fluid">
                 <div class="subnav-controls">
-                    <div>
-                        <div class="pull-left">Payment Summary</div>
+                    <div class="billingSummary">
+                        <div ng-switch on="billing.currentPlan">
+                            <div ng-switch-when="000">
+                                No active subscription. Please select a plan and verify your billing information below.
+                            </div>
+                            <div ng-switch-default class="pull-left">
+                                Your next bill of {{nextInvoice().amount_due/100 || 0 | currency}} is due {{nextInvoice().lines.data[0].period.start*1000 || Date() | fromNow}}.
+                            </div>
+                        </div>
                          <div class="pull-right standard-button" ng-hide="billing.customer_id">
                              <button class="btn"
                                      ng-disabled="!billing.payment_token || !billing.currentPlan"
@@ -33,7 +40,7 @@
                         </div>
                         <div class="body-box">
                             <div class="row-fluid">
-                                <div class="span6">
+                                <div class="span12">
                                     <div>
                                          <h2>Plan Level</h2>
                                     </div>
@@ -41,18 +48,27 @@
                                         Sharewave provides 3 levels of service.
                                         <a href="/pricing">Learn more.</a>
                                     </span>
-                                    <ul class="dropdown-list drop-selector wide">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{billing.currentPlan | billingPlans}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="p in billing.plans">
-                                                    <a ng-click="updateSubscription(p.plan);">{{p.plan | billingPlans}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    <div>
+                                        <ul class="span6 dropdown-list drop-selector wide">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{showSelectedPlan(billing.selectedPlan)}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="p in billing.plans">
+                                                        <a ng-click="selectPlan(p.plan);">{{p.plan | billingPlans}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <div class="standard-button pull-right span3">
+                                            <button class="btn"
+                                                    ng-click="updateSubscription();"
+                                                    ng-disabled="billing.selectedPlan==billing.currentPlan">
+                                                Update Plan
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -158,12 +174,14 @@
                                     <div class="span7">
                                         <span>{{inv.lines.data[0].period.start*1000 | date: 'MMMM d, yyyy'}}</span>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span5">
                                         <span>{{inv.amount_due/100 | currency}}</span>
                                     </div>
+                                    <!--
                                     <div class="span2">
                                         <a href="">Invoice</a>
                                     </div>
+                                    -->
                                 </div>
                             </div>
                         </div>

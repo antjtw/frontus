@@ -33,8 +33,9 @@ function hidePopover() {
     angular.element('.popover').hide();
 }
 
-app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payments',
-    function($scope, $route, SWBrijj, navState, payments) {
+app.controller('BillingCtrl', ['$scope', '$route', '$filter',
+                               'SWBrijj', 'navState', 'payments',
+    function($scope, $route, $filter, SWBrijj, navState, payments) {
         if (navState.role=='investor') {
             document.location.href="/home";
             return;
@@ -48,7 +49,8 @@ app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payme
         });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             if (data.length == 2) {
-                $scope.billing.currentPlan = data[1][3] || '000';
+                $scope.billing.currentPlan =
+                    $scope.billing.selectedPlan = data[1][3] || '000';
                 $scope.billing.customer_id = data[1][1];
                 $scope.billing.payment_token = data[1][2];
                 $scope.get_customer();
@@ -70,6 +72,21 @@ app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payme
                 return "true";
             }
         };
+        $scope.showSelectedPlan = function(p) {
+            if (p == $scope.billing.currentPlan && p == "000") {
+                return "Subscription Cancelled";
+            } else {
+                return $filter('billingPlans')(p);
+            }
+        };
+        $scope.nextInvoice = function() {
+            if ($scope.billing && $scope.billing.next_invoice_received) {
+                return $scope.billing.invoices && $scope.billing.invoices[$scope.billing.invoices.length-1];
+            } else {
+                return false;
+            }
+        };
+
         $scope.updatePayment = function(status, response) {
             if (response.error) {
                 console.log(response);
@@ -107,26 +124,34 @@ app.controller('BillingCtrl', ['$scope', '$route', 'SWBrijj', 'navState', 'payme
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
                 $scope.billing.invoices = resp.data.data;
-                $scope.load_upcoming_invoice();
+                if ($scope.billing.currentPlan!=="000") {
+                    $scope.load_upcoming_invoice();
+                }
             });
         };
         $scope.load_upcoming_invoice = function() {
             payments.get_upcoming_invoice($scope.billing.customer_id)
             .then(function(resp) {
                 $scope.billing.invoices.push(resp.data);
+                $scope.billing.next_invoice_received = true;
             });
         };
-        $scope.updateSubscription = function(newplan) {
+        $scope.selectPlan = function(newplan) {
+            $scope.billing.selectedPlan = newplan;
+        };
+        $scope.updateSubscription = function() {
+            var newplan = $scope.billing.selectedPlan;
             if ($scope.billing.customer_id) {
-                payments.update_subscription(newplan, $scope.billing.payment_token)
+                payments.update_subscription(newplan,
+                        $scope.billing.payment_token)
                 .then(function(x) {
                     if (x[1][0] !== 1) {
                         $scope.$emit("notification:fail",
                                      "Oops, please try again.");
                     } else {
-                        $scope.billing.currentPlan = newplan;
+                        //$scope.billing.currentPlan = newplan;
                         $scope.$emit("notification:success",
-                                     "Payment plan updated");
+                                     "Payment plan update submitted.");
                     }
                 }).except(function(err) {
                 });

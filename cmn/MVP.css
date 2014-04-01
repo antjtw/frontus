@@ -1380,15 +1380,30 @@ form.inputs {
     padding: 0 0 0 0;
     margin: 0 0 0 20px;
 }
-
+.billingSummary div {
+    text-align: left;
+    font-size: 20px;
+    color: #1E2D3D;
+    font-family:'FS Elliot Web Light', sans-serif;
+    font-weight: normal;
+}
 .info-box.billing > .body-box {
     margin: 0 20px 20px 20px;
+}
+.info-box.billing form {
+    margin: 0;
+}
+.info-box.billing > .body-box > div > div > div > .standard-button {
+    text-align: right;
 }
 .info-box > .body-box > .standard-button{
     padding: 0 0 20px 0;
 }
 .info-box.invoices > .body-box {
     margin: 20px 20px 0 20px;
+}
+.info-box.invoices > .body-box > div > div > div:last-child {
+    text-align: right;
 }
 .info-box.invoices > .body-box > .row-fluid > .row-fluid {
     margin-left: 0;
