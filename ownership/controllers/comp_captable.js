@@ -105,33 +105,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.sideToggleName = "Hide";
     $('.tour-box').affix({});
 
-    // Get the company's Issues
-    SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        $scope.issues = data;
-
-        // Get the company's rows
-        SWBrijj.tblm('ownership.company_row_names').then(function (names) {
-            // Get the company's Transactions
-            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
-                $scope.trans = trans;
-                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
-                    $scope.maintoggle = false;
-                    $scope.radioModel = "View";
-                    $scope.tourshow = true;
-                    $scope.sideToggle = true;
-                    $scope.tourUp();
-                }
-
-                // Get the company's Grants
-                SWBrijj.tblm('ownership.company_grants').then(function (grants) {
-                    $scope.grants = grants;
-                    $scope.generateCaptable(names);
-
-                });
-            });
-        });
-    });
-
 
 
     // This call is only here for Intercom (Data is not otherwise available on the page)
@@ -418,6 +391,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
     }
+
+    // Get the company's Issues
+    SWBrijj.tblm('ownership.company_issue').then(function (data) {
+        $scope.issues = data;
+
+        // Get the company's rows
+        SWBrijj.tblm('ownership.company_row_names').then(function (names) {
+            // Get the company's Transactions
+            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
+                $scope.trans = trans;
+                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
+                    $scope.maintoggle = false;
+                    $scope.radioModel = "View";
+                    $scope.tourshow = true;
+                    $scope.sideToggle = true;
+                    $scope.tourUp();
+                }
+
+                // Get the company's Grants
+                SWBrijj.tblm('ownership.company_grants').then(function (grants) {
+                    $scope.grants = grants;
+                    $scope.generateCaptable(names);
+
+                });
+            });
+        });
+    });
 
 
     $scope.findValue = function (row, header) {
