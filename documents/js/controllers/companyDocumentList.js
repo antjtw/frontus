@@ -42,15 +42,23 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
         });
         // Needed for docIsPrepared
+        var loaded_once = false;
         $scope.$on("profile_loaded", function() {
-            SWBrijj.tblm('account.my_signature', ['signature']).then(function(x) {
+            if (loaded_once) {return;}
+            SWBrijj.tblm('account.my_signature', ['signature']
+            ).then(function(x) {
                 if (x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
+                $scope.loadSmartDocuments();
+                loaded_once = true;
             }).except(function(x) {
                 console.log(x);
             });
         });
+        if ($rootScope.person) {
+            $rootScope.$broadcast("profile_loaded");
+        }
         $scope.getShareState = function() {
             var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
             sessionStorage.removeItem("sharewave");
@@ -148,7 +156,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }).except(function(x) {
             });
         };
-        $scope.loadSmartDocuments();
         $scope.loadDocuments = function() {
             SWBrijj.tblm('document.my_company_library',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
@@ -304,7 +311,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             if ($scope.hideSharebar) {
                 return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
             } else {
-                return obj.forShare || (!$scope.query || re.test(obj.docname));
+                return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
             }
         };
         $scope.investorSearchFilter = function(obj) {
@@ -856,15 +863,11 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         };
         $scope.saveAndClearViewState = function() {
             $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
-                                searchQuery:  $scope.clearSearchFilter(),
-                                maxRatio: $scope.clearHideCompleted(),
                                 viewBy: $scope.clearViewBy()};
         };
         $scope.restoreViewState = function() {
             if (!$scope.viewState) {return;}
-            $scope.restoreSearchFilter($scope.viewState.searchQuery);
             $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
-            $scope.restoreHideCompleted($scope.viewState.maxRatio);
             $scope.setViewBy($scope.viewState.viewBy);
             delete $scope.viewState;
         };
