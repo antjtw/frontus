@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('RegisterApp', ['brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('RegisterApp', ['ngRoute', 'brijj'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.

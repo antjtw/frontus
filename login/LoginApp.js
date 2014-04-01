@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('LoginApp', ['ngRoute', 'brijj'], function($routeProvider, $locationProvider){
 
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
