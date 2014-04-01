@@ -310,7 +310,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             if ($scope.hideSharebar) {
                 return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
             } else {
-                return obj.forShare || (!$scope.query || re.test(obj.docname));
+                return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
             }
         };
         $scope.investorSearchFilter = function(obj) {
