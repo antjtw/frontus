@@ -26,6 +26,7 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script src="/lib/angular/angular.js"></script>
 <script src="/lib/angular/angular-route.js"></script>
 <script src="/lib/angular/angular-sanitize.js"></script>
+<script src="/lib/angular/angular-animate.js"></script>
 <script src="/lib/angular/angular-ui.js"></script>
 <script src="/lib/angular/ui-utils.js"></script>
 <script src="/lib/angular/angular-resource.js"></script>

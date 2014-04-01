@@ -6,13 +6,13 @@ var app = angular.module('LoginApp', ['ngRoute', 'brijj'], function($routeProvid
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:'LoginCtrl', templateUrl:'login.html'}).
-      when('/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
-      when('/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
-      when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
-      when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
-      when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
-      when('/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
+      when('/login/', {controller:'LoginCtrl', templateUrl:'login.html'}).
+      when('/login/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
+      when('/login/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
+      when('/login/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
+      when('/login/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
+      when('/login/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
+      when('/login/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
       otherwise({redirectTo:'/'});
 });
 

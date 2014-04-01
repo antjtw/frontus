@@ -100,7 +100,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         }
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
-            console.log("here");
             navState.path = document.location.pathname;
         });
 
@@ -123,7 +122,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
                 if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $scope.lastPage = "/documents/";
+                    $scope.lastPage = "/app/documents/";
                 } else {
                     $scope.lastPage = document.location.href;
                 }
@@ -146,7 +145,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
              */
             SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
                 sessionStorage.clear();
-                document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
+                document.location.href = nc.role=='issuer' ? '/app/home/company' : '/app/home/investor';
             });
         };
 
@@ -230,7 +229,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                             navState.role = thiscmp.role;
                             navState.name = thiscmp.name;
                             navState.reasons = $scope.initReasons(thiscmp.reasons);
-                            document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                            document.location.href = navState.role=='issuer' ? '/app/home/company' : '/app/home/investor';
                             return;
                         }
                     });
@@ -252,6 +251,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+            $rootScope.settings.domain = window.location.host;
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -307,7 +307,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 location.href = '/';
             }
             else {
-                location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                location.href = navState.role=='issuer' ? '/app/home/company' : '/app/home/investor';
             }
         };
 
@@ -441,7 +441,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if (name.length > 0) {
                 SWBrijj.procm('account.new_company', name).then(function (new_comp_id) {
                     var company = {"company": new_comp_id[0].new_company, "role": "issuer"};
-                    $scope.switchCandP(company, "/home/company?cc");
+                    $scope.switchCandP(company, "/app/home/company?cc");
                 });
             }
             else {
@@ -511,32 +511,32 @@ navm.filter('notifications', function () {
         var investor = note.investor;
         var url = "";
         if (note.signature_status == -1) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
-                url = '/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
+                url = '/app/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
             }
             else {
-                url = '/documents/investor-view?doc=' + note.doc_id;
+                url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            url = '/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
-            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 5 && note.signature_flow == 2) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };

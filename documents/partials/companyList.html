@@ -101,7 +101,7 @@
                                 <th></th>
                             </tr>
                         </tbody>
-                        <tbody ng-animate="'animate'" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+                        <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:doc.shown}">
                                 <td class="status-toggle"
