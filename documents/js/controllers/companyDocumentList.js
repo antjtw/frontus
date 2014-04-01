@@ -855,15 +855,11 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
         };
         $scope.saveAndClearViewState = function() {
             $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
-                                searchQuery:  $scope.clearSearchFilter(),
-                                maxRatio: $scope.clearHideCompleted(),
                                 viewBy: $scope.clearViewBy()};
         };
         $scope.restoreViewState = function() {
             if (!$scope.viewState) {return;}
-            $scope.restoreSearchFilter($scope.viewState.searchQuery);
             $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
-            $scope.restoreHideCompleted($scope.viewState.maxRatio);
             $scope.setViewBy($scope.viewState.viewBy);
             delete $scope.viewState;
         };
