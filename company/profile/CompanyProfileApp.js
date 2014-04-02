@@ -247,7 +247,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id=' + person.email : '/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
                 document.location.href = link;
             }
