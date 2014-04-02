@@ -35,7 +35,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
 
 
 
-var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments'], function () {
+var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments', 'commonServices'], function () {
 });
 
 navm.factory('navState', [function () {
@@ -74,7 +74,7 @@ navm.directive('notifications', function() {
             };
 
         }]
-    }
+    };
 });
 
 /** @unused NavCtrl */
