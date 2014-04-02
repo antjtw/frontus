@@ -594,7 +594,7 @@ ul.nav-logo > li > a > img {
     font-weight: normal;
 }
 .topnav .nav > li > a, .topnav .nav.nav-item > li > a {
-    text-shadow: 0 0 0;
+    text-shadow: none;
     color: rgb(166, 166, 166);
     height:40px !important;
     line-height: 40px !important;
