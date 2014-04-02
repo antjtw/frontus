@@ -376,7 +376,7 @@ app.controller('CompanyCtrl', ['$scope','$rootScope','$route','$location', '$rou
         };
 
         $scope.gotopage = function (link){
-            location.href = link;
+            $location.url(link);
         };
 
         // Service functions
@@ -706,7 +706,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.gotopage = function (link){
-            location.href = link;
+            $location.url(link);
         };
 
         // Flipping tiles functionality

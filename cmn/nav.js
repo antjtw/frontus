@@ -87,8 +87,8 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location',
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location) {
 
         $scope.companies = [];
 
@@ -303,7 +303,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 location.href = '/';
             }
             else {
-                location.href = navState.role=='issuer' ? '/app/home/company' : '/app/home/investor';
+                $location.url(navState.role=='issuer' ? '/app/home/company' : '/app/home/investor');
             }
         };
 

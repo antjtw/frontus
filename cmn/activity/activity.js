@@ -78,7 +78,7 @@ active.filter('description', function() {
             }
             else {
                 var document = ac.docname;
-                var url = '/documents/company-view?doc=' + ac.docid + "&page=1";
+                var url = '/app/documents/company-view?doc=' + ac.docid + "&page=1";
                 var urlperson = '';
                 if (ac.email != user) {
                     urlperson = '&investor=' + ac.investor_docid;
@@ -124,7 +124,7 @@ active.filter('description', function() {
             }
             else if (type == "document") {
                 var document = ac.docname;
-                var url = '/documents/investor-view?doc=' + ac.docid + "&page=1";
+                var url = '/app/documents/investor-view?doc=' + ac.docid + "&page=1";
                 if (activity == "received") return "You received <a href=" + url + ">" + caplength(document, 35) + "</a>" + " from " + company;
                 else if (activity == "viewed") return "You viewed <a href=" + url + ">" + + caplength(document, 35) + "</a>";
                 else if (activity == "reminder") return "You were reminded about <a href=" + url + ">" + caplength(document, 35) + "</a>";
