@@ -47,7 +47,7 @@ docviews.controller('CompanyDocumentListController', ['$scope', '$timeout', '$mo
             if (loaded_once) {return;}
             SWBrijj.tblm('account.my_signature', ['signature']
             ).then(function(x) {
-                if (x[0].signature.length>0) {
+                if (x && x[0] && x[0].signature && x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
                 $scope.loadSmartDocuments();
