@@ -56,7 +56,7 @@ app.controller('BillingCtrl', ['$scope', '$route', '$filter',
                 $scope.get_customer();
                 $scope.load_invoices();
             } else {
-                $scope.billing.currentPlan = '001';
+                $scope.billing.selectedPlan = '001';
             }
         }).except(function(err) {
             void(err);
@@ -124,6 +124,7 @@ app.controller('BillingCtrl', ['$scope', '$route', '$filter',
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
                 $scope.billing.invoices = resp.data.data;
+                console.log(resp.data.data);
                 if ($scope.billing.currentPlan!=="000") {
                     $scope.load_upcoming_invoice();
                 }
@@ -133,6 +134,7 @@ app.controller('BillingCtrl', ['$scope', '$route', '$filter',
             payments.get_upcoming_invoice($scope.billing.customer_id)
             .then(function(resp) {
                 $scope.billing.invoices.push(resp.data);
+                console.log(resp.data);
                 $scope.billing.next_invoice_received = true;
             });
         };
