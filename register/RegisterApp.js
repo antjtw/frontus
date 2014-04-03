@@ -1,37 +1,14 @@
 //app for the program
-var app = angular.module('RegisterApp',
-        ['brijj', 'commonServices', 'angularPayments'],
-function($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true).hashPrefix('');
+var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments'], function($routeProvider, $locationProvider){
+  $locationProvider.html5Mode(true).hashPrefix('');
 
-    $routeProvider.
-    when('/', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/company', {
-        controller: 'CompanyCtrl',
-        templateUrl: 'company.html'
-    }).
-    when('/company-self', {
-        controller: 'CompanySelfCtrl',
-        templateUrl: 'company-self.html'
-    }).
-    when('/company-onestep', {
-        controller: 'CompanyOneStep',
-        templateUrl: 'company-onestep.html'
-    }).
-    when('/people', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/signup', {
-        controller: 'SignupCtrl',
-        templateUrl: 'signup.html'
-    }).
-    otherwise({
-        redirectTo: '/'
-    });
+  $routeProvider.
+      when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
+      when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
+      when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
+      when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
+      when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
+      otherwise({redirectTo:'/register/'});
 });
 
 /** @name $scope#activated

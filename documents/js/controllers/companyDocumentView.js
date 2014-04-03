@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
+app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
         'navState',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
         if (navState.role == 'investor') {
@@ -203,7 +203,10 @@ docviews.controller('CompanyDocumentViewController', ['$scope', '$routeParams', 
         };
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
+            if ($rootScope.lastPage
+                && ($rootScope.lastPage.indexOf("/register/") === -1)
+                && ($rootScope.lastPage.indexOf("/login/") === -1)
+                && ($rootScope.lastPage.indexOf("-view") === -1)) {
                 document.location.href = $rootScope.lastPage;
             } else if ($scope.invq) {
                 $location.path('/investor-list').search({});

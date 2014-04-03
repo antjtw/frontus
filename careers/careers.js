@@ -1,4 +1,4 @@
-var app = angular.module('careers', ['ui.bootstrap', 'nav', 'brijj', 'external'], function($routeProvider, $locationProvider){
+var app = angular.module('careers', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'external'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.

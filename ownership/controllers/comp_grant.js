@@ -1071,7 +1071,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 };
 
 // Returns only the real transactions (not the empty ones)
-owner.filter('noempty', function () {
+app.filter('noempty', function () {
     return function (trans) {
         var returntrans = [];
         angular.forEach(trans, function (tran) {

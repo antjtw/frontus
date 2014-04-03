@@ -179,7 +179,7 @@ app.controller('BillingCtrl', ['$scope', '$route', '$filter',
     }
 ]);
 
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
+app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     function($scope, $rootScope, SWBrijj, navState) {
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -356,8 +356,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     }
 ]);
 
-app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route',
-    function($scope, $rootScope, SWBrijj, navState, $route) {
+app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -424,9 +424,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id=' + person.email : '/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
-                document.location.href = link;
+                $location.url(link);
             }
         };
 

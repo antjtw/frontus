@@ -21,6 +21,7 @@
 
 .home-top-row > div.issuer-profile {
     padding-top: 20px;
+    float: right;
 }
 
 .home-top-row > div.issuer-profile > div:first-child > div:first-child {

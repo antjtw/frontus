@@ -62,6 +62,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
 
+    $scope.tourUp = function () {
+        $scope.tourModal = true;
+    };
+
 
     $scope.extraPeople = [];
 
@@ -100,33 +104,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
     $('.tour-box').affix({});
-
-    // Get the company's Issues
-    SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        $scope.issues = data;
-
-        // Get the company's rows
-        SWBrijj.tblm('ownership.company_row_names').then(function (names) {
-            // Get the company's Transactions
-            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
-                $scope.trans = trans;
-                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
-                    $scope.maintoggle = false;
-                    $scope.radioModel = "View";
-                    $scope.tourshow = true;
-                    $scope.sideToggle = true;
-                    $scope.tourUp();
-                }
-
-                // Get the company's Grants
-                SWBrijj.tblm('ownership.company_grants').then(function (grants) {
-                    $scope.grants = grants;
-                    $scope.generateCaptable(names);
-
-                });
-            });
-        });
-    });
 
 
 
@@ -414,6 +391,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
     }
+
+    // Get the company's Issues
+    SWBrijj.tblm('ownership.company_issue').then(function (data) {
+        $scope.issues = data;
+
+        // Get the company's rows
+        SWBrijj.tblm('ownership.company_row_names').then(function (names) {
+            // Get the company's Transactions
+            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
+                $scope.trans = trans;
+                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
+                    $scope.maintoggle = false;
+                    $scope.radioModel = "View";
+                    $scope.tourshow = true;
+                    $scope.sideToggle = true;
+                    $scope.tourUp();
+                }
+
+                // Get the company's Grants
+                SWBrijj.tblm('ownership.company_grants').then(function (grants) {
+                    $scope.grants = grants;
+                    $scope.generateCaptable(names);
+
+                });
+            });
+        });
+    });
 
 
     $scope.findValue = function (row, header) {
@@ -1994,10 +1998,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     //Captable Delete Issue Modal
 
-    $scope.tourUp = function () {
-        $scope.tourModal = true;
-    };
-
     $scope.tourclose = function () {
         $scope.sideToggle = false;
         $scope.tourModal = false;
@@ -2416,9 +2416,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.gotoProfile = function(email, name) {
         var link;
-        link = (name ? ((navState.userid != email) ? '/company/profile/view?id=' + email : '/account/profile/') : '');
+        link = (name ? ((navState.userid != email) ? '/app/company/profile/view?id=' + email : '/app/account/profile/') : '');
         if (link) {
-            document.location.href = link;
+            $location.url(link);
         }
     };
 
