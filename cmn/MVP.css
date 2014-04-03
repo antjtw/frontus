@@ -3823,6 +3823,17 @@ div#us_report_button button.us_button_horizontal {
     text-align: left;
     text-transform: uppercase;
 }
+.big-input-list >div > form > fieldset > div.span6:nth-child(2) {
+    padding-left: 20px;
+}
+.big-input-list .input-list div.span6 {
+    width: -moz-calc(50% - 10px);
+    width: -webkit-calc(50% - 10px);
+    width: calc(50% - 10px);
+}
+.big-input-list .input-list div.span6:last-child {
+    margin-left: 20px;
+}
 .big-input-list .span6 > div:first-child {
     color: #1E2D3D;
     font-size: 20px;
@@ -3832,7 +3843,7 @@ div#us_report_button button.us_button_horizontal {
     font-family: 'FS Elliot Web Light', sans-serif;
 }
 .newreg .large-standard-button > button {
-    margin: 20px 0 60px 0;
+    margin: 20px 0 40px 0;
 }
 .newreglogo {
     margin: 40px 0 40px 0;
