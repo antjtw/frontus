@@ -98,6 +98,9 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
                     void(x);
                     $scope.$emit("notification:success", "Profile successfully updated");
+                    if (attr == 'name') {
+                        $rootScope.person.name = value;
+                    }
                     $scope[attr] = value;
                 }).except(function(x) {
                         void(x);
