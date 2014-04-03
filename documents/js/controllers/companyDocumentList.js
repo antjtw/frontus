@@ -540,7 +540,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
 
         $scope.versionStatus = function(version) {
             if (version.last_event) {
-                return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity + " by ")) +
+                return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity === 'retracted' ? (version.last_event.activity + " from ") : (version.last_event.activity + " by "))) +
                        (version.last_event.name || version.investor) +
                        " " + moment(version.last_event.event_time).from(version.last_event.timenow) +
                        (version.signature_flow===2 && version.last_event.activity==='signed' ? " (awaiting countersign)" : "");

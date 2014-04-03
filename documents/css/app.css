@@ -432,7 +432,15 @@ button.greyButton {
 }
 
 .modalText.deleteDocModal.retractModal {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+}
+
+.retractModal .checkboxOption {
+    margin-top: 20px;
+}
+
+.retractModal .checkboxOption > li:first-child {
+    margin-right: 10px;
 }
 
 .modalText.voidDocModal {
