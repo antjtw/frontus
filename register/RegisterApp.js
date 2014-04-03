@@ -6,6 +6,7 @@ var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments'],
       when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
       when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
       when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
+      when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
       when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
       when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
       otherwise({redirectTo:'/register/'});
@@ -136,7 +137,8 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                                              $scope.payment_token,
                                              $scope.selectedPlan
             ).then(function(registered) {
-                console.log(registered);
+                $scope.$emit("notification:success",
+                             "Welcome to Sharewave!");
                 if (registered) {
                     document.location.href = registered + "?msg=first";
                 } else {

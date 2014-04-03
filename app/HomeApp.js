@@ -2,7 +2,7 @@
 var app = angular.module('HomeApp', ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap', '$strap.directives',
     'ui.event', 'nav', 'brijj', 'ownerFilters', 'ownerDirectives', 'ownerServices', 'commonServices',
     'd3', 'homeDirectives', 'activityDirective', 'commonDirectives', 'ui.select2',
-    'documents', 'docServices']);
+    'documents', 'docServices', 'angularPayments']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -20,6 +20,7 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/company/profile/', {controller: 'CompContactCtrl', templateUrl: '/company/profile/contact.html'}).
         when('/app/company/profile/people', {controller: 'PeopleCtrl', templateUrl: '/company/profile/people.html'}).
         when('/app/company/profile/view', {controller: 'ViewerCtrl', templateUrl: '/company/profile/viewer.html'}).
+        when('/app/company/profile/billing', {controller: 'BillingCtrl', templateUrl: '/company/profile/billing.html'}).
 
         when('/app/ownership/company-captable', {controller: 'captableController', templateUrl: '/ownership/pages/comp-captable.html'}).
         when('/app/ownership/company-grants', {controller: 'grantController', templateUrl: '/ownership/pages/comp-grant.html'}).

@@ -1,38 +1,3 @@
-
-var app = angular.module('CompanyProfileApp',
-        ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj',
-         'activityDirective', 'commonDirectives', 'commonServices', 'angularPayments'],
-function($routeProvider, $locationProvider) {
-    //this is used to assign the correct template and controller for each URL path
-    $locationProvider.html5Mode(true).hashPrefix('');
-    // $locationProvider.html5Mode(false).hashPrefix('!');
-
-    $routeProvider.
-    when('/', {
-        controller: 'ContactCtrl',
-        templateUrl: 'contact.html'
-    }).
-    when('/people', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/view', {
-        controller: 'ViewerCtrl',
-        templateUrl: 'viewer.html'
-    }).
-    when('/billing', {
-        controller: 'BillingCtrl',
-        templateUrl: 'billing.html'
-    }).
-    otherwise({
-        redirectTo: '/'
-    });
-});
-
-function hidePopover() {
-    angular.element('.popover').hide();
-}
-
 app.controller('BillingCtrl', ['$scope', '$route', '$filter',
                                'SWBrijj', 'navState', 'payments',
     function($scope, $route, $filter, SWBrijj, navState, payments) {
@@ -151,7 +116,6 @@ app.controller('BillingCtrl', ['$scope', '$route', '$filter',
                         $scope.$emit("notification:fail",
                                      "Oops, please try again.");
                     } else {
-                        //$scope.billing.currentPlan = newplan;
                         $scope.$emit("notification:success",
                                      "Payment plan update submitted.");
                     }
