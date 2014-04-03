@@ -186,7 +186,7 @@
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
 
-        <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="$parent.templateId"/>
+        <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"/>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">

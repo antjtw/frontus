@@ -207,11 +207,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 && ($rootScope.lastPage.indexOf("/register/") === -1)
                 && ($rootScope.lastPage.indexOf("/login/") === -1)
                 && ($rootScope.lastPage.indexOf("-view") === -1)) {
-                document.location.href = $rootScope.lastPage;
+                console.log($rootScope.lastPage);
             } else if ($scope.invq) {
-                $location.path('/investor-list').search({});
+                $location.url('/documents/investor-list');
             } else {
-                $location.path('/company-list').search({});
+                $location.url('/documents/company-list');
             }
         };
         $scope.$on('countersignAction', function(evt, data) {
