@@ -14,7 +14,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 $scope.hideSharebar = true;
             }
         };
-        $scope.$on('$routeUpdate', $scope.syncShareAndURL);
         $scope.$on('$routeChangeSuccess', function(current, previous) {
             $scope.syncShareAndURL();
         });
@@ -169,6 +168,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         };
         $scope.initShareState = function() {
             $scope.getShareState();
+            $scope.loadPrepareState();
             if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach($scope.docShareState.doclist, function(docToShare) {
@@ -180,8 +180,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 });
             }
             $scope.messageText = $scope.docShareState.message;
-            $scope.multipeople = $scope.docShareState.emails; 
-            $scope.loadPrepareState();
+            $scope.multipeople = $scope.docShareState.emails;
         };
 
         $scope.loadDocumentVersions = function () {
@@ -348,9 +347,9 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
 
         $scope.prepareDocument = function(doc) {
             if (doc.template_id) {
-                $location.url("/app/documents/company-view?template=" + doc.template_id);
+                $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
             } else {
-                $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
+                $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true");
             }
         };
 
