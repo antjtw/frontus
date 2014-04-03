@@ -5,6 +5,7 @@
 <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap-responsive.css">
 <link type="text/css" rel="stylesheet" href="/lib/datepicker/bootstrap-datepicker.css">
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
 
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
