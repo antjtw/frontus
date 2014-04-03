@@ -3823,6 +3823,14 @@ div#us_report_button button.us_button_horizontal {
     text-align: left;
     text-transform: uppercase;
 }
+.big-input-list .span6 > div:first-child {
+    color: #1E2D3D;
+    font-size: 20px;
+    text-align: left;
+    line-height: 30px;
+    margin-bottom: 10px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
 .newreg .large-standard-button > button {
     margin: 20px 0 60px 0;
 }

@@ -11,17 +11,36 @@
                    Your plan
                 </div> 
                 <div class="span2">
-                    <!-- ng-switch with different image -->
-                    <img src="/img/icon-seed.png">
+                    <div ng-switch on="selectedPlan">
+                        <img ng-switch-default
+                             src="/img/icon-seed.png">
+                        <img ng-switch-when="001"
+                             src="/img/icon-seed-selected.png">
+                    </div>
                 </div>
                 <div class="span2">
-                    <img src="/img/icon-startup.png">
+                    <div ng-switch on="selectedPlan">
+                        <img ng-switch-default
+                             src="/img/icon-startup.png">
+                        <img ng-switch-when="002"
+                             src="/img/icon-startup-selected.png">
+                    </div>
                 </div>
                 <div class="span2">
-                    <img src="/img/icon-growth.png">
+                    <div ng-switch on="selectedPlan">
+                        <img ng-switch-default
+                             src="/img/icon-growth.png">
+                        <img ng-switch-when="003"
+                             src="/img/icon-growth-selected.png">
+                    </div>
                 </div>
                 <div class="span2">
-                    <img src="/img/icon-established.png">
+                    <div ng-switch on="selectedPlan">
+                        <img ng-switch-default
+                             src="/img/icon-established.png">
+                        <img ng-switch-when="004"
+                             src="/img/icon-established-selected.png">
+                    </div>
                 </div>
             </div>
             <div class="span12">
@@ -126,54 +145,88 @@
         </div>
         <div class="big-input-list">
             <div class="span12">
-                <div class="span6">
-                    <div>Your details</div>
-                    <div class="input-list">
-                        <div>
-                            <span>Full Name</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                        <div>
-                            <span>Company</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                        <div>
-                            <span>Email Address</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                        <div>
-                            <span>Password</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                    </div>
-                </div>
-                <div class="span6">
-                    <div>Credit card information</div>
-                    <div class="input-list">
-                        <div>
-                            <span>Name on Card</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                        <div>
-                            <span>Credit Card Number</span>
-                            <input type="text" class="input-block-level">
-                        </div>
-                        <div>
-                            <div class="span6">
-                                <span>Expiration Date</span>
-                                <input type="text" class="input-block-level">
-                            </div>
-                            <div class="span6">
-                                <span>CVC</span>
-                                <input type="text" class="input-block-level">
+                <form stripe-form="getPaymentToken" name="stripeForm">
+                    <fieldset>
+                        <div class="span6">
+                            <div>Your details</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Full Name</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="pname">
+                                </div>
+                                <div>
+                                    <span>Company</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="cname">
+                                </div>
+                                <div>
+                                    <span>Email Address</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="email">
+                                </div>
+                                <div>
+                                    <span>Password</span>
+                                    <input type="password"
+                                           class="input-block-level"
+                                           ng-model="password">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        <div class="span6">
+                            <div>Credit card information</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Name on Card</span>
+                                    <input type="text"
+                                           class="input-block-level">
+                                </div>
+                                <div>
+                                    <span>Credit Card Number</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="number"
+                                           payments-validate="card"
+                                           payments-format="card"
+                                           payments-type-model="type"
+                                           ng-class="myForm.number.$card.type">
+                                </div>
+                                <div>
+                                    <div class="span6">
+                                        <span>Expiration Date</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="expiry"
+                                               payments-validate="expiry"
+                                               payments-format="expiry"/>
+                                    </div>
+                                    <div class="span6">
+                                        <span>CVC</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="cvc"
+                                               payments-validate="cvc"
+                                               payments-format="cvc"
+                                               payments-type-model="type"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span12">
+                            <div class="standard-button large-standard-button">
+                                <button type="submit"
+                                        class="btn"
+                                        ng-disabled="fieldCheck()">
+                                    Join Sharewave
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
-        </div>
-        <div class="standard-button large-standard-button">
-            <button class="btn">Join Sharewave</button>
         </div>
     </div>
 </div>
