@@ -102,6 +102,7 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
 app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
     function($scope, $routeParams, SWBrijj) {
         
+        $scope.selectedPlan = '002';
         $scope.selectPlan = function(p) {
             if ($scope.selectedPlan == p) {
                 $scope.selectedPlan = null;
