@@ -234,6 +234,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                 investor.statusRatio = $scope.docStatusRatio(investor);
             });
+            $scope.finishedLoading = true;
         };
 
         $scope.loadDocumentActivity = function() {
@@ -507,12 +508,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 $scope.showProgress = false;
                 $scope.$apply();
             });
-        };
-
-        $scope.gotoDoc = function(docid) {
-            var link;
-            link = "/app/documents/company-view?doc=" + docid;
-            document.location.href = link;
         };
 
         $scope.remind = function(doc_id, user_email) {

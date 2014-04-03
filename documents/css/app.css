@@ -1,3 +1,10 @@
+/* Company List Content */
+
+.company-list .my-loading-spinner-container {
+    width: 50px;
+    margin: 0 auto 0 auto;
+}
+
 .subnav-controls.doclist-controls {
     margin-bottom: 0;
 }

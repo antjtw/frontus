@@ -1,6 +1,6 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <script src="/cmn/spin.js"></script>
-<div class="maincontent openflow">
+<div class="company-list maincontent openflow">
     <div class="container dynamic-page doclistFlow">
         <div class="row-fluid">
             <div class="headsection row-fluid">
@@ -72,7 +72,7 @@
         <div class="row-fluid leftTabWindow">
             <div ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}"
             class="span8 recipientInfo statusBlock leftBlock">
-                <div class="row-fluid listcontainer">
+                <div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
                     <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
                         <tbody class="empty-table">
                             <tr>

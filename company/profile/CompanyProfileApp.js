@@ -179,8 +179,8 @@ app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState'
     }
 ]);
 
-app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route',
-    function($scope, $rootScope, SWBrijj, navState, $route) {
+app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -249,7 +249,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             var link;
             link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
-                document.location.href = link;
+                $location.url(link);
             }
         };
 

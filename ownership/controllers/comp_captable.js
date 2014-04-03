@@ -2416,9 +2416,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.gotoProfile = function(email, name) {
         var link;
-        link = (name ? ((navState.userid != email) ? '/company/profile/view?id=' + email : '/account/profile/') : '');
+        link = (name ? ((navState.userid != email) ? '/app/company/profile/view?id=' + email : '/app/account/profile/') : '');
         if (link) {
-            document.location.href = link;
+            $location.url(link);
         }
     };
 
