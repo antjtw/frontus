@@ -1276,7 +1276,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     && ($rootScope.lastPage.indexOf("/register/") === -1)
                     && ($rootScope.lastPage.indexOf("/login/") === -1)
                     && ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if ($rootScope.lastPage.indexOf("/company-list?share") !== -1) {
+                if ($rootScope.lastFullPage.indexOf("/company-list?share") !== -1) {
                     if ($scope.template_original) {
                         sessionStorage.setItem("docPrepareState",
                                 angular.toJson({template_id: $scope.templateId,
@@ -1286,12 +1286,14 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                                 angular.toJson({template_id: $scope.templateId,
                                                 doc_id: $scope.docId}));
                     }
+                    $rootScope.lastPage = $rootScope.lastPage + "?share";
                 }
-                $location.path($rootScope.lastPage);
+                console.log($rootScope.lastPage);
+                $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
-                $location.path('/app/documents/investor-list');
+                $location.url('/app/documents/investor-list');
             } else {
-                $location.path('/app/documents/company-list');
+                $location.url('/app/documents/company-list');
             }
         };
 

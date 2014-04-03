@@ -122,9 +122,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
                 if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $scope.lastPage = "/app/documents/";
+                    $rootScope.lastPage = "/app/documents/";
                 } else {
-                    $scope.lastPage = document.location.pathname;
+                    $rootScope.lastPage = document.location.pathname;
+                    $rootScope.lastFullPage = document.location.href;
                 }
             }
         });

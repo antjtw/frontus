@@ -15,6 +15,9 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
         };
         $scope.$on('$routeUpdate', $scope.syncShareAndURL);
+        $scope.$on('$routeChangeSuccess', function(current, previous) {
+            $scope.syncShareAndURL();
+        });
         $scope.syncShareAndURL();
 
         SWBrijj.tblm('global.server_time').then(function(time) {
