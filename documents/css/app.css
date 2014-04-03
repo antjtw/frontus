@@ -431,6 +431,10 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.deleteDocModal.retractModal {
+    margin-bottom: 20px;
+}
+
 .modalText.voidDocModal {
     width: 360px;
     padding-left: 20px;
