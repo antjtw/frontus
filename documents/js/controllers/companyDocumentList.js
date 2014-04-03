@@ -49,7 +49,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             if (loaded_once) {return;}
             SWBrijj.tblm('account.my_signature', ['signature']
             ).then(function(x) {
-                if (x[0].signature.length>0) {
+                if (x && x[0] && x[0].signature && x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
                 $scope.loadSmartDocuments();
@@ -972,15 +972,18 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
 
         $scope.retractVersionOpen = function(version) {
             $scope.docForModal = version;
+            $scope.modalArchive = false;
             $scope.retractDocModal = true;
         };
 
         $scope.retractVersionClose = function() {
+            $scope.modalArchive = false;
             $scope.retractDocModal = false;
         };
 
-        $scope.retractVersion = function(version) {
-            SWBrijj.procm("document.retract_document", version.doc_id).then(function(data) {
+
+        $scope.retractVersion = function(version, archive) {
+            SWBrijj.procm("document.retract_document", version.doc_id, archive).then(function(data) {
                 void(data);
                 $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                 version.when_retracted = new Date.today();
@@ -988,6 +991,9 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 version.last_event.event_time = new Date.today();
                 version.last_event.timenow = new Date.today();
                 version.last_event.person = $rootScope.person.name;
+                if (archive) {
+                    version.archived = true;
+                }
             }).except(function(x) {
                 void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
