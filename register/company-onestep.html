@@ -1,3 +1,4 @@
+<script src="/cmn/spin.js"></script>
 <div class="row-fluid">
     <div class="span10 offset1">
         <a href="/" class="pull-left">
@@ -218,14 +219,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="span12 regfooter">
+                        <div class="span12 regfooter"
+                             my-loading-spinner="processing">
                             <p class="caption legal">
                                 By clicking the Register button, you agree to our <br><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a>
                             </p>
                             <div class="standard-button large-standard-button">
                                 <button type="submit"
                                         class="btn"
-                                        ng-disabled="fieldCheck()">
+                                        ng-disabled="fieldCheck()||processing">
                                     Join Sharewave
                                     <span data-icon="&#xe016;" aria-hidden="true"></span>
                                 </button>

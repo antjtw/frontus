@@ -123,10 +123,12 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
         };
         $scope.getPaymentToken = function(status, response) {
             if (response.error) {
+                $scope.processing = false;
                 console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
+                $scope.processing = true;
                 $scope.payment_token = response.id;
                 $scope.register();
             }
@@ -146,6 +148,7 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                     document.location.href = "/login";
                 }
             }).except(function(x) {
+                $scope.processing = false;
                 $scope.$emit("notification:fail",
                              "Oops, something went wrong.");
             });

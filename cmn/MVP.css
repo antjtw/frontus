@@ -3872,3 +3872,6 @@ div#us_report_button button.us_button_horizontal {
     line-height: 77px;
     font-family: 'FS Elliot Web Light', sans-serif;
 }
+.regfooter .my-loading-spinner-container > div {
+    left: 50%;
+}
