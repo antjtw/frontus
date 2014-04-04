@@ -577,7 +577,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th  ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                <th ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
                     <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                     <input placeholder="Add Security" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issuekey\')'}" ng-model="one"
@@ -605,7 +605,7 @@
                 </td>
             </tr>
             <!-- Editable rows -->
-            <tr ng-if="!toggleView();" ng-repeat="row in rows | noUnissue track by $index">
+            <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
                 </td>
@@ -650,18 +650,6 @@
                       </span>
                 </td>
             </tr>
-            <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-if="!toggleView()" ng-repeat="row in rows | unissuedrowviewList track by $index">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="editview output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="editview output second clickable"></div>
-                            </span>
-                </td>
-            </tr>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tr ng-if="toggleView()" ng-repeat="row in rows | rowviewList track by $index">
@@ -676,14 +664,14 @@
                 </td>
             </tr>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-if="toggleView()" ng-repeat="row in rows | unissuedrowviewList track by $index">
+            <tr class="unissued-rows" ng-repeat="row in rows track by $index" ng-show="([row] | unissuedrowviewList).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td  class="viewName">{{row.name}}</td>
                 <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                             <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
+                                <div ng-bind="formatAmount(row[key]['u'])" class="editview output clickable"></div>
+                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="editview output second clickable"></div>
                             </span>
                 </td>
             </tr>
