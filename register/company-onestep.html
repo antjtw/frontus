@@ -1,14 +1,17 @@
 <div class="row-fluid">
     <div class="span10 offset1">
-        <a href="/">
+        <a href="/" class="pull-left">
             <img class="newreglogo" src="/img/logo-blue.png">
         </a>
+        <div class="newregTitle pull-right">
+            <span>Registration</span>
+        </div>
     </div>
     <div class="newreg span10 offset1 gateway text-center">
         <div class="planselector">
             <div class="span12">
                 <div class="span3">
-                   Your plan
+                   Choose your plan
                 </div> 
                 <div class="span2">
                     <div ng-switch on="selectedPlan">
@@ -215,7 +218,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="span12">
+                        <div class="span12 regfooter">
+                            <p class="caption legal">
+                                By clicking the Register button, you agree to our <br><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a>
+                            </p>
                             <div class="standard-button large-standard-button">
                                 <button type="submit"
                                         class="btn"
