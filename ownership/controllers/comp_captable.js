@@ -492,7 +492,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
-    $scope.getActiveIssue = function (issue) {
+    $scope.getActiveIssue = function (issuekey) {
+
+        angular.forEach($scope.issues, function(issuefull) {
+            if (issuefull.issue == issuekey) {
+                issue = issuefull;
+            }
+        });
 
         if ($scope.toggleView()) {
             $scope.sideBar = 5;
@@ -581,6 +587,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
     $scope.saveIssue = function (issue, item) {
+        if (item == "issuekey") {
+            item = "issue";
+            angular.forEach($scope.issues, function(issuefull) {
+                if (issuefull.issue == issue) {
+                    issue = issuefull;
+                }
+            });
+        }
         if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
             return
         }

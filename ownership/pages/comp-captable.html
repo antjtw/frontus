@@ -577,10 +577,10 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th  ng-repeat="one in issues track by $index">
+                <th  ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
                     <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                     <input placeholder="Add Security" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
+                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issuekey\')'}" ng-model="one"
                            onkeydown="testForEnter();">
                 </th>
             </tr>
@@ -588,8 +588,8 @@
             <tr ng-if="toggleView();" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList track by $index" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue | uneditIssue}}</span>
+                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issuekeys | orderBy:issueSort track by $index" ng-click="getActiveIssue(one)">
+                    <span>{{one}}</span>
                     <span class="next-button" ng-click="moveTour();">Next</span>
                 </th>
             </tr>
@@ -599,8 +599,8 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in issues | issueviewList track by $index">
-                    <span>{{grantbyIssue(one.issue)}}</span>
+                <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                    <span>{{grantbyIssue(one)}}</span>
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
