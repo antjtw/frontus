@@ -778,7 +778,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         var allpari = "";
         var index;
         angular.forEach(items, function(picked) {
-            if (picked.$$hashKey == item.$$hashKey) {
+            if (picked == item) {
                 picked.pariwith = pari;
             }
             if (picked.pariwith == "") {
@@ -1019,7 +1019,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return
         }
         angular.forEach($scope.rows, function (row) {
-            if (investor.name != "" && investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
+            if (investor.name != "" && investor.name == row.name && investor != row) {
                 investor.name = investor.name + " (1)";
             }
         });
