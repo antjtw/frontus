@@ -770,7 +770,7 @@
                             </div>
                         </div>
                         <!-- Equity Tab -->
-                        <div class="capGuide top10" ng-if="trantype(activeIssue.type, 'Equity');">
+                        <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
 
                             <p class="rightTitle common-toggle"><span>Common</span><button ng-class="{'selected':activeIssue.common}" ng-click="toggleCommon(activeIssue)" ng-model="activeIssue.common" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
 
@@ -896,7 +896,7 @@
 
                         </div>
                           <!-- Options Tab -->
-                          <div class="capGuide top10" ng-if="trantype(activeIssue.type, 'Option');">
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Option');">
                               <div class="rightTitle double"><span>Underlying Security</span>
                                   <ul class="dropdown-list drop-selector">
                                       <li class="dropdown standard">
@@ -970,7 +970,7 @@
                           </div>
 
                           <!-- Debt tab -->
-                          <div class="capGuide top10" ng-if="trantype(activeIssue.type, 'Debt');">
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Debt');">
 
                               <p class="rightTitle double"><span>Pre-Money Valuation</span><input ng-disabled="toggleView();"
                                                                                                   pattern="[0-9]*(.[0-9]*)*"
@@ -1032,7 +1032,7 @@
                           </div>
 
                         <!-- Safe tab -->
-                          <div class="capGuide top10" ng-if="trantype(activeIssue.type, 'Safe');">
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Safe');">
 
                               <p style="display: inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'valcap\')'}"
@@ -1050,7 +1050,7 @@
                           </div>
 
                         <!-- Warrant tab -->
-                          <div class="capGuide top10" ng-if="trantype(activeIssue.type, 'Warrant');">
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Warrant');">
 
                               <div class="rightTitle double"><span>Underlying Security</span>
                                   <ul class="dropdown-list drop-selector">
@@ -1136,7 +1136,7 @@
                         </div>
 
                         <!-- Equity Tab -->
-                        <div class="capGuide top10" ng-if="trantype(tran.type, 'Equity');">
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
 
                             <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
                                                                                  onkeydown="testForEnter();"
@@ -1211,7 +1211,7 @@
 
                         </div>
                         <!-- Option Tab -->
-                        <div class="capGuide top10" ng-if="trantype(tran.type, 'Option');">
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
 
                             <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
                                                                                   onkeydown="testForEnter();"
@@ -1260,7 +1260,7 @@
 
                         </div>
                         <!-- Debt Tab -->
-                        <div class="capGuide top10" ng-if="trantype(tran.type, 'Debt');">
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
 
                             <p class="rightTitle interest-rate"><span>Interest Rate</span><input ng-disabled="toggleView();"
                                                                                                  onkeydown="testForEnter();"
@@ -1308,7 +1308,7 @@
                         </div>
 
                         <!-- Safe Tab -->
-                        <div class="capGuide top10" ng-if="trantype(tran.type, 'Safe');">
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
 
                             <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
                                                                                                                 onkeydown="testForEnter();"
@@ -1327,7 +1327,7 @@
                         </div>
 
                         <!-- Warrant Tab -->
-                        <div class="capGuide top10" ng-if="trantype(tran.type, 'Warrant');">
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
 
                             <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
                                                                                    onkeydown="testForEnter();"
@@ -1364,7 +1364,7 @@
                                 <p ng-show="activeIssue.type" class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
                             </div>
                         <!-- Equity Tab -->
-                        <div class="capGuide cap-overflow" ng-if="trantype(activeIssue.type, 'Equity');">
+                        <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Equity');">
                             <p ng-show="activeIssue.premoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
                             <p ng-show="activeIssue.postmoney" class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.postmoney)"></span><span tooltip-placement="top" tooltip="The sum of the pre-money valuation and the total money paid into this round">POST-MONEY VALUATION</span></p>
@@ -1386,7 +1386,7 @@
                             </p>
                         </div>
                           <!-- Options Tab -->
-                          <div class="capGuide cap-overflow" ng-if="trantype(activeIssue.type, 'Option');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Option');">
                               <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
 
                               <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top" tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span></p>
@@ -1406,7 +1406,7 @@
                           </div>
 
                           <!-- Debt tab -->
-                          <div class="capGuide cap-overflow" ng-if="trantype(activeIssue.type, 'Debt');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Debt');">
 
                               <p class="belowTitle" ng-show="activeIssue.premoney"><span ng-bind="formatDollarAmount(activeIssue.premoney)"></span><span tooltip-placement="top" tooltip="The valuation before taking in money in this round">PRE-MONEY VALUATION</span></p>
 
@@ -1422,7 +1422,7 @@
                           </div>
 
                           <!-- Safe tab -->
-                          <div class="capGuide cap-overflow" ng-if="trantype(activeIssue.type, 'Safe');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Safe');">
 
                               <p class="belowTitle" ng-show="activeIssue.valcap"><span ng-bind="formatDollarAmount(activeIssue.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">VALUATION CAP</span></p>
 
@@ -1431,7 +1431,7 @@
                           </div>
 
                           <!-- Warrant tab -->
-                          <div class="capGuide cap-overflow" ng-if="trantype(activeIssue.type, 'Warrant');">
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Warrant');">
 
                               <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
 
@@ -1461,7 +1461,7 @@
                                 </div>
 
                                 <!-- Equity Tab -->
-                                <div class="capGuide cap-overflow" ng-if="trantype(tran.type, 'Equity');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Equity');">
 
                                     <p ng-show="tran.ppshare" class="belowTitle"><span ng-bind="formatDollarAmount(tran.ppshare)"></span><span tooltip-placement="top" tooltip="The price at which each share was purchased">Share Price</span></p>
 
@@ -1475,7 +1475,7 @@
 
                                 </div>
                                 <!-- Option Tab -->
-                                <div class="capGuide cap-overflow" ng-if="trantype(tran.type, 'Option');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Option');">
 
                                     <p ng-show="tran.optundersec" class="belowTitle"><span ng-bind="tran.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">Underlying Security</span></p>
 
@@ -1492,7 +1492,7 @@
 
                                 </div>
                                 <!-- Debt Tab -->
-                                <div class="capGuide cap-overflow" ng-if="trantype(tran.type, 'Debt');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Debt');">
 
                                     <p ng-show="tran.interestrate" class="belowTitle"><span>{{tran.interestrate}}% {{tran.interestratefreq}}</span><span tooltip-placement="top" tooltip="The rate that interest accrues on this debt">Interest Rate</span></p>
 
@@ -1504,7 +1504,7 @@
                                 </div>
 
                                 <!-- Safe Tab -->
-                                <div class="capGuide cap-overflow" ng-if="trantype(tran.type, 'Safe');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
 
                                     <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="top" tooltip="The maximum pre-money valuation at which the safe converts to equity">Valuation Cap</span></p>
 
@@ -1513,7 +1513,7 @@
                                 </div>
 
                                 <!-- Warrant Tab -->
-                                <div class="capGuide cap-overflow" ng-if="trantype(tran.type, 'Warrant');">
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
 
                                     <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">Term (months)</span></p>
 
@@ -1521,7 +1521,7 @@
 
                                 </div>
 
-                                <div class="capGuide conversion-activity" ng-if="tran.convert.length > 0">
+                                <div class="capGuide conversion-activity" ng-show="tran.convert.length > 0">
 
                                     <h2>Activity</h2>
                                     <ul>
