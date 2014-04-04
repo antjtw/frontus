@@ -577,7 +577,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="one in issues | orderBy:issueSort track by $index">
+                <th ng-repeat="one in issues track by $index">
                     <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                     <input placeholder="Add Security" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
