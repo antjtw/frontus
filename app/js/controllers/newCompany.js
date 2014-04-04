@@ -11,11 +11,9 @@ app.controller('NewCompanyCtrl', ['$scope', '$routeParams', 'SWBrijj',
         };
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
+            console.log(fs);
             return !($scope.selectedPlan &&
-                     fs.pname &&
                      fs.cname &&
-                     fs.email &&
-                     fs.password &&
                      fs.number &&
                      fs.expiry &&
                      fs.cvc);
@@ -32,6 +30,21 @@ app.controller('NewCompanyCtrl', ['$scope', '$routeParams', 'SWBrijj',
         };
 
         $scope.createCompany = function() {
+            SWBrijj.procm('account.new_company',
+                          $scope.cname,
+                          $scope.selectedPlan,
+                          $scope.payment_token)
+            .then(function(new_comp_id) {
+                $scope.$emit("notification:success",
+                             "New company created!");
+                var company = {company: new_comp_id[0].new_company,
+                               role: "issuer"};
+                $scope.switchCandP(company,
+                                   "/app/home/company?cc");
+            })
+            .except(function(err) {
+                console.log(err);
+            });
 
         };
         /*
