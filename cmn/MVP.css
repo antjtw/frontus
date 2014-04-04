@@ -2543,6 +2543,14 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     color: #A6A6A6;
     font-style: italic;
 }
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child:hover,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child:hover > span > a,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span:hover,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span:hover > a,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span > a:hover {
+    color: #333333 !important;
+    background-color: #C7C7C7;
+}
 
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
