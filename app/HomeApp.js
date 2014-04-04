@@ -1,8 +1,10 @@
 
-var app = angular.module('HomeApp', ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap', '$strap.directives',
-    'ui.event', 'nav', 'brijj', 'ownerFilters', 'ownerDirectives', 'ownerServices', 'commonServices',
-    'd3', 'homeDirectives', 'activityDirective', 'commonDirectives', 'ui.select2',
-    'documents', 'docServices', 'angularPayments']);
+var app = angular.module('HomeApp',
+        ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap',
+         '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters',
+         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
+         'homeDirectives', 'activityDirective', 'commonDirectives',
+         'ui.select2','documents', 'docServices', 'angularPayments']);
 
 /** @name $routeParams#msg
  *  @type {string}

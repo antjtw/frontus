@@ -150,6 +150,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             sessionStorage.clear();
             document.location.href = url;
         };
+        $scope.gotoPage = function(page) {
+            sessionStorage.clear();
+            $location.url(page);
+        };
+
 
         $scope.switchCandP = function (company, url) {
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
