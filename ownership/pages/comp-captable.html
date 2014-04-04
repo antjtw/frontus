@@ -588,8 +588,8 @@
             <tr ng-if="toggleView();" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issuekeys | orderBy:issueSort track by $index" ng-click="getActiveIssue(one)">
-                    <span>{{one}}</span>
+                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues track by $index" ng-click="getActiveIssue(one.issue)">
+                    <span>{{one.issue}}</span>
                     <span class="next-button" ng-click="moveTour();">Next</span>
                 </th>
             </tr>
