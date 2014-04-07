@@ -2673,18 +2673,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         anewTran.paid = splitvalues[i];
                         anewTran.paidkey = splitvalues[i];
                     }
+                    angular.forEach($scope.trans, function(tran) {
+                        var found = -1;
+                        if (tran.investor == anewTran.investor && tran.issue == anewTran.issue && isNaN(parseFloat(tran.tran_id))) {
+                            found = $scope.trans.indexOf(tran);
+                        }
+                        if (found != -1) {
+                            $scope.trans.splice(found, 1)
+                        }
+                    });
                     if ($scope.activeTran[0].investor == anewTran.investor) {
                         anewTran.active = true;
                         $scope.activeTran = [];
-                        angular.forEach($scope.trans, function(tran) {
-                            var found = -1;
-                            if (tran.investor == anewTran.investor && tran.issue == anewTran.issue) {
-                                found = $scope.trans.indexOf(tran);
-                            }
-                            if (found != -1) {
-                                $scope.trans.splice(found, 1)
-                            }
-                        });
                         $scope.activeTran.push(anewTran);
                     }
                     $scope.trans.push(anewTran);
