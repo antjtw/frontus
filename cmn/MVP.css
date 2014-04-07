@@ -1417,7 +1417,21 @@ form.inputs {
 .settingtable {
     margin-top: 10px;
     margin-bottom: 10px;
-    width: 100%;
+    margin-right: 20px;
+}
+.settingtable > div {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.settingtable > div:nth-child(n+2) {
+    border-top: 1px solid #E3E3E3;
+}
+.settingtable > div > div:first-child {
+    color: #1E2D3D;
+}
+.settingtable > div > div:nth-child(2) {
+    width: 120px;
+    margin-top: 6px;
 }
 table.settingtable tr > td {
     height: 30px;
@@ -3875,3 +3889,26 @@ div#us_report_button button.us_button_horizontal {
 .regfooter .my-loading-spinner-container > div {
     left: 50%;
 }
+.meter {
+    height: 5px;
+    position: relative;
+    background: #F1F1F1;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+}
+.meter > span {
+    display: block;
+    height: 100%;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    background-color: #1ABC96;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: width 1s linear;
+    -moz-transition: width 1s linear;
+    -o-transition: width 1s linear;
+    transition: width 1s linear;
+}
+
