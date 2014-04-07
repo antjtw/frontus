@@ -242,10 +242,12 @@ app.controller('CompanyCtrl',
                             });
                         });
 
-                        for (var i = 0, l = $scope.trans.length; i < l; i++) {
-                            if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
-                                $scope.uniquerows.push($scope.trans[i].investor);
-                                $scope.rows.push({"name": $scope.trans[i].investor, "email": $scope.trans[i].email});
+                        if ($scope.trans) {
+                            for (var i = 0, l = $scope.trans.length; i < l; i++) {
+                                if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
+                                    $scope.uniquerows.push($scope.trans[i].investor);
+                                    $scope.rows.push({"name": $scope.trans[i].investor, "email": $scope.trans[i].email});
+                                }
                             }
                         }
 

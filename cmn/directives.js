@@ -78,3 +78,22 @@ m.directive('composeMessage', function() {
         }]
     };
 });
+
+m.directive('paymentPlanSelector', function() {
+    return {
+        scope: false,
+        replace: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/paymentPlanSelector.html',
+        controller: ['$scope', function($scope) {
+            $scope.selectedPlan = '002';
+            $scope.selectPlan = function(p) {
+                if ($scope.selectedPlan == p) {
+                    $scope.selectedPlan = null;
+                } else {
+                    $scope.selectedPlan = p;
+                }
+            };
+        }]
+    };
+});

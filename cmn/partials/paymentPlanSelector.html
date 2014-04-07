@@ -1,0 +1,138 @@
+<div class="planselector">
+    <div class="span12">
+        <div class="span3">
+           Choose your plan
+        </div> 
+        <div class="span2">
+            <div ng-switch on="selectedPlan">
+                <img ng-switch-default
+                     src="/img/icon-seed.png">
+                <img ng-switch-when="001"
+                     src="/img/icon-seed-selected.png">
+            </div>
+        </div>
+        <div class="span2">
+            <div ng-switch on="selectedPlan">
+                <img ng-switch-default
+                     src="/img/icon-startup.png">
+                <img ng-switch-when="002"
+                     src="/img/icon-startup-selected.png">
+            </div>
+        </div>
+        <div class="span2">
+            <div ng-switch on="selectedPlan">
+                <img ng-switch-default
+                     src="/img/icon-growth.png">
+                <img ng-switch-when="003"
+                     src="/img/icon-growth-selected.png">
+            </div>
+        </div>
+        <div class="span2">
+            <div ng-switch on="selectedPlan">
+                <img ng-switch-default
+                     src="/img/icon-established.png">
+                <img ng-switch-when="004"
+                     src="/img/icon-established-selected.png">
+            </div>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="span3">
+        </div> 
+        <div class="span2">
+            <p>Seed</p>
+            <p>$9 / month</p>
+        </div>
+        <div class="span2">
+            <p>Startup</p>
+            <p>$29 / month</p>
+        </div>
+        <div class="span2">
+            <p>Growth</p>
+            <p>$99 / month</p>
+        </div>
+        <div class="span2">
+            <p>Established</p>
+            <p>$199 / month</p>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="span3">
+            Documents
+        </div>
+        <div class="span2">
+            <p>10</p>
+        </div>
+        <div class="span2">
+            <p>50</p>
+        </div>
+        <div class="span2">
+            <p>250</p>
+        </div>
+        <div class="span2">
+            <p>1,000</p>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="span3">
+            Admin Accounts
+        </div>
+        <div class="span2">
+            <p>1</p>
+        </div>
+        <div class="span2">
+            <p>2</p>
+        </div>
+        <div class="span2">
+            <p>5</p>
+        </div>
+        <div class="span2">
+            <p>10</p>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="span3">
+            Direct Messages
+        </div>
+        <div class="span2">
+            <p>10</p>
+        </div>
+        <div class="span2">
+            <p>50</p>
+        </div>
+        <div class="span2">
+            <p>250</p>
+        </div>
+        <div class="span2">
+            <p>1,000</p>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="span3">
+        </div>
+        <div class="span2">
+            <button class="radio-button"
+                    ng-class="{'selected':selectedPlan==='001'}"
+                    ng-click="selectPlan('001')">
+            </button>
+        </div>
+        <div class="span2">
+            <button class="radio-button"
+                    ng-class="{'selected':selectedPlan==='002'}"
+                    ng-click="selectPlan('002')">
+            </button>
+        </div>
+        <div class="span2">
+            <button class="radio-button"
+                    ng-class="{'selected':selectedPlan==='003'}"
+                    ng-click="selectPlan('003')">
+            </button>
+        </div>
+        <div class="span2">
+            <button class="radio-button"
+                    ng-class="{'selected':selectedPlan==='004'}"
+                    ng-click="selectPlan('004')">
+            </button>
+        </div>
+    </div>
+</div>

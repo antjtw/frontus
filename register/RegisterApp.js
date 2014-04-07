@@ -1,5 +1,5 @@
 //app for the program
-var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments'], function($routeProvider, $locationProvider){
+var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments', 'commonDirectives'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -101,15 +101,7 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
 
 app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
     function($scope, $routeParams, SWBrijj) {
-        
-        $scope.selectedPlan = '002';
-        $scope.selectPlan = function(p) {
-            if ($scope.selectedPlan == p) {
-                $scope.selectedPlan = null;
-            } else {
-                $scope.selectedPlan = p;
-            }
-        };
+
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&
