@@ -30,22 +30,9 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
         if ($routeParams.video) {
             $scope.modalUp();
         }
-
-       $scope.registertoggle = false;
-
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        $scope.fieldCheck = function(email) {
-            return re.test(email);
+        $scope.register = function() {
+            document.location.href = "/register/company-onestep";
         };
-
-        /*  if ($rootScope.isLoggedIn) {
-         if ($rootScope.selected.isAdmin) { // If user does not belong in a company, the link will be the default homepage URL
-         document.location.href='/home/company';
-         } else {
-         document.location.href='/home';
-         }
-         }*/
-
 
         $scope.toggle = false;
 
