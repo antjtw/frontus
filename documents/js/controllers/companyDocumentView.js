@@ -207,7 +207,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 && ($rootScope.lastPage.indexOf("/register/") === -1)
                 && ($rootScope.lastPage.indexOf("/login/") === -1)
                 && ($rootScope.lastPage.indexOf("-view") === -1)) {
-                console.log($rootScope.lastPage);
+                $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
                 $location.url('/documents/investor-list');
             } else {
