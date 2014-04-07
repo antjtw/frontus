@@ -492,7 +492,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
-    $scope.getActiveIssue = function (issue) {
+    $scope.getActiveIssue = function (issuekey) {
+
+        angular.forEach($scope.issues, function(issuefull) {
+            if (issuefull.issue == issuekey) {
+                issue = issuefull;
+            }
+        });
 
         if ($scope.toggleView()) {
             $scope.sideBar = 5;
@@ -581,6 +587,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
     $scope.saveIssue = function (issue, item) {
+        if (item == "issuekey") {
+            item = "issue";
+            angular.forEach($scope.issues, function(issuefull) {
+                if (issuefull.issue == issue) {
+                    issue = issuefull;
+                }
+            });
+        }
         if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
             return
         }
@@ -764,7 +778,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         var allpari = "";
         var index;
         angular.forEach(items, function(picked) {
-            if (picked.$$hashKey == item.$$hashKey) {
+            if (picked == item) {
                 picked.pariwith = pari;
             }
             if (picked.pariwith == "") {
@@ -1005,7 +1019,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return
         }
         angular.forEach($scope.rows, function (row) {
-            if (investor.name != "" && investor.name == row.name && investor['$$hashKey'] != row['$$hashKey']) {
+            if (investor.name != "" && investor.name == row.name && investor != row) {
                 investor.name = investor.name + " (1)";
             }
         });

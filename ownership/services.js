@@ -503,15 +503,14 @@ ownership.service('calculate', function () {
     //Calculates the total for a column, will do either shares or money depending
     this.colTotal = function (header, rows, type) {
         var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (key == header) {
-                    if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row[key][type]);
-                    }
+        for (var i = 0, a = rows.length; i < a; i++) {
+            if (rows[i][header]) {
+                var possfloat = parseFloat(rows[i][header][type]);
+                if (!isNaN(possfloat) && String(header) != "$$hashKey") {
+                    total += possfloat;
                 }
             }
-        });
+        }
         return total;
     };
 
