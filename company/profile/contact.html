@@ -13,13 +13,16 @@
                 <div class="subnav-controls">
                     <div>
                         <div class="pull-left">
+                            <!--
                             <form>
                                 <div class="editProfilePhoto"
                                      style="width: 40px; height: 40px;">
                                     <img ng-src="{{photoURL}}">
                                 </div>
                             </form>
+                            -->
                         </div>
+                        <!--
                         <div class="viewProfileText pull-left" style="width:30%;">
                             <ul>
                                 <li>{{name}}</li>
@@ -45,6 +48,7 @@
                                 </li>
                             </ul>
                         </div>
+                        -->
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -55,24 +59,88 @@
                 <div class="row-fluid">
                     <div class="front info-box">
                         <div class="head-box">
-                             <h2>Settings</h2>
-
+                             <h2>Profile Information</h2>
                         </div>
                         <div class="body-box">
-                            <table class="settingtable">
-                                <tr>
-                                    <th style="width:130px;"></th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <td>Currency</td>
-                                    <td>{{currency}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Date Format</td>
-                                    <td>{{dateformat}}</td>
-                                </tr>
-                            </table>
+                            <div class="settingtable">
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        Contact Information
+                                    </div>
+                                    <div class="pull-right">
+                                        <ul>
+                                            <li>{{address1()}}</li>
+                                            <li>{{address2()}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="pull-right">
+                                        <span data-icon="&#xe00e;"
+                                              aria-hidden="true"
+                                              ng-click="profileModalOpen()">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        Profile Image
+                                    </div>
+                                    <div class="pull-right">
+                                        <div class="editProfilePhoto"
+                                             style="width:40px; height:40px;">
+                                            <img ng-src="{{photoURL}}">
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <span data-icon="&#xe00e;"
+                                              aria-hidden="true"
+                                              ng-click="profileModalOpen()">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        Settings
+                                    </div>
+                                    <div class="pull-right">
+                                        <ul>
+                                            <li>{{currency}}</li>
+                                            <li>{{dateformat}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="pull-right">
+                                        <span data-icon="&#xe00e;"
+                                              aria-hidden="true"
+                                              ng-click="settingsModalOpen()">
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- ngIf -->
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        Plan Level
+                                    </div>
+                                    <div class="pull-right">
+                                        {{showSelectedPlan(billing.selectedPlan)}}
+                                    </div>
+                                    <div class="pull-right">
+                                        <span data-icon="&#xe00e;"
+                                              aria-hidden="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        Credit Card Information
+                                    </div>
+                                    <div class="pull-right">
+                                        ******{{billing.current_card.last4}}
+                                    </div>
+                                    <div class="pull-right">
+                                        <span data-icon="&#xe00e;"
+                                              aria-hidden="true">
+                                        </span>
+                                    </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,7 +156,10 @@
                                         Documents (total)
                                     </div>
                                     <div class="pull-right">
-                                        <meter cur-progress="1/4"></meter>
+                                        <div>
+                                            <span>1 / 4</span>
+                                            <meter cur-progress="1/4"></meter>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
@@ -96,7 +167,10 @@
                                         Admins (current)
                                     </div>
                                     <div class="pull-right">
-                                        <meter cur-progress="1/4"></meter>
+                                        <div>
+                                            <span>1 / 4</span>
+                                            <meter cur-progress="1/4"></meter>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
@@ -104,7 +178,15 @@
                                         Messages (monthly)
                                     </div>
                                     <div class="pull-right">
-                                        <meter cur-progress="1/4"></meter>
+                                        <div>
+                                            <span>1 / 4</span>
+                                            <meter cur-progress="1/4"></meter>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="pull-left">
+                                        These statistics are based upon your <a href="/pricing">{{billing.current_plan}}</a> level. Sharewave will automatically upgrade your plan as you use more services.
                                     </div>
                                 </div>
                             </div>
