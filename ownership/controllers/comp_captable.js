@@ -1361,6 +1361,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         });
                     });
+                    console.log($scope.trans.length);
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Transaction failed to save, please try entering again");
                     });
@@ -2672,6 +2673,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         anewTran.paid = splitvalues[i];
                         anewTran.paidkey = splitvalues[i];
                     }
+                    angular.forEach($scope.trans, function(tran) {
+                        var found = -1;
+                        if (tran.investor == anewTran.investor && tran.issue == anewTran.issue && isNaN(parseFloat(tran.tran_id))) {
+                            found = $scope.trans.indexOf(tran);
+                        }
+                        if (found != -1) {
+                            $scope.trans.splice(found, 1)
+                        }
+                    });
                     if ($scope.activeTran[0].investor == anewTran.investor) {
                         anewTran.active = true;
                         $scope.activeTran = [];
