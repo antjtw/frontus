@@ -97,3 +97,15 @@ m.directive('paymentPlanSelector', function() {
         }]
     };
 });
+
+m.directive('meter', function() {
+    return {
+        scope: {curProgress: '='},
+        replace: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/meter.html',
+        controller: ['$scope', function($scope) {
+            $scope.meterStyle = {"width": $scope.curProgress*100 + "%"};
+        }]
+    };
+});
