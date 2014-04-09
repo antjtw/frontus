@@ -3954,3 +3954,44 @@ div#us_report_button button.us_button_horizontal {
     line-height: 30px;
     font-size: 20px;
     font-family: 'FS Elliot Web Light', sans-serif;
+}
+
+.persistentNotification {
+    height: 50px;
+    margin-top: -10px;
+    background-color: #FBC68E;
+    border-bottom:1px solid #F78D1E;
+}
+.persistentNotification > div {
+    height: 100%;
+    width: 100%;
+    margin: 0 40px 0 40px;
+    line-height: 50px;
+    vertical-align:middle;
+    color: #666666;
+}
+.persistentNotification > div > span:first-child {
+    font-size: 14px;
+}
+.persistentNotification > div > span:last-child {
+    font-size: 12px;
+    padding-left: 10px;
+}
+.persistentNotification.ng-enter,
+.persistentNotification.ng-leave {
+    -webkit-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+.persistentNotification.ng-enter,
+.persistentNotification.ng-leave.ng-leave-active {
+    height: 0px;
+    overflow: hidden;
+}
+.persistentNotification.ng-leave, 
+.persistentNotification.ng-enter.ng-enter-active {
+    height: 50px;
+    overflow: hidden;
+}

@@ -133,6 +133,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
+        $scope.persistentNotification = false;
+        SWBrijj.tbl('account.my_company_payment').then(function(data) {
+            if (data.length == 2 && data[1][3] != '000' && data[1][1] && data[1][2]) {
+                $scope.persistentNotification = false;
+            } else {
+                $scope.persistentNotification = true;
+            }
+        });
+
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company

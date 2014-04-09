@@ -168,4 +168,17 @@
             </div>
         </div>
     </div>
+    <div ng-if="persistentNotification"
+         class="persistentNotification pointer"
+         ng-animate="'animate'"
+         ng-click="gotoPage('/app/company/profile/')">
+        <div>
+            <span>
+                Payment Error
+            </span>
+            <span>
+                Please pay your bills so we can pay ours!
+            </span>
+        </div>
+    </div>
 </div>
