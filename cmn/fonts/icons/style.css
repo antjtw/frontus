@@ -40,6 +40,13 @@ you can use the generic selector below, but it's slower:
     -webkit-font-smoothing: antialiased;
 }
 
+.icon-rss1:before {
+    content: "\e605";
+}
+.icon-rss2:before {
+    content: "\e606";
+}
+
 .icon-warning:before {
     content: "\e0000";
 }
