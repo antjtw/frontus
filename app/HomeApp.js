@@ -42,10 +42,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'ViewerCtrl',
             templateUrl: '/company/profile/viewer.html'
         }).
-        when('/app/company/profile/billing', {
-            controller: 'BillingCtrl',
-            templateUrl: '/company/profile/billing.html'
-        }).
         when('/app/ownership/company-captable', {
             controller: 'captableController',
             templateUrl: '/ownership/pages/comp-captable.html'

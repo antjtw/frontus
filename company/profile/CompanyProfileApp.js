@@ -1,150 +1,8 @@
-app.controller('BillingCtrl', ['$scope', '$route', '$filter',
-                               'SWBrijj', 'navState', 'payments',
-    function($scope, $route, $filter, SWBrijj, navState, payments) {
-        if (navState.role=='investor') {
-            document.location.href="/home";
-            return;
-        }
-        $scope.billing = {};
-        $scope.update_card = false;
-        SWBrijj.tblm('account.payment_plans', ['plan']).then(function(data) {
-           $scope.billing.plans = data; 
-        }).except(function(err) {
-            console.log(err);
-        });
-        SWBrijj.tbl('account.my_company_payment').then(function(data) {
-            if (data.length == 2) {
-                $scope.billing.currentPlan =
-                    $scope.billing.selectedPlan = data[1][3] || '000';
-                $scope.billing.customer_id = data[1][1];
-                $scope.billing.payment_token = data[1][2];
-                $scope.get_customer();
-                $scope.load_invoices();
-            } else {
-                $scope.billing.selectedPlan = '001';
-            }
-        }).except(function(err) {
-            void(err);
-        });
-        // this swaps the CC data for a stripe card token
-        $scope.toggleUpdateCard = function() {
-            $scope.update_card = !$scope.update_card;
-        };
-        $scope.showStripeForm = function() {
-            if ($scope.billing.current_card && !$scope.update_card) {
-                return "false";
-            } else {
-                return "true";
-            }
-        };
-        $scope.showSelectedPlan = function(p) {
-            if (p == $scope.billing.currentPlan && p == "000") {
-                return "Subscription Cancelled";
-            } else {
-                return $filter('billingPlans')(p);
-            }
-        };
-        $scope.nextInvoice = function() {
-            if ($scope.billing && $scope.billing.next_invoice_received) {
-                return $scope.billing.invoices && $scope.billing.invoices[$scope.billing.invoices.length-1];
-            } else {
-                return false;
-            }
-        };
-
-        $scope.updatePayment = function(status, response) {
-            if (response.error) {
-                console.log(response);
-                $scope.$emit("notification:fail",
-                             "Invalid credit card. Please try again.");
-            } else {
-                $scope.billing.payment_token = response.id;
-                if ($scope.billing.customer_id) {
-                    payments.update_payment($scope.billing.payment_token)
-                    .then(function(x) {
-                        if (x[1][0] !== 1) {
-                            $scope.$emit("notification:fail",
-                             "Oops, something went wrong. Please try again.");
-                        } else {
-                            $scope.toggleUpdateCard();
-                            $scope.$emit("notification:success",
-                                         "New Credit Card Submitted");
-                        }
-                    }).except(function(err) {
-                        console.log(err);
-                    });
-                } else {
-                    $scope.$emit("notification:success",
-                                 "Credit Card Verified");
-                }
-            }
-        };
-        $scope.get_customer = function() {
-            payments.get_customer($scope.billing.customer_id)
-            .then(function(x) {
-                $scope.billing.current_card = x.data.cards.data[0];
-            });
-        };
-        $scope.load_invoices = function() {
-            payments.get_invoices($scope.billing.customer_id, 3)
-            .then(function(resp) {
-                $scope.billing.invoices = resp.data.data;
-                console.log(resp.data.data);
-                if ($scope.billing.currentPlan!=="000") {
-                    $scope.load_upcoming_invoice();
-                }
-            });
-        };
-        $scope.load_upcoming_invoice = function() {
-            payments.get_upcoming_invoice($scope.billing.customer_id)
-            .then(function(resp) {
-                $scope.billing.invoices.push(resp.data);
-                console.log(resp.data);
-                $scope.billing.next_invoice_received = true;
-            });
-        };
-        $scope.selectPlan = function(newplan) {
-            $scope.billing.selectedPlan = newplan;
-        };
-        $scope.updateSubscription = function() {
-            var newplan = $scope.billing.selectedPlan;
-            if ($scope.billing.customer_id) {
-                payments.update_subscription(newplan,
-                        $scope.billing.payment_token)
-                .then(function(x) {
-                    if (x[1][0] !== 1) {
-                        $scope.$emit("notification:fail",
-                                     "Oops, please try again.");
-                    } else {
-                        $scope.$emit("notification:success",
-                                     "Payment plan update submitted.");
-                    }
-                }).except(function(err) {
-                });
-            } else {
-                $scope.billing.currentPlan = newplan;
-            }
-        };
-        $scope.create_customer = function(newcc, newplan) {
-            SWBrijj.proc('account.create_customer', newcc, newplan)
-            .then(function(data) {
-                if (data.length==2) {
-                    $scope.$emit("notification:success",
-                                 "Billing information submitted");
-                    $route.reload();
-                } else {
-                    $scope.$emit("notification:fail",
-                             "Oops, something went wrong. Please try again.");
-                }
-            }).except(function(err) {
-                console.log(err);
-            });
-        };
-    }
-]);
-
-app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
-    function($scope, $rootScope, SWBrijj, navState) {
+app.controller('CompContactCtrl',
+        ['$scope', '$rootScope', 'SWBrijj', 'navState',
+         'payments', '$route', '$filter',
+    function($scope, $rootScope, SWBrijj, navState,
+             payments, $route, $filter) {
         if (navState.role == 'investor') {
             document.location.href = "/home";
             return;
@@ -199,7 +57,11 @@ app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState'
         };
 
         $scope.profileUpdate = function(editcompany) {
-            SWBrijj.proc("account.company_update", editcompany.name, editcompany.address, editcompany.city, editcompany.state, editcompany.zipcode).then(function(x) {
+            SWBrijj.proc("account.company_update",
+                         editcompany.name, editcompany.address,
+                         editcompany.city, editcompany.state,
+                         editcompany.zipcode
+            ).then(function(x) {
                 void(x);
                 if ($scope.files) {
                     $scope.uploadFile();
@@ -316,6 +178,142 @@ app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState'
                 };
                 $scope.$apply();
             }
+        };
+        $scope.billing = {};
+        $scope.update_card = false;
+        SWBrijj.tblm('account.payment_plans', ['plan']).then(function(data) {
+           $scope.billing.plans = data; 
+        }).except(function(err) {
+            console.log(err);
+        });
+        SWBrijj.tbl('account.my_company_payment').then(function(data) {
+            if (data.length == 2) {
+                $scope.billing.currentPlan =
+                    $scope.billing.selectedPlan = data[1][3] || '000';
+                $scope.billing.customer_id = data[1][1];
+                $scope.billing.payment_token = data[1][2];
+                $scope.get_customer();
+                $scope.load_invoices();
+            } else {
+                $scope.billing.selectedPlan = '001';
+            }
+        }).except(function(err) {
+            void(err);
+        });
+        // this swaps the CC data for a stripe card token
+        $scope.toggleUpdateCard = function() {
+            $scope.update_card = !$scope.update_card;
+        };
+        $scope.showStripeForm = function() {
+            if ($scope.billing.current_card && !$scope.update_card) {
+                return "false";
+            } else {
+                return "true";
+            }
+        };
+        $scope.showSelectedPlan = function(p) {
+            if (p == $scope.billing.currentPlan && p == "000") {
+                return "Subscription Cancelled";
+            } else {
+                return $filter('billingPlans')(p);
+            }
+        };
+        $scope.nextInvoice = function() {
+            if ($scope.billing && $scope.billing.next_invoice_received) {
+                return $scope.billing.invoices &&
+                    $scope.billing.invoices[$scope.billing.invoices.length-1];
+            } else {
+                return false;
+            }
+        };
+
+        $scope.updatePayment = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                $scope.billing.payment_token = response.id;
+                if ($scope.billing.customer_id) {
+                    payments.update_payment($scope.billing.payment_token)
+                    .then(function(x) {
+                        if (x[1][0] !== 1) {
+                            $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                        } else {
+                            $scope.toggleUpdateCard();
+                            $scope.$emit("notification:success",
+                                         "New Credit Card Submitted");
+                        }
+                    }).except(function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Credit Card Verified");
+                }
+            }
+        };
+        $scope.get_customer = function() {
+            payments.get_customer($scope.billing.customer_id)
+            .then(function(x) {
+                $scope.billing.current_card = x.data.cards.data[0];
+            });
+        };
+        $scope.load_invoices = function() {
+            payments.get_invoices($scope.billing.customer_id, 3)
+            .then(function(resp) {
+                $scope.billing.invoices = resp.data.data;
+                console.log(resp.data.data);
+                if ($scope.billing.currentPlan!=="000") {
+                    $scope.load_upcoming_invoice();
+                }
+            });
+        };
+        $scope.load_upcoming_invoice = function() {
+            payments.get_upcoming_invoice($scope.billing.customer_id)
+            .then(function(resp) {
+                $scope.billing.invoices.push(resp.data);
+                console.log(resp.data);
+                $scope.billing.next_invoice_received = true;
+            });
+        };
+        $scope.selectPlan = function(newplan) {
+            $scope.billing.selectedPlan = newplan;
+        };
+        $scope.updateSubscription = function() {
+            var newplan = $scope.billing.selectedPlan;
+            if ($scope.billing.customer_id) {
+                payments.update_subscription(newplan,
+                        $scope.billing.payment_token)
+                .then(function(x) {
+                    if (x[1][0] !== 1) {
+                        $scope.$emit("notification:fail",
+                                     "Oops, please try again.");
+                    } else {
+                        $scope.$emit("notification:success",
+                                     "Payment plan update submitted.");
+                    }
+                }).except(function(err) {
+                });
+            } else {
+                $scope.billing.currentPlan = newplan;
+            }
+        };
+        $scope.create_customer = function(newcc, newplan) {
+            SWBrijj.proc('account.create_customer', newcc, newplan)
+            .then(function(data) {
+                if (data.length==2) {
+                    $scope.$emit("notification:success",
+                                 "Billing information submitted");
+                    $route.reload();
+                } else {
+                    $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                }
+            }).except(function(err) {
+                console.log(err);
+            });
         };
     }
 ]);
