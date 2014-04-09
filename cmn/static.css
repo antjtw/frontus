@@ -406,8 +406,9 @@ address {
 }
 
 .pricing.static p {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 26px;
+    color: #666666;
 }
 
 .pricing .pricing-blocks {
