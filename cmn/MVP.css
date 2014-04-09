@@ -1167,6 +1167,13 @@ form.inputs {
     opacity: 0.5;
     cursor:default;
 }
+.CompanyRegister-form {
+    margin-top: 30px;
+}
+.CompanyRegister-form.large-standard-button > button {
+    width: 260px;
+    height: 50px;
+}
 .line {
     border-top: 1px solid rgb(166, 166, 166);
 }
@@ -1429,7 +1436,7 @@ form.inputs {
 .settingtable > div > div:first-child {
     color: #1E2D3D;
 }
-.settingtable > div > div:nth-child(2) {
+.settingtable.usage > div > div:nth-child(2) {
     width: 120px;
     margin-top: 6px;
 }
@@ -3911,4 +3918,8 @@ div#us_report_button button.us_button_horizontal {
     -o-transition: width 1s linear;
     transition: width 1s linear;
 }
-
+.companyprofile .subnav-controls > div > div {
+    color: #1E2D3D;
+    line-height: 30px;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
