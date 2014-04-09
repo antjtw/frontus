@@ -29,7 +29,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-warning, .icon-view, .icon-twitter-bird, .icon-tweeter, .icon-text-smaller, .icon-text-edit, .icon-text-bigger, .icon-untitled, .icon-star, .icon-share, .icon-share-2, .icon-profile, .icon-profile-pic, .icon-pie, .icon-pencil, .icon-pen, .icon-magnify, .icon-linkedin2, .icon-linkedin, .icon-lightening, .icon-key, .icon-grid, .icon-graph2, .icon-graph1, .icon-grabber, .icon-grab, .icon-giter, .icon-facebook-f, .icon-email, .icon-doc2, .icon-doc, .icon-doc-upload, .icon-doc-download, .icon-delete3, .icon-delete2, .icon-delete, .icon-countersign, .icon-conversion, .icon-cog, .icon-circle-upload, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-download, .icon-circle-down, .icon-circle-delete, .icon-cicle-minus, .icon-check, .icon-chat, .icon-calendar, .icon-back, .icon-arrow-2up, .icon-arrow-2right, .icon-arrow-2left, .icon-arrow-2down, .icon-admin, .icon-redo, .icon-lock, .icon-unlocked, .icon-arrow-up, .icon-arrow-right, .icon-arrow-down, .icon-arrow-left, .icon-circle-check, .icon-circle, .icon-circle-info, .icon-spam {
+.icon-Y, .icon-rss1, .icon-rss2, .icon-warning, .icon-view, .icon-twitter-bird, .icon-tweeter, .icon-text-smaller, .icon-text-edit, .icon-text-bigger, .icon-untitled, .icon-star, .icon-share, .icon-share-2, .icon-profile, .icon-profile-pic, .icon-pie, .icon-pencil, .icon-pen, .icon-magnify, .icon-linkedin2, .icon-linkedin, .icon-lightening, .icon-key, .icon-grid, .icon-graph2, .icon-graph1, .icon-grabber, .icon-grab, .icon-giter, .icon-facebook-f, .icon-email, .icon-doc2, .icon-doc, .icon-doc-upload, .icon-doc-download, .icon-delete3, .icon-delete2, .icon-delete, .icon-countersign, .icon-conversion, .icon-cog, .icon-circle-upload, .icon-circle-up, .icon-circle-time, .icon-circle-right, .icon-circle-plus, .icon-circle-left, .icon-circle-download, .icon-circle-down, .icon-circle-delete, .icon-cicle-minus, .icon-check, .icon-chat, .icon-calendar, .icon-back, .icon-arrow-2up, .icon-arrow-2right, .icon-arrow-2left, .icon-arrow-2down, .icon-admin, .icon-redo, .icon-lock, .icon-unlocked, .icon-arrow-up, .icon-arrow-right, .icon-arrow-down, .icon-arrow-left, .icon-circle-check, .icon-circle, .icon-circle-info, .icon-spam {
     font-family: 'sharewave';
     speak: none;
     font-style: normal;
@@ -38,6 +38,10 @@ you can use the generic selector below, but it's slower:
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
+}
+
+.icon-Y:before {
+    content: "\e607";
 }
 
 .icon-rss1:before {
