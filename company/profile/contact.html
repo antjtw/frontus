@@ -345,7 +345,7 @@
         </div>
         <div class="modalText">
             <payment-plan-selector></payment-plan-selector>
-            <form stripe-form="getPaymentToken" name="stripeForm">
+            <form stripe-form="getPaymentToken" name="initPaymentForm">
                 <fieldset>
                     <div>Credit card information</div>
                     <div class="input-list">
@@ -362,7 +362,7 @@
                                    payments-validate="card"
                                    payments-format="card"
                                    payments-type-model="type"
-                                   ng-class="stripeForm.number.$card.type">
+                                   ng-class="initPaymentForm.number.$card.type">
                         </div>
                         <div class="span12">
                             <div class="span6">
@@ -392,7 +392,7 @@
                     <div class="standard-button pull-right">
                         <button type="submit"
                                 class="btn"
-                                ng-disabled="fieldCheck()">
+                                ng-disabled="initPaymentModalFieldCheck()">
                             Submit
                             <span data-icon="&#xe016;"
                                   aria-hidden="true">
@@ -409,7 +409,7 @@
         <div class="modalHeader">
         </div>
         <div class="modalText">
-            <form stripe-form="getPaymentToken" name="stripeForm">
+            <form stripe-form="updatePayment" name="updateCCForm">
                 <fieldset>
                     <div>Credit card information</div>
                     <div class="input-list">
@@ -426,7 +426,7 @@
                                    payments-validate="card"
                                    payments-format="card"
                                    payments-type-model="type"
-                                   ng-class="stripeForm.number.$card.type">
+                                   ng-class="updateCCForm.number.$card.type">
                         </div>
                         <div class="span12">
                             <div class="span6">
@@ -456,7 +456,7 @@
                     <div class="standard-button">
                         <button type="submit"
                                 class="btn"
-                                ng-disabled="fieldCheck()">
+                                ng-disabled="paymentModalFieldCheck()">
                             Submit
                         </button>
                     </div>
@@ -477,7 +477,7 @@
                 <button class="btn" ng-click="paymentPlanModalClose()">Cancel</button>
             </div>
             <div class="standard-button pull-right">
-                <button class="btn">Update Plan</button>
+                <button class="btn" ng-disabled="paymentPlanModalFieldCheck();" ng-click="updateSubscription(); paymentPlanModalClose();">Update Plan</button>
             </div>
         </div>
     </div>

@@ -11,7 +11,6 @@ app.controller('NewCompanyCtrl', ['$scope', '$routeParams', 'SWBrijj',
         };
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
-            console.log(fs);
             return !($scope.selectedPlan &&
                      fs.cname &&
                      fs.number &&

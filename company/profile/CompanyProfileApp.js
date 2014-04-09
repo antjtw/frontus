@@ -139,25 +139,6 @@ app.controller('CompContactCtrl',
             });
         }).except(initFail);
 
-        $scope.activity = [];
-        SWBrijj.tblm('global.get_company_activity').then(function(feed) {
-
-            var originalfeed = feed;
-            //Generate the groups for the activity feed
-            $scope.feed = [];
-            angular.forEach(originalfeed, function(event) {
-                if (event.activity != "sent") {
-                    event.when = moment(event.time).from(event.timenow);
-                    $scope.feed.push(event);
-                }
-            });
-
-        }).except(function(err) {
-        });
-
-        $scope.activityOrder = function(card) {
-            return -card.time;
-        };
 
         $scope.uploadFile = function() {
             $scope.photoURL = "/img/image-loader-140.gif";
@@ -291,22 +272,18 @@ app.controller('CompContactCtrl',
         };
         $scope.updateSubscription = function() {
             var newplan = $scope.billing.selectedPlan;
-            if ($scope.billing.customer_id) {
-                payments.update_subscription(newplan,
-                        $scope.billing.payment_token)
-                .then(function(x) {
-                    if (x[1][0] !== 1) {
-                        $scope.$emit("notification:fail",
-                                     "Oops, please try again.");
-                    } else {
-                        $scope.$emit("notification:success",
-                                     "Payment plan update submitted.");
-                    }
-                }).except(function(err) {
-                });
-            } else {
-                $scope.billing.currentPlan = newplan;
-            }
+            payments.update_subscription(newplan,
+                    $scope.billing.payment_token)
+            .then(function(x) {
+                if (x[1][0] !== 1) {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please try again.");
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Payment plan update submitted.");
+                }
+            }).except(function(err) {
+            });
         };
         $scope.create_customer = function(newcc, newplan) {
             SWBrijj.proc('account.create_customer', newcc, newplan)
@@ -329,17 +306,29 @@ app.controller('CompContactCtrl',
         $scope.paymentPlanModalClose = function() {
             $scope.paymentPlanModal = false;
         };
+        $scope.paymentPlanModalFieldCheck = function() {
+            return $scope.selectedPlan && $scope.selectedPlan != $scope.billing.current_plan;
+        };
         $scope.ccModalOpen = function() {
             $scope.ccModal = true;
         };
         $scope.ccModalClose = function() {
             $scope.ccModal = false;
         };
+        $scope.ccModalFieldCheck = function() {
+            var fs = angular.element('form[name="updateCCForm"]').scope();
+            return !(fs.cname && fs.number && fs.expiry && fs.cvc);
+        };
         $scope.initPaymentModalOpen = function() {
             $scope.initPaymentModal = true;
         };
         $scope.initPaymentModalClose = function() {
             $scope.initPaymentModal = false;
+        };
+        $scope.initPaymentModalFieldCheck = function() {
+            var fs = angular.element('form[name="initPaymentForm"]').scope();
+            return $scope.paymentPlanModalFieldCheck()
+                || !(fs.cname && fs.number && fs.expiry && fs.cvc);
         };
     }
 ]);
