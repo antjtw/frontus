@@ -427,6 +427,14 @@ address {
     border-left: 1px solid #F1F1F1;
 }
 
+.pricing .pricing-blocks > div.seed > ul > li {
+    border-left-width: 2px;
+}
+
+.pricing .pricing-blocks > div.established > ul > li {
+    border-right-width: 2px;
+}
+
 .pricing .pricing-blocks > div > ul > li:nth-child(1) {
     margin-top: 60px;
     height: 116px;
@@ -475,6 +483,7 @@ address {
 }
 
 .pricing .pricing-blocks > div > ul > li:nth-child(3) > ul > li:nth-child(odd) {
+    font-family: 'FS Elliot Web Light', sans-serif !important;
     padding: 20px 0 5px 0;
 }
 
