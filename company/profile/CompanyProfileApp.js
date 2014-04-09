@@ -55,6 +55,11 @@ app.controller('CompContactCtrl',
             dialogFade: true,
             dialogClass: 'profile-modal wideModal modal'
         };
+        $scope.paymentopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'payment-modal modal'
+        };
 
         $scope.profileUpdate = function(editcompany) {
             SWBrijj.proc("account.company_update",
@@ -186,6 +191,9 @@ app.controller('CompContactCtrl',
         }).except(function(err) {
             console.log(err);
         });
+        SWBrijj.tblm('account.my_usage_details').then(function(data) {
+            console.log(data);
+        });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             if (data.length == 2) {
                 $scope.billing.currentPlan =
@@ -201,14 +209,14 @@ app.controller('CompContactCtrl',
             void(err);
         });
         // this swaps the CC data for a stripe card token
-        $scope.toggleUpdateCard = function() {
-            $scope.update_card = !$scope.update_card;
-        };
-        $scope.showStripeForm = function() {
-            if ($scope.billing.current_card && !$scope.update_card) {
-                return "false";
+        $scope.getPaymentToken = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
             } else {
-                return "true";
+                $scope.payment_token = response.id;
+                $scope.create_customer();
             }
         };
         $scope.showSelectedPlan = function(p) {
@@ -241,7 +249,6 @@ app.controller('CompContactCtrl',
                             $scope.$emit("notification:fail",
                              "Oops, something went wrong. Please try again.");
                         } else {
-                            $scope.toggleUpdateCard();
                             $scope.$emit("notification:success",
                                          "New Credit Card Submitted");
                         }
@@ -264,7 +271,6 @@ app.controller('CompContactCtrl',
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
                 $scope.billing.invoices = resp.data.data;
-                console.log(resp.data.data);
                 if ($scope.billing.currentPlan!=="000") {
                     $scope.load_upcoming_invoice();
                 }
@@ -274,7 +280,6 @@ app.controller('CompContactCtrl',
             payments.get_upcoming_invoice($scope.billing.customer_id)
             .then(function(resp) {
                 $scope.billing.invoices.push(resp.data);
-                console.log(resp.data);
                 $scope.billing.next_invoice_received = true;
             });
         };
@@ -314,6 +319,24 @@ app.controller('CompContactCtrl',
             }).except(function(err) {
                 console.log(err);
             });
+        };
+        $scope.paymentPlanModalOpen = function() {
+            $scope.paymentPlanModal = true;
+        };
+        $scope.paymentPlanModalClose = function() {
+            $scope.paymentPlanModal = false;
+        };
+        $scope.ccModalOpen = function() {
+            $scope.ccModal = true;
+        };
+        $scope.ccModalClose = function() {
+            $scope.ccModal = false;
+        };
+        $scope.initPaymentModalOpen = function() {
+            $scope.initPaymentModal = true;
+        };
+        $scope.initPaymentModalClose = function() {
+            $scope.initPaymentModal = false;
         };
     }
 ]);
