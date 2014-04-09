@@ -24,6 +24,9 @@ app.controller('CompContactCtrl',
                 return null;
             }
         };
+        $scope.usagetips = {documents_total: "What is this about documents?",
+                            admins_total: "What is this about admins?",
+                            direct_messages_monthly: "What is this about limits?"};
 
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
@@ -192,7 +195,7 @@ app.controller('CompContactCtrl',
             console.log(err);
         });
         SWBrijj.tblm('account.my_usage_details').then(function(data) {
-            console.log(data);
+            $scope.billing.usage = data;
         });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             if (data.length == 2) {

@@ -23,7 +23,6 @@
                         <div class="front info-box">
                             <div class="head-box">
                                  <h2>Profile Information</h2>
-
                             </div>
                             <div class="body-box">
                                 <div class="settingtable">
@@ -105,47 +104,70 @@
                             <div class="body-box">
                                 <div class="settingtable usage">
                                     <div class="row-fluid">
-                                        <div class="pull-left">Documents (total)</div>
+                                        <div class="pull-left">
+                                            Documents (total)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.documents_total">
+                                            </span>
+                                        </div>
                                         <div class="pull-right">
                                             <div>
-                                                <meter cur-progress="1/4"></meter>
+                                                <meter cur-progress="$scope.billing.documents_total / $scope.billing.documents_total_limit"></meter>
                                             </div>
                                         </div>
                                         <div class="pull-right">
-                                            <div> <span>1 / 4</span>
+                                            <div> <span>{{billing.usage.documents_total || 0}} / {{billing.usage.documents_total_limit || 0}}</span>
 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="pull-left">Admins (current)</div>
+                                        <div class="pull-left">
+                                            Admins (current)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.admins_total">
+                                            </span>
+                                        </div>
                                         <div class="pull-right">
                                             <div>
-                                                <meter cur-progress="1/4"></meter>
+                                                <meter cur-progress="billing.usage.admins_total / billing.usage.admins_total_limit"></meter>
                                             </div>
                                         </div>
                                         <div class="pull-right">
-                                            <div> <span>1 / 4</span>
+                                            <div> <span>{{billing.usage.admins_total || 0}} / {{billing.usage.admins_total_limit || 0}}</span>
 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="pull-left">Messages (monthly)</div>
+                                        <div class="pull-left">
+                                            Messages (monthly)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.direct_messages_monthly">
+                                            </span>
+                                        </div>
                                         <div class="pull-right">
                                             <div>
-                                                <meter cur-progress="1/4"></meter>
+                                                <meter cur-progress="billing.usage.direct_messages_monthly / billing.usage.direct_messages_monthly_limit"></meter>
                                             </div>
                                         </div>
                                         <div class="pull-right">
-                                            <div> <span>1 / 4</span>
+                                            <div> <span>{{billing.usage.direct_messages_monthly || 0}} / {{billing.usage.direct_messages_monthly_limit || 0}}</span>
 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="pull-left">These statistics are based upon your <a href="/pricing">{{billing.current_plan || 'payment'}}</a> level.
-                                            Sharewave<br>will automatically upgrade your plan as you use more services.</div>
+                                        <div class="pull-left">These statistics are based upon your <a href="/pricing">{{billing.current_plan || 'payment'}}</a> level. Sharewave<br>will automatically upgrade your plan as you use more services.</div>
                                     </div>
                                 </div>
                             </div>
@@ -157,24 +179,30 @@
                         <div class="front info-box">
                             <div class="head-box">
                                  <h2>Invoices</h2>
-
                             </div>
-                        </div>
-                        <div class="body-box">
-                            <div class="row-fluid" ng-repeat="inv in billing.invoices">
-                                <div class="span7"> <span>
-                                    {{inv.lines.data[0].period.start*1000
-                                      | date: 'MMMM d, yyyy'}}
-                                </span>
+                            <div class="body-box">
+                                <div class="settingtable invoices">
+                                    <div class="row-fluid">
+                                        <div class="span6"><span>Date</span></div>
+                                        <div class="span4"><span>Amount</span></div>
+                                        <div class="span2"><span>Invoice</span></div>
+                                    </div>
+                                    <div class="row-fluid" ng-repeat="inv in billing.invoices">
+                                        <div class="span7"> <span>
+                                            {{inv.lines.data[0].period.start*1000
+                                              | date: 'MMMM d, yyyy'}}
+                                        </span>
 
-                                </div>
-                                <div class="span3"> <span>
-                                    {{inv.amount_due/100 | currency}}
-                                </span>
+                                        </div>
+                                        <div class="span3"> <span>
+                                            {{inv.amount_due/100 | currency}}
+                                        </span>
 
-                                </div>
-                                <div class="span2"> <a href="openInvoice(inv)">Invoice</a>
+                                        </div>
+                                        <div class="span2"> <a href="openInvoice(inv)">Invoice</a>
 
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -356,7 +384,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="standard-button large-standard-button">
+                    <div class="standard-button gray pull-left">
+                        <button class="btn" ng-click="initPaymentModalClose()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="standard-button pull-right">
                         <button type="submit"
                                 class="btn"
                                 ng-disabled="fieldCheck()">
@@ -376,8 +409,59 @@
         <div class="modalHeader">
         </div>
         <div class="modalText">
-        </div>
-        <div class="modal-footer">
+            <form stripe-form="getPaymentToken" name="stripeForm">
+                <fieldset>
+                    <div>Credit card information</div>
+                    <div class="input-list">
+                        <div>
+                            <span>Name on Card</span>
+                            <input type="text"
+                                   class="input-block-level">
+                        </div>
+                        <div>
+                            <span>Credit Card Number</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="number"
+                                   payments-validate="card"
+                                   payments-format="card"
+                                   payments-type-model="type"
+                                   ng-class="stripeForm.number.$card.type">
+                        </div>
+                        <div class="span12">
+                            <div class="span6">
+                                <span>Expiration Date</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="expiry"
+                                       payments-validate="expiry"
+                                       payments-format="expiry"/>
+                            </div>
+                            <div class="span6">
+                                <span>CVC</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="cvc"
+                                       payments-validate="cvc"
+                                       payments-format="cvc"
+                                       payments-type-model="type"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-button gray pull-left">
+                        <button class="btn" ng-click="ccModalClose()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="standard-button">
+                        <button type="submit"
+                                class="btn"
+                                ng-disabled="fieldCheck()">
+                            Submit
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
     <div modal="paymentPlanModal"
@@ -387,9 +471,14 @@
         </div>
         <div class="modalText">
             <payment-plan-selector></payment-plan-selector>
-            <!-- add a buton -->
         </div>
         <div class="modal-footer">
+            <div class="standard-button gray pull-left">
+                <button class="btn" ng-click="paymentPlanModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button pull-right">
+                <button class="btn">Update Plan</button>
+            </div>
         </div>
     </div>
 </div>

@@ -1440,6 +1440,9 @@ form.inputs {
     width: 120px;
     margin-top: 6px;
 }
+.settingtable.usage > div > div:last-child {
+    padding-right: 10px;
+}
 table.settingtable tr > td {
     height: 30px;
 }
@@ -1451,6 +1454,19 @@ table.settingtable tr > td:first-child {
 table.settingtable tr > td:last-child {
     font-size: 12px;
     color: #666666;
+}
+.settingtable.invoices {
+    margin: 0 20px 0 0;
+}
+.settingtable.invoices > div:first-child > div > span {
+    color: #1E2D3D;
+}
+.settingtable.usage span.tooltip-icon{
+    color: #A6A6A6;
+    vertical-align: middle;
+}
+.settingtable.usage span.tooltip-icon:before{
+    font-size: 13px;
 }
 ul.last-edited {
     display: inline-block;
@@ -3919,6 +3935,7 @@ div#us_report_button button.us_button_horizontal {
     border-radius: 25px;
 }
 .meter > span {
+    width: 0%;
     display: block;
     height: 100%;
     -moz-border-radius: 25px;
