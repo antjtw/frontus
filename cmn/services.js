@@ -63,7 +63,7 @@ service.factory('payments', function($http, SWBrijj) {
         return SWBrijj.tblm('account.my_usage_details');
     };
     s.my_data = function() {
-        return SWBrijj.tbl('account.my_company_payment');
+        return SWBrijj.tblm('account.my_company_payment');
     };
 
     return s;
