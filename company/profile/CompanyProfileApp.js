@@ -170,25 +170,27 @@ app.controller('CompContactCtrl',
         };
         $scope.billing = {};
         $scope.update_card = false;
-        SWBrijj.tblm('account.payment_plans', ['plan']).then(function(data) {
-           $scope.billing.plans = data; 
+        payments.available_plans().then(function(x) {
+            $scope.billing.plans = x;
         }).except(function(err) {
             console.log(err);
         });
         payments.usage_details().then(function(x) {
-            $scope.billing.usage = x;
+            $scope.billing.usage = x[0];
+        }).except(function(err) {
+            console.log(err);
         });
         payments.my_data().then(function(data) {
-            if (data.length == 2) {
+            if (data.length > 0) {
                 $scope.billing.currentPlan =
-                    $scope.billing.selectedPlan = data[1][3] || '000';
-                $scope.billing.customer_id = data[1][1];
-                $scope.billing.payment_token = data[1][2];
-                $scope.get_customer();
+                    $scope.billing.selectedPlan = data[0].plan || '000';
+                $scope.billing.customer_id = data[0].customer_id;
+                $scope.billing.payment_token = data[0].cc_token;
                 $scope.load_invoices();
             } else {
                 $scope.billing.selectedPlan = '001';
             }
+            console.log($scope.billing);
         }).except(function(err) {
             void(err);
         });

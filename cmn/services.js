@@ -28,10 +28,9 @@ service.filter('caplength', function () {
  */
 service.factory('payments', function($http, SWBrijj) {
     var s = {};
-    SWBrijj.tblm('account.available_payment_plans', ['plan'])
-    .then(function(data) {
-        s.available_plans = data;
-    });
+    s.available_plans = function() {
+        return SWBrijj.tblm('account.available_payment_plans', ['plan']);
+    };
     s.update_subscription = function(newplan, card) {
         return SWBrijj.proc('account.update_my_plan', newplan);
     };

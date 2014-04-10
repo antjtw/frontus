@@ -100,13 +100,14 @@ m.directive('paymentPlanSelector', function() {
 
 m.directive('meter', function() {
     return {
-        scope: {curProgress: '='},
+        scope: {cur: '=',
+                tot: '='},
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/meter.html',
         controller: ['$scope', function($scope) {
-            $scope.meterStyle = {"width": $scope.curProgress*100 + "%"};
-            if ($scope.curProgress > 1) {
+            $scope.meterStyle = {"width": ($scope.cur/$scope.tot)*100 + "%"};
+            if ($scope.cur/$scope.tot > 1) {
                 $scope.meterStyle["background-color"] = "#E74C3C";
             }
         }]

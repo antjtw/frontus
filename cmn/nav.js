@@ -135,8 +135,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.registertoggle = false;
         $scope.persistentNotification = false;
         SWBrijj.tblm('account.my_company_payment').then(function(data) {
-            if (data.length > 0 && data.plan != '000' &&
-                    data.customer_id && data.cc_token) {
+            var p = data.length > 0 && data[0];
+            if (p.plan != '000' && p.customer_id !== null && p.cc_token !== null) {
                 $scope.persistentNotification = false;
             } else {
                 $scope.persistentNotification = true;
