@@ -115,7 +115,9 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             $scope.saveShareState();
         });
         window.onbeforeunload = function() {
-            $scope.saveShareState();
+            if (document.location.href.indexOf('documents/company-list') != -1) {
+                $scope.saveShareState();
+            }
         };
         $scope.mergeSmartIntoDumb = function() {
             var smartdocs = [];
