@@ -175,14 +175,10 @@ app.controller('CompContactCtrl',
         }).except(function(err) {
             console.log(err);
         });
-        SWBrijj.tblm('account.my_usage_details').then(function(data) {
-            console.log(data);
-            $scope.billing.usage = data;
+        payments.usage_details().then(function(x) {
+            $scope.billing.usage = x;
         });
-        SWBrijj.tblm('document.documents_total').then(function(data) {
-            console.log(data);
-        });
-        SWBrijj.tbl('account.my_company_payment').then(function(data) {
+        payments.my_data().then(function(data) {
             if (data.length == 2) {
                 $scope.billing.currentPlan =
                     $scope.billing.selectedPlan = data[1][3] || '000';
@@ -249,12 +245,14 @@ app.controller('CompContactCtrl',
                 }
             }
         };
+        /*
         $scope.get_customer = function() {
             payments.get_customer($scope.billing.customer_id)
             .then(function(x) {
                 $scope.billing.current_card = x.data.cards.data[0];
             });
         };
+        */
         $scope.load_invoices = function() {
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
@@ -276,8 +274,7 @@ app.controller('CompContactCtrl',
         };
         $scope.updateSubscription = function() {
             var newplan = $scope.billing.selectedPlan;
-            payments.update_subscription(newplan,
-                    $scope.billing.payment_token)
+            payments.update_subscription(newplan)
             .then(function(x) {
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
@@ -290,7 +287,7 @@ app.controller('CompContactCtrl',
             });
         };
         $scope.create_customer = function(newcc, newplan) {
-            SWBrijj.proc('account.create_customer', newcc, newplan)
+            payments.create_customer(newplan, newcc)
             .then(function(data) {
                 if (data.length==2) {
                     $scope.$emit("notification:success",
@@ -311,7 +308,8 @@ app.controller('CompContactCtrl',
             $scope.paymentPlanModal = false;
         };
         $scope.paymentPlanModalFieldCheck = function() {
-            return $scope.selectedPlan && $scope.selectedPlan != $scope.billing.current_plan;
+            return $scope.selectedPlan &&
+                $scope.selectedPlan != $scope.billing.current_plan;
         };
         $scope.ccModalOpen = function() {
             $scope.ccModal = true;
@@ -321,7 +319,7 @@ app.controller('CompContactCtrl',
         };
         $scope.ccModalFieldCheck = function() {
             var fs = angular.element('form[name="updateCCForm"]').scope();
-            return !(fs.cname && fs.number && fs.expiry && fs.cvc);
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc);
         };
         $scope.initPaymentModalOpen = function() {
             $scope.initPaymentModal = true;
@@ -331,8 +329,8 @@ app.controller('CompContactCtrl',
         };
         $scope.initPaymentModalFieldCheck = function() {
             var fs = angular.element('form[name="initPaymentForm"]').scope();
-            console.log(fs);
-            return !(fs.name && fs.number && fs.expiry && fs.cvc && $scope.selectedPlan);
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
+                     $scope.selectedPlan);
         };
     }
 ]);
