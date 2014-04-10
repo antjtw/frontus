@@ -1,27 +1,31 @@
-<div class="row-fluid">
-    <div class="span5 offset4 gateway text-center">
-        <div>
-            <a href="#"><img class="login-logo" src="/img/logo-blue.png"></a>
-            <p class="tagline">the best way to manage your shareholders<p>
+<div class="login-block">
+    <div>
+        <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
+    </div>
+
+    <div class="row-fluid">
+        <div class="gateway">
+            <h4>Welcome!</h4>
+            <p>To protect the information of {{company}}, please register <strong>{{email}}</strong></p>
+
+            <form id="login" class="text-center" ng-submit="doActivate()">
+                <fieldset>
+                    <div class="field text-left">
+                        <span>Full Name</span>
+                        <input class="loginInput" type="text" tabindex="1" ng-model="name" />
+                    </div>
+                    <div class="field text-left">
+                        <span>Password</span>
+                        <input class="loginInput" autocomplete="off" tabindex="2" type="password" ng-model="password" />
+                    </div>
+                    <p class=" text-left legal">By clicking the Register button, you agree to our <br><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a></p>
+                    <div class="loginfooter">
+                        <div class="standard-button pull-left text-center">
+                            <button type="submit" class="btn" ng-disabled="fieldCheck()">Register</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-        <div class="spacer20"></div>
-        <p style="margin: 0 20px;"><span class="welcome">Welcome!</span><br>To protect the information of {{company}}, please register <strong>{{email}}</strong></p>
-        <form id="login" class="text-center inputs" ng-submit="doActivate()">
-            <fieldset>
-                <div class="field text-right">
-                    <span>Full Name</span>
-                    <input class="loginInput" type="text" tabindex="1" ng-model="name" />
-                </div>
-                <div class="field text-right">
-                    <span>Password</span>
-                    <input class="loginInput" autocomplete="off" tabindex="2" type="password" ng-model="password" />
-                </div>
-                <p class="caption legal">By clicking the Register button, you agree to our <br><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a></p>
-                <div class="standard-button text-center">
-                    <button type="submit" class="btn" ng-disabled="fieldCheck()">Register</button>
-                </div>
-                <div class="spacer10"></div>
-            </fieldset>
-        </form>
     </div>
 </div>

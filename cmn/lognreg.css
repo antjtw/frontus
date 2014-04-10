@@ -1,5 +1,29 @@
 /* Login & Register */
 
+.login-block {
+    width: 408px;
+    margin: 130px auto 0 auto;
+}
+
+.login-block .standard-button > button {
+    min-height: 40px;
+    width: 154px;
+}
+
+.login-block h4 {
+    color: #1D2C3C;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    margin-bottom: 20px;
+}
+
+.loginErrorBox > h3 {
+    color: #E64B3B;
+    font-size: 12px;
+    line-height: 18px;
+    padding-bottom: 0;
+}
+
 .lognreg {
     background-color: #F1F1F1;
 }
@@ -9,21 +33,18 @@
     font-size: 10px;
 }
 
-#login > fieldset > .field > input {
-    margin-left: 10px;
-}
-
 
 .lognreg .err h2 {
     margin-bottom: 5px !important;
 }
 
- .lognreg .loginfooter{
-    margin: 30px 20px 30px 0;
- }
+.lognreg .loginfooter{
+    overflow: auto;
+    margin: 35px 0 25px 0;
+}
 
 .lognreg .forgot {
-    margin-left: 44px;
+    margin-left: 34px;
 }
 
 .lognreg .return {
@@ -51,13 +72,9 @@
 
 .lognreg .caption {
     padding-top: 10px;
-    font-size: 10px;
-    text-transform:uppercase;
 }
 
 .lognreg .caption a{
-    font-size: 10px;
-    text-transform:uppercase;
     text-decoration: none;
     color: #3498DB;
 }
@@ -65,8 +82,8 @@
     color: #2980B9;
 }
 
-.lognreg .caption.legal {
-    padding: 0 0 10px 0;
+.lognreg .caption + .loginfooter {
+    margin: 20px 0 25px 0;
 }
 
 .lognreg .teaser {
@@ -101,7 +118,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    width: 240px;
+    width: 100%;
     height: 32px;
     outline: none !important;
     -webkit-box-shadow: none !important;
@@ -113,15 +130,14 @@
 }
 
 .lognreg .field {
-    margin: 0 20px 10px 0;
+    margin: 0 0 10px 0;
 }
 .lognreg input {
     background-color: rgb(255, 255, 255);
 }
 
 input.loginInput:focus {
-    background-color: rgb(255, 255, 255);
-    border: none;
+    border: 1px solid #A6A6A6;
 }
 
 input.loginInput:invalid:focus {
@@ -142,12 +158,6 @@ input.loginInput:invalid:focus {
     background-color: rgb(26, 188, 150);
     color: rgb(255, 255, 255);
     opacity: 0.5;
-}
-
-.lognreg .textalert h2 {
-    font-size: 14px;
-    font-family: 'FS Elliot Web Light', sans-serif;
-    color: #FFFFFF;
 }
 
 .small-standard-button > button {
