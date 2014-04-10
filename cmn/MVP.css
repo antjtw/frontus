@@ -1043,10 +1043,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 /* Login */
 .gateway {
     margin-left:0;
-    margin-top:140px;
-    background-color: rgb(227, 227, 227);
-    padding-top: 45px;
-    padding-bottom: 0;
+    margin-top:20px;
+    background-color: #FFFFFF;
+    padding: 20px 30px 10px 30px;
 }
 .register {
     background-color: rgb(30, 45, 61);
@@ -1076,6 +1075,7 @@ form.inputs {
 
 .login-logo {
     margin-bottom: 10px;
+    width: 130px;
 }
 
 .navlogin input {
@@ -1139,14 +1139,7 @@ form.inputs {
 #Login-form .button.greenButton:hover {
     background-color: rgb(28, 202, 161);
 }
-.textalert.loginErrorBox {
-    width:330px;
-    background-color: rgb(166, 166, 166);
-    border-radius: 0;
-    margin: auto;
-    float:none;
-    font-family:'FS Elliot Web Regular', sans-serif;
-}
+
 .gateway .logo {
     font-size: 42px;
     color: rgb(30, 45, 61);
@@ -3676,16 +3669,7 @@ button.icon-button:hover {
     width:100%;
     border-radius: 5px;
 }
-.textalert {
-    margin-top:-10px;
-    margin-left: 20px;
-    width:260px;
-    padding-bottom:15px;
-    padding-top:15px;
-    background-color: rgb(52, 73, 94);
-    color: rgb(255, 255, 255);
-    border-radius: 5px;
-}
+
 .alertContents {
     margin-left:10px;
     vertical-align: middle;
@@ -3980,6 +3964,7 @@ div#us_report_button button.us_button_horizontal {
     font-size: 20px;
     font-family: 'FS Elliot Web Light', sans-serif;
 }
+<<<<<<< HEAD
 
 .persistentNotification {
     height: 50px;
