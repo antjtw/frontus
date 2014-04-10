@@ -106,6 +106,9 @@ m.directive('meter', function() {
         templateUrl: '/cmn/partials/meter.html',
         controller: ['$scope', function($scope) {
             $scope.meterStyle = {"width": $scope.curProgress*100 + "%"};
+            if ($scope.curProgress > 1) {
+                $scope.meterStyle["background-color"] = "#E74C3C";
+            }
         }]
     };
 });

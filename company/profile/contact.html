@@ -88,8 +88,15 @@
                                             Setup Billing Information
                                         </div>
                                         <div class="pull-right pointer">
+                                            <div class="standard-button">
+                                                <button class="btn" ng-click="initPaymentModalOpen()">
+                                                    Setup payments
+                                                </button>
+                                            </div>
+                                            <!--
                                             <span data-icon="&#xe00e;" aria-hidden="true" ng-click="initPaymentModalOpen()">
                                             </span>
+                                            -->
                                         </div>
                                     </div>
                                 </div>
@@ -343,7 +350,7 @@
          options="paymentopts">
         <div class="modalHeader">
         </div>
-        <div class="modalText">
+        <div class="modalText initpayment">
             <payment-plan-selector></payment-plan-selector>
             <form stripe-form="getPaymentToken" name="initPaymentForm">
                 <fieldset>
@@ -364,24 +371,22 @@
                                    payments-type-model="type"
                                    ng-class="initPaymentForm.number.$card.type">
                         </div>
-                        <div class="span12">
-                            <div class="span6">
-                                <span>Expiration Date</span>
-                                <input type="text"
-                                       class="input-block-level"
-                                       ng-model="expiry"
-                                       payments-validate="expiry"
-                                       payments-format="expiry"/>
-                            </div>
-                            <div class="span6">
-                                <span>CVC</span>
-                                <input type="text"
-                                       class="input-block-level"
-                                       ng-model="cvc"
-                                       payments-validate="cvc"
-                                       payments-format="cvc"
-                                       payments-type-model="type"/>
-                            </div>
+                        <div>
+                            <span>Expiration Date</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="expiry"
+                                   payments-validate="expiry"
+                                   payments-format="expiry"/>
+                        </div>
+                        <div>
+                            <span>CVC</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="cvc"
+                                   payments-validate="cvc"
+                                   payments-format="cvc"
+                                   payments-type-model="type"/>
                         </div>
                     </div>
                     <div class="standard-button gray pull-left">

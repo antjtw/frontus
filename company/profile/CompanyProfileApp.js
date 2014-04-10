@@ -176,7 +176,11 @@ app.controller('CompContactCtrl',
             console.log(err);
         });
         SWBrijj.tblm('account.my_usage_details').then(function(data) {
+            console.log(data);
             $scope.billing.usage = data;
+        });
+        SWBrijj.tblm('document.documents_total').then(function(data) {
+            console.log(data);
         });
         SWBrijj.tbl('account.my_company_payment').then(function(data) {
             if (data.length == 2) {
@@ -327,8 +331,8 @@ app.controller('CompContactCtrl',
         };
         $scope.initPaymentModalFieldCheck = function() {
             var fs = angular.element('form[name="initPaymentForm"]').scope();
-            return $scope.paymentPlanModalFieldCheck()
-                || !(fs.cname && fs.number && fs.expiry && fs.cvc);
+            console.log(fs);
+            return !(fs.name && fs.number && fs.expiry && fs.cvc && $scope.selectedPlan);
         };
     }
 ]);
