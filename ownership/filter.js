@@ -1,14 +1,8 @@
 var ownership = angular.module('ownerFilters', []);
 
 ownership.filter('noUnissue', function () {
-    return function (rows) {
-        var returnrows = [];
-        angular.forEach(rows, function (row) {
-            if (row.editable != 0 || row.name == "") {
-                returnrows.push(row);
-            }
-        });
-        return returnrows;
+    return function (row) {
+        return (row[0].editable != 0 || row[0].name == "") ? row : [];
     };
 });
 
@@ -67,14 +61,8 @@ ownership.filter('rowviewList', function () {
 
 // Returns the unissued rows for the captable view
 ownership.filter('unissuedrowviewList', function () {
-    return function (rows) {
-        var returnrows = [];
-        angular.forEach(rows, function (row) {
-            if (row.name != "" && row.editable == 0) {
-                returnrows.push(row);
-            }
-        });
-        return returnrows;
+    return function (row) {
+        return (row[0].name != "" && row[0].editable == 0) ? row : [];
     };
 });
 

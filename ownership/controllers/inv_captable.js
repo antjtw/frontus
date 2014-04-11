@@ -12,19 +12,19 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     $scope.issuetypes = [];
     $scope.freqtypes = [];
     $scope.issuekeys = [];
-    $scope.tf = ["yes", "no"]
-    $scope.issues = []
+    $scope.tf = ["yes", "no"];
+    $scope.issues = [];
     $scope.issueSort = 'date';
     $scope.rowSort = '-name';
-    $scope.rows = []
-    $scope.uniquerows = []
-    $scope.activeTran = []
+    $scope.rows = [];
+    $scope.uniquerows = [];
+    $scope.activeTran = [];
 
     $scope.investorOrder = "name";
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
-            document.location.href="/home/";
+            $location.url("/app/home/");
         }
         if ($scope.level == 'Full View') {
             $scope.fullview = true;
@@ -437,6 +437,25 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
     // Last issue date for the sidebar In Brief section
     $scope.lastPostMoney = function() {
         return $scope.formatDollarAmount(calculate.lastPostMoney($scope.issues));
+    };
+
+    $scope.grantbyIssue = function (key) {
+        var type = "";
+        angular.forEach($scope.issues, function(issue) {
+            if (issue.issue == key) {
+                if (issue.type == "Option") {
+                    type = "options";
+                }
+                else if (issue.type == "Warrant") {
+                    type = "warrants";
+                }
+                else {
+                    type = "shares";
+                }
+
+            }
+        });
+        return type
     };
 
 

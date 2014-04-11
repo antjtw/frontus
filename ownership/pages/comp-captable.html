@@ -1,3 +1,6 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
 <div class="container dynamic-page">
 
@@ -21,7 +24,7 @@
                     </tr>
                 </tbody>
                 <tbody class="scrollable-body">
-                    <tr ng-repeat="row in rows | shareList">
+                    <tr ng-repeat="row in rows | shareList track by $index">
                         <td>
                             <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
@@ -532,8 +535,8 @@
 
         <ul class="maintabs head-text">
             <li class="selectedtab">Capitalization</li>
-            <li><a href="/ownership/company-grants">Grants</a></li>
-            <li><a href="/ownership/company-status">Status</a></li>
+            <li><a href="/app/ownership/company-grants">Grants</a></li>
+            <li><a href="/app/ownership/company-status">Status</a></li>
         </ul>
 
         <div ng-show="lastsaved" class="last-saved">
@@ -548,19 +551,6 @@
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="right" bs-tooltip="tourmessages.view"><span>?</span></span>
                     <div class="standard-button small-standard-button blue">
                         <button class="btn" ng-click="editViewToggle();">{{radioModel}}</span></button>
-                    </div>
-                </div>
-                <div ng-show="false" class="pull-left namedtoggle">
-                    <p class="pull-left">DILUTION</p>
-
-                    <div class="pull-left onoffswitch">
-                        <input ng-disabled="!toggleView();" type="checkbox" ng-change="dilution();"
-                               ng-model="dilutionSwitch" name="onoffswitch" class="onoffswitch-checkbox"
-                               id="myonoffswitch" checked>
-                        <label class="onoffswitch-label" for="myonoffswitch">
-                            <div class="onoffswitch-inner"></div>
-                            <div class="onoffswitch-switch"></div>
-                        </label>
                     </div>
                 </div>
                 <div class="pull-right">
@@ -582,24 +572,24 @@
     <div class="row-fluid capcontainer">
         <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
             <!-- Editable headers -->
-            <tr ng-hide="toggleView();" class="column-label">
+            <tr ng-if="!toggleView();" class="column-label">
                 <th class="longrow" colspan="2">
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th  ng-repeat="one in issues">
+                <th ng-repeat="one in issues track by $index">
                     <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                     <input placeholder="Add Security" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
+                           ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
                            onkeydown="testForEnter();">
                 </th>
             </tr>
             <!-- Uneditable headers -->
-            <tr ng-show="toggleView();" class="column-label">
+            <tr ng-if="toggleView();" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList" ng-click="getActiveIssue(one)">
-                    <span>{{one.issue | uneditIssue}}</span>
+                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList track by $index" ng-click="getActiveIssue(one.issue)">
+                    <span>{{one.issue}}</span>
                     <span class="next-button" ng-click="moveTour();">Next</span>
                 </th>
             </tr>
@@ -609,13 +599,13 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in issues | issueviewList">
-                    <span>SHARES</span>
+                <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                    <span>{{grantbyIssue(one)}}</span>
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
             <!-- Editable rows -->
-            <tr ng-hide="toggleView();" ng-repeat="row in rows | noUnissue">
+            <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
                 </td>
@@ -627,6 +617,8 @@
                                  ng-model="row.name"
                                  ng-change="nameChangeLR(row)"
                                  ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
+                                 onpaste="return false"
+                                 ng-paste="namePaste($event, row);"
                                  onkeydown="testForEnter();">
                         </span>
                         <span ng-switch-when="0">
@@ -634,19 +626,23 @@
                         </span>
                       </span>
                 </td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                     <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
                           <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
-                                 placeholder="shares"
+                                 placeholder="{{grantbyIssue(key)}}"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
+                                 onpaste="return false"
+                                 ng-paste="numberPaste($event, row, key, 'u');"
                                  onkeydown="testForEnter();">
                           <input ng-hide="isDebt(key);" class="captablepair default-pointer first-box" disabled>
                           <input class="captablepair last-box" maxlength="18" placeholder="paid"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
+                                 onpaste="return false"
+                                 ng-paste="numberPaste($event, row, key, 'a');"
                                  onkeydown="testForEnter();">
                         </span>
                         <span class="captablepair-box" ng-switch-when="0">
@@ -660,25 +656,13 @@
                       </span>
                 </td>
             </tr>
-            <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-hide="toggleView()" ng-repeat="row in rows | unissuedrowviewList">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="editview output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="editview output second clickable"></div>
-                            </span>
-                </td>
-            </tr>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
-            <tr ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | rowviewList">
+            <tr ng-if="toggleView()" ng-repeat="row in rows | rowviewList track by $index">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName tableFields" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                                 <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
@@ -686,26 +670,14 @@
                 </td>
             </tr>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-show="toggleView() && toggleDilution();" ng-repeat="row in rows | unissuedrowviewList">
+            <tr class="unissued-rows" ng-repeat="row in rows track by $index" ng-show="([row] | unissuedrowviewList).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                             <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
-                            </span>
-                </td>
-            </tr>
-            <!-- Un-editable diluted view -->
-            <tr ng-show="toggleView() && !toggleDilution();" ng-repeat="row in dilutedRows">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, dilutedRows, issuekeys) | number:3}}%"></td>
-                <td class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td class="tableFields" ng-click="getActiveTransaction(row.name, key)" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
+                                <div ng-bind="formatAmount(row[key]['u'])" class="editview output clickable"></div>
+                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="editview output second clickable"></div>
                             </span>
                 </td>
             </tr>
@@ -714,31 +686,18 @@
                 <td class="tableFields">Total</td>
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys"></td>
+                <td class="tableFields" ng-repeat="one in issuekeys track by $index"></td>
             </tr>
             <!-- Undiluted footer -->
-            <tr ng-show="toggleDilution();" class='tablefooter'>
+            <tr class='tablefooter'>
                 <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                 <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys">
+                <td class="tableFields" ng-repeat="one in issuekeys track by $index">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
                                 <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
-                            </span>
-                </td>
-            </tr>
-
-            <!-- Diluted footer -->
-            <tr ng-hide="toggleDilution();" class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(dilutedRows);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(colTotal(one, dilutedRows, 'u'))" class="output footer"></div>
-                                <div ng-bind="formatDollarAmount(colTotal(one, dilutedRows, 'a'))" class="output second footer"></div>
                             </span>
                 </td>
             </tr>
@@ -792,7 +751,7 @@
                                                     {{activeIssue.type}}<span class="invisible-drop">'</span>
                                                 </a>
                                                 <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                    <li ng-repeat="i in issuetypes">
+                                                    <li ng-repeat="i in issuetypes track by $index">
                                                         <a ng-click="saveIssueAssign(activeIssue, 'type', i)">{{i}}</a>
                                                     </li>
                                                 </ul>
@@ -852,7 +811,7 @@
                                             {{activeIssue.liquidpref}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-repeat="i in liquidpref">
+                                            <li ng-repeat="i in liquidpref track by $index">
                                                 <a ng-click="saveIssueAssign(activeIssue, 'liquidpref', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -868,7 +827,7 @@
                                             {{activeIssue.partpref | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveIssueAssign(activeIssue, 'partpref', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -885,7 +844,7 @@
                                             {{activeIssue.dragalong | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveIssueAssign(activeIssue, 'dragalong', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -901,7 +860,7 @@
                                             {{activeIssue.tagalong | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveIssueAssign(activeIssue, 'tagalong', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -911,14 +870,14 @@
                             </div>
 
                             <span ng-show="showPari(allowKeys) && !activeIssue.common" class="paripassu-list">
-                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu"><span>Pari Passu With</span>
+                                <div class="rightTitle" ng-repeat="item in activeIssue.paripassu track by $index"><span>Pari Passu With</span>
                                     <ul class="dropdown-list drop-selector">
                                         <li class="dropdown standard">
                                             <a class="dropdown-toggle">
                                                 {{item.pariwith | maxLength}}<span class="invisible-drop">'</span>
                                             </a>
                                             <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                <li ng-repeat="i in availableKeys(allowKeys, activeIssue.paripassu)">
+                                                <li ng-repeat="i in availableKeys(allowKeys, activeIssue.paripassu) track by $index">
                                                     <a ng-click="saveIssuePari(i, item, activeIssue.paripassu)">{{i | maxLength}}</a>
                                                 </li>
                                             </ul>
@@ -939,7 +898,7 @@
                                               {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
                                           </a>
                                           <ul ng-hide="toggleView();" class="dropdown-menu">
-                                              <li ng-repeat="i in allowKeys">
+                                              <li ng-repeat="i in allowKeys track by $index">
                                                   <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
                                               </li>
                                           </ul>
@@ -994,7 +953,7 @@
                                               {{activeIssue.vestfreq}}<span class="invisible-drop">'</span>
                                           </a>
                                           <ul ng-hide="toggleView();" class="dropdown-menu">
-                                              <li ng-repeat="i in freqtypes">
+                                              <li ng-repeat="i in freqtypes track by $index">
                                                   <a ng-click="saveIssueAssign(activeIssue, 'vestfreq', i)">{{i}}</a>
                                               </li>
                                           </ul>
@@ -1035,7 +994,7 @@
                                               {{activeIssue.interestratefreq}}<span class="invisible-drop">'</span>
                                           </a>
                                           <ul class="dropdown-menu">
-                                              <li ng-repeat="i in freqtypes">
+                                              <li ng-repeat="i in freqtypes track by $index">
                                                   <a ng-click="saveIssueAssign(activeIssue, 'interestratefreq', i)">{{i}}</a>
                                               </li>
                                           </ul>
@@ -1083,6 +1042,41 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
                               </p>
                           </div>
+
+                        <!-- Warrant tab -->
+                          <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Warrant');">
+
+                              <div class="rightTitle double"><span>Underlying Security</span>
+                                  <ul class="dropdown-list drop-selector">
+                                      <li class="dropdown standard">
+                                          <a class="dropdown-toggle">
+                                              {{activeIssue.optundersec | maxLength}}<span class="invisible-drop">'</span>
+                                          </a>
+                                          <ul ng-hide="toggleView();" class="dropdown-menu">
+                                              <li ng-repeat="i in allowKeys track by $index">
+                                                  <a ng-click="saveIssueAssign(activeIssue, 'optundersec', i)">{{i  | maxLength}}</a>
+                                              </li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                              </div>
+
+                              <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
+                                                                                    ui-event="{blur : 'saveIssueCheck(activeIssue, \'price\')'}"
+                                                                                    ng-model="activeIssue.price"
+                                                                                    onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                              </p>
+
+                              <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                     ui-event="{blur : 'saveIssueCheck(activeIssue, \'term\')'}"
+                                                                                     ng-model="activeIssue.term"
+                                                                                     onkeydown="testForEnter();">
+                                  <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                              </p>
+
+                          </div>
                       </span>
 
 <!-- Transaction Side Bar when Editable -->
@@ -1106,7 +1100,7 @@
                             <p>Customize terms for this shareholder</p>
                         </div>
                         <tabset class="trantabs">
-                        <tab ng-repeat="tran in activeTran" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
+                        <tab ng-repeat="tran in activeTran track by $index" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                         <!-- Global Tab -->
                         <div class="capGuide global">
@@ -1120,7 +1114,7 @@
 
                             </p>
 
-                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>Shares</span><input ng-disabled="toggleView();"
+                            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
                                                                                                          maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                                          ng-model="tran.units" onkeydown="testForEnter();"></p>
 
@@ -1152,7 +1146,7 @@
                                             {{tran.liquidpref}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in liquidpref">
+                                            <li ng-repeat="i in liquidpref track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'liquidpref', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1168,7 +1162,7 @@
                                             {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'partpref', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1184,7 +1178,7 @@
                                             {{tran.dragalong  | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'dragalong', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1200,7 +1194,7 @@
                                             {{tran.tagalong  | falseCheck}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in tf">
+                                            <li ng-repeat="i in tf track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'tagalong', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1249,7 +1243,7 @@
                                             {{tran.vestfreq}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in freqtypes">
+                                            <li ng-repeat="i in freqtypes track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1276,7 +1270,7 @@
                                             {{tran.interestratefreq}}<span class="invisible-drop">'</span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li ng-repeat="i in freqtypes">
+                                            <li ng-repeat="i in freqtypes track by $index">
                                                 <a ng-click="saveTranAssign(tran, 'interestratefreq', i)">{{i}}</a>
                                             </li>
                                         </ul>
@@ -1326,6 +1320,25 @@
 
                         </div>
 
+                        <!-- Warrant Tab -->
+                        <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
+
+                            <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                   onkeydown="testForEnter();"
+                                                                                   ui-event="{blur : 'saveTran(tran)'}"
+                                                                                   ng-model="tran.term">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                            </p>
+
+                            <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
+                                                                                  onkeydown="testForEnter();"
+                                                                                  ui-event="{blur : 'saveTran(tran)'}"
+                                                                                  ng-model="tran.price">
+                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                            </p>
+
+                        </div>
+
                         </tab>
                         <tab select="createTrantab();" heading="add"></tab>
                         </tabset>
@@ -1362,7 +1375,7 @@
 
                             <p ng-show="activeIssue.tagalong"  class="belowTitle"><span ng-bind="activeIssue.tagalong"></span><span tooltip-placement="top" tooltip="When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares">TAG ALONG</span></p>
 
-                            <p ng-show="activeIssue.paripassu[0].pariwith" ng-repeat="pari in activeIssue.paripassu"  class="belowTitle">
+                            <p ng-show="activeIssue.paripassu[0].pariwith" ng-repeat="pari in activeIssue.paripassu track by $index"  class="belowTitle">
                                 <span ng-bind="pari.pariwith"></span><span tooltip-placement="top" tooltip="Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority">PARI PASSU WITH</span>
                             </p>
                         </div>
@@ -1410,6 +1423,17 @@
                               <p class="belowTitle" ng-show="activeIssue.discount"><span ng-bind="activeIssue.discount"></span><span tooltip-placement="top" tooltip="The percentage discount applied to the next round">PERCENT DISCOUNT</span></p>
 
                           </div>
+
+                          <!-- Warrant tab -->
+                          <div class="capGuide cap-overflow" ng-show="trantype(activeIssue.type, 'Warrant');">
+
+                              <p ng-show="activeIssue.optundersec" class="belowTitle"><span ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top" tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span></p>
+
+                              <p class="belowTitle" ng-show="activeIssue.term"><span ng-bind="activeIssue.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">TERM (MONTHS)</span></p>
+
+                              <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">STRIKE PRICE</span></p>
+
+                          </div>
                       </span>
 
 <!-- Transactions Side Bar when UnEditable -->
@@ -1419,11 +1443,11 @@
                             </h1>
                         </div>
                         <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran | orderBy:'date'" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
+                            <tab ng-repeat="tran in activeTran | orderBy:'date' track by $index" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
-                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>Shares</span></p>
+                                    <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>{{grantbyIssue(tran.issue)}}</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
 
@@ -1482,11 +1506,20 @@
 
                                 </div>
 
+                                <!-- Warrant Tab -->
+                                <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
+
+                                    <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="top" tooltip="The term of the warrant before expiration">Term (months)</span></p>
+
+                                    <p ng-show="tran.price" class="belowTitle"><span ng-bind="formatDollarAmount(tran.price)"></span><span tooltip-placement="top" tooltip="The price each granted share can be purchased at">Strike Price</span></p>
+
+                                </div>
+
                                 <div class="capGuide conversion-activity" ng-show="tran.convert.length > 0">
 
                                     <h2>Activity</h2>
                                     <ul>
-                                        <li ng-repeat="convert in tran.convert">
+                                        <li ng-repeat="convert in tran.convert track by $index">
                                             <span>{{convert.date | date:settings.shortdate}}</span>
                                             <span ng-show="convert.method == 'Valuation' || convert.method == 'Price Per Share'">Converted from {{convert.issuefrom}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>
                                             <span ng-show="convert.method == 'Split'">Split {{convert.split.numerator}} to {{convert.split.denominator}} at {{formatDollarAmount(convert.effectivepps)}} Price-per-share</span>

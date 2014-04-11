@@ -1,3 +1,6 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
 <div class="container dynamic-page">
 
@@ -106,9 +109,9 @@
 <div class="headsection row-fluid" ng-click="resetSideBar();">
 
     <ul class="maintabs head-text">
-        <li><a href="/ownership/company-captable">Capitalization</a></li>
+        <li><a href="/app/ownership/company-captable">Capitalization</a></li>
         <li class="selectedtab">Grants</li>
-        <li><a href="/ownership/company-status">Status</a></li>
+        <li><a href="/app/ownership/company-status">Status</a></li>
     </ul>
 
     <div ng-show="lastsaved" class="last-saved">
@@ -159,7 +162,7 @@
         <tbody class="empty-table">
         <tr>
             <td>
-                <div>Welcome! <a href="/ownership/company-captable" class="link">Create an options security</a> on your
+                <div>Welcome! <a href="/app/ownership/company-captable" class="link">Create an options security</a> on your
                     capitalization table to manage your grants
                 </div>
             </td>
@@ -204,19 +207,19 @@
                            ng-change="fauxupdating(tran)"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor"
                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
                            ng-model="tran.units">
                 </td>
                 <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
                            ng-model="tran.forfeited">
                 </td>
-                <td><input maxlength="16" placeholder="shares"
+                <td><input maxlength="16" placeholder="options"
                            ng-disabled="!tran.investor || !tran.units"
                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
                            ng-model="tran.exercised">
@@ -340,7 +343,7 @@
 
                   </p>
 
-                  <p class="rightTitle"><span>Units</span><input ui-event="{blur : 'saveTran(activeTran)'}"
+                  <p class="rightTitle"><span>Options</span><input ui-event="{blur : 'saveTran(activeTran)'}"
                                                                  ng-model="activeTran.units"></p>
 
                   <p class="rightTitle"><span>Strike Price</span><input ui-event="{blur : 'saveTran(activeTran)'}"
@@ -687,7 +690,7 @@
                   <ul class="grant-list-view">
                       <li>
                           <span>Date</span>
-                          <span>Shares</span>
+                          <span>Options</span>
                       </li>
                       <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
                           <span ng-bind="act.date | date:settings.shortdate"></span>
@@ -703,7 +706,7 @@
                 <ul class="grant-list-view">
                     <li>
                         <span>Date</span>
-                        <span>Shares</span>
+                        <span>Options</span>
                     </li>
                     <li ng-show="act.unit"
                         ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
@@ -722,7 +725,7 @@
                 <ul class="grant-list-view">
                     <li>
                         <span>Date</span>
-                        <span>Shares</span>
+                        <span>Options</span>
                     </li>
                     <li ng-repeat="grant in activeTran.vested">
                         <span ng-bind="grant.date | date:settings.shortdate"></span>
