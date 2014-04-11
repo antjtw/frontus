@@ -31,7 +31,7 @@ service.factory('payments', function($http, SWBrijj) {
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
     };
-    s.update_subscription = function(newplan, card) {
+    s.update_subscription = function(newplan) {
         return SWBrijj.proc('account.update_my_plan', newplan);
     };
     s.update_payment = function(newcard) {

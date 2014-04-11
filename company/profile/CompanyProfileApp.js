@@ -171,7 +171,13 @@ app.controller('CompContactCtrl',
         $scope.billing = {};
         $scope.update_card = false;
         payments.available_plans().then(function(x) {
-            $scope.billing.plans = x;
+            $scope.billing.plans = [];
+            angular.forEach(x, function(p) {
+                $scope.billing.plans.push(p.plan);
+            });
+            if ($scope.billing.currentPlan !== '000') {
+                $scope.billing.plans.push('000');
+            }
         }).except(function(err) {
             console.log(err);
         });
@@ -183,12 +189,12 @@ app.controller('CompContactCtrl',
         payments.my_data().then(function(data) {
             if (data.length > 0) {
                 $scope.billing.currentPlan =
-                    $scope.billing.selectedPlan = data[0].plan || '000';
+                    $scope.selectedPlan = data[0].plan || '000';
                 $scope.billing.customer_id = data[0].customer_id;
                 $scope.billing.payment_token = data[0].cc_token;
                 $scope.load_invoices();
             } else {
-                $scope.billing.selectedPlan = '001';
+                $scope.selectedPlan = '002';
             }
             console.log($scope.billing);
         }).except(function(err) {
@@ -202,7 +208,8 @@ app.controller('CompContactCtrl',
                              "Invalid credit card. Please try again.");
             } else {
                 $scope.payment_token = response.id;
-                $scope.create_customer();
+                $scope.create_customer($scope.payment_token,
+                                       $scope.selectedPlan);
             }
         };
         $scope.showSelectedPlan = function(p) {
@@ -271,13 +278,11 @@ app.controller('CompContactCtrl',
                 $scope.billing.next_invoice_received = true;
             });
         };
-        $scope.selectPlan = function(newplan) {
-            $scope.billing.selectedPlan = newplan;
-        };
         $scope.updateSubscription = function() {
-            var newplan = $scope.billing.selectedPlan;
+            var newplan = $scope.selectedPlan;
             payments.update_subscription(newplan)
             .then(function(x) {
+                console.log(x);
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
@@ -294,7 +299,7 @@ app.controller('CompContactCtrl',
                 if (data.length==2) {
                     $scope.$emit("notification:success",
                                  "Billing information submitted");
-                    $route.reload();
+                    $scope.initPaymentModalClose();
                 } else {
                     $scope.$emit("notification:fail",
                              "Oops, something went wrong. Please try again.");
@@ -310,8 +315,8 @@ app.controller('CompContactCtrl',
             $scope.paymentPlanModal = false;
         };
         $scope.paymentPlanModalFieldCheck = function() {
-            return $scope.selectedPlan &&
-                $scope.selectedPlan != $scope.billing.current_plan;
+            return !($scope.selectedPlan &&
+                $scope.selectedPlan != $scope.billing.currentPlan);
         };
         $scope.ccModalOpen = function() {
             $scope.ccModal = true;
@@ -721,13 +726,15 @@ app.filter('billingPlans', function() {
             case '000':
                 return "Cancel Subscription";
             case '001':
-                return "Plan 1";
+                return "Seed";
             case '002':
-                return "Plan 2";
+                return "Startup";
             case '003':
-                return "Plan 3";
+                return "Growth";
+            case '004':
+                return "Established";
             default:
-                return "Error";
+                return "Unknown Plan";
         }
     };
 });

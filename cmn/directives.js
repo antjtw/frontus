@@ -86,12 +86,15 @@ m.directive('paymentPlanSelector', function() {
         restrict: 'E',
         templateUrl: '/cmn/partials/paymentPlanSelector.html',
         controller: ['$scope', function($scope) {
-            $scope.selectedPlan = '002';
             $scope.selectPlan = function(p) {
                 if ($scope.selectedPlan == p) {
                     $scope.selectedPlan = null;
                 } else {
-                    $scope.selectedPlan = p;
+                    if ($scope.billing.plans.indexOf(p)!==-1) {
+                        $scope.selectedPlan = p;
+                    } else {
+                        console.log(p);
+                    }
                 }
             };
         }]
