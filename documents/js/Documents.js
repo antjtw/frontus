@@ -82,7 +82,9 @@ function ApplyLineBreaks(oTextarea) {
 
 function getIntProperty(se, z) {
     var lh = getComputed(se, z);
-    lh = parseFloat(lh.replace("px", ""));
+    if(lh) {
+        lh = parseFloat(lh.replace("px", ""));
+    }
     return lh;
 }
 
@@ -1276,22 +1278,21 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     && ($rootScope.lastPage.indexOf("/register/") === -1)
                     && ($rootScope.lastPage.indexOf("/login/") === -1)
                     && ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if ($rootScope.lastPage.indexOf("/company-list?share") !== -1) {
-                    if ($scope.template_original) {
-                        sessionStorage.setItem("docPrepareState",
-                                angular.toJson({template_id: $scope.templateId,
-                                                doc_id: $scope.docId}));
-                    } else {
-                        sessionStorage.setItem("docPrepareState",
-                                angular.toJson({template_id: $scope.templateId,
-                                                doc_id: $scope.docId}));
-                    }
+                if (document.location.href.indexOf("share=true") !== -1) {
+                    sessionStorage.setItem("docPrepareState",
+                            angular.toJson({template_id: $scope.templateId,
+                                            doc_id: $scope.docId}));
+                    $rootScope.lastPage = $rootScope.lastPage + "?share";
                 }
-                document.location.href = $rootScope.lastPage;
+                if ($rootScope.lastPage.indexOf("company-status") !== -1) {
+                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
+                }
+                console.log($rootScope.lastPage);
+                $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
-                $location.path('/investor-list').search({});
+                $location.url('/app/documents/investor-list');
             } else {
-                $location.path('/company-list').search({});
+                $location.url('/app/documents/company-list');
             }
         };
 

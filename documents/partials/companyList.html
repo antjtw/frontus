@@ -1,5 +1,6 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <script src="/cmn/spin.js"></script>
-<div class="maincontent openflow">
+<div class="company-list maincontent openflow">
     <div class="container dynamic-page doclistFlow">
         <div class="row-fluid">
             <div class="headsection row-fluid">
@@ -26,13 +27,13 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                             <span>HIDE COMPLETED</span>
                             <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
                             </button>
                         </div>
-                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                             <span>SHOW ARCHIVED</span>
                             <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
@@ -71,7 +72,7 @@
         <div class="row-fluid leftTabWindow">
             <div ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}"
             class="span8 recipientInfo statusBlock leftBlock">
-                <div class="row-fluid listcontainer">
+                <div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
                     <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
                         <tbody class="empty-table">
                             <tr>
@@ -100,7 +101,7 @@
                                 <th></th>
                             </tr>
                         </tbody>
-                        <tbody ng-animate="'animate'" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+                        <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:doc.shown}">
                                 <td class="status-toggle"
@@ -175,6 +176,8 @@
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
+                                                        <li ng-show="!docIsPrepared(doc)" ng-click="prepareDocument(doc);">Prepare for Signature</li>
+                                                        <li ng-show="docIsPrepared(doc)" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -449,15 +452,30 @@
         <span>Retract Document</span>
         <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="retractVersionClose()"></span>
     </div>
-    <div class="modalText deleteDocModal">
+    <div class="modalText deleteDocModal retractModal">
         <span>Are you sure you want to retract {{docForModal.docname}} from {{docForModal.name || docForModal.investor}}?</span>
+
+        <div>
+            <ul class="checkboxOption">
+                <li class="pull-left">
+                    <button class="check-box-button" ng-class="{'selected':modalArchive}" ng-click="modalArchive = !modalArchive">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </li>
+                <li class="pull-left">
+                    <span>Archive from library</span>
+                </li>
+            </ul>
+        </div>
     </div>
+
+
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
             <button class="btn" ng-click="retractVersionClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="retractVersion(docForModal); retractVersionClose();">Confirm</button>
+            <button class="btn" ng-click="retractVersion(docForModal, modalArchive); retractVersionClose();">Confirm</button>
         </div>
     </div>
 </div>

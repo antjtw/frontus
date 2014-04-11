@@ -1,6 +1,6 @@
 //'use strict';
 
-docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
+app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
         'navState',
     function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics) {
         // Switch to company view if the role is issuer
@@ -109,12 +109,15 @@ docviews.controller('InvestorDocumentViewController', ['$scope', '$location', '$
         };
 
         $scope.leave = function() {
-            if ($rootScope.lastPage && (document.location.pathname.indexOf("/register/") === -1)) {
-                document.location.href = $rootScope.lastPage;
+            if ($rootScope.lastPage
+                && ($rootScope.lastPage.indexOf("/register/") === -1)
+                && ($rootScope.lastPage.indexOf("/login/") === -1)
+                && ($rootScope.lastPage.indexOf("-view") === -1)) {
+                $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
-                $location.path('/investor-list').search({});
+                $location.url('/documents/investor-list');
             } else {
-                $location.path('/company-list').search({});
+                $location.url('/documents/company-list');
             }
         };
 

@@ -1,31 +1,8 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective', 'commonDirectives'], function($routeProvider, $locationProvider) {
-    //this is used to assign the correct template and controller for each URL path
-    $locationProvider.html5Mode(true).hashPrefix('');
-    // $locationProvider.html5Mode(false).hashPrefix('!');
-
-    $routeProvider.
-    when('/', {
-        controller: 'ContactCtrl',
-        templateUrl: 'contact.html'
-    }).
-    when('/people', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/view', {
-        controller: 'ViewerCtrl',
-        templateUrl: 'viewer.html'
-    }).
-    otherwise({
-        redirectTo: '/'
-    });
-});
-
 function hidePopover() {
     angular.element('.popover').hide();
 }
 
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
+app.controller('CompContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     function($scope, $rootScope, SWBrijj, navState) {
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -202,8 +179,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
     }
 ]);
 
-app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route',
-    function($scope, $rootScope, SWBrijj, navState, $route) {
+app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -270,9 +247,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id=' + person.email : '/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
-                document.location.href = link;
+                $location.url(link);
             }
         };
 

@@ -17,10 +17,269 @@
         <navbar></navbar>
         <div id="register" ng-class="{'fixednavoffset':!navState.userid, 'homedrop': homecollapsed}" class="wrap">
             <div class="pricing static home">
-               <h1>Sharewave is currently free</h1>
-               <p>On May 1st, pricing is $29/month for small companies.</p>
+                <div class="container">
+                    <h1>Sharewave is currently free</h1>
+                    <p>Starting May 1st our pricing will scale with your business.</p>
+                </div>
+
+                <div class="container pricing-container">
+                    <div class="row-fluid pricing-blocks hidden-phone">
+                        <div class="span3 seed">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-seed-color.png"></li>
+                                        <li>Seed</li>
+                                    </ul>
+                                </li>
+                                <li><span>$</span><span>9</span>/month</li>
+                                <li>
+                                    <ul>
+                                        <li>10</li>
+                                        <li>Documents</li>
+                                        <li>1</li>
+                                        <li>Administrator</li>
+                                        <li>10</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 startup">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-startup-color.png"></li>
+                                        <li>Startup</li>
+                                    </ul>
+                                </li>
+                                <li><span>$</span><span>29</span>/month</li>
+                                <li>
+                                    <ul>
+                                        <li>50</li>
+                                        <li>Documents</li>
+                                        <li>2</li>
+                                        <li>Administrators</li>
+                                        <li>50</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 growth">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-growth-color.png"></li>
+                                        <li>Growth</li>
+                                    </ul>
+                                </li>
+                                <li><span>$</span><span>99</span>/month</li>
+                                <li>
+                                    <ul>
+                                        <li>250</li>
+                                        <li>Documents</li>
+                                        <li>5</li>
+                                        <li>Administrators</li>
+                                        <li>250</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 established">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-established-color.png"></li>
+                                        <li>Established</li>
+                                    </ul>
+                                </li>
+                                <li><span>$</span><span>199</span>/month</li>
+                                <li>
+                                    <ul>
+                                        <li>1,000</li>
+                                        <li>Documents</li>
+                                        <li>10</li>
+                                        <li>Administrators</li>
+                                        <li>1,000</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid pricing-blocks pricing-blocks-phone visible-phone">
+                        <div class="span3 seed">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-seed-color.png"></li>
+                                        <li>Seed</li>
+                                        <li><span>$</span><span>9</span>/month</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>10 <span>Documents</span></li>
+                                        <li>1 <span>Administrator</span></li>
+                                        <li>10 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 startup">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-startup-color.png"></li>
+                                        <li>Startup</li>
+                                        <li><span>$</span><span>29</span>/month</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>50 <span>Documents</span></li>
+                                        <li>2 <span>Administrators</span></li>
+                                        <li>50 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 growth">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-growth-color.png"></li>
+                                        <li>Growth</li>
+                                        <li><span>$</span><span>99</span>/month</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>250 <span>Documents</span></li>
+                                        <li>5 <span>Administrators</span></li>
+                                        <li>250 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 established">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-established-color.png"></li>
+                                        <li>Established</li>
+                                        <li><span>$</span><span>199</span>/month</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>1,000 <span>Documents</span></li>
+                                        <li>10 <span>Administrators</span></li>
+                                        <li>1,000 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
             </div>
+
+            <div class="row-fluid bar-break">
+                <p>Need more? <a class="blue-link" href="mailto:sales@sharewave.com?Subject=Custom%20pricing" target="_top">Contact us</a> for a custom plan.</p>
+            </div>
+
+            <div class='home plans-include'>
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="text-center" >
+                            <h1>All plans include</h1>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span10 offset1">
+                            <div class="trio-icons row-fluid">
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-legal.png">
+                                    <h2>Unlimited Cap Table</h2>
+                                    <p>All of our features to prepare, review and share your company's capitalization</p>
+                                </div>
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-audit.png">
+                                    <h2>Unlimited History</h2>
+                                    <p>Your company data, records and audit trails never expire</p>
+                                </div>
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-template.png">
+                                    <h2>Unlimited People</h2>
+                                    <p>Invite anyone to review or interact with your data and documents</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="text-center">
+                            <h1>Common questions</h1>
+                        </div>
+                    </div>
+                    <div class="row-fluid questions">
+                        <div class="offset1 span5">
+                            <p>
+                                You charge for documents. How do you define a document?
+                            </p>
+
+                            <p>
+                                A document is any item that is uploaded to Sharewave, or any signed and executed version via Sharewave. However, inviting people to view a document is limitless.
+                            </p>
+                        </div>
+
+                        <div class="offset1 span5">
+                            <p>
+                                What if I go over my plan limits?
+                            </p>
+
+                            <p>
+                                You will not be charged extra during the month that you exceed your plan limit, nor will we restrict the product.  In the following month, you will be automatically upgraded to a higher plan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row-fluid questions last-questions">
+                        <div class="offset1 span5">
+                            <p>
+                                What is a direct message?
+                            </p>
+
+                            <p>
+                                A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean.                            </p>
+                        </div>
+
+                        <div class="offset1 span5">
+                            <p>
+                                If I leave the service, can I export my data?
+                            </p>
+
+                            <p>
+                                Yes. Sharewave provides a service to make your data more valuable, but you are the owner of your information. Should you decide to leave, we'll make your data available to download.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div>
                 <div class="row-fluid">
                     <div class="span10 offset1 text-center home">

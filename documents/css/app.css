@@ -1,3 +1,10 @@
+/* Company List Content */
+
+.company-list .my-loading-spinner-container {
+    width: 50px;
+    margin: 0 auto 0 auto;
+}
+
 .subnav-controls.doclist-controls {
     margin-bottom: 0;
 }
@@ -424,6 +431,18 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.deleteDocModal.retractModal {
+    margin-bottom: 50px;
+}
+
+.retractModal .checkboxOption {
+    margin-top: 20px;
+}
+
+.retractModal .checkboxOption > li:first-child {
+    margin-right: 10px;
+}
+
 .modalText.voidDocModal {
     width: 360px;
     padding-left: 20px;
@@ -680,15 +699,15 @@ textarea.email-text {
 }
 .subnav-controls.doclist-controls .fadeHide,
 .subnav-controls.doclist-controls .fadeHide + div {
-    -webkit-transform: translate3d(-497px, 0, 0);
-    -moz-transform: translate3d(-497px, 0, 0);
-    -ms-transform: translate3d(-497px, 0, 0);
-    -o-transform: translate3d(-497px, 0, 0);
-    transform: translate3d(-497px, 0, 0);
+    -webkit-transform: translate3d(-197px, 0, 0);
+    -moz-transform: translate3d(-197px, 0, 0);
+    -ms-transform: translate3d(-197px, 0, 0);
+    -o-transform: translate3d(-197px, 0, 0);
+    transform: translate3d(-197px, 0, 0);
     transition: all 0.25s ease-in-out;
 }
-.animate-enter,
-.animate-leave {
+.animate.ng-enter,
+.animate.ng-leave {
     -webkit-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
     -moz-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
     -ms-transition: 0.25s cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
@@ -701,8 +720,8 @@ textarea.email-text {
     white-space:nowrap;
 } 
 
-.animate-leave.animate-leave-active,
-.animate-enter {
+.animate.ng-leave.animate.ng-leave-active,
+.animate.ng-enter {
     opacity: 0;
 /*
     width: 0px;
@@ -710,8 +729,8 @@ textarea.email-text {
 */
 }
 
-.animate-enter.animate-enter-active, 
-.animate-leave {
+.animate.ng-enter.ng-enter-active,
+.animate.ng-leave {
     opacity: 1;
 /*
     width: 150px;
@@ -728,19 +747,19 @@ textarea.email-text {
     animation: slideIn 0.25s ease-in-out;
 }
 @keyframes slideIn {
-    0% {margin-left: -497px;}
+    0% {margin-left: -197px;}
     100% {margin-left: inherit;}
 }
 @-webkit-keyframes slideIn {
-    0% {margin-left: -497px;}
+    0% {margin-left: -197px;}
     100% {margin-left: inherit;}
 }
 @-moz-keyframes slideIn {
-    0% {margin-left: -497px;}
+    0% {margin-left: -197px;}
     100% {margin-left: inherit;}
 }
 @-o-keyframes slideIn {
-    0% {margin-left: -497px;}
+    0% {margin-left: -197px;}
     100% {margin-left: inherit;}
 }
 

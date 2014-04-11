@@ -1,4 +1,4 @@
-var app = angular.module('index', ['ui.bootstrap', 'brijj', 'nav', 'registerDirective']);
+var app = angular.module('index', ['ngRoute', 'ui.bootstrap', 'brijj', 'nav', 'registerDirective']);
 
 
 
