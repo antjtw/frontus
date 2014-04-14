@@ -179,15 +179,25 @@ app.controller('CompContactCtrl',
             if ($scope.billing.currentPlan !== '000') {
                 $scope.billing.plans.push('000');
             }
-            console.log($scope.billing.recommendedPlan);
+            $scope.get_usage_details();
         }).except(function(err) {
             console.log(err);
         });
-        payments.usage_details().then(function(x) {
-            $scope.billing.usage = x[0];
-        }).except(function(err) {
-            console.log(err);
-        });
+        $scope.get_usage_details = function() {
+            payments.usage_details().then(function(x) { if (x.length === 0) {
+                    payments.usage_grid($scope.billing.recommendedPlan)
+                    .then(function(x) {
+                        $scope.billing.usage = x;
+                    }).except(function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    $scope.billing.usage = x[0];
+                }
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
         payments.my_data().then(function(data) {
             if (data.length > 0) {
                 $scope.billing.currentPlan =
@@ -198,7 +208,6 @@ app.controller('CompContactCtrl',
             } else {
                 $scope.selectedPlan = '002';
             }
-            console.log($scope.billing);
         }).except(function(err) {
             void(err);
         });

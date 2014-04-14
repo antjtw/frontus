@@ -61,6 +61,9 @@ service.factory('payments', function($http, SWBrijj) {
     s.usage_details = function() {
         return SWBrijj.tblm('account.my_usage_details');
     };
+    s.usage_grid = function(p) {
+        return SWBrijj.tblm('account.my_usage_grid', 'plan', p);
+    };
     s.my_data = function() {
         return SWBrijj.tblm('account.my_company_payment');
     };
