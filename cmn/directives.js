@@ -90,10 +90,14 @@ m.directive('paymentPlanSelector', function() {
                 if ($scope.selectedPlan == p) {
                     $scope.selectedPlan = null;
                 } else {
-                    if ($scope.billing.plans.indexOf(p)!==-1) {
-                        $scope.selectedPlan = p;
+                    if ($scope.billing) {
+                        if ($scope.billing.plans.indexOf(p)!==-1) {
+                            $scope.selectedPlan = p;
+                        } else {
+                            console.log(p);
+                        }
                     } else {
-                        console.log(p);
+                        $scope.selectedPlan = p;
                     }
                 }
             };

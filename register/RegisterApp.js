@@ -140,9 +140,10 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                     document.location.href = "/login";
                 }
             }).except(function(x) {
-                $scope.processing = false;
                 $scope.$emit("notification:fail",
                              "Oops, something went wrong.");
+                $scope.processing = false;
+                console.log(x);
             });
         };
 
