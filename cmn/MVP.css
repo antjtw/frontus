@@ -1416,7 +1416,6 @@ form.inputs {
 }
 .settingtable {
     margin-top: 10px;
-    margin-bottom: 10px;
     margin-right: 20px;
 }
 .settingtable > div {
@@ -1435,6 +1434,7 @@ form.inputs {
 }
 .settingtable.usage > div > div:last-child {
     padding-right: 10px;
+    color: #666666;
 }
 table.settingtable tr > td {
     height: 30px;
@@ -4013,4 +4013,21 @@ div#us_report_button button.us_button_horizontal {
 .persistentNotification.ng-enter.ng-enter-active {
     height: 50px;
     overflow: hidden;
+}
+div.cancel {
+    color: #666666;
+}
+div.cancel > span {
+    color: #E74C3C;
+}
+.cancelModal {
+    margin: 0 20px 0 20px;
+    text-align: left;
+}
+.forwardButton > button > span {
+    font-size: 16px;
+    padding-left: 6px;
+}
+.forwardButton > button > span:before {
+    vertical-align: middle;
 }

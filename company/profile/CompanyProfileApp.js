@@ -301,6 +301,9 @@ app.controller('CompContactCtrl',
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
+                } else if ($scope.selectedPlan=='000') {
+                    $scope.$emit("notification:success",
+                                 "Subscription cancelled");
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
@@ -354,6 +357,17 @@ app.controller('CompContactCtrl',
             var fs = angular.element('form[name="initPaymentForm"]').scope();
             return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
                      $scope.selectedPlan);
+        };
+        $scope.cancelSubscriptionModalOpen = function() {
+            $scope.cancelSubscriptionModal = true;
+        };
+        $scope.cancelSubscription = function() {
+            $scope.selectedPlan = '000';
+            $scope.updateSubscription();
+            $scope.cancelSubscriptionModalClose();
+        };
+        $scope.cancelSubscriptionModalClose = function() {
+            $scope.cancelSubscriptionModal = false;
         };
     }
 ]);
