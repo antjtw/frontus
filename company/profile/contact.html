@@ -421,11 +421,11 @@
          close="ccModalClose()"
          options="profileopts">
         <div class="modalHeader">
+            <span>Credit card information</span>
         </div>
-        <div class="modalText">
+        <div class="ccmodal modalText">
             <form stripe-form="updatePayment" name="updateCCForm">
                 <fieldset>
-                    <div>Credit card information</div>
                     <div class="input-list">
                         <div>
                             <span>Name on Card</span>
@@ -442,24 +442,22 @@
                                    payments-type-model="type"
                                    ng-class="updateCCForm.number.$card.type">
                         </div>
-                        <div class="span12">
-                            <div class="span6">
-                                <span>Expiration Date</span>
-                                <input type="text"
-                                       class="input-block-level"
-                                       ng-model="expiry"
-                                       payments-validate="expiry"
-                                       payments-format="expiry"/>
-                            </div>
-                            <div class="span6">
-                                <span>CVC</span>
-                                <input type="text"
-                                       class="input-block-level"
-                                       ng-model="cvc"
-                                       payments-validate="cvc"
-                                       payments-format="cvc"
-                                       payments-type-model="type"/>
-                            </div>
+                        <div>
+                            <span>Expiration Date</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="expiry"
+                                   payments-validate="expiry"
+                                   payments-format="expiry"/>
+                        </div>
+                        <div>
+                            <span>CVC</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="cvc"
+                                   payments-validate="cvc"
+                                   payments-format="cvc"
+                                   payments-type-model="type"/>
                         </div>
                     </div>
                     <div class="standard-button gray pull-left">
@@ -467,7 +465,7 @@
                             Cancel
                         </button>
                     </div>
-                    <div class="standard-button">
+                    <div class="standard-button pull-right">
                         <button type="submit"
                                 class="btn"
                                 ng-disabled="paymentModalFieldCheck()">

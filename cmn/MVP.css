@@ -3424,9 +3424,19 @@ button.icon-button:hover {
     text-align: right;
     margin-right: 5px;
 }
+.profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
+    width: 120px;
+}
 
 .profile-modal.modal > div.modalText .input-list > div > input {
     float: none;
+}
+.profile-modal.modal > div.modalText.ccmodal .input-list > div > input {
+    width: 280px;
+}
+
+.ccmodal {
+    margin-bottom: 20px;
 }
 
 .profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {

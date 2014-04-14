@@ -113,18 +113,6 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                      fs.expiry &&
                      fs.cvc);
         };
-        $scope.getPaymentToken = function(status, response) {
-            if (response.error) {
-                $scope.processing = false;
-                console.log(response);
-                $scope.$emit("notification:fail",
-                             "Invalid credit card. Please try again.");
-            } else {
-                $scope.processing = true;
-                $scope.payment_token = response.id;
-                $scope.register();
-            }
-        };
 
         $scope.register = function() {
             SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password,
@@ -145,6 +133,18 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                 $scope.processing = false;
                 console.log(x);
             });
+        };
+        $scope.getPaymentToken = function(status, response) {
+            if (response.error) {
+                $scope.processing = false;
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                $scope.processing = true;
+                $scope.payment_token = response.id;
+                $scope.register();
+            }
         };
 
     }
