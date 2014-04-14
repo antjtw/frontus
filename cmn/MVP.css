@@ -3435,7 +3435,7 @@ button.icon-button:hover {
     width: 280px;
 }
 
-.ccmodal {
+.ccmodal .input-list {
     margin-bottom: 20px;
 }
 

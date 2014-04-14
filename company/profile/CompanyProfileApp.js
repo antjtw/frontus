@@ -264,7 +264,8 @@ app.controller('CompContactCtrl',
                              "Oops, something went wrong. Please try again.");
                         } else {
                             $scope.$emit("notification:success",
-                                         "New Credit Card Submitted");
+                                         "Processing new credit card");
+                            $scope.ccModalClose();
                         }
                     }).except(function(err) {
                         console.log(err);
@@ -272,6 +273,7 @@ app.controller('CompContactCtrl',
                 } else {
                     $scope.$emit("notification:success",
                                  "Credit Card Verified");
+                    $scope.ccModalClose();
                 }
             }
         };
