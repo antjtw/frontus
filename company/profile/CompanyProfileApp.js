@@ -26,7 +26,8 @@ app.controller('CompContactCtrl',
         };
         $scope.usagetips = {documents_total: "A document is any item that is uploaded to Sharewave, as well as any document signed and executed via Sharewave. However, inviting people to view a document is limitless.",
                             admins_total: "Admins are users with permission to edit company data, which includes the ability to edit your cap table and sign documents on your company's behalf.",
-                            direct_messages_monthly: "A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean."};
+                            direct_messages_monthly: "A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean.",
+                            plan_not_available: "You have exceeded one or more of the usage limits for this plan."};
 
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
@@ -194,23 +195,30 @@ app.controller('CompContactCtrl',
                 } else {
                     $scope.billing.usage = x[0];
                 }
+                $scope.get_payment_data();
             }).except(function(err) {
                 console.log(err);
             });
         };
-        payments.my_data().then(function(data) {
-            if (data.length > 0) {
-                $scope.billing.currentPlan =
-                    $scope.selectedPlan = data[0].plan || '000';
-                $scope.billing.customer_id = data[0].customer_id;
-                $scope.billing.payment_token = data[0].cc_token;
-                $scope.load_invoices();
-            } else {
-                $scope.selectedPlan = '002';
-            }
-        }).except(function(err) {
-            void(err);
-        });
+        $scope.get_payment_data = function() {
+            payments.my_data().then(function(data) {
+                if (data.length > 0) {
+                    $scope.billing.currentPlan =
+                        $scope.selectedPlan = data[0].plan || '000';
+                    $scope.billing.customer_id = data[0].customer_id;
+                    $scope.billing.payment_token = data[0].cc_token;
+                    $scope.load_invoices();
+                } else {
+                    if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
+                        $scope.selectedPlan = $scope.billing.recommendedPlan;
+                    } else {
+                        $scope.selectedPlan = '002';
+                    }
+                }
+            }).except(function(err) {
+                void(err);
+            });
+        };
         // this swaps the CC data for a stripe card token
         $scope.getPaymentToken = function(status, response) {
             if (!$scope.initPaymentModal) return;

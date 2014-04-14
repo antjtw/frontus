@@ -113,26 +113,62 @@
         <div class="span2">
             <button class="radio-button"
                     ng-class="{'selected':selectedPlan==='001'}"
-                    ng-click="selectPlan('001')">
+                    ng-click="selectPlan('001')"
+                    ng-if="!billing.plans
+                           || billing.plans.indexOf('001')!==-1">
             </button>
+            <span class="pointer"
+                  ng-if="billing.plans
+                         && billing.plans.indexOf('001')==-1"
+                  tooltip-placement="top"
+                  tooltip="{{usagetips.plan_not_available}}">
+                N/A
+            </span>
         </div>
         <div class="span2">
             <button class="radio-button"
                     ng-class="{'selected':selectedPlan==='002'}"
-                    ng-click="selectPlan('002')">
+                    ng-click="selectPlan('002')"
+                    ng-if="!billing.plans
+                           || billing.plans.indexOf('002')!==-1">
             </button>
+            <span class="pointer"
+                  ng-if="billing.plans
+                         && billing.plans.indexOf('002')==-1"
+                  tooltip-placement="top"
+                  tooltip="{{usagetips.plan_not_available}}">
+                N/A
+            </span>
         </div>
         <div class="span2">
             <button class="radio-button"
                     ng-class="{'selected':selectedPlan==='003'}"
-                    ng-click="selectPlan('003')">
+                    ng-click="selectPlan('003')"
+                    ng-if="!billing.plans
+                           || billing.plans.indexOf('003')!==-1">
             </button>
+            <span class="pointer"
+                  ng-if="billing.plans
+                         && billing.plans.indexOf('003')==-1"
+                  tooltip-placement="top"
+                  tooltip="{{usagetips.plan_not_available}}">
+                N/A
+            </span>
         </div>
         <div class="span2">
             <button class="radio-button"
                     ng-class="{'selected':selectedPlan==='004'}"
-                    ng-click="selectPlan('004')">
+                    ng-click="selectPlan('004')"
+                    ng-if="!billing.plans
+                           || billing.plans.indexOf('004')!==-1">
             </button>
+            <span class="pointer"
+                  ng-if="billing.plans
+                         && billing.plans.indexOf('004')==-1"
+                  tooltip-placement="top"
+                  tooltip="{{usagetips.plan_not_available}}">
+                N/A
+            </span>
         </div>
     </div>
 </div>
