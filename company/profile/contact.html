@@ -90,7 +90,7 @@
                                         <div class="pull-right pointer">
                                             <div class="standard-button">
                                                 <button class="btn" ng-click="initPaymentModalOpen()">
-                                                    Setup payments
+                                                    Setup billing
                                                 </button>
                                             </div>
                                             <!--
@@ -174,7 +174,16 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="pull-left">These statistics are based upon your <a href="/pricing">{{billing.current_plan || 'payment'}}</a> level. Sharewave<br>will automatically upgrade your plan as you use more services.</div>
+                                        <div class="pull-left"
+                                             ng-if="billing.plan
+                                                    && billing.plan!=='000'">
+                                            These statistics are based upon your {{billing.current_plan || 'payment'}} level. Sharewave
+                                            <br>will automatically upgrade your plan as you use more services.
+                                        </div>
+                                        <div class="pull-left"
+                                             ng-if="!billing.plan || billing.plan=='000'">
+                                             These statistics are based upon your recommended payment level: {{billing.recommendedPlan | billingPlans}}.
+                                        </div>
                                     </div>
                                 </div>
                             </div>

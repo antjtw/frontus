@@ -24,9 +24,9 @@ app.controller('CompContactCtrl',
                 return null;
             }
         };
-        $scope.usagetips = {documents_total: "What is this about documents?",
-                            admins_total: "What is this about admins?",
-                            direct_messages_monthly: "What is this about limits?"};
+        $scope.usagetips = {documents_total: "A document is any item that is uploaded to Sharewave, as well as any document signed and executed via Sharewave. However, inviting people to view a document is limitless.",
+                            admins_total: "Admins are users with permission to edit company data, which includes the ability to edit your cap table and sign documents on your company's behalf.",
+                            direct_messages_monthly: "A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean."};
 
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
@@ -175,9 +175,11 @@ app.controller('CompContactCtrl',
             angular.forEach(x, function(p) {
                 $scope.billing.plans.push(p.plan);
             });
+            $scope.billing.recommendedPlan = "00" + Math.max(parseInt($scope.billing.plans, 10));
             if ($scope.billing.currentPlan !== '000') {
                 $scope.billing.plans.push('000');
             }
+            console.log($scope.billing.recommendedPlan);
         }).except(function(err) {
             console.log(err);
         });
@@ -202,6 +204,7 @@ app.controller('CompContactCtrl',
         });
         // this swaps the CC data for a stripe card token
         $scope.getPaymentToken = function(status, response) {
+            if (!$scope.initPaymentModal) return;
             if (response.error) {
                 console.log(response);
                 $scope.$emit("notification:fail",
@@ -229,6 +232,7 @@ app.controller('CompContactCtrl',
         };
 
         $scope.updatePayment = function(status, response) {
+            if (!$scope.ccModal) return;
             if (response.error) {
                 console.log(response);
                 $scope.$emit("notification:fail",
