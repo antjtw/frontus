@@ -1,8 +1,8 @@
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState',
-         'payments', '$route', '$filter',
+         'payments', '$route', '$filter', '$location',
     function($scope, $rootScope, SWBrijj, navState,
-             payments, $route, $filter) {
+             payments, $route, $filter, $location) {
         if (navState.role == 'investor') {
             document.location.href = "/app/home";
             return;
@@ -275,14 +275,6 @@ app.controller('CompContactCtrl',
                 }
             }
         };
-        /*
-        $scope.get_customer = function() {
-            payments.get_customer($scope.billing.customer_id)
-            .then(function(x) {
-                $scope.billing.current_card = x.data.cards.data[0];
-            });
-        };
-        */
         $scope.load_invoices = function() {
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
@@ -318,8 +310,9 @@ app.controller('CompContactCtrl',
             payments.create_customer(newplan, newcc)
             .then(function(data) {
                 if (data.length==2) {
+                    $location.url("/app/home/company");
                     $scope.$emit("notification:success",
-                                 "Billing information submitted");
+                                 "Processing billing information");
                     $scope.initPaymentModalClose();
                 } else {
                     $scope.$emit("notification:fail",
