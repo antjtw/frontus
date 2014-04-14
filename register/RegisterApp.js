@@ -127,6 +127,7 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                 } else {
                     document.location.href = "/login";
                 }
+                $scope.processing = false;
             }).except(function(x) {
                 $scope.$emit("notification:fail",
                              "Oops, something went wrong.");
@@ -137,7 +138,6 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
         $scope.getPaymentToken = function(status, response) {
             if (response.error) {
                 $scope.processing = false;
-                console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
@@ -146,7 +146,6 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                 $scope.register();
             }
         };
-
     }
 ]);
 app.controller('PeopleCtrl', ['$scope', '$location', '$routeParams', 'SWBrijj',
