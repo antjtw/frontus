@@ -35,7 +35,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
 
 
 
-var navm = angular.module('nav', ['ui.bootstrap'], function () {
+var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments', 'commonServices'], function () {
 });
 
 navm.factory('navState', [function () {
@@ -74,7 +74,7 @@ navm.directive('notifications', function() {
             };
 
         }]
-    }
+    };
 });
 
 /** @unused NavCtrl */
@@ -87,8 +87,8 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location',
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location) {
 
         $scope.companies = [];
 
@@ -98,6 +98,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 rr.style.display="inline";
             }
         }
+
+        $scope.$on('$routeChangeSuccess', function(current, previous) {
+            navState.path = document.location.pathname;
+        });
 
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
@@ -118,20 +122,27 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
                 if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $scope.lastPage = "/documents/";
+                    $rootScope.lastPage = "/app/documents/";
                 } else {
-                    $scope.lastPage = document.location.href;
+                    $rootScope.lastPage = document.location.pathname;
+                    $rootScope.lastFullPage = document.location.href;
                 }
             }
         });
-        // On each NavCtrl load (new angular app), if the referrer is of the same domain, record the old page.
-        if (document.referrer.indexOf(location.host)!=-1) {
-            $scope.lastPage = document.referrer;
-        }
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
+        $scope.persistentNotification = false;
+        SWBrijj.tblm('account.my_company_payment').then(function(data) {
+            var p = data.length > 0 && data[0];
+            if (p && p.plan != '000' && p.customer_id !== null && p.cc_token !== null) {
+                $scope.persistentNotification = false;
+            } else {
+                $scope.persistentNotification = true;
+            }
+        });
+
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company
@@ -141,7 +152,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
              */
             SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
                 sessionStorage.clear();
-                document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
+                document.location.href = nc.role=='issuer' ? '/app/home/company' : '/app/home/investor';
             });
         };
 
@@ -149,6 +160,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             sessionStorage.clear();
             document.location.href = url;
         };
+        $scope.gotoPage = function(page) {
+            sessionStorage.clear();
+            $location.url(page);
+        };
+
 
         $scope.switchCandP = function (company, url) {
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
@@ -225,7 +241,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                             navState.role = thiscmp.role;
                             navState.name = thiscmp.name;
                             navState.reasons = $scope.initReasons(thiscmp.reasons);
-                            document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                            document.location.href = navState.role=='issuer' ? '/app/home/company' : '/app/home/investor';
                             return;
                         }
                     });
@@ -247,6 +263,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+            $rootScope.settings.domain = window.location.host;
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -302,7 +319,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 location.href = '/';
             }
             else {
-                location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                $location.url(navState.role=='issuer' ? '/app/home/company' : '/app/home/investor');
             }
         };
 
@@ -338,6 +355,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return email != undefined ? re.test(email) : false;
         };
 
+        $scope.verifyPayment = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                //save cc token
+            }
+        };
         $scope.companySelfRegister = function () {
             if ($scope.fieldCheck($scope.registeremail)) {
                 SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {
@@ -368,6 +394,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (doc.when_signed == null) return 1;
                 else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
                 else if (doc.when_finalized == null) return 3;
+                else if (doc.when_void_requested != null && doc.when_void_accepted == null) return 5;
                 else return 4;
             }
         };
@@ -397,6 +424,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
+                    console.log(x);
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
                     });
@@ -414,37 +442,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
                 else if (type == "investor") {
-                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1) {
+                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1 || note.signature_status == 5) {
                         notifications.push(note);
                     }
                 }
             });
             return notifications
-        };
-
-        $scope.addCompanyModalUp = function() {
-            $scope.addCompanyModal = true;
-        };
-
-        $scope.addCompanyModalClose = function() {
-            $scope.addCompanyModal = false;
-        };
-
-        $scope.createNewCompany = function(name) {
-            if (name.length > 0) {
-                SWBrijj.procm('account.new_company', name).then(function (new_comp_id) {
-                    var company = {"company": new_comp_id[0].new_company, "role": "issuer"};
-                    $scope.switchCandP(company, "/home/company?cc");
-                });
-            }
-            else {
-                $scope.addCompanyModal = false;
-            }
-        };
-
-        $scope.opts = {
-            backdropFade: true,
-            dialogFade: true
         };
 
         var idleTime = 0;
@@ -504,29 +507,33 @@ navm.filter('notifications', function () {
         var investor = note.investor;
         var url = "";
         if (note.signature_status == -1) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
-                url = '/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
+                url = '/app/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
             }
             else {
-                url = '/documents/investor-view?doc=' + note.doc_id;
+                url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            url = '/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
-            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+        }
+        else if (note.signature_status == 5 && note.signature_flow == 2) {
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
+            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };
 });
@@ -537,6 +544,7 @@ navm.filter('noteicon', function() {
         if (activity == 1) return "doc-sign-yel";
         else if (activity == 2) return "doc-countersign-yel";
         else if (activity == 3) return "doc-final-yel";
+        else if (activity == 5) return "doc-void-pending-yel";
         else if (activity == -1) return "doc-view-yel";
         else return "hunh?";
     }

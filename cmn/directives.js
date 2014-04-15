@@ -39,12 +39,14 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
+                var newtext = msg.text.replace(/\n/g, "<br />");
+                console.log(msg);
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(msg.recipients),
                               category,
                               template,
                               msg.subject,
-                              msg.text
+                              newtext
                 ).then(function(x) {
                     void(x);
                     $scope.$emit("notification:success",
@@ -75,6 +77,48 @@ m.directive('composeMessage', function() {
                 $scope.resetMessage();
                 $scope.composeModal = false;
             };
+        }]
+    };
+});
+
+m.directive('paymentPlanSelector', function() {
+    return {
+        scope: false,
+        replace: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/paymentPlanSelector.html',
+        controller: ['$scope', function($scope) {
+            $scope.selectPlan = function(p) {
+                if ($scope.selectedPlan == p) {
+                    $scope.selectedPlan = null;
+                } else {
+                    if ($scope.billing) {
+                        if ($scope.billing.plans.indexOf(p)!==-1) {
+                            $scope.selectedPlan = p;
+                        } else {
+                            console.log(p);
+                        }
+                    } else {
+                        $scope.selectedPlan = p;
+                    }
+                }
+            };
+        }]
+    };
+});
+
+m.directive('meter', function() {
+    return {
+        scope: {cur: '=',
+                tot: '='},
+        replace: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/meter.html',
+        controller: ['$scope', function($scope) {
+            $scope.meterStyle = {"width": ($scope.cur/$scope.tot)*100 + "%"};
+            if ($scope.cur/$scope.tot > 1) {
+                $scope.meterStyle["background-color"] = "#E74C3C";
+            }
         }]
     };
 });

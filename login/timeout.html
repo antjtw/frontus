@@ -1,3 +1,4 @@
+
 <div class="row-fluid">
     <div class="span5 offset4 gateway text-center">
         <div>
@@ -14,25 +15,28 @@
                 <h2>Invalid email/password combination.</h2>
             </div>
         </div>
-        <form id="login" class="text-center inputs">
-            <fieldset>
-                <div class="field text-right">
-                    <span>Email Address</span>
-                    <input type="text" class="loginInput" autocomplete="off"
-                    tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                </div>
-                <div class="field text-right">
-                    <span>Password</span>
-                    <input class="loginInput" autocomplete="off" tabindex="2"
-                    name="password" type="password" ng-model="password">
-                </div>                           
-                <div class="loginfooter">
-                    <a id="forgotButton" class="button pull-left forgot" ng-href="forgot">Forgot Password?</a>
-                    <div class="standard-button pull-right loginbtn">
-                        <button class="btn" ng-disabled="fieldCheck()" ng-click="doLogin()">Log In</button>
+            <form id="login" class="text-center">
+                <fieldset>
+                    <div class="field text-left">
+                        <span>Email Address</span>
+                        <input type="text" class="loginInput" autocomplete="off"
+                               tabindex="1" autocapitalize="off" name="username" ng-model="username">
                     </div>
-                </div>
-            </fieldset>
-        </form>
+                    <div class="field text-left">
+                        <span>Password</span>
+                        <input class="loginInput" autocomplete="off" tabindex="2"
+                               name="password" type="password" ng-model="password">
+                    </div>
+                    <div class="loginfooter">
+                        <a id="forgotButton" class="button pull-left forgot" ng-href="forgot">Forgot Password?</a>
+                        <div class="standard-button pull-right loginbtn">
+                            <button class="btn" ng-disabled="fieldCheck()" ng-click="doLogin()">Log In</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
+
+
