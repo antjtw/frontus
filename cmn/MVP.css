@@ -3981,20 +3981,19 @@ div#us_report_button button.us_button_horizontal {
     background-color: #FBC68E;
     border-bottom:1px solid #F78D1E;
 }
-.persistentNotification > div {
+.persistentNotification > div > div {
     height: 100%;
-    width: 100%;
     margin: 0 40px 0 40px;
     line-height: 50px;
     vertical-align:middle;
     color: #666666;
 }
-.persistentNotification > div > span:first-child {
+.persistentNotification > div > div > span:first-child {
     font-size: 14px;
 }
-.persistentNotification > div > span:last-child {
-    font-size: 12px;
-    padding-left: 10px;
+.persistentNotification > div > div > span > span {
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    font-weight: normal;
 }
 .persistentNotification.ng-enter,
 .persistentNotification.ng-leave {

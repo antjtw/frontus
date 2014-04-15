@@ -173,12 +173,16 @@
          ng-animate="'animate'"
          ng-click="gotoPage('/app/company/profile/')">
         <div>
-            <span>
-                Heads up
-            </span>
-            <span>
-                Our free period ends May 1st, click here to select your plan.
-            </span>
+            <div class="pull-left">
+                <span>
+                    Our free period ends May 1st, click here to select your plan.
+                </span>
+            </div>
+            <div class="standard-button red pull-right">
+                <button class="btn" ng-click="gotoPage('/app/company/profile/')">
+                    Select Plan
+                </button>
+            </div>
         </div>
     </div>
 </div>
