@@ -622,6 +622,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     var vestcliffdate = null
                 }
 
+                if (issue.issue == "name") {
+                    issue.issue = "No name";
+                }
+
                 angular.forEach($scope.issues, function (x) {
                     // Duplicate issue names are not allowed
                     if (x.issue != "" && issue.issue == x.issue && x != issue) {
@@ -711,12 +715,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if ($scope.issues.length == 1 && (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com")) {
                     _kmq.push(['record', 'cap table creator']);
                 }
+
+                if (issue.issue == "name") {
+                    issue.issue = "No name";
+                }
+
                 angular.forEach($scope.issues, function (x) {
                     // Duplicate issue names are not allowed
                     if (x.issue != "" && issue.issue == x.issue && x != issue) {
                         issue.issue = issue.issue + " (1)";
                     }
                 });
+
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], calculate.toFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
