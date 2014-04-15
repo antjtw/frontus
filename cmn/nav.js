@@ -143,10 +143,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 $rootScope.persistentNotification = true;
                 if (p) {
                     if (p.status) {
-                        $rootScope.paymentmessage = "We've had a problem with your payment.";
+                        $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
                     }
                     else {
-                        $rootScope.paymentmessage = "You need to add a new payment plan.";
+                        $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
                     }
                     Intercom('update', {'plan' : p.plan, 'changed_at' : p.when_attempted});
                 }
