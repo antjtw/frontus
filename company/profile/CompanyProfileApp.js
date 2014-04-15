@@ -328,6 +328,7 @@ app.controller('CompContactCtrl',
                     $scope.$emit("notification:success",
                                  "Processing billing information");
                     $scope.initPaymentModalClose();
+                    $rootScope.persistentNotification = false;
                 } else {
                     $scope.$emit("notification:fail",
                              "Oops, something went wrong. Please try again.");
