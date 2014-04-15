@@ -142,7 +142,16 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             } else {
                 $rootScope.persistentNotification = true;
                 if (p) {
+                    if (p.status) {
+                        $rootScope.paymentmessage = "We've had a problem with your payment.";
+                    }
+                    else {
+                        $rootScope.paymentmessage = "You need to add a new payment plan.";
+                    }
                     Intercom('update', {'plan' : p.plan, 'changed_at' : p.when_attempted});
+                }
+                else {
+                    $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
                 }
             }
         });
