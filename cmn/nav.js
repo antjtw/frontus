@@ -133,13 +133,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
-        $scope.persistentNotification = false;
+        $rootScope.persistentNotification = false;
         SWBrijj.tblm('account.my_company_payment').then(function(data) {
             var p = data.length > 0 && data[0];
             if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
-                $scope.persistentNotification = false;
+                $rootScope.persistentNotification = false;
             } else {
-                $scope.persistentNotification = true;
+                $rootScope.persistentNotification = true;
             }
         });
 
