@@ -185,7 +185,8 @@ app.controller('CompContactCtrl',
             console.log(err);
         });
         $scope.get_usage_details = function() {
-            payments.usage_details().then(function(x) { if (x.length === 0) {
+            payments.usage_details().then(function(x) {
+                if (x.length === 0) {
                     payments.usage_grid($scope.billing.recommendedPlan)
                     .then(function(x) {
                         $scope.billing.usage = x;

@@ -4030,3 +4030,6 @@ div.cancel > span {
 .forwardButton > button > span:before {
     vertical-align: middle;
 }
+.ng-invalid {
+    border-color: #f00 !important;
+}
