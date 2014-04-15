@@ -520,11 +520,11 @@ address {
 /* Colouring for the specific columns */
 
 .pricing .pricing-blocks .seed > ul > li:nth-child(1) {
-    background-color: #E64B3B;
+    background-color: #C33F31;
 }
 
 .pricing .pricing-blocks .seed > ul > li:nth-child(2) {
-    background-color: #C33F31;
+    background-color: #E64B3B;
 }
 
 .pricing .pricing-blocks .startup > ul > li:nth-child(1) {
