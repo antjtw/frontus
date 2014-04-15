@@ -3924,7 +3924,8 @@ div#us_report_button button.us_button_horizontal {
 .big-input-list .input-list div.span6:last-child {
     margin-left: 20px;
 }
-.big-input-list .span6 > div:first-child {
+.big-input-list .span6 > div:first-child,
+.big-input-list .span6 > div:nth-child(3){
     color: #1E2D3D;
     font-size: 20px;
     text-align: left;
