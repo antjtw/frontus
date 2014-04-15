@@ -3966,10 +3966,10 @@ div#us_report_button button.us_button_horizontal {
     background-color: #1ABC96;
     position: relative;
     overflow: hidden;
-    -webkit-transition: width 1s linear;
-    -moz-transition: width 1s linear;
-    -o-transition: width 1s linear;
-    transition: width 1s linear;
+    -webkit-transition: width 1s ease-in-out;
+    -moz-transition: width 1s ease-in-out;
+    -o-transition: width 1s ease-in-out;
+    transition: width 1s ease-in-out;
 }
 .companyprofile .subnav-controls > div > div {
     color: #1E2D3D;
