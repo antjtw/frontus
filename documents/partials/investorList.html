@@ -1,0 +1,88 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<div class="maincontent openflow">
+<div class="container dynamic-page doclistFlow">
+  <div class="row-fluid">
+    <div class="headsection row-fluid">
+        <ul class="maintabs head-text">
+            <li class="selectedtab">Documents</li>
+        </ul>
+    </div>
+
+    <div style="margin-left: 0;" class="span12 recipientInfo statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left checkboxitem">
+                        <span>HIDE COMPLETED</span>
+                        <button class="check-box-button" ng-class="{'selected':hideCompleted}" ng-click="toggleHideCompleted()">
+                            <span data-icon="&#xe023;" aria-hidden="true"></span>
+                        </button> 
+                    </div>
+                    <div class="pull-left">
+                        <span>SEARCH</span>
+                        <input type="Text" class="search-box" ng-model="query">
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <table class="status-table investor">
+                <tbody>
+                    <tr>
+                        <th colspan="1" class="left" style="width:45%" ng-click="setOrder('docname')">Document Name</th>
+                        <th colspan="2" class="left" style="width:40%" ng-click="setOrder('statusRank')">Status</th>
+                        <th/>
+                    </tr>
+                </tbody>
+                <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+                    <tr class="empty-row"/>
+                    <tr ng-class="{selectedrow:doc.shown}">
+                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
+                            <ul>
+                                <li>{{doc.docname | caplength:40}}</li>
+                                <li>{{docStatus(doc)}}</li>
+                            </ul>
+                        </td>
+                        <td class="status-toggle status-icon">
+                            <div ng-show="docIsComplete(doc) && !doc.when_void_accepted && !isPendingVoid(doc)" data-icon="&#xe023;"
+                                 class="circle green" aria-hidden="true"></div>
+                            <div ng-show="docIsComplete(doc) && doc.when_void_accepted && !isPendingVoid(doc)" class="circle green"
+                                 aria-hidden="true"><span>x</span>
+                            </div>
+                            <div ng-show="isPendingVoid(doc) || !docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
+                        </td>
+                        <td class="shareholder-column status-column">
+                            <ul>
+                                <li>{{shortStatus(doc)}}</li>
+                                <li>{{momentFromNow(doc.last_event.event_time)}}</li>
+                            </ul>
+                        </td>
+                        <td class="sign-button toggle-column">
+                            <div class="standard-button small-standard-button">
+                                <button ng-show="isPendingSignature(doc)" class="btn" ng-click="gotoDoc(doc)">Sign</button>
+                                <button ng-show="isPendingFinalization(doc)" class="btn" ng-click="gotoDoc(doc)">Approve</button>
+                                <button ng-show="isPendingVoid(doc)" class="btn" ng-click="gotoDoc(doc)">Void</button>
+                            </div>
+                            <ul class="dropdown-list">
+                                <li class="dropdown standard menu-drop">
+                                    <a class="dropdown-toggle">
+                                        <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                    </a>
+                                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                                        <li ng-click="gotoDoc(doc)">View Document</li>
+                                        <li ng-show="!docIsComplete(doc) || doc.signature_flow == 0" ng-click="exportOriginalToPdf(doc)">Download Document</li>
+                                        <li ng-show="docIsComplete(doc) && doc.signature_flow>0" ng-click="exportVersionToPdf(doc)">Download Document</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="display:none;" ng-show="documents.length===0">You have no documents.</div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="minimumGap"></div>
+<div class="push"></div>

@@ -39,12 +39,14 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
+                var newtext = msg.text.replace(/\n/g, "<br />");
+                console.log(msg);
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(msg.recipients),
                               category,
                               template,
                               msg.subject,
-                              msg.text
+                              newtext
                 ).then(function(x) {
                     void(x);
                     $scope.$emit("notification:success",
