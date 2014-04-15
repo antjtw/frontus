@@ -414,7 +414,8 @@
                             Cancel
                         </button>
                     </div>
-                    <div class="standard-button pull-right forwardButton">
+                    <div    id="pricing-change-plan"
+                            class="standard-button pull-right forwardButton">
                         <button type="submit"
                                 class="btn"
                                 ng-disabled="initPaymentModalFieldCheck()">
@@ -502,7 +503,7 @@
                 <button class="btn" ng-click="paymentPlanModalClose()">Cancel</button>
             </div>
             <div class="standard-button pull-right">
-                <button class="btn" ng-disabled="paymentPlanModalFieldCheck();" ng-click="updateSubscription(); paymentPlanModalClose();">Update Plan</button>
+                <button id="pricing-change-card" class="btn" ng-disabled="paymentPlanModalFieldCheck();" ng-click="updateSubscription(); paymentPlanModalClose();">Update Plan</button>
             </div>
         </div>
     </div>
@@ -521,7 +522,8 @@
                 Back
             </button>
         </div>
-        <div class="standard-button red">
+        <div   id="pricing-cancel"
+                class="standard-button red">
             <button class="btn" ng-click="cancelSubscription()">
                 Cancel
             </button>
