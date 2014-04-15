@@ -308,6 +308,7 @@ app.controller('CompContactCtrl',
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
+                    $scope.billing.currentPlan = $scope.selectedPlan;
                 }
             }).except(function(err) {
             });

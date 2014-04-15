@@ -88,7 +88,7 @@
                                             Setup Billing Information
                                         </div>
                                         <div class="pull-right pointer">
-                                            <div class="standard-button">
+                                            <div class="standard-button red">
                                                 <button class="btn" ng-click="initPaymentModalOpen()">
                                                     Select Plan
                                                 </button>
@@ -501,10 +501,13 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="cancelSubscriptionModalClose()">Cancel</button>
+            <button class="btn" ng-click="cancelSubscriptionModalClose()">
+                Back
+            </button>
         </div>
         <div class="standard-button red">
-            <button class="btn" ng-click="cancelSubscription()">Confirm
+            <button class="btn" ng-click="cancelSubscription()">
+                Cancel
             </button>
         </div>
     </div>

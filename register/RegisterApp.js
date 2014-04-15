@@ -101,7 +101,7 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
 
 app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
     function($scope, $routeParams, SWBrijj) {
-
+        $scope.selectedPlan = '002';
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&

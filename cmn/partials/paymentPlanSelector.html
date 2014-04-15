@@ -3,7 +3,7 @@
         <div class="span3">
            Choose your plan
         </div> 
-        <div class="span2">
+        <div class="span2" ng-click="selectPlan('001')">
             <div ng-switch on="selectedPlan">
                 <img ng-switch-default
                      src="/img/icon-seed.png">
@@ -11,7 +11,7 @@
                      src="/img/icon-seed-selected.png">
             </div>
         </div>
-        <div class="span2">
+        <div class="span2" ng-click="selectPlan('002')">
             <div ng-switch on="selectedPlan">
                 <img ng-switch-default
                      src="/img/icon-startup.png">
@@ -19,7 +19,7 @@
                      src="/img/icon-startup-selected.png">
             </div>
         </div>
-        <div class="span2">
+        <div class="span2" ng-click="selectPlan('003')">
             <div ng-switch on="selectedPlan">
                 <img ng-switch-default
                      src="/img/icon-growth.png">
@@ -27,7 +27,7 @@
                      src="/img/icon-growth-selected.png">
             </div>
         </div>
-        <div class="span2">
+        <div class="span2" ng-click="selectPlan('004')">
             <div ng-switch on="selectedPlan">
                 <img ng-switch-default
                      src="/img/icon-established.png">
