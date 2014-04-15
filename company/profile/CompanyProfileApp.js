@@ -209,6 +209,10 @@ app.controller('CompContactCtrl',
                     $scope.billing.customer_id = data[0].customer_id;
                     $scope.billing.payment_token = data[0].cc_token;
                     $scope.load_invoices();
+                    payments.get_customer($scope.billing.customer_id)
+                    .then(function(x) {
+                        $scope.billing.current_card = x.data.cards.data[0];
+                    });
                 } else {
                     if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
                         $scope.selectedPlan = $scope.billing.recommendedPlan;

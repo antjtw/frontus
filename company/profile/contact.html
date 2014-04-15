@@ -448,6 +448,7 @@
                             <input type="text"
                                    class="input-block-level"
                                    ng-model="number"
+                                   placeholder="******{{billing.current_card.last4}}"
                                    payments-validate="card"
                                    payments-format="card"
                                    payments-type-model="type"
@@ -458,6 +459,7 @@
                             <input type="text"
                                    class="input-block-level"
                                    ng-model="expiry"
+                                   placeholder="{{billing.current_card.exp_month}}/{{billing.current_card.exp_year}}"
                                    payments-validate="expiry"
                                    payments-format="expiry"/>
                         </div>
