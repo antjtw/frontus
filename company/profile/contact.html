@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid"
-                                         ng-if="billing.customer_id">
+                                         ng-if="billing.customer_id && billing.cc_token">
                                         <div class="pull-left span5">Plan Level</div>
                                         <div class="pull-left">{{showSelectedPlan(billing.currentPlan)}}</div>
                                         <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="paymentPlanModalOpen()">
@@ -75,7 +75,7 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid"
-                                         ng-if="billing.customer_id">
+                                         ng-if="billing.customer_id && billing.cc_token">
                                         <div class="pull-left span5">
                                             Credit Card Information
                                         </div>
@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid"
-                                         ng-if="!billing.customer_id">
+                                         ng-if="!billing.customer_id || !billing.cc_token">
                                         <div class="pull-left span5">
                                             Setup Billing Information
                                         </div>
