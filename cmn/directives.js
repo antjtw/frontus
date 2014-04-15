@@ -115,7 +115,12 @@ m.directive('meter', function() {
         restrict: 'E',
         templateUrl: '/cmn/partials/meter.html',
         controller: ['$scope', function($scope) {
-            $scope.meterStyle = {"width": ($scope.cur/$scope.tot)*100 + "%"};
+            $scope.updateMeter = function() {
+                $scope.meterStyle = {"width":
+                                     ($scope.cur/$scope.tot)*100 + "%"};
+            };
+            $scope.$watch('cur', $scope.updateMeter);
+            $scope.$watch('tot', $scope.updateMeter);
             if ($scope.cur/$scope.tot > 1) {
                 $scope.meterStyle["background-color"] = "#E74C3C";
             }

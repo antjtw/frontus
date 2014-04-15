@@ -246,7 +246,6 @@ app.controller('CompContactCtrl',
         };
         $scope.nextInvoice = function() {
             if ($scope.billing && $scope.billing.next_invoice_received) {
-                console.log($scope.billing.invoices[$scope.billing.invoices.length-1]);
                 return $scope.billing.invoices &&
                     $scope.billing.invoices[$scope.billing.invoices.length-1];
             } else {
