@@ -1,7 +1,7 @@
 app.controller('CompContactCtrl',
-        ['$scope', '$rootScope', 'SWBrijj', 'navState',
+        ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
          'payments', '$route', '$filter', '$location',
-    function($scope, $rootScope, SWBrijj, navState,
+    function($scope, $rootScope, SWBrijj, navState, $routeParams,
              payments, $route, $filter, $location) {
         if (navState.role == 'investor') {
             document.location.href = "/app/home";
@@ -285,6 +285,7 @@ app.controller('CompContactCtrl',
         $scope.load_invoices = function() {
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
+                if (!$scope.billing) {$scope.billing = {};}
                 $scope.billing.invoices = resp.data.data.filter(function(el) {
                     return el.amount>0;
                 });
@@ -359,6 +360,9 @@ app.controller('CompContactCtrl',
         $scope.initPaymentModalOpen = function() {
             $scope.initPaymentModal = true;
         };
+        if ($routeParams.setup) {
+            $scope.initPaymentModalOpen();
+        }
         $scope.initPaymentModalClose = function() {
             $scope.initPaymentModal = false;
         };
