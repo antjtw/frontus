@@ -242,6 +242,7 @@ app.controller('CompContactCtrl',
         };
         $scope.nextInvoice = function() {
             if ($scope.billing && $scope.billing.next_invoice_received) {
+                console.log($scope.billing.invoices[$scope.billing.invoices.length-1]);
                 return $scope.billing.invoices &&
                     $scope.billing.invoices[$scope.billing.invoices.length-1];
             } else {
@@ -281,7 +282,9 @@ app.controller('CompContactCtrl',
         $scope.load_invoices = function() {
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
-                $scope.billing.invoices = resp.data.data;
+                $scope.billing.invoices = resp.data.data.filter(function(el) {
+                    return el.amount>0;
+                });
                 if ($scope.billing.currentPlan!=="000") {
                     $scope.load_upcoming_invoice();
                 }

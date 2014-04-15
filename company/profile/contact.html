@@ -12,6 +12,9 @@
                     <div class="subnav-controls">
                         <div>
                             <div class="pull-left">{{navState.name}}</div>
+                            <div class="pull-right" ng-show="nextInvoice().period_end">
+                                Your next invoice will be processed on {{nextInvoice().period_end*1000 | date: 'MMMM d, yyyy'}}.
+                            </div>
                         </div>
                         <div class="DivHelper"></div>
                     </div>
@@ -198,25 +201,33 @@
                             <div class="body-box">
                                 <div class="settingtable invoices">
                                     <div class="row-fluid">
-                                        <div class="span6"><span>Date</span></div>
-                                        <div class="span4"><span>Amount</span></div>
-                                        <div class="span2"><span>Invoice</span></div>
+                                        <div class="span8"><span>Date</span></div>
+                                        <div class="span2"><span>Amount</span></div>
+                                        <!--
+                                        <div class="span2">
+                                            <span>Invoice</span>
+                                        </div>
+                                        -->
                                     </div>
                                     <div class="row-fluid" ng-repeat="inv in billing.invoices">
-                                        <div class="span7"> <span>
+                                        <div class="span8"> <span>
                                             {{inv.lines.data[0].period.start*1000
                                               | date: 'MMMM d, yyyy'}}
                                         </span>
 
                                         </div>
-                                        <div class="span3"> <span>
+                                        <div class="span4"> <span>
                                             {{inv.amount_due/100 | currency}}
                                         </span>
 
                                         </div>
-                                        <div class="span2"> <a href="openInvoice(inv)">Invoice</a>
-
+                                        <!--
+                                        <div class="span2">
+                                            <a href="openInvoice(inv)">
+                                                Invoice
+                                            </a>
                                         </div>
+                                        -->
                                     </div>
                                 </div>
                             </div>

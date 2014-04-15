@@ -1408,6 +1408,9 @@ form.inputs {
 .info-box.invoices > .body-box > .row-fluid > .row-fluid {
     margin-left: 0;
 }
+.settingtable.invoices > div > div {
+    color: #1E2D3D;
+}
 .info-box > .body-box > .ownershipPermissions > span {
     text-transform: uppercase;
     font-size: 10px;
@@ -3973,6 +3976,9 @@ div#us_report_button button.us_button_horizontal {
     line-height: 30px;
     font-size: 20px;
     font-family: 'FS Elliot Web Light', sans-serif;
+}
+.companyprofile .subnav-controls > div > div:last-child {
+    font-size: 14px;
 }
 
 .persistentNotification {
