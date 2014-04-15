@@ -102,11 +102,11 @@ app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $
        */
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         void(x);
-        $location.path("/sent");
+        $location.path("/login/sent");
       }).except(function(x) { 
         // console.log(x);
         // $scope.fed = "There was an error. Please try again later."
-        $location.path("/sent");
+        $location.path("/login/sent");
       });
     }
 }]);
