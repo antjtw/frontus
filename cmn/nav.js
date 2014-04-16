@@ -87,8 +87,8 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location) {
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter',
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter) {
 
         $scope.companies = [];
 
@@ -138,7 +138,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             var p = data.length > 0 && data[0];
             if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
                 $rootScope.persistentNotification = false;
-                Intercom('update', {'plan' : p.plan, 'changed_at' : p.when_attempted});
+                Intercom('update', {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : p.when_attempted});
             } else {
                 $rootScope.persistentNotification = true;
                 if (p) {
@@ -148,7 +148,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     else {
                         $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
                     }
-                    Intercom('update', {'plan' : p.plan, 'changed_at' : p.when_attempted});
+                    Intercom('update', {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : p.when_attempted});
                 }
                 else {
                     $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
@@ -487,6 +487,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 idleTime = 0;
             });
         });
+
+        $scope.pricingregister = function() {
+            document.location.href = "/register/company-onestep";
+        };
 
     }]);
 
