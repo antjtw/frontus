@@ -8,19 +8,19 @@
                     <div class="span12 text-center">
                         <div id="Login-form" class="navlogin">
                             <form>
-                                <fieldset>
-                                    <span>Email Address</span>
+                                <fieldset> <span>Email Address</span>
+
                                     <input type="text" class="loginInput" autocomplete="off"
-                                    tabindex="1" autocapitalize="off" name="username" ng-model="username">
-                                    <span>Password</span>
+                                    tabindex="1" autocapitalize="off" name="username" ng-model="username"> <span>Password</span>
+
                                     <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
                                     <div class="standard-button">
                                         <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
-                                    </div>
-                                    <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
+                                    </div> <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
-                                    <br> <span class="forgotLog"><a href="/login/forgot">Forgot Password?</a></span> 
+                                    <br> <span class="forgotLog"><a target="_self" href="/login/forgot">Forgot Password?</a></span>
+
                                 </fieldset>
                             </form>
                         </div>
@@ -36,23 +36,24 @@
                     <div class="span12 text-center">
                         <div class="navlogin" ng-hide="registertoggle">
                             <form>
-                                <fieldset>
-                                    <span>Email Address</span>
+                                <fieldset> <span>Email Address</span>
+
                                     <input type="text" class="registerInput" autocomplete="off"
-                                           tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
+                                    tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
                                     <div class="standard-button">
-                                        <button class="btn" ng-disabled="!fieldCheck(registeremail);"  ng-click="companySelfRegister()">Sign Up</button>
-                                    </div>
-                                    <a class="pointer" ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
+                                        <button class="btn" ng-disabled="!fieldCheck(registeremail);" ng-click="companySelfRegister()">Sign Up</button>
+                                    </div> <a class="pointer" ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
+
                                 </fieldset>
                             </form>
                         </div>
                         <div class="navlogin register-message" ng-show="registertoggle">
                             <div>
-                                <h2>Thanks for signing up to use Sharewave!</h2>
+                                 <h2>Thanks for signing up to use Sharewave!</h2>
+
                                 <p>Please check your email to complete your registration.</p>
-                            </div>
-                            <span class="pointer" data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
+                            </div> <span class="pointer" data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
+
                         </div>
                     </div>
                 </div>
@@ -71,73 +72,71 @@
                     </li>
                 </ul>
                 <ul ng-hide="navState.userid" class="hidden-phone nav pull-left content-pages">
-                    <li>
-                        <a href="/features">
+                    <li> <a target="_self" href="/features">
                             Features
                         </a>
+
                     </li>
-                    <li>
-                        <a href="/pricing">
+                    <li> <a target="_self" href="/pricing">
                             Pricing
                         </a>
+
                     </li>
-                    <li>
-                        <a href="http://blog.sharewave.com">
+                    <li> <a href="http://blog.sharewave.com">
                             Blog
                         </a>
+
                     </li>
                 </ul>
                 <ul class="nav pull-right nav-item dropdown-list">
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
-                            <img ng-show="userURL" ng-src="{{userURL}}">
-                            <span>{{person.name  | caplength:25}}</span>
-                            <span class="fauxcaret" data-icon="&#xe031;" aria-hidden="true"></span>
-                            <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
+                            <img ng-show="userURL" ng-src="{{userURL}}"> <span>{{person.name  | caplength:25}}</span>
+ <span class="fauxcaret" data-icon="&#xe031;"
+                            aria-hidden="true"></span>
+ <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
+
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a class="menuProfileText button" href="/account/profile">My Account</a>
+                            <li> <a class="menuProfileText button" href="/app/account/profile">My Account</a>
+
                             </li>
-                            <li>
-                                <a class="menuProfileText button" href="/login/logout">Log Out</a>
+                            <li> <a class="menuProfileText button" target="_self" href="/login/logout">Log Out</a>
+
                             </li>
                         </ul>
                     </li>
                     <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isRegisterCollapsed}">
-                        <div class="standard-button small-standard-button green" style="display: none;" ng-show="!navState.userid  && navState.path != '/'">
-                            <button class="btn"  ng-click="toggleLogin('register')">Sign Up</button>
+                        <div class="standard-button small-standard-button green" ng-show="!navState.userid  && navState.path != '/'">
+                            <button class="btn" ng-click="gotoURL('/register/company-onestep')">Sign Up</button>
                         </div>
                     </li>
                     <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isCollapsed}">
-                        <div class="standard-button small-standard-button blue" style="display: none;" ng-show="!navState.userid">
-                            <button class="btn"  ng-click="toggleLogin('login')">Log In</button>
+                        <div class="standard-button small-standard-button blue" ng-show="!navState.userid">
+                            <button class="btn" ng-click="toggleLogin('login')">Log In</button>
                         </div>
                     </li>
                 </ul>
-                <ul class="nav pull-right nav-item dropdown-list notifications" notifications notes="notes"></ul>
+                <ul class="nav pull-right nav-item dropdown-list notifications" notifications
+                notes="notes"></ul>
             </div>
         </div>
     </div>
-</div>
-
-<div modal="addCompanyModal" close="addCompanyModalClose()" options="opts">
-    <div class="modalHeader">
-        <span>Create a new company</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addCompanyModalClose()"></span>
-    </div>
-    <div class="modalText">
-        <div class="input-row-new">
-            <p>Company Name</p>
-            <input ng-model="newCompany" maxlength="30">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="addCompanyModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="addCompanyModalClose(); createNewCompany(newCompany);">Create</button>
+    <div ng-if="persistentNotification"
+         class="persistentNotification pointer"
+         ng-animate="'animate'"
+         ng-click="gotoPage('/app/company/profile/?setup')">
+        <div>
+            <div class="pull-left">
+                <span>
+                    {{paymentmessage}}
+                </span>
+            </div>
+            <div class="standard-button red pull-right">
+                <button class="btn" ng-click="gotoPage('/app/company/profile/?setup')">
+                    Select Plan
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-var app = angular.module('AdminApp', ['ngResource', 'ui.bootstrap', 'nav', 'brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('AdminApp', ['ngRoute', 'ngResource', 'ui.bootstrap', 'nav', 'brijj'], function($routeProvider, $locationProvider){
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');

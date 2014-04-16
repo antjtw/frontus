@@ -56,6 +56,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     });
 
+    SWBrijj.tblm('ownership.company_transaction', ['investor', 'email']).then(function (trans) {
+        $scope.rowemails = {};
+        angular.forEach(trans, function(tran) {
+            if (tran.email && !(tran.investor in $scope.rowemails)) {
+                $scope.rowemails[tran.investor] = tran.email;
+            }
+        });
+    });
+
     //Get the company issues
     SWBrijj.tblm('ownership.company_issue').then(function (issues) {
         // Initialisation. Get the transactions and the grants
@@ -661,6 +670,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
                 }
+                if (!transaction['email']) {
+                    if (transaction['investor'] in $scope.rowemails) {
+                        transaction['email'] = $scope.rowemails[transaction['investor']];
+                    }
+                }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), calculate.toFloat(transaction['units']), d1, String(transaction['type']), calculate.toFloat(transaction['amount']), calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     if (transaction.tran_id == '') {
@@ -1071,7 +1085,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 };
 
 // Returns only the real transactions (not the empty ones)
-owner.filter('noempty', function () {
+app.filter('noempty', function () {
     return function (trans) {
         var returntrans = [];
         angular.forEach(trans, function (tran) {

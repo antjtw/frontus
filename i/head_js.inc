@@ -1,3 +1,4 @@
+<script src="/lib/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript">
 var _kmq = _kmq || [];
 if ((window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") && document.location.pathname.indexOf("timeout") == -1) {
@@ -21,9 +22,11 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
     </script>
 <![endif]-->
 
-<script src="/lib/jquery/jquery-1.8.3.js"></script>
 <script src="/lib/bootstrap/bootstrap.js"></script>
 <script src="/lib/angular/angular.js"></script>
+<script src="/lib/angular/angular-route.js"></script>
+<script src="/lib/angular/angular-sanitize.js"></script>
+<script src="/lib/angular/angular-animate.js"></script>
 <script src="/lib/angular/angular-ui.js"></script>
 <script src="/lib/angular/ui-utils.js"></script>
 <script src="/lib/angular/angular-resource.js"></script>
@@ -35,6 +38,13 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script src="/lib/moment.min.js"></script>
 <script src="/cmn/nav.js"></script>
 <script src="/lib/usersnap/jquery.usersnap-0.1.0.js"></script>
+<script src="/cmn/services.js"></script>
+<script src="/lib/stripe.js"></script>
+<script type="text/javascript"
+        src="/lib/angular-payments/angular-payments.min.js"></script>
+<script>
+    Stripe.setPublishableKey('pk_live_nFUfhjAz1rauxbHxrShrOf5Q');
+</script>
 
 <script>
         window.console = window.console || {};

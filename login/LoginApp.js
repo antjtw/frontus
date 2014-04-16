@@ -1,18 +1,18 @@
 //app for the program
-var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('LoginApp', ['ngRoute', 'brijj'], function($routeProvider, $locationProvider){
 
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:'LoginCtrl', templateUrl:'login.html'}).
-      when('/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
-      when('/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
-      when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
-      when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
-      when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
-      when('/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
+      when('/login/', {controller:'LoginCtrl', templateUrl:'login.html'}).
+      when('/login/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
+      when('/login/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
+      when('/login/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
+      when('/login/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
+      when('/login/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
+      when('/login/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -102,11 +102,11 @@ app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $
        */
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         void(x);
-        $location.path("/sent");
+        $location.path("/login/sent");
       }).except(function(x) { 
         // console.log(x);
         // $scope.fed = "There was an error. Please try again later."
-        $location.path("/sent");
+        $location.path("/login/sent");
       });
     }
 }]);

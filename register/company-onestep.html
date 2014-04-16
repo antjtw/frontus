@@ -1,0 +1,109 @@
+<script src="/cmn/spin.js"></script>
+<div class="row-fluid">
+    <div class="span10 offset1">
+        <a href="/" class="pull-left">
+            <img class="newreglogo" src="/img/logo-blue.png">
+        </a>
+        <div class="newregTitle pull-right">
+            <span>Registration</span>
+        </div>
+    </div>
+    <div class="newreg span10 offset1 gateway text-center">
+        <div ng-if="errorMessage" class="errorMessage" ng-click="gotoPage(errorLink)" ng-class="{pointer: errorLink}">
+            <span>{{errorMessage}}</span>
+        </div>
+        <payment-plan-selector></payment-plan-selector>
+        <div class="big-input-list">
+            <div class="span12">
+                <form stripe-form="getPaymentToken" name="stripeForm">
+                    <fieldset>
+                        <div class="span6">
+                            <div>Your details</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Full Name</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="pname">
+                                </div>
+                                <div>
+                                    <span>Company</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="cname">
+                                </div>
+                                <div>
+                                    <span>Email Address</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="email">
+                                </div>
+                                <div>
+                                    <span>Password</span>
+                                    <input type="password"
+                                           class="input-block-level"
+                                           ng-model="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <div>Payment information</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Name on Card</span>
+                                    <input type="text"
+                                           ng-model="cardname"
+                                           class="input-block-level">
+                                </div>
+                                <div>
+                                    <span>Card Number</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="number"
+                                           payments-validate="card"
+                                           payments-format="card"
+                                           payments-type-model="type"
+                                           ng-class="myForm.number.$card.type">
+                                </div>
+                                <div>
+                                    <div class="span6">
+                                        <span>Expiration Date</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="expiry"
+                                               payments-validate="expiry"
+                                               payments-format="expiry"/>
+                                    </div>
+                                    <div class="span6">
+                                        <span>CVC</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="cvc"
+                                               payments-validate="cvc"
+                                               payments-format="cvc"
+                                               payments-type-model="type"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span12 regfooter"
+                             my-loading-spinner="processing">
+                            <p class="caption legal">
+                                By clicking the button below, you agree to our <br><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a>
+                            </p>
+                            <div  class="standard-button large-standard-button">
+                                <button id="pricing-register"
+                                        type="submit"
+                                        class="btn"
+                                        ng-disabled="fieldCheck()||processing">
+                                    Join Sharewave
+                                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
