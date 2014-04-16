@@ -43,7 +43,7 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script type="text/javascript"
         src="/lib/angular-payments/angular-payments.min.js"></script>
 <script>
-    Stripe.setPublishableKey('pk_test_IEFI9xd56qv5jt1Cta9ODSL4');
+    Stripe.setPublishableKey('pk_live_nFUfhjAz1rauxbHxrShrOf5Q');
 </script>
 
 <script>
