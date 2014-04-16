@@ -187,7 +187,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row-fluid cancel">
+                        <div class="row-fluid cancel" ng-if="billing.currentPlan && billing.currentPlan!=='000'">
                             Click here to <span class="red pointer" ng-click="cancelSubscriptionModalOpen()">cancel your subscription.</span>
                         </div>
                     </div>
