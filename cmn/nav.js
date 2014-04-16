@@ -142,7 +142,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             $scope.plan = p;
             if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
                 $rootScope.persistentNotification = false;
-                console.log(p);
                 Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
             } else {
                 $rootScope.persistentNotification = true;
@@ -153,7 +152,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                     else {
                         $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
-                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " cancelled"}});
+                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
                     }
                 }
                 else {
