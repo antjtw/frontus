@@ -2395,7 +2395,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.kissTour = function() {
-        _kmq.push(['trackClick', 'a_own_tour_start_modal', 'CT Tour Started']);
+        _kmq.push(['record', 'CT Tour Started']);
     };
 
     $scope.moveTour = function() {
