@@ -293,7 +293,7 @@ app.controller('CompContactCtrl',
                     return el.amount>0;
                 });
                 if ($scope.billing.currentPlan!=="000") {
-                    $scope.load_upcoming_invoice();
+                    //$scope.load_upcoming_invoice();
                 }
             });
         };
