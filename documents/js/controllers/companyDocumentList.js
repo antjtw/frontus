@@ -92,6 +92,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                     }
                 }); 
             }
+            $scope.finishedLoading = true;
             $scope.loadDocumentVersions();
             return st1;
         };
@@ -238,7 +239,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                 investor.statusRatio = $scope.docStatusRatio(investor);
             });
-            $scope.finishedLoading = true;
         };
 
         $scope.loadDocumentActivity = function() {
@@ -313,7 +313,10 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-            if ($scope.hideSharebar) {
+             if (!obj.statusRatio || !$scope.maxRatio) {
+                 return true;
+             }
+             if ($scope.hideSharebar) {
                 return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
             } else {
                 return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
