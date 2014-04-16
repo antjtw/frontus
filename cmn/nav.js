@@ -136,7 +136,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $rootScope.persistentNotification = false;
         SWBrijj.tblm('account.my_company_payment').then(function(data) {
             var p = data.length > 0 && data[0];
-            console.log($filter('billingPlans')(p.plan));
             if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
                 $rootScope.persistentNotification = false;
                 Intercom('update', {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : p.when_attempted});
