@@ -99,8 +99,8 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
     }
 ]);
 
-app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
-    function($scope, $routeParams, SWBrijj) {
+app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$location',
+    function($scope, $routeParams, SWBrijj, $location) {
         $scope.selectedPlan = '002';
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
@@ -121,8 +121,6 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                                              $scope.payment_token,
                                              $scope.selectedPlan
             ).then(function(registered) {
-                $scope.$emit("notification:success",
-                             "Welcome to Sharewave!");
                 if (registered) {
                     document.location.href = registered + "?msg=first";
                 } else {
@@ -130,11 +128,21 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                 }
                 $scope.processing = false;
             }).except(function(x) {
-                $scope.$emit("notification:fail",
-                             "Oops, something went wrong.");
+                $scope.handleError(x);
                 $scope.processing = false;
                 console.log(x);
             });
+        };
+        $scope.handleError = function(err) {
+            if (err.message.indexOf("duplicate key value violates unique constraint") !== -1) {
+                $scope.errorMessage = "This email address is already registered, try logging in.";
+                $scope.errorLink = "/login";
+            } else {
+                $scope.errorMessage = "Something went wrong. Please check your information and try again.";
+            }
+        };
+        $scope.gotoPage = function(url) {
+            $location.url(url);
         };
         $scope.getPaymentToken = function(status, response) {
             if (response.error) {

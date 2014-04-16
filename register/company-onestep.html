@@ -9,6 +9,9 @@
         </div>
     </div>
     <div class="newreg span10 offset1 gateway text-center">
+        <div ng-if="errorMessage" class="errorMessage" ng-click="gotoPage(errorLink)" ng-class="{pointer: errorLink}">
+            <span>{{errorMessage}}</span>
+        </div>
         <payment-plan-selector></payment-plan-selector>
         <div class="big-input-list">
             <div class="span12">

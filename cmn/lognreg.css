@@ -256,3 +256,11 @@ h2.browser {
     line-height: 4px;
 }
 
+.errorMessage {
+    color: #E74C3C;
+    width: 90%;
+    margin-left: 40px;
+    margin-bottom: 40px;
+    text-align: left;
+    font-size: 16px;
+}
