@@ -131,7 +131,6 @@ app.controller('CompContactCtrl',
             initPage($scope, x);
             $scope.cname = angular.copy($scope.name);
             delete $scope.name;
-            console.log($scope);
             $scope.cnamekey = $scope.cname;
             $scope.companykey = $scope.company;
             $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
