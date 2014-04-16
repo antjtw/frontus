@@ -29,3 +29,7 @@
 .new-nav .opencomp {
     background-color: #33485D;
 }
+
+.new-nav .accordion-inner {
+    border: none;
+}
