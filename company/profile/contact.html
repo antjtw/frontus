@@ -393,7 +393,7 @@
                                    ng-class="initPaymentForm.number.$card.type">
                         </div>
                         <div>
-                            <span>Expiration Date</span>
+                            <span>Expiration Date (mm/yyyy)</span>
                             <input type="text"
                                    class="input-block-level"
                                    ng-model="expiry"
@@ -458,11 +458,10 @@
                                    ng-class="updateCCForm.number.$card.type">
                         </div>
                         <div>
-                            <span>Expiration Date</span>
+                            <span>Expiration Date (mm/yyyy)</span>
                             <input type="text"
                                    class="input-block-level"
                                    ng-model="expiry"
-                                   placeholder="{{billing.current_card.exp_month}}/{{billing.current_card.exp_year}}"
                                    payments-validate="expiry"
                                    payments-format="expiry"/>
                         </div>
