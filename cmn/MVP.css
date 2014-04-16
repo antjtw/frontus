@@ -3756,7 +3756,10 @@ h2.onboard {
 
 .container.dynamic-page {
     min-width: 1024px;
-    width: 100%;
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin-left: 40px;
     overflow-x: hidden;
 }
 
