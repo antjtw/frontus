@@ -101,7 +101,9 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
             navState.path = document.location.pathname;
-            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
+            if (p) {
+                Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
+            }
         });
 
         navigator.sayswho= (function(){
