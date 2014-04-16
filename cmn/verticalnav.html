@@ -1,21 +1,21 @@
 <div class="new-nav">
     <accordion close-others="true">
-        <accordion-group is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
+        <accordion-group ng-class="{'opencomp': company.current}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>
                 <span>{{company.name}}</span>
             </accordion-heading>
             <ul>
                 <li><a class="button" ng-click="switchCandP(company, '/home/company')">Dashboard</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-captable')">Cap Table</a>
+                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-captable')">Cap Table</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-grants')">Grants Table</a>
+                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-grants')">Grants Table</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/ownership/company-status')">Ownership Status</a>
+                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-status')">Ownership Status</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/documents/company-list')">Documents</a>
+                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/documents/company-list')">Documents</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/company/profile/people')">People</a>
+                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/company/profile/people')">People</a>
                 </li>
             </ul>
         </accordion-group>
@@ -26,11 +26,11 @@
             <ul>
                 <li><a class="button" ng-click="switchCandP(company, '/home/investor')">Dashboard</a>
                 </li>
-                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/ownership/investor-captable')">Cap Table</a>
+                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-captable')">Cap Table</a>
                 </li>
-                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/ownership/investor-grants')">Grants Table</a>
+                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
                 </li>
-                <li ng-show="company.reasondic.doc"><a class="button" ng-click="switchCandP(company, '/documents/investor-list')">Documents</a>
+                <li ng-show="company.reasondic.doc"><a class="button" ng-click="switchCandP(company, '/app/documents/investor-list')">Documents</a>
                 </li>
             </ul>
         </accordion-group>

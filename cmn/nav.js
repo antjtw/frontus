@@ -200,7 +200,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
             else {
-                $scope.gotoURL(url);
+                $scope.gotoPage(url);
             }
         };
         $rootScope.homecollapsed = false;
