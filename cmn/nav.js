@@ -101,6 +101,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
             navState.path = document.location.pathname;
+            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
         });
 
         navigator.sayswho= (function(){
@@ -138,17 +139,18 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             var p = data.length > 0 && data[0];
             if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
                 $rootScope.persistentNotification = false;
-                Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : p.when_attempted}});
+                Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
             } else {
                 $rootScope.persistentNotification = true;
                 if (p) {
                     if (p.status) {
                         $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
+                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed", 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
                     }
                     else {
                         $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
+                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " cancelled", 'changed_at' : parseInt(Date.parse(p.when_attempted).getTime()/1000)}});
                     }
-                    Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan), 'changed_at' : p.when_attempted}});
                 }
                 else {
                     $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
