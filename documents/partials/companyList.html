@@ -349,7 +349,7 @@
                     </table>
                 </div>
             </div>
-            <div ng-style="stretchheight" ng-class="{rightNoTableBlock:hideSharebar,
+            <div ng-style="stretchheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                  <h2 class="right-bar-header">SHARE DOCUMENTS</h2>

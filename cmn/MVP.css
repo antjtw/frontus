@@ -4040,3 +4040,11 @@ div.cancel > span {
 .ng-invalid {
     border-color: #f00 !important;
 }
+
+/* app.css items that prevent flashing as that file is currently loaded late */
+
+.company-list .my-loading-spinner-container {
+    width: 50px;
+    margin: 0 auto 0 auto;
+    height: 100px;
+}
