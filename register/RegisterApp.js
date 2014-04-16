@@ -109,6 +109,7 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj',
                      fs.cname &&
                      fs.email &&
                      fs.password &&
+                     fs.cardname &&
                      fs.number &&
                      fs.expiry &&
                      fs.cvc);

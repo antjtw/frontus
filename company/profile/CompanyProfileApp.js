@@ -41,7 +41,7 @@ app.controller('CompContactCtrl',
         $scope.profileModalOpen = function() {
             $scope.profileModal = true;
             $scope.editcompany = {
-                'name': angular.copy($scope.name),
+                'cname': angular.copy($scope.cname),
                 'address': angular.copy($scope.address),
                 'city': angular.copy($scope.city),
                 'state': angular.copy($scope.state),
@@ -67,7 +67,7 @@ app.controller('CompContactCtrl',
 
         $scope.profileUpdate = function(editcompany) {
             SWBrijj.proc("account.company_update",
-                         editcompany.name, editcompany.address,
+                         editcompany.cname, editcompany.address,
                          editcompany.city, editcompany.state,
                          editcompany.zipcode
             ).then(function(x) {
@@ -76,7 +76,7 @@ app.controller('CompContactCtrl',
                     $scope.uploadFile();
                 }
                 $scope.$emit("notification:success", "Company profile successfully updated.");
-                $scope.name = editcompany.name;
+                $scope.cname = editcompany.cname;
                 $scope.address = editcompany.address;
                 $scope.city = editcompany.city;
                 $scope.state = editcompany.state;
@@ -129,7 +129,10 @@ app.controller('CompContactCtrl',
 
         SWBrijj.tbl('account.my_company').then(function(x) {
             initPage($scope, x);
-            $scope.namekey = $scope.name;
+            $scope.cname = angular.copy($scope.name);
+            delete $scope.name;
+            console.log($scope);
+            $scope.cnamekey = $scope.cname;
             $scope.companykey = $scope.company;
             $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
             $scope.photoURL = '/photo/user?id=company:' + $scope.company;

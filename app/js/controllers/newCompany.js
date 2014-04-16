@@ -13,6 +13,7 @@ app.controller('NewCompanyCtrl', ['$scope', '$routeParams', 'SWBrijj',
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&
                      fs.cname &&
+                     fs.cardname &&
                      fs.number &&
                      fs.expiry &&
                      fs.cvc);
