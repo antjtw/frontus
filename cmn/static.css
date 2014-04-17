@@ -463,7 +463,7 @@ address {
     vertical-align: 12%;
 }
 
-.pricing .pricing-blocks > div > ul > li:nth-child(2) > span:last-of-type {
+.pricing .pricing-blocks > div > ul > li:nth-child(2) > span:nth-child(2) {
     font-size: 42px;
 }
 
@@ -596,6 +596,12 @@ address {
 
 .pricing .pricing-blocks.pricing-blocks-phone > div > ul > li:nth-child(2) > ul > li > span {
     font-size: 14px;
+}
+
+/* Hover States */
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(-n+2) > ul, .pricing .pricing-blocks > div:hover > ul > li:nth-child(-n+2) > span {
+    visibility: hidden;
 }
 
 @media (max-width: 480px) {
