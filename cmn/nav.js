@@ -146,29 +146,31 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
         $rootScope.persistentNotification = false;
-        SWBrijj.tblm('account.my_company_payment').then(function(data) {
-            var p = data.length > 0 && data[0];
-            $scope.plan = p;
-            if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
-                $rootScope.persistentNotification = false;
-                Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
-            } else {
-                $rootScope.persistentNotification = true;
-                if (p) {
-                    if (p.status) {
-                        $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
-                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
+        if (navState.role=='issuer') {
+            SWBrijj.tblm('account.my_company_payment').then(function(data) {
+                var p = data.length > 0 && data[0];
+                $scope.plan = p;
+                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
+                    $rootScope.persistentNotification = false;
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                } else {
+                    $rootScope.persistentNotification = true;
+                    if (p) {
+                        if (p.status) {
+                            $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
+                        }
+                        else {
+                            $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                        }
                     }
                     else {
-                        $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
-                        Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                        $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
                     }
                 }
-                else {
-                    $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
-                }
-            }
-        });
+            });
+        }
 
 
         $scope.switch = function (nc) {
@@ -450,7 +452,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
-                    console.log(x);
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
                     });

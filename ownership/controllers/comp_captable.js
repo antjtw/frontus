@@ -2394,6 +2394,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.kissTour = function() {
+        _kmq.push(['record', 'CT Tour Started']);
+    };
+
     $scope.moveTour = function() {
         $scope.tourstate += 1;
         $scope.tourfunc();

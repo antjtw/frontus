@@ -131,7 +131,6 @@ app.controller('CompContactCtrl',
             initPage($scope, x);
             $scope.cname = angular.copy($scope.name);
             delete $scope.name;
-            console.log($scope);
             $scope.cnamekey = $scope.cname;
             $scope.companykey = $scope.company;
             $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
@@ -230,10 +229,12 @@ app.controller('CompContactCtrl',
         // this swaps the CC data for a stripe card token
         $scope.getPaymentToken = function(status, response) {
             if (!$scope.initPaymentModal) return;
+            _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
             if (response.error) {
                 console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
+                _kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
             } else {
                 $scope.payment_token = response.id;
                 $scope.create_customer($scope.payment_token,
@@ -306,6 +307,11 @@ app.controller('CompContactCtrl',
         };
         $scope.updateSubscription = function() {
             var newplan = $scope.selectedPlan;
+            if (newplan == "000") {
+                _kmq.push(['record', 'Subscription Cancelled']);
+            } else {
+                _kmq.push(['record', 'Subscription Modified']);
+            }
             payments.update_subscription(newplan)
             .then(function(x) {
                 console.log(x);
@@ -381,6 +387,7 @@ app.controller('CompContactCtrl',
             $scope.selectedPlan = '000';
             $scope.updateSubscription();
             $scope.cancelSubscriptionModalClose();
+
         };
         $scope.cancelSubscriptionModalClose = function() {
             $scope.cancelSubscriptionModal = false;
