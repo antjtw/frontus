@@ -62,6 +62,11 @@
     vertical-align: -10%;
 }
 
+.new-nav .accordion > span {
+    font-size: 20px;
+    text-align: center;
+}
+
 .new-nav .opencomp {
     background-color: #33485D;
 }

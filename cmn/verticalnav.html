@@ -1,8 +1,8 @@
 <div class="new-nav" ng-mouseenter="navhover=true" ng-mouseleave="navhover=false">
-    <div class="rail-menu show-hide-animation" ng-hide="true">
+    <div class="rail-menu show-hide-animation" ng-hide="navhover">
         <span data-icon="&#xe043;" aria-hidden="true"></span>
     </div>
-    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="false">
+    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
         <span>Admin</span>
         <accordion-group ng-class="{'opencomp': company.current}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>
@@ -31,11 +31,11 @@
                 <span>{{company.name}}</span>
             </accordion-heading>
             <ul>
-                <li><a class="button" ng-click="switchCandP(company, '/home/investor')">Dashboard</a>
+                <li class="group-bottom"><a class="button" ng-click="switchCandP(company, '/home/investor')">Dashboard</a>
                 </li>
                 <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-captable')">Cap Table</a>
                 </li>
-                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
+                <li class="group-bottom" ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
                 </li>
                 <li ng-show="company.reasondic.doc"><a class="button" ng-click="switchCandP(company, '/app/documents/investor-list')">Documents</a>
                 </li>
