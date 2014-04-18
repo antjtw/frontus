@@ -11,17 +11,17 @@
                 <span>{{company.name}}</span>
             </accordion-heading>
             <ul>
-                <li class="group-bottom"><a class="button" ng-click="switchCandP(company, '/home/company')">Dashboard</a>
+                <li class="group-bottom" ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/home/company')">Dashboard</a>
                 </li>
-                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-captable')">Cap Table</a>
+                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-captable')">Cap Table</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-grants')">Grants Table</a>
+                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-grants') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-grants')">Grants Table</a>
                 </li>
-                <li class="group-bottom" ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-status')">Ownership Status</a>
+                <li class="group-bottom" ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-status') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-status')">Ownership Status</a>
                 </li>
-                <li class="group-bottom" ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/documents/company-list')">Documents</a>
+                <li class="group-bottom" ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/documents/company-list') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/documents/company-list')">Documents</a>
                 </li>
-                <li ng-show="company.reasondic.rol"><a class="button" ng-click="switchCandP(company, '/app/company/profile/people')">People</a>
+                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/company/profile/people') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/company/profile/people')">People</a>
                 </li>
             </ul>
         </accordion-group>
@@ -31,13 +31,13 @@
                 <span>{{company.name}}</span>
             </accordion-heading>
             <ul>
-                <li class="group-bottom"><a class="button" ng-click="switchCandP(company, '/home/investor')">Dashboard</a>
+                <li class="group-bottom" ng-class="{activepage: navState.path.indexOf('/home/investor') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/home/investor')">Dashboard</a>
                 </li>
-                <li ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-captable')">Cap Table</a>
+                <li ng-show="company.reasondic.own" ng-class="{activepage: navState.path.indexOf('/ownership/investor-captable') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-captable')">Cap Table</a>
                 </li>
-                <li class="group-bottom" ng-show="company.reasondic.own"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
+                <li class="group-bottom" ng-show="company.reasondic.own" ng-class="{activepage: navState.path.indexOf('/ownership/investor-grants') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
                 </li>
-                <li ng-show="company.reasondic.doc"><a class="button" ng-click="switchCandP(company, '/app/documents/investor-list')">Documents</a>
+                <li ng-show="company.reasondic.doc" ng-class="{activepage: navState.path.indexOf('/ownership/investor-list') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/documents/investor-list')">Documents</a>
                 </li>
             </ul>
         </accordion-group>

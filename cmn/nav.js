@@ -200,8 +200,21 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
 
         $scope.switchCandP = function (company, url) {
+            console.log(company);
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
                 SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    /* Not quite ready for prime time
+                    navState.company = company.company;
+                    navState.role = company.role;
+                    navState.reasons = $scope.initReasons(company.reasons);
+                    angular.forEach($scope.companies, function(comp) {
+                        if (comp.company == company.company && comp.role == company.role) {
+                            comp.current = true;
+                        }
+                        else {
+                            comp.current = false;
+                        }
+                    }); */
                     $scope.gotoURL(url);
                 });
             }

@@ -79,6 +79,18 @@
     color: #FFFFFF;
 }
 
+.new-nav .opencomp li.activepage:after {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    right: 0;
+    margin-top: 5px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right:5px solid #FFFFFF;
+}
+
 .new-nav .accordion-inner {
     border: none;
     padding: 0 0 9px 0;
