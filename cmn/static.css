@@ -633,6 +633,13 @@ address {
 .pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li > div > button {
     width: 175px;
     height: 60px;
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li > div > button > span {
+    vertical-align: -10%;
+    padding-left: 4px;
 }
 
 
