@@ -180,7 +180,7 @@
                                 </td>
                             </tr>
                             <!-- TODO animate show/hide by sliding down/up -->
-                            <tr ng-show="doc.shown" class="sub-row"
+                            <tr ng-if="doc.shown" class="sub-row"
                                 ng-repeat="version in doc.versions | archived: archivestate | orderBy:versionOrder">
                                 <td class="status-toggle"></td>
                                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">

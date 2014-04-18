@@ -2,8 +2,8 @@
     position: fixed;
     height: 100%;
     top: 0;
-    left: -100px;
-    width:  140px;
+    left: -150px;
+    width:  190px;
     background-color: rgb(30, 45, 61);
     -webkit-transition: left 0.35s ease;
     -moz-transition: left 0.35s ease;
@@ -16,8 +16,8 @@
     position: absolute;
     height: 100%;
     top: 40px;
-    left: -100px;
-    width:  140px;
+    left: -150px;
+    width:  190px;
     background-color: rgb(30, 45, 61);
     -webkit-transition: left 0.35s ease;
     -moz-transition: left 0.35s ease;
@@ -49,16 +49,46 @@
 }
 
 .new-nav .accordion-heading {
-    height: 46px;
+    height: 42px;
     padding: 0;
+}
+
+.new-nav .accordion-heading a {
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+}
+
+.new-nav .accordion-heading a > span:nth-child(-n+2):before {
+    vertical-align: -10%;
 }
 
 .new-nav .opencomp {
     background-color: #33485D;
 }
 
+.new-nav .opencomp .activepage {
+    background-color: #003045;
+}
+
+.new-nav .opencomp .activepage a {
+    color: #FFFFFF;
+}
+
 .new-nav .accordion-inner {
     border: none;
+    padding: 0 0 9px 0;
+}
+
+.new-nav p, .new-nav a {
+    color: #E3E3E3;
+}
+
+.new-nav .accordion-body a {
+    margin-left: 40px;
+}
+
+.new-nav .accordion-body li.group-bottom {
+    margin-bottom: 10px;
 }
 
 .rail-menu > span {
