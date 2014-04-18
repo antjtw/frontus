@@ -458,12 +458,12 @@ address {
     line-height: 110px;
 }
 
-.pricing .pricing-blocks > div > ul > li:nth-child(2) > span:first-of-type, .pricing .pricing-blocks.pricing-blocks-phone > div > ul > li:nth-child(1) > ul > li:last-of-type > span:first-of-type {
+.pricing .pricing-blocks > div > ul > li:nth-child(2) > span > span:first-of-type, .pricing .pricing-blocks.pricing-blocks-phone > div > ul > li:nth-child(1) > ul > li:last-of-type > span:first-of-type {
     font-size: 22px;
     vertical-align: 12%;
 }
 
-.pricing .pricing-blocks > div > ul > li:nth-child(2) > span:last-of-type {
+.pricing .pricing-blocks > div > ul > li:nth-child(2) > span >  span:nth-child(2) {
     font-size: 42px;
 }
 
@@ -597,6 +597,52 @@ address {
 .pricing .pricing-blocks.pricing-blocks-phone > div > ul > li:nth-child(2) > ul > li > span {
     font-size: 14px;
 }
+
+/* Hover States */
+
+.pricing .pricing-blocks div.span3:hover > ul > li:nth-child(1) {
+    background-color: #1D2C3C;
+}
+
+.pricing .pricing-blocks div.span3:hover > ul > li:nth-child(2) {
+    background-color: #33485D;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(1) > ul, .pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span > span {
+    display: none;
+}
+
+.pricing .pricing-blocks > div > ul > li:nth-child(1) > ul.reverse, .pricing .pricing-blocks > div > ul > li:nth-child(2) > span.reverse {
+    display: none;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(1) > ul.reverse, .pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse {
+    display: inline;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(1) > ul.reverse > li > img {
+    width: 100px;
+    height: auto;
+    margin-top: 5px;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li {
+    padding-top: 10px;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li > div > button {
+    width: 175px;
+    height: 60px;
+    font-size: 14px;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+}
+
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li > div > button > span {
+    vertical-align: -10%;
+    padding-left: 4px;
+}
+
+
 
 @media (max-width: 480px) {
 
