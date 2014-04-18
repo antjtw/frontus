@@ -31,7 +31,7 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             $scope.modalUp();
         }
         $scope.register = function() {
-            document.location.href = "/register/company-onestep";
+            document.location.href = "/pricing/";
         };
 
         $scope.toggle = false;
