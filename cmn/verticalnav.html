@@ -1,5 +1,9 @@
-<div class="new-nav">
-    <accordion close-others="true">
+<div class="new-nav" ng-mouseenter="navhover=true" ng-mouseleave="navhover=false">
+    <div class="rail-menu show-hide-animation" ng-hide="navhover">
+        <span data-icon="&#xe043;" aria-hidden="true"></span>
+    </div>
+    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
+        <span>Admin</span>
         <accordion-group ng-class="{'opencomp': company.current}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>
                 <span>{{company.name}}</span>
@@ -19,6 +23,7 @@
                 </li>
             </ul>
         </accordion-group>
+        <span>Investments</span>
         <accordion-group is-open="company.current" ng-repeat="company in companies | filter: {role:'investor'}">
             <accordion-heading>
                 <span>{{company.name}}</span>

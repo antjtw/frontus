@@ -108,6 +108,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         }
 
+        $('.new-nav').affix({
+            offset: {top: 40}
+        });
+
         $scope.$on('$routeChangeSuccess', function(current, previous) {
             navState.path = document.location.pathname;
             if ($scope.plan) {
