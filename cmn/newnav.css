@@ -53,6 +53,10 @@
     padding: 0;
 }
 
+.new-nav .accordion-heading .accordion-toggle {
+    padding: 8px 15px;
+}
+
 .new-nav .accordion-heading a {
     font-size: 14px;
     font-family: 'FS Elliot Web Light', sans-serif !important;
