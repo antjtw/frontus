@@ -189,12 +189,9 @@ app.controller('CompContactCtrl',
         $scope.get_usage_details = function() {
             payments.usage_details().then(function(x) {
                 if (x.length === 0) {
-                    payments.usage_grid($scope.billing.recommendedPlan)
-                    .then(function(x) {
-                        $scope.billing.usage = x;
-                    }).except(function(err) {
-                        console.log(err);
-                    });
+                    $scope.billing.usage =
+                        $scope.get_hypothetical_usage_details(
+                            $scope.billing.recommendedPlan);
                 } else {
                     $scope.billing.usage = x[0];
                 }
@@ -202,6 +199,22 @@ app.controller('CompContactCtrl',
             }).except(function(err) {
                 console.log(err);
             });
+        };
+        $scope.get_hypothetical_usage_details = function(p) {
+            payments.usage_grid(p)
+            .then(function(x) {
+                return x;
+            }).except(function(err) {
+                console.log(err);
+                return null;
+            });
+        };
+        $scope.set_usage_details = function(p, doc_limit,
+                                            admin_limit, msg_limit) {
+            $scope.billing.usage.plan = p;
+            $scope.billing.usage.docments_total_limit = doc_limit;
+            $scope.billing.usage.admins_total_limit = admin_limit;
+            $scope.billing.usage.direct_messages_monthly_limit = msg_limit;
         };
         $scope.get_payment_data = function() {
             payments.my_data().then(function(data) {
@@ -314,17 +327,20 @@ app.controller('CompContactCtrl',
             }
             payments.update_subscription(newplan)
             .then(function(x) {
-                console.log(x);
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
                 } else if ($scope.selectedPlan=='000') {
                     $scope.$emit("notification:success",
                                  "Subscription cancelled");
+                    $scope.set_usage_details('000', 0, 0, 0);
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
                     $scope.billing.currentPlan = $scope.selectedPlan;
+                    $scope.billing.usage =
+                        $scope.get_hypothetical_usage_details(
+                            $scope.selectedPlan);
                 }
             }).except(function(err) {
             });
