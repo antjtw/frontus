@@ -225,6 +225,7 @@
                                                     ng-click="switchSignatureFlow(version, 0)">
                                                     Switch to View Only
                                                 </li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-click="viewStatus(doc)">View Status</li>
                                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
@@ -537,7 +538,7 @@
             <button class="btn" ng-click="remindDocClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="remindDocClose();">Confirm</button>
+            <button class="btn" ng-click="remindDocument(reminddocForModal, remindText); remindDocClose();">Confirm</button>
         </div>
     </div>
 </div>

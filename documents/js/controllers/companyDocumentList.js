@@ -1110,6 +1110,19 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             $scope.remindDocModal = false;
         };
 
+        $scope.remindDocument = function(doc, message) {
+            if (!message || message.length == 0) {
+                message = " ";
+            }
+            SWBrijj.procm("document.remind_investor", doc.doc_id, message).then(function(data) {
+                $scope.$emit("notification:success", "Reminder sent.");
+                void(data);
+            }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    console.log(x);
+                });
+        };
+
         $scope.allArchived = function(versions) {
             var result = 0;
             if ($scope.archivestate) {
