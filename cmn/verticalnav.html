@@ -4,7 +4,7 @@
     </div>
     <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
         <span>Admin</span>
-        <accordion-group ng-class="{'opencomp': company.current}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
+        <accordion-group ng-class="{'opencomp': navState.company == company.company}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>
                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="company.current"></span>
                 <span data-icon="&#xe034;" aria-hidden="true" ng-show="!company.current"></span>

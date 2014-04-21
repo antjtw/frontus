@@ -3326,9 +3326,16 @@ button.icon-button:hover {
     width: 540px;
     margin-left: -270px;
 }
+
+.widerModal.modal {
+    width: 600px;
+    margin-left: -300px;
+}
+
 .compose-modal.modal > .modalHeader {
     margin-bottom: 20px;
 }
+
 .compose-modal.modal > div.modalText .input-list > div {
     margin: 0 0 20px 0;
     line-height: 32px;
@@ -3346,7 +3353,7 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list>div>input,
 .compose-modal.modal > div.modalText .input-list>div>textarea {
     float: right;
-    width: 416px;
+    width: 476px;
     margin-right: 0;
 }
 .compose-modal.modal > div.modalText .input-list>div>input {
@@ -3356,7 +3363,7 @@ button.icon-button:hover {
     padding-bottom: 40px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div.select2-container {
-    width: 430px;
+    width: 490px;
 }
 .payment-modal {
     width: 90%;
