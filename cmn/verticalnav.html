@@ -13,7 +13,7 @@
             <ul>
                 <li ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/home/company')">Dashboard</a>
                 </li>
-                <li class="group-bottom" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/company/profile/')">Profile</a>
+                <li class="group-bottom" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/company/profile/')">Profile</a>
                 </li>
                 <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-captable')">Cap Table</a>
                 </li>
