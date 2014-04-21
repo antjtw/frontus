@@ -333,6 +333,7 @@
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                                                     ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>
@@ -513,6 +514,30 @@
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="voidDocument(voiddocForModal, voidText); voidDocClose();">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div modal="remindDocModal" close="remindDocClose()" options="opts">
+    <div class="modalHeader">
+        <span>Send Signature Reminder</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="remindDocClose()"></span>
+    </div>
+    <div class="modalText voidDocModal">
+        <span>Send a reminder to the original recipient.</span>
+
+        <div class="message-block">
+            <span>Message</span>
+            <textarea rows="4" cols="60" ng-model="remindText"></textarea>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="remindDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="remindDocClose();">Confirm</button>
         </div>
     </div>
 </div>

@@ -1101,6 +1101,15 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             $scope.voidDocModal = false;
         };
 
+        $scope.remindDocOpen = function(doc) {
+            $scope.reminddocForModal = doc;
+            $scope.remindDocModal = true;
+        };
+
+        $scope.remindDocClose = function() {
+            $scope.remindDocModal = false;
+        };
+
         $scope.allArchived = function(versions) {
             var result = 0;
             if ($scope.archivestate) {
