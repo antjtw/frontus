@@ -720,12 +720,8 @@ textarea {
 .tableView.grant-table {
     margin-bottom: 60px;
     margin-top: 20px;
-    margin-left: 40px;
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
-    width: -moz-calc(100% - 40px);
-    width: -webkit-calc(100% - 40px);
-    width: calc(100% - 40px);
 }
 
 .tableView.grant-table.viewmode {
@@ -755,7 +751,7 @@ textarea {
     padding: 0;
 }
 
-.tableView.grant-table td {
+.tableView.grant-table td:not(:nth-child(1)) {
     padding: 0;
 }
 
