@@ -3,7 +3,7 @@
         <span data-icon="&#xe043;" aria-hidden="true"></span>
     </div>
     <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
-        <span>Admin</span>
+        <span ng-show="(companies | filter: {role:'issuer}).length > 0">Admin</span>
         <accordion-group ng-class="{'opencomp': navState.company == company.company}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>
                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="company.current"></span>
@@ -27,9 +27,11 @@
                 </li>
             </ul>
         </accordion-group>
-        <span>Investments</span>
+        <span ng-show="(companies | filter: {role:'investor}).length > 0">Investments</span>
         <accordion-group is-open="company.current" ng-repeat="company in companies | filter: {role:'investor'}">
             <accordion-heading>
+                <span data-icon="&#xe031;" aria-hidden="true" ng-show="company.current"></span>
+                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!company.current"></span>
                 <span>{{company.name}}</span>
             </accordion-heading>
             <ul>
