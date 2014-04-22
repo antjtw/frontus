@@ -169,13 +169,13 @@
                                     </div>
                                     <div class="row-fluid">
                                         <div class="pull-left"
-                                             ng-if="billing.plan
-                                                    && billing.plan!=='000'">
-                                            These statistics are based upon your {{billing.current_plan || 'payment'}} level. Sharewave
+                                            ng-if="billing.currentPlan
+                                                    && billing.currentPlan!=='000'">
+                                            These statistics are based upon the {{billing.currentPlan | billingPlans}} plan. Sharewave
                                             <br>will automatically upgrade your plan as you use more services.
                                         </div>
                                         <div class="pull-left"
-                                             ng-if="!billing.plan || billing.plan=='000'">
+                                             ng-if="!billing.currentPlan || billing.currentPlan=='000'">
                                             These metrics are based on your company's usage within the {{billing.recommendedPlan | billingPlans}} plan.
                                         </div>
                                     </div>
