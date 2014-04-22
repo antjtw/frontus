@@ -202,33 +202,29 @@
                                         No invoices at this time.
                                     </div>
                                     <div class="row-fluid" ng-if="billing.invoices.length>0">
-                                        <div class="span8"><span>Date</span></div>
+                                        <div class="span6"><span>Date</span></div>
                                         <div class="span2"><span>Amount</span></div>
-                                        <!--
                                         <div class="span2">
                                             <span>Invoice</span>
                                         </div>
-                                        -->
                                     </div>
                                     <div class="row-fluid" ng-repeat="inv in billing.invoices" ng-if="billing.invoices.length>0">
-                                        <div class="span8"> <span>
+                                        <div class="span6"> <span>
                                             {{inv.lines.data[0].period.start*1000
                                               | date: 'MMMM d, yyyy'}}
                                         </span>
 
                                         </div>
-                                        <div class="span4"> <span>
+                                        <div class="span2"> <span>
                                             {{inv.amount_due/100 | currency}}
                                         </span>
 
                                         </div>
-                                        <!--
                                         <div class="span2">
-                                            <a href="openInvoice(inv)">
+                                            <a href="/invoice?id={{inv.id}}">
                                                 Invoice
                                             </a>
                                         </div>
-                                        -->
                                     </div>
                                 </div>
                             </div>
