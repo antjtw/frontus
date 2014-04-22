@@ -52,8 +52,12 @@
     padding: 0;
 }
 
-.new-nav .accordion-heading .accordion-toggle {
+.new-nav .manycomp .accordion-heading .accordion-toggle {
     padding: 4px 15px;
+}
+
+.new-nav .accordion-heading .accordion-toggle {
+    padding: 0;
 }
 
 .new-nav .accordion-heading a {
@@ -62,7 +66,7 @@
 }
 
 .new-nav .accordion-heading a > span:nth-child(-n+2):before {
-    vertical-align: -10%;
+    vertical-align: 10%;
     margin-right: 5px;
 }
 
@@ -82,7 +86,7 @@
     vertical-align: -8%;
 }
 
-.new-nav .opencomp {
+.new-nav .opencomp.manycomp {
     background-color: #33485D;
 }
 
