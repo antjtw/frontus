@@ -86,6 +86,14 @@
     background-color: #33485D;
 }
 
+.new-nav .accordion-heading a > span:last-of-type {
+    width: 130px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 
 .new-nav .opencomp .accordion-heading a > span:last-of-type {
     color: #F1F1F1;
