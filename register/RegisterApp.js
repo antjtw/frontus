@@ -102,6 +102,7 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
 app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$location',
     function($scope, $routeParams, SWBrijj, $location) {
         $scope.selectedPlan = '002';
+        $scope.coupon_code = $routeParams.coupon;
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&
@@ -119,6 +120,7 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$locatio
             SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password,
                                              $scope.pname, $scope.cname,
                                              $scope.payment_token,
+                                             $scope.coupon_code,
                                              $scope.selectedPlan
             ).then(function(registered) {
                 if (registered) {
