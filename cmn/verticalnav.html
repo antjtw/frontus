@@ -1,8 +1,8 @@
 <div class="new-nav" ng-mouseenter="navhover=true" ng-mouseleave="navhover=false">
-    <div class="rail-menu show-hide-animation" ng-hide="true">
+    <div class="rail-menu show-hide-animation" ng-hide="navhover">
         <span data-icon="&#xe043;" aria-hidden="true"></span>
     </div>
-    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="false">
+    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
         <span class="nav-section-header" ng-show="(companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe011;" aria-hidden="true"></span>Admin</span>
         <accordion-group ng-class="{'opencomp': navState.company == company.company && navState.role == company.role}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
             <accordion-heading>

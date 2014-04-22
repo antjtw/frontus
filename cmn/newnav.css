@@ -82,8 +82,13 @@
     vertical-align: -8%;
 }
 
-.new-nav .opencomp > .accordion-heading {
+.new-nav .opencomp {
     background-color: #33485D;
+}
+
+
+.new-nav .opencomp .accordion-heading a > span:last-of-type {
+    color: #F1F1F1;
 }
 
 .new-nav .opencomp .activepage {
@@ -115,7 +120,7 @@
 }
 
 .new-nav .accordion-body a {
-    margin-left: 44px;
+    margin-left: 42px;
 }
 
 .new-nav .accordion-body li.group-bottom {
