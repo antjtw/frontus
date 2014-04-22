@@ -408,6 +408,28 @@ app.controller('CompContactCtrl',
         };
     }
 ]);
+app.controller('InvoiceCtrl',
+               ['$scope', 'SWBrijj', 'payments',
+                '$routeParams', '$location', 'navState',
+    function($scope, SWBrijj, payments,
+             $routeParams, $location, navState) {
+
+        if (!$routeParams.id) $location.url('/app/company/profile');
+        if (navState.role == 'investor') $location.url('/home');
+
+        payments.my_data().then(function(x) {
+            payments.get_invoices(x[0].customer_id, 100).then(function(x) {
+                var matches = x.data.filter(function(el) {
+                    return el.id == $routeParams.id;
+                });
+                if (matches.length == 1) {
+                    $scope.invoice = matches[0];
+                    console.log(matches);
+                }
+            });
+        });
+    }
+]);
 
 app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
