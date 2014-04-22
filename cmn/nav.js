@@ -87,6 +87,15 @@ navm.directive('navbar', function () {
     };
 });
 
+navm.directive('verticalnav', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/cmn/verticalnav.html',
+        controller: 'NavCtrl'
+    };
+});
+
+
 navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter',
     function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter) {
 
@@ -98,6 +107,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 rr.style.display="inline";
             }
         }
+
+        $('.new-nav').affix({
+            offset: {top: 40}
+        });
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
             navState.path = document.location.pathname;
@@ -187,17 +200,28 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
 
         $scope.switchCandP = function (company, url) {
+            console.log(company);
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
                 SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    /* Not quite ready for prime time
+                    navState.company = company.company;
+                    navState.role = company.role;
+                    navState.reasons = $scope.initReasons(company.reasons);
+                    angular.forEach($scope.companies, function(comp) {
+                        if (comp.company == company.company && comp.role == company.role) {
+                            comp.current = true;
+                        }
+                        else {
+                            comp.current = false;
+                        }
+                    }); */
                     $scope.gotoURL(url);
                 });
             }
             else {
-                $scope.gotoURL(url);
+                $scope.gotoPage(url);
             }
-
         };
-
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
             $rootScope.homecollapsed = !$rootScope.homecollapsed;
@@ -235,6 +259,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (company.role == 'investor') {
                     $scope.hasInvest = true;
                 }
+                company.reasondic = $scope.initReasons(company.reasons);
             });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
@@ -496,6 +521,10 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
 
         $scope.pricingregister = function() {
             document.location.href = "/register/company-onestep";
+        };
+
+        $scope.pricingregisterchoose = function(which) {
+            document.location.href = "/register/company-onestep?plan=" + which;
         };
 
     }]);

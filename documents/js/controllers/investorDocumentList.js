@@ -109,7 +109,7 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
             */
         };
 
-        $scope.docStatus = function(doc) {
+        $scope.docStatusa = function(doc) {
             if (doc.last_event) {
                 return doc.last_event.activity +
                        " by " +

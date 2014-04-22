@@ -24,7 +24,7 @@ m.directive('composeMessage', function() {
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true,
-                dialogClass: 'compose-modal wideModal modal'
+                dialogClass: 'compose-modal widerModal modal'
             };
             $scope.select2Options = {
                 'multiple': true,
@@ -87,7 +87,12 @@ m.directive('paymentPlanSelector', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/paymentPlanSelector.html',
-        controller: ['$scope', function($scope) {
+        controller: ['$scope', '$routeParams', function($scope, $routeParams) {
+
+            if ($routeParams.plan) {
+                $scope.selectedPlan = $routeParams.plan;
+            }
+
             $scope.selectPlan = function(p) {
                 if ($scope.selectedPlan == p) {
                     $scope.selectedPlan = null;

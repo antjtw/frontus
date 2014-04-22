@@ -479,7 +479,7 @@ h2 {
 }
 /* Navigation Bar at Top of Page */
 .navBarLoggedIn {
-    height:70px;
+    height:40px !important;
 }
 .navBarLoggedOut {
     height:80px;
@@ -3326,9 +3326,16 @@ button.icon-button:hover {
     width: 540px;
     margin-left: -270px;
 }
+
+.widerModal.modal {
+    width: 600px;
+    margin-left: -300px;
+}
+
 .compose-modal.modal > .modalHeader {
     margin-bottom: 20px;
 }
+
 .compose-modal.modal > div.modalText .input-list > div {
     margin: 0 0 20px 0;
     line-height: 32px;
@@ -3346,7 +3353,7 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list>div>input,
 .compose-modal.modal > div.modalText .input-list>div>textarea {
     float: right;
-    width: 416px;
+    width: 476px;
     margin-right: 0;
 }
 .compose-modal.modal > div.modalText .input-list>div>input {
@@ -3356,7 +3363,7 @@ button.icon-button:hover {
     padding-bottom: 40px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div.select2-container {
-    width: 430px;
+    width: 490px;
 }
 .payment-modal {
     width: 90%;
@@ -3756,7 +3763,10 @@ h2.onboard {
 
 .container.dynamic-page {
     min-width: 1024px;
-    width: 100%;
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin-left: 40px;
     overflow-x: hidden;
 }
 
@@ -3769,6 +3779,7 @@ h2.onboard {
     width: -webkit-calc(100% - 350px);
     width: calc(100% - 350px);
     margin-left: 0;
+    min-height: 300px;
 }
 
 .dynamic-page .leftFullTableBlock {
