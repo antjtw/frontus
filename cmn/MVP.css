@@ -3995,13 +3995,12 @@ div#us_report_button button.us_button_horizontal {
 
 .persistentNotification {
     height: 50px;
-    margin-top: -10px;
     background-color: #FBC68E;
     border-bottom:1px solid #F78D1E;
 }
 .persistentNotification > div > div {
     height: 100%;
-    margin: 0 40px 0 40px;
+    margin: 0 40px 0 60px;
     line-height: 50px;
     vertical-align:middle;
     color: #666666;
