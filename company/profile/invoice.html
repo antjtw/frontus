@@ -1,4 +1,72 @@
 <link type="text/css" rel="stylesheet" href="/company/profile/invoice.css">
 <div class="maincontent openflow">
+    <div class="span6 offset3">
+        <a href="/" class="pull-left">
+            <img class="newreglogo" src="/img/logo-blue.png">
+        </a>
+        <div class="newregTitle pull-right">
+            <span>Invoice</span>
+        </div>
+        <div class="spacer100"></div>
+        Thank you!
+        <div class="spacer30"></div>
+        <hr>
+        <div class="row-fluid">
+            <div class="span6">
+                <div>Issued to:</div>
+                <div>{{navState.name}}</div>
+                <div>{{navState.userid}}</div>
+                <div>company address</div>
+                <div>company address</div>
+            </div>
+            <div class="span6">
+                <div>Issued by:</div>
+                <div>Sharewave</div>
+                <div>sharewave address</div>
+                <div>sharewave address</div>
+            </div>
+        </div>
+        <div class="spacer30"></div>
+        <div class="row-fluid">
+            <div class="span3">
+                <div>Invoice #:</div>
+                <div>Payment Date:</div>
+                <div>Payment Method:</div>
+            </div>
+            <div>
+                <div>{{invoice.id}}</div>
+                <div>{{invoice.date*1000 | date: 'MMMM d, yyyy'}}</div>
+                <div>{{invoice.charge}}</div>
+            </div>
+        </div>
+        <div class="spacer30"></div>
+        <hr>
+        Subscription:
+        <div ng-repeat="item in invoice.lines.data">
+            <div class="pull-left">
+                {{item.plan.id | billingPlans}} {{item.plan.interval}}
+            </div>
+            <div class="pull-right">
+                {{item.amount}}
+            </div>
+        </div>
+        <div class="spacer30"></div>
+        <div class="pull-right row-fluid">
+            <div class="span9"></div>
+            <div class="span2">
+                <div>Subtotal</div>
+                <div>Discount</div>
+                <div>Due</div>
+                <div>Paid</div>
+            </div>
+            <div class="span1">
+                <div>{{invoice.subtotal}}</div>
+                <div>{{invoice.discount || '--'}}</div>
+                <div>{{invoice.amount_due}}</div>
+                <div>{{invoice.paid}}</div>
+            </div>
+        </div>
+
+    </div>
 
 </div>

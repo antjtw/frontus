@@ -419,7 +419,8 @@ app.controller('InvoiceCtrl',
 
         payments.my_data().then(function(x) {
             payments.get_invoices(x[0].customer_id, 100).then(function(x) {
-                var matches = x.data.filter(function(el) {
+                console.log(x);
+                var matches = x.data.data.filter(function(el) {
                     return el.id == $routeParams.id;
                 });
                 if (matches.length == 1) {
