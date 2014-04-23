@@ -78,7 +78,7 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
+<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
 </button>
 <div class="row-fluid">
@@ -291,6 +291,3 @@
 </div>
 
 </div>
-
-
-<div class="push"></div>
