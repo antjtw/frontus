@@ -107,9 +107,13 @@
 <div class="row-fluid" ng-click="resetSideBar();">
     <div class="captable-controls subnav-controls">
         <div>
-            <div class="pull-left" ng-show="issues.length!==0">
-                <div class="standard-button small-standard-button blue">
-                    <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
+            <div class="pull-left back-section">
+                <div class="backbutton" ng-click="gotoPage('/app/ownership/company-status')">
+                    <span data-icon="&#xe033;" aria-hidden="true"></span>
+                </div>
+                <div>
+                    <span>View</span>
+                    <span>Status</span>
                 </div>
             </div>
             <div class="pull-left" ng-show="maintoggle && issues.length!==0" style="margin-left:10px">
@@ -134,6 +138,11 @@
                 <div class="standard-button">
                     <button ng-click="modalUp();" class="btn">Share</span>
                     </button>
+                </div>
+            </div>
+            <div class="pull-right" ng-show="issues.length!==0">
+                <div class="standard-button small-standard-button blue">
+                    <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
                 </div>
             </div>
         </div>

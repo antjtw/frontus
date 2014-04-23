@@ -1014,6 +1014,54 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #666666;
     line-height: 16px;
 }
+
+.subnav-controls .back-section {
+    width: 160px;
+}
+
+.subnav-controls .back-section > div:last-of-type {
+    text-align: left;
+    display: inline-block;
+    width: 100px;
+    float: left;
+    margin-left: 20px;
+}
+
+.subnav-controls .back-section > div:last-of-type > span {
+    line-height: 16px;
+    display: block;
+}
+
+.subnav-controls .back-section > div:last-of-type > span:last-of-type {
+    line-height: 16px;
+    display: block;
+    color: #666666;
+}
+
+.subnav-controls .backbutton {
+    width: 40px;
+    height: 40px;
+    float: left;
+    border-radius: 20px;
+    background-color: #E3E3E3;
+    display: inline-block;
+    margin-top: -4px;
+    cursor: pointer;
+}
+
+.subnav-controls .backbutton > span {
+
+}
+
+.subnav-controls .backbutton > span:before {
+    font-size: 26px;
+    line-height: 38px;
+}
+
+.subnav-controls .backbutton:hover > span:before {
+    color: #FFFFFF;
+}
+
 .doc-title {
     display: inline-block;
     white-space: nowrap;
