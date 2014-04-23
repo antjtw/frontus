@@ -359,6 +359,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
         };
 
+        $scope.doLogout = function() {
+            SWBrijj.logout().then(function(x) {
+                void(x);
+                document.location.href='/?logout';
+            });
+        };
+
         $scope.gotohome = function() {
             if ($rootScope.companies.length == 0) {
                 location.href = '/';
@@ -475,7 +482,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-        }
+        };
 
         $scope.actionablenotes = function(notes, type) {
             var notifications = [];
