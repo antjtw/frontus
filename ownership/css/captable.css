@@ -1753,11 +1753,11 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 /* The Tour itself */
 
-.tableView.captable tr:nth-child(4) td > span {
+.tableView.captable tr:nth-child(3) td > span {
     position: relative;
 }
 
-.tableView.captable tr:nth-child(4) td > span.box-highlight:before {
+.tableView.captable tr:nth-child(3) td > span.box-highlight:before {
     display: inline-block;
     position: absolute;
     left: 0;
@@ -1774,7 +1774,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: none;
 }
 
-.tableView.captable tr:nth-child(4) td > span.box-highlight > span.next-button {
+.tableView.captable tr:nth-child(3) td > span.box-highlight > span.next-button {
     display: inline-block;
     position: absolute;
     right: -162px;
@@ -1891,11 +1891,11 @@ div.capGuide.global.issue-rail .next-button {
     border-bottom-left-radius: 3px;
 }
 
-.tableView.captable tr:nth-child(4) td .next-button {
+.tableView.captable tr:nth-child(3) td .next-button {
     display: none;
 }
 
-.tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
+.tableView.captable tr:nth-child(3) td:nth-child(4) > span.tran-highlight > .next-button {
     display: inline-block;
     position: absolute;
     right: -146px;
@@ -1918,7 +1918,7 @@ div.capGuide.global.issue-rail .next-button {
     border-bottom-left-radius: 3px;
 }
 
-.tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
+.tableView.captable tr:nth-child(3) td:nth-child(4) > span.tran-highlight:before {
     display: inline-block;
     position: absolute;
     left: 0;
@@ -1933,11 +1933,11 @@ div.capGuide.global.issue-rail .next-button {
 
 
 @-moz-document url-prefix() {
-    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight > .next-button {
+    .tableView.captable tr:nth-child(3) td:nth-child(4) > span.tran-highlight > .next-button {
         bottom: -198px;
     }
 
-    .tableView.captable tr:nth-child(4) td:nth-child(4) > span.tran-highlight:before {
+    .tableView.captable tr:nth-child(3) td:nth-child(4) > span.tran-highlight:before {
         top: 10px;
         height: 172px;
     }
@@ -1947,7 +1947,7 @@ div.capGuide.global.issue-rail .next-button {
 
 span.tour-icon {
     position: absolute;
-    left: -10px;
+    right: -10px;
     top: -10px;
     z-index: 100;
     border-radius: 50%;
@@ -1989,11 +1989,16 @@ span.tour-icon.side-toggle {
 }
 
 span.tour-icon.tour-share + .tooltip {
-    left: -107px !important;
+    left: -20px !important;
+    width: 200px;
+}
+
+span.tour-icon.tour-share + .tooltip > .tooltip-arrow {
+    left: 84%;
 }
 
 span.tour-icon.tour-view + .tooltip {
-    left: 12px !important;
+    left: -5px !important;
     width: 200px;
 }
 
@@ -2005,7 +2010,7 @@ span.tour-icon.side-toggle + .tooltip {
 
 span.tour-icon.issue-cog + .tooltip {
     top: -25px !important;
-    left: -235px !important;
+    left: -205px !important;
 }
 
 /* Select2 Styling */
