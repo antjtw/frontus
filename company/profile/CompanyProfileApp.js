@@ -172,6 +172,9 @@ app.controller('CompContactCtrl',
             }
         };
         $scope.billing = {};
+        $scope.toggleCoupon = function() {
+            $scope.enter_coupon = !$scope.enter_coupon;
+        };
         $scope.update_card = false;
         payments.available_plans().then(function(x) {
             $scope.billing.plans = [];
@@ -227,6 +230,7 @@ app.controller('CompContactCtrl',
                     payments.get_customer($scope.billing.customer_id)
                     .then(function(x) {
                         $scope.billing.current_card = x.data.cards.data[0];
+                        $scope.openModalsFromURL();
                     });
                 } else {
                     if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
@@ -234,12 +238,14 @@ app.controller('CompContactCtrl',
                     } else {
                         $scope.selectedPlan = '002';
                     }
+                    $scope.openModalsFromURL();
                 }
             }).except(function(err) {
                 void(err);
             });
         };
         // this swaps the CC data for a stripe card token
+        // FIXME use coupon code
         $scope.getPaymentToken = function(status, response) {
             if (!$scope.initPaymentModal) return;
             _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
@@ -270,6 +276,7 @@ app.controller('CompContactCtrl',
             }
         };
 
+        // FIXME use coupon code
         $scope.updatePayment = function(status, response) {
             if (!$scope.ccModal) return;
             if (response.error) {
@@ -384,9 +391,6 @@ app.controller('CompContactCtrl',
         $scope.initPaymentModalOpen = function() {
             $scope.initPaymentModal = true;
         };
-        if ($routeParams.setup) {
-            $scope.initPaymentModalOpen();
-        }
         $scope.initPaymentModalClose = function() {
             $scope.initPaymentModal = false;
         };
@@ -406,6 +410,18 @@ app.controller('CompContactCtrl',
         };
         $scope.cancelSubscriptionModalClose = function() {
             $scope.cancelSubscriptionModal = false;
+        };
+        $scope.openModalsFromURL = function() {
+            if ($routeParams.coupon) {
+                $scope.billing.coupon_code = $routeParams.coupon;
+                $scope.toggleCoupon();
+            }
+            if ($routeParams.setup) {
+                $scope.initPaymentModalOpen();
+            } else if ($scope.billing.customer_id
+                       && $scope.billing.coupon_code) {
+                $scope.ccModalOpen();
+            }
         };
     }
 ]);

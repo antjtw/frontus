@@ -3467,18 +3467,32 @@ button.icon-button:hover {
 }
 
 .profile-modal.modal > div.modalText .input-list > div {
-    margin: 0 0 10px 50px;
+    margin: 0 0 10px 0;
+    height: 48px;
+}
+.profile-modal.modal > div.modalText .input-list > div > div {
+    margin-left: 0;
+}
+.profile-modal.modal > div.modalText .input-list > div > div:last-child {
+    margin-left: 20px;
+}
+.profile-modal.modal > div.modalText .input-list > div > div > input {
+    width: 100%;
+    margin: 0;
 }
 .profile-modal.modal > div.modalText .input-list > div > button {
     margin-left: -3px;
+}
+.input-list div.coupon > p {
+    margin-left: 0;
 }
 
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
     text-transform: uppercase;
     font-size: 10px;
     width: 80px;
-    display: inline-block;
-    text-align: right;
+//    display: inline-block;
+//    text-align: right;
     margin-right: 5px;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
@@ -3489,11 +3503,13 @@ button.icon-button:hover {
     float: none;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > input {
-    width: 280px;
+    width: 100%;
 }
 
 .ccmodal .input-list {
     margin-bottom: 20px;
+    height: 200px;
+    height: auto;
 }
 
 .profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {
