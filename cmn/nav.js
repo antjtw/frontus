@@ -96,8 +96,8 @@ navm.directive('verticalnav', function () {
 });
 
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter) {
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter', '$window',
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter, $window) {
 
         $scope.companies = [];
 
@@ -117,6 +117,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($scope.plan) {
                 Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
             }
+            $window.ga('send', 'pageview', { page: $location.path() });
         });
 
         navigator.sayswho= (function(){
