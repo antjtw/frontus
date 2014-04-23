@@ -39,7 +39,7 @@ active.filter('icon', function() {
             if (activity == "sent") return "doc-share";
             else if (activity == "received") return "doc-share";
             else if (activity == "viewed") return "doc-view";
-            else if (activity == "reminder") return "icon-redo";
+            else if (activity == "reminder") return "reminder";
             else if (activity == "edited") return "doc-edit";
             else if (activity == "signed") return "doc-sign";
             else if (activity == "uploaded") return "doc-upload";
