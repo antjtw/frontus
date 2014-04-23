@@ -138,3 +138,30 @@
 .rail-menu > span:before {
     font-size: 22px;
 }
+
+.new-nav.affix-top .nav-bottom-buttons {
+    position: absolute;
+    bottom: 40px;
+}
+
+.new-nav.affix .nav-bottom-buttons {
+    position: absolute;
+    bottom: 0;
+}
+
+.new-nav .nav-bottom-buttons > ul {
+    height: 40px;
+    width: 190px;
+    border-top: 1px solid #33485D;
+}
+
+.new-nav .nav-bottom-buttons > ul > li {
+    line-height: 40px;
+    text-align: center;
+    font-style: italic;
+    color: #A6A6A6;
+}
+
+.new-nav .nav-bottom-buttons > ul > li > span:before {
+    font-size: 10px;
+}
