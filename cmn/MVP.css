@@ -1043,7 +1043,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     height: 40px;
     float: left;
     border-radius: 20px;
-    background-color: #1D2C3C;
+    background-color: #E3E3E3;
     display: inline-block;
     margin-top: -4px;
     cursor: pointer;
