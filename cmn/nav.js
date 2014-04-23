@@ -194,6 +194,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             document.location.href = url;
         };
         $scope.gotoPage = function(page) {
+            console.log(page);
             sessionStorage.clear();
             $location.url(page);
         };
