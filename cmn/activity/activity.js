@@ -151,7 +151,7 @@ active.filter('description', function() {
             }
             if (activity == "sent") return "";
             else if (activity == "viewed") return "Viewed by " + person;
-            else if (activity == "reminder") return "reminded Document";
+            else if (activity == "reminder") return "Reminded " + person;
             else if (activity == "edited") return "Edited by " +person;
             else if (activity == "signed") return "Signed by " +person;
             else if (activity == "uploaded") return "Uploaded by " + person;
