@@ -364,7 +364,7 @@
     <div modal="initPaymentModal"
          close="initPaymentModalClose()"
          options="paymentopts">
-        <div class="modalText initpayment">
+        <div class="modalText initpayment big-input-list">
             <payment-plan-selector></payment-plan-selector>
             <form stripe-form="getPaymentToken" name="initPaymentForm">
                 <fieldset>
@@ -387,21 +387,23 @@
                                    ng-class="initPaymentForm.number.$card.type">
                         </div>
                         <div>
-                            <span>Expiration Date</span>
-                            <input type="text"
-                                   class="input-block-level"
-                                   ng-model="expiry"
-                                   payments-validate="expiry"
-                                   payments-format="expiry"/>
-                        </div>
-                        <div>
-                            <span>CVC</span>
-                            <input type="text"
-                                   class="input-block-level"
-                                   ng-model="cvc"
-                                   payments-validate="cvc"
-                                   payments-format="cvc"
-                                   payments-type-model="type"/>
+                            <div class="span6">
+                                <span>Expiration Date</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="expiry"
+                                       payments-validate="expiry"
+                                       payments-format="expiry"/>
+                            </div>
+                            <div class="span6">
+                                <span>CVC</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="cvc"
+                                       payments-validate="cvc"
+                                       payments-format="cvc"
+                                       payments-type-model="type"/>
+                            </div>
                         </div>
                     </div>
                     <div class="standard-button gray pull-left">

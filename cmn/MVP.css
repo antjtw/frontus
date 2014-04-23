@@ -3414,8 +3414,8 @@ button.icon-button:hover {
     width: 490px;
 }
 .payment-modal {
-    width: 90%;
-    left: 5%;
+    width: 80%;
+    left: 10%;
     margin: 0 auto;
 }
 .payment-modal form {
@@ -3440,7 +3440,7 @@ button.icon-button:hover {
 .payment-modal .initpayment form .input-list > div {
     margin: 0 auto;
     width: 100%;
-    line-height: 30px;
+//    line-height: 30px;
     padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
@@ -3915,6 +3915,9 @@ div#us_report_button button.us_button_horizontal {
     width: 90%;
     height: 240px;
     margin: 20px auto 40px auto;
+}
+.planselector p {
+    margin: 0;
 }
 .newreg.gateway {
     margin-top: 0;

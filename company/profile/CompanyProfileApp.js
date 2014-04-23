@@ -1,6 +1,6 @@
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-         'payments', '$route', '$filter', '$location',
+         'payments', '$route', '$filter', '$location', 'myPayments',
     function($scope, $rootScope, SWBrijj, navState, $routeParams,
              payments, $route, $filter, $location) {
         if (navState.role == 'investor') {
