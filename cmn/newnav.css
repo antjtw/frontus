@@ -138,3 +138,8 @@
 .rail-menu > span:before {
     font-size: 22px;
 }
+
+.new-nav .nav-bottom-buttons {
+    position: absolute;
+    bottom: 0;
+}
