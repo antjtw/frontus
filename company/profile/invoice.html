@@ -1,72 +1,121 @@
 <link type="text/css" rel="stylesheet" href="/company/profile/invoice.css">
-<div class="maincontent openflow">
-    <div class="span6 offset3">
-        <a href="/" class="pull-left">
-            <img class="newreglogo" src="/img/logo-blue.png">
-        </a>
-        <div class="newregTitle pull-right">
-            <span>Invoice</span>
-        </div>
-        <div class="spacer100"></div>
-        Thank you!
-        <div class="spacer30"></div>
-        <hr>
-        <div class="row-fluid">
-            <div class="span6">
-                <div>Issued to:</div>
+<div class="maincontent">
+    <table>
+        <tr>
+            <td colspan="3">
+                <a href="/" class="pull-left">
+                    <img class="newreglogo" src="/img/logo-blue.png">
+                </a>
+            </td>
+            <td colspan="1">
+                <span class="right"><h1>Invoice</h1></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="spacer40"></div>
+                <h1>Thank you!</h1>
+                <div class="spacer30"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div><h2>Issued to:</h2></div>
                 <div>{{navState.name}}</div>
                 <div>{{navState.userid}}</div>
                 <div>company address</div>
                 <div>company address</div>
-            </div>
-            <div class="span6">
-                <div>Issued by:</div>
+            </td>
+            <td colspan="2">
+                <div><h2>Issued by:</h2></div>
                 <div>Sharewave</div>
                 <div>sharewave address</div>
                 <div>sharewave address</div>
-            </div>
-        </div>
-        <div class="spacer30"></div>
-        <div class="row-fluid">
-            <div class="span3">
-                <div>Invoice #:</div>
-                <div>Payment Date:</div>
-                <div>Payment Method:</div>
-            </div>
-            <div>
-                <div>{{invoice.id}}</div>
-                <div>{{invoice.date*1000 | date: 'MMMM d, yyyy'}}</div>
-                <div>{{invoice.charge}}</div>
-            </div>
-        </div>
-        <div class="spacer30"></div>
-        <hr>
-        Subscription:
-        <div ng-repeat="item in invoice.lines.data">
-            <div class="pull-left">
-                {{item.plan.id | billingPlans}} {{item.plan.interval}}
-            </div>
-            <div class="pull-right">
-                {{item.amount}}
-            </div>
-        </div>
-        <div class="spacer30"></div>
-        <div class="pull-right row-fluid">
-            <div class="span9"></div>
-            <div class="span2">
-                <div>Subtotal</div>
-                <div>Discount</div>
-                <div>Due</div>
-                <div>Paid</div>
-            </div>
-            <div class="span1">
-                <div>{{invoice.subtotal}}</div>
-                <div>{{invoice.discount || '--'}}</div>
-                <div>{{invoice.amount_due}}</div>
-                <div>{{invoice.paid}}</div>
-            </div>
-        </div>
+                <div><br></div>
+            </td>
 
-    </div>
-
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="spacer30"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <div><h2>Invoice #:</h2></div>
+                <div><h2>Payment Date:</h2></div>
+                <div><h2>Payment Method:</h2></div>
+                <div class="spacer30">
+            </td>
+            <td colspan="3">
+                <div>
+                    <span class="tall">
+                        {{invoice.id}}
+                    </span>
+                </div>
+                <div>
+                    <span class="tall">
+                        {{invoice.date*1000 | date: 'MMMM d, yyyy'}}
+                    </span>
+                </div>
+                <div>
+                    <span class="tall">
+                        {{invoice.charge || 'N/A'}}
+                    </span>
+                </div>
+                <div class="spacer30">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div><h1>Subscription:</h1></div>
+            </td>
+        </tr>
+        <tr ng-repeat="item in invoice.lines.data">
+            <td colspan="3">
+                <span>
+                    {{item.plan.id | billingPlans}} Plan ({{item.plan.interval | interval}})
+                </span>
+            </td>
+            <td colspan="1">
+                <span class="right">
+                    {{item.amount | currency}}
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="spacer40"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td>
+                <div class="fakefloat">
+                    <span>Subtotal</span>
+                    <span class="right">
+                        {{invoice.subtotal | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Discount</span>
+                    <span class="right">
+                        {{invoice.discount || 0 | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Due</span>
+                    <span class="right">
+                        {{invoice.amount_due | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Paid</span>
+                    <span class="right">
+                        {{amountPaid() | currency}}
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

@@ -303,6 +303,7 @@ app.controller('CompContactCtrl',
             payments.get_invoices($scope.billing.customer_id, 3)
             .then(function(resp) {
                 if (!$scope.billing) {$scope.billing = {};}
+                console.log(resp.data.data);
                 $scope.billing.invoices = resp.data.data.filter(function(el) {
                     return el.amount>0;
                 });
@@ -429,6 +430,14 @@ app.controller('InvoiceCtrl',
                 }
             });
         });
+        $scope.amountPaid = function() {
+            if (!$scope.invoice) return 0;
+            if ($scope.invoice.paid) {
+                return $scope.invoice.total;
+            } else {
+                return 0;
+            }
+        };
     }
 ]);
 
@@ -809,6 +818,23 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
 
     }
 ]);
+
+app.filter('interval', function() {
+    return function(word) {
+        switch(word) {
+            case "day":
+                return "daily";
+            case "week":
+                return "weekly";
+            case "month":
+                return "monthly";
+            case "year":
+                return "annually";
+            default:
+                return null;
+        }
+    };
+});
 
 app.filter('billingPlans', function() {
     return function(plan) {
