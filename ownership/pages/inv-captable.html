@@ -25,7 +25,7 @@
                     <span>TOTAL PAID</span>
                 </td>
             </tr>
-            <tr ng-repeat="row in rows | noUnissue">
+            <tr ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col" ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td class="capsums-col" ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
@@ -37,7 +37,7 @@
                     </span>
                 </td>
             </tr>
-            <tr ng-show="fullview" class="unissued-rows" ng-repeat="row in rows | unissuedrowviewList">
+            <tr ng-repeat="row in rows track by $index" ng-show="fullview && ([row] | unissuedrowviewList).length > 0" class="unissued-rows">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
                 <td class="viewName" ng-class="{hoverable:row.name}">{{row.name}}</td>
@@ -78,7 +78,7 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
+<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
 </button>
 <div class="row-fluid">
@@ -291,6 +291,3 @@
 </div>
 
 </div>
-
-
-<div class="push"></div>

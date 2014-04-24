@@ -225,7 +225,7 @@
                                                     ng-click="switchSignatureFlow(version, 0)">
                                                     Switch to View Only
                                                 </li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted" ng-click="remindDocOpen(version)">Send Reminder</li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-click="viewStatus(doc)">View Status</li>
                                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
@@ -334,7 +334,7 @@
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                                                     ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted" ng-click="remindDocOpen(version)">Send Reminder</li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>

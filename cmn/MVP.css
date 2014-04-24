@@ -2183,6 +2183,7 @@ tr.preparedDoc {
 /* Dynamic shifting of spans */
 .leftTabWindow {
     overflow-x: hidden;
+    padding-bottom: 150px;
 }
 .leftFullTableBlock {
     width: 1017px !important;
