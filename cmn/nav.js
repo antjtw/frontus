@@ -113,12 +113,21 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         });
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
-            navState.path = document.location.pathname;
-            if ($scope.plan) {
-                Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+            if (navState.path != document.location.pathname) {
+                navState.path = document.location.pathname;
+                if ($scope.plan) {
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+                }
+
+                var dataLayer = $window.dataLayer ? $window.dataLayer : [];
+                dataLayer.push({
+                    'event': 'pageview',
+                    'virtualUrl': $location.path()
+                });
+                console.log(dataLayer);
             }
-            $window.ga('send', 'pageview', { page: $location.path() });
         });
+
 
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
@@ -195,7 +204,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             document.location.href = url;
         };
         $scope.gotoPage = function(page) {
-            console.log(page);
             sessionStorage.clear();
             $location.url(page);
         };
