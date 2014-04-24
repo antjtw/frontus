@@ -124,7 +124,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     'event': 'pageview',
                     'virtualUrl': $location.path()
                 });
-                console.log(dataLayer);
             }
         });
 
