@@ -473,18 +473,6 @@
                                        payments-type-model="type"/>
                             </div>
                         </div>
-                        <div ng-if="!enter_coupon" class="coupon">
-                            <p class="pointer"
-                               ng-click="toggleCoupon();">
-                                Click to enter a coupon code.
-                            </p>
-                        </div>
-                        <div ng-if="enter_coupon" class="coupon">
-                            <span>Coupon Code</span>
-                            <input type="text"
-                                   ng-model="billing.coupon_code"
-                                   class="input-block-level">
-                        </div>
                     </div>
                     <div class="standard-button gray pull-left">
                         <button class="btn" ng-click="ccModalClose()">

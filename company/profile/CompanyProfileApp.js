@@ -218,8 +218,6 @@ app.controller('CompContactCtrl',
         $scope.toggleCoupon = function() {
             $scope.enter_coupon = !$scope.enter_coupon;
         };
-        // this swaps the CC data for a stripe card token
-        // FIXME use coupon code
         $scope.getPaymentToken = function(status, response) {
             if (!$scope.initPaymentModal) return;
             _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
@@ -234,7 +232,6 @@ app.controller('CompContactCtrl',
                                        $rootScope.selectedPlan);
             }
         };
-        // FIXME use coupon code
         $scope.updatePayment = function(status, response) {
             if (!$scope.ccModal) return;
             if (response.error) {
