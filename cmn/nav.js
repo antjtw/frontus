@@ -645,8 +645,8 @@ navm.controller('NavCtrl',
             });
         };
         $rootScope.companyIsZombie = function() {
-            console.log("TODO implement companyIsZombie");
-            return true;
+            console.log($rootScope.billing.currentplan == "000" || $rootScope.billing.payment_token == null);
+            return $rootScope.billing.currentplan == "000" || $rootScope.billing.payment_token == null;
         };
     }
 ]);
