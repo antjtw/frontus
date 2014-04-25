@@ -1291,7 +1291,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
                     $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
                 }
-                console.log($rootScope.lastPage);
                 $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
                 $location.url('/app/documents/investor-list');
