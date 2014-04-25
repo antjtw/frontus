@@ -139,6 +139,15 @@ input:focus, textarea:focus {
     cursor: pointer !important;
 }
 /* Tooltips */
+
+.box-button + .tooltip {
+    display: none !important;
+}
+
+.box-button.disabledme + .tooltip {
+    display: inline-block !important;
+}
+
 .tooltip-inner {
     background-color: rgb(30, 45, 61);
     border-radius: 3px;

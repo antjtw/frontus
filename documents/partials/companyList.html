@@ -51,7 +51,10 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="box-button pull-right" ng-class="{selected: uploadModal}" ng-click="documentUploadOpen();">
+                        <div class="box-button pull-right"
+                             ng-class="{selected: uploadModal, 'disabledme': companyIsZombie()}"
+                             ng-click="companyIsZombie() || documentUploadOpen();"
+                             data-placement="bottom" bs-tooltip="zombiemessage">
                             <ul>
                                 <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
                                 </li>
