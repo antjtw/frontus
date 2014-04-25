@@ -38,9 +38,11 @@
                             <input type="text" class="search-box" ng-model="query">
                         </div>
                         <div class="box-button pull-right"
-                             ng-class="{selected:!hideSharebar, 'disabled': companyIsZombie()}"
+                             ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
                              ng-show="documents.length!==0"
-                             ng-click="companyIsZombie() || toggleSide();">
+                             ng-click="companyIsZombie() || toggleSide();"
+                             data-trigger="click"
+                             data-placement="bottom" bs-tooltip="zombiemessage">
                             <ul>
                                 <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 

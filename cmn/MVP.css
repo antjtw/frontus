@@ -971,7 +971,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     width: -webkit-calc(100% - 80px);
     width: calc(100% - 80px);
 }
-.subnav-controls > div > div {
+.subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
 .subnav-controls div.pull-right div.standard-button {
@@ -2230,12 +2230,6 @@ tr.preparedDoc {
 }
 .box-button.selected {
     background-color: white;
-    /*
-    border-top: #C7C7C7 2px solid;
-    border-left: #C7C7C7 2px solid;
-    border-right: #C7C7C7 2px solid;
-    border-bottom: #C7C7C7 2px solid;
-    */
 }
 .box-button.selected:hover {
     background-color: #E3E3E3;
@@ -2253,6 +2247,14 @@ tr.preparedDoc {
 
 .box-button > ul > li:nth-child(2) > span {
     font-size: 10px;
+}
+
+.box-button.disabledme {
+    color: #A6A6A6;
+}
+.box-button.disabledme:hover {
+    cursor: pointer;
+    background-color: inherit;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
