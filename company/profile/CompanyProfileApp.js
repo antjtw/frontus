@@ -171,203 +171,7 @@ app.controller('CompContactCtrl',
                 $scope.$apply();
             }
         };
-        $scope.billing = {};
-        $scope.toggleCoupon = function() {
-            $scope.enter_coupon = !$scope.enter_coupon;
-        };
-        $scope.update_card = false;
-        payments.available_plans().then(function(x) {
-            $scope.billing.plans = [];
-            angular.forEach(x, function(p) {
-                $scope.billing.plans.push(p.plan);
-            });
-            $scope.billing.recommendedPlan = "00" + Math.max(parseInt($scope.billing.plans, 10));
-            if ($scope.billing.currentPlan !== '000') {
-                $scope.billing.plans.push('000');
-            }
-            $scope.get_usage_details();
-        }).except(function(err) {
-            console.log(err);
-        });
-        $scope.get_usage_details = function() {
-            payments.usage_details().then(function(x) {
-                if (x.length === 0) {
-                    $scope.get_hypothetical_usage_details(
-                        $scope.billing.recommendedPlan);
-                } else {
-                    $scope.billing.usage = x[0];
-                }
-                $scope.get_payment_data();
-            }).except(function(err) {
-                console.log(err);
-            });
-        };
-        $scope.get_hypothetical_usage_details = function(p) {
-            payments.usage_grid(p)
-            .then(function(x) {
-                console.log(x);
-                $scope.billing.usage = x;
-            }).except(function(err) {
-                console.log(err);
-                $scope.billing.usage = null;
-            });
-        };
-        $scope.set_usage_details = function(p, doc_limit,
-                                            admin_limit, msg_limit) {
-            $scope.billing.usage.plan = p;
-            $scope.billing.usage.documents_total_limit = doc_limit;
-            $scope.billing.usage.admins_total_limit = admin_limit;
-            $scope.billing.usage.direct_messages_monthly_limit = msg_limit;
-        };
-        $scope.get_payment_data = function() {
-            payments.my_data().then(function(data) {
-                if (data.length > 0) {
-                    $scope.billing.currentPlan =
-                        $scope.selectedPlan = data[0].plan || '000';
-                    $scope.billing.customer_id = data[0].customer_id;
-                    $scope.billing.payment_token = data[0].cc_token;
-                    $scope.load_invoices();
-                    payments.get_customer($scope.billing.customer_id)
-                    .then(function(x) {
-                        $scope.billing.current_card = x.data.cards.data[0];
-                        $scope.openModalsFromURL();
-                    });
-                } else {
-                    if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
-                        $scope.selectedPlan = $scope.billing.recommendedPlan;
-                    } else {
-                        $scope.selectedPlan = '002';
-                    }
-                    $scope.openModalsFromURL();
-                }
-            }).except(function(err) {
-                void(err);
-            });
-        };
-        // this swaps the CC data for a stripe card token
-        // FIXME use coupon code
-        $scope.getPaymentToken = function(status, response) {
-            if (!$scope.initPaymentModal) return;
-            _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
-            if (response.error) {
-                console.log(response);
-                $scope.$emit("notification:fail",
-                             "Invalid credit card. Please try again.");
-                _kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
-            } else {
-                $scope.payment_token = response.id;
-                $scope.create_customer($scope.payment_token,
-                                       $scope.selectedPlan);
-            }
-        };
-        $scope.showSelectedPlan = function(p) {
-            if (p == $scope.billing.currentPlan && p == "000") {
-                return "Subscription Cancelled";
-            } else {
-                return $filter('billingPlans')(p);
-            }
-        };
-        $scope.nextInvoice = function() {
-            if ($scope.billing && $scope.billing.next_invoice_received) {
-                return $scope.billing.invoices &&
-                    $scope.billing.invoices[$scope.billing.invoices.length-1];
-            } else {
-                return false;
-            }
-        };
 
-        // FIXME use coupon code
-        $scope.updatePayment = function(status, response) {
-            if (!$scope.ccModal) return;
-            if (response.error) {
-                console.log(response);
-                $scope.$emit("notification:fail",
-                             "Invalid credit card. Please try again.");
-            } else {
-                $scope.billing.payment_token = response.id;
-                if ($scope.billing.customer_id) {
-                    payments.update_payment($scope.billing.payment_token)
-                    .then(function(x) {
-                        if (x[1][0] !== 1) {
-                            $scope.$emit("notification:fail",
-                             "Oops, something went wrong. Please try again.");
-                        } else {
-                            $scope.$emit("notification:success",
-                                         "Processing new credit card");
-                            $scope.ccModalClose();
-                        }
-                    }).except(function(err) {
-                        console.log(err);
-                    });
-                } else {
-                    $scope.$emit("notification:success",
-                                 "Credit Card Verified");
-                    $scope.ccModalClose();
-                }
-            }
-        };
-        $scope.load_invoices = function() {
-            payments.get_invoices($scope.billing.customer_id, 3)
-            .then(function(resp) {
-                if (!$scope.billing) {$scope.billing = {};}
-                console.log(resp.data.data);
-                $scope.billing.invoices = resp.data.data.filter(function(el) {
-                    return el.amount>0;
-                });
-                if ($scope.billing.currentPlan!=="000") {
-                    //$scope.load_upcoming_invoice();
-                }
-            });
-        };
-        $scope.load_upcoming_invoice = function() {
-            payments.get_upcoming_invoice($scope.billing.customer_id)
-            .then(function(resp) {
-                $scope.billing.invoices.push(resp.data);
-                $scope.billing.next_invoice_received = true;
-            });
-        };
-        $scope.updateSubscription = function() {
-            var newplan = $scope.selectedPlan;
-            if (newplan == "000") {
-                _kmq.push(['record', 'Subscription Cancelled']);
-            } else {
-                _kmq.push(['record', 'Subscription Modified']);
-            }
-            payments.update_subscription(newplan)
-            .then(function(x) {
-                if (x[1][0] !== 1) {
-                    $scope.$emit("notification:fail",
-                                 "Oops, please try again.");
-                } else if ($scope.selectedPlan=='000') {
-                    $scope.$emit("notification:success",
-                                 "Subscription cancelled");
-                    $scope.set_usage_details('000', 0, 0, 0);
-                } else {
-                    $scope.$emit("notification:success",
-                                 "Payment plan update submitted.");
-                    $scope.billing.currentPlan = $scope.selectedPlan;
-                    $scope.get_hypothetical_usage_details($scope.selectedPlan);
-                }
-            }).except(function(err) {
-            });
-        };
-        $scope.create_customer = function(newcc, newplan) {
-            payments.create_customer(newplan, newcc)
-            .then(function(data) {
-                if (data.length==2) {
-                    $location.url("/app/home/company");
-                    $scope.$emit("notification:success",
-                                 "Processing billing information");
-                    $scope.initPaymentModalClose();
-                    $rootScope.persistentNotification = false;
-                } else {
-                    $scope.$emit("notification:fail",
-                             "Oops, something went wrong. Please try again.");
-                }
-            }).except(function(err) {
-                console.log(err);
-            });
-        };
         $scope.paymentPlanModalOpen = function() {
             $scope.paymentPlanModal = true;
         };
@@ -376,7 +180,7 @@ app.controller('CompContactCtrl',
         };
         $scope.paymentPlanModalFieldCheck = function() {
             return !($scope.selectedPlan &&
-                $scope.selectedPlan != $scope.billing.currentPlan);
+                $scope.selectedPlan != $rootScope.billing.currentPlan);
         };
         $scope.ccModalOpen = function() {
             $scope.ccModal = true;
@@ -411,15 +215,114 @@ app.controller('CompContactCtrl',
         $scope.cancelSubscriptionModalClose = function() {
             $scope.cancelSubscriptionModal = false;
         };
+        $scope.toggleCoupon = function() {
+            $scope.enter_coupon = !$scope.enter_coupon;
+        };
+        // this swaps the CC data for a stripe card token
+        // FIXME use coupon code
+        $scope.getPaymentToken = function(status, response) {
+            if (!$scope.initPaymentModal) return;
+            _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+                _kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
+            } else {
+                $scope.payment_token = response.id;
+                $scope.create_customer($scope.payment_token,
+                                       $scope.selectedPlan);
+            }
+        };
+        // FIXME use coupon code
+        $scope.updatePayment = function(status, response) {
+            if (!$scope.ccModal) return;
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                $rootScope.billing.payment_token = response.id;
+                if ($rootScope.billing.customer_id) {
+                    payments.update_payment($rootScope.billing.payment_token)
+                    .then(function(x) {
+                        if (x[1][0] !== 1) {
+                            $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                        } else {
+                            $scope.$emit("notification:success",
+                                         "Processing new credit card");
+                            $scope.ccModalClose();
+                        }
+                    }).except(function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Credit Card Verified");
+                    $scope.ccModalClose();
+                }
+            }
+        };
+        $scope.updateSubscription = function() {
+            var newplan = $scope.selectedPlan;
+            if (newplan == "000") {
+                _kmq.push(['record', 'Subscription Cancelled']);
+            } else {
+                _kmq.push(['record', 'Subscription Modified']);
+            }
+            payments.update_subscription(newplan)
+            .then(function(x) {
+                if (x[1][0] !== 1) {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please try again.");
+                } else if ($scope.selectedPlan=='000') {
+                    $scope.$emit("notification:success",
+                                 "Subscription cancelled");
+                    $scope.set_usage_details('000', 0, 0, 0);
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Payment plan update submitted.");
+                    $rootScope.billing.currentPlan = $scope.selectedPlan;
+                    $rootScope.get_hypothetical_usage_details($scope.selectedPlan);
+                }
+            }).except(function(err) {
+            });
+        };
+        $scope.create_customer = function(newcc, newplan) {
+            payments.create_customer(newplan, newcc)
+            .then(function(data) {
+                if (data.length==2) {
+                    $location.url("/app/home/company");
+                    $scope.$emit("notification:success",
+                                 "Processing billing information");
+                    $scope.initPaymentModalClose();
+                    $rootScope.persistentNotification = false;
+                } else {
+                    $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                }
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.showSelectedPlan = function(p) {
+            if (p == $rootScope.billing.currentPlan && p == "000") {
+                return "Subscription Cancelled";
+            } else {
+                return $filter('billingPlans')(p);
+            }
+        };
+        $scope.$on('openPaymentModals', $scope.openModalsfromURL);
         $scope.openModalsFromURL = function() {
             if ($routeParams.coupon) {
-                $scope.billing.coupon_code = $routeParams.coupon;
+                $rootScope.billing.coupon_code = $routeParams.coupon;
                 $scope.toggleCoupon();
             }
             if ($routeParams.setup) {
                 $scope.initPaymentModalOpen();
-            } else if ($scope.billing.customer_id
-                       && $scope.billing.coupon_code) {
+            } else if ($rootScope.billing.customer_id
+                       && $rootScope.billing.coupon_code) {
                 $scope.ccModalOpen();
             }
         };

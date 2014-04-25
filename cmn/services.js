@@ -72,37 +72,42 @@ service.factory('payments', function($http, SWBrijj) {
     return s;
 });
 
-service.service('myPayments', function(payments) {
-    this.data = {};
+service.factory('myPayments', function($q, payments) {
     var d = {};
     // TODO these must return promises
     // so where are results accumulated/published?
     var loadPlans = function() {
             return payments
-                    .available_plans()
-                    .then(function(x)
-                    {
-                        d.plans = [];
-                        angular.forEach(x, function(p) {
-                            d.plans.push(p.plan);
-                        });
-                        d.recommendedPlan
-                            = "00" + Math.max(parseInt(d.plans, 10));
-                        return null;
-                    });
+                    .available_plans();
+        },
+        handlePlans = function(x) {
+            var deferred = $q.defer();
+
+            try {
+                d.plans = [];
+                angular.forEach(x, function(p) {
+                    d.plans.push(p.plan);
+                });
+                d.recommendedPlan = "00" + Math.max(parseInt(d.plans, 10));
+                deferred.resolve();
+            } catch(e) {
+                deferred.reject(e);
+            }
+
+            return deferred.promise;
         },
         loadUsage = function() {
             return payments
-                    .usage_details()
-                    .then(function(x)
-                    {
-                        if (x.length === 0) {
-                            loadSpecifiedUsage(d.recommendedPlan);
-                        } else {
-                            d.usage = x[0];
-                        }
-                        return x;
-                    });
+                    .usage_details().then(handleUsage);
+        },
+        handleUsage = function(x) {
+            var deferred = $q.defer();
+            if (x.length === 0) {
+                loadSpecifiedUsage(d.recommendedPlan);
+            } else {
+                d.usage = x[0];
+            }
+            return deferred.resolve();
         },
         loadSpecifiedUsage = function(p) {
             return payments
@@ -114,10 +119,10 @@ service.service('myPayments', function(payments) {
         },
         loadUserPaymentData = function() {
             return payments
-                    .my_data()
+                    .my_data;
+                        /*
                     .then(function(x)
                     {
-                        /*
                         if (data.length > 0) {
                             $scope.billing.currentPlan =
                                 $scope.selectedPlan = data[0].plan || '000';
@@ -138,8 +143,8 @@ service.service('myPayments', function(payments) {
                             $scope.openModalsFromURL();
                         }
                         
-                        */
                     });
+                        */
         },
         loadCustomerInvoices = function() {
             return payments.get_invoices();
@@ -151,9 +156,13 @@ service.service('myPayments', function(payments) {
         
 
     loadPlans()
+        //.then( handlePlans )
         .then( loadUsage )
+        //.then( handleUsage )
         .then( loadUserPaymentData )
         .then( loadCustomerInvoices )
         .then( broadcastResults );
+
+    return d;
 
 });

@@ -96,9 +96,12 @@ navm.directive('verticalnav', function () {
 });
 
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter) {
-
+navm.controller('NavCtrl',
+                ['$scope', '$route', '$rootScope', 'SWBrijj', '$q',
+                 'navState', '$location', '$filter', 'payments',
+    function($scope, $route, $rootScope, SWBrijj, $q,
+             navState, $location, $filter, payments)
+    {
         $scope.companies = [];
 
         if (location.host=='share.wave' || navState.tester) {
@@ -475,7 +478,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-        }
+        };
 
         $scope.actionablenotes = function(notes, type) {
             var notifications = [];
@@ -491,7 +494,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
             });
-            return notifications
+            return notifications;
         };
 
         var idleTime = 0;
@@ -527,7 +530,110 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             document.location.href = "/register/company-onestep?plan=" + which;
         };
 
-    }]);
+        $rootScope.billing = {};
+        $rootScope.update_card = false;
+        payments.available_plans().then(function(x) {
+            $rootScope.billing.plans = [];
+            angular.forEach(x, function(p) {
+                $rootScope.billing.plans.push(p.plan);
+            });
+            $rootScope.billing.recommendedPlan
+                = "00" + Math.max(parseInt($rootScope.billing.plans, 10));
+            if ($rootScope.billing.currentPlan !== '000') {
+                $rootScope.billing.plans.push('000');
+            }
+            $rootScope.get_usage_details();
+        }).except(function(err) {
+            console.log(err);
+        });
+        $rootScope.get_usage_details = function() {
+            payments.usage_details().then(function(x) {
+                if (x.length === 0) {
+                    $rootScope.get_hypothetical_usage_details(
+                        $rootScope.billing.recommendedPlan);
+                } else {
+                    $rootScope.billing.usage = x[0];
+                }
+                $rootScope.get_payment_data();
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $rootScope.get_hypothetical_usage_details = function(p) {
+            payments.usage_grid(p)
+            .then(function(x) {
+                console.log(x);
+                $rootScope.billing.usage = x;
+            }).except(function(err) {
+                console.log(err);
+                $rootScope.billing.usage = null;
+            });
+        };
+        $rootScope.set_usage_details = function(p, doc_limit,
+                                            admin_limit, msg_limit) {
+            $rootScope.billing.usage.plan = p;
+            $rootScope.billing.usage.documents_total_limit = doc_limit;
+            $rootScope.billing.usage.admins_total_limit = admin_limit;
+            $rootScope.billing.usage.direct_messages_monthly_limit = msg_limit;
+        };
+        $rootScope.get_payment_data = function() {
+            payments.my_data().then(function(data) {
+                if (data.length > 0) {
+                    $rootScope.billing.currentPlan =
+                        $rootScope.selectedPlan = data[0].plan || '000';
+                    $rootScope.billing.customer_id = data[0].customer_id;
+                    $rootScope.billing.payment_token = data[0].cc_token;
+                    $rootScope.load_invoices();
+                    payments.get_customer($rootScope.billing.customer_id)
+                    .then(function(x) {
+                        $rootScope.billing.current_card = x.data.cards.data[0];
+                        $rootScope.openModalsFromURL();
+                    });
+                } else {
+                    if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
+                        $rootScope.selectedPlan = $rootScope.billing.recommendedPlan;
+                    } else {
+                        $rootScope.selectedPlan = '002';
+                    }
+                    $rootScope.$broadcast('openPaymentModals');
+                }
+            }).except(function(err) {
+                void(err);
+            });
+        };
+        $rootScope.nextInvoice = function() {
+            if ($rootScope.billing && $rootScope.billing.next_invoice_received) {
+                return $rootScope.billing.invoices &&
+                    $rootScope.billing.invoices[$rootScope.billing.invoices.length-1];
+            } else {
+                return false;
+            }
+        };
+        $rootScope.load_invoices = function() {
+            payments.get_invoices($rootScope.billing.customer_id, 3)
+            .then(function(resp) {
+                if (!$rootScope.billing) {$rootScope.billing = {};}
+                console.log(resp.data.data);
+                $rootScope.billing.invoices = resp.data.data.filter(function(el) {
+                    return el.amount>0;
+                });
+                if ($rootScope.billing.currentPlan!=="000") {
+                    //$scope.load_upcoming_invoice();
+                }
+            });
+        };
+        $rootScope.load_upcoming_invoice = function() {
+            payments.get_upcoming_invoice($rootScope.billing.customer_id)
+            .then(function(resp) {
+                $rootScope.billing.invoices.push(resp.data);
+                $rootScope.billing.next_invoice_received = true;
+            });
+        };
+        $rootScope.companyIsZombie = function() {
+            return true;
+        };
+    }
+]);
 
 
 function caplength(word, length) {
