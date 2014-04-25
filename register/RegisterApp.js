@@ -120,8 +120,8 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$locatio
             SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password,
                                              $scope.pname, $scope.cname,
                                              $scope.payment_token,
-                                             $scope.coupon_code,
-                                             $scope.selectedPlan
+                                             $scope.selectedPlan,
+                                             $scope.coupon_code
             ).then(function(registered) {
                 if (registered) {
                     document.location.href = registered + "?msg=first";
