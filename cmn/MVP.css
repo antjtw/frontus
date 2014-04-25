@@ -604,9 +604,13 @@ ul.nav-logo > li > a > img {
     text-align: center;
 }
 
+.topnav .nav.content-pages {
+}
+
 .topnav .nav.content-pages > li > a {
     text-align: center;
-    width: 140px;
+    padding: 0 20px;
+    width: auto;
     height: 40px;
     line-height: 40px;
     margin-top: 20px;
