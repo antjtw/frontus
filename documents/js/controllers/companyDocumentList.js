@@ -47,13 +47,13 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         var loaded_once = false;
         $scope.$on("profile_loaded", function() {
             if (loaded_once) {return;}
+            loaded_once = true;
             SWBrijj.tblm('account.my_signature', ['signature']
             ).then(function(x) {
                 if (x && x[0] && x[0].signature && x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
                 $scope.loadSmartDocuments();
-                loaded_once = true;
             }).except(function(x) {
                 console.log(x);
             });
