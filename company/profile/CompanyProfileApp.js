@@ -1,6 +1,6 @@
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-         'payments', '$route', '$filter', '$location', 'myPayments',
+         'payments', '$route', '$filter', '$location',
     function($scope, $rootScope, SWBrijj, navState, $routeParams,
              payments, $route, $filter, $location) {
         if (navState.role == 'investor') {
@@ -179,8 +179,8 @@ app.controller('CompContactCtrl',
             $scope.paymentPlanModal = false;
         };
         $scope.paymentPlanModalFieldCheck = function() {
-            return !($scope.selectedPlan &&
-                $scope.selectedPlan != $rootScope.billing.currentPlan);
+            return !($rootScope.selectedPlan &&
+                $rootScope.selectedPlan != $rootScope.billing.currentPlan);
         };
         $scope.ccModalOpen = function() {
             $scope.ccModal = true;
@@ -201,13 +201,13 @@ app.controller('CompContactCtrl',
         $scope.initPaymentModalFieldCheck = function() {
             var fs = angular.element('form[name="initPaymentForm"]').scope();
             return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
-                     $scope.selectedPlan);
+                     $rootScope.selectedPlan);
         };
         $scope.cancelSubscriptionModalOpen = function() {
             $scope.cancelSubscriptionModal = true;
         };
         $scope.cancelSubscription = function() {
-            $scope.selectedPlan = '000';
+            $rootScope.selectedPlan = '000';
             $scope.updateSubscription();
             $scope.cancelSubscriptionModalClose();
 
@@ -231,7 +231,7 @@ app.controller('CompContactCtrl',
             } else {
                 $scope.payment_token = response.id;
                 $scope.create_customer($scope.payment_token,
-                                       $scope.selectedPlan);
+                                       $rootScope.selectedPlan);
             }
         };
         // FIXME use coupon code
@@ -265,7 +265,7 @@ app.controller('CompContactCtrl',
             }
         };
         $scope.updateSubscription = function() {
-            var newplan = $scope.selectedPlan;
+            var newplan = $rootScope.selectedPlan;
             if (newplan == "000") {
                 _kmq.push(['record', 'Subscription Cancelled']);
             } else {
@@ -276,15 +276,15 @@ app.controller('CompContactCtrl',
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
-                } else if ($scope.selectedPlan=='000') {
+                } else if ($rootScope.selectedPlan=='000') {
                     $scope.$emit("notification:success",
                                  "Subscription cancelled");
-                    $scope.set_usage_details('000', 0, 0, 0);
+                    $rootScope.set_usage_details('000', 0, 0, 0);
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
-                    $rootScope.billing.currentPlan = $scope.selectedPlan;
-                    $rootScope.get_hypothetical_usage_details($scope.selectedPlan);
+                    $rootScope.billing.currentPlan = $rootScope.selectedPlan;
+                    $rootScope.get_hypothetical_usage_details($rootScope.selectedPlan);
                 }
             }).except(function(err) {
             });

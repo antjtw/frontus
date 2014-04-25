@@ -87,24 +87,25 @@ m.directive('paymentPlanSelector', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/paymentPlanSelector.html',
-        controller: ['$scope', '$routeParams', function($scope, $routeParams) {
+        controller: ['$scope', '$rootScope', '$routeParams',
+        function($scope, $rootScope, $routeParams) {
 
             if ($routeParams.plan) {
-                $scope.selectedPlan = $routeParams.plan;
+                $rootScope.selectedPlan = $routeParams.plan;
             }
 
             $scope.selectPlan = function(p) {
-                if ($scope.selectedPlan == p) {
-                    $scope.selectedPlan = null;
+                if ($rootScope.selectedPlan == p) {
+                    $rootScope.selectedPlan = null;
                 } else {
-                    if ($scope.billing) {
-                        if ($scope.billing.plans.indexOf(p)!==-1) {
-                            $scope.selectedPlan = p;
+                    if ($rootScope.billing) {
+                        if ($rootScope.billing.plans.indexOf(p)!==-1) {
+                            $rootScope.selectedPlan = p;
                         } else {
                             console.log(p);
                         }
                     } else {
-                        $scope.selectedPlan = p;
+                        $rootScope.selectedPlan = p;
                     }
                 }
             };
