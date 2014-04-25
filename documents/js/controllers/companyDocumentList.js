@@ -1186,17 +1186,19 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             });
             var regExp = /\(([^)]+)\)/;
             angular.forEach(people, function(person) {
-                var email;
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                email = matches[1];
-                if (!re.test(email)) {
-                    anybad = true;
-                }
-                if (investors.indexOf(person)!==-1) {
-                    anybad = true;
+                if (person.length != 1) {
+                    var email;
+                    var matches = regExp.exec(person);
+                    if (matches === null) {
+                        matches = ["", person];
+                    }
+                    email = matches[1];
+                    if (!re.test(email)) {
+                        anybad = true;
+                    }
+                    if (investors.indexOf(person)!==-1) {
+                        anybad = true;
+                    }
                 }
             });
             if (people && people.length === 0) {
@@ -1204,7 +1206,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
             if (compare) {
                 docsharestateCOPY = angular.copy($scope.docShareState);
-                if (anybad && !old_failed && people && docs) {
+                if (anybad && !old_failed && people.length > 0 && docs) {
                     $scope.$emit("notification:fail", "Oops, recipients have already received these documents.");
                 }
             }
