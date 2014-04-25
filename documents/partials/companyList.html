@@ -38,10 +38,9 @@
                             <input type="text" class="search-box" ng-model="query">
                         </div>
                         <div class="box-button pull-right"
-                             ng-class="{selected:!hideSharebar}"
+                             ng-class="{selected:!hideSharebar, 'disabled': companyIsZombie()}"
                              ng-show="documents.length!==0"
-                             ng-disabled="companyIsZombie()"
-                             ng-click="toggleSide();">
+                             ng-click="companyIsZombie() || toggleSide();">
                             <ul>
                                 <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
