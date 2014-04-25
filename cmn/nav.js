@@ -97,9 +97,9 @@ navm.directive('verticalnav', function () {
 
 
 navm.controller('NavCtrl',
-                ['$scope', '$route', '$rootScope', 'SWBrijj', '$q',
+                ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
                  'navState', '$location', '$filter', 'payments',
-    function($scope, $route, $rootScope, SWBrijj, $q,
+    function($scope, $route, $rootScope, SWBrijj, $q, '$window',
              navState, $location, $filter, payments)
     {
         $scope.companies = [];
@@ -116,11 +116,20 @@ navm.controller('NavCtrl',
         });
 
         $scope.$on('$routeChangeSuccess', function(current, previous) {
-            navState.path = document.location.pathname;
-            if ($scope.plan) {
-                Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+            if (navState.path != document.location.pathname) {
+                navState.path = document.location.pathname;
+                if ($scope.plan) {
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+                }
+
+                var dataLayer = $window.dataLayer ? $window.dataLayer : [];
+                dataLayer.push({
+                    'event': 'pageview',
+                    'virtualUrl': $location.path()
+                });
             }
         });
+
 
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
@@ -197,7 +206,6 @@ navm.controller('NavCtrl',
             document.location.href = url;
         };
         $scope.gotoPage = function(page) {
-            console.log(page);
             sessionStorage.clear();
             $location.url(page);
         };
@@ -360,6 +368,13 @@ navm.controller('NavCtrl',
                     void(x);
                     document.location.href = "/login/?error=" + x.message;
                 });
+        };
+
+        $scope.doLogout = function() {
+            SWBrijj.logout().then(function(x) {
+                void(x);
+                document.location.href='/?logout';
+            });
         };
 
         $scope.gotohome = function() {
