@@ -543,17 +543,34 @@
                         <span>Status</span>
                     </div>
                 </div>
-                <div class="pull-right">
+                <div class="box-button pull-right"
+                     ng-class="{'disabledme': companyIsZombie()}"
+                     ng-click="companyIsZombie() || modalUp();"
+                     id='a_own_tour_share_subnav'
+                     data-placement="bottom" bs-tooltip="zombiemessage">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" data-placement="bottom" bs-tooltip="tourmessages.share"><span>?</span></span>
-                    <div class="standard-button">
-                        <button id='a_own_tour_share_subnav' ng-click="modalUp();" class="btn">Share</button>
-                    </div>
+                    <ul>
+                        <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+
+                        </li>
+                        <li> <span>Share</span>
+
+                        </li>
+                    </ul>
                 </div>
-                <div class="pull-right">
+
+                <div class="box-button pull-right"
+                     ng-class="{'disabledme': companyIsZombie()}"
+                     ng-click="companyIsZombie() || editViewToggle();"
+                     data-placement="bottom" bs-tooltip="zombiemessage">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
-                    <div class="standard-button small-standard-button blue">
-                        <button class="btn" ng-click="editViewToggle();">{{radioModel}}</button>
-                    </div>
+                    <ul>
+                        <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                        </li>
+                        <li> <span>{{radioModel}}</span>
+
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="DivHelper"></div>
