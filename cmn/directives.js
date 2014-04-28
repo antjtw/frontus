@@ -93,6 +93,9 @@ m.directive('paymentPlanSelector', function() {
             if ($routeParams.plan) {
                 $rootScope.selectedPlan = $routeParams.plan;
             }
+            $rootScope.$watch('selectedPlan', function(){
+                $scope.selectedPlan = $rootScope.selectedPlan;
+            });
 
             $scope.selectPlan = function(p) {
                 if ($rootScope.selectedPlan == p) {

@@ -655,8 +655,6 @@ navm.controller('NavCtrl',
             if ($rootScope.billing && $rootScope.billing.usage) {
                 var num = $rootScope.billing.usage.documents_total+numNew;
                 var lim = $rootScope.billing.usage.documents_total_limit;
-                console.log("num: "+num);
-                console.log("lim: "+lim);
                 return num > lim;
             } else {
                 return null;
