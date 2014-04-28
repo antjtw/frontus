@@ -357,6 +357,9 @@ app.controller('InvoiceCtrl',
                 return 0;
             }
         };
+        $scope.print = function() {
+            window.print();
+        };
     }
 ]);
 
@@ -761,13 +764,13 @@ app.filter('billingPlans', function() {
             case '000':
                 return "Cancel Subscription";
             case '001':
-                return "Seed";
+                return "Seed ($9 / month)";
             case '002':
-                return "Startup";
+                return "Startup ($29 / month)";
             case '003':
-                return "Growth";
+                return "Growth ($99 / month)";
             case '004':
-                return "Established";
+                return "Established ($199 / month)";
             default:
                 return "Unknown Plan";
         }

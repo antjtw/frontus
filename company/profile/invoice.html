@@ -3,20 +3,27 @@
     <table>
         <tr>
             <td colspan="3">
-                <!-- FIXME it prints the '/' -->
-                <a href="/" class="pull-left">
-                    <img class="newreglogo" src="/img/logo-blue.png">
-                </a>
+                <img class="newreglogo pointer"
+                     src="/img/logo-blue.png">
             </td>
             <td colspan="1">
                 <span class="right"><h1>Invoice</h1></span>
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="3">
                 <div class="spacer40"></div>
                 <h1>Thank you!</h1>
                 <div class="spacer30"></div>
+            </td>
+            <td colspan="1">
+                <div class="right">
+                    <span class="blue hideWhenPrint pointer"
+                          ng-click="print()"
+                          id="ga_print_invoice">
+                        Print
+                    </span>
+                </div>
             </td>
         </tr>
         <tr>
