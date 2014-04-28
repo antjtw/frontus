@@ -11,10 +11,18 @@
                         <input type="text" class="search-box" ng-model="filterText">
                     </div>
                     <compose-message/></compose-message>
-                    <div class="pull-right">
-                        <div class='standard-button darkgray'>
-                            <button class="btn" ng-click="adminModalOpen()">Add Person</button>
-                        </div>
+
+                    <div class="box-button pull-right"
+                         ng-class="{'disabledme': companyIsZombie()}"
+                         ng-click="companyIsZombie() || adminModalOpen();"
+                         data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                            </li>
+                            <li> <span>Add Person</span>
+
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="DivHelper"></div>
