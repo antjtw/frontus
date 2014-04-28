@@ -5,6 +5,7 @@ navbar, verticalnav, #us_report_button {
 
 .maincontent * {
     float: none !important;
+    color: #666666;
 }
 
 .maincontent {
@@ -47,4 +48,12 @@ div.fakefloat > span:last-child {
 }
 .tall {
     line-height: 26px;
+}
+.blue {
+    color: #3498db;
+}
+@media print {
+    .hideWhenPrint {
+        display: none !important;
+    }
 }

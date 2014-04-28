@@ -357,6 +357,9 @@ app.controller('InvoiceCtrl',
                 return 0;
             }
         };
+        $scope.print = function() {
+            window.print();
+        };
     }
 ]);
 

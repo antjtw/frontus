@@ -634,15 +634,16 @@ navm.controller('NavCtrl',
                     return el.amount>0;
                 });
                 if ($rootScope.billing.currentPlan!=="000") {
-                    //$scope.load_upcoming_invoice();
+                    $scope.load_upcoming_invoice();
                 }
             });
         };
         $rootScope.load_upcoming_invoice = function() {
             payments.get_upcoming_invoice($rootScope.billing.customer_id)
             .then(function(resp) {
-                $rootScope.billing.invoices.push(resp.data);
-                $rootScope.billing.next_invoice_received = true;
+                console.log(resp);
+                //$rootScope.billing.invoices.push(resp.data);
+                //$rootScope.billing.next_invoice_received = true;
             });
         };
         $rootScope.companyIsZombie = function() {
