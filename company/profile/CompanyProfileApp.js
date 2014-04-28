@@ -776,6 +776,24 @@ app.filter('billingPlans', function() {
         }
     };
 });
+app.filter('billingPlansNameOnly', function() {
+    return function(plan) {
+        switch (plan) {
+            case '000':
+                return "Cancel Subscription";
+            case '001':
+                return "Seed";
+            case '002':
+                return "Startup";
+            case '003':
+                return "Growth";
+            case '004':
+                return "Established";
+            default:
+                return "Unknown Plan";
+        }
+    };
+});
 app.filter('fileLength', function() {
     return function(word) {
         if (word) {

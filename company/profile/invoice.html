@@ -82,7 +82,7 @@
         <tr ng-repeat="item in invoice.lines.data">
             <td colspan="3">
                 <span>
-                    {{item.plan.id | billingPlans}} Plan ({{item.plan.interval | interval}})
+                    {{item.plan.id | billingPlansNameOnly}} Plan ({{item.plan.interval | interval}})
                 </span>
             </td>
             <td colspan="1">
