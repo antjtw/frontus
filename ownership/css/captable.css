@@ -1961,6 +1961,13 @@ span.tour-icon {
     text-align: center;
 }
 
+span.tour-icon.tour-view, span.tour-icon.tour-share {
+    bottom: -10px;
+    left: -10px;
+    top: initial;
+    right: initial;
+}
+
 span.tour-icon.intro-icon {
     display: inline-block;
     top: 140px;
@@ -1989,16 +1996,16 @@ span.tour-icon.side-toggle {
 }
 
 span.tour-icon.tour-share + .tooltip {
-    left: -20px !important;
+    left: -140px !important;
     width: 200px;
 }
 
 span.tour-icon.tour-share + .tooltip > .tooltip-arrow {
-    left: 84%;
+    left: 70%;
 }
 
 span.tour-icon.tour-view + .tooltip {
-    left: -5px !important;
+    left: -100px !important;
     width: 200px;
 }
 
