@@ -1,12 +1,6 @@
 <link type="text/css" rel="stylesheet" href="/account/profile/profile.css">
 <div style="min-height: 900px;" class="container dynamic-page doclistFlow">
     <div class="row-fluid">
-        <div class="headsection row-fluid">
-            <ul class="maintabs head-text">
-                <!--<li><a href="/company/profile/people/">People</a></li>-->
-                <li class="selectedtab">My Profile</li>
-            </ul>
-        </div>
         <div style="margin-left: 0;" class="span12 statusBlock">
             <div class="row-fluid">
                 <div class="subnav-controls">
@@ -14,11 +8,18 @@
                         <div class="pull-left">
                             <h1 class="profile-name">{{name}}</h1>
                         </div>
-                        <div class="pull-right">
-                            <div class="standard-button">
-                                <button class="btn" ng-click="passwordModalOpen();">Change Password</button>
-                            </div>
-                        </div> 
+
+                        <div class="box-button pull-right"
+                             ng-click="passwordModalOpen();">
+                            <ul>
+                                <li> <span data-icon="&#xe02c;" aria-hidden="true"></span>
+
+                                </li>
+                                <li> <span>Password</span>
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="DivHelper"></div>
                 </div>
