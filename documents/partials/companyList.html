@@ -174,8 +174,8 @@
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
-                                                        <li ng-show="!docIsPrepared(doc)" ng-click="prepareDocument(doc);">Prepare for Signature</li>
-                                                        <li ng-show="docIsPrepared(doc)" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
+                                                        <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
+                                                        <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                                                     </ul>
                                                 </li>
                                             </ul>
