@@ -387,6 +387,12 @@
     </div>
 
     <div class="modalText uploadModal">
+        <div ng-if="true || triggerUpgradeDocs(files.length)"
+             class="upgradeWarning">
+            <span>
+                Warning: Uploading these documents will automatically upgrade your payment plan.
+            </span>
+        </div>
         <p>Please select any document or presentation (20MB max per file)</p>
         <form class="form-inline">
             <fieldset>

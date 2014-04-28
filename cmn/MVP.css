@@ -4152,3 +4152,12 @@ div.upgradeWarning > span {
 .modalText > .add-person > div.upgradeWarning {
     margin-left: 20px;
 }
+.uploadModal > div.upgradeWarning {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+
+}
+.confirmBody > div.upgradeWarning {
+    margin-bottom: 20px;
+}

@@ -209,6 +209,12 @@
 
             <div ng-show="countersignable(lib)">
                 <div class='confirmBody'>
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
@@ -239,6 +245,12 @@
 
             <div ng-show="finalizable(lib) && lib.signature_flow===1">
                 <div class="confirmBody">
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
@@ -273,6 +285,12 @@
             </div>
             <div ng-show="finalizable(lib) && lib.signature_flow===2">
                 <div class="confirmBody">
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>

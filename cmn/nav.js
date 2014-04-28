@@ -650,26 +650,38 @@ navm.controller('NavCtrl',
                 || $rootScope.billing.payment_token === null;
         };
         $rootScope.zombiemessage = "This feature is not available without payment.";
-        $rootScope.triggerUpgradeDocs = function(numNew) {
-            var num = $rootScope.billing.usage.documents_total+numNew;
-            var lim = $rootScope.billing.usage.documents_total_limit;
-            return true;
-
+        $rootScope.triggerUpgradeDocuments = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.documents_total+numNew;
+                var lim = $rootScope.billing.usage.documents_total_limit;
+                console.log("num: "+num);
+                console.log("lim: "+lim);
+                return num > lim;
+            } else {
+                return null;
+            }
         };
         $rootScope.triggerUpgradeAdmins = function(numNew) {
-            var num = $rootScope.billing.usage.admins_total+numNew;
-            var lim = $rootScope.billing.usage.admins_total_limit;
-            return num > lim;
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.admins_total+numNew;
+                var lim = $rootScope.billing.usage.admins_total_limit;
+                return num > lim;
+            } else {
+                return null;
+            }
         };
         $rootScope.triggerUpgradeMessages = function(numNew) {
-            var num = $rootScope.billing.usage.direct_messages_monthly
-                      + numNew.length;
-            var lim = $rootScope.billing.usage.direct_messages_monthly_limit;
-            if (numNew && numNew.length>1 && numNew[0].length>1) {
-                return num > lim;
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.direct_messages_monthly
+                          + numNew.length;
+                var lim = $rootScope.billing.usage.direct_messages_monthly_limit;
+                if (numNew && numNew.length>1 && numNew[0].length>1) {
+                    return num > lim;
+                }
+                return false;
+            } else {
+                return null;
             }
-            return false;
-
         };
         
     }
