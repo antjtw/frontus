@@ -364,6 +364,7 @@
          <div class="controls" my-loading-spinner="processing">
              <div class="standard-button pull-right">
                  <button class="btn"
+                         ng-if="!companyIsZombie()"
                          ng-click="shareDocuments(docShareState.doclist,
                                    docShareState.emails, messageText)"
                          ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)

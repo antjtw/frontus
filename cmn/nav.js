@@ -603,7 +603,7 @@ navm.controller('NavCtrl',
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
                         $rootScope.billing.current_card = x.data.cards.data[0];
-                        $rootScope.$broadcast('openPaymentModals');
+                        $rootScope.$broadcast('billingLoaded');
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
@@ -611,7 +611,7 @@ navm.controller('NavCtrl',
                     } else {
                         $rootScope.selectedPlan = '002';
                     }
-                    $rootScope.$broadcast('openPaymentModals');
+                    $rootScope.$broadcast('billingLoaded');
                 }
             }).except(function(err) {
                 void(err);
