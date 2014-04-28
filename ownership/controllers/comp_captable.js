@@ -402,11 +402,25 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
                 $scope.trans = trans;
                 if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
-                    $scope.maintoggle = false;
-                    $scope.radioModel = "View";
-                    $scope.tourshow = true;
-                    $scope.sideToggle = true;
-                    $scope.tourUp();
+                    $rootScope.$on('billingLoaded', function(x) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                            $scope.radioModel = "View";
+                            $scope.tourshow = true;
+                            $scope.sideToggle = true;
+                            $scope.tourUp();
+                        }
+                    });
+                    if ($rootScope.selectedPlan) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                            $scope.radioModel = "View";
+                            $scope.tourshow = true;
+                            $scope.sideToggle = true;
+                            $scope.tourUp();
+                        }
+                    }
+
                 }
 
                 // Get the company's Grants

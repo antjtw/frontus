@@ -322,7 +322,7 @@ app.controller('CompContactCtrl',
                 $scope.ccModalOpen();
             }
         };
-        $rootScope.$on('openPaymentModals', function(x) {
+        $rootScope.$on('billingLoaded', function(x) {
             $scope.openModalsFromURL();
         });
         if ($rootScope.selectedPlan) $scope.openModalsFromURL();
