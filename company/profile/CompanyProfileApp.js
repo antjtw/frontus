@@ -310,7 +310,6 @@ app.controller('CompContactCtrl',
                 return $filter('billingPlans')(p);
             }
         };
-        $scope.$on('openPaymentModals', $scope.openModalsfromURL);
         $scope.openModalsFromURL = function() {
             if ($routeParams.coupon) {
                 $rootScope.billing.coupon_code = $routeParams.coupon;
@@ -323,6 +322,10 @@ app.controller('CompContactCtrl',
                 $scope.ccModalOpen();
             }
         };
+        $rootScope.$on('openPaymentModals', function(x) {
+            $scope.openModalsFromURL();
+        });
+        if ($rootScope.selectedPlan) $scope.openModalsFromURL();
     }
 ]);
 app.controller('InvoiceCtrl',

@@ -547,20 +547,22 @@ navm.controller('NavCtrl',
 
         $rootScope.billing = {};
         $rootScope.update_card = false;
-        payments.available_plans().then(function(x) {
-            $rootScope.billing.plans = [];
-            angular.forEach(x, function(p) {
-                $rootScope.billing.plans.push(p.plan);
+        if (navState.role=='issuer') {
+            payments.available_plans().then(function(x) {
+                $rootScope.billing.plans = [];
+                angular.forEach(x, function(p) {
+                    $rootScope.billing.plans.push(p.plan);
+                });
+                $rootScope.billing.recommendedPlan
+                    = "00" + Math.max(parseInt($rootScope.billing.plans, 10));
+                if ($rootScope.billing.currentPlan !== '000') {
+                    $rootScope.billing.plans.push('000');
+                }
+                $rootScope.get_usage_details();
+            }).except(function(err) {
+                console.log(err);
             });
-            $rootScope.billing.recommendedPlan
-                = "00" + Math.max(parseInt($rootScope.billing.plans, 10));
-            if ($rootScope.billing.currentPlan !== '000') {
-                $rootScope.billing.plans.push('000');
-            }
-            $rootScope.get_usage_details();
-        }).except(function(err) {
-            console.log(err);
-        });
+        }
         $rootScope.get_usage_details = function() {
             payments.usage_details().then(function(x) {
                 if (x.length === 0) {
@@ -577,7 +579,6 @@ navm.controller('NavCtrl',
         $rootScope.get_hypothetical_usage_details = function(p) {
             payments.usage_grid(p)
             .then(function(x) {
-                console.log(x);
                 $rootScope.billing.usage = x;
             }).except(function(err) {
                 console.log(err);
