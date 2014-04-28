@@ -1,8 +1,15 @@
 <div class="pull-right">
-    <div class="standard-button">
-        <button class="btn" ng-click="composeModalOpen();">
-            Send Message
-        </button>
+    <div class="box-button pull-right"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || composeModalOpen();"
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <ul>
+            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+            </li>
+            <li> <span>Message</span>
+
+            </li>
+        </ul>
     </div>
     <div modal="composeModal" close="composeModalClose()" options="composeopts">
         <div class="modalHeader">

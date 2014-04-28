@@ -565,7 +565,8 @@
                      data-placement="bottom" bs-tooltip="zombiemessage">
                     <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
                     <ul>
-                        <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                        <li> <span ng-show="!toggleView()" data-icon="&#xe001;" aria-hidden="true"></span>
+                             <span ng-show="toggleView()" data-icon="&#xe00e;" aria-hidden="true"></span>
                         </li>
                         <li> <span>{{radioModel}}</span>
 

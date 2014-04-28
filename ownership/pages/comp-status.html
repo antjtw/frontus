@@ -91,10 +91,16 @@
                             <input type="text" class="search-box" ng-model="filterPeople">
                         </div>
 
-                        <div class="pull-right">
-                            <div class="standard-button blue">
-                                <button class="btn" ng-click="downloadCsv();">CSV Export</span></button>
-                            </div>
+                        <div class="box-button pull-right"
+                             ng-click="downloadCsv();">
+                            <ul>
+                                <li> <span data-icon="&#xe007;" aria-hidden="true"></span>
+
+                                </li>
+                                <li> <span>CSV Export</span>
+
+                                </li>
+                            </ul>
                         </div>
 
                     </div>
