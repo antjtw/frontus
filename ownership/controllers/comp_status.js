@@ -9,6 +9,14 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.lastupdated = time[0].last_edited;
     });
 
+    if ($scope.lastPage && $scope.lastPage == "/app/ownership/company-grants") {
+        $scope.gobackto = "Grant Table";
+    }
+    else {
+        $scope.lastPage = "/app/ownership/company-captable";
+        $scope.gobackto = "Cap Table";
+    }
+
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {

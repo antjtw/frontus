@@ -181,6 +181,8 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
         $scope.formatDate = function(date, fallback) {
             if (!date) {
                 return fallback ? fallback : "ERROR";
+            } else if (!$rootScope.settings.dateformat) {
+                return "";
             } else {
                 return "" + $filter('date')(date, $rootScope.settings.dateformat) + "\n" + $filter('date')(date, 'shortTime');
             }

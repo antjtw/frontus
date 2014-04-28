@@ -1,0 +1,71 @@
+<div class="row-fluid">
+    <div class="newreg span10 offset1 gateway text-center">
+        <payment-plan-selector></payment-plan-selector>
+        <div class="big-input-list">
+            <div class="span12">
+                <form stripe-form="getPaymentToken" name="stripeForm">
+                    <fieldset>
+                        <div class="span6">
+                            <div>Company details</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Company name</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="cname">
+                                </div>
+                            </div>
+                            <div>Payment information</div>
+                            <div class="input-list">
+                                <div>
+                                    <span>Name on Card</span>
+                                    <input type="text"
+                                           ng-model="cardname"
+                                           class="input-block-level">
+                                </div>
+                                <div>
+                                    <span>Card Number</span>
+                                    <input type="text"
+                                           class="input-block-level"
+                                           ng-model="number"
+                                           payments-validate="card"
+                                           payments-format="card"
+                                           payments-type-model="type"
+                                           ng-class="myForm.number.$card.type">
+                                </div>
+                                <div>
+                                    <div class="span6">
+                                        <span>Expiration Date (mm/yyyy)</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="expiry"
+                                               payments-validate="expiry"
+                                               payments-format="expiry"/>
+                                    </div>
+                                    <div class="span6">
+                                        <span>CVC</span>
+                                        <input type="text"
+                                               class="input-block-level"
+                                               ng-model="cvc"
+                                               payments-validate="cvc"
+                                               payments-format="cvc"
+                                               payments-type-model="type"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="standard-button large-standard-button">
+                                <button type="submit"
+                                        class="btn"
+                                        ng-disabled="fieldCheck()">
+                                    Create Company
+                                    <span data-icon="&#xe016;"
+                                          aria-hidden="true">
+                                    </span>
+                                </button>
+                            </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

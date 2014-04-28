@@ -35,7 +35,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
 
 
 
-var navm = angular.module('nav', ['ui.bootstrap'], function () {
+var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments', 'commonServices'], function () {
 });
 
 navm.factory('navState', [function () {
@@ -74,7 +74,7 @@ navm.directive('notifications', function() {
             };
 
         }]
-    }
+    };
 });
 
 /** @unused NavCtrl */
@@ -87,8 +87,17 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location) {
+navm.directive('verticalnav', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/cmn/verticalnav.html',
+        controller: 'NavCtrl'
+    };
+});
+
+
+navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter', '$window',
+    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter, $window) {
 
         $scope.companies = [];
 
@@ -99,9 +108,25 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             }
         }
 
-        $scope.$on('$routeChangeSuccess', function(current, previous) {
-            navState.path = document.location.pathname;
+        $('.new-nav').affix({
+            offset: {top: 40}
         });
+
+        $scope.$on('$routeChangeSuccess', function(current, previous) {
+            if (navState.path != document.location.pathname) {
+                navState.path = document.location.pathname;
+                if ($scope.plan) {
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+                }
+
+                var dataLayer = $window.dataLayer ? $window.dataLayer : [];
+                dataLayer.push({
+                    'event': 'pageview',
+                    'virtualUrl': $location.path()
+                });
+            }
+        });
+
 
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
@@ -133,6 +158,33 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
+        $rootScope.persistentNotification = false;
+        if (navState.role=='issuer') {
+            SWBrijj.tblm('account.my_company_payment').then(function(data) {
+                var p = data.length > 0 && data[0];
+                $scope.plan = p;
+                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
+                    $rootScope.persistentNotification = false;
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                } else {
+                    $rootScope.persistentNotification = true;
+                    if (p) {
+                        if (p.status) {
+                            $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
+                        }
+                        else {
+                            $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                        }
+                    }
+                    else {
+                        $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
+                    }
+                }
+            });
+        }
+
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company
@@ -150,19 +202,34 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             sessionStorage.clear();
             document.location.href = url;
         };
+        $scope.gotoPage = function(page) {
+            sessionStorage.clear();
+            $location.url(page);
+        };
+
 
         $scope.switchCandP = function (company, url) {
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
                 SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    /* Not quite ready for prime time
+                    navState.company = company.company;
+                    navState.role = company.role;
+                    navState.reasons = $scope.initReasons(company.reasons);
+                    angular.forEach($scope.companies, function(comp) {
+                        if (comp.company == company.company && comp.role == company.role) {
+                            comp.current = true;
+                        }
+                        else {
+                            comp.current = false;
+                        }
+                    }); */
                     $scope.gotoURL(url);
                 });
             }
             else {
-                $scope.gotoURL(url);
+                $scope.gotoPage(url);
             }
-
         };
-
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
             $rootScope.homecollapsed = !$rootScope.homecollapsed;
@@ -200,6 +267,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (company.role == 'investor') {
                     $scope.hasInvest = true;
                 }
+                company.reasondic = $scope.initReasons(company.reasons);
             });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
@@ -299,6 +367,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
         };
 
+        $scope.doLogout = function() {
+            SWBrijj.logout().then(function(x) {
+                void(x);
+                document.location.href='/?logout';
+            });
+        };
+
         $scope.gotohome = function() {
             if ($rootScope.companies.length == 0) {
                 location.href = '/';
@@ -340,6 +415,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return email != undefined ? re.test(email) : false;
         };
 
+        $scope.verifyPayment = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                //save cc token
+            }
+        };
         $scope.companySelfRegister = function () {
             if ($scope.fieldCheck($scope.registeremail)) {
                 SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {
@@ -400,14 +484,13 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
-                    console.log(x);
                     angular.forEach($scope.notes, function(note) {
                         note.signature_status = $scope.docStatus(note);
                     });
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-        }
+        };
 
         $scope.actionablenotes = function(notes, type) {
             var notifications = [];
@@ -424,31 +507,6 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 }
             });
             return notifications
-        };
-
-        $scope.addCompanyModalUp = function() {
-            $scope.addCompanyModal = true;
-        };
-
-        $scope.addCompanyModalClose = function() {
-            $scope.addCompanyModal = false;
-        };
-
-        $scope.createNewCompany = function(name) {
-            if (name.length > 0) {
-                SWBrijj.procm('account.new_company', name).then(function (new_comp_id) {
-                    var company = {"company": new_comp_id[0].new_company, "role": "issuer"};
-                    $scope.switchCandP(company, "/app/home/company?cc");
-                });
-            }
-            else {
-                $scope.addCompanyModal = false;
-            }
-        };
-
-        $scope.opts = {
-            backdropFade: true,
-            dialogFade: true
         };
 
         var idleTime = 0;
@@ -475,6 +533,14 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 idleTime = 0;
             });
         });
+
+        $scope.pricingregister = function() {
+            document.location.href = "/pricing";
+        };
+
+        $scope.pricingregisterchoose = function(which) {
+            document.location.href = "/register/company-onestep?plan=" + which;
+        };
 
     }]);
 
