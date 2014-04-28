@@ -646,10 +646,32 @@ navm.controller('NavCtrl',
             });
         };
         $rootScope.companyIsZombie = function() {
-            return $rootScope.billing.currentplan == "000" || $rootScope.billing.payment_token == null;
+            return $rootScope.billing.currentplan == "000"
+                || $rootScope.billing.payment_token === null;
         };
+        $rootScope.zombiemessage = "This feature is not available without payment.";
+        $rootScope.triggerUpgradeDocs = function(numNew) {
+            var num = $rootScope.billing.usage.documents_total+numNew;
+            var lim = $rootScope.billing.usage.documents_total_limit;
+            return true;
 
-        $rootScope.zombiemessage = "This feature is not available without payment."
+        };
+        $rootScope.triggerUpgradeAdmins = function(numNew) {
+            var num = $rootScope.billing.usage.admins_total+numNew;
+            var lim = $rootScope.billing.usage.admins_total_limit;
+            return num > lim;
+        };
+        $rootScope.triggerUpgradeMessages = function(numNew) {
+            var num = $rootScope.billing.usage.direct_messages_monthly
+                      + numNew.length;
+            var lim = $rootScope.billing.usage.direct_messages_monthly_limit;
+            if (numNew && numNew.length>1 && numNew[0].length>1) {
+                return num > lim;
+            }
+            return false;
+
+        };
+        
     }
 ]);
 

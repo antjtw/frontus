@@ -4141,3 +4141,14 @@ div.cancel > span {
     margin: 0 auto 0 auto;
     height: 100px;
 }
+
+div.upgradeWarning {
+    color: #15A085;
+    text-align: left;
+}
+div.upgradeWarning > span {
+    font-size: 12px !important;
+}
+.modalText > .add-person > div.upgradeWarning {
+    margin-left: 20px;
+}

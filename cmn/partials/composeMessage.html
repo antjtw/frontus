@@ -20,6 +20,12 @@
         </div>
         <div class="modalText">
             <div class="input-list">
+                <div ng-if="triggerUpgradeMessages(message.recipients)"
+                     class="upgradeWarning">
+                    <span>
+                        Warning: Sending this message will automatically upgrade your payment plan.
+                    </span>
+                </div>
                 <div>
                     <span>Recipients</span>
                     <input ui-select2="select2Options"

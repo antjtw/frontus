@@ -91,6 +91,12 @@
                 <span>Admin</span>
                 <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
             </div>
+            <div ng-if="newRole && triggerUpgradeAdmins(1)"
+                 class="upgradeWarning">
+                <span>
+                    Warning: Sending this message will automatically upgrade your payment plan.
+                </span>
+            </div>
         </div>
     </div>
 
@@ -128,6 +134,12 @@
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
             <span>Are you sure you want to add {{selectedToAdd}} as an admin?</span>
+            <div class="spacer20"></div>
+            <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
+                <span>
+                    Warning: Sending this message will automatically upgrade your payment plan.
+                </span>
+            </div>
         </div>
         <div class="modal-footer">
             <div class="pull-left standard-button gray">
