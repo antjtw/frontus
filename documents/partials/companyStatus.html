@@ -1,18 +1,19 @@
 <link type="text/css" rel="stylesheet" href="/app/documents/css/app.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page">
-
+    <verticalnav></verticalnav>
     <div class="row-fluid">
-        <div class="headsection row-fluid">
-
-            <ul class="maintabs head-text">
-                <li><a href="/app/documents/company-list">Documents</a></li>
-                <li class="selectedtab"><a href="/app/documents/company-view?doc={{document.doc_id}}&page=1"><span class="doc-title" ng-bind="document.docname | caplength:40"></span></a></li>
-            </ul>
-
-        </div>
         <div class="subnav-controls">
             <div>
+                <div class="pull-left back-section">
+                    <div class="backbutton" ng-click="gotoPage('/app/documents/company-list')">
+                        <span data-icon="&#xe032;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Back to</span>
+                        <span>Documents</span>
+                    </div>
+                </div>
                 <div class="pull-left checkboxitem">
                     <span>SHOW ARCHIVED</span>
                     <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">

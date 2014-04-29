@@ -496,10 +496,13 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         window.onresize = $scope.updateDocPanelSize;
         $window.onkeydown = function(evt) {
             evt.which = evt.which || e.keyCode;
-            if (evt.which === 37) {
-                $scope.previousPage($scope.currentPage);
-            } else if (evt.which === 39) {
-                $scope.nextPage($scope.currentPage);
+            // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
+            if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {
+                if (evt.which === 37) {
+                    $scope.previousPage($scope.currentPage);
+                } else if (evt.which === 39) {
+                    $scope.nextPage($scope.currentPage);
+                }
             }
         };
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.
@@ -1290,7 +1293,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
                     $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
                 }
-                console.log($rootScope.lastPage);
                 $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
                 $location.url('/app/documents/investor-list');

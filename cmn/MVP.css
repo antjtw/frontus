@@ -479,7 +479,7 @@ h2 {
 }
 /* Navigation Bar at Top of Page */
 .navBarLoggedIn {
-    height:70px;
+    height:40px !important;
 }
 .navBarLoggedOut {
     height:80px;
@@ -604,9 +604,13 @@ ul.nav-logo > li > a > img {
     text-align: center;
 }
 
+.topnav .nav.content-pages {
+}
+
 .topnav .nav.content-pages > li > a {
     text-align: center;
-    width: 140px;
+    padding: 0 20px;
+    width: auto;
     height: 40px;
     line-height: 40px;
     margin-top: 20px;
@@ -1014,6 +1018,54 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #666666;
     line-height: 16px;
 }
+
+.subnav-controls .back-section {
+    width: 160px;
+}
+
+.subnav-controls .back-section > div:last-of-type {
+    text-align: left;
+    display: inline-block;
+    width: 100px;
+    float: left;
+    margin-left: 20px;
+}
+
+.subnav-controls .back-section > div:last-of-type > span {
+    line-height: 16px;
+    display: block;
+}
+
+.subnav-controls .back-section > div:last-of-type > span:last-of-type {
+    line-height: 16px;
+    display: block;
+    color: #666666;
+}
+
+.subnav-controls .backbutton {
+    width: 40px;
+    height: 40px;
+    float: left;
+    border-radius: 20px;
+    background-color: #E3E3E3;
+    display: inline-block;
+    margin-top: -4px;
+    cursor: pointer;
+}
+
+.subnav-controls .backbutton > span {
+
+}
+
+.subnav-controls .backbutton > span:before {
+    font-size: 26px;
+    line-height: 38px;
+}
+
+.subnav-controls .backbutton:hover > span:before {
+    color: #FFFFFF;
+}
+
 .doc-title {
     display: inline-block;
     white-space: nowrap;
@@ -1043,10 +1095,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 /* Login */
 .gateway {
     margin-left:0;
-    margin-top:140px;
-    background-color: rgb(227, 227, 227);
-    padding-top: 45px;
-    padding-bottom: 0;
+    margin-top:20px;
+    background-color: #FFFFFF;
+    padding: 20px 30px 10px 30px;
 }
 .register {
     background-color: rgb(30, 45, 61);
@@ -1076,6 +1127,7 @@ form.inputs {
 
 .login-logo {
     margin-bottom: 10px;
+    width: 130px;
 }
 
 .navlogin input {
@@ -1139,14 +1191,7 @@ form.inputs {
 #Login-form .button.greenButton:hover {
     background-color: rgb(28, 202, 161);
 }
-.textalert.loginErrorBox {
-    width:330px;
-    background-color: rgb(166, 166, 166);
-    border-radius: 0;
-    margin: auto;
-    float:none;
-    font-family:'FS Elliot Web Regular', sans-serif;
-}
+
 .gateway .logo {
     font-size: 42px;
     color: rgb(30, 45, 61);
@@ -1166,6 +1211,13 @@ form.inputs {
     color: rgb(255, 255, 255);
     opacity: 0.5;
     cursor:default;
+}
+.CompanyRegister-form {
+    margin-top: 30px;
+}
+.CompanyRegister-form.large-standard-button > button {
+    width: 260px;
+    height: 50px;
 }
 .line {
     border-top: 1px solid rgb(166, 166, 166);
@@ -1380,10 +1432,37 @@ form.inputs {
     padding: 0 0 0 0;
     margin: 0 0 0 20px;
 }
+.billingSummary div {
+    text-align: left;
+    font-size: 20px;
+    color: #1E2D3D;
+    font-family:'FS Elliot Web Light', sans-serif;
+    font-weight: normal;
+}
+.info-box.billing > .body-box {
+    margin: 0 20px 20px 20px;
+}
+.info-box.billing form {
+    margin: 0;
+}
+.info-box.billing > .body-box > div > div > div > .standard-button {
+    text-align: right;
+}
 .info-box > .body-box > .standard-button{
     padding: 0 0 20px 0;
 }
-
+.info-box.invoices > .body-box {
+    margin: 20px 20px 0 20px;
+}
+.info-box.invoices > .body-box > div > div > div:last-child {
+    text-align: right;
+}
+.info-box.invoices > .body-box > .row-fluid > .row-fluid {
+    margin-left: 0;
+}
+.settingtable.invoices > div > div {
+    color: #1E2D3D;
+}
 .info-box > .body-box > .ownershipPermissions > span {
     text-transform: uppercase;
     font-size: 10px;
@@ -1392,8 +1471,25 @@ form.inputs {
 }
 .settingtable {
     margin-top: 10px;
-    margin-bottom: 10px;
-    width: 100%;
+    margin-right: 20px;
+}
+.settingtable > div {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.settingtable > div:nth-child(n+2) {
+    border-top: 1px solid #E3E3E3;
+}
+.settingtable > div > div:first-child {
+    color: #1E2D3D;
+}
+.settingtable.usage > div > div:nth-child(2) {
+    width: 120px;
+    margin-top: 6px;
+}
+.settingtable.usage > div > div:last-child {
+    padding-right: 10px;
+    color: #666666;
 }
 table.settingtable tr > td {
     height: 30px;
@@ -1406,6 +1502,19 @@ table.settingtable tr > td:first-child {
 table.settingtable tr > td:last-child {
     font-size: 12px;
     color: #666666;
+}
+.settingtable.invoices {
+    margin: 0 20px 0 0;
+}
+.settingtable.invoices > div:first-child > div > span {
+    color: #1E2D3D;
+}
+.settingtable.usage span.tooltip-icon{
+    color: #A6A6A6;
+    vertical-align: middle;
+}
+.settingtable.usage span.tooltip-icon:before{
+    font-size: 13px;
 }
 ul.last-edited {
     display: inline-block;
@@ -1985,48 +2094,55 @@ tr.preparedDoc {
     width: 100%;
     margin: 0 auto 0 auto;
 }
+
 .footerLinks ul {
     list-style-type:none;
-    min-height: 20px;
-    margin: 10px 0;
-    padding: 3px 0;
-    color: rgb(141, 141, 141);
+    display: inline-block;
+    vertical-align: top;
+    margin: 30px 40px 20px 20px;
 }
+
+.footerLinks ul li:first-child {
+    text-transform: uppercase;
+    color: #476380;
+    font-family:'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
+}
+
 .footerLinks li {
-    display: inline;
     padding: 0 8px;
 }
+
 .footerLinks li a {
-    color: rgb(141, 141, 141);
+    color: #F1F1F1;
     font-family:'FS Elliot Web Regular', sans-serif;
     font-size: 12px;
     font-weight: normal;
     text-decoration: none;
 }
+
 .footerLinks li:last-child {
     border-right: 0;
 }
+
 .footerBar {
     min-height: 112px;
     background-color: rgb(30, 45, 61);
 }
-#copyrightBar {
-    border-top: solid 1px rgb(52, 73, 94);
-    padding-top: 10px;
-}
+
 .copyright {
-    color: rgb(141, 141, 141);
-    font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
+    text-transform: uppercase;
+    font-family:'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
+    color: #476380;
     font-weight: normal;
     text-decoration: none;
+    text-align: right;
+    margin-top: 30px;
+    margin-right: 20px;
+    margin-bottom: 30px;
 }
-.copyright.pull-right {
-    margin-right: 8px;
-}
-.copyright.pull-left {
-    margin-left: 8px;
-}
+
 .copyrightLinks {
     display:inline-block;
 }
@@ -2078,6 +2194,7 @@ tr.preparedDoc {
 /* Dynamic shifting of spans */
 .leftTabWindow {
     overflow-x: hidden;
+    padding-bottom: 150px;
 }
 .leftFullTableBlock {
     width: 1017px !important;
@@ -2281,6 +2398,13 @@ tr.preparedDoc {
 }
 .small-standard-button.red > button:hover {
     background-color: #C44032;
+}
+
+.large-standard-button > button {
+    width: 328px;
+    height: 60px;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 .icon-standard-button > span {
     display: block;
@@ -2511,6 +2635,14 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child {
     color: #A6A6A6;
     font-style: italic;
+}
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child:hover,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child:hover > span > a,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span:hover,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span:hover > a,
+.bottomnav .nav > .standard.menu-drop .dropdown-menu > li:last-child > span > a:hover {
+    color: #333333 !important;
+    background-color: #C7C7C7;
 }
 
 .standard.menu-drop .dropdown-menu > li {
@@ -3254,9 +3386,16 @@ button.icon-button:hover {
     width: 540px;
     margin-left: -270px;
 }
+
+.widerModal.modal {
+    width: 600px;
+    margin-left: -300px;
+}
+
 .compose-modal.modal > .modalHeader {
     margin-bottom: 20px;
 }
+
 .compose-modal.modal > div.modalText .input-list > div {
     margin: 0 0 20px 0;
     line-height: 32px;
@@ -3274,7 +3413,7 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list>div>input,
 .compose-modal.modal > div.modalText .input-list>div>textarea {
     float: right;
-    width: 416px;
+    width: 476px;
     margin-right: 0;
 }
 .compose-modal.modal > div.modalText .input-list>div>input {
@@ -3284,7 +3423,44 @@ button.icon-button:hover {
     padding-bottom: 40px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div.select2-container {
-    width: 430px;
+    width: 490px;
+}
+.payment-modal {
+    width: 90%;
+    left: 5%;
+    margin: 0 auto;
+}
+.payment-modal form {
+    width: 90%;
+    height: 260px;
+    margin: 0 auto;
+}
+.payment-modal fieldset > div:first-child {
+    text-align: left;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #1E2D3D;
+    width: 90%;
+}
+.payment-modal form .input-list {
+    height: 200px;
+}
+.payment-modal .initpayment .input-list {
+    width: 400px;
+    margin-top: 10px;
+}
+.payment-modal .initpayment form .input-list > div {
+    margin: 0 auto;
+    width: 100%;
+    line-height: 30px;
+    padding-bottom: 15px;
+}
+.payment-modal .initpayment form .input-list input {
+    width: 250px;
+}
+.payment-modal form .input-list > div {
+    width: 400px;
+    text-align: left;
 }
 .profile-modal.modal > div.modalText {
     padding: 0 20px 0 20px;
@@ -3317,9 +3493,19 @@ button.icon-button:hover {
     text-align: right;
     margin-right: 5px;
 }
+.profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
+    width: 120px;
+}
 
 .profile-modal.modal > div.modalText .input-list > div > input {
     float: none;
+}
+.profile-modal.modal > div.modalText.ccmodal .input-list > div > input {
+    width: 280px;
+}
+
+.ccmodal .input-list {
+    margin-bottom: 20px;
 }
 
 .profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {
@@ -3562,16 +3748,7 @@ button.icon-button:hover {
     width:100%;
     border-radius: 5px;
 }
-.textalert {
-    margin-top:-10px;
-    margin-left: 20px;
-    width:260px;
-    padding-bottom:15px;
-    padding-top:15px;
-    background-color: rgb(52, 73, 94);
-    color: rgb(255, 255, 255);
-    border-radius: 5px;
-}
+
 .alertContents {
     margin-left:10px;
     vertical-align: middle;
@@ -3646,7 +3823,10 @@ h2.onboard {
 
 .container.dynamic-page {
     min-width: 1024px;
-    width: 100%;
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    margin-left: 40px;
     overflow-x: hidden;
 }
 
@@ -3659,6 +3839,7 @@ h2.onboard {
     width: -webkit-calc(100% - 350px);
     width: calc(100% - 350px);
     margin-left: 0;
+    min-height: 300px;
 }
 
 .dynamic-page .leftFullTableBlock {
@@ -3720,4 +3901,220 @@ div#us_report_button button.us_button_horizontal {
     background-image: none !important;
     background-color: #E3E3E3 !important;
     padding: 0 !important ;
+}
+
+.newreg {
+    background-color: white;
+}
+
+.planselector {
+    width: 90%;
+    height: 240px;
+    margin: 20px auto 40px auto;
+}
+.newreg.gateway {
+    margin-top: 0;
+    padding-top: 20px;
+}
+.newreg > .planselector .span4,
+.newreg > .planselector > .span12,
+.newreg > .big-input-list [class*="span"] {
+    margin-left: 0;
+}
+.newreg > .planselector > div > div:first-child {
+    text-align: left;
+}
+.planselector > div > div,
+.planselector > div > div > p {
+    text-align: center;
+    font-size: 12px;
+    color: #1E2D3D;
+    margin-bottom: 0;
+    line-height: 30px;
+}
+.planselector > div > div:nth-last-child(n-1) > p {
+    color: #666666;
+}
+.planselector > div:first-child > div:first-child {
+    text-align: left;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    line-height: 50px;
+}
+.planselector > div:first-child {
+    height: 50px;
+}
+.planselector > div:nth-child(2) > div > p {
+    color: #1E2D3D;
+    font-size: 14px;
+    line-height: 20px;
+}
+.planselector > div:nth-child(2) {
+    margin-bottom: 20px;
+}
+.planselector > div:nth-last-child(-n+3) {
+    border-top: 1px solid #C7C7C7;
+}
+.planselector > div:last-child {
+    padding-top:10px;
+}
+.newreg > div:nth-child(2) > div.span12 > div.span6 > div:first-child {
+    color: #1E2D3D;
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
+.row-fluid .newreg .offset1,
+.row-fluid .newreg.gateway {
+    margin-left: 8.51063829787234%;
+}
+
+.big-input-list {
+    width: 90%;
+    margin: 0 auto;
+
+}
+.big-input-list .input-list span {
+    display: block;
+    font-size: 10px;
+    text-align: left;
+    text-transform: uppercase;
+}
+.big-input-list .input-list div.span6 {
+    width: -moz-calc(50% - 10px);
+    width: -webkit-calc(50% - 10px);
+    width: calc(50% - 10px);
+}
+.big-input-list > div > form > fieldset > div.span6:first-child {
+    padding-right: 10px;
+}
+.big-input-list >div > form > fieldset > div.span6:nth-child(2) {
+    padding-left: 30px;
+}
+.big-input-list .input-list div.span6:last-child {
+    margin-left: 20px;
+}
+.big-input-list .span6 > div:first-child,
+.big-input-list .span6 > div:nth-child(3){
+    color: #1E2D3D;
+    font-size: 20px;
+    text-align: left;
+    line-height: 30px;
+    margin-bottom: 10px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
+.newreg .regfooter {
+    margin: 20px 0 40px 0;
+}
+.newreglogo {
+    margin: 25px 0 30px 0;
+    width: 130px;
+}
+.newregTitle {
+    color: #666666;
+    font-size: 26px;
+    line-height: 77px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
+.regfooter .my-loading-spinner-container > div {
+    left: 50%;
+}
+.meter {
+    height: 5px;
+    position: relative;
+    background: #F1F1F1;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+}
+.meter > span {
+    width: 0%;
+    display: block;
+    height: 100%;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    background-color: #1ABC96;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: width 1s ease-in-out;
+    -moz-transition: width 1s ease-in-out;
+    -o-transition: width 1s ease-in-out;
+    transition: width 1s ease-in-out;
+}
+.companyprofile .subnav-controls > div > div {
+    color: #1E2D3D;
+    line-height: 30px;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+}
+.companyprofile .subnav-controls > div > div:last-child {
+    font-size: 14px;
+}
+
+.persistentNotification {
+    height: 50px;
+    background-color: #FBC68E;
+    border-bottom:1px solid #F78D1E;
+}
+.persistentNotification > div > div {
+    height: 100%;
+    margin: 0 40px 0 60px;
+    line-height: 50px;
+    vertical-align:middle;
+    color: #666666;
+}
+.persistentNotification > div > div > span:first-child {
+    font-size: 14px;
+}
+.persistentNotification > div > div > span > span {
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    font-weight: normal;
+}
+.persistentNotification.ng-enter,
+.persistentNotification.ng-leave {
+    -webkit-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 100ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+.persistentNotification.ng-enter,
+.persistentNotification.ng-leave.ng-leave-active {
+    height: 0px;
+    overflow: hidden;
+}
+.persistentNotification.ng-leave, 
+.persistentNotification.ng-enter.ng-enter-active {
+    height: 50px;
+    overflow: hidden;
+}
+div.cancel {
+    color: #666666;
+}
+div.cancel > span {
+    color: #E74C3C;
+}
+.cancelModal {
+    margin: 0 20px 0 20px;
+    text-align: left;
+}
+.forwardButton > button > span {
+    font-size: 16px;
+    padding-left: 6px;
+}
+.forwardButton > button > span:before {
+    vertical-align: middle;
+}
+.ng-invalid {
+    border-color: #f00 !important;
+}
+
+/* app.css items that prevent flashing as that file is currently loaded late */
+
+.company-list .my-loading-spinner-container {
+    width: 50px;
+    margin: 0 auto 0 auto;
+    height: 100px;
 }

@@ -3,11 +3,6 @@
 <div class="company-list maincontent openflow">
     <div class="container dynamic-page doclistFlow">
         <div class="row-fluid">
-            <div class="headsection row-fluid">
-                <ul class="maintabs head-text">
-                    <li class="selectedtab">Documents</li>
-                </ul>
-            </div>
             <div class="row-fluid">
                 <div class="subnav-controls doclist-controls">
                     <div>
@@ -20,8 +15,8 @@
                                         <li>
                                             <a ng-click="setViewBy('document')" class="button">Document</a>
                                         </li>
-                                        <li> 
-                                            <a ng-click="setViewBy('name')" class="button">Name</a>
+                                        <li>
+                                            <a ng-click="setViewBy('name')" class="button">Recipient</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -87,7 +82,6 @@
                             <tr>
                                 <td>
                                     <!-- todo update ng-click --> <span>Welcome! </span><span class="link" ng-click="multishareOpen();">Share a document</span><span> to get started.</span>
-
                                 </td>
                             </tr>
                         </tbody>
@@ -124,7 +118,7 @@
                                     <ul>
                                         <li>{{doc.docname | caplength:40}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
                                         <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                                        ng-hide="!hideSharebar">{{docStatus(doc)}}</li>
+                                        ng-hide="!hideSharebar">{{docStatusA(doc)}}</li>
                                     </ul>
                                 </td>
                                 <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
@@ -186,7 +180,7 @@
                                 </td>
                             </tr>
                             <!-- TODO animate show/hide by sliding down/up -->
-                            <tr ng-show="doc.shown" class="sub-row"
+                            <tr ng-if="doc.shown" class="sub-row"
                                 ng-repeat="version in doc.versions | archived: archivestate | orderBy:versionOrder">
                                 <td class="status-toggle"></td>
                                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
@@ -231,6 +225,7 @@
                                                     ng-click="switchSignatureFlow(version, 0)">
                                                     Switch to View Only
                                                 </li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-click="viewStatus(doc)">View Status</li>
                                                 <li ng-click="viewInvestorCopy(version)">View Document</li>
                                                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
@@ -339,6 +334,7 @@
                                                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                                                     ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
+                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
                                                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
                                             </ul>
                                         </li>
@@ -349,7 +345,7 @@
                     </table>
                 </div>
             </div>
-            <div ng-style="stretchheight" ng-class="{rightNoTableBlock:hideSharebar,
+            <div ng-style="stretchheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                  <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
@@ -519,6 +515,30 @@
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="voidDocument(voiddocForModal, voidText); voidDocClose();">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div modal="remindDocModal" close="remindDocClose()" options="opts">
+    <div class="modalHeader">
+        <span>Send Signature Reminder</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="remindDocClose()"></span>
+    </div>
+    <div class="modalText voidDocModal">
+        <span>Send a reminder to the original recipient.</span>
+
+        <div class="message-block">
+            <span>Message</span>
+            <textarea rows="4" cols="60" ng-model="remindText"></textarea>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="remindDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="remindDocument(reminddocForModal, remindText); remindDocClose();">Confirm</button>
         </div>
     </div>
 </div>

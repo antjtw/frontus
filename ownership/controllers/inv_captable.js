@@ -88,7 +88,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
                         if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
                             $scope.uniquerows.push($scope.trans[i].investor);
-                            $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor});
+                            $scope.rows.push({"name": $scope.trans[i].investor, "namekey": $scope.trans[i].investor, "editable": "yes"});
                         }
                         angular.forEach($scope.issues, function (issue) {
                             if ($scope.trans[i].issue == issue.issue) {
@@ -457,6 +457,11 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         });
         return type
     };
+
+    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
+    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 59) + "px"}
+    });
 
 
 };

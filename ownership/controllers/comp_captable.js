@@ -2381,7 +2381,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.tourstate = 0;
         }
         else if ($scope.tourstate == 1) {
-            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(3) input:first-of-type").focus();
+            $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(3) input:first-of-type").focus();
         }
         else if ($scope.tourstate == 2) {
             $(".tableView.captable th > input:first-of-type").focus();
@@ -2390,8 +2390,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggle = false;
         }
         else if ($scope.tourstate == 4) {
-            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(4) input:first-of-type").focus();
+            $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(4) input:first-of-type").focus();
         }
+    };
+
+    $scope.kissTour = function() {
+        _kmq.push(['record', 'CT Tour Started']);
     };
 
     $scope.moveTour = function() {

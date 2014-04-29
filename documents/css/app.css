@@ -1,10 +1,5 @@
 /* Company List Content */
 
-.company-list .my-loading-spinner-container {
-    width: 50px;
-    margin: 0 auto 0 auto;
-}
-
 .subnav-controls.doclist-controls {
     margin-bottom: 0;
 }
@@ -816,23 +811,19 @@ textarea.email-text {
     color: #1D2C3C;
 }
 
-.templatePanel > p:nth-child(-n+2) {
+.templatePanel > p:nth-child(1) {
     width: 600px;
     margin: 0 auto 0 auto;
 }
 
 .templatePanel > p:nth-child(1) {
     margin-top: 50px;
+    visibility: hidden;
 }
 
 .templatePanel.investor > p:nth-child(1) {
     text-align: center;
     font-size: 20px;
-}
-
-.templatePanel > p:nth-child(2) {
-    margin-top: 0;
-    visibility: hidden;
 }
 
 .templatePanel.investor > p:nth-child(2) {
@@ -842,24 +833,24 @@ textarea.email-text {
     font-size: 16px;
 }
 
-.templatePanel > p:nth-child(2) > br:first-child {
+.templatePanel > p:nth-child(1) > br:first-child {
     display: none;
 }
 
-.templatePanel > p:nth-child(2) input, .templatePanel > p:nth-child(2) span {
+.templatePanel > p:nth-child(1) input, .templatePanel > p:nth-child(1) span {
     visibility: visible;
 }
 
-.templatePanel > p:nth-child(3) {
+.templatePanel > p:nth-child(2) {
     font-size: 20px;
     text-align: center;
 }
 
-.templatePanel.investor > p:nth-child(3) {
+.templatePanel.investor > p:nth-child(2) {
     font-size: 30px;
 }
 
-.templatePanel > p:nth-child(4) {
+.templatePanel > p:nth-child(3) {
     display: none;
 }
 
@@ -874,7 +865,7 @@ textarea.email-text {
     vertical-align: top;
 }
 
-.templatePanel > p:nth-child(2) span.template-label {
+.templatePanel > p:nth-child(1) > span.template-label {
     width: 220px;
 }
 
