@@ -182,7 +182,7 @@ navm.controller('NavCtrl',
                         }
                     }
                     else {
-                        $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
+                        $rootScope.paymentmessage = "Click here to start a new payment plan.";
                     }
                 }
             });
