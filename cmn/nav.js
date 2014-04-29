@@ -629,7 +629,6 @@ navm.controller('NavCtrl',
             payments.get_invoices($rootScope.billing.customer_id, 3)
             .then(function(resp) {
                 if (!$rootScope.billing) {$rootScope.billing = {};}
-                console.log(resp.data.data);
                 $rootScope.billing.invoices = resp.data.data.filter(function(el) {
                     return el.amount>0;
                 });
@@ -641,7 +640,6 @@ navm.controller('NavCtrl',
         $rootScope.load_upcoming_invoice = function() {
             payments.get_upcoming_invoice($rootScope.billing.customer_id)
             .then(function(resp) {
-                console.log(resp);
                 //$rootScope.billing.invoices.push(resp.data);
                 //$rootScope.billing.next_invoice_received = true;
             });
