@@ -3430,13 +3430,13 @@ button.icon-button:hover {
     width: 490px;
 }
 .payment-modal {
-    width: 80%;
-    left: 10%;
+    width: 70%;
+    left: 15%;
     margin: 0 auto;
 }
 .payment-modal form {
     width: 90%;
-    height: 260px;
+    height: 280px;
     margin: 0 auto;
 }
 .payment-modal fieldset > div:first-child {
@@ -3447,7 +3447,7 @@ button.icon-button:hover {
     width: 90%;
 }
 .payment-modal form .input-list {
-    height: 200px;
+    height: 180px;
 }
 .payment-modal .initpayment .input-list {
     width: 400px;
@@ -3457,10 +3457,11 @@ button.icon-button:hover {
     margin: 0 auto;
     width: 100%;
 //    line-height: 30px;
-    padding-bottom: 15px;
+//    padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
-    width: 250px;
+    width: 100%;
+    float: none;
 }
 .payment-modal form .input-list > div {
     width: 400px;
@@ -3944,7 +3945,7 @@ div#us_report_button button.us_button_horizontal {
 .newreg > .big-input-list [class*="span"] {
     margin-left: 0;
 }
-.newreg > .planselector > div > div:first-child {
+.planselector > div > div:first-child {
     text-align: left;
 }
 .planselector > div > div,
@@ -3998,6 +3999,9 @@ div#us_report_button button.us_button_horizontal {
     margin: 0 auto;
 
 }
+.payment-modal .big-input-list {
+    width: 100%;
+}
 .big-input-list .input-list span {
     display: block;
     font-size: 10px;
@@ -4008,6 +4012,7 @@ div#us_report_button button.us_button_horizontal {
     width: -moz-calc(50% - 10px);
     width: -webkit-calc(50% - 10px);
     width: calc(50% - 10px);
+    margin-left: 0;
 }
 .big-input-list > div > form > fieldset > div.span6:first-child {
     padding-right: 10px;
