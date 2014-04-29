@@ -35,14 +35,13 @@
     -webkit-transition:0.2s linear all;
     transition:0.2s linear all;
 
-    /* remember to add this */
     display:block!important;
     opacity:1;
 }
+
 .show-hide-animation.ng-hide {
     opacity:0;
 }
-
 
 .new-nav .accordion-group {
     border: none;
