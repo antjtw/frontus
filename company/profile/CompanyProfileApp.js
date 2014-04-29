@@ -329,9 +329,9 @@ app.controller('CompContactCtrl',
     }
 ]);
 app.controller('InvoiceCtrl',
-               ['$scope', 'SWBrijj', 'payments',
+               ['$scope', '$rootScope', 'SWBrijj', 'payments',
                 '$routeParams', '$location', 'navState',
-    function($scope, SWBrijj, payments,
+    function($scope, $rootScope, SWBrijj, payments,
              $routeParams, $location, navState) {
 
         if (!$routeParams.id) $location.url('/app/company/profile');
@@ -339,16 +339,31 @@ app.controller('InvoiceCtrl',
 
         payments.my_data().then(function(x) {
             payments.get_invoices(x[0].customer_id, 100).then(function(x) {
-                console.log(x);
                 var matches = x.data.data.filter(function(el) {
                     return el.id == $routeParams.id;
                 });
                 if (matches.length == 1) {
                     $scope.invoice = matches[0];
-                    console.log(matches);
+                } else {
+                    console.log("here");
+                    //$location.url('/app/company/profile');
                 }
             });
         });
+        SWBrijj.tbl('account.my_company').then(function(x) {
+            initPage($scope, x);
+            $scope.cname = angular.copy($scope.name);
+            delete $scope.name;
+            $scope.cnamekey = $scope.cname;
+            $scope.companykey = $scope.company;
+            $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
+            $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+            angular.forEach($scope.currencies, function(c) {
+               if (c.indexOf($scope.currency) !== -1) {
+                   $scope.longcurrency = c;
+               }
+            });
+        }).except(initFail);
         $scope.amountPaid = function() {
             if (!$scope.invoice) return 0;
             if ($scope.invoice.paid) {
@@ -359,6 +374,20 @@ app.controller('InvoiceCtrl',
         };
         $scope.print = function() {
             window.print();
+        };
+        $scope.address1 = function() {
+            return $scope.address;
+        };
+        $scope.address2 = function() {
+            if ($scope.city && $scope.state && $scope.zipcode) {
+                return $scope.city + ", " + $scope.state + " " + $scope.zipcode;
+            } else if ($scope.city || $scope.state) {
+                return ($scope.city || "") + ($scope.state || "") + " " + ($scope.zipcode || "");
+            } else if ($scope.zipcode) {
+                return $scope.zipcode;
+            } else {
+                return null;
+            }
         };
     }
 ]);
