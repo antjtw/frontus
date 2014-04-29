@@ -6,8 +6,8 @@ m.directive('composeMessage', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', 'SWBrijj',
-        function($scope, SWBrijj) {
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+        function($scope, $rootScope, SWBrijj) {
             $scope.getInvestors = function() {
                 $scope.investors = [];
                 angular.forEach($scope.people, function(p) {
@@ -40,7 +40,6 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
-                console.log(msg);
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(msg.recipients),
                               category,
@@ -49,6 +48,7 @@ m.directive('composeMessage', function() {
                               newtext
                 ).then(function(x) {
                     void(x);
+                    $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
                     $scope.composeModalClose();

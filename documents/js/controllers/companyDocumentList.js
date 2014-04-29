@@ -439,11 +439,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                             if (document.doc_id == doc.upload_id) {
                                 document.doc_id = doc.doc_id;
                                 document.uploading = false;
+                                $rootScope.billing.usage.documents_total+=1;
                             }
                         });
                     }
                 });
-                if ($scope.uploadprogress.length != 0 && incrementer < 30) {
+                if ($scope.uploadprogress.length !== 0 && incrementer < 30) {
                     incrementer += 1;
                     $timeout($scope.checkReady, 2000);
                 }
@@ -1067,6 +1068,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.reallyDeleteDoc = function(doc) {
             SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                 void(data);
+                $rootScope.documents.billing.usage.documents_total -= 1;
                 $scope.$emit("notification:success", doc.docname + " deleted.");
                 $scope.documents.splice($scope.documents.indexOf(doc), 1);
             }).except(function(x) {

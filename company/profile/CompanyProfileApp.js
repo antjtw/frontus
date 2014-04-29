@@ -523,6 +523,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if ($scope.newRole) {
                 SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                     void(x);
+                    $rootScope.billing.usage.admins_total += 1;
                     $scope.$emit("notification:success", "Admin Added");
                     $route.reload();
                 }).except(function(x) {
@@ -544,6 +545,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.revoke_admin = function() {
             SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total -= 1;
                 $scope.$emit("notification:success", "Admin Removed");
                 $route.reload();
             }).except(function(x) {
@@ -556,6 +558,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.add_admin = function() {
             SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total += 1;
                 $scope.$emit("notification:success", "Admin Added");
                 $route.reload();
             }).except(function(x) {
