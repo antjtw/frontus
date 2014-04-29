@@ -317,9 +317,16 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                  return true;
              }
              if ($scope.hideSharebar) {
-                return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
+                return !$scope.query || re.test(obj.docname);
             } else {
-                return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
+                return obj.forShare || (!$scope.query || re.test(obj.docname));
+            }
+        };
+        $scope.versionFilter = function(obj) {
+            if ($scope.maxRatio == 1000) {
+                return true;
+            } else {
+                return !$scope.versionIsComplete(obj);
             }
         };
         $scope.investorSearchFilter = function(obj) {
@@ -640,36 +647,28 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         };
 
         $scope.formatDocStatusRatio = function(doc) {
-            if (doc.versions) {
-                if (doc.versions.length === 0) {
-                    return "";
-                } else {
-                    var total = 0;
-                    var archived = 0;
-                    if ($scope.archivestate) {
-                        total = doc.versions.length;
-                    }
-                    else {
-                        angular.forEach(doc.versions, function (version) {
-                            if (!version.archived) {
-                                total += 1;
-                            }
-                            else {
-                                archived += 1
-                            }
-                        });
-                    }
-                    var docnumber = ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length - archived)
-                    if (!docnumber && !total) {
-                        return "All documents archived";
-                    }
-                    else {
-                        return docnumber +
-                            " / " +
-                            total +
-                            " documents";
-                    }
-                }
+            if (!doc.versions || doc.versions.length===0) return "";
+
+
+            var archived = $scope.versionsArchived(doc).length;
+            var show_archived = $scope.archivestate;
+
+            // fixme what if a completed document is archived?
+            var completed = $scope.versionsCompleted(doc).length;
+            var hide_completed = ($scope.maxRatio !== 1000);
+
+            var num = (hide_completed ? 0 : completed) + (show_archived ? archived : 0);
+            var total = doc.versions.length;
+            var display_total = doc.versions.length + (hide_completed ? -completed : 0);
+
+            if (total == archived && !show_archived) {
+                return "All documents archived";
+            } else if (total == completed && hide_completed) {
+                return "All documents completed";
+            } else if (total == archived+completed && (!show_archived && hide_completed)) {
+                return "All documents are archived or completed";
+            } else {
+                return num+" / "+display_total+" documents";
             }
         };
 
@@ -707,6 +706,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
         };
 
+        $scope.versionsArchived = function(doc) {
+            return doc.versions.filter(function(el) {return el.archived;});
+        };
+        $scope.versionsCompleted = function(doc) {
+            return doc.versions.filter($scope.versionIsComplete);
+        };
         $scope.versionsFinalized = function(doc) {
             return doc.versions.filter(function(el) {return el.when_finalized;});
         };
