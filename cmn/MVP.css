@@ -2105,6 +2105,8 @@ tr.preparedDoc {
 .footerLinks ul li:first-child {
     text-transform: uppercase;
     color: #476380;
+    font-family:'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
 }
 
 .footerLinks li {
@@ -2130,6 +2132,8 @@ tr.preparedDoc {
 
 .copyright {
     text-transform: uppercase;
+    font-family:'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.05em;
     color: #476380;
     font-weight: normal;
     text-decoration: none;

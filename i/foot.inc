@@ -21,7 +21,7 @@
                         <li><a href="https://github.com/sharewave/frontus">GitHub</a></li>
                         <li><a href="https://www.linkedin.com/company/2994986">LinkedIn</a></li>
                     </ul>
-                    <span class="copyright pull-right">COPYRIGHT 2013-2014 SHAREWAVE LLC, <br>ALL RIGHTS RESERVED</span>
+                    <span class="copyright pull-right">COPYRIGHT 2013-2014 SHAREWAVE LLC<br>ALL RIGHTS RESERVED</span>
                 </div>
             </div>
         </footer>
