@@ -648,7 +648,7 @@ navm.controller('NavCtrl',
             return $rootScope.billing.currentplan == "000"
                 || $rootScope.billing.payment_token === null;
         };
-        $rootScope.zombiemessage = "This feature is not available without payment.";
+        $rootScope.zombiemessage = "Please update your payment information to use this feature.";
         $rootScope.triggerUpgradeDocuments = function(numNew) {
             if ($rootScope.billing && $rootScope.billing.usage) {
                 var num = $rootScope.billing.usage.documents_total+numNew;
