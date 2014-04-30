@@ -1213,7 +1213,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             }
                         }
                     } // json struct
-                })
+                }).except(function(err) {
+                        $scope.leave();
+                    });
             });
         };
 
