@@ -290,10 +290,10 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
         $scope.query = "";
-        $scope.archivestate = false;
+        $scope.show_archived = false;
 
         $scope.toggleArchived = function() {
-            $scope.archivestate = !$scope.archivestate;
+            $scope.show_archived = !$scope.show_archived;
         };
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -313,21 +313,21 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-             if (!obj.statusRatio || !$scope.maxRatio) {
-                 return true;
-             }
-             if ($scope.hideSharebar) {
-                return !$scope.query || re.test(obj.docname);
+            if (!$scope.hideSharebar && obj.forShare) {
+                return true;
+            } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
+                console.log("here");
+                // if hide_completed and all versions are completed then return false
+                return false;
+            } else if (!$scope.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
+                // if !show_archived and all versions are archived then return false
+                return false;
             } else {
-                return obj.forShare || (!$scope.query || re.test(obj.docname));
+                return !$scope.query || re.test(obj.docname);
             }
         };
         $scope.versionFilter = function(obj) {
-            if ($scope.maxRatio == 1000) {
-                return true;
-            } else {
-                return !$scope.versionIsComplete(obj);
-            }
+            return $scope.maxRatio==1000 || !$scope.versionIsComplete(obj);
         };
         $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
@@ -644,7 +644,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
 
 
             var archived = $scope.versionsArchived(doc).length;
-            var show_archived = $scope.archivestate;
+            var show_archived = $scope.show_archived;
 
             // fixme what if a completed document is archived?
             var completed = $scope.versionsCompleted(doc).length;
@@ -1122,11 +1122,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         };
 
         $scope.versionsVisible = function(versions) {
+            if (!versions) return false;
             var total = versions.length;
             if ($scope.maxRatio!==1000) {
                 total -= versions.filter($scope.versionIsComplete)
                                  .length;
-            } else if (!$scope.archivestate) {
+            } else if (!$scope.show_archived) {
                 total -= versions.filter(function(el) {return el.archived;})
                                  .length;
             }
