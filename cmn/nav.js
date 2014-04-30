@@ -173,16 +173,16 @@ navm.controller('NavCtrl',
                     $rootScope.persistentNotification = true;
                     if (p) {
                         if (p.status) {
-                            $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
+                            $rootScope.paymentmessage = "We were unable to process your payment, please click here to update your card.";
                             Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
                         }
                         else {
-                            $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
+                            $rootScope.paymentmessage = "Your account has been cancelled, please click here if you'd like to re-subscribe.";
                             Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
                         }
                     }
                     else {
-                        $rootScope.paymentmessage = "Click here to start a new payment plan.";
+                        $rootScope.paymentmessage = "Our free period has come to a close, click here to select your plan.";
                     }
                 }
             });
