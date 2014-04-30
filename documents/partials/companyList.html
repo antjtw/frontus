@@ -22,13 +22,13 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                             <span>HIDE COMPLETED</span>
                             <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
                             </button>
                         </div>
-                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                        <div class="pull-left checkboxitem" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                             <span>SHOW ARCHIVED</span>
                             <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
@@ -248,7 +248,7 @@
                                 <th></th>
                             </tr>
                         </tbody>
-                        <tbody ng-repeat="investor in investorDocs | filter:investorSearchFilter | orderBy:investorOrder">
+                        <tbody ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:investor.shown}">
                                 <td class="status-toggle"

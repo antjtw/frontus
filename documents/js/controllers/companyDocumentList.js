@@ -329,13 +329,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 return !$scope.versionIsComplete(obj);
             }
         };
-        $scope.investorSearchFilter = function(obj) {
-            var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
-            var re = new RegExp(testString, 'i');
-            // need to backslash all special characters
-            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
-        };
-
         $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
