@@ -1,15 +1,17 @@
-//app for the program
-var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments', 'commonDirectives'], function($routeProvider, $locationProvider){
-  $locationProvider.html5Mode(true).hashPrefix('');
+var app = angular.module('RegisterApp',
+        ['ngRoute', 'brijj', 'angularPayments', 'commonDirectives',
+         'commonServices'],
+function($routeProvider, $locationProvider){
+    $locationProvider.html5Mode(true).hashPrefix('');
 
-  $routeProvider.
-      when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
-      when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
-      when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
-      when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
-      when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
-      when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
-      otherwise({redirectTo:'/register/'});
+    $routeProvider.
+        when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
+        when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
+        when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
+        when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
+        when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
+        when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
+        otherwise({redirectTo:'/register/'});
 });
 
 /** @name $scope#activated
@@ -99,10 +101,16 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
     }
 ]);
 
-app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$location',
-    function($scope, $routeParams, SWBrijj, $location) {
+app.controller('CompanyOneStep',
+               ['$scope', 'payments', '$routeParams', 'SWBrijj', '$location',
+    function($scope, payments, $routeParams, SWBrijj, $location) {
         $scope.selectedPlan = '002';
-        $scope.coupon_code = $routeParams.coupon;
+        $scope.coupon_code = $routeParams.c;
+        if ($scope.coupon_code) {
+            payments.get_coupon($scope.coupon_code).then(function(x) {
+                console.log(x);
+            });
+        }
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&

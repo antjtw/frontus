@@ -602,7 +602,8 @@ navm.controller('NavCtrl',
                     $rootScope.load_invoices();
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
-                        $rootScope.billing.current_card = x.data.cards.data[0];
+                        var rsp = JSON.parse(x);
+                        $rootScope.billing.current_card = rsp.cards.data[0];
                         $rootScope.$broadcast('billingLoaded');
                     });
                 } else {
@@ -627,13 +628,14 @@ navm.controller('NavCtrl',
         };
         $rootScope.load_invoices = function() {
             payments.get_invoices($rootScope.billing.customer_id, 3)
-            .then(function(resp) {
+            .then(function(x) {
+                var resp = JSON.parse(x);
                 if (!$rootScope.billing) {$rootScope.billing = {};}
-                $rootScope.billing.invoices = resp.data.data.filter(function(el) {
+                $rootScope.billing.invoices = resp.data.filter(function(el) {
                     return el.amount>0;
                 });
                 if ($rootScope.billing.currentPlan!=="000") {
-                    $scope.load_upcoming_invoice();
+                    //$scope.load_upcoming_invoice();
                 }
             });
         };
