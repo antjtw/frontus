@@ -99,13 +99,13 @@
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:doc.shown}">
                                 <td class="status-toggle"
-                                    ng-class="{'pointer':(doc.versions[0] && hideSharebar && allArchived(doc.versions)),
-                                               'status-toggle-on': (doc.shown && allArchived(doc.versions))}"
+                                    ng-class="{'pointer':(doc.versions[0] && hideSharebar && versionsVisible(doc.versions)),
+                                               'status-toggle-on': (doc.shown && versionsVisible(doc.versions))}"
                                     ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
                                     <div ng-switch on="hideSharebar">
                                         <div ng-switch-when="true" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-hide="!hideSharebar">
-                                            <span ng-hide="!allArchived(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                            <span ng-show="allArchived(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                                            <span ng-hide="!versionsVisible(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                                            <span ng-show="versionsVisible(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                                         </div>
                                         <div ng-switch-when="false" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="!hideSharebar">
                                             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
@@ -252,10 +252,10 @@
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:investor.shown}">
                                 <td class="status-toggle"
-                                    ng-class="{'pointer':(investor.versions[0] && allArchived(investor.versions)), 'status-toggle-on':(investor.shown && allArchived(investor.versions))}"
+                                    ng-class="{'pointer':(investor.versions[0] && versionsVisible(investor.versions)), 'status-toggle-on':(investor.shown && versionsVisible(investor.versions))}"
                                     ng-click="!investor.versions[0] || opendetails(investor)">
-                                    <span ng-hide="!allArchived(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                    <span ng-show="allArchived(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                                    <span ng-hide="!versionsVisible(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                                    <span ng-show="versionsVisible(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                                 </td>
                                 <td class="shareholder-column docname-column">
                                     <ul>

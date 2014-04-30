@@ -657,7 +657,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             var completed = $scope.versionsCompleted(doc).length;
             var hide_completed = ($scope.maxRatio !== 1000);
 
-            var num = (hide_completed ? 0 : completed) + (show_archived ? archived : 0);
+            var num = (hide_completed ? 0 : completed);// + (show_archived ? archived : 0);
             var total = doc.versions.length;
             var display_total = doc.versions.length + (hide_completed ? -completed : 0);
 
@@ -1128,19 +1128,16 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 });
         };
 
-        $scope.allArchived = function(versions) {
-            var result = 0;
-            if ($scope.archivestate) {
-                result = 1;
+        $scope.versionsVisible = function(versions) {
+            var total = versions.length;
+            if ($scope.maxRatio!==1000) {
+                total -= versions.filter($scope.versionIsComplete)
+                                 .length;
+            } else if (!$scope.archivestate) {
+                total -= versions.filter(function(el) {return el.archived;})
+                                 .length;
             }
-            else {
-                angular.forEach(versions, function(version) {
-                    if (!version.archived) {
-                        result += 1;
-                    }
-                });
-            }
-            return result > 0 ? true : false;
+            return total > 0;
         };
 
         $scope.archiveDoc = function(version) {
