@@ -290,10 +290,10 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
         $scope.query = "";
-        $scope.archivestate = false;
+        $scope.show_archived = false;
 
         $scope.toggleArchived = function() {
-            $scope.archivestate = !$scope.archivestate;
+            $scope.show_archived = !$scope.show_archived;
         };
 
         // Only allow docOrder to be set -- versionOrder is fixed
@@ -313,22 +313,22 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-             if (!obj.statusRatio || !$scope.maxRatio) {
-                 return true;
-             }
-             if ($scope.hideSharebar) {
-                return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
+            if (!$scope.hideSharebar && obj.forShare) {
+                return true;
+            } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
+                console.log("here");
+                // if hide_completed and all versions are completed then return false
+                return false;
+            } else if (!$scope.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
+                // if !show_archived and all versions are archived then return false
+                return false;
             } else {
-                return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
+                return !$scope.query || re.test(obj.docname);
             }
         };
-        $scope.investorSearchFilter = function(obj) {
-            var testString = $scope.query.replace(/[\\\.\+\*\?\^\$\[\]\(\)\{\}\/\'\#\:\!\=\|]/ig, "\\$&");
-            var re = new RegExp(testString, 'i');
-            // need to backslash all special characters
-            return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.name) || re.test(obj.investor));
+        $scope.versionFilter = function(obj) {
+            return $scope.maxRatio==1000 || !$scope.versionIsComplete(obj);
         };
-
         $scope.exportOriginalToPdf = function(doc) {
             SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
@@ -641,36 +641,28 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         };
 
         $scope.formatDocStatusRatio = function(doc) {
-            if (doc.versions) {
-                if (doc.versions.length === 0) {
-                    return "";
-                } else {
-                    var total = 0;
-                    var archived = 0;
-                    if ($scope.archivestate) {
-                        total = doc.versions.length;
-                    }
-                    else {
-                        angular.forEach(doc.versions, function (version) {
-                            if (!version.archived) {
-                                total += 1;
-                            }
-                            else {
-                                archived += 1
-                            }
-                        });
-                    }
-                    var docnumber = ($scope.versionsFinalized(doc).length + $scope.versionsViewed(doc).length + $scope.versionsRetracted(doc).length - archived)
-                    if (!docnumber && !total) {
-                        return "All documents archived";
-                    }
-                    else {
-                        return docnumber +
-                            " / " +
-                            total +
-                            " documents";
-                    }
-                }
+            if (!doc.versions || doc.versions.length===0) return "";
+
+
+            var archived = $scope.versionsArchived(doc).length;
+            var show_archived = $scope.show_archived;
+
+            // fixme what if a completed document is archived?
+            var completed = $scope.versionsCompleted(doc).length;
+            var hide_completed = ($scope.maxRatio !== 1000);
+
+            var num = (hide_completed ? 0 : completed);// + (show_archived ? archived : 0);
+            var total = doc.versions.length;
+            var display_total = doc.versions.length + (hide_completed ? -completed : 0);
+
+            if (total == archived && !show_archived) {
+                return "All documents archived";
+            } else if (total == completed && hide_completed) {
+                return "All documents completed";
+            } else if (total == archived+completed && (!show_archived && hide_completed)) {
+                return "All documents are archived or completed";
+            } else {
+                return num+" / "+display_total+" documents";
             }
         };
 
@@ -708,6 +700,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
         };
 
+        $scope.versionsArchived = function(doc) {
+            return doc.versions.filter(function(el) {return el.archived;});
+        };
+        $scope.versionsCompleted = function(doc) {
+            return doc.versions.filter($scope.versionIsComplete);
+        };
         $scope.versionsFinalized = function(doc) {
             return doc.versions.filter(function(el) {return el.when_finalized;});
         };
@@ -1125,19 +1123,17 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 });
         };
 
-        $scope.allArchived = function(versions) {
-            var result = 0;
-            if ($scope.archivestate) {
-                result = 1;
+        $scope.versionsVisible = function(versions) {
+            if (!versions) return false;
+            var total = versions.length;
+            if ($scope.maxRatio!==1000) {
+                total -= versions.filter($scope.versionIsComplete)
+                                 .length;
+            } else if (!$scope.show_archived) {
+                total -= versions.filter(function(el) {return el.archived;})
+                                 .length;
             }
-            else {
-                angular.forEach(versions, function(version) {
-                    if (!version.archived) {
-                        result += 1;
-                    }
-                });
-            }
-            return result > 0 ? true : false;
+            return total > 0;
         };
 
         $scope.archiveDoc = function(version) {

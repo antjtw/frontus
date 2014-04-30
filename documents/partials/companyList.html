@@ -30,7 +30,7 @@
                         </div>
                         <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                             <span>SHOW ARCHIVED</span>
-                            <button class="check-box-button" ng-class="{'selected':archivestate==true}" ng-click="toggleArchived();">
+                            <button class="check-box-button" ng-class="{'selected':show_archived==true}" ng-click="toggleArchived();">
                                 <span data-icon="&#xe023;" aria-hidden="true"></span>
                             </button>
                         </div>
@@ -103,13 +103,13 @@
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:doc.shown}">
                                 <td class="status-toggle"
-                                    ng-class="{'pointer':(doc.versions[0] && hideSharebar && allArchived(doc.versions)),
-                                               'status-toggle-on': (doc.shown && allArchived(doc.versions))}"
+                                    ng-class="{'pointer':(doc.versions[0] && hideSharebar && versionsVisible(doc.versions)),
+                                               'status-toggle-on': (doc.shown && versionsVisible(doc.versions))}"
                                     ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
                                     <div ng-switch on="hideSharebar">
                                         <div ng-switch-when="true" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-hide="!hideSharebar">
-                                            <span ng-hide="!allArchived(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                            <span ng-show="allArchived(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                                            <span ng-hide="!versionsVisible(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                                            <span ng-show="versionsVisible(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                                         </div>
                                         <div ng-switch-when="false" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="!hideSharebar">
                                             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
@@ -185,7 +185,7 @@
                             </tr>
                             <!-- TODO animate show/hide by sliding down/up -->
                             <tr ng-if="doc.shown" class="sub-row"
-                                ng-repeat="version in doc.versions | archived: archivestate | orderBy:versionOrder">
+                                ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
                                 <td class="status-toggle"></td>
                                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                                     <ul>
@@ -206,7 +206,7 @@
                                 </td>
                                 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                                     <ul>
-                                        <li>{{shortVersionStatus(version)}} <span ng-show="archivestate && version.archived"> & archived</span></li>
+                                        <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
                                         <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
@@ -252,14 +252,14 @@
                                 <th></th>
                             </tr>
                         </tbody>
-                        <tbody ng-repeat="investor in investorDocs | filter:investorSearchFilter | orderBy:investorOrder">
+                        <tbody ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
                             <tr class="empty-row"></tr>
                             <tr ng-class="{selectedrow:investor.shown}">
                                 <td class="status-toggle"
-                                    ng-class="{'pointer':(investor.versions[0] && allArchived(investor.versions)), 'status-toggle-on':(investor.shown && allArchived(investor.versions))}"
+                                    ng-class="{'pointer':(investor.versions[0] && versionsVisible(investor.versions)), 'status-toggle-on':(investor.shown && versionsVisible(investor.versions))}"
                                     ng-click="!investor.versions[0] || opendetails(investor)">
-                                    <span ng-hide="!allArchived(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                    <span ng-show="allArchived(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                                    <span ng-hide="!versionsVisible(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                                    <span ng-show="versionsVisible(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
                                 </td>
                                 <td class="shareholder-column docname-column">
                                     <ul>
@@ -292,7 +292,7 @@
                                 </td>
                             </tr>
                             <tr ng-show="investor.shown" class="sub-row"
-                                ng-repeat="version in investor.versions | archived: archivestate | orderBy:versionOrder">
+                                ng-repeat="version in investor.versions | archived: show_archived | orderBy:versionOrder">
                                 <td class="status-toggle"></td>
                                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                                     <ul>
@@ -313,7 +313,7 @@
                                 </td>
                                 <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(version)">
                                     <ul>
-                                        <li>{{shortVersionStatus(version)}} <span ng-show="archivestate && version.archived"> & archived</span></li>
+                                        <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
                                         <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
