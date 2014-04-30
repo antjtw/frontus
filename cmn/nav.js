@@ -648,7 +648,8 @@ navm.controller('NavCtrl',
         };
         $rootScope.companyIsZombie = function() {
             return $rootScope.billing.currentplan == "000"
-                || $rootScope.billing.payment_token === null;
+                || $rootScope.billing.payment_token === null
+                || !$rootScope.billing.payment_token;
         };
         $rootScope.zombiemessage = "Please update your payment information to use this feature.";
         $rootScope.triggerUpgradeDocuments = function(numNew) {
