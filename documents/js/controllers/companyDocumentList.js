@@ -1068,11 +1068,11 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.reallyDeleteDoc = function(doc) {
             SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                 void(data);
-                $rootScope.documents.billing.usage.documents_total -= 1;
+                $rootScope.billing.usage.documents_total -= 1;
                 $scope.$emit("notification:success", doc.docname + " deleted.");
                 $scope.documents.splice($scope.documents.indexOf(doc), 1);
             }).except(function(x) {
-                $scope.$emit("notification:fail", "Document deletion failed.");
+                $scope.$emit("notification:fail", x);
             });
         };
 
