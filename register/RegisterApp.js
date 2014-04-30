@@ -102,15 +102,28 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
 ]);
 
 app.controller('CompanyOneStep',
-               ['$scope', 'payments', '$routeParams', 'SWBrijj', '$location',
-    function($scope, payments, $routeParams, SWBrijj, $location) {
+               ['$scope', 'payments', '$routeParams', 'SWBrijj', '$location', '$filter',
+    function($scope, payments, $routeParams, SWBrijj, $location, $filter) {
         $scope.selectedPlan = '002';
         $scope.coupon_code = $routeParams.c;
         if ($scope.coupon_code) {
             payments.get_coupon($scope.coupon_code).then(function(x) {
-                console.log(x);
+                var cpn = JSON.parse(x);
+                if (cpn.percent_off) {
+                    $scope.formatted_coupon = cpn.percent_off + "% off";
+                } else {
+                    $scope.formatted_coupon = $filter('currency')(cpn.amount_off/100, "$") + " off";
+                }
+                if (cpn.duration == 'repeating') {
+                    $scope.formatted_coupon += " for "+cpn.duration_in_months+" months";
+                } else if (cpn.duration == 'forever') {
+                    $scope.formatted_coupon += " forever";
+                } else {
+                    $scope.formatted_coupon += " your first month";
+                }
             });
         }
+
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&
