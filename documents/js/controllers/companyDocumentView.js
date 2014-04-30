@@ -16,9 +16,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
         });
+        /*
+        Don't really want this as it overrides even the ones that are caught and handled properly
         $scope.$on('event:brijjError', function(event, msg) {
             $scope.$emit("notification:fail", msg);//"Oops, something went wrong.");
-        });
+        }); */
 
         $scope.$on('event:reload', function(event) {
             void(event);
