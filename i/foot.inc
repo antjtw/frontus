@@ -9,6 +9,7 @@
                         <li><a target="_self" href="/team">Team</a></li>
                         <li><a target="_self" href="/careers">Careers</a></li>
                         <li><a target="_self" href="/press">Press</a></li>
+                        <li><a href="http://docs.sharewave.com">FAQs</a></li>
                     </ul>
                     <ul>
                         <li>Policies</i>

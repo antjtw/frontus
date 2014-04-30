@@ -535,7 +535,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         });
 
         $scope.pricingregister = function() {
-            document.location.href = "/pricing";
+            document.location.href = "/register/company-onestep";
         };
 
         $scope.pricingregisterchoose = function(which) {
