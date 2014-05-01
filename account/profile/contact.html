@@ -230,7 +230,7 @@
             <button class="btn" ng-click="pictureModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="uploadFile(); pictureModalClose();">Upload</button>
+            <button class="btn" ng-disabled="files.length===0" ng-click="uploadFile(); pictureModalClose();">Upload</button>
         </div>
     </div>
 </div>
