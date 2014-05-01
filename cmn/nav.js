@@ -166,7 +166,7 @@ navm.controller('NavCtrl',
             SWBrijj.tblm('account.my_company_payment_history').then(function(data) {
                 var p = data.length > 0 && data[0];
                 $scope.plan = p;
-                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
+                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_requested != null && p.when_attempted == null))) {
                     $rootScope.persistentNotification = false;
                     Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
                 } else {
