@@ -163,7 +163,7 @@ navm.controller('NavCtrl',
         $scope.registertoggle = false;
         $rootScope.persistentNotification = false;
         if (navState.role=='issuer') {
-            SWBrijj.tblm('account.my_company_payment').then(function(data) {
+            SWBrijj.tblm('account.my_company_payment_history').then(function(data) {
                 var p = data.length > 0 && data[0];
                 $scope.plan = p;
                 if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
