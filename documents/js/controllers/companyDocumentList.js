@@ -1,7 +1,7 @@
 //'use strict';
 
-app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
-    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
+app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$window', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
+    function($scope, $timeout, $modal, $window, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -1274,9 +1274,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             });
         };
 
-        $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 150) + "px"};
+        $scope.$watch($window.innerHeight, function() {
+            console.log($window.innerHeight);
+            $scope.viewportheight = {height: String($window.innerHeight - 100) + "px"};
         });
+
+
     }
 ]);
 

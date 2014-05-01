@@ -1,19 +1,5 @@
-.new-nav.affix {
+.new-nav {
     position: fixed;
-    height: 100%;
-    top: 0;
-    left: -150px;
-    width:  190px;
-    background-color: rgb(30, 45, 61);
-    -webkit-transition: left 0.35s ease;
-    -moz-transition: left 0.35s ease;
-    -o-transition: left 0.35s ease;
-    transition: left 0.35s ease;
-    z-index: 1000;
-}
-
-.new-nav.affix-top {
-    position: absolute;
     height: 100%;
     top: 40px;
     left: -150px;
