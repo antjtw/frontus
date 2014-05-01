@@ -230,7 +230,7 @@
             <button class="btn" ng-click="pictureModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-disabled="files.length===0" ng-click="uploadFile(); pictureModalClose();">Upload</button>
+            <button class="btn" ng-disabled="!files || files.length===0" ng-click="uploadFile(); pictureModalClose();">Upload</button>
         </div>
     </div>
 </div>
@@ -314,7 +314,7 @@
         <div class="pull-right standard-button green" style="margin-right: 30px;">
             <button class="btn"
                     ng-click="uploadSignatureNow();"
-                    ng-disabled="files.length===0">Done</button>
+                    ng-disabled="!files || files.length===0">Done</button>
         </div>
         <div class="pull-right standard-button gray">
             <button class="btn"
