@@ -602,7 +602,8 @@ navm.controller('NavCtrl',
                     $rootScope.load_invoices();
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
-                        $rootScope.billing.current_card = x.data.cards.data[0];
+                        var rsp = JSON.parse(x);
+                        $rootScope.billing.current_card = rsp.cards.data[0];
                         $rootScope.$broadcast('billingLoaded');
                     });
                 } else {
@@ -627,11 +628,12 @@ navm.controller('NavCtrl',
         };
         $rootScope.load_invoices = function() {
             payments.get_invoices($rootScope.billing.customer_id, 3)
-            .then(function(resp) {
+            .then(function(x) {
+                var resp = JSON.parse(x);
                 if (!$rootScope.billing) {$rootScope.billing = {};}
-                $rootScope.billing.invoices = resp.data.data.filter(function(el) {
+                $rootScope.billing.invoices = resp.data.filter(function(el) {
                     return el.amount>0;
-                });
+                }) || [];
                 if ($rootScope.billing.currentPlan!=="000") {
                     $scope.load_upcoming_invoice();
                 }
@@ -639,14 +641,18 @@ navm.controller('NavCtrl',
         };
         $rootScope.load_upcoming_invoice = function() {
             payments.get_upcoming_invoice($rootScope.billing.customer_id)
-            .then(function(resp) {
-                //$rootScope.billing.invoices.push(resp.data);
-                //$rootScope.billing.next_invoice_received = true;
+            .then(function(x) {
+                var resp = JSON.parse(x);
+                if (!$rootScope.billing.next_invoice_received) {
+                    //$rootScope.billing.invoices.push(resp);
+                    $rootScope.billing.next_invoice_received = true;
+                }
             });
         };
         $rootScope.companyIsZombie = function() {
             return $rootScope.billing.currentplan == "000"
-                || $rootScope.billing.payment_token === null;
+                || $rootScope.billing.payment_token === null
+                || !$rootScope.billing.payment_token;
         };
         $rootScope.zombiemessage = "Please update your payment information to use this feature.";
         $rootScope.triggerUpgradeDocuments = function(numNew) {

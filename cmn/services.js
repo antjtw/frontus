@@ -1,12 +1,5 @@
 var service = angular.module('commonServices', ['brijj']);
 
-// Add Stripe authorization to default $http request headers.
-service.run(function($http, SWBrijj) {
-    SWBrijj.tblm('config.configuration', 'name', 'stripe').then(function(data) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + data.value;
-    });
-});
-
 service.filter('caplength', function () {
     return function (word, length) {
         if (word) {
@@ -20,13 +13,7 @@ service.filter('caplength', function () {
     };
 });
 
-/* STRIPE API SERVICE
- * Always returns a promise.
- *
- * Controllers must coordinate between Stripe, DB and UI.
- *
- */
-service.factory('payments', function($http, SWBrijj) {
+service.service('payments', function(SWBrijj) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -39,6 +26,24 @@ service.factory('payments', function($http, SWBrijj) {
     };
     s.create_customer = function(newplan, newcard) {
         return SWBrijj.proc('account.create_customer', newplan, newcard);
+    };
+    s.get_coupon = function(cpn) {
+        return SWBrijj.stripeExternal(['get_coupon', cpn]);
+    };
+    s.get_customer = function(cusid) {
+        return SWBrijj.stripe(['get_customer', cusid]);
+    };
+    s.get_invoices = function(cusid, n) {
+        return SWBrijj.stripe(['get_invoices', cusid, n]);
+    };
+    s.get_upcoming_invoice = function(cusid) {
+        return SWBrijj.stripe(['get_upcoming_invoice', cusid]);
+    };
+    /*
+    s.get_coupon = function(cpn) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/coupons/'+cpn
+        });
     };
     s.get_customer = function(customerid) {
         return $http({method: 'GET',
@@ -58,6 +63,7 @@ service.factory('payments', function($http, SWBrijj) {
                       params: {customer: customerid}
         });
     };
+    */
     s.usage_details = function() {
         return SWBrijj.tblm('account.my_usage_details');
     };

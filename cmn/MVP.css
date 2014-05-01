@@ -4065,6 +4065,7 @@ div#us_report_button button.us_button_horizontal {
 }
 .meter > span {
     width: 0%;
+    max-width: 100%;
     display: block;
     height: 100%;
     -moz-border-radius: 25px;
