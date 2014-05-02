@@ -4179,3 +4179,8 @@ div.upgradeWarning > span {
 .confirmBody > div.upgradeWarning {
     margin-bottom: 20px;
 }
+
+.tabbable .tab-content {
+    overflow: visible;
+    padding-bottom: 20px;
+}
