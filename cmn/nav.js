@@ -103,7 +103,6 @@ navm.controller('NavCtrl',
              navState, $location, $filter, payments)
     {
         $scope.companies = [];
-        $rootScope.billingLoaded = false;
 
         if (location.host=='share.wave' || navState.tester) {
             var rr = getCSSRule('.for-r0ml');
