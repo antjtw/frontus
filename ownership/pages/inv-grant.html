@@ -31,7 +31,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span8 docLibrary leftBlock" style="overflow-x: auto">
+    <div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
 
         <div class="row-fluid">
             <table class="tableView bodyText grant-table viewmode" ng-show="optionView == 'Security'">
@@ -149,7 +149,7 @@
     </div>
 
 
-    <div class="span4 capright">
+    <div ng-style="viewportheight" class="span4 capright">
         <div ng-switch on="sideBar">
         <span ng-switch-when="1">
           <div class="headsection tabbed row-fluid">
