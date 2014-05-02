@@ -103,6 +103,7 @@ navm.controller('NavCtrl',
              navState, $location, $filter, payments)
     {
         $scope.companies = [];
+        $rootScope.billingLoaded = false;
 
         if (location.host=='share.wave' || navState.tester) {
             var rr = getCSSRule('.for-r0ml');
@@ -605,13 +606,6 @@ navm.controller('NavCtrl',
                         var rsp = JSON.parse(x);
                         $rootScope.billing.current_card = rsp.cards.data[0];
                         $rootScope.$broadcast('billingLoaded');
-                        if ($rootScope.companyIsZombie()) {
-                            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-                            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-                        } else {
-                            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-                            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
-                        }
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
@@ -619,6 +613,7 @@ navm.controller('NavCtrl',
                     } else {
                         $rootScope.selectedPlan = '002';
                     }
+                    $rootScope.billingLoaded = true;
                     $rootScope.$broadcast('billingLoaded');
                 }
             }).except(function(err) {
@@ -657,10 +652,13 @@ navm.controller('NavCtrl',
             });
         };
         $rootScope.companyIsZombie = function() {
-            return $rootScope.billing.currentplan == "000"
+            return ($rootScope.billing.currentPlan == "000"
                 || $rootScope.billing.payment_token === null
-                || !$rootScope.billing.payment_token;
+                || !$rootScope.billing.payment_token) && navState.role == "issuer";
+
         };
+
+
         $rootScope.zombiemessage = "Please update your payment information to use this feature.";
         $rootScope.triggerUpgradeDocuments = function(numNew) {
             if ($rootScope.billing && $rootScope.billing.usage) {
@@ -702,6 +700,15 @@ navm.controller('NavCtrl',
             $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
             $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
         }
+        $rootScope.$on('billingLoaded', function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
+        });
         window.onresize = function() {
             if ($rootScope.companyIsZombie()) {
                 $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
