@@ -11,7 +11,7 @@ m.directive('composeMessage', function() {
             $scope.getInvestors = function() {
                 $scope.investors = [];
                 angular.forEach($scope.people, function(p) {
-                    $scope.investors.push(p.email);
+                    $scope.investors.push(p.selector);
                 });
             };
             $scope.getInvestors();
@@ -40,8 +40,17 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
+                var regExp = /\(([^)]+)\)/;
+                var recipients = [];
+                angular.forEach(msg.recipients, function(person) {
+                    var matches = regExp.exec(person);
+                    if (matches == null) {
+                        matches = ["", person];
+                    }
+                    recipients.push(matches[1]);
+                });
                 SWBrijj.procm('mail.send_message',
-                              JSON.stringify(msg.recipients),
+                              JSON.stringify(recipients),
                               category,
                               template,
                               msg.subject,

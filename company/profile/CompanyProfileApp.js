@@ -413,6 +413,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                 angular.forEach(admins, function(admin) {
                     angular.forEach($scope.people, function(person) {
+                        if (person.name) {
+                            person.selector = person.name + "  (" + person.email +")";
+                        }
+                        else {
+                            person.selector = "(" + person.email+")";
+                        }
+
                         if (person.email == admin.email) {
                             person.role = "issuer";
                         }
