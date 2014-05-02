@@ -159,7 +159,7 @@
     </div>
 </div>
 
-<div class="span8 docLibrary leftBlock" style="overflow-x: auto">
+<div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
 
     <table class="tableView bodyText grant-table" ng-show="issues.length===0 && done">
         <tbody class="empty-table">
@@ -319,7 +319,7 @@
 </div>
 
 
-<div class="span4 capright">
+<div ng-style="viewportheight" class="span4 capright">
 <div ng-switch on="sideBar">
 <span ng-switch-when="1">
 

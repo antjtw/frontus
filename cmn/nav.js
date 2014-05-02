@@ -689,8 +689,10 @@ navm.controller('NavCtrl',
 
         //I don't love this but it works, should probably make a directive.
         $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+        $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
         window.onresize = function() {
             $scope.viewportheight = {height: String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
             $scope.$apply();
         };
         

@@ -3886,6 +3886,7 @@ h2.onboard {
     float: right;
     margin-right: 40px;
     margin-left: 20px;
+    margin-top: 20px;
 }
 
 .dynamic-page .recipientInfo.docLibrary.statusBlock {
@@ -3893,6 +3894,7 @@ h2.onboard {
     width: -moz-calc(100% - 440px) !important;
     width: -webkit-calc(100% - 440px) !important;
     width: calc(100% - 440px) !important;
+    margin-top: 20px;
 }
 
 .dynamic-page .maintabs {
