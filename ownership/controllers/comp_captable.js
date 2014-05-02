@@ -1399,7 +1399,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             }
                         });
                     });
-                    console.log($scope.trans.length);
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Transaction failed to save, please try entering again");
                     });

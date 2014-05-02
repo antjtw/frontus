@@ -1274,11 +1274,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             });
         };
 
-        $scope.$watch($window.innerHeight, function() {
-            console.log($window.innerHeight);
-            $scope.viewportheight = {height: String($window.innerHeight - 100) + "px"};
-        });
-
 
     }
 ]);

@@ -581,7 +581,7 @@
 </div>
 
 <div class="row-fluid leftTabWindow">
-<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
+<div ng-style="viewportheight" ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
         <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
@@ -719,9 +719,9 @@
     </div>
 </div>
 
-<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
+<div ng-style="viewportheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
 <span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
-<button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
+<button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
     {{sideToggleName}}
 </button>
 <div class="row-fluid">

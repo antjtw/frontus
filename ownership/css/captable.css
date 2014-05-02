@@ -345,7 +345,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     float: right;
     margin-left: 0;
     width: 350px;
-    min-height: 850px;
     border-left: 6px solid #E3E3E3;
 }
 
@@ -354,11 +353,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     -moz-transition:all 0.25s; /* Firefox 4 */;
     -webkit-transition: all 0.25s; /* Safari and Chrome */
     -o-transition: all 0.25s; /* Opera */
-}
-
-.span4.capright.button-offset {
-    margin-top: -19px;
-    position: relative;
 }
 
 .span4.capright > button {
