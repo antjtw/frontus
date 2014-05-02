@@ -3410,6 +3410,7 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list > div {
     margin: 0 0 20px 0;
     line-height: 32px;
+    overflow: auto;
 }
 .compose-modal.modal > div.modalText {
     padding: 0 20px 0 20px;
@@ -3429,9 +3430,6 @@ button.icon-button:hover {
 }
 .compose-modal.modal > div.modalText .input-list>div>input {
     height: 24px;
-}
-.compose-modal.modal > div.modalText .input-list>div:last-child {
-    padding-bottom: 40px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div.select2-container {
     width: 490px;
