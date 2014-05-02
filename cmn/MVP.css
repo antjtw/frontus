@@ -1275,6 +1275,10 @@ form.inputs {
     padding-top: 40px;
 }
 
+.coreEdit.extrapadding {
+    padding-top: 90px;
+}
+
 .span10.coreEdit {
     height:100%;
     margin-left:0;

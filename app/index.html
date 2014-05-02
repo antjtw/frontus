@@ -43,7 +43,7 @@
 <div class="wrap">
     <navbar></navbar>
     <verticalnav></verticalnav>
-    <div class="coreEdit" data-ng-view=""></div>
+    <div class="coreEdit" ng-class="{'extrapadding': billing.currentPlan && companyIsZombie()}" data-ng-view=""></div>
 </div>
 <!--{{/i/foot_js.inc}}-->
 </body>

@@ -605,6 +605,13 @@ navm.controller('NavCtrl',
                         var rsp = JSON.parse(x);
                         $rootScope.billing.current_card = rsp.cards.data[0];
                         $rootScope.$broadcast('billingLoaded');
+                        if ($rootScope.companyIsZombie()) {
+                            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+                        } else {
+                            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+                        }
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
@@ -688,11 +695,21 @@ navm.controller('NavCtrl',
         };
 
         //I don't love this but it works, should probably make a directive.
-        $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-        $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
-        window.onresize = function() {
-            $scope.viewportheight = {height: String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+        if ($rootScope.companyIsZombie()) {
+            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+        } else {
+            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
             $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+        }
+        window.onresize = function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
             $scope.$apply();
         };
         
