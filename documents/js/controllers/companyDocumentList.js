@@ -316,7 +316,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             if (!$scope.hideSharebar && obj.forShare) {
                 return true;
             } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
-                console.log("here");
                 // if hide_completed and all versions are completed then return false
                 return false;
             } else if (!$scope.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
@@ -766,18 +765,24 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 }
             }
         };
+        // TODO is it necessary to wrap with new functions?
         $scope.isCompleteSigned = function(version) {
             return basics.isCompleteSigned(version);
         };
         $scope.isCompleteViewed = function(version) {
             return basics.isCompleteViewed(version);
         };
+        $scope.isCompleteVoided = function(version) {
+            return basics.isCompleteVoided(version);
+        };
         $scope.isCompleteRetracted = function(version) {
             return version.when_retracted;
         };
 
         $scope.versionIsComplete = function(version) {
-            return  $scope.isCompleteSigned(version) || $scope.isCompleteViewed(version) || $scope.isCompleteRetracted(version);
+            return $scope.isCompleteSigned(version)
+                || $scope.isCompleteViewed(version)
+                || $scope.isCompleteRetracted(version);
         };
 
         $scope.defaultDocStatus = function (doc) {

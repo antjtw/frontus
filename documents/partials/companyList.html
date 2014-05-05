@@ -292,7 +292,7 @@
                                 </td>
                             </tr>
                             <tr ng-show="investor.shown" class="sub-row"
-                                ng-repeat="version in investor.versions | archived: show_archived | orderBy:versionOrder">
+                                ng-repeat="version in investor.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
                                 <td class="status-toggle"></td>
                                 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
                                     <ul>
