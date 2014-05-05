@@ -47,13 +47,13 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         var loaded_once = false;
         $scope.$on("profile_loaded", function() {
             if (loaded_once) {return;}
+            loaded_once = true;
             SWBrijj.tblm('account.my_signature', ['signature']
             ).then(function(x) {
                 if (x && x[0] && x[0].signature && x[0].signature.length>0) {
                     $rootScope.person.has_signature = true;
                 }
                 $scope.loadSmartDocuments();
-                loaded_once = true;
             }).except(function(x) {
                 console.log(x);
             });
@@ -92,6 +92,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                     }
                 }); 
             }
+            $scope.finishedLoading = true;
             $scope.loadDocumentVersions();
             return st1;
         };
@@ -238,7 +239,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                 investor.statusRatio = $scope.docStatusRatio(investor);
             });
-            $scope.finishedLoading = true;
         };
 
         $scope.loadDocumentActivity = function() {
@@ -313,7 +313,10 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             var re = new RegExp($scope.query, 'i');
             /** @name obj#docname
              * @type { string} */
-            if ($scope.hideSharebar) {
+             if (!obj.statusRatio || !$scope.maxRatio) {
+                 return true;
+             }
+             if ($scope.hideSharebar) {
                 return (obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname));
             } else {
                 return obj.forShare || ((obj.statusRatio < $scope.maxRatio) && (!$scope.query || re.test(obj.docname)));
@@ -1098,6 +1101,28 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             $scope.voidDocModal = false;
         };
 
+        $scope.remindDocOpen = function(doc) {
+            $scope.reminddocForModal = doc;
+            $scope.remindDocModal = true;
+        };
+
+        $scope.remindDocClose = function() {
+            $scope.remindDocModal = false;
+        };
+
+        $scope.remindDocument = function(doc, message) {
+            if (!message || message.length == 0) {
+                message = " ";
+            }
+            SWBrijj.procm("document.remind_investor", doc.doc_id, message).then(function(data) {
+                $scope.$emit("notification:success", "Reminder sent.");
+                void(data);
+            }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    console.log(x);
+                });
+        };
+
         $scope.allArchived = function(versions) {
             var result = 0;
             if ($scope.archivestate) {
@@ -1161,17 +1186,19 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             });
             var regExp = /\(([^)]+)\)/;
             angular.forEach(people, function(person) {
-                var email;
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                email = matches[1];
-                if (!re.test(email)) {
-                    anybad = true;
-                }
-                if (investors.indexOf(person)!==-1) {
-                    anybad = true;
+                if (person.length != 1) {
+                    var email;
+                    var matches = regExp.exec(person);
+                    if (matches === null) {
+                        matches = ["", person];
+                    }
+                    email = matches[1];
+                    if (!re.test(email)) {
+                        anybad = true;
+                    }
+                    if (investors.indexOf(person)!==-1) {
+                        anybad = true;
+                    }
                 }
             });
             if (people && people.length === 0) {
@@ -1179,7 +1206,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
             if (compare) {
                 docsharestateCOPY = angular.copy($scope.docShareState);
-                if (anybad && !old_failed && people && docs) {
+                if (anybad && !old_failed && people.length > 0 && docs) {
                     $scope.$emit("notification:fail", "Oops, recipients have already received these documents.");
                 }
             }

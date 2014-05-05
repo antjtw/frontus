@@ -1,0 +1,167 @@
+.new-nav.affix {
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: -150px;
+    width:  190px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: left 0.35s ease;
+    -moz-transition: left 0.35s ease;
+    -o-transition: left 0.35s ease;
+    transition: left 0.35s ease;
+    z-index: 1000;
+}
+
+.new-nav.affix-top {
+    position: absolute;
+    height: 100%;
+    top: 40px;
+    left: -150px;
+    width:  190px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: left 0.35s ease;
+    -moz-transition: left 0.35s ease;
+    -o-transition: left 0.35s ease;
+    transition: left 0.35s ease;
+    z-index: 1000;
+}
+
+.new-nav:hover {
+    left: 0px;
+}
+
+.show-hide-animation.ng-hide-add,
+.show-hide-animation.ng-hide-remove {
+    -webkit-transition:0.2s linear all;
+    transition:0.2s linear all;
+
+    /* remember to add this */
+    display:block!important;
+    opacity:1;
+}
+.show-hide-animation.ng-hide {
+    opacity:0;
+}
+
+
+.new-nav .accordion-group {
+    border: none;
+}
+
+.new-nav .accordion-heading {
+    padding: 0;
+}
+
+.new-nav .manycomp .accordion-heading .accordion-toggle {
+    padding: 4px 15px;
+}
+
+.new-nav .accordion-heading .accordion-toggle {
+    padding: 0;
+}
+
+.new-nav .accordion-heading a {
+    font-size: 12px;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+}
+
+.new-nav .accordion-heading a > span:nth-child(-n+2):before {
+    vertical-align: 10%;
+    margin-right: 5px;
+}
+
+.new-nav .nav-section-header {
+    text-transform: uppercase;
+    font-size: 12px;
+    text-shadow: none;
+    margin-left: 19px;
+    color: #E3E3E3;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+}
+
+.new-nav .nav-section-header > span {
+    margin-right: 8px;
+    vertical-align: -8%;
+}
+
+.new-nav .opencomp.manycomp {
+    background-color: #33485D;
+}
+
+.new-nav .accordion-heading a > span:last-of-type {
+    width: 130px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+.new-nav .opencomp .accordion-heading a > span:last-of-type {
+    color: #F1F1F1;
+}
+
+.new-nav .opencomp .activepage {
+}
+
+.new-nav .opencomp .activepage a {
+    color: #FFFFFF;
+}
+
+.new-nav .accordion-inner {
+    border: none;
+    padding: 0 0 9px 0;
+}
+
+.new-nav p, .new-nav a {
+    color: #A6A6A6;
+}
+
+.new-nav .accordion-body a {
+    margin-left: 42px;
+}
+
+.new-nav .accordion-body li.group-bottom {
+    margin-bottom: 10px;
+}
+
+.rail-menu > span {
+    float: right;
+    width: 40px;
+    text-align: center;
+    margin-top: 5px;
+    color: #F1F1F1;
+}
+
+.rail-menu > span:before {
+    font-size: 22px;
+}
+
+.new-nav.affix-top .nav-bottom-buttons {
+    position: absolute;
+    bottom: 40px;
+}
+
+.new-nav.affix .nav-bottom-buttons {
+    position: absolute;
+    bottom: 0;
+}
+
+.new-nav .nav-bottom-buttons > ul {
+    height: 40px;
+    width: 190px;
+    border-top: 1px solid #33485D;
+}
+
+.new-nav .nav-bottom-buttons > ul > li {
+    line-height: 40px;
+    text-align: center;
+    font-style: italic;
+    color: #A6A6A6;
+}
+
+.new-nav .nav-bottom-buttons > ul > li > span:before {
+    font-size: 10px;
+}

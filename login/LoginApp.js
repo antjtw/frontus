@@ -102,18 +102,17 @@ app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $
        */
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         void(x);
-        $location.path("/sent");
+        $location.path("/login/sent");
       }).except(function(x) { 
         // console.log(x);
         // $scope.fed = "There was an error. Please try again later."
-        $location.path("/sent");
+        $location.path("/login/sent");
       });
     }
 }]);
 
 app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope, $routeParams, SWBrijj) {
   $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; };
-  $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); };
 
   /** @name SWBrijj#resetFillout
    * @function
@@ -149,5 +148,8 @@ app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
   }
 }]);
 
-app.controller('SentCtrl', [ function() {
+app.controller('SentCtrl', ['$scope', function($scope) {
+    $scope.gobacklogin = function(){
+        document.location.href = '/login';
+    };
 }]);

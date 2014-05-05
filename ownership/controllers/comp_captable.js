@@ -621,6 +621,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if (issue['vestingbegins'] == undefined) {
                     var vestcliffdate = null
                 }
+
+                if (issue.issue == "name") {
+                    issue.issue = "No name";
+                }
+
+                angular.forEach($scope.issues, function (x) {
+                    // Duplicate issue names are not allowed
+                    if (x.issue != "" && issue.issue == x.issue && x != issue) {
+                        issue.issue = issue.issue + " (1)";
+                    }
+                });
+
                 SWBrijj.proc('ownership.update_issue', issue['key'], issue['type'], d1, issue['issue'], calculate.toFloat(issue['premoney']), calculate.toFloat(issue['postmoney']), calculate.toFloat(issue['ppshare']), calculate.toFloat(issue['totalauth']), partpref, issue.liquidpref, issue['optundersec'], calculate.toFloat(issue['price']), calculate.toFloat(issue['terms']), vestcliffdate, calculate.toFloat(issue['vestcliff']), issue['vestfreq'], issue['debtundersec'], calculate.toFloat(issue['interestrate']), issue['interestratefreq'], calculate.toFloat(issue['valcap']), calculate.toFloat(issue['discount']), calculate.toFloat(issue['term']), dragalong, tagalong, common).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var oldissue = issue['key'];
@@ -703,6 +715,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 if ($scope.issues.length == 1 && (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com")) {
                     _kmq.push(['record', 'cap table creator']);
                 }
+
+                if (issue.issue == "name") {
+                    issue.issue = "No name";
+                }
+
+                angular.forEach($scope.issues, function (x) {
+                    // Duplicate issue names are not allowed
+                    if (x.issue != "" && issue.issue == x.issue && x != issue) {
+                        issue.issue = issue.issue + " (1)";
+                    }
+                });
+
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], calculate.toFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
@@ -2357,7 +2381,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.tourstate = 0;
         }
         else if ($scope.tourstate == 1) {
-            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(3) input:first-of-type").focus();
+            $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(3) input:first-of-type").focus();
         }
         else if ($scope.tourstate == 2) {
             $(".tableView.captable th > input:first-of-type").focus();
@@ -2366,8 +2390,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggle = false;
         }
         else if ($scope.tourstate == 4) {
-            $(".captable.tableView > tbody > tr:nth-child(4) > td:nth-child(4) input:first-of-type").focus();
+            $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(4) input:first-of-type").focus();
         }
+    };
+
+    $scope.kissTour = function() {
+        _kmq.push(['record', 'CT Tour Started']);
     };
 
     $scope.moveTour = function() {

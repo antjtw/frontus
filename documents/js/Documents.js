@@ -1217,48 +1217,51 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $window.addEventListener('beforeunload', function(event) {
             void(event);
-            var ndx = $scope.getNoteData(false);
-            var ndx_inv = ndx[0];
-            var ndx_iss = ndx[1];
-            /** @name $scope#lib#annotations
-             * @type {[Object]}
-             */
-            /*
-            if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
-               console.log("OH NO!!!");
-               return; // no changes
-            }
-            */
+            if (document.location.href.indexOf('-view') != -1) {
+                var ndx = $scope.getNoteData(false);
+                var ndx_inv = ndx[0];
+                var ndx_iss = ndx[1];
+                /** @name $scope#lib#annotations
+                 * @type {[Object]}
+                 */
+                /*
+                 if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
+                 console.log("OH NO!!!");
+                 return; // no changes
+                 }
+                 */
 
-            /** @name SWBrijj#_sync
-             * @function
-             * @param {string}
-             * @param {string}
-             * @param {string}
-             * @param {...}
-             */
-            // This is a synchronous save
-            /** @name $scope#lib#original
-             * @type {int} */
+                /** @name SWBrijj#_sync
+                 * @function
+                 * @param {string}
+                 * @param {string}
+                 * @param {string}
+                 * @param {...}
+                 */
+                // This is a synchronous save
+                /** @name $scope#lib#original
+                 * @type {int} */
                 if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
                     var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                     if (!res) alert('failed to save annotations');
                 }
                 if ($scope.template_original && $scope.prepareable($scope.lib)) {
                     var res2 = SWBrijj._sync('SWBrijj', 'proc',
-                            ["account.company_attribute_update",
-                             "name",
-                             $scope.used_attributes.companyName
-                             ]
+                        ["account.company_attribute_update",
+                            "name",
+                            $scope.used_attributes.companyName
+                        ]
                     );
                     var res3 = SWBrijj._sync('SWBrijj', 'proc',
-                            ["account.company_attribute_update",
-                             "state",
-                             $scope.used_attributes.companyState
-                             ]
+                        ["account.company_attribute_update",
+                            "state",
+                            $scope.used_attributes.companyState
+                        ]
                     );
                     if (!res2 || !res3) alert('failed to save annotations');
                 }
+            }
+
         });
 
         /* Save the notes when navigating away */
@@ -1287,7 +1290,6 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
                     $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
                 }
-                console.log($rootScope.lastPage);
                 $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
                 $location.url('/app/documents/investor-list');
@@ -1841,13 +1843,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             SWBrijj.proc("account.company_attribute_update",
                     "state", ($scope.used_attributes.companyState || "")
             ).then(function(x) {
-                console.log(x);
                 void(x);
             });
             SWBrijj.proc("account.company_attribute_update",
                     "name", ($scope.used_attributes.companyName || "")
             ).then(function(x) {
-                console.log(x);
                 void(x);
             });
             if (clicked) {
