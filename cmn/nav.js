@@ -602,9 +602,13 @@ navm.controller('NavCtrl',
                     $rootScope.load_invoices();
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
-                        var rsp = JSON.parse(x);
-                        $rootScope.billing.current_card = rsp.cards.data[0];
-                        $rootScope.$broadcast('billingLoaded');
+                        if (x && x.length>0 && x!="invalid request") {
+                            var rsp = JSON.parse(x);
+                            $rootScope.billing.current_card = rsp.cards.data[0];
+                            $rootScope.$broadcast('billingLoaded');
+                        } else {
+                            console.log(x);
+                        }
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
@@ -630,23 +634,31 @@ navm.controller('NavCtrl',
         $rootScope.load_invoices = function() {
             payments.get_invoices($rootScope.billing.customer_id, 3)
             .then(function(x) {
-                var resp = JSON.parse(x);
-                if (!$rootScope.billing) {$rootScope.billing = {};}
-                $rootScope.billing.invoices = resp.data.filter(function(el) {
-                    return el.amount>0;
-                }) || [];
-                if ($rootScope.billing.currentPlan!=="000") {
-                    $scope.load_upcoming_invoice();
+                if (x && x.length>0 && x!="invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.invoices = resp.data.filter(function(el) {
+                        return el.amount>0;
+                    }) || [];
+                    if ($rootScope.billing.currentPlan!=="000") {
+                        $scope.load_upcoming_invoice();
+                    }
+                } else {
+                    console.log(x);
                 }
             });
         };
         $rootScope.load_upcoming_invoice = function() {
             payments.get_upcoming_invoice($rootScope.billing.customer_id)
             .then(function(x) {
-                var resp = JSON.parse(x);
-                if (!$rootScope.billing.next_invoice_received) {
-                    //$rootScope.billing.invoices.push(resp);
-                    $rootScope.billing.next_invoice_received = true;
+                if (x && x.length>0 && x != "invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing.next_invoice_received) {
+                        //$rootScope.billing.invoices.push(resp);
+                        $rootScope.billing.next_invoice_received = true;
+                    }
+                } else {
+                    console.log(x);
                 }
             });
         };
