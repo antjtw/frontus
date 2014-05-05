@@ -16,18 +16,19 @@ To set up a new instance:
 - Then:
 ```shell
 cat >.git/hooks/post-receive <<EOF
-#!/bin/bash -x
-# Read standard input or hook will fail
+#!/bin/bash
+
  while read oldrev newrev refname
  do
- :
+# Unset GIT_DIR or the universe will implode                                                       
+    unset GIT_DIR
+    cd ../ || exit
+    git checkout --force
+    git submodule update --init --recursive --force
+    ./post-receive $oldrev $newrev $refname
  done
-# Unset GIT_DIR or the universe will implode
- unset GIT_DIR
-cd ../ || exit
- git checkout --force
- git submodule update --init --recursive --force
-./post-receive
+
+echo Done
 ```
 
 - don't forget to `chmod a+x .git/hooks/post-receive`
