@@ -514,7 +514,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="cancelSubscriptionModalClose()"></span>
     </div>
     <div class="modalText cancelModal">
-       By clicking confirm, your subscription will be cancelled and your data will be made available for download. 
+       By clicking confirm, your subscription will be cancelled at the end of your current billing cycle and your data will be made available for download.
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -525,6 +525,28 @@
         <div class="standard-button red">
             <button id="pricing_cancel"
                     class="btn" ng-click="cancelSubscription()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+<div modal="reactivateSubscriptionModal" close="reactivateSubscriptionModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Reactivate Subscription</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="reactivateSubscriptionModalClose()"></span>
+    </div>
+    <div class="modalText cancelModal">
+       By clicking confirm, your subscription will be reactivated as if you never tried to leave!
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="reactivateSubscriptionModalClose()">
+                Back
+            </button>
+        </div>
+        <div class="standard-button red">
+            <button id="pricing_cancel"
+                    class="btn" ng-click="reactivateSubscription()">
                 Cancel
             </button>
         </div>
