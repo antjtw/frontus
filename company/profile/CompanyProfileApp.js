@@ -221,7 +221,7 @@ app.controller('CompContactCtrl',
         $scope.reactivateSubscription = function() {
             $rootScope.selectedPlan = 'reactivate';
             $scope.updateSubscription();
-            $scope.reactivateSubscriptionModalCloes();
+            $scope.reactivateSubscriptionModalClose();
         };
         $scope.reactivateSubscriptionModalClose = function() {
             $scope.reactivateSubscriptionModal = false;
@@ -286,9 +286,11 @@ app.controller('CompContactCtrl',
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
                 } else if ($rootScope.selectedPlan=='cancel') {
+                    $rootScope.billing.last_status = 'cancel';
                     $scope.$emit("notification:success",
                                  "Subscription cancelled");
                 } else if ($rootScope.selectedPlan=='reactivate') {
+                    $rootScope.billing.last_status = 'reactivate';
                     $scope.$emit("notification:success",
                                  "Subscription reactivated");
                 } else {
@@ -298,6 +300,8 @@ app.controller('CompContactCtrl',
                     $rootScope.get_hypothetical_usage_details($rootScope.selectedPlan);
                 }
             }).except(function(err) {
+                $scope.$emit("notification:fail",
+                             "Oops, please try again.");
             });
         };
         $scope.create_customer = function(newcc, newplan) {
