@@ -4188,3 +4188,8 @@ div.upgradeWarning > span {
     overflow: visible;
     padding-bottom: 20px;
 }
+
+.dropdown-menu li + div.tooltip.bottom {
+   margin-top: -11px;
+}
+
