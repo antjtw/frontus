@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="pull-left">
                                             <span ng-if="billing.current_period_end">
-                                                Your account will be disabled on {{billing.current_period_end*1000 | date: 'MMMM d, yyyy'}}.
+                                                Your subscription ends on {{billing.current_period_end*1000 | date: 'MMMM d, yyyy'}}.
                                             </span>
                                             <span ng-if="!billing.current_period_end">
                                                 Your account has been cancelled.
@@ -557,7 +557,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="reactivateSubscriptionModalClose()"></span>
     </div>
     <div class="modalText cancelModal">
-       By clicking confirm, your subscription will be reactivated as if you never tried to leave!
+        By clicking confirm, your subscription will be reactivated to the {{billing.currentPlan | billingPlansNameOnly}} plan.
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
