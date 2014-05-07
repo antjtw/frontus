@@ -251,6 +251,10 @@ app.controller('CompContactCtrl',
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
+                if ($rootScope.billing.last_status == 'cancel') {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please reactivate your subscription before making other updates.");
+                }
                 $rootScope.billing.payment_token = response.id;
                 if ($rootScope.billing.customer_id) {
                     payments.update_payment($rootScope.billing.payment_token)
@@ -274,6 +278,10 @@ app.controller('CompContactCtrl',
             }
         };
         $scope.updateSubscription = function() {
+            if ($rootScope.billing.last_status == 'cancel' && $rootScope.billing.selectedPlan !="reactivate") {
+                $scope.$emit("notification:fail",
+                             "Oops, please reactivate your subscription before making other updates.");
+            }
             var newplan = $rootScope.selectedPlan;
             if (newplan == "cancel") {
                 _kmq.push(['record', 'Subscription Cancelled']);
