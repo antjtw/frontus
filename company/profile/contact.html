@@ -83,7 +83,7 @@
                                     <div class="row-fluid"
                                          ng-if="billing.last_status=='cancel'">
                                         <div class="pull-left span5">
-                                            Re-activate Billing
+                                            Reactivate Billing
                                         </div>
                                         <div class="pull-left">
                                             <span ng-if="billing.current_period_end">
@@ -96,7 +96,7 @@
                                         <div class="pull-right pointer">
                                             <div class="standard-button red">
                                                 <button class="btn" ng-click="reactivateSubscriptionModalOpen()">
-                                                    Re-activate
+                                                    Reactivate
                                                 </button>
                                             </div>
                                         </div>
@@ -553,7 +553,7 @@
 </div>
 <div modal="reactivateSubscriptionModal" close="reactivateSubscriptionModalClose()" options="opts">
     <div class="modalHeader">
-        <span>Re-activate Subscription</span>
+        <span>Reactivate Subscription</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="reactivateSubscriptionModalClose()"></span>
     </div>
     <div class="modalText cancelModal">
