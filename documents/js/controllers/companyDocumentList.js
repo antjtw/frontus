@@ -170,7 +170,7 @@ app.controller('CompanyDocumentListController',
         $scope.loadDocuments = function() {
             SWBrijj.tblm('document.my_company_library',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
-                     'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
+                     'uploaded_by', 'annotations', 'iss_annotations', 'tags']).then(function(data) {
                 $scope.documents = data;
                 $scope.mergeSmartIntoDumb();
             });
@@ -192,40 +192,23 @@ app.controller('CompanyDocumentListController',
             $scope.multipeople = $scope.docShareState.emails;
         };
         $scope.loadTags = function() {
-            $scope.loadAvailableTags();
-            SWBrijj.tblm('tag.my_agg_company_tags').then(function(data) {
-                if (data.length === 0) return;
-                angular.forEach($scope.documents, function(doc) {
-                    var tags = data.filter(function(el){return el.original_doc_id == doc.doc_id;});
-                    if (tags.length > 0) {
-                        doc.tags = JSON.parse(tags[0].tags);
-                    } else {
-                        doc.tags = [];
-                    }
-                });
-
+            SWBrijj.tblm('document.my_company_tags').then(function(x) {
+                console.log(x);
+                $scope.available_tags = JSON.parse(x);
             });
         };
         $scope.getAvailableTags = function() {return $scope.available_tags;};
         $scope.getTagClass = function() {return 'badge badge-info';};
-        $scope.loadAvailableTags = function() {
-            SWBrijj.view('select distinct name from tag.my_company_tags').then(function(data) {
-                $scope.available_tags = [];
-                angular.forEach(data, function(x) {
-                    $scope.available_tags.push(x[0]);
-                });
-            });
-        };
 
         $scope.updateTags = function(doc) {
             var id = angular.copy(doc.doc_id);
             var new_tags = angular.copy(doc.new_tags);
-            // FIXME this doesn't work
-            SWBrijj.procm('tag.update_tags_for',
-                    'original_doc_id', id, JSON.stringify(new_tags))
+            SWBrijj.procm('document.update_tags',
+                          id, JSON.stringify(new_tags))
             .then(function(data) {
                 console.log(data);
-                doc.tags = new_tags;
+                doc.tags = JSON.parse(new_tags);
+                $scope.loadTags();
                 $scope.$emit("notification:success", "Tags updated");
             }).except(function(err) {
                 console.log(err);
