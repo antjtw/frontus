@@ -32,6 +32,8 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script src="/lib/angular/angular-resource.js"></script>
 <script src="/lib/angular/ui-bootstrap-tpls-0.4.0.js"></script>
 <script src="/lib/angular/ui-utils/event.js"></script>
+<script src="/lib/bootstrap/bootstrap-tagsinput.min.js"></script>
+<script src="/lib/bootstrap/bootstrap-tagsinput-angular.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
 <script src="/lib/placeholders.min.js"></script>
 <script src="/brijj/aBrijj.js"></script>

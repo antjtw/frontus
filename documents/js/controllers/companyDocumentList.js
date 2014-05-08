@@ -1,7 +1,12 @@
 //'use strict';
 
-app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$window', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
-    function($scope, $timeout, $modal, $window, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
+app.controller('CompanyDocumentListController',
+        ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
+         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
+         'basics',
+    function($scope, $timeout, $modal, $window, $q, $location,
+             $routeParams, $rootScope, $route, SWBrijj, navState,
+             basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -187,6 +192,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             $scope.multipeople = $scope.docShareState.emails;
         };
         $scope.loadTags = function() {
+            $scope.loadAvailableTags();
             SWBrijj.tblm('tag.my_agg_company_tags').then(function(data) {
                 if (data.length === 0) return;
                 angular.forEach($scope.documents, function(doc) {
@@ -198,6 +204,32 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                     }
                 });
 
+            });
+        };
+        $scope.getAvailableTags = function() {return $scope.available_tags;};
+        $scope.getTagClass = function() {return 'badge badge-info';};
+        $scope.loadAvailableTags = function() {
+            SWBrijj.view('select distinct name from tag.my_company_tags').then(function(data) {
+                $scope.available_tags = [];
+                angular.forEach(data, function(x) {
+                    $scope.available_tags.push(x[0]);
+                });
+            });
+        };
+
+        $scope.updateTags = function(doc) {
+            var id = angular.copy(doc.doc_id);
+            var new_tags = angular.copy(doc.new_tags);
+            // FIXME this doesn't work
+            SWBrijj.procm('tag.update_tags_for',
+                    'original_doc_id', id, JSON.stringify(new_tags))
+            .then(function(data) {
+                console.log(data);
+                doc.tags = new_tags;
+                $scope.$emit("notification:success", "Tags updated");
+            }).except(function(err) {
+                console.log(err);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
@@ -337,7 +369,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 // if !show_archived and all versions are archived then return false
                 return false;
             } else {
-                return !$scope.query || re.test(obj.docname);
+                return !$scope.query || re.test(obj.docname) || re.test(obj.tags);
             }
         };
         $scope.versionFilter = function(obj) {
@@ -1073,6 +1105,14 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 });
             }
         });
+        $scope.updateTagsOpen = function(doc) {
+            $scope.docForModal = angular.copy(doc);
+            $scope.docForModal.new_tags = angular.copy(doc.tags);
+            $scope.updateTagsModal = true;
+        };
+        $scope.updateTagsClose = function() {
+            $scope.updateTagsModal = false;
+        };
 
         $scope.deleteDocOpen = function(doc) {
             $scope.docForModal = doc;

@@ -3200,6 +3200,16 @@ button.icon-button:hover {
     width: 360px;
     display: inline-block;
 }
+.updateTitleModal .bootstrap-tagsinput {
+    width: 100%;
+    text-align: left;
+    color: inherit;
+}
+.bootstrap-tagsinput input,
+.bootstrap-tagsinput input:active,
+.bootstrap-tagsinput input:focus {
+    border: none;
+}
 /* Styling file uploads with fake overlay */
 .modal div.fileinputs {
     position: relative;
