@@ -150,6 +150,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                     }
                 });
                 $scope.initShareState();
+                $scope.loadTags();
             });
 
         };
@@ -184,6 +185,20 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
             $scope.messageText = $scope.docShareState.message;
             $scope.multipeople = $scope.docShareState.emails;
+        };
+        $scope.loadTags = function() {
+            SWBrijj.tblm('tag.my_agg_company_tags').then(function(data) {
+                if (data.length === 0) return;
+                angular.forEach($scope.documents, function(doc) {
+                    var tags = data.filter(function(el){return el.original_doc_id == doc.doc_id;});
+                    if (tags.length > 0) {
+                        doc.tags = JSON.parse(tags[0].tags);
+                    } else {
+                        doc.tags = [];
+                    }
+                });
+
+            });
         };
 
         $scope.loadDocumentVersions = function () {

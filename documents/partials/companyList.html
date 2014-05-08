@@ -123,6 +123,7 @@
                                         <li>{{doc.docname | caplength:40}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
                                         <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                                         ng-hide="!hideSharebar">{{docStatusA(doc)}}</li>
+                                        <li ng-if="doc.tags.length>0">{{doc.tags}}</li>
                                     </ul>
                                 </td>
                                 <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
