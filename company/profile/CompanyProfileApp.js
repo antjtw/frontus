@@ -278,10 +278,6 @@ app.controller('CompContactCtrl',
             }
         };
         $scope.updateSubscription = function() {
-            if ($rootScope.billing.last_status == 'cancel' && $rootScope.billing.selectedPlan !="reactivate") {
-                $scope.$emit("notification:fail",
-                             "Oops, please reactivate your subscription before making other updates.");
-            }
             var newplan = $rootScope.selectedPlan;
             if (newplan == "cancel") {
                 _kmq.push(['record', 'Subscription Cancelled']);
