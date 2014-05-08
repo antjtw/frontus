@@ -22,10 +22,6 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
     </script>
 <![endif]-->
 
-<script src="/lib/combine.js.cat"></script>
-<script src="/brijj/aBrijj.js"></script>
-
-<!--
 <script src="/lib/bootstrap/bootstrap.js"></script>
 <script src="/lib/angular/angular.js"></script>
 <script src="/lib/angular/angular-route.js"></script>
@@ -38,14 +34,14 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
 <script src="/lib/placeholders.min.js"></script>
+<script src="/brijj/aBrijj.js"></script>
 <script src="/lib/moment.min.js"></script>
 <script src="/cmn/nav.js"></script>
 <script src="/lib/usersnap/jquery.usersnap-0.1.0.js"></script>
 <script src="/cmn/services.js"></script>
 <script src="/lib/stripe.js"></script>
-<script src="/lib/angular-payments/angular-payments.min.js"></script>
--->
-
+<script type="text/javascript"
+        src="/lib/angular-payments/angular-payments.min.js"></script>
 <script>
     if (document.location.hostname == 'sharewave.com') {
         Stripe.setPublishableKey('pk_live_nFUfhjAz1rauxbHxrShrOf5Q');

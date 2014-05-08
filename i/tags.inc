@@ -1,4 +1,4 @@
-<!-- Google Tag Manager -->
+<!-- Google Tag Manager (tags.inc version) -->
   <noscript>
   <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PDWZ8L"
     height="0" width="0" style="display:none;visibility:hidden">
