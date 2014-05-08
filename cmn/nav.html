@@ -1,4 +1,4 @@
-<div ng-class="{'fixednav':!navState.userid}">
+<div class="fixednav">
     <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible"
     ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
     <div collapse="isCollapsed">
@@ -15,11 +15,12 @@
 
                                     <input class="loginInput" autocomplete="off" tabindex="2"
                                     name="password" type="password" ng-model="password">
-                                    <div class="standard-button">
+                                    <br class="visible-below-1024">
+                                    <div class="standard-button top-login">
                                         <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
                                     </div> <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
 
-                                    <br> <span class="forgotLog"><a target="_self" href="/login/forgot">Forgot Password?</a></span>
+                                    <span class="forgotLog"><a target="_self" href="/login/forgot">Forgot Password?</a></span>
 
                                 </fieldset>
                             </form>

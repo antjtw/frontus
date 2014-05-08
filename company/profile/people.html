@@ -11,17 +11,25 @@
                         <input type="text" class="search-box" ng-model="filterText">
                     </div>
                     <compose-message/></compose-message>
-                    <div class="pull-right">
-                        <div class='standard-button darkgray'>
-                            <button class="btn" ng-click="adminModalOpen()">Add Person</button>
-                        </div>
+
+                    <div class="box-button pull-right"
+                         ng-class="{'disabledme': companyIsZombie()}"
+                         ng-click="companyIsZombie() || adminModalOpen();"
+                         data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                            </li>
+                            <li> <span>Add Person</span>
+
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="DivHelper"></div>
             </div>
         </div>
 
-        <div class="row-fluid">
+        <div ng-style="viewportheight" class="row-fluid">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
@@ -83,6 +91,12 @@
                 <span>Admin</span>
                 <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
             </div>
+            <div ng-if="newRole && triggerUpgradeAdmins(1)"
+                 class="upgradeWarning">
+                <span>
+                    Note that making this person an admin will upgrade your subscription plan.
+                </span>
+            </div>
         </div>
     </div>
 
@@ -120,6 +134,12 @@
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
             <span>Are you sure you want to add {{selectedToAdd}} as an admin?</span>
+            <div class="spacer20"></div>
+            <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
+                <span>
+                    Warning: Making this user an admin will automatically upgrade your payment plan.
+                </span>
+            </div>
         </div>
         <div class="modal-footer">
             <div class="pull-left standard-button gray">
@@ -132,5 +152,3 @@
     </div>
 </div>
 </div>
-<div class="minimumGap"></div>
-<div class="push"></div>

@@ -143,7 +143,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                 if ($scope.issues.length == 1) {
-                    $scope.maintoggle = false;
+                    $rootScope.$on('billingLoaded', function(x) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                        }
+                    });
+                    if ($rootScope.selectedPlan) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                        }
+                    }
                 }
 
                 $scope.done = true;

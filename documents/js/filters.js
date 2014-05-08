@@ -9,7 +9,7 @@ app.filter('fromNow', function() {
 app.filter('viewByPrinter', function() {
     return function(viewby) {
         if (viewby == "document") return "Document";
-        else if (viewby == "name") return "Recipient Name";
+        else if (viewby == "name") return "Recipient";
         else return order;
     };
 });

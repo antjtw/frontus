@@ -345,7 +345,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     float: right;
     margin-left: 0;
     width: 350px;
-    min-height: 850px;
     border-left: 6px solid #E3E3E3;
 }
 
@@ -354,11 +353,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     -moz-transition:all 0.25s; /* Firefox 4 */;
     -webkit-transition: all 0.25s; /* Safari and Chrome */
     -o-transition: all 0.25s; /* Opera */
-}
-
-.span4.capright.button-offset {
-    margin-top: -19px;
-    position: relative;
 }
 
 .span4.capright > button {
@@ -401,12 +395,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     line-height:21px;
     font-weight: normal;
     color: #1e2d3d;
-    width: 260px;
+    width: 240px;
     border-radius: 3px;
-}
-
-.capright .tab-content {
-    min-height: 550px;
 }
 
 .capright .transaction-icon {
@@ -1961,6 +1951,13 @@ span.tour-icon {
     text-align: center;
 }
 
+span.tour-icon.tour-view, span.tour-icon.tour-share {
+    bottom: -10px;
+    left: -10px;
+    top: initial;
+    right: initial;
+}
+
 span.tour-icon.intro-icon {
     display: inline-block;
     top: 140px;
@@ -1989,16 +1986,16 @@ span.tour-icon.side-toggle {
 }
 
 span.tour-icon.tour-share + .tooltip {
-    left: -20px !important;
+    left: -140px !important;
     width: 200px;
 }
 
 span.tour-icon.tour-share + .tooltip > .tooltip-arrow {
-    left: 84%;
+    left: 70%;
 }
 
 span.tour-icon.tour-view + .tooltip {
-    left: -5px !important;
+    left: -100px !important;
     width: 200px;
 }
 

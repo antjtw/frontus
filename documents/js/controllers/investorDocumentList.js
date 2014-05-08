@@ -59,7 +59,9 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
             return moment(date).from($rootScope.servertime);
         };
 
-        $scope.docOrder = 'docname';
+        // by default sort in reverse chronological order
+        // even though there's no way to restore this sort order via the ui
+        $scope.docOrder = '-when_shared';
         $scope.shareOrder = 'docname';
         $scope.hideCompleted = false;
 

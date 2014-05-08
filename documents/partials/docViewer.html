@@ -99,23 +99,23 @@
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
-                        <button ng-disabled="notesComplete()" class="btn" ng-click="setStage(1);">
+                        <button ng-disabled="notesComplete() || (navState.role == 'issuer' && companyIsZombie())" class="btn" ng-click="setStage(1);">
                             Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
                     <div class="pull-right tools" ng-class="{hidden: !isAnnotable || countersignable(lib)}">
-                        <button ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
+                        <button ng-disabled="navState.role == 'issuer' && companyIsZombie()" ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: prepareable(lib) || (!$parent.template_original && forsigning) || !templateId}">
                     <div class="pull-right tools" >
-                        <button ng-click="saveSmartdocData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
+                        <button ng-disabled="navState.role == 'issuer' && companyIsZombie()" ng-click="saveSmartdocData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !$parent.template_original && !forsigning}">
                     <div class="pull-right standard-button green">
-                        <button class="btn" ng-click="setStage(1);">Review</button>
+                        <button ng-disabled="navState.role == 'issuer' && companyIsZombie()" class="btn" ng-click="setStage(1);">Review</button>
                     </div>
                 </div>
             </div>
@@ -209,6 +209,12 @@
 
             <div ng-show="countersignable(lib)">
                 <div class='confirmBody'>
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
@@ -239,6 +245,12 @@
 
             <div ng-show="finalizable(lib) && lib.signature_flow===1">
                 <div class="confirmBody">
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
@@ -273,6 +285,12 @@
             </div>
             <div ng-show="finalizable(lib) && lib.signature_flow===2">
                 <div class="confirmBody">
+                    <div class="upgradeWarning"
+                         ng-if="triggerUpgradeDocuments(1)">
+                        <span>
+                            Warning: Approving this document will automatically upgrade your payment plan.
+                        </span>
+                    </div>
                     <ul class="radioOption">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>

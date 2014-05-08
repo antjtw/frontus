@@ -1,12 +1,5 @@
 var service = angular.module('commonServices', ['brijj']);
 
-// Add Stripe authorization to default $http request headers.
-service.run(function($http, SWBrijj) {
-    SWBrijj.tblm('config.configuration', 'name', 'stripe').then(function(data) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + data.value;
-    });
-});
-
 service.filter('caplength', function () {
     return function (word, length) {
         if (word) {
@@ -20,13 +13,7 @@ service.filter('caplength', function () {
     };
 });
 
-/* STRIPE API SERVICE
- * Always returns a promise.
- *
- * Controllers must coordinate between Stripe, DB and UI.
- *
- */
-service.factory('payments', function($http, SWBrijj) {
+service.service('payments', function(SWBrijj) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -39,6 +26,24 @@ service.factory('payments', function($http, SWBrijj) {
     };
     s.create_customer = function(newplan, newcard) {
         return SWBrijj.proc('account.create_customer', newplan, newcard);
+    };
+    s.get_coupon = function(cpn) {
+        return SWBrijj.stripeExternal(['get_coupon', cpn]);
+    };
+    s.get_customer = function(cusid) {
+        return SWBrijj.stripe(['get_customer', cusid]);
+    };
+    s.get_invoices = function(cusid, n) {
+        return SWBrijj.stripe(['get_invoices', cusid, n]);
+    };
+    s.get_upcoming_invoice = function(cusid) {
+        return SWBrijj.stripe(['get_upcoming_invoice', cusid]);
+    };
+    /*
+    s.get_coupon = function(cpn) {
+        return $http({method: 'GET',
+                      url: 'https://api.stripe.com/v1/coupons/'+cpn
+        });
     };
     s.get_customer = function(customerid) {
         return $http({method: 'GET',
@@ -58,6 +63,7 @@ service.factory('payments', function($http, SWBrijj) {
                       params: {customer: customerid}
         });
     };
+    */
     s.usage_details = function() {
         return SWBrijj.tblm('account.my_usage_details');
     };
@@ -68,5 +74,101 @@ service.factory('payments', function($http, SWBrijj) {
         return SWBrijj.tblm('account.my_company_payment');
     };
 
+
     return s;
+});
+
+service.factory('myPayments', function($q, payments) {
+    var d = {};
+    // TODO these must return promises
+    // so where are results accumulated/published?
+    var loadPlans = function() {
+            return payments
+                    .available_plans();
+        },
+        handlePlans = function(x) {
+            var deferred = $q.defer();
+
+            try {
+                d.plans = [];
+                angular.forEach(x, function(p) {
+                    d.plans.push(p.plan);
+                });
+                d.recommendedPlan = "00" + Math.max(parseInt(d.plans, 10));
+                deferred.resolve();
+            } catch(e) {
+                deferred.reject(e);
+            }
+
+            return deferred.promise;
+        },
+        loadUsage = function() {
+            return payments
+                    .usage_details().then(handleUsage);
+        },
+        handleUsage = function(x) {
+            var deferred = $q.defer();
+            if (x.length === 0) {
+                loadSpecifiedUsage(d.recommendedPlan);
+            } else {
+                d.usage = x[0];
+            }
+            return deferred.resolve();
+        },
+        loadSpecifiedUsage = function(p) {
+            return payments
+                    .usage_grid(p)
+                    .then(function(x)
+                    {
+                        d.usage = x;
+                    });
+        },
+        loadUserPaymentData = function() {
+            return payments
+                    .my_data;
+                        /*
+                    .then(function(x)
+                    {
+                        if (data.length > 0) {
+                            $scope.billing.currentPlan =
+                                $scope.selectedPlan = data[0].plan || '000';
+                            $scope.billing.customer_id = data[0].customer_id;
+                            $scope.billing.payment_token = data[0].cc_token;
+                            $scope.load_invoices();
+                            payments.get_customer($scope.billing.customer_id)
+                            .then(function(x) {
+                                $scope.billing.current_card = x.data.cards.data[0];
+                                $scope.openModalsFromURL();
+                            });
+                        } else {
+                            if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
+                                $scope.selectedPlan = $scope.billing.recommendedPlan;
+                            } else {
+                                $scope.selectedPlan = '002';
+                            }
+                            $scope.openModalsFromURL();
+                        }
+                        
+                    });
+                        */
+        },
+        loadCustomerInvoices = function() {
+            return payments.get_invoices();
+        },
+        broadcastResults = function() {
+            this.data = d;
+            console.log(this.data);
+        };
+        
+
+    loadPlans()
+        //.then( handlePlans )
+        .then( loadUsage )
+        //.then( handleUsage )
+        .then( loadUserPaymentData )
+        .then( loadCustomerInvoices )
+        .then( broadcastResults );
+
+    return d;
+
 });
