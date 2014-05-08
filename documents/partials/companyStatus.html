@@ -40,7 +40,7 @@
             <table class="status-table" ng-show="docversions.length===0">
                 <tbody class="empty-table">
                 <tr>
-                    <td>
+                    <td ng-hide="companyIsZombie();">
                         <span>Welcome! </span>
                         <span class="link" ng-click="shareDocument(document);">Share with Investors</span>
                         <span> to view status.</span>

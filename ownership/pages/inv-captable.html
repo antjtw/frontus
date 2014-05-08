@@ -4,7 +4,7 @@
 <div class="maincontent">
 <div class="container dynamic-page">
 <div class="row-fluid leftTabWindow">
-<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
+<div ng-style="viewportheightnobar" ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
         <table class="captable tableView viewcaptable bodyText">
@@ -78,7 +78,7 @@
     </div>
 </div>
 
-<div ng-style="stretchheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
+<div ng-style="viewportheightnobar" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
 <button type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>{{sideToggleName}}
 </button>
 <div class="row-fluid">

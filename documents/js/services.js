@@ -42,4 +42,9 @@ docs.service('basics', function () {
         return version.signature_flow===0 && version.last_viewed;
     };
 
+    this.isCompleteVoided = function(version) {
+        return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
+    };
+
+
 });

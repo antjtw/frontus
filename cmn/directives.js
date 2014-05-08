@@ -6,12 +6,12 @@ m.directive('composeMessage', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', 'SWBrijj',
-        function($scope, SWBrijj) {
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+        function($scope, $rootScope, SWBrijj) {
             $scope.getInvestors = function() {
                 $scope.investors = [];
                 angular.forEach($scope.people, function(p) {
-                    $scope.investors.push(p.email);
+                    $scope.investors.push(p.selector);
                 });
             };
             $scope.getInvestors();
@@ -40,15 +40,24 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
-                console.log(msg);
+                var regExp = /\(([^)]+)\)/;
+                var recipients = [];
+                angular.forEach(msg.recipients, function(person) {
+                    var matches = regExp.exec(person);
+                    if (matches == null) {
+                        matches = ["", person];
+                    }
+                    recipients.push(matches[1]);
+                });
                 SWBrijj.procm('mail.send_message',
-                              JSON.stringify(msg.recipients),
+                              JSON.stringify(recipients),
                               category,
                               template,
                               msg.subject,
                               newtext
                 ).then(function(x) {
                     void(x);
+                    $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
                     $scope.composeModalClose();
@@ -87,24 +96,28 @@ m.directive('paymentPlanSelector', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/paymentPlanSelector.html',
-        controller: ['$scope', '$routeParams', function($scope, $routeParams) {
+        controller: ['$scope', '$rootScope', '$routeParams',
+        function($scope, $rootScope, $routeParams) {
 
             if ($routeParams.plan) {
-                $scope.selectedPlan = $routeParams.plan;
+                $rootScope.selectedPlan = $routeParams.plan;
             }
+            $rootScope.$watch('selectedPlan', function(){
+                $scope.selectedPlan = $rootScope.selectedPlan;
+            });
 
             $scope.selectPlan = function(p) {
-                if ($scope.selectedPlan == p) {
-                    $scope.selectedPlan = null;
+                if ($rootScope.selectedPlan == p) {
+                    $rootScope.selectedPlan = null;
                 } else {
-                    if ($scope.billing) {
-                        if ($scope.billing.plans.indexOf(p)!==-1) {
-                            $scope.selectedPlan = p;
+                    if ($rootScope.billing) {
+                        if ($rootScope.billing.plans.indexOf(p)!==-1) {
+                            $rootScope.selectedPlan = p;
                         } else {
                             console.log(p);
                         }
                     } else {
-                        $scope.selectedPlan = p;
+                        $rootScope.selectedPlan = p;
                     }
                 }
             };
@@ -120,15 +133,17 @@ m.directive('meter', function() {
         restrict: 'E',
         templateUrl: '/cmn/partials/meter.html',
         controller: ['$scope', function($scope) {
+            $scope.meterStyle = {};
             $scope.updateMeter = function() {
                 $scope.meterStyle = {"width":
                                      ($scope.cur/$scope.tot)*100 + "%"};
+                if ($scope.cur/$scope.tot > 1) {
+                    console.log("here");
+                    $scope.meterStyle["background-color"] = "#E74C3C";
+                }
             };
             $scope.$watch('cur', $scope.updateMeter);
             $scope.$watch('tot', $scope.updateMeter);
-            if ($scope.cur/$scope.tot > 1) {
-                $scope.meterStyle["background-color"] = "#E74C3C";
-            }
         }]
     };
 });

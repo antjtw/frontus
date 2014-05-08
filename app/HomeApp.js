@@ -34,6 +34,10 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'CompContactCtrl', 
             templateUrl: '/company/profile/contact.html'
         }).
+        when('/app/company/profile/invoice', {
+            controller: 'InvoiceCtrl',
+            templateUrl: '/company/profile/invoice.html'
+        }).
         when('/app/company/profile/people', {
             controller: 'PeopleCtrl',
             templateUrl: '/company/profile/people.html'

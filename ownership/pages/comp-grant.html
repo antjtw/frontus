@@ -140,17 +140,26 @@
                     </button>
                 </div>
             </div>
-            <div class="pull-right" ng-show="issues.length!==0">
-                <div class="standard-button small-standard-button blue">
-                    <button class="btn" ng-click="editViewToggle();">{{togglename()}}</span></button>
-                </div>
+            <div class="box-button pull-right"
+                 ng-show="issues.length!==0"
+                 ng-class="{'disabledme': companyIsZombie()}"
+                 ng-click="companyIsZombie() || editViewToggle();"
+                 data-placement="bottom" bs-tooltip="zombiemessage">
+                <ul>
+                    <li> <span ng-show="togglename() == 'View'" data-icon="&#xe001;" aria-hidden="true"></span>
+                        <span ng-show="togglename() == 'Edit'" data-icon="&#xe00e;" aria-hidden="true"></span>
+                    </li>
+                    <li> <span>{{togglename()}}</span>
+
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="DivHelper"></div>
     </div>
 </div>
 
-<div class="span8 docLibrary leftBlock" style="overflow-x: auto">
+<div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
 
     <table class="tableView bodyText grant-table" ng-show="issues.length===0 && done">
         <tbody class="empty-table">
@@ -310,7 +319,7 @@
 </div>
 
 
-<div class="span4 capright">
+<div ng-style="viewportheight" class="span4 capright">
 <div ng-switch on="sideBar">
 <span ng-switch-when="1">
 
@@ -823,7 +832,7 @@
                 </div>
             </div>
 
-            <div ng-hide="newSchedule" class="standard-button">
+            <div ng-hide="newSchedule || companyIsZombie()" class="standard-button">
                 <button id='a_grant_template' class="btn ng-binding" ng-click="addSchedule();">New Template</button>
             </div>
           </span>
