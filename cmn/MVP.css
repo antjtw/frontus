@@ -11,7 +11,7 @@ html, body {
     /* The html and body elements cannot have any padding or margin. */
 }
 body {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 .wrap {
@@ -139,6 +139,15 @@ input:focus, textarea:focus {
     cursor: pointer !important;
 }
 /* Tooltips */
+
+.box-button + .tooltip {
+    display: none !important;
+}
+
+.box-button.disabledme + .tooltip {
+    display: inline-block !important;
+}
+
 .tooltip-inner {
     background-color: rgb(30, 45, 61);
     border-radius: 3px;
@@ -503,7 +512,7 @@ h2 {
 
 div.fixednav{
     position: fixed;
-    z-index: 1000000;
+    z-index: 1000;
     width: 100%;
     top: 0;
 }
@@ -944,7 +953,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls {
     height: 60px;
     white-space: nowrap;
-    margin: 0 0 20px 0;
+    margin: 0;
     background-color: #F1F1F1;
     text-align: center;
 }
@@ -971,7 +980,7 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     width: -webkit-calc(100% - 80px);
     width: calc(100% - 80px);
 }
-.subnav-controls > div > div {
+.subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
 .subnav-controls div.pull-right div.standard-button {
@@ -1262,6 +1271,14 @@ form.inputs {
 #detailsEdit {
     padding-right:20px;
 }
+.coreEdit {
+    padding-top: 40px;
+}
+
+.coreEdit.extrapadding {
+    padding-top: 90px;
+}
+
 .span10.coreEdit {
     height:100%;
     margin-left:0;
@@ -2194,7 +2211,6 @@ tr.preparedDoc {
 /* Dynamic shifting of spans */
 .leftTabWindow {
     overflow-x: hidden;
-    padding-bottom: 150px;
 }
 .leftFullTableBlock {
     width: 1017px !important;
@@ -2237,12 +2253,6 @@ tr.preparedDoc {
 }
 .box-button.selected {
     background-color: white;
-    /*
-    border-top: #C7C7C7 2px solid;
-    border-left: #C7C7C7 2px solid;
-    border-right: #C7C7C7 2px solid;
-    border-bottom: #C7C7C7 2px solid;
-    */
 }
 .box-button.selected:hover {
     background-color: #E3E3E3;
@@ -2260,6 +2270,14 @@ tr.preparedDoc {
 
 .box-button > ul > li:nth-child(2) > span {
     font-size: 10px;
+}
+
+.box-button.disabledme {
+    color: #A6A6A6;
+}
+.box-button.disabledme:hover {
+    cursor: pointer;
+    background-color: inherit;
 }
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
@@ -3399,6 +3417,7 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list > div {
     margin: 0 0 20px 0;
     line-height: 32px;
+    overflow: auto;
 }
 .compose-modal.modal > div.modalText {
     padding: 0 20px 0 20px;
@@ -3419,20 +3438,17 @@ button.icon-button:hover {
 .compose-modal.modal > div.modalText .input-list>div>input {
     height: 24px;
 }
-.compose-modal.modal > div.modalText .input-list>div:last-child {
-    padding-bottom: 40px;
-}
 .compose-modal.modal > div.modalText .input-list>div>div.select2-container {
     width: 490px;
 }
 .payment-modal {
-    width: 90%;
-    left: 5%;
+    width: 70%;
+    left: 15%;
     margin: 0 auto;
 }
 .payment-modal form {
     width: 90%;
-    height: 260px;
+    height: 280px;
     margin: 0 auto;
 }
 .payment-modal fieldset > div:first-child {
@@ -3443,7 +3459,7 @@ button.icon-button:hover {
     width: 90%;
 }
 .payment-modal form .input-list {
-    height: 200px;
+    height: 180px;
 }
 .payment-modal .initpayment .input-list {
     width: 400px;
@@ -3452,11 +3468,12 @@ button.icon-button:hover {
 .payment-modal .initpayment form .input-list > div {
     margin: 0 auto;
     width: 100%;
-    line-height: 30px;
-    padding-bottom: 15px;
+//    line-height: 30px;
+//    padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
-    width: 250px;
+    width: 100%;
+    float: none;
 }
 .payment-modal form .input-list > div {
     width: 400px;
@@ -3479,18 +3496,32 @@ button.icon-button:hover {
 }
 
 .profile-modal.modal > div.modalText .input-list > div {
-    margin: 0 0 10px 50px;
+    margin: 0 0 10px 0;
+    height: 48px;
+}
+.profile-modal.modal > div.modalText .input-list > div > div {
+    margin-left: 0;
+}
+.profile-modal.modal > div.modalText .input-list > div > div:last-child {
+    margin-left: 20px;
+}
+.profile-modal.modal > div.modalText .input-list > div > div > input {
+    width: 100%;
+    margin: 0;
 }
 .profile-modal.modal > div.modalText .input-list > div > button {
     margin-left: -3px;
+}
+.input-list div.coupon > p {
+    margin-left: 0;
 }
 
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
     text-transform: uppercase;
     font-size: 10px;
     width: 80px;
-    display: inline-block;
-    text-align: right;
+//    display: inline-block;
+//    text-align: right;
     margin-right: 5px;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
@@ -3501,11 +3532,13 @@ button.icon-button:hover {
     float: none;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > input {
-    width: 280px;
+    width: 100%;
 }
 
 .ccmodal .input-list {
     margin-bottom: 20px;
+    height: 200px;
+    height: auto;
 }
 
 .profile-modal.modal > div.modalText .input-list > div.city-state > input:first-of-type {
@@ -3840,6 +3873,8 @@ h2.onboard {
     width: calc(100% - 350px);
     margin-left: 0;
     min-height: 300px;
+    padding-bottom: 150px;
+    overflow-y: auto;
 }
 
 .dynamic-page .leftFullTableBlock {
@@ -3853,6 +3888,7 @@ h2.onboard {
     float: right;
     margin-right: 40px;
     margin-left: 20px;
+    margin-top: 20px;
 }
 
 .dynamic-page .recipientInfo.docLibrary.statusBlock {
@@ -3860,6 +3896,7 @@ h2.onboard {
     width: -moz-calc(100% - 440px) !important;
     width: -webkit-calc(100% - 440px) !important;
     width: calc(100% - 440px) !important;
+    margin-top: 20px;
 }
 
 .dynamic-page .maintabs {
@@ -3880,14 +3917,14 @@ h2.onboard {
 }
 
 .dynamic-page .span12 .status-table {
-    margin: 0 40px 0 40px;
+    margin: 20px 40px 20px 40px;
     width: -moz-calc(100% - 80px) !important;
     width: -webkit-calc(100% - 80px) !important;
     width: calc(100% - 80px) !important;
 }
 
 .dynamic-page .span12.home-top-row {
-    margin: 0 40px 0 40px;
+    margin: 20px 40px 20px 40px;
     width: -moz-calc(100% - 80px) !important;
     width: -webkit-calc(100% - 80px) !important;
     width: calc(100% - 80px) !important;
@@ -3912,6 +3949,9 @@ div#us_report_button button.us_button_horizontal {
     height: 240px;
     margin: 20px auto 40px auto;
 }
+.planselector p {
+    margin: 0;
+}
 .newreg.gateway {
     margin-top: 0;
     padding-top: 20px;
@@ -3921,7 +3961,7 @@ div#us_report_button button.us_button_horizontal {
 .newreg > .big-input-list [class*="span"] {
     margin-left: 0;
 }
-.newreg > .planselector > div > div:first-child {
+.planselector > div > div:first-child {
     text-align: left;
 }
 .planselector > div > div,
@@ -3975,6 +4015,9 @@ div#us_report_button button.us_button_horizontal {
     margin: 0 auto;
 
 }
+.payment-modal .big-input-list {
+    width: 100%;
+}
 .big-input-list .input-list span {
     display: block;
     font-size: 10px;
@@ -3985,6 +4028,7 @@ div#us_report_button button.us_button_horizontal {
     width: -moz-calc(50% - 10px);
     width: -webkit-calc(50% - 10px);
     width: calc(50% - 10px);
+    margin-left: 0;
 }
 .big-input-list > div > form > fieldset > div.span6:first-child {
     padding-right: 10px;
@@ -4030,6 +4074,7 @@ div#us_report_button button.us_button_horizontal {
 }
 .meter > span {
     width: 0%;
+    max-width: 100%;
     display: block;
     height: 100%;
     -moz-border-radius: 25px;
@@ -4118,3 +4163,33 @@ div.cancel > span {
     margin: 0 auto 0 auto;
     height: 100px;
 }
+
+div.upgradeWarning {
+    color: #15A085;
+    text-align: left;
+}
+div.upgradeWarning > span {
+    font-size: 12px !important;
+}
+.modalText > .add-person > div.upgradeWarning {
+    margin-left: 20px;
+}
+.uploadModal > div.upgradeWarning {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+
+}
+.confirmBody > div.upgradeWarning {
+    margin-bottom: 20px;
+}
+
+.tabbable .tab-content {
+    overflow: visible;
+    padding-bottom: 20px;
+}
+
+.dropdown-menu li + div.tooltip.bottom {
+   margin-top: -11px;
+}
+

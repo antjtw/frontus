@@ -1,9 +1,5 @@
 /* Company List Content */
 
-.subnav-controls.doclist-controls {
-    margin-bottom: 0;
-}
-
 .listcontainer {
     width: -moz-calc(100% - 40px);
     width: -webkit-calc(100% - 40px);
@@ -656,7 +652,6 @@ textarea.email-text {
     float: right;
     margin-left: 0;
     width: 350px;
-    min-height: 850px;
     border-left: 6px solid white;
     padding-top: 14px;
     padding-left: 20px;

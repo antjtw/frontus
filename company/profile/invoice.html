@@ -1,0 +1,129 @@
+<link type="text/css" rel="stylesheet" href="/company/profile/invoice.css">
+<div class="maincontent">
+    <table>
+        <tr>
+            <td colspan="3">
+                <img class="newreglogo pointer"
+                     src="/img/logo-blue.png">
+            </td>
+            <td colspan="1">
+                <span class="right"><h1>Invoice</h1></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div class="spacer40"></div>
+                <h1>Thank you!</h1>
+                <div class="spacer30"></div>
+            </td>
+            <td colspan="1">
+                <div class="right">
+                    <span class="blue hideWhenPrint pointer"
+                          ng-click="print()"
+                          id="ga_print_invoice">
+                        Print
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div><h2>Issued to:</h2></div>
+                <div>{{navState.name}}</div>
+                <div>{{navState.userid}}</div>
+                <div>{{address1()}}<br></div>
+                <div>{{address2()}}<br></div>
+            </td>
+            <td colspan="2">
+                <div><h2>Issued by:</h2></div>
+                <div>Sharewave</div>
+                <div>2095 Broadway Suite 506</div>
+                <div>New York, NY 10023</div>
+                <div><br></div>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="spacer30"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <div><h2>Invoice #:</h2></div>
+                <div><h2>Payment Date:</h2></div>
+                <div><h2>Payment Method:</h2></div>
+                <div class="spacer30">
+            </td>
+            <td colspan="3">
+                <div>
+                    <span class="tall">
+                        {{invoice.id}}
+                    </span>
+                </div>
+                <div>
+                    <span class="tall">
+                        {{invoice.date*1000 | date: 'MMMM d, yyyy'}}
+                    </span>
+                </div>
+                <div>
+                    <span class="tall">
+                        {{invoice.charge || 'N/A'}}
+                    </span>
+                </div>
+                <div class="spacer30">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div><h1>Subscription:</h1></div>
+            </td>
+        </tr>
+        <tr ng-repeat="item in invoice.lines.data">
+            <td colspan="3">
+                <span>
+                    {{item.plan.id | billingPlansNameOnly}} Plan ({{item.plan.interval | interval}})
+                </span>
+            </td>
+            <td colspan="1">
+                <span class="right">
+                    {{item.amount | currency}}
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="spacer40"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td>
+                <div class="fakefloat">
+                    <span>Subtotal</span>
+                    <span class="right">
+                        {{invoice.subtotal | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Discount</span>
+                    <span class="right">
+                        {{invoice.discount || 0 | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Due</span>
+                    <span class="right">
+                        {{invoice.amount_due | currency}}
+                    </span>
+                </div>
+                <div class="fakefloat">
+                    <span>Paid</span>
+                    <span class="right">
+                        {{amountPaid() | currency}}
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

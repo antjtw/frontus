@@ -48,6 +48,7 @@ active.filter('icon', function() {
             else if (activity == "countersigned") return "doc-countersign";
             else if (activity == "finalized") return "doc-final";
             else if (activity == "retracted") return "doc-retract";
+            else if (activity == "deleted") return "doc-delete";
             else if (activity == "void requested") return "doc-void-request";
             else if (activity == "void rejected") return "doc-void-reject";
             else if (activity == "void accepted") return "doc-void-accept";
@@ -83,23 +84,34 @@ active.filter('description', function() {
                 if (ac.email != user) {
                     urlperson = '&investor=' + ac.investor_docid;
                 }
+                // Only link to undeleted documents
+                var doclink = "";
+                var doclinkperson = "";
+                if (!ac.deleted) {
+                    doclink = "<a href=" + url + ">" + caplength(document, 35) + "</a>";
+                    doclinkperson = "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
+                } else {
+                    doclink = caplength(document, 35);
+                    doclinkperson = caplength(document, 35);
+                }
                 if (activity == "sent") return "";
                 else if (activity == "viewed") {
-                    return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " viewed by "+person;
+                    return doclinkperson + " viewed by "+person;
                 }
-                else if (activity == "reminder") return "Reminded "+person + " about " + "<a href=" + url + ">" + caplength(document, 35) + "</a>";
-                else if (activity == "edited") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " edited by "+person;
-                else if (activity == "signed") return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " signed by "+person;
-                else if (activity == "uploaded") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " uploaded by "+person;
-                else if (activity == "transcoded") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " uploaded by "+person;
-                else if (activity == "received") return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " sent to "+person;
-                else if (activity == "rejected") return "Signature on " +"<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " rejected by "+person;
-                else if (activity == "countersigned") return "<a href=" + url + ">" + caplength(document, 35) + "</a>" + " countersigned by "+person;
-                else if (activity == "finalized") return "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>" + " approved by " + person;
+                else if (activity == "reminder") return "Reminded "+person + " about " + doclink;
+                else if (activity == "edited") return doclink + " edited by "+person;
+                else if (activity == "signed") return doclinkperson + " signed by "+person;
+                else if (activity == "uploaded") return doclink + " uploaded by "+person;
+                else if (activity == "transcoded") return doclink + " uploaded by "+person;
+                else if (activity == "received") return doclinkperson + " sent to "+person;
+                else if (activity == "rejected") return "Signature on " + doclinkperson + " rejected by "+person;
+                else if (activity == "countersigned") return doclink + " countersigned by "+person;
+                else if (activity == "finalized") return doclinkperson + " approved by " + person;
                 else if (activity == "retracted") return "Retracted " + caplength(document, 35) + " from " + person;
-                else if (activity == "void requested") return " Void requested on " + person + "'s " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
-                else if (activity == "void rejected") return " Void rejected by " + person + " on " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
-                else if (activity == "void accepted") return " Void accepted by " + person + " on " + "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
+                else if (activity == "deleted") return person + " deleted " + doclink;
+                else if (activity == "void requested") return " Void requested on " + person + "'s " + doclinkperson;
+                else if (activity == "void rejected") return " Void rejected by " + person + " on " + doclinkperson;
+                else if (activity == "void accepted") return " Void accepted by " + person + " on " + doclinkperson;
                 else return activity + " by "+person;
             }
         }
@@ -157,9 +169,11 @@ active.filter('description', function() {
             else if (activity == "uploaded") return "Uploaded by " + person;
             else if (activity == "transcoded") return "Uploaded by " + person;
             else if (activity == "received") return "Received by " +person;
+            else if (activity == "deleted") return "Deleted by " +person;
             else if (activity == "rejected") return "Signature rejected by " +person;
             else if (activity == "countersigned") return "Countersigned by " + person;
             else if (activity == "finalized") return "Approved by " + person;
+            else if (activity == "Retracted") return "Retracted by " + person;
             else if (activity == "void requested") return "Void request sent to " +person;
             else if (activity == "void accepted") return "Void accepted by " + person;
             else if (activity == "void rejected") return "Void rejected by " + person;

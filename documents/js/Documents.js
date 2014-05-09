@@ -753,6 +753,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
 
         $scope.setStage = function(n) {
             $scope.setConfirmValue(0);
+            if (n==1) window.scrollTo(window.scrollX, 0);
             $scope.stage = n;
             if ($scope.stage === 0) {
                 refreshDocImage();
@@ -1213,7 +1214,9 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                             }
                         }
                     } // json struct
-                })
+                }).except(function(err) {
+                        $scope.leave();
+                    });
             });
         };
 

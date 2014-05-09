@@ -10,7 +10,7 @@
                 Good Job! You're up to date.
             </div>
         </li>
-        <li ng-repeat="note in notes | orderBy:oldestDate">
+        <li ng-repeat="note in notes | orderBy:oldestDate" tooltip-placement="bottom" tooltip="{{nameIfLong(note.docname)}}" class="actionItemTooltip">
             <div><img ng-src="/img/activity/{{note.signature_status | noteicon}}.png"></div>
             <div>
                 <ul>

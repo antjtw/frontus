@@ -1,7 +1,7 @@
 //'use strict';
 
-app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
-    function($scope, $timeout, $modal, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
+app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$window', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
+    function($scope, $timeout, $modal, $window, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -316,7 +316,6 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             if (!$scope.hideSharebar && obj.forShare) {
                 return true;
             } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
-                console.log("here");
                 // if hide_completed and all versions are completed then return false
                 return false;
             } else if (!$scope.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
@@ -439,11 +438,12 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                             if (document.doc_id == doc.upload_id) {
                                 document.doc_id = doc.doc_id;
                                 document.uploading = false;
+                                $rootScope.billing.usage.documents_total+=1;
                             }
                         });
                     }
                 });
-                if ($scope.uploadprogress.length != 0 && incrementer < 30) {
+                if ($scope.uploadprogress.length !== 0 && incrementer < 30) {
                     incrementer += 1;
                     $timeout($scope.checkReady, 2000);
                 }
@@ -765,18 +765,24 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 }
             }
         };
+        // TODO is it necessary to wrap with new functions?
         $scope.isCompleteSigned = function(version) {
             return basics.isCompleteSigned(version);
         };
         $scope.isCompleteViewed = function(version) {
             return basics.isCompleteViewed(version);
         };
+        $scope.isCompleteVoided = function(version) {
+            return basics.isCompleteVoided(version);
+        };
         $scope.isCompleteRetracted = function(version) {
             return version.when_retracted;
         };
 
         $scope.versionIsComplete = function(version) {
-            return  $scope.isCompleteSigned(version) || $scope.isCompleteViewed(version) || $scope.isCompleteRetracted(version);
+            return $scope.isCompleteSigned(version)
+                || $scope.isCompleteViewed(version)
+                || $scope.isCompleteRetracted(version);
         };
 
         $scope.defaultDocStatus = function (doc) {
@@ -1065,10 +1071,11 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.reallyDeleteDoc = function(doc) {
             SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                 void(data);
+                $rootScope.billing.usage.documents_total -= 1;
                 $scope.$emit("notification:success", doc.docname + " deleted.");
                 $scope.documents.splice($scope.documents.indexOf(doc), 1);
             }).except(function(x) {
-                $scope.$emit("notification:fail", "Document deletion failed.");
+                $scope.$emit("notification:fail", x);
             });
         };
 
@@ -1272,9 +1279,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             });
         };
 
-        $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-            $scope.stretchheight = {height: String(newValue + 150) + "px"};
-        });
+
     }
 ]);
 

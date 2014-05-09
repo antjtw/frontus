@@ -1,15 +1,17 @@
-//app for the program
-var app = angular.module('RegisterApp', ['ngRoute', 'brijj', 'angularPayments', 'commonDirectives'], function($routeProvider, $locationProvider){
-  $locationProvider.html5Mode(true).hashPrefix('');
+var app = angular.module('RegisterApp',
+        ['ngRoute', 'brijj', 'angularPayments', 'commonDirectives',
+         'commonServices'],
+function($routeProvider, $locationProvider){
+    $locationProvider.html5Mode(true).hashPrefix('');
 
-  $routeProvider.
-      when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
-      when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
-      when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
-      when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
-      when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
-      when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
-      otherwise({redirectTo:'/register/'});
+    $routeProvider.
+        when('/register/', {controller:'PeopleCtrl', templateUrl:'people.html'}).
+        when('/register/company', {controller:'CompanyCtrl', templateUrl: 'company.html'}).
+        when('/register/company-self', {controller:'CompanySelfCtrl', templateUrl: 'company-self.html'}).
+        when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
+        when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
+        when('/register/signup', {controller:'SignupCtrl', templateUrl: 'signup.html'}).
+        otherwise({redirectTo:'/register/'});
 });
 
 /** @name $scope#activated
@@ -99,9 +101,29 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
     }
 ]);
 
-app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$location',
-    function($scope, $routeParams, SWBrijj, $location) {
+app.controller('CompanyOneStep',
+               ['$scope', 'payments', '$routeParams', 'SWBrijj', '$location', '$filter',
+    function($scope, payments, $routeParams, SWBrijj, $location, $filter) {
         $scope.selectedPlan = '002';
+        $scope.coupon_code = $routeParams.c;
+        if ($scope.coupon_code) {
+            payments.get_coupon($scope.coupon_code).then(function(x) {
+                var cpn = JSON.parse(x);
+                if (cpn.percent_off) {
+                    $scope.formatted_coupon = cpn.percent_off + "% off";
+                } else {
+                    $scope.formatted_coupon = $filter('currency')(cpn.amount_off/100, "$") + " off";
+                }
+                if (cpn.duration == 'repeating') {
+                    $scope.formatted_coupon += " for "+cpn.duration_in_months+" months";
+                } else if (cpn.duration == 'forever') {
+                    $scope.formatted_coupon += " forever";
+                } else {
+                    $scope.formatted_coupon += " your first month";
+                }
+            });
+        }
+
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
             return !($scope.selectedPlan &&
@@ -119,7 +141,8 @@ app.controller('CompanyOneStep', ['$scope', '$routeParams', 'SWBrijj', '$locatio
             SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password,
                                              $scope.pname, $scope.cname,
                                              $scope.payment_token,
-                                             $scope.selectedPlan
+                                             $scope.selectedPlan,
+                                             $scope.coupon_code
             ).then(function(registered) {
                 if (registered) {
                     document.location.href = registered + "?msg=first";

@@ -16,9 +16,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
         });
+        /*
+        Don't really want this as it overrides even the ones that are caught and handled properly
         $scope.$on('event:brijjError', function(event, msg) {
             $scope.$emit("notification:fail", msg);//"Oops, something went wrong.");
-        });
+        }); */
 
         $scope.$on('event:reload', function(event) {
             void(event);
@@ -258,6 +260,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.finalizeDocument = function() {
             $scope.processing = true;
             SWBrijj.document_issuer_finalize($scope.docId).then(function(data) {
+                $rootScope.billing.usage.documents_total += 1;
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
@@ -294,7 +297,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.drawTime = function() {
-            return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"))
-        }
+            return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"));
+        };
     }
 ]);

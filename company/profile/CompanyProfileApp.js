@@ -171,62 +171,65 @@ app.controller('CompContactCtrl',
                 $scope.$apply();
             }
         };
-        $scope.billing = {};
-        $scope.update_card = false;
-        payments.available_plans().then(function(x) {
-            $scope.billing.plans = [];
-            angular.forEach(x, function(p) {
-                $scope.billing.plans.push(p.plan);
-            });
-            $scope.billing.recommendedPlan = "00" + Math.max(parseInt($scope.billing.plans, 10));
-            if ($scope.billing.currentPlan !== '000') {
-                $scope.billing.plans.push('000');
-            }
-            $scope.get_usage_details();
-        }).except(function(err) {
-            console.log(err);
-        });
-        $scope.get_usage_details = function() {
-            payments.usage_details().then(function(x) {
-                if (x.length === 0) {
-                    payments.usage_grid($scope.billing.recommendedPlan)
-                    .then(function(x) {
-                        $scope.billing.usage = x;
-                    }).except(function(err) {
-                        console.log(err);
-                    });
-                } else {
-                    $scope.billing.usage = x[0];
-                }
-                $scope.get_payment_data();
-            }).except(function(err) {
-                console.log(err);
-            });
+
+        $scope.paymentPlanModalOpen = function() {
+            $scope.paymentPlanModal = true;
         };
-        $scope.get_payment_data = function() {
-            payments.my_data().then(function(data) {
-                if (data.length > 0) {
-                    $scope.billing.currentPlan =
-                        $scope.selectedPlan = data[0].plan || '000';
-                    $scope.billing.customer_id = data[0].customer_id;
-                    $scope.billing.payment_token = data[0].cc_token;
-                    $scope.load_invoices();
-                    payments.get_customer($scope.billing.customer_id)
-                    .then(function(x) {
-                        $scope.billing.current_card = x.data.cards.data[0];
-                    });
-                } else {
-                    if (parseInt($scope.billing.recommendedPlan, 10) > 2) {
-                        $scope.selectedPlan = $scope.billing.recommendedPlan;
-                    } else {
-                        $scope.selectedPlan = '002';
-                    }
-                }
-            }).except(function(err) {
-                void(err);
-            });
+        $scope.paymentPlanModalClose = function() {
+            $scope.paymentPlanModal = false;
         };
-        // this swaps the CC data for a stripe card token
+        $scope.paymentPlanModalFieldCheck = function() {
+            return !($rootScope.selectedPlan &&
+                $rootScope.selectedPlan != $rootScope.billing.currentPlan);
+        };
+        $scope.ccModalOpen = function() {
+            $scope.ccModal = true;
+        };
+        $scope.ccModalClose = function() {
+            $scope.ccModal = false;
+        };
+        $scope.ccModalFieldCheck = function() {
+            var fs = angular.element('form[name="updateCCForm"]').scope();
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc);
+        };
+        $scope.initPaymentModalOpen = function() {
+            $scope.initPaymentModal = true;
+        };
+        $scope.initPaymentModalClose = function() {
+            $scope.initPaymentModal = false;
+        };
+        $scope.initPaymentModalFieldCheck = function() {
+            var fs = angular.element('form[name="initPaymentForm"]').scope();
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
+                     $rootScope.selectedPlan);
+        };
+        $scope.cancelSubscriptionModalOpen = function() {
+            $scope.cancelSubscriptionModal = true;
+        };
+        $scope.cancelSubscription = function() {
+            $rootScope.selectedPlan = 'cancel';
+            $scope.updateSubscription();
+            $scope.cancelSubscriptionModalClose();
+
+        };
+        $scope.cancelSubscriptionModalClose = function() {
+            $scope.cancelSubscriptionModal = false;
+        };
+        $scope.reactivateSubscriptionModalOpen = function() {
+            $scope.reactivateSubscriptionModal = true;
+        };
+        $scope.reactivateSubscription = function() {
+            $rootScope.selectedPlan = 'reactivate';
+            $scope.updateSubscription();
+            $scope.reactivateSubscriptionModalClose();
+        };
+        $scope.reactivateSubscriptionModalClose = function() {
+            $scope.reactivateSubscriptionModal = false;
+        };
+
+        $scope.toggleCoupon = function() {
+            $scope.enter_coupon = !$scope.enter_coupon;
+        };
         $scope.getPaymentToken = function(status, response) {
             if (!$scope.initPaymentModal) return;
             _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
@@ -238,25 +241,9 @@ app.controller('CompContactCtrl',
             } else {
                 $scope.payment_token = response.id;
                 $scope.create_customer($scope.payment_token,
-                                       $scope.selectedPlan);
+                                       $rootScope.selectedPlan);
             }
         };
-        $scope.showSelectedPlan = function(p) {
-            if (p == $scope.billing.currentPlan && p == "000") {
-                return "Subscription Cancelled";
-            } else {
-                return $filter('billingPlans')(p);
-            }
-        };
-        $scope.nextInvoice = function() {
-            if ($scope.billing && $scope.billing.next_invoice_received) {
-                return $scope.billing.invoices &&
-                    $scope.billing.invoices[$scope.billing.invoices.length-1];
-            } else {
-                return false;
-            }
-        };
-
         $scope.updatePayment = function(status, response) {
             if (!$scope.ccModal) return;
             if (response.error) {
@@ -264,9 +251,13 @@ app.controller('CompContactCtrl',
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
-                $scope.billing.payment_token = response.id;
-                if ($scope.billing.customer_id) {
-                    payments.update_payment($scope.billing.payment_token)
+                if ($rootScope.billing.last_status == 'cancel') {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please reactivate your subscription before making other updates.");
+                }
+                $rootScope.billing.payment_token = response.id;
+                if ($rootScope.billing.customer_id) {
+                    payments.update_payment($rootScope.billing.payment_token)
                     .then(function(x) {
                         if (x[1][0] !== 1) {
                             $scope.$emit("notification:fail",
@@ -286,47 +277,35 @@ app.controller('CompContactCtrl',
                 }
             }
         };
-        $scope.load_invoices = function() {
-            payments.get_invoices($scope.billing.customer_id, 3)
-            .then(function(resp) {
-                if (!$scope.billing) {$scope.billing = {};}
-                $scope.billing.invoices = resp.data.data.filter(function(el) {
-                    return el.amount>0;
-                });
-                if ($scope.billing.currentPlan!=="000") {
-                    //$scope.load_upcoming_invoice();
-                }
-            });
-        };
-        $scope.load_upcoming_invoice = function() {
-            payments.get_upcoming_invoice($scope.billing.customer_id)
-            .then(function(resp) {
-                $scope.billing.invoices.push(resp.data);
-                $scope.billing.next_invoice_received = true;
-            });
-        };
         $scope.updateSubscription = function() {
-            var newplan = $scope.selectedPlan;
-            if (newplan == "000") {
+            var newplan = $rootScope.selectedPlan;
+            if (newplan == "cancel") {
                 _kmq.push(['record', 'Subscription Cancelled']);
             } else {
                 _kmq.push(['record', 'Subscription Modified']);
             }
             payments.update_subscription(newplan)
             .then(function(x) {
-                console.log(x);
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
-                } else if ($scope.selectedPlan=='000') {
+                } else if ($rootScope.selectedPlan=='cancel') {
+                    $rootScope.billing.last_status = 'cancel';
                     $scope.$emit("notification:success",
                                  "Subscription cancelled");
+                } else if ($rootScope.selectedPlan=='reactivate') {
+                    $rootScope.billing.last_status = 'reactivate';
+                    $scope.$emit("notification:success",
+                                 "Subscription reactivated");
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
-                    $scope.billing.currentPlan = $scope.selectedPlan;
+                    $rootScope.billing.currentPlan = $rootScope.selectedPlan;
+                    $rootScope.get_hypothetical_usage_details($rootScope.selectedPlan);
                 }
             }).except(function(err) {
+                $scope.$emit("notification:fail",
+                             "Oops, please try again.");
             });
         };
         $scope.create_customer = function(newcc, newplan) {
@@ -346,51 +325,91 @@ app.controller('CompContactCtrl',
                 console.log(err);
             });
         };
-        $scope.paymentPlanModalOpen = function() {
-            $scope.paymentPlanModal = true;
+        $scope.showSelectedPlan = function(p) {
+            if (p == $rootScope.billing.currentPlan && p == "000") {
+                return "Subscription Cancelled";
+            } else {
+                return $filter('billingPlans')(p);
+            }
         };
-        $scope.paymentPlanModalClose = function() {
-            $scope.paymentPlanModal = false;
+        $scope.openModalsFromURL = function() {
+            if ($routeParams.coupon) {
+                $rootScope.billing.coupon_code = $routeParams.coupon;
+                $scope.toggleCoupon();
+            }
+            if ($routeParams.setup) {
+                $scope.initPaymentModalOpen();
+            } else if ($rootScope.billing.customer_id
+                       && $rootScope.billing.coupon_code) {
+                $scope.ccModalOpen();
+            }
         };
-        $scope.paymentPlanModalFieldCheck = function() {
-            return !($scope.selectedPlan &&
-                $scope.selectedPlan != $scope.billing.currentPlan);
-        };
-        $scope.ccModalOpen = function() {
-            $scope.ccModal = true;
-        };
-        $scope.ccModalClose = function() {
-            $scope.ccModal = false;
-        };
-        $scope.ccModalFieldCheck = function() {
-            var fs = angular.element('form[name="updateCCForm"]').scope();
-            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc);
-        };
-        $scope.initPaymentModalOpen = function() {
-            $scope.initPaymentModal = true;
-        };
-        if ($routeParams.setup) {
-            $scope.initPaymentModalOpen();
-        }
-        $scope.initPaymentModalClose = function() {
-            $scope.initPaymentModal = false;
-        };
-        $scope.initPaymentModalFieldCheck = function() {
-            var fs = angular.element('form[name="initPaymentForm"]').scope();
-            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
-                     $scope.selectedPlan);
-        };
-        $scope.cancelSubscriptionModalOpen = function() {
-            $scope.cancelSubscriptionModal = true;
-        };
-        $scope.cancelSubscription = function() {
-            $scope.selectedPlan = '000';
-            $scope.updateSubscription();
-            $scope.cancelSubscriptionModalClose();
+        $rootScope.$on('billingLoaded', function(x) {
+            $scope.openModalsFromURL();
+        });
+        if ($rootScope.selectedPlan) $scope.openModalsFromURL();
+    }
+]);
+app.controller('InvoiceCtrl',
+               ['$scope', '$rootScope', 'SWBrijj', 'payments',
+                '$routeParams', '$location', 'navState',
+    function($scope, $rootScope, SWBrijj, payments,
+             $routeParams, $location, navState) {
 
+        if (!$routeParams.id) $location.url('/app/company/profile');
+        if (navState.role == 'investor') $location.url('/home');
+
+        payments.my_data().then(function(x) {
+            payments.get_invoices(x[0].customer_id, 100).then(function(x) {
+                var matches = JSON.parse(x).data.filter(function(el) {
+                    return el.id == $routeParams.id;
+                });
+                if (matches.length == 1) {
+                    $scope.invoice = matches[0];
+                } else {
+                    console.log("here");
+                    //$location.url('/app/company/profile');
+                }
+            });
+        });
+        SWBrijj.tbl('account.my_company').then(function(x) {
+            initPage($scope, x);
+            $scope.cname = angular.copy($scope.name);
+            delete $scope.name;
+            $scope.cnamekey = $scope.cname;
+            $scope.companykey = $scope.company;
+            $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
+            $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+            angular.forEach($scope.currencies, function(c) {
+               if (c.indexOf($scope.currency) !== -1) {
+                   $scope.longcurrency = c;
+               }
+            });
+        }).except(initFail);
+        $scope.amountPaid = function() {
+            if (!$scope.invoice) return 0;
+            if ($scope.invoice.paid) {
+                return $scope.invoice.total;
+            } else {
+                return 0;
+            }
         };
-        $scope.cancelSubscriptionModalClose = function() {
-            $scope.cancelSubscriptionModal = false;
+        $scope.print = function() {
+            window.print();
+        };
+        $scope.address1 = function() {
+            return $scope.address;
+        };
+        $scope.address2 = function() {
+            if ($scope.city && $scope.state && $scope.zipcode) {
+                return $scope.city + ", " + $scope.state + " " + $scope.zipcode;
+            } else if ($scope.city || $scope.state) {
+                return ($scope.city || "") + ($scope.state || "") + " " + ($scope.zipcode || "");
+            } else if ($scope.zipcode) {
+                return $scope.zipcode;
+            } else {
+                return null;
+            }
         };
     }
 ]);
@@ -416,6 +435,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                 angular.forEach(admins, function(admin) {
                     angular.forEach($scope.people, function(person) {
+                        if (person.name) {
+                            person.selector = person.name + "  (" + person.email +")";
+                        }
+                        else {
+                            person.selector = "(" + person.email+")";
+                        }
+
                         if (person.email == admin.email) {
                             person.role = "issuer";
                         }
@@ -526,6 +552,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if ($scope.newRole) {
                 SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                     void(x);
+                    $rootScope.billing.usage.admins_total += 1;
                     $scope.$emit("notification:success", "Admin Added");
                     $route.reload();
                 }).except(function(x) {
@@ -547,6 +574,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.revoke_admin = function() {
             SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total -= 1;
                 $scope.$emit("notification:success", "Admin Removed");
                 $route.reload();
             }).except(function(x) {
@@ -559,6 +587,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.add_admin = function() {
             SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total += 1;
                 $scope.$emit("notification:success", "Admin Added");
                 $route.reload();
             }).except(function(x) {
@@ -773,7 +802,42 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
     }
 ]);
 
+app.filter('interval', function() {
+    return function(word) {
+        switch(word) {
+            case "day":
+                return "daily";
+            case "week":
+                return "weekly";
+            case "month":
+                return "monthly";
+            case "year":
+                return "annually";
+            default:
+                return null;
+        }
+    };
+});
+
 app.filter('billingPlans', function() {
+    return function(plan) {
+        switch (plan) {
+            case '000':
+                return "Cancel Subscription";
+            case '001':
+                return "Seed ($9 / month)";
+            case '002':
+                return "Startup ($29 / month)";
+            case '003':
+                return "Growth ($99 / month)";
+            case '004':
+                return "Established ($199 / month)";
+            default:
+                return "Unknown Plan";
+        }
+    };
+});
+app.filter('billingPlansNameOnly', function() {
     return function(plan) {
         switch (plan) {
             case '000':

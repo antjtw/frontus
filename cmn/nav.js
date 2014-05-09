@@ -73,6 +73,18 @@ navm.directive('notifications', function() {
                 }
             };
 
+            $scope.nameIfLong = function(name){
+                if (name.length > 20){
+                    return name;
+                }
+                    
+                else{
+                    return null;
+                }        
+            };
+                
+
+
         }]
     };
 });
@@ -96,9 +108,12 @@ navm.directive('verticalnav', function () {
 });
 
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState', '$location', '$filter', '$window',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState, $location, $filter, $window) {
-
+navm.controller('NavCtrl',
+                ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
+                 'navState', '$location', '$filter', 'payments',
+    function($scope, $route, $rootScope, SWBrijj, $q, $window,
+             navState, $location, $filter, payments)
+    {
         $scope.companies = [];
 
         if (location.host=='share.wave' || navState.tester) {
@@ -160,26 +175,26 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
         $scope.registertoggle = false;
         $rootScope.persistentNotification = false;
         if (navState.role=='issuer') {
-            SWBrijj.tblm('account.my_company_payment').then(function(data) {
+            SWBrijj.tblm('account.my_company_payment_history').then(function(data) {
                 var p = data.length > 0 && data[0];
                 $scope.plan = p;
-                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_request != null && p.when_attempted == null))) {
+                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_requested != null && p.when_attempted == null))) {
                     $rootScope.persistentNotification = false;
                     Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
                 } else {
                     $rootScope.persistentNotification = true;
                     if (p) {
                         if (p.status) {
-                            $rootScope.paymentmessage = "We've had a problem with your payment. Click here to update your card.";
+                            $rootScope.paymentmessage = "We were unable to process your payment, please click here to update your card.";
                             Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
                         }
                         else {
-                            $rootScope.paymentmessage = "You've cancelled your account, click here to start a new payment plan.";
+                            $rootScope.paymentmessage = "Your account has been cancelled, please click here if you'd like to re-subscribe.";
                             Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
                         }
                     }
                     else {
-                        $rootScope.paymentmessage = "Our free period ends May 1st, click here to select your plan.";
+                        $rootScope.paymentmessage = "Our free period has come to a close, click here to select your plan.";
                     }
                 }
             });
@@ -478,7 +493,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-            else {
+            
+                 else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
                 }
@@ -491,6 +507,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
             }
         };
+
 
         $scope.actionablenotes = function(notes, type) {
             var notifications = [];
@@ -506,7 +523,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
             });
-            return notifications
+            return notifications;
         };
 
         var idleTime = 0;
@@ -542,7 +559,198 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             document.location.href = "/register/company-onestep?plan=" + which;
         };
 
-    }]);
+        $rootScope.billing = {};
+        $rootScope.update_card = false;
+        if (navState.role=='issuer') {
+            payments.available_plans().then(function(x) {
+                $rootScope.billing.plans = [];
+                angular.forEach(x, function(p) {
+                    $rootScope.billing.plans.push(p.plan);
+                });
+                $rootScope.billing.recommendedPlan
+                    = "00" + Math.max(parseInt($rootScope.billing.plans, 10));
+                if ($rootScope.billing.currentPlan !== '000') {
+                    $rootScope.billing.plans.push('000');
+                }
+                $rootScope.get_usage_details();
+            }).except(function(err) {
+                console.log(err);
+            });
+        }
+        $rootScope.get_usage_details = function() {
+            payments.usage_details().then(function(x) {
+                if (x.length === 0) {
+                    $rootScope.get_hypothetical_usage_details(
+                        $rootScope.billing.recommendedPlan);
+                } else {
+                    $rootScope.billing.usage = x[0];
+                }
+                $rootScope.get_payment_data();
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $rootScope.get_hypothetical_usage_details = function(p) {
+            payments.usage_grid(p)
+            .then(function(x) {
+                $rootScope.billing.usage = x;
+            }).except(function(err) {
+                console.log(err);
+                $rootScope.billing.usage = null;
+            });
+        };
+        $rootScope.set_usage_details = function(p, doc_limit,
+                                            admin_limit, msg_limit) {
+            $rootScope.billing.usage.plan = p;
+            $rootScope.billing.usage.documents_total_limit = doc_limit;
+            $rootScope.billing.usage.admins_total_limit = admin_limit;
+            $rootScope.billing.usage.direct_messages_monthly_limit = msg_limit;
+        };
+        $rootScope.get_payment_data = function() {
+            payments.my_data().then(function(data) {
+                if (data.length > 0) {
+                    console.log(data);
+                    $rootScope.billing.currentPlan =
+                        $rootScope.selectedPlan = data[0].plan || '000';
+                    $rootScope.billing.customer_id = data[0].customer_id;
+                    $rootScope.billing.payment_token = data[0].cc_token;
+                    $rootScope.billing.last_status = data[0].status;
+                    $rootScope.load_invoices();
+                    payments.get_customer($rootScope.billing.customer_id)
+                    .then(function(x) {
+                        if (x && x.length>0 && x!="invalid request") {
+                            var rsp = JSON.parse(x);
+                            console.log(rsp);
+                            $rootScope.billing.current_card = rsp.cards.data[0];
+                            $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
+                            $rootScope.$broadcast('billingLoaded');
+                        } else {
+                            console.log(x);
+                        }
+                    });
+                } else {
+                    if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
+                        $rootScope.selectedPlan = $rootScope.billing.recommendedPlan;
+                    } else {
+                        $rootScope.selectedPlan = '002';
+                    }
+                    $rootScope.billingLoaded = true;
+                    $rootScope.$broadcast('billingLoaded');
+                }
+            }).except(function(err) {
+                void(err);
+            });
+        };
+        $rootScope.nextInvoice = function() {
+            if ($rootScope.billing && $rootScope.billing.next_invoice_received) {
+                return $rootScope.billing.invoices &&
+                    $rootScope.billing.invoices[$rootScope.billing.invoices.length-1];
+            } else {
+                return false;
+            }
+        };
+        $rootScope.load_invoices = function() {
+            payments.get_invoices($rootScope.billing.customer_id, 3)
+            .then(function(x) {
+                if (x && x.length>0 && x!="invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.invoices = resp.data.filter(function(el) {
+                        return el.amount>0;
+                    }) || [];
+                    if ($rootScope.billing.currentPlan!=="000") {
+                        $scope.load_upcoming_invoice();
+                    }
+                } else {
+                    console.log(x);
+                }
+            });
+        };
+        $rootScope.load_upcoming_invoice = function() {
+            payments.get_upcoming_invoice($rootScope.billing.customer_id)
+            .then(function(x) {
+                if (x && x.length>0 && x != "invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing.next_invoice_received) {
+                        //$rootScope.billing.invoices.push(resp);
+                        $rootScope.billing.next_invoice_received = true;
+                    }
+                } else {
+                    console.log(x);
+                }
+            });
+        };
+        $rootScope.companyIsZombie = function() {
+            return ($rootScope.billing.currentPlan == "000"
+                || $rootScope.billing.payment_token === null
+                || !$rootScope.billing.payment_token) && navState.role == "issuer";
+
+        };
+
+
+        $rootScope.zombiemessage = "Please update your payment information to use this feature.";
+        $rootScope.triggerUpgradeDocuments = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.documents_total+numNew;
+                var lim = $rootScope.billing.usage.documents_total_limit;
+                return num > lim;
+            } else {
+                return null;
+            }
+        };
+        $rootScope.triggerUpgradeAdmins = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.admins_total+numNew;
+                var lim = $rootScope.billing.usage.admins_total_limit;
+                return num > lim;
+            } else {
+                return null;
+            }
+        };
+        $rootScope.triggerUpgradeMessages = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.direct_messages_monthly
+                          + numNew.length;
+                var lim = $rootScope.billing.usage.direct_messages_monthly_limit;
+                if (numNew && numNew.length>1 && numNew[0].length>1) {
+                    return num > lim;
+                }
+                return false;
+            } else {
+                return null;
+            }
+        };
+
+        //I don't love this but it works, should probably make a directive.
+        if ($rootScope.companyIsZombie()) {
+            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+        } else {
+            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+        }
+        $rootScope.$on('billingLoaded', function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
+        });
+        window.onresize = function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
+            $scope.$apply();
+        };
+        
+    }
+]);
 
 
 function caplength(word, length) {
