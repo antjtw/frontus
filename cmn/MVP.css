@@ -3222,7 +3222,7 @@ button.icon-button:hover {
     color: inherit;
     box-sizing: border-box;
     -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box
+    -webkit-box-sizing:border-box;
     box-shadow: none !important;
 }
 .bootstrap-tagsinput .badge {
