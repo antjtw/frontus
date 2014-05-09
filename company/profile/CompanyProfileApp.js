@@ -207,7 +207,7 @@ app.controller('CompContactCtrl',
             $scope.cancelSubscriptionModal = true;
         };
         $scope.cancelSubscription = function() {
-            $rootScope.selectedPlan = '000';
+            $rootScope.selectedPlan = 'cancel';
             $scope.updateSubscription();
             $scope.cancelSubscriptionModalClose();
 
@@ -215,6 +215,18 @@ app.controller('CompContactCtrl',
         $scope.cancelSubscriptionModalClose = function() {
             $scope.cancelSubscriptionModal = false;
         };
+        $scope.reactivateSubscriptionModalOpen = function() {
+            $scope.reactivateSubscriptionModal = true;
+        };
+        $scope.reactivateSubscription = function() {
+            $rootScope.selectedPlan = 'reactivate';
+            $scope.updateSubscription();
+            $scope.reactivateSubscriptionModalClose();
+        };
+        $scope.reactivateSubscriptionModalClose = function() {
+            $scope.reactivateSubscriptionModal = false;
+        };
+
         $scope.toggleCoupon = function() {
             $scope.enter_coupon = !$scope.enter_coupon;
         };
@@ -239,6 +251,10 @@ app.controller('CompContactCtrl',
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
+                if ($rootScope.billing.last_status == 'cancel') {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please reactivate your subscription before making other updates.");
+                }
                 $rootScope.billing.payment_token = response.id;
                 if ($rootScope.billing.customer_id) {
                     payments.update_payment($rootScope.billing.payment_token)
@@ -263,7 +279,7 @@ app.controller('CompContactCtrl',
         };
         $scope.updateSubscription = function() {
             var newplan = $rootScope.selectedPlan;
-            if (newplan == "000") {
+            if (newplan == "cancel") {
                 _kmq.push(['record', 'Subscription Cancelled']);
             } else {
                 _kmq.push(['record', 'Subscription Modified']);
@@ -273,10 +289,14 @@ app.controller('CompContactCtrl',
                 if (x[1][0] !== 1) {
                     $scope.$emit("notification:fail",
                                  "Oops, please try again.");
-                } else if ($rootScope.selectedPlan=='000') {
+                } else if ($rootScope.selectedPlan=='cancel') {
+                    $rootScope.billing.last_status = 'cancel';
                     $scope.$emit("notification:success",
                                  "Subscription cancelled");
-                    $rootScope.set_usage_details('000', 0, 0, 0);
+                } else if ($rootScope.selectedPlan=='reactivate') {
+                    $rootScope.billing.last_status = 'reactivate';
+                    $scope.$emit("notification:success",
+                                 "Subscription reactivated");
                 } else {
                     $scope.$emit("notification:success",
                                  "Payment plan update submitted.");
@@ -284,6 +304,8 @@ app.controller('CompContactCtrl',
                     $rootScope.get_hypothetical_usage_details($rootScope.selectedPlan);
                 }
             }).except(function(err) {
+                $scope.$emit("notification:fail",
+                             "Oops, please try again.");
             });
         };
         $scope.create_customer = function(newcc, newplan) {

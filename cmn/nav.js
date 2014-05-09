@@ -609,16 +609,20 @@ navm.controller('NavCtrl',
         $rootScope.get_payment_data = function() {
             payments.my_data().then(function(data) {
                 if (data.length > 0) {
+                    console.log(data);
                     $rootScope.billing.currentPlan =
                         $rootScope.selectedPlan = data[0].plan || '000';
                     $rootScope.billing.customer_id = data[0].customer_id;
                     $rootScope.billing.payment_token = data[0].cc_token;
+                    $rootScope.billing.last_status = data[0].status;
                     $rootScope.load_invoices();
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
+                            console.log(rsp);
                             $rootScope.billing.current_card = rsp.cards.data[0];
+                            $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
                             console.log(x);

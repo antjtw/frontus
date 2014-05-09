@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid"
-                                         ng-if="billing.customer_id && billing.payment_token">
+                                         ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
                                         <div class="pull-left span5">Plan Level</div>
                                         <div class="pull-left">{{showSelectedPlan(billing.currentPlan)}}</div>
                                         <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="paymentPlanModalOpen()">
@@ -70,7 +70,7 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid"
-                                         ng-if="billing.customer_id && billing.payment_token">
+                                         ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
                                         <div class="pull-left span5">
                                             Billing Information
                                         </div>
@@ -78,6 +78,27 @@
                                         <div class="pull-right pointer">
                                             <span data-icon="&#xe00e;" aria-hidden="true" ng-click="ccModalOpen()">
                                             </span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid"
+                                         ng-if="billing.last_status=='cancel'">
+                                        <div class="pull-left span5">
+                                            Reactivate Billing
+                                        </div>
+                                        <div class="pull-left">
+                                            <span ng-if="billing.current_period_end">
+                                                Your subscription ends on {{billing.current_period_end*1000 | date: 'MMMM d, yyyy'}}.
+                                            </span>
+                                            <span ng-if="!billing.current_period_end">
+                                                Your account has been cancelled.
+                                            </span>
+                                        </div>
+                                        <div class="pull-right pointer">
+                                            <div class="standard-button red">
+                                                <button class="btn" ng-click="reactivateSubscriptionModalOpen()">
+                                                    Reactivate
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row-fluid"
@@ -182,7 +203,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row-fluid cancel" ng-if="billing.currentPlan && billing.currentPlan!=='000'">
+                        <div class="row-fluid cancel" ng-if="billing.currentPlan && billing.currentPlan!=='000' && billing.last_status!='cancel'">
                             Click here to <span class="red pointer" ng-click="cancelSubscriptionModalOpen()">cancel your subscription.</span>
                         </div>
                     </div>
@@ -430,7 +451,7 @@
          close="ccModalClose()"
          options="profileopts">
         <div class="modalHeader">
-            <span>Credit card information</span>
+            <span>Billing information</span>
         </div>
         <div class="ccmodal modalText big-input-list">
             <form stripe-form="updatePayment" name="updateCCForm">
@@ -514,7 +535,7 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="cancelSubscriptionModalClose()"></span>
     </div>
     <div class="modalText cancelModal">
-       By clicking confirm, your subscription will be cancelled and your data will be made available for download. 
+       By clicking confirm, your subscription will be cancelled at the end of your current billing cycle and your data will be made available for download.
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -525,7 +546,29 @@
         <div class="standard-button red">
             <button id="pricing_cancel"
                     class="btn" ng-click="cancelSubscription()">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
+<div modal="reactivateSubscriptionModal" close="reactivateSubscriptionModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Reactivate Subscription</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="reactivateSubscriptionModalClose()"></span>
+    </div>
+    <div class="modalText cancelModal">
+        By clicking confirm, your subscription will be reactivated to the {{billing.currentPlan | billingPlansNameOnly}} plan.
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="reactivateSubscriptionModalClose()">
                 Cancel
+            </button>
+        </div>
+        <div class="standard-button">
+            <button id="pricing_cancel"
+                    class="btn" ng-click="reactivateSubscription()">
+                Submit
             </button>
         </div>
     </div>
