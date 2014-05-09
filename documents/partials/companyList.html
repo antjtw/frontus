@@ -137,8 +137,13 @@
                                         <li>{{formatDocStatusRatio(doc)}}</li>
                                     </ul>
                                 </td>
-                                <td>
-                                    <span>{{doc.tags | arrayPrinter}}</span>
+                                <td ng-hide="!hideSharebar"
+                                    ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                                    <span class="tag"
+                                          ng-repeat="tag in doc.tags"
+                                          ng-click="setQuery(tag)">
+                                        {{tag + (($last && ' ') || ', ')}}
+                                    </span>
                                 </td>
                                 <td>
                                     <div ng-switch on="hideSharebar">

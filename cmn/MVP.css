@@ -4235,3 +4235,10 @@ div.upgradeWarning > span {
    margin-top: -11px;
 }
 
+.tag {
+    color: #3498DB;
+}
+.tag:hover {
+    color: #2980B9;
+    cursor: pointer;
+}

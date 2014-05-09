@@ -326,8 +326,11 @@ app.controller('CompanyDocumentListController',
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.query = "";
+        $scope.query = $routeParams.q || "";
         $scope.show_archived = false;
+        $scope.setQuery = function(q) {
+            $scope.query = q;
+        };
 
         $scope.toggleArchived = function() {
             $scope.show_archived = !$scope.show_archived;
