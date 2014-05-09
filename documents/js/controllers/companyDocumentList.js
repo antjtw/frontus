@@ -196,7 +196,9 @@ app.controller('CompanyDocumentListController',
         };
         $scope.loadTags = function() {
             SWBrijj.tblm('document.my_company_tags').then(function(x) {
-                $scope.available_tags = JSON.parse(x[0].tags);
+                $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
+                    return el.replace(/"/g, "");
+                });
             });
         };
         $scope.getAvailableTags = function() {return $scope.available_tags;};
