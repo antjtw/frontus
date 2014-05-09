@@ -138,7 +138,7 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <span ng-repeat="tag in doc.tags">{{tag + (($last && ' ') || ', ')}}</span>
+                                    <span>{{doc.tags | arrayPrinter}}</span>
                                 </td>
                                 <td>
                                     <div ng-switch on="hideSharebar">

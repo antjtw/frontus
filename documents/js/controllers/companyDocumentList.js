@@ -172,6 +172,9 @@ app.controller('CompanyDocumentListController',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
                      'uploaded_by', 'annotations', 'iss_annotations', 'tags']).then(function(data) {
                 $scope.documents = data;
+                angular.forEach($scope.documents, function(d) {
+                    if (d.tags !== null) d.tags = JSON.parse(d.tags);
+                });
                 $scope.mergeSmartIntoDumb();
             });
         };
@@ -193,8 +196,7 @@ app.controller('CompanyDocumentListController',
         };
         $scope.loadTags = function() {
             SWBrijj.tblm('document.my_company_tags').then(function(x) {
-                console.log(x);
-                $scope.available_tags = JSON.parse(x);
+                $scope.available_tags = JSON.parse(x[0].tags);
             });
         };
         $scope.getAvailableTags = function() {return $scope.available_tags;};
@@ -206,11 +208,16 @@ app.controller('CompanyDocumentListController',
             SWBrijj.procm('document.update_tags',
                           id, JSON.stringify(new_tags))
             .then(function(data) {
-                console.log(data);
-                doc.tags = JSON.parse(new_tags);
+                $scope.updateTagsClose();
+                angular.forEach($scope.documents, function(el) {
+                    if (el.doc_id===doc.doc_id) {
+                        el.tags = new_tags;
+                    }
+                });
                 $scope.loadTags();
                 $scope.$emit("notification:success", "Tags updated");
             }).except(function(err) {
+                $scope.updateTagsClose();
                 console.log(err);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
