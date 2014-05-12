@@ -28,9 +28,11 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
-        var docId = parseInt($routeParams.doc);
-        SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", docId).then(function(data) {
+        var docId = parseInt($routeParams.doc, 10);
+        SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages', 'tags'], "doc_id", docId).then(function(data) {
+            if (data.tags !== null) data.tags = JSON.parse(data.tags);
             $scope.document = data;
+            console.log($scope.document);
         });
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
@@ -121,6 +123,9 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
             $location.path('/company-list?share');
             $location.search({});
         };
+        $scope.gotoTag = function(tag) {
+            $location.url('/app/documents/company-list?q='+tag);
+        };
 
         $scope.$watch('document.docname', function(newValue, oldValue) {
             if (newValue === "") {
@@ -181,7 +186,7 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
         $scope.formatDate = function(date, fallback) {
             if (!date) {
                 return fallback ? fallback : "ERROR";
-            } else if (!$rootScope.settings.dateformat) {
+            } else if (!$rootScope.settings || !$rootScope.settings.dateformat) {
                 return "";
             } else {
                 return "" + $filter('date')(date, $rootScope.settings.dateformat) + "\n" + $filter('date')(date, 'shortTime');
