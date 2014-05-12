@@ -1,7 +1,12 @@
 //'use strict';
 
-app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal', '$window', '$q', '$location', '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState', 'basics',
-    function($scope, $timeout, $modal, $window, $q, $location, $routeParams, $rootScope, $route, SWBrijj, navState, basics) {
+app.controller('CompanyDocumentListController',
+        ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
+         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
+         'basics',
+    function($scope, $timeout, $modal, $window, $q, $location,
+             $routeParams, $rootScope, $route, SWBrijj, navState,
+             basics) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -150,6 +155,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                     }
                 });
                 $scope.initShareState();
+                $scope.loadTags();
             });
 
         };
@@ -164,8 +170,11 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.loadDocuments = function() {
             SWBrijj.tblm('document.my_company_library',
                     ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
-                     'uploaded_by', 'annotations', 'iss_annotations']).then(function(data) {
+                     'uploaded_by', 'annotations', 'iss_annotations', 'tags']).then(function(data) {
                 $scope.documents = data;
+                angular.forEach($scope.documents, function(d) {
+                    if (d.tags !== null) d.tags = JSON.parse(d.tags);
+                });
                 $scope.mergeSmartIntoDumb();
             });
         };
@@ -184,6 +193,36 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
             }
             $scope.messageText = $scope.docShareState.message;
             $scope.multipeople = $scope.docShareState.emails;
+        };
+        $scope.loadTags = function() {
+            SWBrijj.tblm('document.my_company_tags').then(function(x) {
+                $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
+                    return el.replace(/"/g, "");
+                });
+            });
+        };
+        $scope.getAvailableTags = function() {return $scope.available_tags;};
+        $scope.getTagClass = function() {return 'badge badge-info';};
+
+        $scope.updateTags = function(doc) {
+            var id = angular.copy(doc.doc_id);
+            var new_tags = angular.copy(doc.new_tags);
+            SWBrijj.procm('document.update_tags',
+                          id, JSON.stringify(new_tags))
+            .then(function(data) {
+                $scope.updateTagsClose();
+                angular.forEach($scope.documents, function(el) {
+                    if (el.doc_id===doc.doc_id) {
+                        el.tags = new_tags;
+                    }
+                });
+                $scope.loadTags();
+                $scope.$emit("notification:success", "Tags updated");
+            }).except(function(err) {
+                $scope.updateTagsClose();
+                console.log(err);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
         };
 
         $scope.loadDocumentVersions = function () {
@@ -289,8 +328,11 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
         $scope.recipients = [];
         $scope.signaturedate = Date.today();
         $scope.signeeded = "No";
-        $scope.query = "";
+        $scope.query = $routeParams.q || "";
         $scope.show_archived = false;
+        $scope.setQuery = function(q) {
+            $scope.query = q;
+        };
 
         $scope.toggleArchived = function() {
             $scope.show_archived = !$scope.show_archived;
@@ -322,7 +364,7 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 // if !show_archived and all versions are archived then return false
                 return false;
             } else {
-                return !$scope.query || re.test(obj.docname);
+                return !$scope.query || re.test(obj.docname) || re.test(obj.tags);
             }
         };
         $scope.versionFilter = function(obj) {
@@ -1058,6 +1100,14 @@ app.controller('CompanyDocumentListController', ['$scope', '$timeout', '$modal',
                 });
             }
         });
+        $scope.updateTagsOpen = function(doc) {
+            $scope.docForModal = angular.copy(doc);
+            $scope.docForModal.new_tags = angular.copy(doc.tags);
+            $scope.updateTagsModal = true;
+        };
+        $scope.updateTagsClose = function() {
+            $scope.updateTagsModal = false;
+        };
 
         $scope.deleteDocOpen = function(doc) {
             $scope.docForModal = doc;

@@ -4,7 +4,8 @@ var app = angular.module('HomeApp',
          '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters',
          'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
          'homeDirectives', 'activityDirective', 'commonDirectives',
-         'ui.select2','documents', 'docServices', 'angularPayments']);
+         'ui.select2','documents', 'docServices', 'angularPayments',
+         'bootstrap-tagsinput']);
 
 /** @name $routeParams#msg
  *  @type {string}

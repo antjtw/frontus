@@ -622,7 +622,9 @@ navm.controller('NavCtrl',
                             var rsp = JSON.parse(x);
                             console.log(rsp);
                             $rootScope.billing.current_card = rsp.cards.data[0];
-                            $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
+                            if (rsp.subscriptions.count>0) {
+                                $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
+                            }
                             $rootScope.$broadcast('billingLoaded');
                         } else {
                             console.log(x);

@@ -93,10 +93,10 @@
                     <table class="status-table" ng-show="documents.length!==0 && viewBy==='document'">
                         <tbody>
                             <tr>
-                                <th colspan="2" style="width: 50%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
-                                <th colspan="2" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                                <th colspan="2" style="width: 40%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
+                                <th colspan="2" style="width: 20%" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                                 class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
-                                <th></th>
+                                <th colspan="2">Tags</th>
                             </tr>
                         </tbody>
                         <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
@@ -120,7 +120,7 @@
                                 </td>
                                 <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
                                     <ul>
-                                        <li>{{doc.docname | caplength:40}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
+                                        <li>{{doc.docname | caplength:50}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
                                         <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                                         ng-hide="!hideSharebar">{{docStatusA(doc)}}</li>
                                     </ul>
@@ -135,6 +135,14 @@
                                         <li>{{shortDocStatus(doc)}}</li>
                                         <li>{{formatDocStatusRatio(doc)}}</li>
                                     </ul>
+                                </td>
+                                <td ng-hide="!hideSharebar"
+                                    ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                                    <span class="tag"
+                                          ng-repeat="tag in doc.tags"
+                                          ng-click="setQuery(tag)">
+                                        {{tag + (($last && ' ') || ', ')}}
+                                    </span>
                                 </td>
                                 <td>
                                     <div ng-switch on="hideSharebar">
@@ -173,6 +181,7 @@
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
+                                                        <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
                                                         <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
                                                         <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
@@ -210,7 +219,7 @@
                                         <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
-                                <td>
+                                <td colspan="2">
                                     <div class="standard-button small-standard-button doc-share-button">
                                         <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn"
                                         ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
@@ -450,6 +459,35 @@
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm
+            </button>
+        </div>
+    </div>
+</div>
+<div modal="updateTagsModal" close="updateTagsClose()" options="wideopts">
+    <div class="tagsModalHeader modalHeader">
+        <span>{{docForModal.docname | caplength:50}} Tags</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTagsClose()"></span>
+    </div>
+    <div class="modalText tagsModal">
+        <div>
+            <ul>
+                <li>Type a tag name and press "enter" or "," to add. Click the X to remove.</li>
+            </ul>
+        </div>
+        <div>
+            <bootstrap-tagsinput ng-model="docForModal.new_tags"
+                                 typeahead-source="getAvailableTags"
+                                 tagClass="getTagClass">
+            </bootstrap-tagsinput>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="updateTagsClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="updateTags(docForModal);">
+                Confirm
             </button>
         </div>
     </div>
