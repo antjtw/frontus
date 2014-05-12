@@ -2539,8 +2539,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
-    height: 300px;
-
+    max-height: 300px;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2560,10 +2559,14 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) {
     padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: auto;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul {
-    height: 266px;
+    max-height: 258px;
+    min-height: 56px;
     overflow-y: auto;
 }
 
@@ -2581,7 +2584,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     border-top: 1px solid #E3E3E3;
 }
 
-.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
+.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
     background-color: #FFFFFF;
     color: #656565;
 }
@@ -2611,14 +2614,14 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type > ul > li {
     line-height: 44px;
 }
 
 .nav.dropdown-list.notifications > li > ul > li a {
     color: #3397DA;
 }
-.nav.dropdown-list.notifications > li > ul > li > div.no-notifications {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div.no-notifications {
     text-align: center;
     width: 301px !important;
     line-height: 45px;
