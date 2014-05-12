@@ -3233,6 +3233,9 @@ button.icon-button:hover {
     -moz-border-radius: 3px;
     border-radius: 3px;
     text-shadow: none !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
 }
 .bootstrap-tagsinput .badge-info {
     background-color: #E3E3E3;

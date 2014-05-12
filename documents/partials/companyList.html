@@ -96,8 +96,7 @@
                                 <th colspan="2" style="width: 40%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
                                 <th colspan="2" style="width: 20%" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                                 class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
-                                <th>Tags</th>
-                                <th></th>
+                                <th colspan="2">Tags</th>
                             </tr>
                         </tbody>
                         <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
@@ -220,8 +219,7 @@
                                         <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
-                                <td></td>
-                                <td>
+                                <td colspan="2">
                                     <div class="standard-button small-standard-button doc-share-button">
                                         <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn"
                                         ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
@@ -473,7 +471,8 @@
     <div class="modalText tagsModal">
         <div>
             <ul>
-                <li>Add or remove tags for {{docForModal.docname}}</li>
+                <li>{{docForModal.docname}}</li>
+                <li>Type a tag name and press "enter" or "," to add. Click the X to remove.</li>
             </ul>
         </div>
         <div>
