@@ -2539,6 +2539,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
+    height: 300px;
 
 }
 
@@ -2557,7 +2558,16 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #FFFFFF;
 }
 
-.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a{
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) {
+    padding-left: 0;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul {
+    height: 266px;
+    overflow-y: auto;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul > li, .topnav .nav.dropdown-list.notifications > li > ul > li > a {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -2584,7 +2594,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     margin-right: -135px;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
@@ -2592,7 +2602,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     vertical-align: top;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -2663,7 +2673,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     background-color: #C7C7C7;
 }
 
-.standard.menu-drop .dropdown-menu > li {
+.standard.menu-drop .dropdown-menu > li, .notifications .standard.menu-drop .dropdown-menu > li > ul > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     text-align: left;
