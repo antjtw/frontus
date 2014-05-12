@@ -464,14 +464,13 @@
     </div>
 </div>
 <div modal="updateTagsModal" close="updateTagsClose()" options="wideopts">
-    <div class="modalHeader">
-        <span>Tags</span>
+    <div class="tagsModalHeader modalHeader">
+        <span>{{docForModal.docname | caplength:50}} Tags</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTagsClose()"></span>
     </div>
     <div class="modalText tagsModal">
         <div>
             <ul>
-                <li>{{docForModal.docname}}</li>
                 <li>Type a tag name and press "enter" or "," to add. Click the X to remove.</li>
             </ul>
         </div>

@@ -3208,9 +3208,6 @@ button.icon-button:hover {
     width: 500px;
     margin: 0 auto;
 }
-.tagsModal > div:nth-child(odd) {
-    margin-bottom: 20px;
-}
 .tagsModal > div > ul {
     text-align: left;
     color: #666666;
