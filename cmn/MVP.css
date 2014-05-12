@@ -3214,7 +3214,7 @@ button.icon-button:hover {
 .tagsModal > div > ul {
     text-align: left;
     color: #666666;
-    font-size: 14px;
+    font-size: 12px;
 }
 .tagsModal .bootstrap-tagsinput {
     width: 100%;
@@ -3224,6 +3224,9 @@ button.icon-button:hover {
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-shadow: none !important;
+}
+.tagsModal .bootstrap-tagsinput input {
+    float: none;
 }
 .bootstrap-tagsinput .badge {
     -webkit-border-radius: 3px;
