@@ -3208,16 +3208,14 @@ button.icon-button:hover {
     width: 500px;
     margin: 0 auto;
 }
-.tagsModal > div:nth-child(odd) {
-    margin-bottom: 20px;
-}
 .tagsModal > div > ul {
     text-align: left;
     color: #666666;
-    font-size: 14px;
+    font-size: 12px;
 }
 .tagsModal .bootstrap-tagsinput {
     width: 100%;
+    min-height: 35px;
     text-align: left;
     color: inherit;
     box-sizing: border-box;
@@ -3225,16 +3223,23 @@ button.icon-button:hover {
     -webkit-box-sizing:border-box;
     box-shadow: none !important;
 }
+.tagsModal .bootstrap-tagsinput input {
+    float: none;
+}
 .bootstrap-tagsinput .badge {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
     text-shadow: none !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
 }
 .bootstrap-tagsinput .badge-info {
     background-color: #E3E3E3;
 }
 .bootstrap-tagsinput .tag {
+    vertical-align: middle;
     color: #666666;
 }
 .bootstrap-tagsinput input,
