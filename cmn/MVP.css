@@ -2578,6 +2578,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #656565;
     height: 50px;
     cursor: default;
+    padding-bottom: 0;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
