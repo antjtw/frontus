@@ -482,6 +482,7 @@ navm.controller('NavCtrl',
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
                     _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
+                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
 
                 // Get Notifications for docs
@@ -494,7 +495,7 @@ navm.controller('NavCtrl',
                 });
             }
             
-                 else {
+            else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
                 }
