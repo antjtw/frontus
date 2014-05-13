@@ -2568,6 +2568,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     max-height: 258px;
     min-height: 56px;
     overflow-y: auto;
+    border-radius: 3px;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul > li, .topnav .nav.dropdown-list.notifications > li > ul > li > a {
@@ -2579,6 +2580,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     height: 50px;
     cursor: default;
     padding-bottom: 0;
+    padding-top: 0;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
@@ -2602,7 +2604,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     display: inline-block;
     width: 50px;
     text-align: center;
-    margin-top: 7px;
+    margin-top: 11px;
     vertical-align: top;
 }
 
@@ -2616,7 +2618,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 }
 
 .nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type > ul > li {
-    line-height: 44px;
+    line-height: 50px;
 }
 
 .nav.dropdown-list.notifications > li > ul > li a {
@@ -2625,7 +2627,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .nav.dropdown-list.notifications > li > ul > li > ul > li > div.no-notifications {
     text-align: center;
     width: 301px !important;
-    line-height: 45px;
+    line-height: 55px;
     margin: 0;
 }
 
