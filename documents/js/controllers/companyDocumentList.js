@@ -444,10 +444,10 @@ app.controller('CompanyDocumentListController',
                          // open office
                          "application/vnd.oasis.opendocument.text", // .odt
                          "application/vnd.oasis.opendocument.presentation", // .odp
-                         //"application/vnd.oasis.opendocument.image", // .odi
-                         //"image/png", // .png
-                         //"image/tiff", // .tiff
-                         //"image/jpeg", // .jpg
+                         "application/vnd.oasis.opendocument.image", // .odi
+                         "image/png", // .png
+                         "image/tiff", // .tiff
+                         "image/jpeg", // .jpg
                          "text/plain", // .txt
                          "application/rtf" // .rtf
                          ];
