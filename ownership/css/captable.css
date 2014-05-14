@@ -2081,3 +2081,9 @@ span.tour-icon.issue-cog + .tooltip {
 .select2-container-multi .select2-choices .select2-search-field input {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
+
+/* Chrome visual bug fix */
+
+.span4.capright, .span4.capright span, .span4.capright input {
+    -webkit-transform: translateZ(0);
+}
