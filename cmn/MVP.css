@@ -18,7 +18,7 @@ body {
     min-height: 100%;
     height: auto !important;
     /*height: 100%; */
-    margin: 0 auto -112px;
+    margin: 0 auto -170px;
     -webkit-transition: margin 0.35s ease;
     -moz-transition: margin 0.35s ease;
     -o-transition: margin 0.35s ease;
@@ -2105,7 +2105,7 @@ tr.preparedDoc {
     min-height:150px;
 }
 .push {
-    height: 112px;
+    height: 170px;
 }
 .container.scaling {
     width: 100%;
