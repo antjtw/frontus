@@ -131,6 +131,7 @@ navm.controller('NavCtrl',
                     'event': 'pageview',
                     'virtualUrl': $location.path()
                 });
+                analytics.page($location.path());
             }
         });
 
