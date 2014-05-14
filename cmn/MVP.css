@@ -4266,7 +4266,3 @@ div.upgradeWarning > span {
 
 
 /* Chrome visual bug fix */
-
-.status-table > tbody > tr  {
-    -webkit-transform: translateZ(0);
-}
