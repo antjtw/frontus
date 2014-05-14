@@ -4263,3 +4263,10 @@ div.upgradeWarning > span {
     color: #2980B9;
     cursor: pointer;
 }
+
+
+/* Chrome visual bug fix */
+
+.status-table > tbody > tr, .status-table > tbody > tr > td, .status-table > tbody > tr > td > ul  {
+    -webkit-transform: translateZ(0);
+}
