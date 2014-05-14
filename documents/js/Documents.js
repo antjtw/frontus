@@ -1923,6 +1923,11 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
             $scope.signatureModal = false;
             $scope.scribblemode = false;
         };
+
+        $scope.$on("$destroy", function( event ) {
+                $window.onkeydown = null;
+            }
+        );
     }
 ]);
 
