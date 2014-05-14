@@ -1,6 +1,7 @@
+<div class="notification-bar" ng-class="notification.style" ng-show="notification.visible"
+     ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
+
 <div class="fixednav">
-    <div style="cursor: pointer;" ng-class="notification.style" ng-show="notification.visible"
-    ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
     <div collapse="isCollapsed">
         <div class="well well-large">
             <div class="container">
@@ -61,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
+    <div class="overall-nav" ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
         <div class="navbar topnav row-fluid" ng-class="{navheight:!navState.userid}">
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
                 <ul class="nav pull-left nav-logo">

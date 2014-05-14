@@ -512,9 +512,9 @@ h2 {
 
 div.fixednav{
     position: fixed;
-    z-index: 1000;
     width: 100%;
     top: 0;
+    z-index: 998;
 }
 
 .fixednavoffset {
@@ -895,6 +895,7 @@ ul.nav-logo > li > a > img {
     display: block;
     height: 50px;
     overflow: hidden;
+    cursor: pointer;
 }
 .notification.success {
     background-color: rgb(28, 202, 161);
@@ -1175,6 +1176,7 @@ form.inputs {
 
 .collapse-well {
     height: 160px;
+    z-index: 999;
 }
 
 #login_password {
@@ -2529,6 +2531,10 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     height: 15px;
     width: 15px;
     line-height: 15px;
+}
+
+.overall-nav {
+    z-index: 999;
 }
 
 .topnav.navbar .nav.dropdown-list.notifications > li > .dropdown-menu:before {
@@ -4165,7 +4171,9 @@ div#us_report_button button.us_button_horizontal {
     height: 50px;
     background-color: #FBC68E;
     border-bottom:1px solid #F78D1E;
+    z-index: 998;
 }
+
 .persistentNotification > div > div {
     height: 100%;
     margin: 0 40px 0 60px;
