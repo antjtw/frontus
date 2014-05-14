@@ -99,14 +99,6 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.directive('verticalnav', function () {
-    return {
-        restrict: 'E',
-        templateUrl: '/cmn/verticalnav.html',
-        controller: 'NavCtrl'
-    };
-});
-
 
 navm.controller('NavCtrl',
                 ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
@@ -154,7 +146,7 @@ navm.controller('NavCtrl',
             if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
             return M;
         })();
-
+        console.log("please only fire once");
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/", "/pricing/", "/survey/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
