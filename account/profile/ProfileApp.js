@@ -94,7 +94,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
         };
         
         $scope.profileUpdate = function(attr, value) {
-            if ($scope.profilecheck.attr != value && value != undefined) {
+            if ($scope.profilecheck[attr] != value && value != undefined) {
                 SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
                     void(x);
                     $scope.$emit("notification:success", "Profile successfully updated");
