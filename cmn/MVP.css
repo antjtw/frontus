@@ -2539,7 +2539,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
-
+    max-height: 300px;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2557,7 +2557,21 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #FFFFFF;
 }
 
-.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a{
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) {
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: auto;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul {
+    max-height: 258px;
+    min-height: 56px;
+    overflow-y: auto;
+    border-radius: 3px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul > li, .topnav .nav.dropdown-list.notifications > li > ul > li > a {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -2565,13 +2579,15 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #656565;
     height: 50px;
     cursor: default;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
     border-top: 1px solid #E3E3E3;
 }
 
-.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
+.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
     background-color: #FFFFFF;
     color: #656565;
 }
@@ -2584,15 +2600,15 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     margin-right: -135px;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
-    margin-top: 7px;
+    margin-top: 11px;
     vertical-align: top;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -2601,17 +2617,17 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
-    line-height: 44px;
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type > ul > li {
+    line-height: 50px;
 }
 
 .nav.dropdown-list.notifications > li > ul > li a {
     color: #3397DA;
 }
-.nav.dropdown-list.notifications > li > ul > li > div.no-notifications {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div.no-notifications {
     text-align: center;
     width: 301px !important;
-    line-height: 45px;
+    line-height: 55px;
     margin: 0;
 }
 
@@ -2663,7 +2679,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     background-color: #C7C7C7;
 }
 
-.standard.menu-drop .dropdown-menu > li {
+.standard.menu-drop .dropdown-menu > li, .notifications .standard.menu-drop .dropdown-menu > li > ul > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     text-align: left;
@@ -4246,4 +4262,11 @@ div.upgradeWarning > span {
 .tag:hover {
     color: #2980B9;
     cursor: pointer;
+}
+
+
+/* Chrome visual bug fix */
+
+.status-table > tbody > tr  {
+    -webkit-transform: translateZ(0);
 }

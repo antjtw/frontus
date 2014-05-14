@@ -267,7 +267,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     $scope.setView = function(field) {
         $scope.optionView = field;
         var uniquenames = [];
-        if (field == "Investor") {
+        if (field == "Person") {
             // Create the investor led row
             $scope.investorLed = [];
             angular.forEach($scope.issues, function(issue) {
@@ -285,7 +285,6 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                     }
                 });
             });
-            console.log($scope.investorLed);
         }
     };
 };
