@@ -131,7 +131,6 @@ navm.controller('NavCtrl',
                     'event': 'pageview',
                     'virtualUrl': $location.path()
                 });
-                analytics.page($location.path());
             }
         });
 
@@ -490,6 +489,7 @@ navm.controller('NavCtrl',
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
+                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;

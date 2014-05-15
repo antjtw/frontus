@@ -527,6 +527,7 @@ app.controller('CompanyDocumentListController',
             var fd = new FormData();
             if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
                 _kmq.push(['record', 'doc uploader']);
+                analytics.track('doc uploader');
             }
             Intercom('update', {company : {"documents":$scope.documents.length+1}});
             for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
