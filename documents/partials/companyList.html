@@ -214,7 +214,6 @@
                                 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
                                     <ul>
                                         <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
-                                        <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
                                 <td colspan="2">
@@ -320,7 +319,6 @@
                                 <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(version)">
                                     <ul>
                                         <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
-                                        <li>{{momentFromNow(version.last_event.event_time, version.last_event.timenow)}}</li>
                                     </ul>
                                 </td>
                                 <td>
