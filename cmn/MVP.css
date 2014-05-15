@@ -1917,7 +1917,7 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 18px;
 }
 
-.status-table > tbody > tr > td.shareholder-column > ul > li:last-child {
+.status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
     font-size: 10px;
     text-transform: uppercase;
     color: #A6A6A6;

@@ -683,7 +683,7 @@ app.controller('CompanyDocumentListController',
         };
 
         $scope.formatDocStatusRatio = function(doc) {
-            if (!doc.versions || doc.versions.length===0) return "";
+            if (!doc.versions || doc.versions.length===0) return "Uploaded";
 
 
             var archived = $scope.versionsArchived(doc).length;
@@ -704,7 +704,7 @@ app.controller('CompanyDocumentListController',
             } else if (total == archived+completed && (!show_archived && hide_completed)) {
                 return "All documents are archived or completed";
             } else {
-                return num+" / "+display_total+" documents";
+                return num+" / "+display_total+" completed";
             }
         };
 

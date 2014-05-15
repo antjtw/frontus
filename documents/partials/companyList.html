@@ -132,7 +132,6 @@
                                 <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
                                 ng-click="doc.uploading || viewStatus(doc)">
                                     <ul>
-                                        <li>{{shortDocStatus(doc)}}</li>
                                         <li>{{formatDocStatusRatio(doc)}}</li>
                                     </ul>
                                 </td>
@@ -282,7 +281,6 @@
                                 </td>
                                 <td class="shareholder-column status-column issuer pointer">
                                     <ul>
-                                        <li>{{shortDocStatus(investor)}}</li>
                                         <li>{{formatDocStatusRatio(investor)}}</li>
                                     </ul>
                                 </td>
