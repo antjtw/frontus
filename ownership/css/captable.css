@@ -590,6 +590,11 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     margin-top: 6px;
     cursor: pointer;
     vertical-align: middle;
+    position: relative;
+}
+
+p.rightTitle {
+    position: relative;
 }
 
 p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
@@ -598,16 +603,19 @@ p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-ic
 
 .rightTitle > div.tooltip {
     left: auto !important;
-    right: 14px !important;
+    right: 12px !important;
     width: 200px;
 }
 
 .rightTitle.common-toggle > div.tooltip {
-    left: auto !important;
-    right: 147px !important;
+    right: 132px !important;
 }
 
 .rightTitle > div.tooltip > .tooltip-arrow {
+    left: 88.8%;
+}
+
+.rightTitle.common-toggle > div.tooltip > .tooltip-arrow {
     left: 81.8%;
 }
 
