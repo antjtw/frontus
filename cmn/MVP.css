@@ -885,6 +885,7 @@ ul.nav-logo > li > a > img {
 /* Notifications */
 .notification {
     position: fixed;
+    top: 0;
     width: 100%;
     text-align: center;
     z-index: 1050;
@@ -3555,7 +3556,8 @@ button.icon-button:hover {
 
 .profile-modal.modal > div.modalText .input-list > span {
     float: left;
-    margin-left: 132px;
+    margin-left: 65px;
+    margin-top: -20px;
 }
 
 .profile-modal.modal > div.modalText > div > div.profile-image {
@@ -3588,10 +3590,10 @@ button.icon-button:hover {
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
     text-transform: uppercase;
     font-size: 10px;
-    width: 80px;
-//    display: inline-block;
-//    text-align: right;
+    width: 60px;
     margin-right: 5px;
+    display: inline-block;
+    text-align: right;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
     width: 120px;
