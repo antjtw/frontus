@@ -13,7 +13,7 @@
             <div>
                     <span>Recipients</span>
                     <div class="sharepeople-input">
-                        <input ui-select2="select2Options" ng-model="docShareState.emails">
+                        <input ui-select2="select2Options" ng-model="messages.recipients">
                      </div>
                 </div>
             <div>
@@ -36,11 +36,11 @@
         </div>
     </div>
     <div class = "standard-button green">
-        <!-- <button class="btn"
+        <button class="btn"
             ng-disabled="!readyToSend(message)"
-            ng-click="sendMessage(message);"> -->
+            ng-click="sendMessage(message);">
             Send
-        <!-- </button> -->
+        </button>
      </div>
 </div>
 
