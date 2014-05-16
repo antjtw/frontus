@@ -24,7 +24,6 @@ m.directive('composeMessage', function() {
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true,
-                dialogClass: 'compose-modal widerModal modal'
             };
             $scope.select2Options = {
                 'multiple': true,

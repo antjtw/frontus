@@ -4303,4 +4303,10 @@ div.upgradeWarning > span {
     box-shadow: none;
     padding: 22px 22px 22px 22px;
 }
+
+.select2sux {
+    width: 300;
+}
+
+
 /* Chrome visual bug fix */
