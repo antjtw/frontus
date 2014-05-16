@@ -33,9 +33,7 @@ m.directive('composeMessage', function() {
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email address & press enter'
             };
-            $scope.composeModalOpen = function() {
-                $scope.composeModal = true;
-            };
+          
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
@@ -83,10 +81,6 @@ m.directive('composeMessage', function() {
                 return !anybad;
             };
 
-            $scope.composeModalClose = function() {
-                $scope.resetMessage();
-                $scope.composeModal = false;
-            };
         }]
     };
 });
