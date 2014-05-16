@@ -1,42 +1,45 @@
 <div>
-                <div class="sidebarHeader">
-                    <span>Send Mesage</span>
-                </div>
-                <div class="sidebarText">
-                    <div class="input-list">
-                        <div ng-if="triggerUpdateMessages(message.recipients)"
-                        class="upgradeWarning">
-                            <span>Warning: Sending this message will automatically upgrade your payment plan.
-                            </span>
-                        </div>
-                        <div>
-                            <span>Recipients</span>
-                            <input type="text">
-                        </div>
-                        <div>
-                            <span>Subject</span>
-                            <input type="text">
-                        </div>
-                        <div>
-                            <span>Message</span>
-                            <textarea class="email-text" rows="6"
-                            cols="60">
-                            </textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="sidebarFooter">
-                    <div class= "standard-button gray">
-                        <button class="btn" ng-click="toggleSide()">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-                <div class = "standard-button green">
-                    <!-- <button class="btn"
-                        ng-disabled="!readyToSend(message)"
-                        ng-click="sendMessage(message);"> -->
-                        Send
-                    <!-- </button> -->
-                 </div>
+    <div class="sidebarHeader">
+        <span>Send Mesage</span>
+    </div>
+    <div class="sidebarText">
+        <div class="input-list">
+           <div ng-if="triggerUpgradeMessages(message.recipients)"
+                     class="upgradeWarning">
+                <span>Warning: Sending this message will automatically upgrade your payment plan.
+                </span>
             </div>
+            <div>
+                <span>Recipients</span>
+                <input ui-select2="select2Options"
+                    ng-model="message.recipients">
+            </div>
+            <div>
+                <span>Subject</span>
+                <input type="text">
+            </div>
+            <div>
+                <span>Message</span>
+                <textarea class="email-text" rows="6"
+                cols="60">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="sidebarFooter">
+        <div class= "standard-button gray">
+            <button class="btn" ng-click="toggleSide()">
+                Cancel
+            </button>
+        </div>
+    </div>
+    <div class = "standard-button green">
+        <!-- <button class="btn"
+            ng-disabled="!readyToSend(message)"
+            ng-click="sendMessage(message);"> -->
+            Send
+        <!-- </button> -->
+     </div>
+</div>
+
+
