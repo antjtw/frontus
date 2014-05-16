@@ -1,12 +1,11 @@
-<div class="box-button pull-right"
-     ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
-    ng-show="documents.length!==0"
-    ng-click="companyIsZombie() || toggleSidebar();"
+<!-- <div class="box-button pull-right"
+     ng-class="{selected: hideSharebar, 'disabledme': companyIsZombie()}"
+    ng-click="companyIsZombie() || composeModalOpen();"
     data-placement="bottom" bs-tooltip="zombiemessage">
     <ul>
         <li> <span data-icon="&#xe028;" aria-hidden="true"></span></li>
         <li> <span>email</span> </li>
-    </ul>
+    </ul> -->
     
 <!--     <div class="box-button pull-right"
          ng-class="{'disabledme': companyIsZombie()}"
@@ -20,7 +19,7 @@
             </li>
         </ul>
     </div> -->
-   <!--  <div modal="composeModal" close="composeModalClose()" options="composeopts">
+    <div modal="composeModal" close="composeModalClose()" options="composeopts">
         <div class="modalHeader">
             <span>Send Message</span>
             <span class="close" data-icon="&#xe00f;" aria-hidden="true"
@@ -66,5 +65,5 @@
                 </button>
             </div>
         </div>
-    </div> -->
+    </div>
 </div>

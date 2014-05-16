@@ -89,6 +89,7 @@ m.directive('composeMessage', function() {
                 } 
                 else {
                     $scope.hideSharebar = false;
+                alert("hello!")
                 };
             };
             // $scope.composeSidebarOpen = function(){
