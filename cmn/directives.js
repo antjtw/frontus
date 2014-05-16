@@ -14,13 +14,13 @@ m.directive('composeMessage', function() {
                     $scope.investors.push(p.selector);
                 });
             };
-            $scope.getInvestors();
+            // $scope.getInvestors();
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
                                   subject:""};
             };
-            $scope.resetMessage();
+            // $scope.resetMessage();
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true,
@@ -57,7 +57,6 @@ m.directive('composeMessage', function() {
                     $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
-                    $scope.composeModalClose();
                 }).except(function(err) {
                     void(err);
                     $scope.$emit("notification:fail",

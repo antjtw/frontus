@@ -1,19 +1,20 @@
 
 <div>
+
     <div class="sidebarHeader">
         <span>Send Mesage</span>
     </div>
     <div class="sidebarText">
         <div class="input-list">
-           <div ng-if="triggerUpgradeMessages(message.recipients)"
+         <div ng-if="triggerUpgradeMessages(message.recipients)"
                      class="upgradeWarning">
                 <span>Warning: Sending this message will automatically upgrade your payment plan.
                 </span>
-            </div>
+            </div> 
             <div>
                     <span>Recipients</span>
                     <div class="sharepeople-input">
-                        <input ui-select2="select2Options" ng-model="messages.recipients">
+                        <input ui-select2="select2Options" ng-model="message.recipients">
                      </div>
                 </div>
             <div>
