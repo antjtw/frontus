@@ -1,5 +1,4 @@
-<link type="text/css" rel="stylesheet" href="/cmn/profile.css">
-<!-- <link type="text/css" rel="stylesheet" href="/documents/css/app.css"> -->
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -8,7 +7,7 @@
             <div class="subnav-controls">
                 <div>
                     <div class="pull-left">
-                        <div class="pull-left">
+                        <div class="pull-left" >
                             <span>SEARCH</span>
                             <input type="text" class="search-box" ng-model="filterText">
                         </div>
@@ -86,7 +85,16 @@
                 </table>
             </div>
         </div>
+        <div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
+                showSharebar:!hideSharebar,
+                slidingcss25:oldSafari()}" class="span4 capright button-offset">
+                <div>
+                    hiello
+                </div>
+        </div>
     </div>
+
+
     </section>
 </div>
 
