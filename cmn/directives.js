@@ -82,6 +82,19 @@ m.directive('composeMessage', function() {
                 });
                 return !anybad;
             };
+
+            $scope.toggleSidebar = function () {
+                if (!$scope.hideSharebar) {
+                    $scope.hideSharebar = true;
+                } 
+                else {
+                    $scope.hideSharebar = false;
+                };
+            };
+            // $scope.composeSidebarOpen = function(){
+            //     $scope.resetMessage();
+            //     $scope.
+            // }
             $scope.composeModalClose = function() {
                 $scope.resetMessage();
                 $scope.composeModal = false;

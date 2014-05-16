@@ -1,5 +1,14 @@
-<div class="pull-right">
-    <div class="box-button pull-right"
+<div class="box-button pull-right"
+     ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
+    ng-show="documents.length!==0"
+    ng-click="companyIsZombie() || toggleSidebar();"
+    data-placement="bottom" bs-tooltip="zombiemessage">
+    <ul>
+        <li> <span data-icon="&#xe028;" aria-hidden="true"></span></li>
+        <li> <span>email</span> </li>
+    </ul>
+    
+<!--     <div class="box-button pull-right"
          ng-class="{'disabledme': companyIsZombie()}"
          ng-click="companyIsZombie() || composeModalOpen();"
          data-placement="bottom" bs-tooltip="zombiemessage">
@@ -10,51 +19,52 @@
 
             </li>
         </ul>
-    </div>
- 
-    <div class="modalHeader">
-        <span>Send Message</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-              ng-click="composeModalClose()">
-        </span>
-    </div>
-    <div class="modalText">
-        <div class="input-list">
-            <div ng-if="triggerUpgradeMessages(message.recipients)"
-                 class="upgradeWarning">
-                <span>
-                    Warning: Sending this message will automatically upgrade your payment plan.
-                </span>
-            </div>
-            <div>
-                <span>Recipients</span>
-                <input ui-select2="select2Options"
-                       ng-model="message.recipients">
-            </div>
-            <div>
-                <span>Subject</span>
-                <input type="text" ng-model="message.subject">
-            </div>
-            <div>
-                <span>Message</span>
-                <textarea class="email-text" rows="6" cols="60"
-                          ng-model="message.text">
-                </textarea>
+    </div> -->
+   <!--  <div modal="composeModal" close="composeModalClose()" options="composeopts">
+        <div class="modalHeader">
+            <span>Send Message</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+                  ng-click="composeModalClose()">
+            </span>
+        </div>
+        <div class="modalText">
+            <div class="input-list">
+                <div ng-if="triggerUpgradeMessages(message.recipients)"
+                     class="upgradeWarning">
+                    <span>
+                        Warning: Sending this message will automatically upgrade your payment plan.
+                    </span>
+                </div>
+                <div>
+                    <span>Recipients</span>
+                    <input ui-select2="select2Options"
+                           ng-model="message.recipients">
+                </div>
+                <div>
+                    <span>Subject</span>
+                    <input type="text" ng-model="message.subject">
+                </div>
+                <div>
+                    <span>Message</span>
+                    <textarea class="email-text" rows="6" cols="60"
+                              ng-model="message.text">
+                    </textarea>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="composeModalClose()">
-                Cancel
-            </button>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="composeModalClose()">
+                    Cancel
+                </button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn"
+                        ng-disabled="!readyToSend(message)"
+                        ng-click="sendMessage(message);">
+                    Send
+                </button>
+            </div>
         </div>
-        <div class="standard-button green">
-            <button class="btn"
-                    ng-disabled="!readyToSend(message)"
-                    ng-click="sendMessage(message);">
-                Send
-            </button>
-        </div>
-    </div>
+    </div> -->
 </div>
