@@ -421,6 +421,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
+            $scope.hideSharebar = true;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -595,6 +596,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
+
+        $scope.toggleSide = function () {
+            if (!$scope.hideSharebar) {
+                $scope.hideSharebar = true;
+            } 
+            else {
+                $scope.hideSharebar = false;
+            alert("hello!")
+            };
+        };
+       
     }
 ]);
 

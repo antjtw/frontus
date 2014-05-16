@@ -1,4 +1,5 @@
 <link type="text/css" rel="stylesheet" href="/cmn/profile.css">
+<!-- <link type="text/css" rel="stylesheet" href="/documents/css/app.css"> -->
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -7,10 +8,25 @@
             <div class="subnav-controls">
                 <div>
                     <div class="pull-left">
-                        <span>SEARCH</span>
-                        <input type="text" class="search-box" ng-model="filterText">
+                        <div class="pull-left">
+                            <span>SEARCH</span>
+                            <input type="text" class="search-box" ng-model="filterText">
+                        </div>
                     </div>
-                    <compose-message/></compose-message>
+                   <!--  <compose-message/></compose-message> -->
+                    <div class="box-button pull-right"
+                         ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
+                         ng-click="companyIsZombie() || toggleSide();"
+                         data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+
+                            </li>
+                            <li> <span>testing</span>
+
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie()}"
@@ -29,7 +45,8 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" class="row-fluid">
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
@@ -69,6 +86,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </section>
 </div>
 
