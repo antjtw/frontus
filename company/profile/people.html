@@ -18,10 +18,10 @@
                          ng-click="companyIsZombie() || toggleSide();"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
-                            <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
 
                             </li>
-                            <li> <span>testing</span>
+                            <li> <span>Email</span>
 
                             </li>
                         </ul>
@@ -89,7 +89,50 @@
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                 <div>
-                    hiello
+                    <div class="sidebarHeader">
+                        <span>Send Mesage</span>
+                    </div>
+                    <div class="sidebarText">
+                        <div class="input-list">
+                            <div ng-if="triggerUpdateMessages(message.recipients)"
+                            class="upgradeWarning">
+                                <span>Warning: Sending this message will automatically upgrade your payment plan.
+                                </span>
+                            </div>
+                            <div>
+                                <span>Recipients</span>
+                                <input ui-select2="select20ptions"
+                                    ng-model="message.recipients">
+                            </div>
+                            <div>
+                                <span>Subject</span>
+                                <input type="text" ng-model="message.subject">
+                            </div>
+                            <div>
+                                <span>Message</span>
+                                <textarea class="email-text" rows="6"
+                                cols="60"
+                                    ng-model="message.text">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebarFooter">
+                        <button class="btn" ng-click="toggleSide()">
+                        Cancel
+                        </button>
+                    </div>
+                    <div class = "standard-button green">
+                        <button class="btn"
+                        ng-disabled="!readyToSend(message)"
+                        ng-click="sendMessage(message);">
+                    Send
+                </button>
+
+
+
+
+                    </div>
                 </div>
         </div>
     </div>

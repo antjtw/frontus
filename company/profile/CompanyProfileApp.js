@@ -603,7 +603,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             } 
             else {
                 $scope.hideSharebar = false;
-            alert("hello!")
             };
         };
        

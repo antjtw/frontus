@@ -3303,6 +3303,8 @@ button.icon-button:hover {
     height: 100%;
     margin: 0;
 }
+
+
 /* Modal CSS */
 .modal {
     margin-left: -180px;
@@ -4272,5 +4274,33 @@ div.upgradeWarning > span {
     cursor: pointer;
 }
 
+/*Sidebar CSS */
+.sidebarHeader {
+    display: block;
+    text-align: left;
+    padding: 16px 0 16px 20px;
+    margin: 0;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #1E2D3D;
+}
 
+.sidebarText {
+    padding: 10px 0 0 0;
+    margin: 5px 0 20px 0;
+    display: block;
+    text-align: center;
+}
+.sidebarText p {
+    text-align: left;
+    margin: 0 20px 0 20px;
+}
+
+.sidebarFooter {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 22px 22px 22px 22px;
+}
 /* Chrome visual bug fix */
