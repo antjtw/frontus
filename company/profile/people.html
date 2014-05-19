@@ -62,7 +62,7 @@
                             <ul class="checkboxOption">
                                 <li class="pull-left">
                                     <div ng-if="!hideSharebar">
-                                        <button class="check-box-button" ng-class="{'selected': emailRecipient}" ng-click="emailRecipient = !emailRecipient">
+                                        <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
                                         <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                                     </div>
                                 </li>

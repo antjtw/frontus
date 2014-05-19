@@ -33,20 +33,25 @@ m.directive('composeMessage', function() {
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email address & press enter'
             };
-          
+
+            
+
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
-                var regExp = /\(([^)]+)\)/;
-                var recipients = [];
-                angular.forEach(msg.recipients, function(person) {
-                    var matches = regExp.exec(person);
-                    if (matches == null) {
-                        matches = ["", person];
-                    }
-                    recipients.push(matches[1]);
-                });
+                var recipients = $scope.recipients;
+                 // assume that recipients are valid
+                // var regExp = /\(([^)]+)\)/;
+                // var recipients = [];
+    
+                // angular.forEach(msg.recipients, function(person) {
+                //     var matches = regExp.exec(person);
+                //     if (matches == null) {
+                //         matches = ["", person];
+                //     }
+                //     recipients.push(matches[1]);
+                // });
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -65,19 +70,22 @@ m.directive('composeMessage', function() {
                 });
             };
             $scope.readyToSend = function(msg) {
-                $scope.getInvestors();
-                var anybad = false;
-                if (msg.recipients.length===0
+                // $scope.getInvestors();
+                // var anybad = false;
+                if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
                 }
-                angular.forEach(msg.recipients, function(e) {
-                    if ($scope.investors.indexOf(e) === -1) {
-                        anybad = true;
-                    }
-                });
-                return !anybad;
+                else {
+                    return true;
+                }
+                // angular.forEach(msg.recipients, function(e) {
+                //     if ($scope.investors.indexOf(e) === -1) {
+                //         anybad = true;
+                //     }
+                // });
+                // return !anybad;
             };
 
         }]

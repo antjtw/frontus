@@ -114,6 +114,8 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
             $scope.message.subject = message.subject;
             $scope.message.text = message.text;
         };
+
+       
   
 
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
