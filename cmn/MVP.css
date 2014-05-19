@@ -1922,6 +1922,7 @@ ul.spaced-list > li:nth-child(odd) {
     text-transform: uppercase;
     color: #A6A6A6;
     line-height: 14px;
+    min-width: 40px;
 }
 
 .status-table > tbody > tr > td > .statusTableButton {
@@ -4302,26 +4303,28 @@ div.upgradeWarning > span {
     border-radius: 0;
     box-shadow: none;
     /*padding: 22px 22px 22px 22px;*/
-    display: inline-block;
+/*    display: inline-block;*/
     text-align: center;
-    position: relative;
+/*    position: relative;*/
 }
 
 .standard-button.green > button {
     width: 100px;
-    margin-left: 200px;
     display: inline-block;
 }
 
 .standard-button.white > button{
-    margin-right: 48%;
     width: 100px;
     background-color: white;
     color: blue;
-  /*  margin-right: 15px;
-    text-align: left;*/
     display: inline-block;
-    width: 150px;
+}
+
+.cell{
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    text-align: left;
 }
 
 
