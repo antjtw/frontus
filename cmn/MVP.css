@@ -4278,7 +4278,7 @@ div.upgradeWarning > span {
 .sidebarHeader {
     display: block;
     text-align: left;
-    padding: 16px 0 16px 20px;
+/*    padding: 16px 0 16px 20px;*/
     margin: 0;
     vertical-align: middle;
     font-size: 14px;
@@ -4289,7 +4289,7 @@ div.upgradeWarning > span {
     padding: 10px 0 0 0;
     margin: 5px 0 20px 0;
     display: block;
-    text-align: center;
+    text-align: left;
 }
 .sidebarText p {
     text-align: left;
@@ -4301,12 +4301,30 @@ div.upgradeWarning > span {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    padding: 22px 22px 22px 22px;
+    /*padding: 22px 22px 22px 22px;*/
+    display: inline-block;
+    text-align: center;
+    position: relative;
 }
 
-.select2sux {
-    width: 300;
+.standard-button.green > button {
+    width: 100px;
+    margin-left: 200px;
+    display: inline-block;
 }
+
+.standard-button.white > button{
+    margin-right: 48%;
+    width: 100px;
+    background-color: white;
+    color: blue;
+  /*  margin-right: 15px;
+    text-align: left;*/
+    display: inline-block;
+    width: 150px;
+}
+
+
 
 
 /* Chrome visual bug fix */
