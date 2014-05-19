@@ -6,7 +6,7 @@ m.directive('composeMessage', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
         function($scope, $rootScope, SWBrijj) {
             $scope.getInvestors = function() {
                 $scope.investors = [];
@@ -14,13 +14,14 @@ m.directive('composeMessage', function() {
                     $scope.investors.push(p.selector);
                 });
             };
-            // $scope.getInvestors();
+
+            $scope.getInvestors();
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
                                   subject:""};
             };
-            // $scope.resetMessage();
+            $scope.resetMessage();
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true,
@@ -65,6 +66,7 @@ m.directive('composeMessage', function() {
             };
             $scope.readyToSend = function(msg) {
                 $scope.getInvestors();
+                console.log(msg)
                 var anybad = false;
                 if (msg.recipients.length===0
                     || msg.subject===""
