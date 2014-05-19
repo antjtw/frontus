@@ -146,7 +146,7 @@ active.filter('description', function() {
                 else if (activity == "void requested") return person + " requested voiding <a href=" + url + ">" +caplength(document, 35) + "</a>";
                 else if (activity == "void rejected") return "You rejected the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
                 else if (activity == "void accepted") return "You accepted the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "finalized") return "You approved <a href=" + url + ">" + caplength(document, 35) + "</a>";
+                else if (activity == "finalized") return person + " approved <a href=" + url + ">" +caplength(document, 35) + "</a>";
                 else  {
                     return activity + " by "+person;
                 }
