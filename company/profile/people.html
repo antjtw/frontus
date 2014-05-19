@@ -58,7 +58,16 @@
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
                     <tr>
-                        <td style="width:400px" class="shareholder-column docname-column" ng-click="gotoPerson(person);">
+                        <td style="width:400px" class="shareholder-column docname-column" ng-click="!hideSharebar || gotoPerson(person)">
+                            <ul class="checkboxOption">
+                                <li class="pull-left">
+                                    <div ng-if="!hideSharebar">
+                                        <button class="check-box-button" ng-class="{'selected': emailRecipient}" ng-click="emailRecipient = !emailRecipient">
+                                        <span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                                    </div>
+                                </li>
+                            </ul>
+                
                             <ul>
                                 <li>{{person.name}}</li>
                                 <li>{{formatLastLogin(person.lastlogin)}}</li>

@@ -532,6 +532,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.addAdminModal = false;
         };
 
+
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
