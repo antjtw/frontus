@@ -322,8 +322,7 @@ app.controller('CompanyCtrl',
         };
 
         $scope.getActivityFeed = function() {
-            $scope.activity = [];
-            SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
+            SWBrijj.tblm('global.get_company_activity', 50, 0).then(function(feed) {
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
                 $scope.feed = [];
@@ -525,11 +524,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.getActivityFeed = function() {
-            $scope.activity = [];
             SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-
                 var originalfeed = feed;
                 //Generate the groups for the activity feed
                 $scope.feed = [];
