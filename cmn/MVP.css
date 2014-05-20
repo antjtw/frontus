@@ -1281,6 +1281,7 @@ form.inputs {
     padding-top: 90px;
 }
 
+
 .span10.coreEdit {
     height:100%;
     margin-left:0;
@@ -1291,7 +1292,11 @@ form.inputs {
 }
 .coreEdit input {
     box-shadow: none !important;
+    width: 270px;
 }
+
+
+
 .formBounder {
     width:620px;
 }

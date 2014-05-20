@@ -77,7 +77,7 @@
                              
                         <td><span ng-show="person.role=='issuer'">Admin</span></td>
                         <td style="width:50px;">
-                            <ul ng-show="person.lastlogin" class="dropdown-list">
+                            <ul ng-show="person.lastlogin" class="dropdown-list" ng-hide="!hideSharebar">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
