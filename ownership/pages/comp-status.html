@@ -1,6 +1,8 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
 <div class="container dynamic-page">
-
     <div modal="capAccess" close="close()" options="shareopts">
         <div class="modalHeader">
             <span>Change Permissions</span>
@@ -70,28 +72,35 @@
 
     <div class="row-fluid">
         <div class="span12">
-            <div class="headsection row-fluid">
-
-                <ul class="maintabs head-text">
-                    <li><a href="/ownership/company-captable">Capitalization</a></li>
-                    <li><a href="/ownership/company-grants">Grants</a></li>
-                    <li class="selectedtab">Status</li>
-                </ul>
-            </div>
 
             <div class="row-fluid">
                 <div class="subnav-controls">
                     <div>
+                        <div class="pull-left back-section">
+                            <div class="backbutton" ng-click="gotoPage(lastPage)">
+                                <span data-icon="&#xe032;" aria-hidden="true"></span>
+                            </div>
+                            <div>
+                                <span>Back to</span>
+                                <span>{{gobackto}}</span>
+                            </div>
+                        </div>
 
                         <div class="pull-left">
                             <span>Search</span>
                             <input type="text" class="search-box" ng-model="filterPeople">
                         </div>
 
-                        <div class="pull-right">
-                            <div class="standard-button blue">
-                                <button class="btn" ng-click="downloadCsv();">CSV Export</span></button>
-                            </div>
+                        <div class="box-button pull-right"
+                             ng-click="downloadCsv();">
+                            <ul>
+                                <li> <span data-icon="&#xe007;" aria-hidden="true"></span>
+
+                                </li>
+                                <li> <span>CSV Export</span>
+
+                                </li>
+                            </ul>
                         </div>
 
                     </div>
@@ -107,7 +116,7 @@
                     <tbody class="empty-table">
                     <tr>
                         <td>
-                            Welcome! <a href="/ownership/company-captable" class="link">Start your cap table</a> and share with investors to view status</a>
+                            Welcome! <a href="/app/ownership/company-captable" class="link">Start your cap table</a> and share with investors to view status</a>
                         </td>
                     </tr>
                     </tbody>
@@ -213,6 +222,3 @@
 
 </div>
 
-
-<div class="minimumGap"></div>
-<div class="push"></div>

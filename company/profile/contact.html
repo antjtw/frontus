@@ -1,225 +1,577 @@
-<div class="container dynamic-page doclistFlow">
-    <div class="row-fluid">
-        <div class="headsection row-fluid">
-            <ul class="maintabs head-text">
-                <li class="selectedtab">Company Profile</li>
-            </ul>
-        </div>
-        <div style="margin-left: 0;" class="span12 statusBlock">
-            <div class="row-fluid">
-                <div class="subnav-controls">
-                    <div>
-                        <div class="pull-left">
-                            <form>
-                                <div class="editProfilePhoto"
-                                     style="width: 40px; height: 40px;">
-                                    <img ng-src="{{photoURL}}">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="viewProfileText pull-left" style="width:30%;">
-                            <ul>
-                                <li>{{name}}</li>
-                            </ul>
-                        </div>
-                        <div ng-show="address1() && address2()" class="viewProfileText pull-left" style="width:30%;">
-                            <ul>
-                                <li>{{address1()}}</li>
-                                <li>{{address2()}}</li>
-                            </ul>
-                        </div>
-                        <div class="pull-right">
-                            <ul class="dropdown-list">
-                                <li class="dropdown standard menu-drop">
-                                    <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true">
-                                        </span>
-
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-click="profileModalOpen()">Edit Profile</li>
-                                        <li ng-click="settingModalOpen()">Edit Settings</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="DivHelper"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row-fluid home-top-row span12">
-            <div class="span8">
-                <div class="row-fluid">
-                    <div class="front info-box">
-                        <div class="head-box">
-                             <h2>Settings</h2>
-
-                        </div>
-                        <div class="body-box">
-                            <table class="settingtable">
-                                <tr>
-                                    <th style="width:130px;"></th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <td>Currency</td>
-                                    <td>{{currency}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Date Format</td>
-                                    <td>{{dateformat}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- Dropbox backup not enabled
-                    <div class="front info-box">
-                        <div class="head-box">
-                             <h2>Integrations</h2>
-
-                        </div>
-                        <div class="body-box">
-                            <table class="status-table investor">
-                                <tbody>
-                                    <tr>
-                                        <td>Dropbox icon</td>
-                                        <td>Dropbox</td>
-                                        <td>Connect Button</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    -->
-                </div>
-            </div>
-            <div class="span4">
-                <div activity-feed user='navState.userid' activity="feed" type="iss"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div modal="pictureModal" close="pictureModalClose()" options="narrowopts">
-    <div class="modalHeader">
-        <span>Update company logo</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-              ng-click="pictureModalClose()"></span>
-    </div>
-    <div class="modalText">
-        <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
-        <form class="form-inline">
-            <fieldset>
-                <div class="fileinputs">
-                    <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"
-                    />
-                    <div class="fakefile">
-                        <span>CHOOSE FILE</span>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="pictureModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="uploadFile(); pictureModalClose();">Upload</button>
-        </div>
-    </div>
-</div>
-<div modal="profileModal" close="profileModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Edit Company Profile</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
-    </div>
-    <div class="modalText">
+<link type="text/css" rel="stylesheet" href="/cmn/profile.css">
+<div class="maincontent openflow">
+    <div class="container dynamic-page doclistFlow companyprofile">
         <div class="row-fluid">
-            <div class="profile-image span3">
-                <img id="updateImage" ng-src="{{photoURL}}">
-                <form class="form-inline image-button">
-                    <fieldset>
-                        <div class="fileinputs">
-                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
-                            <div class="profile-fakefile">
-                                <span>Change</span>
+            <div style="margin-left: 0;" class="span12 statusBlock">
+                <div class="row-fluid">
+                    <div class="subnav-controls">
+                        <div>
+                            <div class="pull-left">{{navState.name}}</div>
+                            <div class="pull-right" ng-show="nextInvoice().period_end">
+                                Your next invoice will be processed on {{nextInvoice().period_end*1000 | date: 'MMMM d, yyyy'}}.
                             </div>
                         </div>
-                    </fieldset>
-                </form>
+                        <div class="DivHelper"></div>
+                    </div>
+                </div>
             </div>
-            <div class="span9 input-list">
-                <div>
-                    <span>Name*</span><input type="text" ng-model="editcompany.name" maxlength="30">
-                </div>
-                <div>
-                    <span>Address</span><input type="text" ng-model="editcompany.address">
-                </div>
-                <div class="city-state">
-                    <span>City/State</span>
-                    <input type="text" ng-model="editcompany.city">
-                    <input type="text" ng-model="editcompany.state" maxlength="2">
-                </div>
-                <div>
-                    <span>Zip Code</span><input type="text" ng-model="editcompany.zipcode">
-                </div>
-                <span class="capital-text">*Required</span>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="profileModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="profileUpdate(editcompany); profileModalClose();">Confirm</button>
-        </div>
-    </div>
-</div>
+            <div class="row-fluid home-top-row span12">
+                <div class="span8">
+                    <div class="row-fluid">
+                        <div class="front info-box">
+                            <div class="head-box">
+                                 <h2>Profile Information</h2>
+                            </div>
+                            <div class="body-box">
+                                <div class="settingtable">
+                                    <div class="row-fluid">
+                                        <div class="pull-left span5">Contact Information</div>
+                                        <div class="pull-left">
+                                            <ul>
+                                                <li>{{address1()}}</li>
+                                                <li>{{address2()}}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="profileModalOpen()">
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left span5">Profile Image</div>
+                                        <div class="pull-left">
+                                            <div class="editProfilePhoto" style="width:40px; height:40px;">
+                                                <img ng-src="{{photoURL}}">
+                                            </div>
+                                        </div>
+                                        <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="profileModalOpen()">
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left span5">Settings</div>
+                                        <div class="pull-left">
+                                            <ul>
+                                                <li>{{currency}}</li>
+                                                <li>{{dateformat}}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="settingModalOpen()">
+                                        </span>
 
-<div modal="settingModal" close="settingModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Edit Settings</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="settingModalClose()"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid"
+                                         ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
+                                        <div class="pull-left span5">Plan Level</div>
+                                        <div class="pull-left">{{showSelectedPlan(billing.currentPlan)}}</div>
+                                        <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="paymentPlanModalOpen()">
+                                        </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid"
+                                         ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
+                                        <div class="pull-left span5">
+                                            Billing Information
+                                        </div>
+                                        <div class="pull-left">******{{billing.current_card.last4}}</div>
+                                        <div class="pull-right pointer">
+                                            <span data-icon="&#xe00e;" aria-hidden="true" ng-click="ccModalOpen()">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid"
+                                         ng-if="billing.last_status=='cancel'">
+                                        <div class="pull-left span5">
+                                            Reactivate Billing
+                                        </div>
+                                        <div class="pull-left">
+                                            <span ng-if="billing.current_period_end">
+                                                Your subscription ends on {{billing.current_period_end*1000 | date: 'MMMM d, yyyy'}}.
+                                            </span>
+                                            <span ng-if="!billing.current_period_end">
+                                                Your account has been cancelled.
+                                            </span>
+                                        </div>
+                                        <div class="pull-right pointer">
+                                            <div class="standard-button red">
+                                                <button class="btn" ng-click="reactivateSubscriptionModalOpen()">
+                                                    Reactivate
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid"
+                                         ng-if="!billing.customer_id || !billing.payment_token">
+                                        <div class="pull-left span5">
+                                            Setup Billing Information
+                                        </div>
+                                        <div class="pull-right pointer">
+                                            <div class="standard-button red">
+                                                <button class="btn" ng-click="initPaymentModalOpen()">
+                                                    Select Plan
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="front info-box">
+                            <div class="head-box">
+                                 <h2>Usage Information</h2>
+                            </div>
+                            <div class="body-box">
+                                <div class="settingtable usage">
+                                    <div class="row-fluid">
+                                        <div class="pull-left">
+                                            Documents (total)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.documents_total">
+                                            </span>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div>
+                                                <meter cur="billing.usage.documents_total" tot="billing.usage.documents_total_limit"></meter>
+                                            </div>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div> <span>{{billing.usage.documents_total || 0}} / {{billing.usage.documents_total_limit || 0}}</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left">
+                                            Administrators (total)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.admins_total">
+                                            </span>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div>
+                                                <meter cur="billing.usage.admins_total" tot="billing.usage.admins_total_limit"></meter>
+                                            </div>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div> <span>{{billing.usage.admins_total || 0}} / {{billing.usage.admins_total_limit || 0}}</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left">
+                                            Direct Messages (monthly)
+                                            <span class="tooltip-icon"
+                                                  data-icon="&#xe044;"
+                                                  aria-hidden="true"
+                                                  data-placement="top"
+                                                  bs-tooltip="usagetips.direct_messages_monthly">
+                                            </span>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div>
+                                                <meter cur="billing.usage.direct_messages_monthly" tot="billing.usage.direct_messages_monthly_limit"></meter>
+                                            </div>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div> <span>{{billing.usage.direct_messages_monthly || 0}} / {{billing.usage.direct_messages_monthly_limit || 0}}</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left"
+                                            ng-if="billing.currentPlan
+                                                    && billing.currentPlan!=='000'">
+                                            These statistics are based upon the {{billing.currentPlan | billingPlansNameOnly}} plan. Sharewave
+                                            will automatically upgrade your plan as you use more services.
+                                        </div>
+                                        <div class="pull-left"
+                                             ng-if="!billing.currentPlan || billing.currentPlan=='000'">
+                                            These metrics are based on your company's usage within the {{billing.recommendedPlan | billingPlansNameOnly}} plan.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid cancel" ng-if="billing.currentPlan && billing.currentPlan!=='000' && billing.last_status!='cancel'">
+                            Click here to <span class="red pointer" ng-click="cancelSubscriptionModalOpen()">cancel your subscription.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="row-fluid">
+                        <div class="front info-box">
+                            <div class="head-box">
+                                 <h2>Invoices</h2>
+                            </div>
+                            <div class="body-box">
+                                <div class="settingtable invoices">
+                                    <div class="row-fluid" ng-if="!billing.currentPlan || billing.currentPlan=='000' && (!billing.invoices || billing.invoices.length==0)">
+                                        Please select your payment plan.
+                                    </div>
+                                    <div class="row-fluid" ng-if="billing.currentPlan && billing.currentPlan!=='000' && (!billing.invoices || billing.invoices.length==0)">
+                                        No invoices at this time.
+                                    </div>
+                                    <div class="row-fluid" ng-if="billing.invoices.length>0">
+                                        <div class="span6"><span>Date</span></div>
+                                        <div class="span3"><span>Amount</span></div>
+                                        <div class="span3">
+                                            <span>Invoice</span>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid" ng-repeat="inv in billing.invoices" ng-if="billing.invoices.length>0">
+                                        <div class="span6"> <span>
+                                            {{inv.lines.data[0].period.start*1000
+                                              | date: 'MMMM d, yyyy'}}
+                                        </span>
+
+                                        </div>
+                                        <div class="span3"> <span>
+                                            {{inv.amount_due/100 | currency}}
+                                        </span>
+
+                                        </div>
+                                        <div class="span3">
+                                            <a href="/app/company/profile/invoice?id={{inv.id}}" target="_blank">
+                                                Invoice
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modalText settings">
-        <div>
-            <span>Currency</span>
-            <ul class="dropdown-list drop-selector wide">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
+    <div modal="pictureModal" close="pictureModalClose()" options="narrowopts">
+        <div class="modalHeader"> <span>Update company logo</span>
+ <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+            ng-click="pictureModalClose()"></span>
+
+        </div>
+        <div class="modalText">
+            <p>You can upload a JPG, GIF, or PNG (file size limit is 1MB)</p>
+            <form class="form-inline">
+                <fieldset>
+                    <div class="fileinputs">
+                        <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"
+                        />
+                        <div class="fakefile"> <span>CHOOSE FILE</span>
+
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="pictureModalClose();">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="uploadFile(); pictureModalClose();">Upload</button>
+            </div>
+        </div>
+    </div>
+    <div modal="profileModal" close="profileModalClose()" options="profileopts">
+        <div class="modalHeader"> <span>Edit Company Profile</span>
+ <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+            ng-click="profileModalClose()">
+        </span>
+
+        </div>
+        <div class="modalText">
+            <div class="row-fluid">
+                <div class="profile-image span3">
+                    <img id="updateImage" ng-src="{{photoURL}}">
+                    <form class="form-inline image-button">
+                        <fieldset>
+                            <div class="fileinputs">
+                                <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"
+                                />
+                                <div class="profile-fakefile"> <span>Change</span>
+
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="span9 input-list">
+                    <div> <span>Name*</span>
+                        <input type="text" ng-model="editcompany.cname" maxlength="30">
+                    </div>
+                    <div> <span>Address</span>
+                        <input type="text" ng-model="editcompany.address">
+                    </div>
+                    <div class="city-state"> <span>City/State</span>
+
+                        <input type="text" ng-model="editcompany.city">
+                        <input type="text" ng-model="editcompany.state" maxlength="2">
+                    </div>
+                    <div> <span>Zip Code</span>
+                        <input type="text" ng-model="editcompany.zipcode">
+                    </div> <span class="capital-text">*Required</span>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="profileModalClose();">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="profileUpdate(editcompany); profileModalClose();">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <div modal="settingModal" close="settingModalClose()" options="profileopts">
+        <div class="modalHeader"> <span>Edit Settings</span>
+ <span class="close" data-icon="&#xe00f;" aria-hidden="true"
+            ng-click="settingModalClose()"></span>
+
+        </div>
+        <div class="modalText settings">
+            <div> <span>Currency</span>
+
+                <ul class="dropdown-list drop-selector wide">
+                    <li class="dropdown standard"> <a class="dropdown-toggle">
                         {{editcompany.longcurrency}}<span class="invisible-drop">'</span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="i in currencies">
-                            <a ng-click="setCurrency(i);">{{i}}</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <span>Date Format</span>
-            <ul class="dropdown-list drop-selector wide">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
+
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="i in currencies"> <a ng-click="setCurrency(i);">{{i}}</a>
+
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div> <span>Date Format</span>
+
+                <ul class="dropdown-list drop-selector wide">
+                    <li class="dropdown standard"> <a class="dropdown-toggle">
                         {{editcompany.dateformat}}<span class="invisible-drop">'</span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="i in dateformats">
-                            <a ng-click="setDateFormat(i);">{{i}}</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="i in dateformats"> <a ng-click="setDateFormat(i);">{{i}}</a>
+
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="settingModalClose();">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="saveSettings(editcompany); settingModalClose();">Confirm</button>
+            </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="settingModalClose();">Cancel</button>
+    <div modal="initPaymentModal"
+         close="initPaymentModalClose()"
+         options="paymentopts">
+        <div class="modalText initpayment big-input-list">
+            <payment-plan-selector></payment-plan-selector>
+            <form stripe-form="getPaymentToken" name="initPaymentForm">
+                <fieldset>
+                    <div>Payment information</div>
+                    <div class="input-list">
+                        <div>
+                            <span>Name on Card</span>
+                            <input type="text"
+                                   ng-model="name"
+                                   class="input-block-level">
+                        </div>
+                        <div>
+                            <span>Card Number</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="number"
+                                   payments-validate="card"
+                                   payments-format="card"
+                                   payments-type-model="type"
+                                   ng-class="initPaymentForm.number.$card.type">
+                        </div>
+                        <div>
+                            <div class="span6">
+                                <span>Expiration Date</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="expiry"
+                                       payments-validate="expiry"
+                                       payments-format="expiry"/>
+                            </div>
+                            <div class="span6">
+                                <span>CVC</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="cvc"
+                                       payments-validate="cvc"
+                                       payments-format="cvc"
+                                       payments-type-model="type"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-button gray pull-left">
+                        <button class="btn" ng-click="initPaymentModalClose()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div    class="standard-button pull-right forwardButton">
+                        <button
+                                type="submit"
+                                class="btn"
+                                ng-disabled="initPaymentModalFieldCheck()">
+                            Submit
+                            <span data-icon="&#xe016;"
+                                  aria-hidden="true">
+                            </span>
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="saveSettings(editcompany); settingModalClose();">Confirm</button>
+    </div>
+    <div modal="ccModal"
+         close="ccModalClose()"
+         options="profileopts">
+        <div class="modalHeader">
+            <span>Billing information</span>
+        </div>
+        <div class="ccmodal modalText big-input-list">
+            <form stripe-form="updatePayment" name="updateCCForm">
+                <fieldset>
+                    <div class="input-list">
+                        <div>
+                            <span>Name on Card</span>
+                            <input type="text"
+                                   ng-model="name"
+                                   class="input-block-level">
+                        </div>
+                        <div>
+                            <span>Credit Card Number</span>
+                            <input type="text"
+                                   class="input-block-level"
+                                   ng-model="number"
+                                   placeholder=
+                                       "******{{billing.current_card.last4}}"
+                                   payments-validate="card"
+                                   payments-format="card"
+                                   payments-type-model="type"
+                                   ng-class="updateCCForm.number.$card.type">
+                        </div>
+                        <div>
+                            <div class="span6">
+                                <span>Expiration Date</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="expiry"
+                                       payments-validate="expiry"
+                                       payments-format="expiry"/>
+                            </div>
+                            <div class="span6">
+                                <span>CVC</span>
+                                <input type="text"
+                                       class="input-block-level"
+                                       ng-model="cvc"
+                                       payments-validate="cvc"
+                                       payments-format="cvc"
+                                       payments-type-model="type"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="standard-button gray pull-left">
+                        <button class="btn" ng-click="ccModalClose()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="standard-button pull-right">
+                        <button type="submit"
+                                class="btn"
+                                ng-disabled="ccModalFieldCheck()">
+                            Submit
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div modal="paymentPlanModal"
+         close="paymentPlanModalClose()"
+         options="paymentopts">
+        <div class="modalHeader">
+        </div>
+        <div class="modalText">
+            <payment-plan-selector></payment-plan-selector>
+        </div>
+        <div class="modal-footer">
+            <div class="standard-button gray pull-left">
+                <button class="btn" ng-click="paymentPlanModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button pull-right">
+                <button id="pricing_change_card" class="btn" ng-disabled="paymentPlanModalFieldCheck();" ng-click="updateSubscription(); paymentPlanModalClose();">Update Plan</button>
+            </div>
         </div>
     </div>
 </div>
+<div modal="cancelSubscriptionModal" close="cancelSubscriptionModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Cancel Subscription</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="cancelSubscriptionModalClose()"></span>
+    </div>
+    <div class="modalText cancelModal">
+       By clicking confirm, your subscription will be cancelled at the end of your current billing cycle and your data will be made available for download.
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="cancelSubscriptionModalClose()">
+                Back
+            </button>
+        </div>
+        <div class="standard-button red">
+            <button id="pricing_cancel"
+                    class="btn" ng-click="cancelSubscription()">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
+<div modal="reactivateSubscriptionModal" close="reactivateSubscriptionModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Reactivate Subscription</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="reactivateSubscriptionModalClose()"></span>
+    </div>
+    <div class="modalText cancelModal">
+        By clicking confirm, your subscription will be reactivated to the {{billing.currentPlan | billingPlansNameOnly}} plan.
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="reactivateSubscriptionModalClose()">
+                Cancel
+            </button>
+        </div>
+        <div class="standard-button">
+            <button id="pricing_cancel"
+                    class="btn" ng-click="reactivateSubscription()">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+<div class="minimumGap"></div>
+<div class="push"></div>

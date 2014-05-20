@@ -6,293 +6,59 @@
     <!--{{/i/head_js.inc}}-->
     <script src="/survey/survey.js"></script>
     <link type="text/css" rel="stylesheet" href="/cmn/static.css">
+      <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
   </head>
   <body>
-    <div class="wrap">
+    <div ng-class="{'homedrop': homecollapsed}" class="wrap">
        <navbar></navbar>
       <div class="container static">
         <div class="row-fluid">
-          <div class="span8 offset2 text-center">
-            <h1>Thanks for showing so much interest in Sharewave!</h1>
-            <p>We have a few brief (and anonymous) questions that will help us better understand <br> your company. We read every response, and reflect on them as we iterate our product.</p>
+          <div class="span8 offset2 text-center" style="padding-top: 60px;">
+            <h1>Thanks for your answer</h1>
+            <p>If you have any additional feedback, feel free to enter it anonymously below. </p>
           </div>
         </div>
-        <div class="spacer90"></div>
+        <div class="spacer30"></div>
         <div class="row-fluid">
-          <div class="span8 offset2 ">
+          <div class="span8 offset3 ">
 
-          <form action=
-          "https://docs.google.com/spreadsheet/formResponse?formkey=dEpwNWkycHVsTTRuQWZZYzM0dWgtQnc6MQ&amp;embedded=true&amp;ifq"
-          id="ss-form" method="post" name="ss-form">
+            <form action="https://docs.google.com/forms/d/1oApJdghoZb1XpW73dv4vshO2hZHouWak_3bFCK7NK-8/formResponse" method="POST" id="ss-form" target="_self" onsubmit="">
             <br>
 
-            <div class="errorbox-good">
-              <div class="ss-item ss-select">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_0">How many investors
-                  do you have?</label> <label class="ss-q-help" for=
-                  "entry_0"></label> <select id="entry_0" name=
-                  "entry.0.single" class="dropdown">
-                    <option value="Less than 5">
-                      Less than 5
-                    </option>
+                <ol role="list" class="ss-question-list" style="padding-left: 0">
+                    <div class="ss-form-question errorbox-good" role="listitem">
+                        <div dir="ltr" class="ss-item  ss-paragraph-text">
+                            <div class="ss-form-entry"">
+                                <textarea name="entry.757606887" rows="8" cols="0" class="ss-q-long"
+                                          id="entry_757606887" dir="auto" aria-label="  "
+                                          style="width:450px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="draftResponse" value="[,,&quot;-5027965146197115193&quot;]">
+                    <input type="hidden" name="pageHistory" value="0">
 
-                    <option value="5-10">
-                      5-10
-                    </option>
+                    <input type="hidden" name="fbzx" value="-5027965146197115193">
 
-                    <option value="10+">
-                      10+
-                    </option>
-
-                    <option value="None">
-                      None
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-select">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_1">If your company has
-                  a stock option plan, how many people have options?</label>
-                  <label class="ss-q-help" for="entry_1"></label> <select id=
-                  "entry_1" name="entry.1.single">
-                    <option value="Less than 5">
-                      Less than 5
-                    </option>
-
-                    <option value="5-10">
-                      5-10
-                    </option>
-
-                    <option value="10+">
-                      10+
-                    </option>
-
-                    <option value="None">
-                      None
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-radio">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_2">How many rounds of
-                  financing have you completed?</label> <label class=
-                  "ss-q-help" for="entry_2"></label>
-
-                  <ul class="ss-choices" style=
-                  "list-style:none; margin-left:5px;">
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input checked class="ss-q-radio" id=
-                    "group_2_1" name="entry.2.group" type="radio" value=
-                    "1"> 1</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-radio" id=
-                    "group_2_2" name="entry.2.group" type="radio" value=
-                    "2"> 2</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-radio" id=
-                    "group_2_3" name="entry.2.group" type="radio" value=
-                    "3+"> 3+</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-radio" id=
-                    "group_2_4" name="entry.2.group" type="radio" value=
-                    "None"> None</label></li>
-                  </ul>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-checkbox">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_3">Who in your company
-                  manages things like your cap table, employee option pool,
-                  etc.?</label> <label class="ss-q-help" for=
-                  "entry_3"></label>
-
-                  <ul class="ss-choices" style=
-                  "list-style:none; margin-left:5px;">
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_3_1" name="entry.3.group" type="checkbox" value=
-                    "CEO"> CEO</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_3_2" name="entry.3.group" type="checkbox" value=
-                    "CFO"> CFO</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_3_3" name="entry.3.group" type="checkbox" value=
-                    "General Counsel"> General Counsel</label></li>
-
-                    <li class="ss-choice-item form-inline"><input class=
-                    "ss-q-checkbox" id="other_option:3" name=
-                    "entry.3.group" type="checkbox" value="__option__">
-                    <label for="other_option:3">Other:</label>
-                    <input class="ss-q-other" name=
-                    "entry.3.group.other_option_" type="text" value=
-                    ""></li>
-                  </ul>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-checkbox">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_4">How do you
-                  communicate company information to investors?</label>
-                  <label class="ss-q-help" for="entry_4"></label>
-
-                  <ul class="ss-choices" style=
-                  "list-style:none; margin-left:5px;">
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_4_1" name="entry.4.group" type="checkbox" value=
-                    "E-mail"> E-mail</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_4_2" name="entry.4.group" type="checkbox" value=
-                    "Fax"> Fax</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_4_3" name="entry.4.group" type="checkbox" value=
-                    "Traditional Mail"> Traditional Mail</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_4_4" name="entry.4.group" type="checkbox" value=
-                    "An existing software solution"> An existing software
-                    solution</label></li>
-
-                    <li class="ss-choice-item form-inline"><input class=
-                    "ss-q-checkbox" id="other_option:4" name=
-                    "entry.4.group" type="checkbox" value="__option__">
-                    <label for="other_option:4">Other:</label>
-                    <input class="ss-q-other" name=
-                    "entry.4.group.other_option_" type="text" value=
-                    ""></li>
-                  </ul>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-select">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_5">Do you have formal
-                  board meetings?</label> <label class="ss-q-help" for=
-                  "entry_5"></label> <select id="entry_5" name=
-                  "entry.5.single">
-                    <option value="Yes">
-                      Yes
-                    </option>
-
-                    <option value="No">
-                      No
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-checkbox">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_6">Where do you store
-                  your private company documents?</label> <label class=
-                  "ss-q-help" for="entry_6"></label>
-
-                  <ul class="ss-choices" style=
-                  "list-style:none; margin-left:5px;">
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_6_1" name="entry.6.group" type="checkbox" value=
-                    "Cloud storage (e.g. Dropbox, Salesforce, Google Drive, etc.)">
-                    Cloud storage (e.g. Dropbox, Salesforce, Google Drive,
-                    etc.)</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_6_2" name="entry.6.group" type="checkbox" value=
-                    "On a company server"> On a company server</label></li>
-
-                    <li class="ss-choice-item"><label class=
-                    "ss-choice-label"><input class="ss-q-checkbox" id=
-                    "group_6_3" name="entry.6.group" type="checkbox" value=
-                    "On my local hard drive"> On my local hard
-                    drive</label></li>
-
-                    <li class="ss-choice-item form-inline"><input class=
-                    "ss-q-checkbox" id="other_option:6" name=
-                    "entry.6.group" type="checkbox" value="__option__">
-                    <label for="other_option:6">Other:</label>
-                    <input class="ss-q-other" name=
-                    "entry.6.group.other_option_" type="text" value=
-                    ""></li>
-                  </ul>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-paragraph-text">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_7">What's your biggest
-                  pain point in dealing with your investors?</label>
-                  <label class="ss-q-help" for="entry_7"></label> 
-                  <textarea class="ss-q-long" cols="75" id="entry_7" name=
-                  "entry.7.single" rows="8" style="width:500px;">
-        </textarea>
-                </div>
-              </div>
-            </div><br>
-
-            <div class="errorbox-good">
-              <div class="ss-item ss-text">
-                <div class="ss-form-entry">
-                  <label class="ss-q-title" for="entry_8">Optional: Leave
-                  your email address If you're open to us following up with
-                  you as part of our private beta.</label> <label class=
-                  "ss-q-help" for="entry_8"></label> <input class=
-                  "ss-q-short" id="entry_8" name="entry.8.single" style=
-                  "width:300px;" type="text" value="">
-                </div>
-              </div>
-            </div><br>
-            <input name="pageNumber" type="hidden" value="0"> <input name=
-            "backupCache" type="hidden" value="">
-
-            <div class="ss-item ss-navigate">
-              <div class="ss-form-entry">
-                <input class="btn" name="submit" type="submit" value="Submit">
-              </div>
-            </div>
+                    <div class="ss-item ss-navigate">
+                        <table id="navigation-table">
+                            <tbody>
+                            <tr>
+                                <td class="ss-form-entry goog-inline-block" id="navigation-buttons" dir="ltr">
+                                    <input class="btn" type="submit" name="submit" value="Submit" id="ss-submit" style="background-color: #e7e7e7;">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ol>
           </form>
-
-
-
 
           </div>
         </div>
-      <div class="minimumGap"></div>
-      <div class="push"></div>   
+        </div>
+        <div class="push"></div>
     </div>
-      <!--{{/i/foot.inc}}-->
+    <!--{{/i/foot.inc}}-->
   </body>
 </html>

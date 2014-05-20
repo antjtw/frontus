@@ -1,26 +1,29 @@
-<div class="row-fluid">
-    <div class="span5 offset4 gateway text-center">
-        <div>
-            <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
+<div class="login-block">
+    <div>
+        <a target="_self" href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
+    </div>
 
-            <p class="tagline">the best way to manage shareholders<p>
+    <div class="row-fluid">
+        <div class="gateway">
+            <h4>Choose a Password</h4>
+            <p>Enter a new password to use for your account</p>
+
+            <form id="login" class="text-center">
+                <fieldset>
+                    <div class="field text-left">
+                        <span>Password</span>
+                        <input required class="loginInput FI" placeholder="Password" tabindex="1" data-autocapitalize="off"
+                               autocomplete="off" name="password" type="password" ng-model="password" />
+                    </div>
+                    <div class="loginfooter">
+                        <a id="cancelButton" class="button pull-left return" ng-href=".">Return to Login</a>
+                        <div class="standard-button pull-right loginbtn">
+                            <button class="btn" ng-disabled="resetDisabled()" ng-click="doReset()" tabindex="3">Change Password</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-        <div class="border-bottom40"></div>
-         <h2>Choose a Password</h2>
-
-        <p>Enter a new password to use for your account</p>
-        <div class="text-error">{{fed}}</div>
-        <form id="login" class="text-center inputs">
-            <fieldset>
-                <label>
-                    <input required class="loginInput FI" placeholder="Password" tabindex="1" data-autocapitalize="off"
-                    autocomplete="off" name="password" type="password" ng-model="password" />
-                </label>
-                <div class="spacer30"></div>
-                <button ng-disabled="resetDisabled()" ng-click="doReset()" ng-class="resetClass()"
-                tabindex="3">Change Password</button> <a id="cancelButton" class="button text-center" ng-href=".">Return to Login</a> 
-                <br>
-            </fieldset>
-        </form>
     </div>
 </div>
+

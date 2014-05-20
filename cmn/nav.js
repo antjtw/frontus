@@ -35,7 +35,7 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
 
 
 
-var navm = angular.module('nav', ['ui.bootstrap'], function () {
+var navm = angular.module('nav', ['ui.bootstrap', 'angularPayments', 'commonServices'], function () {
 });
 
 navm.factory('navState', [function () {
@@ -73,8 +73,20 @@ navm.directive('notifications', function() {
                 }
             };
 
+            $scope.nameIfLong = function(name){
+                if (name.length > 20){
+                    return name;
+                }
+                    
+                else{
+                    return null;
+                }        
+            };
+                
+
+
         }]
-    }
+    };
 });
 
 /** @unused NavCtrl */
@@ -87,9 +99,13 @@ navm.directive('navbar', function () {
     };
 });
 
-navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', 'navState',
-    function ($scope, $route, $rootScope, SWBrijj, $q, navState) {
 
+navm.controller('NavCtrl',
+                ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
+                 'navState', '$location', '$filter', 'payments',
+    function($scope, $route, $rootScope, SWBrijj, $q, $window,
+             navState, $location, $filter, payments)
+    {
         $scope.companies = [];
 
         if (location.host=='share.wave' || navState.tester) {
@@ -98,6 +114,26 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 rr.style.display="inline";
             }
         }
+
+        $('.new-nav').affix({
+            offset: {top: 40}
+        });
+
+        $scope.$on('$routeChangeSuccess', function(current, previous) {
+            if (navState.path != document.location.pathname) {
+                navState.path = document.location.pathname;
+                if ($scope.plan) {
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')($scope.plan.plan)}});
+                }
+
+                var dataLayer = $window.dataLayer ? $window.dataLayer : [];
+                dataLayer.push({
+                    'event': 'pageview',
+                    'virtualUrl': $location.path()
+                });
+            }
+        });
+
 
         navigator.sayswho= (function(){
             var ua= navigator.userAgent, tem,
@@ -110,28 +146,51 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
             return M;
         })();
-
-        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/"];
+        var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/", "/pricing/", "/survey/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
                 if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $scope.lastPage = "/documents/";
+                    $rootScope.lastPage = "/app/documents/";
                 } else {
-                    $scope.lastPage = document.location.href;
+                    $rootScope.lastPage = document.location.pathname;
+                    $rootScope.lastFullPage = document.location.href;
                 }
             }
         });
-        // On each NavCtrl load (new angular app), if the referrer is of the same domain, record the old page.
-        if (document.referrer.indexOf(location.host)!=-1) {
-            $scope.lastPage = document.referrer;
-        }
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
         $scope.registertoggle = false;
+        $rootScope.persistentNotification = false;
+        if (navState.role=='issuer') {
+            SWBrijj.tblm('account.my_company_payment_history').then(function(data) {
+                var p = data.length > 0 && data[0];
+                $scope.plan = p;
+                if (p && p.plan != '000' && ((p.customer_id !== null && p.cc_token !== null) || (p.when_requested != null && p.when_attempted == null))) {
+                    $rootScope.persistentNotification = false;
+                    Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                } else {
+                    $rootScope.persistentNotification = true;
+                    if (p) {
+                        if (p.status) {
+                            $rootScope.paymentmessage = "We were unable to process your payment, please click here to update your card.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan) + " failed"}});
+                        }
+                        else {
+                            $rootScope.paymentmessage = "Your account has been cancelled, please click here if you'd like to re-subscribe.";
+                            Intercom('update', {company:  {'plan' : $filter('billingPlans')(p.plan)}});
+                        }
+                    }
+                    else {
+                        $rootScope.paymentmessage = "Our free period has come to a close, click here to select your plan.";
+                    }
+                }
+            });
+        }
+
 
         $scope.switch = function (nc) {
             /** @name SWBrijj#switch_company
@@ -140,8 +199,42 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
              * @param {string} role
              */
             SWBrijj.switch_company(nc.company, nc.role).then(function (data) {
-                document.location.href = nc.role=='issuer' ? '/home/company' : '/home/investor';
+                sessionStorage.clear();
+                document.location.href = nc.role=='issuer' ? '/app/home/company' : '/app/home/investor';
             });
+        };
+
+        $scope.gotoURL = function(url) {
+            sessionStorage.clear();
+            document.location.href = url;
+        };
+        $scope.gotoPage = function(page) {
+            sessionStorage.clear();
+            $location.url(page);
+        };
+
+
+        $scope.switchCandP = function (company, url) {
+            if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
+                SWBrijj.switch_company(company.company, company.role).then(function (data) {
+                    /* Not quite ready for prime time
+                    navState.company = company.company;
+                    navState.role = company.role;
+                    navState.reasons = $scope.initReasons(company.reasons);
+                    angular.forEach($scope.companies, function(comp) {
+                        if (comp.company == company.company && comp.role == company.role) {
+                            comp.current = true;
+                        }
+                        else {
+                            comp.current = false;
+                        }
+                    }); */
+                    $scope.gotoURL(url);
+                });
+            }
+            else {
+                $scope.gotoPage(url);
+            }
         };
         $rootScope.homecollapsed = false;
         $scope.toggleLogin = function(type) {
@@ -180,6 +273,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (company.role == 'investor') {
                     $scope.hasInvest = true;
                 }
+                company.reasondic = $scope.initReasons(company.reasons);
             });
             $scope.$broadcast('update:companies', $scope.companies);
             if ( ! (cmps && cmps.length > 0) ) return; // no companies
@@ -206,7 +300,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                             navState.role = thiscmp.role;
                             navState.name = thiscmp.name;
                             navState.reasons = $scope.initReasons(thiscmp.reasons);
-                            document.location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                            document.location.href = navState.role=='issuer' ? '/app/home/company' : '/app/home/investor';
                             return;
                         }
                     });
@@ -228,6 +322,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
+            $rootScope.settings.domain = window.location.host;
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -236,6 +331,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 Intercom('update', {'name' : $rootScope.person.name});
             }
             $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            $scope.$broadcast("profile_loaded");
         });
 
         // Notification code
@@ -277,12 +373,19 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 });
         };
 
+        $scope.doLogout = function() {
+            SWBrijj.logout().then(function(x) {
+                void(x);
+                document.location.href='/?logout';
+            });
+        };
+
         $scope.gotohome = function() {
             if ($rootScope.companies.length == 0) {
                 location.href = '/';
             }
             else {
-                location.href = navState.role=='issuer' ? '/home/company' : '/home/investor';
+                $location.url(navState.role=='issuer' ? '/app/home/company' : '/app/home/investor');
             }
         };
 
@@ -318,6 +421,15 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             return email != undefined ? re.test(email) : false;
         };
 
+        $scope.verifyPayment = function(status, response) {
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                //save cc token
+            }
+        };
         $scope.companySelfRegister = function () {
             if ($scope.fieldCheck($scope.registeremail)) {
                 SWBrijj.companySelfRegister($scope.registeremail.toLowerCase(), 'issuer').then(function(requested) {
@@ -348,6 +460,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 else if (doc.when_signed == null) return 1;
                 else if (doc.signature_flow===2 && doc.when_countersigned == null) return 2;
                 else if (doc.when_finalized == null) return 3;
+                else if (doc.when_void_requested != null && doc.when_void_accepted == null) return 5;
                 else return 4;
             }
         };
@@ -359,7 +472,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-                    _kmq.push(['set', {'role':'issuer'}]);
+                    _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
+                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
 
                 // Get Notifications for docs
@@ -371,9 +485,11 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
+            
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder'}]);
+                    _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
+                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
@@ -383,7 +499,8 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-        }
+        };
+
 
         $scope.actionablenotes = function(notes, type) {
             var notifications = [];
@@ -394,12 +511,12 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                     }
                 }
                 else if (type == "investor") {
-                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1) {
+                    if (note.signature_status == 1 || note.signature_status == 3 || note.signature_status == -1 || note.signature_status == 5) {
                         notifications.push(note);
                     }
                 }
             });
-            return notifications
+            return notifications;
         };
 
         var idleTime = 0;
@@ -409,6 +526,7 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
                 idleTime = idleTime + 1;
             }
             if (idleTime > 28) { // 1 minutes
+                sessionStorage.clear();
                 document.location.href = "/login/logout?timeout";
             }
         }
@@ -426,7 +544,207 @@ navm.controller('NavCtrl', ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '
             });
         });
 
-    }]);
+        $scope.pricingregister = function() {
+            document.location.href = "/register/company-onestep";
+        };
+
+        $scope.pricingregisterchoose = function(which) {
+            document.location.href = "/register/company-onestep?plan=" + which;
+        };
+
+        $rootScope.billing = {};
+        $rootScope.update_card = false;
+        if (navState.role=='issuer') {
+            payments.available_plans().then(function(x) {
+                $rootScope.billing.plans = [];
+                angular.forEach(x, function(p) {
+                    $rootScope.billing.plans.push(p.plan);
+                });
+                $rootScope.billing.recommendedPlan
+                    = "00" + Math.max(parseInt($rootScope.billing.plans, 10));
+                if ($rootScope.billing.currentPlan !== '000') {
+                    $rootScope.billing.plans.push('000');
+                }
+                $rootScope.get_usage_details();
+            }).except(function(err) {
+                console.log(err);
+            });
+        }
+        $rootScope.get_usage_details = function() {
+            payments.usage_details().then(function(x) {
+                if (x.length === 0) {
+                    $rootScope.get_hypothetical_usage_details(
+                        $rootScope.billing.recommendedPlan);
+                } else {
+                    $rootScope.billing.usage = x[0];
+                }
+                $rootScope.get_payment_data();
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $rootScope.get_hypothetical_usage_details = function(p) {
+            payments.usage_grid(p)
+            .then(function(x) {
+                $rootScope.billing.usage = x;
+            }).except(function(err) {
+                console.log(err);
+                $rootScope.billing.usage = null;
+            });
+        };
+        $rootScope.set_usage_details = function(p, doc_limit,
+                                            admin_limit, msg_limit) {
+            $rootScope.billing.usage.plan = p;
+            $rootScope.billing.usage.documents_total_limit = doc_limit;
+            $rootScope.billing.usage.admins_total_limit = admin_limit;
+            $rootScope.billing.usage.direct_messages_monthly_limit = msg_limit;
+        };
+        $rootScope.get_payment_data = function() {
+            payments.my_data().then(function(data) {
+                if (data.length > 0) {
+                    $rootScope.billing.currentPlan =
+                        $rootScope.selectedPlan = data[0].plan || '000';
+                    $rootScope.billing.customer_id = data[0].customer_id;
+                    $rootScope.billing.payment_token = data[0].cc_token;
+                    $rootScope.billing.last_status = data[0].status;
+                    $rootScope.load_invoices();
+                    payments.get_customer($rootScope.billing.customer_id)
+                    .then(function(x) {
+                        if (x && x.length>0 && x!="invalid request") {
+                            var rsp = JSON.parse(x);
+                            $rootScope.billing.current_card = rsp.cards.data[0];
+                            if (rsp.subscriptions.count>0) {
+                                $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
+                            }
+                            $rootScope.billingLoaded = true;
+                            $rootScope.$broadcast('billingLoaded');
+                        } else {
+                            console.log(x);
+                        }
+                    });
+                } else {
+                    if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
+                        $rootScope.selectedPlan = $rootScope.billing.recommendedPlan;
+                    } else {
+                        $rootScope.selectedPlan = '002';
+                    }
+                    $rootScope.billingLoaded = true;
+                    $rootScope.$broadcast('billingLoaded');
+                }
+            }).except(function(err) {
+                void(err);
+            });
+        };
+        $rootScope.nextInvoice = function() {
+            if ($rootScope.billing && $rootScope.billing.next_invoice_received) {
+                return $rootScope.billing.invoices &&
+                    $rootScope.billing.invoices[$rootScope.billing.invoices.length-1];
+            } else {
+                return false;
+            }
+        };
+        $rootScope.load_invoices = function() {
+            payments.get_invoices($rootScope.billing.customer_id, 3)
+            .then(function(x) {
+                if (x && x.length>0 && x!="invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.invoices = resp.data.filter(function(el) {
+                        return el.amount>0;
+                    }) || [];
+                    if ($rootScope.billing.currentPlan!=="000") {
+                        $scope.load_upcoming_invoice();
+                    }
+                } else {
+                    console.log(x);
+                }
+            });
+        };
+        $rootScope.load_upcoming_invoice = function() {
+            payments.get_upcoming_invoice($rootScope.billing.customer_id)
+            .then(function(x) {
+                if (x && x.length>0 && x != "invalid request") {
+                    var resp = JSON.parse(x);
+                    if (!$rootScope.billing.next_invoice_received) {
+                        //$rootScope.billing.invoices.push(resp);
+                        $rootScope.billing.next_invoice_received = true;
+                    }
+                } else {
+                    console.log(x);
+                }
+            });
+        };
+        $rootScope.companyIsZombie = function() {
+            return ($rootScope.billing.currentPlan == "000"
+                || $rootScope.billing.payment_token === null
+                || !$rootScope.billing.payment_token) && navState.role == "issuer";
+
+        };
+
+
+        $rootScope.zombiemessage = "Please update your payment information to use this feature.";
+        $rootScope.triggerUpgradeDocuments = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.documents_total+numNew;
+                var lim = $rootScope.billing.usage.documents_total_limit;
+                return num > lim;
+            } else {
+                return null;
+            }
+        };
+        $rootScope.triggerUpgradeAdmins = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.admins_total+numNew;
+                var lim = $rootScope.billing.usage.admins_total_limit;
+                return num > lim;
+            } else {
+                return null;
+            }
+        };
+        $rootScope.triggerUpgradeMessages = function(numNew) {
+            if ($rootScope.billing && $rootScope.billing.usage) {
+                var num = $rootScope.billing.usage.direct_messages_monthly
+                          + numNew.length;
+                var lim = $rootScope.billing.usage.direct_messages_monthly_limit;
+                if (numNew && numNew.length>1 && numNew[0].length>1) {
+                    return num > lim;
+                }
+                return false;
+            } else {
+                return null;
+            }
+        };
+
+        //I don't love this but it works, should probably make a directive.
+        if ($rootScope.companyIsZombie()) {
+            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+        } else {
+            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+        }
+        $rootScope.$on('billingLoaded', function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
+        });
+        window.onresize = function() {
+            if ($rootScope.companyIsZombie()) {
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+            } else {
+                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            }
+            $scope.$apply();
+        };
+        
+    }
+]);
 
 
 function caplength(word, length) {
@@ -458,29 +776,33 @@ navm.filter('notifications', function () {
         var investor = note.investor;
         var url = "";
         if (note.signature_status == -1) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
-                url = '/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
+                url = '/app/documents/investor-view?template=' + note.template_id + '&subid=' + note.doc_id;
             }
             else {
-                url = '/documents/investor-view?doc=' + note.doc_id;
+                url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 2) {
-            url = '/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
             return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
-            url = '/documents/investor-view?doc=' + note.doc_id;
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
-            url = '/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
+            url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
             return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+        }
+        else if (note.signature_status == 5 && note.signature_flow == 2) {
+            url = '/app/documents/investor-view?doc=' + note.doc_id;
+            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
         }
     };
 });
@@ -491,6 +813,7 @@ navm.filter('noteicon', function() {
         if (activity == 1) return "doc-sign-yel";
         else if (activity == 2) return "doc-countersign-yel";
         else if (activity == 3) return "doc-final-yel";
+        else if (activity == 5) return "doc-void-pending-yel";
         else if (activity == -1) return "doc-view-yel";
         else return "hunh?";
     }

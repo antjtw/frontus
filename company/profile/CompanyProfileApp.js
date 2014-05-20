@@ -1,34 +1,10 @@
-var app = angular.module('CompanyProfileApp', ['ngResource', 'ui.bootstrap', 'ui.event', 'nav', 'brijj', 'activityDirective'], function($routeProvider, $locationProvider) {
-    //this is used to assign the correct template and controller for each URL path
-    $locationProvider.html5Mode(true).hashPrefix('');
-    // $locationProvider.html5Mode(false).hashPrefix('!');
-
-    $routeProvider.
-    when('/', {
-        controller: 'ContactCtrl',
-        templateUrl: 'contact.html'
-    }).
-    when('/people', {
-        controller: 'PeopleCtrl',
-        templateUrl: 'people.html'
-    }).
-    when('/view', {
-        controller: 'ViewerCtrl',
-        templateUrl: 'viewer.html'
-    }).
-    otherwise({
-        redirectTo: '/'
-    });
-});
-
-function hidePopover() {
-    angular.element('.popover').hide();
-}
-
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
-    function($scope, $rootScope, SWBrijj, navState) {
+app.controller('CompContactCtrl',
+        ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
+         'payments', '$route', '$filter', '$location',
+    function($scope, $rootScope, SWBrijj, navState, $routeParams,
+             payments, $route, $filter, $location) {
         if (navState.role == 'investor') {
-            document.location.href = "/home";
+            document.location.href = "/app/home";
             return;
         }
         $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
@@ -48,6 +24,10 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
                 return null;
             }
         };
+        $scope.usagetips = {documents_total: "A document is any item that is uploaded to Sharewave, as well as any document signed and executed via Sharewave. However, inviting people to view a document is limitless.",
+                            admins_total: "Admins are users with permission to edit company data, which includes the ability to edit your cap table and sign documents on your company's behalf.",
+                            direct_messages_monthly: "A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean.",
+                            plan_not_available: "You have exceeded one or more of the usage limits for this plan."};
 
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
@@ -61,7 +41,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
         $scope.profileModalOpen = function() {
             $scope.profileModal = true;
             $scope.editcompany = {
-                'name': angular.copy($scope.name),
+                'cname': angular.copy($scope.cname),
                 'address': angular.copy($scope.address),
                 'city': angular.copy($scope.city),
                 'state': angular.copy($scope.state),
@@ -79,15 +59,24 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             dialogFade: true,
             dialogClass: 'profile-modal wideModal modal'
         };
+        $scope.paymentopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'payment-modal modal'
+        };
 
         $scope.profileUpdate = function(editcompany) {
-            SWBrijj.proc("account.company_update", editcompany.name, editcompany.address, editcompany.city, editcompany.state, editcompany.zipcode).then(function(x) {
+            SWBrijj.proc("account.company_update",
+                         editcompany.cname, editcompany.address,
+                         editcompany.city, editcompany.state,
+                         editcompany.zipcode
+            ).then(function(x) {
                 void(x);
                 if ($scope.files) {
                     $scope.uploadFile();
                 }
                 $scope.$emit("notification:success", "Company profile successfully updated.");
-                $scope.name = editcompany.name;
+                $scope.cname = editcompany.cname;
                 $scope.address = editcompany.address;
                 $scope.city = editcompany.city;
                 $scope.state = editcompany.state;
@@ -140,7 +129,9 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
 
         SWBrijj.tbl('account.my_company').then(function(x) {
             initPage($scope, x);
-            $scope.namekey = $scope.name;
+            $scope.cname = angular.copy($scope.name);
+            delete $scope.name;
+            $scope.cnamekey = $scope.cname;
             $scope.companykey = $scope.company;
             $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
             $scope.photoURL = '/photo/user?id=company:' + $scope.company;
@@ -151,25 +142,6 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
             });
         }).except(initFail);
 
-        $scope.activity = [];
-        SWBrijj.tblm('global.get_company_activity').then(function(feed) {
-
-            var originalfeed = feed;
-            //Generate the groups for the activity feed
-            $scope.feed = [];
-            angular.forEach(originalfeed, function(event) {
-                if (event.activity != "sent") {
-                    event.when = moment(event.time).from(event.timenow);
-                    $scope.feed.push(event);
-                }
-            });
-
-        }).except(function(err) {
-        });
-
-        $scope.activityOrder = function(card) {
-            return -card.time;
-        };
 
         $scope.uploadFile = function() {
             $scope.photoURL = "/img/image-loader-140.gif";
@@ -199,11 +171,251 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState',
                 $scope.$apply();
             }
         };
+
+        $scope.paymentPlanModalOpen = function() {
+            $scope.paymentPlanModal = true;
+        };
+        $scope.paymentPlanModalClose = function() {
+            $scope.paymentPlanModal = false;
+        };
+        $scope.paymentPlanModalFieldCheck = function() {
+            return !($rootScope.selectedPlan &&
+                $rootScope.selectedPlan != $rootScope.billing.currentPlan);
+        };
+        $scope.ccModalOpen = function() {
+            $scope.ccModal = true;
+        };
+        $scope.ccModalClose = function() {
+            $scope.ccModal = false;
+        };
+        $scope.ccModalFieldCheck = function() {
+            var fs = angular.element('form[name="updateCCForm"]').scope();
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc);
+        };
+        $scope.initPaymentModalOpen = function() {
+            $scope.initPaymentModal = true;
+        };
+        $scope.initPaymentModalClose = function() {
+            $scope.initPaymentModal = false;
+        };
+        $scope.initPaymentModalFieldCheck = function() {
+            var fs = angular.element('form[name="initPaymentForm"]').scope();
+            return fs && !(fs.name && fs.number && fs.expiry && fs.cvc &&
+                     $rootScope.selectedPlan);
+        };
+        $scope.cancelSubscriptionModalOpen = function() {
+            $scope.cancelSubscriptionModal = true;
+        };
+        $scope.cancelSubscription = function() {
+            $rootScope.selectedPlan = 'cancel';
+            $scope.updateSubscription();
+            $scope.cancelSubscriptionModalClose();
+
+        };
+        $scope.cancelSubscriptionModalClose = function() {
+            $scope.cancelSubscriptionModal = false;
+        };
+        $scope.reactivateSubscriptionModalOpen = function() {
+            $scope.reactivateSubscriptionModal = true;
+        };
+        $scope.reactivateSubscription = function() {
+            $rootScope.selectedPlan = 'reactivate';
+            $scope.updateSubscription();
+            $scope.reactivateSubscriptionModalClose();
+        };
+        $scope.reactivateSubscriptionModalClose = function() {
+            $scope.reactivateSubscriptionModal = false;
+        };
+
+        $scope.toggleCoupon = function() {
+            $scope.enter_coupon = !$scope.enter_coupon;
+        };
+        $scope.getPaymentToken = function(status, response) {
+            if (!$scope.initPaymentModal) return;
+            _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+                _kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
+            } else {
+                $scope.payment_token = response.id;
+                $scope.create_customer($scope.payment_token,
+                                       $rootScope.selectedPlan);
+            }
+        };
+        $scope.updatePayment = function(status, response) {
+            if (!$scope.ccModal) return;
+            if (response.error) {
+                console.log(response);
+                $scope.$emit("notification:fail",
+                             "Invalid credit card. Please try again.");
+            } else {
+                if ($rootScope.billing.last_status == 'cancel') {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please reactivate your subscription before making other updates.");
+                }
+                $rootScope.billing.payment_token = response.id;
+                if ($rootScope.billing.customer_id) {
+                    payments.update_payment($rootScope.billing.payment_token)
+                    .then(function(x) {
+                        if (x[1][0] !== 1) {
+                            $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                        } else {
+                            $scope.$emit("notification:success",
+                                         "Processing new credit card");
+                            $scope.ccModalClose();
+                        }
+                    }).except(function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Credit Card Verified");
+                    $scope.ccModalClose();
+                }
+            }
+        };
+        $scope.updateSubscription = function() {
+            var newplan = $rootScope.selectedPlan;
+            if (newplan == "cancel") {
+                _kmq.push(['record', 'Subscription Cancelled']);
+            } else {
+                _kmq.push(['record', 'Subscription Modified']);
+            }
+            payments.update_subscription(newplan)
+            .then(function(x) {
+                if (x[1][0] !== 1) {
+                    $scope.$emit("notification:fail",
+                                 "Oops, please try again.");
+                } else if ($rootScope.selectedPlan=='cancel') {
+                    $rootScope.billing.last_status = 'cancel';
+                    $scope.$emit("notification:success",
+                                 "Subscription cancelled");
+                } else if ($rootScope.selectedPlan=='reactivate') {
+                    $rootScope.billing.last_status = 'reactivate';
+                    $scope.$emit("notification:success",
+                                 "Subscription reactivated");
+                } else {
+                    $scope.$emit("notification:success",
+                                 "Payment plan update submitted.");
+                    $rootScope.billing.currentPlan = $rootScope.selectedPlan;
+                    $rootScope.get_hypothetical_usage_details($rootScope.selectedPlan);
+                }
+            }).except(function(err) {
+                $scope.$emit("notification:fail",
+                             "Oops, please try again.");
+            });
+        };
+        $scope.create_customer = function(newcc, newplan) {
+            payments.create_customer(newplan, newcc)
+            .then(function(data) {
+                if (data.length==2) {
+                    $location.url("/app/home/company");
+                    $scope.$emit("notification:success",
+                                 "Processing billing information");
+                    $scope.initPaymentModalClose();
+                    $rootScope.persistentNotification = false;
+                } else {
+                    $scope.$emit("notification:fail",
+                             "Oops, something went wrong. Please try again.");
+                }
+            }).except(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.showSelectedPlan = function(p) {
+            if (p == $rootScope.billing.currentPlan && p == "000") {
+                return "Subscription Cancelled";
+            } else {
+                return $filter('billingPlans')(p);
+            }
+        };
+        $scope.openModalsFromURL = function() {
+            if ($routeParams.coupon) {
+                $rootScope.billing.coupon_code = $routeParams.coupon;
+                $scope.toggleCoupon();
+            }
+            if ($routeParams.setup) {
+                $scope.initPaymentModalOpen();
+            } else if ($rootScope.billing.customer_id
+                       && $rootScope.billing.coupon_code) {
+                $scope.ccModalOpen();
+            }
+        };
+        $rootScope.$on('billingLoaded', function(x) {
+            $scope.openModalsFromURL();
+        });
+        if ($rootScope.selectedPlan) $scope.openModalsFromURL();
+    }
+]);
+app.controller('InvoiceCtrl',
+               ['$scope', '$rootScope', 'SWBrijj', 'payments',
+                '$routeParams', '$location', 'navState',
+    function($scope, $rootScope, SWBrijj, payments,
+             $routeParams, $location, navState) {
+
+        if (!$routeParams.id) $location.url('/app/company/profile');
+        if (navState.role == 'investor') $location.url('/home');
+
+        payments.my_data().then(function(x) {
+            payments.get_invoices(x[0].customer_id, 100).then(function(x) {
+                var matches = JSON.parse(x).data.filter(function(el) {
+                    return el.id == $routeParams.id;
+                });
+                if (matches.length == 1) {
+                    $scope.invoice = matches[0];
+                } else {
+                    console.log("here");
+                    //$location.url('/app/company/profile');
+                }
+            });
+        });
+        SWBrijj.tbl('account.my_company').then(function(x) {
+            initPage($scope, x);
+            $scope.cname = angular.copy($scope.name);
+            delete $scope.name;
+            $scope.cnamekey = $scope.cname;
+            $scope.companykey = $scope.company;
+            $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
+            $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+            angular.forEach($scope.currencies, function(c) {
+               if (c.indexOf($scope.currency) !== -1) {
+                   $scope.longcurrency = c;
+               }
+            });
+        }).except(initFail);
+        $scope.amountPaid = function() {
+            if (!$scope.invoice) return 0;
+            if ($scope.invoice.paid) {
+                return $scope.invoice.total;
+            } else {
+                return 0;
+            }
+        };
+        $scope.print = function() {
+            window.print();
+        };
+        $scope.address1 = function() {
+            return $scope.address;
+        };
+        $scope.address2 = function() {
+            if ($scope.city && $scope.state && $scope.zipcode) {
+                return $scope.city + ", " + $scope.state + " " + $scope.zipcode;
+            } else if ($scope.city || $scope.state) {
+                return ($scope.city || "") + ($scope.state || "") + " " + ($scope.zipcode || "");
+            } else if ($scope.zipcode) {
+                return $scope.zipcode;
+            } else {
+                return null;
+            }
+        };
     }
 ]);
 
-app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route',
-    function($scope, $rootScope, SWBrijj, navState, $route) {
+app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
             document.location.href = "/home";
@@ -223,6 +435,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                 angular.forEach(admins, function(admin) {
                     angular.forEach($scope.people, function(person) {
+                        if (person.name) {
+                            person.selector = person.name + "  (" + person.email +")";
+                        }
+                        else {
+                            person.selector = "(" + person.email+")";
+                        }
+
                         if (person.email == admin.email) {
                             person.role = "issuer";
                         }
@@ -270,9 +489,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id=' + person.email : '/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
-                document.location.href = link;
+                $location.url(link);
             }
         };
 
@@ -333,6 +552,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if ($scope.newRole) {
                 SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
                     void(x);
+                    $rootScope.billing.usage.admins_total += 1;
                     $scope.$emit("notification:success", "Admin Added");
                     $route.reload();
                 }).except(function(x) {
@@ -354,6 +574,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.revoke_admin = function() {
             SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total -= 1;
                 $scope.$emit("notification:success", "Admin Removed");
                 $route.reload();
             }).except(function(x) {
@@ -366,6 +587,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.add_admin = function() {
             SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
                 void(x);
+                $rootScope.billing.usage.admins_total += 1;
                 $scope.$emit("notification:success", "Admin Added");
                 $route.reload();
             }).except(function(x) {
@@ -580,6 +802,59 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
     }
 ]);
 
+app.filter('interval', function() {
+    return function(word) {
+        switch(word) {
+            case "day":
+                return "daily";
+            case "week":
+                return "weekly";
+            case "month":
+                return "monthly";
+            case "year":
+                return "annually";
+            default:
+                return null;
+        }
+    };
+});
+
+app.filter('billingPlans', function() {
+    return function(plan) {
+        switch (plan) {
+            case '000':
+                return "Cancel Subscription";
+            case '001':
+                return "Seed ($9 / month)";
+            case '002':
+                return "Startup ($29 / month)";
+            case '003':
+                return "Growth ($99 / month)";
+            case '004':
+                return "Established ($199 / month)";
+            default:
+                return "Unknown Plan";
+        }
+    };
+});
+app.filter('billingPlansNameOnly', function() {
+    return function(plan) {
+        switch (plan) {
+            case '000':
+                return "Cancel Subscription";
+            case '001':
+                return "Seed";
+            case '002':
+                return "Startup";
+            case '003':
+                return "Growth";
+            case '004':
+                return "Established";
+            default:
+                return "Unknown Plan";
+        }
+    };
+});
 app.filter('fileLength', function() {
     return function(word) {
         if (word) {

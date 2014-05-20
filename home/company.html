@@ -1,10 +1,9 @@
-<div class="headsection row-fluid">
-    <ul class="maintabs head-text">
-        <li class="selectedtab">Welcome, {{person.name}}</li>
-    </ul>
-</div>
+<link type="text/css" rel="stylesheet" href="/home/home.css">
+<div class="container">
+<div class="row-fluid">
+<div class="maincontent">
 <div class="row-fluid home-top-row">
-    <div class="span8 flip-tile" ng-class="{'reverse':flipped1}">
+    <div ng-show="docsummary" class="span8 flip-tile" ng-class="{'reverse':flipped1}">
         <div class="flipper">
             <div class="front info-box">
                 <div class="head-box" ng-click="flipTile(1);">
@@ -32,7 +31,7 @@
                         <div class="row-fluid">
                             <span>Want more information? <span class="blue-link" ng-click="flipTile(1);">Learn more</span></span>
                             <div class="pull-right standard-button green">
-                                <button id='a_home_doc_pre' class="btn" ng-click="gotopage('/documents/company-list')">Upload Documents</button>
+                                <button id='a_home_doc_pre' class="btn" ng-click="gotopage('/app/documents/company-list')">Start Now</button>
                             </div>
                         </div>
                     </div>
@@ -54,7 +53,7 @@
                             </div>
                             <div class="span6 no-graph">
                                 <div class="standard-button green">
-                                    <button id='a_home_doc_post' class="btn" ng-click="gotopage('/documents/company-list')">View Documents</button>
+                                    <button id='a_home_doc_post' class="btn" ng-click="gotopage('/app/documents/company-list')">View Documents</button>
                                 </div>
                                 <span class="blue-link" ng-click="flipTile(1);">Learn More about Documents</span>
                             </div>
@@ -102,7 +101,7 @@
                             <li ng-show="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
                             <li ng-hide="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
                             -->
-                            <li ng-click="gotopage('/company/profile/');">View Profile</li>
+                            <li ng-click="gotopage('/app/company/profile/');">View Profile</li>
                             <li ng-click="profileModalOpen();">Edit Profile</li>
                             <li ng-click="settingModalOpen();">Edit Settings</li>
                         </ul>
@@ -138,7 +137,7 @@
     </div>
 </div>
 <div class="row-fluid home-bottom-row">
-    <div class="span8 flip-tile" ng-class="{'reverse':flipped2}">
+    <div ng-show="ownersummary" class="span8 flip-tile" ng-class="{'reverse':flipped2}">
         <div class="flipper">
             <div class="front info-box">
                 <div class="head-box" ng-click="flipTile(2);">
@@ -166,7 +165,7 @@
                         <div class="row-fluid">
                             <span>New to Equity? <span class="blue-link" ng-click="flipTile(2);">Learn more</span></span>
                             <div class="pull-right standard-button green">
-                                <button id='a_home_own_pre' class="btn" ng-click="gotopage('/ownership/company-captable')">Start Now</button>
+                                <button id='a_home_own_pre' class="btn" ng-click="gotopage('/app/ownership/company-captable')">Start Now</button>
                             </div>
                         </div>
                     </div>
@@ -179,7 +178,7 @@
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-investors.png'>
-                                    <h2><span>{{ownersummary.peoplenum || 0}}</span> Shareholders</h2>
+                                    <h2><span>{{ownersummary.peoplenum || 0}}</span> Investors</h2>
                                 </div>
                                 <div>
                                     <img src='/img/onboardingicons/dayone/ownership-share.png'>
@@ -189,7 +188,7 @@
                             <div class="span6">
                                 <d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
                                 <div class="standard-button green">
-                                    <button id='a_home_own_post' class="btn" ng-click="gotopage('/ownership/company-captable')">View Ownership</button>
+                                    <button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View Ownership</button>
                                 </div>
                                 <span class="blue-link" ng-click="flipTile(2);">Learn More about Ownership</span>
                             </div>
@@ -221,7 +220,7 @@
         </div>
     </div>
     <div class="span4">
-        <div activity-feed user='navState.userid' activity="feed" type="iss"></div>
+        <div activity-feed user='navState.userid' type="iss" view="activityView"></div>
     </div>
 </div>
 
@@ -321,4 +320,7 @@
             <button class="btn" ng-click="settingModalClose(); saveSettings(editcompany);">Confirm</button>
         </div>
     </div>
+</div>
+</div>
+</div>
 </div>

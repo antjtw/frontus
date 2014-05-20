@@ -1,18 +1,18 @@
 //app for the program
-var app = angular.module('LoginApp', ['brijj'], function($routeProvider, $locationProvider){
+var app = angular.module('LoginApp', ['ngRoute', 'brijj'], function($routeProvider, $locationProvider){
 
 //this is used to assign the correct template and controller for each URL path
   $locationProvider.html5Mode(true).hashPrefix('');
   // $locationProvider.html5Mode(false).hashPrefix('!');
 
   $routeProvider.
-      when('/', {controller:'LoginCtrl', templateUrl:'login.html'}).
-      when('/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
-      when('/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
-      when('/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
-      when('/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
-      when('/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
-      when('/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
+      when('/login/', {controller:'LoginCtrl', templateUrl:'login.html'}).
+      when('/login/forgot', {controller:'ForgotCtrl', templateUrl: 'forgot.html'}).
+      when('/login/sent', {controller:'SentCtrl', templateUrl: 'sent.html'}).
+      when('/login/home', {controller:'HomeCtrl', templateUrl:'home.html'}).
+      when('/login/logout', {controller: 'LogoutCtrl', templateUrl: 'logout.html'}).
+      when('/login/reset', {controller: 'ResetCtrl', templateUrl: 'reset.html'}).
+      when('/login/timeout', {controller: 'LoginCtrl', templateUrl: 'timeout.html'}).
       otherwise({redirectTo:'/'});
 });
 
@@ -24,6 +24,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     $scope.password = "";
     if ($routeParams.error) {
       $scope.showError = true;
+      $scope.username = $routeParams.error;
     } else {
       $scope.showError = false;
     }
@@ -102,18 +103,17 @@ app.controller('ForgotCtrl', ['$scope','$location','SWBrijj', function($scope, $
        */
       SWBrijj.forgot($scope.username.toLowerCase()).then(function(x) {
         void(x);
-        $location.path("/sent");
+        $location.path("/login/sent");
       }).except(function(x) { 
         // console.log(x);
         // $scope.fed = "There was an error. Please try again later."
-        $location.path("/sent");
+        $location.path("/login/sent");
       });
     }
 }]);
 
 app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope, $routeParams, SWBrijj) {
   $scope.resetDisabled = function() { return $scope.password == null || $scope.password.length < 1; };
-  $scope.resetClass = function() { return "button greenButton loginButton bodyText" + ($scope.resetDisabled() ? " adisabled" : ""); };
 
   /** @name SWBrijj#resetFillout
    * @function
@@ -149,5 +149,8 @@ app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
   }
 }]);
 
-app.controller('SentCtrl', [ function() {
+app.controller('SentCtrl', ['$scope', function($scope) {
+    $scope.gobacklogin = function(){
+        document.location.href = '/login';
+    };
 }]);

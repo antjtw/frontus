@@ -9,6 +9,14 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         $scope.lastupdated = time[0].last_edited;
     });
 
+    if ($scope.lastPage && $scope.lastPage == "/app/ownership/company-grants") {
+        $scope.gobackto = "Grant Table";
+    }
+    else {
+        $scope.lastPage = "/app/ownership/company-captable";
+        $scope.gobackto = "Cap Table";
+    }
+
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         $scope.userStatus = data;
         for (var i = 0; i < $scope.userStatus.length; i++) {
@@ -58,7 +66,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         return -card.event_time;
     };
 
-    $scope.peopleOrder = 'name'
+    $scope.peopleOrder = 'name';
 
     $scope.setOrder = function(field) {	$scope.peopleOrder = ($scope.peopleOrder == field) ? '-' + field :  field; };
 
@@ -144,9 +152,9 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
 
     $scope.gotoPerson = function (person) {
         var link;
-        link = (person.name ? ((navState.userid != person.email) ? '/company/profile/view?id='+person.email : '/account/profile/') : '');
+        link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id='+person.email : '/app/account/profile/') : '');
         if (link) {
-            document.location.href=link;
+            $location.url(link);
         }
     };
 

@@ -1,0 +1,391 @@
+<!DOCTYPE HTML>
+<html ng-app="pricing">
+    <head>
+        <title>Sharewave Pricing</title>
+        <meta id="viewport" name="viewport" content ="width=device-width, minimum-scale=1.0"/>
+        <!--{{/i/head_css.inc}}-->
+        <!--{{/i/head_js.inc}}-->
+        <link type="text/css" rel="stylesheet" href="/cmn/index.css">
+        <link type="text/css" rel="stylesheet" href="/cmn/static.css">
+        <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
+        <meta name="description" content="The best way to manage your shareholders">
+        <script src="/pricing/pricing.js"></script>
+        <script src="/cmn/register/register.js"></script>
+        <script src="/cmn/external-rail/rail.js"></script>
+    </head>
+    <body>
+        <navbar></navbar>
+        <div id="register" ng-class="{'fixednavoffset':!navState.userid, 'homedrop': homecollapsed}" class="wrap">
+            <div class="pricing static home">
+                <div class="container">
+                    <h1>Simple pricing for every business</h1>
+                </div>
+
+                <div class="container pricing-container">
+                    <div class="row-fluid pricing-blocks hidden-phone">
+                        <div class="span3 seed">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-seed-color.png"></li>
+                                        <li>Seed</li>
+                                    </ul>
+                                    <ul class="reverse">
+                                        <li><img src="/img/ike.png"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span><span>$</span><span>9</span><span>/month</span></span>
+                                    <span class="reverse">
+                                        <ul>
+                                            <li>$9 / month</li>
+                                            <li>
+                                                <div class="standard-button">
+                                                    <button class="btn" ng-click="pricingregisterchoose('001')">
+                                                        Pick this Plan
+                                                        <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>10</li>
+                                        <li>Documents</li>
+                                        <li>1</li>
+                                        <li>Administrator</li>
+                                        <li>10</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 startup">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-startup-color.png"></li>
+                                        <li>Startup</li>
+                                    </ul>
+                                    <ul class="reverse">
+                                        <li><img src="/img/ike.png"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span><span>$</span><span>29</span><span>/month</span></span>
+                                    <span class="reverse">
+                                        <ul>
+                                            <li>$29 / month</li>
+                                            <li>
+                                                <div class="standard-button">
+                                                    <button class="btn" ng-click="pricingregisterchoose('002')">
+                                                        Pick this Plan
+                                                        <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>50</li>
+                                        <li>Documents</li>
+                                        <li>5</li>
+                                        <li>Administrators</li>
+                                        <li>50</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 growth">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-growth-color.png"></li>
+                                        <li>Growth</li>
+                                    </ul>
+                                    <ul class="reverse">
+                                        <li><img src="/img/ike.png"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span><span>$</span><span>99</span><span>/month</span></span>
+                                    <span class="reverse">
+                                        <ul>
+                                            <li>$99 / month</li>
+                                            <li>
+                                                <div class=" standard-button">
+                                                    <button class="btn" ng-click="pricingregisterchoose('003')">
+                                                        Pick this Plan
+                                                        <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>250</li>
+                                        <li>Documents</li>
+                                        <li>10</li>
+                                        <li>Administrators</li>
+                                        <li>250</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 established">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-established-color.png"></li>
+                                        <li>Established</li>
+                                    </ul>
+                                    <ul class="reverse">
+                                        <li><img src="/img/ike.png"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span><span>$</span><span>199</span><span>/month</span></span>
+                                    <span class="reverse">
+                                        <ul>
+                                            <li>$199 / month</li>
+                                            <li>
+                                                <div class=" standard-button">
+                                                    <button class="btn" ng-click="pricingregisterchoose('004')">
+                                                        Pick this Plan
+                                                        <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>1,000</li>
+                                        <li>Documents</li>
+                                        <li>20</li>
+                                        <li>Administrators</li>
+                                        <li>1,000</li>
+                                        <li>Direct Messages / month</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid pricing-blocks pricing-blocks-phone visible-phone">
+                        <div class="span3 seed">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-seed-color.png"></li>
+                                        <li>Seed</li>
+                                        <li><span>$</span><span>9</span><span>/month</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>10 <span>Documents</span></li>
+                                        <li>1 <span>Administrator</span></li>
+                                        <li>10 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 startup">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-startup-color.png"></li>
+                                        <li>Startup</li>
+                                        <li><span>$</span><span>29</span><span>/month</span></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>50 <span>Documents</span></li>
+                                        <li>2 <span>Administrators</span></li>
+                                        <li>50 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 growth">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-growth-color.png"></li>
+                                        <li>Growth</li>
+                                        <li><span>$</span><span>99</span><span>/month</span></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>250 <span>Documents</span></li>
+                                        <li>5 <span>Administrators</span></li>
+                                        <li>250 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="span3 established">
+                            <ul>
+                                <li>
+                                    <ul>
+                                        <li><img src="/img/icon-established-color.png"></li>
+                                        <li>Established</li>
+                                        <li><span>$</span><span>199</span><span>/month</span></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <ul>
+                                        <li>1,000 <span>Documents</span></li>
+                                        <li>10 <span>Administrators</span></li>
+                                        <li>1,000 <span>Direct Messages /Month</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row-fluid bar-break">
+                <p>Need more? <a class="blue-link" href="mailto:sales@sharewave.com?Subject=Custom%20pricing" target="_top">Contact us</a> for a custom plan.</p>
+            </div>
+
+            <div class='home plans-include'>
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="text-center" >
+                            <h1>All plans include</h1>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span10 offset1">
+                            <div class="trio-icons row-fluid">
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-captable.png">
+                                    <h2>Unlimited Cap Table</h2>
+                                    <p>All of our features to prepare, review and share your company's capitalization</p>
+                                </div>
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-audit.png">
+                                    <h2>Unlimited History</h2>
+                                    <p>Your company data, records and <br>audit trails never expire</p>
+                                </div>
+                                <div class="span4 text-center">
+                                    <img src="/img/icon-people.png">
+                                    <h2>Unlimited People</h2>
+                                    <p>Invite anyone to review or interact with your data and documents</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="text-center">
+                            <h1>Common questions</h1>
+                        </div>
+                    </div>
+                    <div class="row-fluid questions">
+                        <div class="offset1 span5">
+                            <p>
+                                You charge for documents. How do you define a document?
+                            </p>
+
+                            <p>
+                                A document is any item that is uploaded to Sharewave, as well as any document signed and executed via Sharewave. However, inviting people to view a document is limitless.
+                            </p>
+                        </div>
+
+                        <div class="offset1 span5">
+                            <p>
+                                What if I go over my plan limits?
+                            </p>
+
+                            <p>
+                                You will not be charged extra during the month that you exceed your plan limit, nor will we restrict the product.  In the following month, you will be automatically upgraded to a higher plan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row-fluid questions">
+                        <div class="offset1 span5">
+                            <p>
+                                What is a direct message?
+                            </p>
+
+                            <p>
+                                A one-way email message to a person or group of people, ideal for sending company information while keeping your personal inbox clean.                            </p>
+                        </div>
+
+                        <div class="offset1 span5">
+                            <p>
+                                What is an admin?
+                            </p>
+
+                            <p>
+                                An admin is any user with edit rights. You can invite unlimited shareholders and non-shareholders to view & sign documents, and view cap table and grant information, with every plan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row-fluid questions last-questions">
+                        <div class="offset1 span5">
+                            <p>
+                                Can I cancel my subscription?
+                            </p>
+
+                            <p>
+                                If you no longer wish you use Sharewave, you can cancel at any time. At that point, your subscription will last until the end of the current monthly billing cycle.
+                            </p>
+                        </div>
+
+                        <div class="offset1 span5">
+                            <p>
+                                If I leave the service, can I export my data?
+                            </p>
+
+                            <p>
+                                Yes. Sharewave provides a service to make your data more valuable, but you are the owner of your information. Should you decide to leave, we'll make your data available to download.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="row-fluid">
+                    <div class="span10 offset1 text-center">
+                        <div class="CompanyRegister-form large-standard-button standard-button">
+                            <button class="btn" ng-click="pricingregister()">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacer30"></div>
+            </div>
+
+
+            <div class="push"></div>
+        </div>
+        <!--{{/i/foot.inc}}-->
+    </body>
+</html>

@@ -56,6 +56,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         });
     });
 
+    SWBrijj.tblm('ownership.company_transaction', ['investor', 'email']).then(function (trans) {
+        $scope.rowemails = {};
+        angular.forEach(trans, function(tran) {
+            if (tran.email && !(tran.investor in $scope.rowemails)) {
+                $scope.rowemails[tran.investor] = tran.email;
+            }
+        });
+    });
+
     //Get the company issues
     SWBrijj.tblm('ownership.company_issue').then(function (issues) {
         // Initialisation. Get the transactions and the grants
@@ -134,7 +143,16 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                 if ($scope.issues.length == 1) {
-                    $scope.maintoggle = false;
+                    $rootScope.$on('billingLoaded', function(x) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                        }
+                    });
+                    if ($rootScope.selectedPlan) {
+                        if (!$rootScope.companyIsZombie()) {
+                            $scope.maintoggle = false;
+                        }
+                    }
                 }
 
                 $scope.done = true;
@@ -646,10 +664,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 }
 
                 if (transaction.units) {
-                    transaction.units = String(transaction.units).replace(/\,/g,'');
+                    transaction.units = calculate.cleannumber(transaction.units);
                 }
                 if (transaction.amount) {
-                    transaction.amount = String(transaction.amount).replace(/\,/g,'');
+                    transaction.amount = calculate.cleannumber(transaction.amount);
                 }
 
                 // Convert amount to a float but remove the NaNs if amount is undefined
@@ -660,6 +678,11 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 transaction['units'] = parseFloat(transaction['units']);
                 if (isNaN(transaction['units'])) {
                     transaction['units'] = null;
+                }
+                if (!transaction['email']) {
+                    if (transaction['investor'] in $scope.rowemails) {
+                        transaction['email'] = $scope.rowemails[transaction['investor']];
+                    }
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), calculate.toFloat(transaction['units']), d1, String(transaction['type']), calculate.toFloat(transaction['amount']), calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
                     $scope.lastsaved = Date.now();
@@ -935,7 +958,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.setView = function(field) {
         $scope.optionView = field;
         var uniquenames = [];
-        if (field == "Investor") {
+        if (field == "Person") {
             // Create the investor led row
             $scope.investorLed = [];
             angular.forEach($scope.issues, function(issue) {
@@ -1071,7 +1094,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 };
 
 // Returns only the real transactions (not the empty ones)
-owner.filter('noempty', function () {
+app.filter('noempty', function () {
     return function (trans) {
         var returntrans = [];
         angular.forEach(trans, function (tran) {

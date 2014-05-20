@@ -1,11 +1,6 @@
-<div class="container dynamic-page doclistFlow">
+<link type="text/css" rel="stylesheet" href="/account/profile/profile.css">
+<div style="min-height: 900px;" class="container dynamic-page doclistFlow">
     <div class="row-fluid">
-        <div class="headsection row-fluid">
-            <ul class="maintabs head-text">
-                <!--<li><a href="/company/profile/people/">People</a></li>-->
-                <li class="selectedtab">My Profile</li>
-            </ul>
-        </div>
         <div style="margin-left: 0;" class="span12 statusBlock">
             <div class="row-fluid">
                 <div class="subnav-controls">
@@ -13,11 +8,18 @@
                         <div class="pull-left">
                             <h1 class="profile-name">{{name}}</h1>
                         </div>
-                        <div class="pull-right">
-                            <div class="standard-button">
-                                <button class="btn" ng-click="passwordModalOpen();">Change Password</button>
-                            </div>
-                        </div> 
+
+                        <div class="box-button pull-right"
+                             ng-click="passwordModalOpen();">
+                            <ul>
+                                <li> <span data-icon="&#xe02c;" aria-hidden="true"></span>
+
+                                </li>
+                                <li> <span>Password</span>
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="DivHelper"></div>
                 </div>
@@ -36,6 +38,8 @@
                                     <ul>
                                         <li>Full Name</li>
                                         <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
+                                        <li>Email</li>
+                                        <li style="line-height: 28px;">{{email}}</li>
                                     </ul>
                                 </li>
                                 <li>
@@ -56,6 +60,12 @@
                                 </li>
                                 <li>
                                     <ul>
+                                        <li>Country</li>
+                                        <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <ul>
                                         <li>Telephone</li>
                                         <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
                                     </ul>
@@ -67,6 +77,15 @@
                                             <img ng-src="{{photoURL}}">
                                             <div class="standard-button small-standard-button gray">
                                                 <button ng-click="pictureModalOpen();" class="btn">Change</button>
+                                            </div>
+                                        </li>
+                                        <li class="signature-label">Signature Image</li>
+                                        <li class='signature-image'>
+                                            <div>
+                                                <img ng-src="{{signatureURL}}">
+                                            </div>
+                                            <div class="standard-button small-standard-button gray">
+                                                <button ng-click="sigModalUp();" class="btn">Change</button>
                                             </div>
                                         </li>
                                     </ul>
@@ -211,7 +230,7 @@
             <button class="btn" ng-click="pictureModalClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="uploadFile(); pictureModalClose();">Upload</button>
+            <button class="btn" ng-disabled="!files || files.length===0" ng-click="uploadFile(); pictureModalClose();">Upload</button>
         </div>
     </div>
 </div>
@@ -251,5 +270,55 @@
                 </div>
             </fieldset>
         </form>
+    </div>
+</div>
+
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Pick your Signature
+        </p>
+    </div>
+    <div class="sigmodal modalText">
+        <div class="row-fluid">
+            <div class="imgsig span6">
+                <div ng-hide="scribblemode" ng-style="{{signaturestyle}}" >
+                    <img id="signaturevisual" ng-src="{{signatureURL}}">
+                </div>
+                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                    <canvas id="scribbleboard"></canvas>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <div class="span6 gif-text">
+                <p>
+                    Upload an image or draw out your signature. We'll store it in your profile for use when signing documents.
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFilesSig(this);"/>
+                            <div class="fakefile">
+                                <span>CHOOSE FILE</span>
+                            </div>
+                        </div>
+                        <div class="scribblebutton">
+                            <button ng-click="createNewSignature()">Draw Signature</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green" style="margin-right: 30px;">
+            <button class="btn"
+                    ng-click="uploadSignatureNow();"
+                    ng-disabled="(!files && !scribblemode) || files.length===0">Done</button>
+        </div>
+        <div class="pull-right standard-button gray">
+            <button class="btn"
+                    ng-click="sigclose();">Cancel</button>
+        </div>
     </div>
 </div>

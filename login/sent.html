@@ -1,20 +1,22 @@
-<div class="row-fluid">
-  <div class="span5 offset4 gateway text-center">
+<div class="login-block">
     <div>
-      <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
-      <p class="tagline">the best way to manage shareholders<p>
+        <a target="_self" href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
     </div>
-    <div class="spacer20"></div>
-    <h2>Password Sent</h2>
-    <p>Password reset instructions have been sent to you. <br> Don't forget to check your spam and junk mail <br> filters if they don't turn up.
-    </p>
-   	<div class="spacer30"></div>   
 
-    <a ng-href=".">
-      <div class="standard-button text-center blue">
-        <button class="btn" >Return to Login</button>
-        <div class="spacer30"></div>   
-      </div>
-    </a>
-  </div>
+    <div class="row-fluid">
+        <div class="gateway">
+            <h4>Password Sent</h4>
+            <p>Password reset instructions have been sent to you. <br> Don't forget to check your spam and junk mail <br> filters if they don't turn up.
+
+            <form id="login" class="text-center">
+                <fieldset>
+                    <div class="loginfooter">
+                        <div class="standard-button text-center pull-left blue">
+                            <button ng-click="gobacklogin()" class="btn" >Return to Login</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
 </div>

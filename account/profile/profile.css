@@ -162,7 +162,172 @@ li.profile-image > img {
 }
 
 
-li.profile-image > div {
+li.profile-image > div, li.signature-image > div:last-of-type {
     text-align: center;
     margin-top: 10px;
+}
+
+li.signature-image > div:first-of-type {
+    width: 198px;
+    height: 108px;
+    border: 1px solid #E3E3E3;
+    border-radius: 3px;
+}
+
+li.signature-image > div:first-of-type > img {
+    height: 100%;
+    width: auto;
+}
+
+.personal-information > li > ul > li:nth-child(odd):nth-child(n+2).signature-label {
+    width: 145px;
+}
+
+.helpModal {
+    margin-left: -360px;
+    width:718px;
+    z-index: 1060;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.helpModal .modal-title {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    height: 80px;
+}
+
+.helpModal .modal-title > p {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #1D2C3C;
+    line-height: 80px;
+}
+
+.helpModal .modalText {
+    background-color: #FFFFFF;
+}
+
+.helpModal ul > li {
+    text-align: left;
+    display: block;
+    margin-left: 20px;
+    height: 100px;
+    overflow: auto;
+    font-size: 14px;
+    color: #666666;
+}
+
+.helpModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+}
+
+.helpModal ul > li > span {
+    display: inline-block;
+    width: 300px;
+    float: right;
+}
+
+.helpModal .modalText h6 {
+    color: #15A085;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.helpModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.helpModal .subtitle {
+    color: #000;
+    display: block;
+
+}
+
+.helpModal .gif-text {
+    margin-top: 10px;
+}
+
+.helpModal .modalText > div > div > img {
+    margin-top: 10px;
+}
+
+.helpModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
+
+.sigmodal.modalText {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 40px;
+    margin-bottom: 0;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+div.imgsig {
+    height: 200px;
+    white-space: nowrap;
+}
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
+.sigmodal .gif-text > p {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-right: 30px;
+}
+
+.modal.helpModal input.file {
+    float: left;
+    width: 50%;
+    margin-left: 15px;
+}
+
+.scribblewindow {
+    border: #1ABC96 solid 1px;
+}
+
+.scribblewindow > canvas {
+    cursor: default;
+    background-color: transparent;
+}
+
+
+.modal.helpModal div.fileinputs {
+    display: inline-block;
+    float: left;
+}
+
+.scribblebutton > button {
+    float: left;
+    margin-left: 20px;
+    display: block;
+    width: 162px;
+    height: 34px;
+    text-align: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgb(227, 227, 227);
+    text-transform: uppercase;
 }

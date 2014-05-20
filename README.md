@@ -16,33 +16,28 @@ To set up a new instance:
 - Then:
 ```shell
 cat >.git/hooks/post-receive <<EOF
-#!/bin/sh -x
-# Unset GIT_DIR or the universe will implode
-unset GIT_DIR
-# Change directory to the working tree; exit on failure
-cd ../ || exit
-#
-while read oldrev newrev refname
-do
-    branch=$(git rev-parse --symbolic --abbrev-ref $refname)
-    if [ "master" = "$branch" ]; then
-        echo "checking out master"
-        git checkout -f master
-        git submodule update --init --recursive --force
-    fi
-done
+#!/bin/bash
+
+ while read oldrev newrev refname
+ do
+# Unset GIT_DIR or the universe will implode                                                       
+    unset GIT_DIR
+    cd ../ || exit
+    git checkout --force
+    git submodule update --init --recursive --force
+    ./post-receive $oldrev $newrev $refname
+ done
+
+echo Done
 ```
 
 - don't forget to `chmod a+x .git/hooks/post-receive`
 
 On the client side:
 
-`git remote add ec2-testing sharewave-testing:/var/repo/frontus`
-'git remote set-url ec2-testing sharewave-testing:/var/repo/frontus'
+`git remote add name-for-remote remote-ssh-hostname:/remote-directory`
+`git push name-for-remote +master:refs/heads/master`
 
-`git push ec2-testing +master:refs/heads/master`
-
-
-Subsequent deployments are done with: `git push ec2-testing`.
+Subsequent deployments are done with: `git push name-for-remote`.
 
 

@@ -1,3 +1,6 @@
+.visible-below-1024 {
+    display: none;
+}
 
 @media (max-width: 1024px) {
 	.container {
@@ -24,6 +27,32 @@
     .home .button.center-button {
         text-align: center;
         margin: 10px auto 0 auto;
+    }
+
+    .topnav .nav.content-pages > li > a {
+        width: 95px;
+    }
+
+    .navlogin input {
+    }
+
+    .forgotLog {
+        margin-top: 10px;
+        float: inherit;
+    }
+
+    .navlogin > form > fieldset > div.top-login {
+        margin-top: 10px;
+        margin-left: 40px;
+    }
+
+    .navlogin > form > fieldset > a {
+        float: right;
+        margin-top: -25px;
+    }
+
+    .visible-below-1024 {
+        display: inherit;
     }
 }
 

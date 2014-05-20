@@ -1,15 +1,20 @@
-<div class="container dynamic-page doclistFlow">
+<link type="text/css" rel="stylesheet" href="/cmn/profile.css">
+<div class="maincontent openflow">
+<div style="min-height: 1000px;" class="container dynamic-page doclistFlow">
     <div class="row-fluid">
-        <div class="headsection row-fluid">
-            <ul class="maintabs head-text">
-                <li><a href="/company/profile/people/">People</a></li>
-                <li class="selectedtab">{{user.name}}</li>
-            </ul>
-        </div>
         <div style="margin-left: 0;" class="span12 statusBlock">
             <div class="row-fluid">
                 <div class="subnav-controls">
                     <div>
+                        <div class="pull-left back-section">
+                            <div class="backbutton" ng-click="gotoPage('/app/company/profile/people')">
+                                <span data-icon="&#xe032;" aria-hidden="true"></span>
+                            </div>
+                            <div>
+                                <span>Back to</span>
+                                <span>People</span>
+                            </div>
+                        </div>
                         <div class="pull-left">
                             <div class="viewProfilePhoto"
                                  style="width:40px; height:40px;">
@@ -131,3 +136,6 @@
         </div>
     </div>
 </div>
+</div>
+<div class="minimumGap"></div>
+<div class="push"></div>

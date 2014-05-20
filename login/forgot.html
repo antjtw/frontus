@@ -1,28 +1,28 @@
-<div class="row-fluid">
-  <div class="span5 offset4 gateway text-center">
+<div class="login-block">
     <div>
-      <a href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
-      <p class="tagline">the best way to manage shareholders<p>
+        <a target="_self" href="/"><img class="login-logo" src="/img/logo-blue.png"></a>
     </div>
-    <div class="spacer20"></div>
-    <h2>Forgot Password?</h2>
-    <p>To reset your account password, enter the email <br> address you registered with, and we'll send your <br> instructions on their way.</p>
-    <div class="text-error">{{fed}}</div>
-    <form id="login" class="text-center inputs">
-      <fieldset>
-        <div class="field text-right">
-            <span>Email Address</span>
-            <input required type="email" class="loginInput FI" autocomplete="off"
-            tabindex="1" autocapitalize="off" autocomplete="off" name="username" ng-model="username">
+
+    <div class="row-fluid">
+        <div class="gateway">
+            <h4>Forgot Password?</h4>
+            <p>To reset your account password, enter the email <br> address you registered with, and we'll send your <br> instructions on their way.</p>
+
+            <form id="login" class="text-center">
+                <fieldset>
+                    <div class="field text-left">
+                        <span>Email Address</span>
+                        <input required type="email" class="loginInput FI" autocomplete="off"
+                               tabindex="1" autocapitalize="off" autocomplete="off" name="username" ng-model="username">
+                    </div>
+                    <div class="loginfooter">
+                        <a id="cancelButton" class="button pull-left return" ng-href=".">Return to Login</a>
+                        <div class="standard-button pull-right loginbtn">
+                            <button class="btn" ng-disabled="forgotDisabled()" ng-click="doForgot()">Reset Password</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-        <div class="loginfooter">
-          <a id="cancelButton" class="button pull-left return" ng-href=".">Return to Login</a>
-          <div class="standard-button pull-right loginbtn">
-            <button class="btn" ng-disabled="forgotDisabled()" ng-click="doForgot()">Reset Password</button>
-          </div>
-        </div>
-        <br>
-      </fieldset>
-    </form>
-  </div>
+    </div>
 </div>
