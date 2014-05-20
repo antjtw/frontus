@@ -1,12 +1,13 @@
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-         'payments', '$route', '$filter', '$location',
+         'payments', '$route', '$filter', '$location', '$http',
     function($scope, $rootScope, SWBrijj, navState, $routeParams,
-             payments, $route, $filter, $location) {
+             payments, $route, $filter, $location, $http) {
         if (navState.role == 'investor') {
             document.location.href = "/app/home";
             return;
         }
+        console.log(navState);
         $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
         $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
         $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
@@ -344,6 +345,34 @@ app.controller('CompContactCtrl',
                 $scope.ccModalOpen();
             }
         };
+        
+        $scope.startOauth = function(svc) {
+            alert("Starting Oauth");
+            
+            if (!(navState.userid && navState.company && navState.role)) {
+                alert("User role not selected.");
+                $scope.response = "User role not selected.";
+                return;
+            }
+            alert("Posting");
+            $http.post('/amber/cgi/suDbProc.py', {
+                'proc': 'oauth.request_authorization',
+                'service': svc,
+                'userid': navState.userid,
+                'company': navState.company,
+                'role': navState.role
+            }).success(function(x) {
+                    console.log(x);
+                    window.open(x);
+                })
+                .error(function(x) {
+                    alert(x);
+                    $scope.response = x;
+                });
+            
+            
+        };
+        
         $rootScope.$on('billingLoaded', function(x) {
             $scope.openModalsFromURL();
         });
