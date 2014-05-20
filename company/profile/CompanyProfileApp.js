@@ -421,6 +421,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
+            $scope.hideSharebar = true;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -531,6 +532,26 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.addAdminModal = false;
         };
 
+       $scope.emailRecipient = function(person){
+            // var recipients = [];
+            if ($scope.recipients.indexOf(person.email)=== -1){
+                 $scope.recipients.push(person.email);
+            }
+            else{
+                var toDelete = $scope.recipients.indexOf(person.email)
+                $scope.recipients.splice(toDelete, 1);
+                console.log($scope.recipients)
+            }; 
+            // console.log(recipients);
+        };
+
+        $scope.recipients = [];
+        $scope.personIs = function(person){
+            return $scope.recipients.indexOf(person.email) != -1;
+            console.log($scope.recipients)
+        };
+
+
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
@@ -595,6 +616,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
+
+        $scope.toggleSide = function () {
+            if (!$scope.hideSharebar) {
+                $scope.hideSharebar = true;
+            } 
+            else {
+                $scope.hideSharebar = false;
+            };
+        };
+
+        $scope.getRecipients = function() {
+                var email = [];
+                if(emailRecipient === true){
+                    email.push(emailRecipient);
+                }
+                console.log(email);
+        };
+       
     }
 ]);
 

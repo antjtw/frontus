@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="/cmn/profile.css">
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -7,10 +7,25 @@
             <div class="subnav-controls">
                 <div>
                     <div class="pull-left">
-                        <span>SEARCH</span>
-                        <input type="text" class="search-box" ng-model="filterText">
+                        <div class="pull-left" >
+                            <span>SEARCH</span>
+                            <input type="text" class="search-box" ng-model="filterText">
+                        </div>
                     </div>
-                    <compose-message/></compose-message>
+                   <!--  <compose-message/></compose-message> -->
+                    <div class="box-button pull-right"
+                         ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
+                         ng-click="companyIsZombie() || toggleSide();"
+                         data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+
+                            </li>
+                            <li> <span>Email</span>
+
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie()}"
@@ -19,7 +34,7 @@
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
                             </li>
-                            <li> <span>Add Person</span>
+                            <li> <span>People</span>
 
                             </li>
                         </ul>
@@ -29,28 +44,40 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" class="row-fluid">
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
                     <tr>
+                    
                         <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
                         <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
                         <th></th>
+
                     </tr>
                     </tbody>
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
-                    <tr>
-                        <td style="width:400px" class="shareholder-column docname-column" ng-click="gotoPerson(person);">
-                            <ul>
-                                <li>{{person.name}}</li>
-                                <li>{{formatLastLogin(person.lastlogin)}}</li>
-                            </ul>
-                        </td>
+                    
+                      
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click="!hideSharebar || gotoPerson(person)">      
+                        <div ng-if="!hideSharebar" class="check-box-side">
+                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
+                             <span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </div>
+            
+                        <ul>
+                            <li>{{person.name}}</li>
+                            <li>{{formatLastLogin(person.lastlogin)}}</li>
+                        </ul>
+                    </td>
+
+                        
+                             
                         <td><span ng-show="person.role=='issuer'">Admin</span></td>
                         <td style="width:50px;">
-                            <ul ng-show="person.lastlogin" class="dropdown-list">
+                            <ul ng-show="person.lastlogin" class="dropdown-list" ng-hide="!hideSharebar">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
@@ -69,6 +96,14 @@
                 </table>
             </div>
         </div>
+        <div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
+                showSharebar:!hideSharebar,
+                slidingcss25:oldSafari()}" class="span4 capright button-offset">
+            <compose-message/></compose-message>
+        </div>
+    </div>
+
+
     </section>
 </div>
 
@@ -89,7 +124,7 @@
             </div>
             <div>
                 <span>Admin</span>
-                <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button email"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
             </div>
             <div ng-if="newRole && triggerUpgradeAdmins(1)"
                  class="upgradeWarning">
@@ -108,7 +143,6 @@
             <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
         </div>
     </div>
-
 </div>
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
     <div class="modalHeader">
