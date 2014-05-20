@@ -549,10 +549,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log($scope.recipients)
         };
 
-        // $scope.clearCheckbox = function(){
-        //     $scope.recipeints = []
-        // }
-
 
         $scope.narrowopts = {
             backdropFade: true,
@@ -618,7 +614,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
-
+        // email sidebar
         $scope.toggleSide = function () {
             if (!$scope.hideSharebar) {
                 $scope.hideSharebar = true;
