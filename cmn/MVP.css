@@ -1582,12 +1582,12 @@ ul.spaced-list > li:nth-child(odd) {
     overflow: auto;
 }
 
-.activity-feed2 > li {
+.activity-feed2 li.event {
     min-height: 50px;
     border-bottom: 1px solid #E3E3E3;
 }
 
-.activity-feed2 > li:last-of-type {
+.activity-feed2 li.event:last-of-type {
     border-bottom: none;
 }
 
@@ -1595,7 +1595,7 @@ ul.spaced-list > li:nth-child(odd) {
     color: #3397DA;
 }
 
-.activity-feed2 > li > div:first-of-type {
+.activity-feed2 li.event > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
@@ -1603,7 +1603,7 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
-.activity-feed2 > li > div:last-of-type {
+.activity-feed2 li.event > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -1611,16 +1611,16 @@ ul.spaced-list > li:nth-child(odd) {
     width: calc(100% - 58px) !important;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li {
+.activity-feed2 li.event > div:last-of-type > ul > li {
     line-height: 16px;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li:first-of-type {
+.activity-feed2 li.event > div:last-of-type > ul > li:first-of-type {
     margin-top: 8px;
     color: #666666;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li:last-of-type {
+.activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: uppercase;
     font-size: 10px;
 }
