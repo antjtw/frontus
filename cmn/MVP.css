@@ -1282,6 +1282,10 @@ form.inputs {
 }
 
 
+
+.email-subject input {
+    width: 270px;
+}
 .span10.coreEdit {
     height:100%;
     margin-left:0;
@@ -1290,12 +1294,14 @@ form.inputs {
     border-color: rgb(189, 195, 199);
     border-left: 1px solid;
 }
+
 .coreEdit input {
     box-shadow: none !important;
+} 
+
+.input-list .inner-editor{
     width: 270px;
 }
-
-
 
 .formBounder {
     width:620px;
@@ -4284,8 +4290,8 @@ div.upgradeWarning > span {
 .sidebarHeader {
     display: block;
     text-align: left;
-    padding-top: 18px;
-    padding-bottom: 20px;
+    padding-top: 23px;
+    padding-bottom: 40px;
     margin: 0;
     vertical-align: middle;
     font-size: 14px;
@@ -4293,14 +4299,16 @@ div.upgradeWarning > span {
 }
 
 .sidebarText {
-    padding: 10px 0 0 0;
-    margin: 5px 0 20px 0;
+   /* padding: 10px 0 0 0;*/
+  /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
+    margin-bottom: ;
 }
 .sidebarText p {
     text-align: left;
     margin: 0 10px 0 10px;
+    padding-bottom: 10px;
 }
 
 .sidebarFooter {
@@ -4308,6 +4316,7 @@ div.upgradeWarning > span {
     border: none;
     border-radius: 0;
     box-shadow: none;
+    padding-top: 20px;
 
 }
 
@@ -4327,7 +4336,7 @@ div.upgradeWarning > span {
 }
 
 .sidebarText span{
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .footer-headline-left{
@@ -4346,6 +4355,7 @@ div.upgradeWarning > span {
     text-align: center;
     line-height: 26px;
     padding-right: 20px;
+    margin-top: 2px;
 }
 
 .person-info{
