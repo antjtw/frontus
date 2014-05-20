@@ -133,8 +133,8 @@
         </div>
     </div>
 
-    <div ng-show="!(myownership.shares > 0 || myownership.amount != null) || !(docsummary.num > 0)" class="span4">
-        <div activity-feed user='navState.userid' activity="feed" type="inv"></div>
+    <div ng-if="!(myownership.shares > 0 || myownership.amount != null) || !(docsummary.num > 0)" class="span4">
+        <div activity-feed user='navState.userid' type="inv" view="activityView"></div>
     </div>
 
     <div class="span4 issuer-profile">
@@ -253,8 +253,8 @@
             </div>
         </div>
     </div>
-    <div ng-hide="!(myownership.shares > 0 || myownership.amount > 0) || !(docsummary.num > 0)" class="span4" style="float: right;">
-        <div activity-feed user='navState.userid' activity="feed" type="inv"></div>
+    <div ng-if="(myownership.shares > 0 || myownership.amount > 0) && (docsummary.num > 0)" class="span4" style="float: right;">
+        <div activity-feed user='navState.userid' type="inv" view="activityView"></div>
     </div>
 
 </div>

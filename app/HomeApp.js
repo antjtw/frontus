@@ -530,7 +530,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.person.namekey = $scope.person.name;
 
             $scope.getTokenInfo();
-            $scope.getActivityFeed();
             $scope.getOwnershipInfo();
             $scope.getDocumentInfo();
         });
@@ -570,19 +569,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             return -card.time;
         };
 
-        $scope.getActivityFeed = function() {
-            SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-                $scope.feed = [];
-                angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent" && event.activity != "viewed") {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.feed.push(event);
-                    }
-                });
-            });
-        };
+	$scope.activityView = "global.get_investor_activity";
 
         $scope.getOwnershipInfo = function() {
             $scope.ownersummary = {};
