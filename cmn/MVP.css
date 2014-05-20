@@ -4279,7 +4279,8 @@ div.upgradeWarning > span {
 .sidebarHeader {
     display: block;
     text-align: left;
-/*    padding: 16px 0 16px 20px;*/
+    padding-top: 18px;
+    padding-bottom: 20px;
     margin: 0;
     vertical-align: middle;
     font-size: 14px;
@@ -4294,7 +4295,7 @@ div.upgradeWarning > span {
 }
 .sidebarText p {
     text-align: left;
-    margin: 0 20px 0 20px;
+    margin: 0 10px 0 10px;
 }
 
 .sidebarFooter {
@@ -4304,30 +4305,38 @@ div.upgradeWarning > span {
     box-shadow: none;
     /*padding: 22px 22px 22px 22px;*/
 /*    display: inline-block;*/
-    text-align: center;
+/*    text-align: center;*/
 /*    position: relative;*/
 }
 
-.standard-button.green > button {
-    width: 100px;
-    display: inline-block;
-}
-
 .standard-button.white > button{
-    width: 100px;
+    width: 130px;
     background-color: white;
-    color: blue;
-    display: inline-block;
+    color: #2980B9;
 }
 
-.cell{
-    width: 100px;
-    height: 100px;
-    display: inline-block;
+
+.preview-message {
     text-align: left;
+    display: block;
+    font-style: 'FS Elliot Web Regular', sans-serif;
+    color: #2980B9;
+    padding-bottom: 10px;
+}
+
+.sidebarText span{
+    font-size: 12px;
+}
+
+.footer-headline-left{
+    width: 45%;
+    float: left;
+}
+
+.footer-headline-right {
+    width: 45%;
+    float: right;
 }
 
 
 
-
-/* Chrome visual bug fix */
