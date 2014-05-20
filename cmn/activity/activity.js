@@ -30,7 +30,7 @@ active.directive('activityFeed', function() {
             $scope.load = function() {
                 $scope.loading = true;
 
-                SWBrijj.tblm($scope.view, quantity, $scope.iteration * quantity).then(function(feed) {
+                SWBrijj.tblmlimit($scope.view, quantity, $scope.iteration * quantity).then(function(feed) {
                     //Generate the groups for the activity feed
                     angular.forEach(feed, function(event) {
                         event.when = moment(event.time).from(event.timenow);
