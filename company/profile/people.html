@@ -50,29 +50,31 @@
                 <table class="status-table people-table">
                     <tbody>
                     <tr>
+                    
                         <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
                         <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
                         <th></th>
+
                     </tr>
                     </tbody>
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
-                    <tr>
-                        <td style="width:400px" class="shareholder-column docname-column" ng-click="!hideSharebar || gotoPerson(person)">
-                            <ul class="checkboxOption">
-                                <li class="pull-left">
-                                    <div ng-if="!hideSharebar">
-                                        <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                                    </div>
-                                </li>
-                            </ul>
-                
-                            <ul>
-                                <li>{{person.name}}</li>
-                                <li>{{formatLastLogin(person.lastlogin)}}</li>
-                            </ul>
-                        </td>
+                    
+                      
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click="!hideSharebar || gotoPerson(person)">      
+                        <div ng-if="!hideSharebar" class="check-box-side">
+                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
+                             <span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </div>
+            
+                        <ul>
+                            <li>{{person.name}}</li>
+                            <li>{{formatLastLogin(person.lastlogin)}}</li>
+                        </ul>
+                    </td>
+
+                        
+                             
                         <td><span ng-show="person.role=='issuer'">Admin</span></td>
                         <td style="width:50px;">
                             <ul ng-show="person.lastlogin" class="dropdown-list">
@@ -141,7 +143,6 @@
             <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
         </div>
     </div>
-
 </div>
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
     <div class="modalHeader">

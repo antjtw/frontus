@@ -4303,10 +4303,7 @@ div.upgradeWarning > span {
     border: none;
     border-radius: 0;
     box-shadow: none;
-    /*padding: 22px 22px 22px 22px;*/
-/*    display: inline-block;*/
-/*    text-align: center;*/
-/*    position: relative;*/
+
 }
 
 .standard-button.white > button{
@@ -4337,6 +4334,21 @@ div.upgradeWarning > span {
     width: 45%;
     float: right;
 }
+
+
+.check-box-side {
+    float:left;
+    text-align: center;
+    line-height: 26px;
+    padding-right: 20px;
+}
+
+.person-info{
+    margin-left: 40px;
+}
+
+
+
 
 
 
