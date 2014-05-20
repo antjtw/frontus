@@ -31,19 +31,16 @@ active.directive('activityFeed', function() {
                 $scope.loading = true;
 
                 SWBrijj.tblm($scope.view, quantity, $scope.iteration * quantity).then(function(feed) {
-                    if (feed.length < quantity) {
-                        // end of the loading line, do nothing, leave the loading disabled
-                        return;
-                    }
                     //Generate the groups for the activity feed
                     angular.forEach(feed, function(event) {
-                        if (event.activity != "sent") {
-                            event.when = moment(event.time).from(event.timenow);
-                            $scope.activity.push(event);
-                        }
+                        event.when = moment(event.time).from(event.timenow);
+                        $scope.activity.push(event);
                     });
-                    $scope.iteration = $scope.iteration + 1;
-                    $scope.loading = false;
+                    if (feed.length >= quantity) {
+                        // only fetch the next page if the last one was complete
+                        $scope.iteration = $scope.iteration + 1;
+                        $scope.loading = false;
+                    }
                 });
             };
 
