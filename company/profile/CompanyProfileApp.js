@@ -345,16 +345,12 @@ app.controller('CompContactCtrl',
                 $scope.ccModalOpen();
             }
         };
-        
         $scope.startOauth = function(svc) {
-            alert("Starting Oauth");
-            
             if (!(navState.userid && navState.company && navState.role)) {
                 alert("User role not selected.");
                 $scope.response = "User role not selected.";
                 return;
             }
-            alert("Posting");
             $http.post('/amber/cgi/suDbProc.py', {
                 'proc': 'oauth.request_authorization',
                 'service': svc,
@@ -369,10 +365,7 @@ app.controller('CompContactCtrl',
                     alert(x);
                     $scope.response = x;
                 });
-            
-            
         };
-        
         $rootScope.$on('billingLoaded', function(x) {
             $scope.openModalsFromURL();
         });
