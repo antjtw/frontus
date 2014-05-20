@@ -63,6 +63,8 @@ m.directive('composeMessage', function() {
                     $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
+                    $scope.toggleSide();
+                    $scope.resetMessage();
                 }).except(function(err) {
                     void(err);
                     $scope.$emit("notification:fail",
