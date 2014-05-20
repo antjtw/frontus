@@ -1,3 +1,4 @@
+'use strict';
 var active = angular.module('activityDirective', ['ngSanitize']);
 
 function caplength(word, length) {
@@ -16,12 +17,36 @@ active.directive('activityFeed', function() {
         restrict: 'A',
         require: '^activity',
         scope: {
-            activity: '=',
             type: '@',
-            user: '='
+            user: '=',
+            view: '='
         },
         templateUrl: '/cmn/activity/activity.html',
-        controller: ['$scope', function($scope) {
+        controller: ['$scope', 'SWBrijj', function($scope, SWBrijj) {
+            $scope.iteration = 0;
+            $scope.loading = false;
+            $scope.activity = [];
+            var quantity = 10; // number of items to load
+            $scope.load = function() {
+                $scope.loading = true;
+
+                SWBrijj.tblm($scope.view, quantity, $scope.iteration * quantity).then(function(feed) {
+                    if (feed.length < quantity) {
+                        // end of the loading line, do nothing, leave the loading disabled
+                        return;
+                    }
+                    //Generate the groups for the activity feed
+                    angular.forEach(feed, function(event) {
+                        if (event.activity != "sent") {
+                            event.when = moment(event.time).from(event.timenow);
+                            $scope.activity.push(event);
+                        }
+                    });
+                    $scope.iteration = $scope.iteration + 1;
+                    $scope.loading = false;
+                });
+            };
+
         }]
     }
 });
