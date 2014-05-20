@@ -533,16 +533,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
        $scope.emailRecipient = function(person){
-            // var recipients = [];
             if ($scope.recipients.indexOf(person.email)=== -1){
                  $scope.recipients.push(person.email);
             }
-            else{
+            else {
                 var toDelete = $scope.recipients.indexOf(person.email)
                 $scope.recipients.splice(toDelete, 1);
-                console.log($scope.recipients)
             }; 
-            // console.log(recipients);
+            
         };
 
         $scope.recipients = [];
@@ -550,6 +548,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return $scope.recipients.indexOf(person.email) != -1;
             console.log($scope.recipients)
         };
+
+        // $scope.clearCheckbox = function(){
+        //     $scope.recipeints = []
+        // }
 
 
         $scope.narrowopts = {

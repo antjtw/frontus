@@ -65,6 +65,7 @@ m.directive('composeMessage', function() {
                         "Message sent!");
                     $scope.toggleSide();
                     $scope.resetMessage();
+                    $scope.recipients = [];
                 }).except(function(err) {
                     void(err);
                     $scope.$emit("notification:fail",
