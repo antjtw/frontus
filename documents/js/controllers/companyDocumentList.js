@@ -379,15 +379,10 @@ app.controller('CompanyDocumentListController',
             console.log("Posting: " + navState.company + " " + doc.doc_id + " " + doc.docname);
             $http.post('/amber/cgi/dropboxBackupFile.py', {
                 'swid': navState.company,
-                'docid': 1070449048,
-                'filename': 'anothertest.pdf',
+                'docid': doc.doc_id,
+                'filename': doc.docname,
                 'role': 'company'
-            }).success(function(x) {
-                    console.log(x);
-                    window.open(x);
-                })
-                .error(function(x) {
-                    alert(x);
+            }).error(function(x) {
                     $scope.response = x;
                 });
         };
