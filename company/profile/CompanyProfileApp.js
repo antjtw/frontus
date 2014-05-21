@@ -361,6 +361,7 @@ app.controller('CompContactCtrl',
                     console.log(x);
                 })
                 .error(function(x) {
+                    console.log(x);
                     $scope.response = x;
                 });
         };
