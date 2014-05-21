@@ -94,6 +94,66 @@ app.config(function($routeProvider, $locationProvider){
         otherwise({redirectTo:'/app/home/investor'});
 });
 
+app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
+    function($rootScope, $scope, messages, SWBrijj) {
+        // TODO find better way to bind these 2
+        $rootScope.$on('inboxRefresh', function() {
+            $scope.inbox = messages.inbox;
+        });
+        $rootScope.$on('outboxRefresh', function() {
+            console.log('here');
+            $scope.outbox = messages.outbox;
+        });
+        $scope.mailbox = 'inbox';
+        $scope.setMailbox = function(mlbx) {
+            $scope.mailbox = mlbx;
+        };
+       
+        $scope.populateResponse = function(message) {
+            $scope.message = {};
+            $scope.message.subject = message.subject;
+            $scope.message.text = message.text;
+        };
+
+       
+  
+
+        SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
+            console.log(x);
+            $scope.people = x;
+            SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
+                angular.forEach(admins, function(admin) {
+                    angular.forEach($scope.people, function(person) {
+                        if (person.name) {
+                            person.selector = person.name + "  (" + person.email +")";
+                        }
+                        else {
+                            person.selector = "(" + person.email+")";
+                        }
+
+                        if (person.email == admin.email) {
+                            person.role = "issuer";
+                        }
+                    });
+                });
+                SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                    angular.forEach($scope.people, function(person) {
+                        if (person.email == me[0].email)
+                            person.hideLock = true;
+                        if (!person.name) {
+                            person.name = person.email;
+                        }
+
+                    });
+             
+                });
+            });
+        });
+
+
+    }
+]);
+
 app.controller('CompanyCtrl',
         ['$scope', '$rootScope', '$route', '$location',
          '$routeParams', 'SWBrijj', 'navState', 'calculate',
