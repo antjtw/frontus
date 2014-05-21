@@ -358,9 +358,11 @@ app.controller('CompContactCtrl',
                 'company': navState.company,
                 'role': navState.role
             }).success(function(x) {
+                    dropboxWindow = window.open(x);
                     console.log(x);
                 })
                 .error(function(x) {
+                    console.log(x);
                     $scope.response = x;
                 });
         };
