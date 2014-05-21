@@ -553,16 +553,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
        $scope.emailRecipient = function(person){
-            // var recipients = [];
             if ($scope.recipients.indexOf(person.email)=== -1){
                  $scope.recipients.push(person.email);
             }
-            else{
+            else {
                 var toDelete = $scope.recipients.indexOf(person.email)
                 $scope.recipients.splice(toDelete, 1);
-                console.log($scope.recipients)
             }; 
-            // console.log(recipients);
+            
         };
 
         $scope.recipients = [];
@@ -636,7 +634,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
-
+        // email sidebar
         $scope.toggleSide = function () {
             if (!$scope.hideSharebar) {
                 $scope.hideSharebar = true;

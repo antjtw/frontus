@@ -41,6 +41,7 @@ m.directive('composeMessage', function() {
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
                 var recipients = $scope.recipients;
+                $scope.clicked = true;
                  // assume that recipients are valid
                 // var regExp = /\(([^)]+)\)/;
                 // var recipients = [];
@@ -65,10 +66,14 @@ m.directive('composeMessage', function() {
                         "Message sent!");
                     $scope.toggleSide();
                     $scope.resetMessage();
+                    $scope.recipients = [];
+                    $scope.clicked = false;
+
                 }).except(function(err) {
                     void(err);
                     $scope.$emit("notification:fail",
                         "Oops, something went wrong.");
+                    $scope.clicked = false;
                 });
             };
             $scope.readyToSend = function(msg) {
