@@ -26,13 +26,13 @@ m.directive('composeMessage', function() {
                 backdropFade: true,
                 dialogFade: true,
             };
-            // $scope.select2Options = {
-            //     'multiple': true,
-            //     'simple_tags': true,
-            //     'tags': function(){return $scope.investors;},
-            //     'tokenSeparators': [",", " "],
-            //     'placeholder': 'Enter email address & press enter'
-            // };
+            $scope.select2Options = {
+                'multiple': true,
+                'simple_tags': true,
+                'tags': function(){return $scope.investors;},
+                'tokenSeparators': [",", " "],
+                'placeholder': 'Enter email address & press enter'
+            };
 
             
 
@@ -42,6 +42,7 @@ m.directive('composeMessage', function() {
                 var newtext = msg.text.replace(/\n/g, "<br />");
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
+                console.log(recipients)
                  // assume that recipients are valid
                 // var regExp = /\(([^)]+)\)/;
                 // var recipients = [];
