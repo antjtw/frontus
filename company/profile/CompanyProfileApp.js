@@ -360,7 +360,6 @@ app.controller('CompContactCtrl',
             }).success(function(x) {
                     dropboxWindow = window.open(x);
                     console.log(x);
-                    dropboxWindow.close();
                 })
                 .error(function(x) {
                     console.log(x);
