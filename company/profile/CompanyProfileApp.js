@@ -633,7 +633,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 if(emailRecipient === true){
                     email.push(emailRecipient);
                 }
-                console.log(email);
+              
         };
        
     }
