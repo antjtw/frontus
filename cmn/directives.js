@@ -43,7 +43,6 @@ m.directive('composeMessage', function() {
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
                  // assume that recipients are valid
-                 console.log(recipients.length)
                 // var regExp = /\(([^)]+)\)/;
                 // var recipients = [];
     
