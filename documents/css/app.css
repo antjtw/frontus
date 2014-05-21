@@ -1390,7 +1390,7 @@ doc-viewer > .modal-backdrop {
     box-shadow: none;
 }
 
-.docViewerTitle div.small-standard-button {
+.docViewerTitle div.standard-button {
     padding-top: 14px;
     padding-right: 20px;
 }
