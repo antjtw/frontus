@@ -359,10 +359,8 @@ app.controller('CompContactCtrl',
                 'role': navState.role
             }).success(function(x) {
                     console.log(x);
-                    window.open(x);
                 })
                 .error(function(x) {
-                    alert(x);
                     $scope.response = x;
                 });
         };
