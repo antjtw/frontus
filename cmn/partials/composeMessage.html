@@ -39,7 +39,7 @@
         <div class="footer-headline-left">
         <div class = "standard-button green">
             <button class="btn"
-                ng-disabled="!readyToSend(message)"
+                ng-disabled="!readyToSend(message)  || clicked"
                 ng-click="sendMessage(message);">
                 Send
             </button>
