@@ -26,13 +26,13 @@ m.directive('composeMessage', function() {
                 backdropFade: true,
                 dialogFade: true,
             };
-            $scope.select2Options = {
-                'multiple': true,
-                'simple_tags': true,
-                'tags': function(){return $scope.investors;},
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter'
-            };
+            // $scope.select2Options = {
+            //     'multiple': true,
+            //     'simple_tags': true,
+            //     'tags': function(){return $scope.investors;},
+            //     'tokenSeparators': [",", " "],
+            //     'placeholder': 'Enter email address & press enter'
+            // };
 
             
 
