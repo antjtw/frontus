@@ -43,6 +43,7 @@ m.directive('composeMessage', function() {
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
                  // assume that recipients are valid
+                 console.log(recipients.length)
                 // var regExp = /\(([^)]+)\)/;
                 // var recipients = [];
     
@@ -61,7 +62,7 @@ m.directive('composeMessage', function() {
                               newtext
                 ).then(function(x) {
                     void(x);
-                    $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
+                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
                     $scope.toggleSide();
