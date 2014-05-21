@@ -376,7 +376,7 @@ app.controller('CompanyDocumentListController',
             });
         };
         $scope.exportOriginalToDropbox = function(doc) {
-            console.log("Posting: " + company + " " + docid + " " + filename);
+            console.log("Posting: " + navState.company + " " + doc.doc_id + " " + doc.docname);
             $http.post('/amber/cgi/dropboxBackupFile.py', {
                 'company': navState.company,
                 'docid': doc.doc_id,
