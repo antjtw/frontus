@@ -358,8 +358,9 @@ app.controller('CompContactCtrl',
                 'company': navState.company,
                 'role': navState.role
             }).success(function(x) {
+                    dropboxWindow = window.open(x);
                     console.log(x);
-                    window.open(x);
+                    dropboxWindow.close();
                 })
                 .error(function(x) {
                     console.log(x);
