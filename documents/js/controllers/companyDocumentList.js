@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
         ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
          '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-         'basics',
+         'basics', '$http',
     function($scope, $timeout, $modal, $window, $q, $location,
              $routeParams, $rootScope, $route, SWBrijj, navState,
-             basics) {
+             basics, $http) {
         $scope.docShareState={};
         if (navState.role == 'investor') {
             $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -374,6 +374,20 @@ app.controller('CompanyDocumentListController',
             SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
                 document.location.href = url;
             });
+        };
+        $scope.exportOriginalToDropbox = function(doc) {
+            $http.post('/amber/cgi/dropboxBackupFile.py', {
+                'company': navState.company,
+                'docid': doc.doc_id,
+                'filename': doc.docname
+            }).success(function(x) {
+                    console.log(x);
+                    window.open(x);
+                })
+                .error(function(x) {
+                    alert(x);
+                    $scope.response = x;
+                });
         };
         $scope.exportOriginalDocidToPdf = function(docid) {
             SWBrijj.procd('sharewave-' + docid + '.pdf', 'application/pdf', 'document.genOriginalPdf', docid.toString()).then(function(url) {
