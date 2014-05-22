@@ -1592,16 +1592,25 @@
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
                             <div class="headsection row-fluid tabbed">
-                                <h1>Summary</h1>
+                                <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
                             </div>
 
                             <div class="summary-bar">
-                                <p ng-show="lastPostMoney()" class="belowTitle"><span ng-bind="lastPostMoney()"></span><span>Latest Post-Money Valuation</span></p>
-                                <p ng-show="false" class="belowTitle"><span ng-bind="lastIssue() | date:settings.shortdate"></span><span>Date of last valuation</span></p>
-                                <p ng-show="false" class="belowTitle"><span ng-bind="pricePerShare()"></span><span>Price-per-share</span></p>
-                                <p ng-show="totalPaid(rows)" class="belowTitle"><span ng-bind="totalPaid(rows)"></span><span>Total Invested</span></p>
-                                <p ng-show="totalShares(rows)" class="belowTitle"><span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span></p>
-                                <p ng-show="numShareholders()" class="belowTitle"><span ng-bind="numShareholders()"></span><span>Shareholders</span></p>
+                                <div ng-show="totalPaid(rows)" class="belowTitle">
+                                    <div>
+                                        <span ng-bind="totalPaid(rows)"></span><span>Total Invested</span>
+                                    </div>
+                                </div>
+                                <div ng-show="totalShares(rows)" class="belowTitle">
+                                    <div>
+                                        <span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span>
+                                    </div>
+                                </div>
+                                <div ng-show="numShareholders()" class="belowTitle">
+                                    <div>
+                                        <span ng-bind="numShareholders()"></span><span>Shareholders</span>
+                                    </div>
+                                </div>
                             </div>
                         </span>
                       </span>

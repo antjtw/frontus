@@ -953,11 +953,13 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #1E2D3D;
 }
 .subnav-controls {
+    box-sizing: border-box;
     height: 60px;
     white-space: nowrap;
     margin: 0;
     background-color: #F1F1F1;
     text-align: center;
+    border-bottom: 1px solid #C6C6C6;
 }
 .subnav-controls span {
     font-size: 10px;
@@ -4311,7 +4313,6 @@ div.upgradeWarning > span {
   /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
-    margin-bottom: ;
 }
 .sidebarText p {
     text-align: left;
@@ -4338,7 +4339,7 @@ div.upgradeWarning > span {
 .preview-message {
     text-align: left;
     display: block;
-    font-style: 'FS Elliot Web Regular', sans-serif;
+    font-family: 'FS Elliot Web Regular', sans-serif;
     color: #2980B9;
     padding-bottom: 10px;
 }

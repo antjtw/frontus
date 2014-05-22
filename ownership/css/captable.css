@@ -345,7 +345,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     float: right;
     margin-left: 0;
     width: 350px;
-    border-left: 6px solid #E3E3E3;
+    border-left: 1px solid #C6C6C6;
+    background-color: #F1F1F1;
 }
 
 .slidingcss25 {
@@ -442,9 +443,24 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-bottom: 20px;
 }
 
-.capright .in-brief p {
+.capright .in-brief > div > div:first-of-type {
+    border-top: 1px solid #C6C6C6;
+}
+
+.capright .in-brief > div > div {
     font-size: 14px;
-    margin-bottom: 25px;
+    border-bottom: 1px solid #C6C6C6;
+    height: 55px;
+    margin-right: 40px;
+}
+
+.capright .in-brief div > div > div {
+    padding-top: 12px;
+    height: 30px;
+}
+
+.capright .in-brief div > div > div > span {
+    line-height: 15px;
 }
 
 .capright .in-brief span {
