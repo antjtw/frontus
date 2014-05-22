@@ -598,6 +598,20 @@ p.rightTitle {
     position: relative;
 }
 
+p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
+    left: -23px !important;
+}
+
+div.rightTitle.interest-rate span.tooltip-icon {
+    margin-top: -8px;
+}
+
+
+div.rightTitle.interest-rate span.tooltip-icon + .tooltip {
+    left: -77px !important;
+}
+
+
 p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
     margin-top: -5px;
 }
