@@ -1,3 +1,4 @@
+'use strict';
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
          'payments', '$route', '$filter', '$location',
@@ -674,28 +675,15 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             SWBrijj.tblmm('document.my_counterparty_library', 'investor', $scope.user.email).then(function(data) {
                 $scope.docs = data;
                 $scope.getDocumentActivity();
-                $scope.getCompanyActivity();
                 $scope.getCompanyAccess();
             }).except(function(err) {
                 console.log(err);
             });
         };
 
-        $scope.getCompanyActivity = function() {
-            SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
+        $scope.activityFeed = "global.get_company_activity";
+        $scope.activityFeedFilter = "email";
 
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-                $scope.feed = [];
-                angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent") {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.feed.push(event);
-                    }
-                });
-            }).except(function(err) {
-            });
-        };
         $scope.getDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "person", $scope.user.email).then(function(data) {
                 $scope.setDocsLastEvent(data);
@@ -769,9 +757,6 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             return -card.time;
         };
 
-        SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(data) {
-            $scope.activity = data;
-        });
         $scope.shortStatus = function(version) {
             if (!version) return "";
             if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
