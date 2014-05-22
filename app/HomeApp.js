@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
          'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
          'homeDirectives', 'activityDirective', 'commonDirectives',
          'ui.select2','documents', 'docServices', 'angularPayments',
-         'bootstrap-tagsinput']);
+         'bootstrap-tagsinput', 'infinite-scroll']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -194,7 +194,6 @@ app.controller('CompanyCtrl',
             $scope.getTokenInfo();
             $scope.getDocumentInfo();
             $scope.getOwnershipInfo();
-            $scope.getActivityFeed();
         });
 
         if ($routeParams.msg) {
@@ -381,20 +380,7 @@ app.controller('CompanyCtrl',
             });
         };
 
-        $scope.getActivityFeed = function() {
-            $scope.activity = [];
-            SWBrijj.tblm('global.get_recent_company_activity').then(function(feed) {
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-                $scope.feed = [];
-                angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent") {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.feed.push(event);
-                    }
-                });
-            });
-        };
+	$scope.activityView = "global.get_company_activity";
 
         $scope.activityOrder = function(card) {
             return -card.time;
@@ -544,7 +530,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.person.namekey = $scope.person.name;
 
             $scope.getTokenInfo();
-            $scope.getActivityFeed();
             $scope.getOwnershipInfo();
             $scope.getDocumentInfo();
         });
@@ -584,23 +569,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             return -card.time;
         };
 
-        $scope.getActivityFeed = function() {
-            $scope.activity = [];
-            SWBrijj.tblm('global.get_investor_activity').then(function(feed) {
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-                $scope.feed = [];
-                angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent" && event.activity != "viewed") {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.feed.push(event);
-                    }
-                });
-            });
-        };
+	$scope.activityView = "global.get_investor_activity";
 
         $scope.getOwnershipInfo = function() {
             $scope.ownersummary = {};
