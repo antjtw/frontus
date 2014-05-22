@@ -714,6 +714,14 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
+        SWBrijj.tblm('oauth.my_tokens').then(function(data) {
+            if (!data.length)
+            {
+                $scope.access_token = null;
+                return;
+            }
+            $scope.access_token = data[0].access_token;
+        });
 
         //I don't love this but it works, should probably make a directive.
         if ($rootScope.companyIsZombie()) {
