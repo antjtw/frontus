@@ -359,7 +359,11 @@ app.controller('CompContactCtrl',
                 'company': navState.company,
                 'role': navState.role
             }).success(function(x) {
-                    dropboxWindow = window.open(x);
+                    window.oauthSuccessCallback = function (){
+                        $scope.access_token = 1;
+                        alert("Authentication succeeded.");
+                    };
+                    window.open(x);
                     console.log(x);
                 })
                 .error(function(x) {
