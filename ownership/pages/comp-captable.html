@@ -1455,8 +1455,11 @@
                             <h1>{{activeInvestor}}
                             </h1>
                         </div>
-                        <tabset class="trantabs">
-                            <tab ng-repeat="tran in activeTran | orderBy:'date' track by $index" heading="{{tran.date | date:settings.shortdate}}" active="tran.active">
+                        <accordion close-others="true">
+                        <accordion-group is-open="tran.active" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
+                            <accordion-heading>
+                                {{tran.date | date:settings.shortdate}} Transaction
+                            </accordion-heading>
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
@@ -1541,37 +1544,42 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </tab>
-                        </tabset>
+                            </accordion-group>
+                        </accordion>
                       </span>
 
-                      <span ng-switch-when="3">
-                        <div class="headsection row-fluid">
-                            <h1>{{activeInvestorName}}
-                                <ul class="dropdown-list transaction-icon pull-right" ng-show="activeInvestorEmail">
-                                    <li class="dropdown standard menu-drop">
-                                        <a class="dropdown-toggle">
-                                            <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li ng-click="accessmodalUp(activeInvestorEmail);">Edit Permissions</li>
-                                            <li ng-show="activeInvestorRealName" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">View Profile</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </h1>
-
-                            <p ng-show="activeInvestorEmail">Info on this shareholder</p>
+                      <span class="capGuide in-brief" ng-switch-when="3">
+                        <div class="headsection row-fluid tabbed company-info">
+                                <h1><img ng-src="{{ navState.company && '/photo/user?id='+activeInvestorEmail || '' }}">{{activeInvestorName}}</h1>
                         </div>
-                        <div ng-show="activeInvestorEmail" class="row-fluid trancore">
-                            <div>
-                                <p>
-                                    {{activeInvestorEmail}}
-                                    <span ng-hide="toggleView();" ng-click="alterEmailModalUp(activeInvestorEmail);" data-icon="&#xe00e;" aria-hidden="true"></span>
-                                </p>
+                        <div ng-show="userDict[activeInvestorEmail]" class="summary-bar">
+                            <div class="belowTitle">
+                                <img src="/img/activity/login.png">
+                                <div>
+                                    <span>{{userDict[activeInvestorEmail].lastlogin | date:settings.shortdate}}</span><span>Last Login</span>
+                                </div>
                             </div>
-                            <div class="DivHelper"></div>
+                            <div class="belowTitle">
+                                <img src="/img/activity/received.png">
+                                <div>
+                                    <span>{{userDict[activeInvestorEmail].received | date:settings.shortdate}}</span><span>Delivered</span>
+                                </div>
+                            </div>
+                            <div class="belowTitle">
+                                <img src="/img/activity/view.png">
+                                <div>
+                                    <span>{{userDict[activeInvestorEmail].viewed | date:settings.shortdate}}</span><span>Last Viewed</span>
+                                </div>
+                            </div>
+                            <div class="belowTitle">
+                                <img src="/img/activity/permissions.png">
+                                <div>
+                                    <span>{{userDict[activeInvestorEmail].level}}</span><span>Permissions</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <span ng-show="userDict[activeInvestorEmail]" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">View Full Profile</span>
                       </span>
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">

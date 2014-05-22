@@ -106,14 +106,39 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $('.tour-box').affix({});
 
 
-
-    // This call is only here for Intercom (Data is not otherwise available on the page)
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         Intercom('update', {company : {'captable_shares':data.length}});
-    });
-
-    SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         $scope.userstatuses = data;
+
+        $scope.userStatus = data;
+        $scope.userDict = {};
+        for (var i = 0; i < $scope.userstatuses.length; i++) {
+            $scope.userDict[$scope.userstatuses[i].email] = {};
+            $scope.userDict[$scope.userstatuses[i].email].name = ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
+            $scope.userDict[$scope.userstatuses[i].email].shown = false;
+            $scope.userDict[$scope.userstatuses[i].email].level = $scope.userstatuses[i].level;
+        }
+        SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
+            angular.forEach($scope.userstatuses, function (person) {
+                angular.forEach(activities, function (activity) {
+                    if (activity.email == person.email) {
+                        var act = activity.activity;
+                        var time;
+                        time = activity.event_time;
+                        $scope.userDict[person.email][act] = time;
+                    }
+                });
+            });
+        });
+        SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
+            angular.forEach($scope.userStatus, function (person) {
+                angular.forEach(logins, function (login) {
+                    if (login.email == person.email) {
+                        $scope.userDict[person.email].lastlogin = login.logintime;
+                    }
+                });
+            });
+        });
     });
 
     $scope.generateCaptable = function(names) {
