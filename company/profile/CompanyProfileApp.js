@@ -352,7 +352,7 @@ app.controller('CompContactCtrl',
                 $scope.response = "User role not selected.";
                 return;
             }
-            $http.post('/amber/cgi/suDbProc.py', {
+            $http.post('/cgi/suDbProc.py', {
                 'proc': 'oauth.request_authorization',
                 'service': svc,
                 'userid': navState.userid,
