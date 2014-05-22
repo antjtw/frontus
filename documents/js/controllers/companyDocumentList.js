@@ -376,16 +376,13 @@ app.controller('CompanyDocumentListController',
             });
         };
         $scope.exportOriginalToDropbox = function(doc) {
+            console.log("Posting: " + navState.company + " " + doc.doc_id + " " + doc.docname);
             $http.post('/amber/cgi/dropboxBackupFile.py', {
-                'company': navState.company,
+                'swid': navState.company,
                 'docid': doc.doc_id,
-                'filename': doc.docname
-            }).success(function(x) {
-                    console.log(x);
-                    window.open(x);
-                })
-                .error(function(x) {
-                    alert(x);
+                'filename': doc.docname,
+                'role': 'company'
+            }).error(function(x) {
                     $scope.response = x;
                 });
         };

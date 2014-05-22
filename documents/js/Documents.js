@@ -1305,10 +1305,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.showPages = function() {
-            return $scope.range($scope.pageScroll,
-                                Math.min($scope.pageScroll + $scope.pageBarSize,
-                                         $scope.annotatedPages.length)
-                                ).map(function(i){return $scope.annotatedPages[i];});
+            return $scope.annotatedPages;
         };
 
         $scope.morePages = function() {

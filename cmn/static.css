@@ -54,6 +54,7 @@
 
 .static .person-block {
     margin-top: 100px;
+    overflow: auto;
 }
 
 .static .person-block > img {
