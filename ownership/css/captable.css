@@ -41,7 +41,7 @@ div.last-saved {
 }
 
 .capGuide.cap-overflow {
-    overflow: auto;
+    overflow: visible;
 }
 
 .capGuide.grants {
@@ -652,6 +652,7 @@ p.belowTitle {
     display: inline-block;
     width: 160px;
     float: left;
+    position: relative;
 }
 
 .belowTitle > span:first-child {
