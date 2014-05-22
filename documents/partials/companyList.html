@@ -178,7 +178,7 @@
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
                                                         <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
+                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
                                                         <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
                                                         <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
