@@ -102,9 +102,9 @@ navm.directive('navbar', function () {
 
 navm.controller('NavCtrl',
                 ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
-                 'navState', '$location', '$filter', 'payments',
+                 'navState', '$location', '$filter', 'payments', 'logService',
     function($scope, $route, $rootScope, SWBrijj, $q, $window,
-             navState, $location, $filter, payments)
+             navState, $location, $filter, payments, logService)
     {
         $scope.companies = [];
 
@@ -343,6 +343,14 @@ navm.controller('NavCtrl',
 
         $rootScope.$on('notification:fail', function (event, message, callback) {
             $scope.notiFn('fail',message,callback);
+        });
+
+        $rootScope.$on('dblog:updated', function(event, message) {
+            // TODO is there a better way to aggregate these?
+            if (logService.log.length >= 5) {
+                SWBrijj.logAccess(JSON.stringify(logService.log));
+                logService.clearLog();
+            }
         });
 
         $scope.notiFn = function(color, message, callback) {
