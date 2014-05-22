@@ -1,3 +1,4 @@
+'use strict';
 app.controller('CompContactCtrl',
         ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
          'payments', '$route', '$filter', '$location',
@@ -421,6 +422,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
+        $scope.hideSharebar = true;
+        $scope.sidebarPage = null;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -531,6 +534,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.addAdminModal = false;
         };
 
+       $scope.emailRecipient = function(person){
+            if ($scope.recipients.indexOf(person.email)=== -1){
+                 $scope.recipients.push(person.email);
+            }
+            else {
+                var toDelete = $scope.recipients.indexOf(person.email)
+                $scope.recipients.splice(toDelete, 1);
+            }; 
+            
+        };
+
+        $scope.recipients = [];
+        $scope.personIs = function(person){
+            return $scope.recipients.indexOf(person.email) != -1;
+            console.log($scope.recipients)
+        };
+
+
         $scope.narrowopts = {
             backdropFade: true,
             dialogFade: true,
@@ -595,6 +616,27 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
+        // email sidebar
+        $scope.toggleSide = function(button) {
+            if (!$scope.hideSharebar) {
+                $scope.hideSharebar = true;
+            } 
+            else {
+                $scope.hideSharebar = false;
+                $scope.sidebarPage = button;
+            };
+        };
+
+     
+
+        $scope.getRecipients = function() {
+                var email = [];
+                if(emailRecipient === true){
+                    email.push(emailRecipient);
+                }
+              
+        };
+       
     }
 ]);
 
@@ -633,28 +675,16 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             SWBrijj.tblmm('document.my_counterparty_library', 'investor', $scope.user.email).then(function(data) {
                 $scope.docs = data;
                 $scope.getDocumentActivity();
-                $scope.getCompanyActivity();
                 $scope.getCompanyAccess();
             }).except(function(err) {
                 console.log(err);
             });
         };
 
-        $scope.getCompanyActivity = function() {
-            SWBrijj.tblmm('global.get_company_activity', 'email', $scope.user.email).then(function(feed) {
+        $scope.activityFeed = "global.get_company_activity";
+        $scope.activityFeedFilter = "email";
+        $scope.activityFeedFilterVal = userId;
 
-                var originalfeed = feed;
-                //Generate the groups for the activity feed
-                $scope.feed = [];
-                angular.forEach(originalfeed, function(event) {
-                    if (event.activity != "sent") {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.feed.push(event);
-                    }
-                });
-            }).except(function(err) {
-            });
-        };
         $scope.getDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "person", $scope.user.email).then(function(data) {
                 $scope.setDocsLastEvent(data);
@@ -728,9 +758,6 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             return -card.time;
         };
 
-        SWBrijj.tblmm('global.get_company_activity', 'email', userId).then(function(data) {
-            $scope.activity = data;
-        });
         $scope.shortStatus = function(version) {
             if (!version) return "";
             if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {

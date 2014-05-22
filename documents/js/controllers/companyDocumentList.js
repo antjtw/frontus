@@ -92,7 +92,7 @@ app.controller('CompanyDocumentListController',
                         } else {
                             $scope.updateShareType(doc, -1);
                             $scope.$emit("notification:fail",
-                                "Oops, the document is not ready for signature. Please try again.");
+                                "Progress saved but document not yet ready for signature.");
                         }
                     }
                 }); 

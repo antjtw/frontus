@@ -6,7 +6,7 @@ m.directive('composeMessage', function() {
         replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
         function($scope, $rootScope, SWBrijj) {
             $scope.getInvestors = function() {
                 $scope.investors = [];
@@ -14,6 +14,7 @@ m.directive('composeMessage', function() {
                     $scope.investors.push(p.selector);
                 });
             };
+
             $scope.getInvestors();
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
@@ -24,7 +25,6 @@ m.directive('composeMessage', function() {
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true,
-                dialogClass: 'compose-modal widerModal modal'
             };
             $scope.select2Options = {
                 'multiple': true,
@@ -33,22 +33,27 @@ m.directive('composeMessage', function() {
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email address & press enter'
             };
-            $scope.composeModalOpen = function() {
-                $scope.composeModal = true;
-            };
+
+            
+
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br />");
-                var regExp = /\(([^)]+)\)/;
-                var recipients = [];
-                angular.forEach(msg.recipients, function(person) {
-                    var matches = regExp.exec(person);
-                    if (matches == null) {
-                        matches = ["", person];
-                    }
-                    recipients.push(matches[1]);
-                });
+                var recipients = $scope.recipients;
+                $scope.clicked = true;
+                console.log(recipients)
+                 // assume that recipients are valid
+                // var regExp = /\(([^)]+)\)/;
+                // var recipients = [];
+    
+                // angular.forEach(msg.recipients, function(person) {
+                //     var matches = regExp.exec(person);
+                //     if (matches == null) {
+                //         matches = ["", person];
+                //     }
+                //     recipients.push(matches[1]);
+                // });
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -57,35 +62,40 @@ m.directive('composeMessage', function() {
                               newtext
                 ).then(function(x) {
                     void(x);
-                    $rootScope.billing.usage.direct_messages_monthly += msg.recipients.length;
+                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
                     $scope.$emit("notification:success",
                         "Message sent!");
-                    $scope.composeModalClose();
+                    $scope.toggleSide();
+                    $scope.resetMessage();
+                    $scope.recipients = [];
+                    $scope.clicked = false;
+
                 }).except(function(err) {
                     void(err);
                     $scope.$emit("notification:fail",
                         "Oops, something went wrong.");
+                    $scope.clicked = false;
                 });
             };
             $scope.readyToSend = function(msg) {
-                $scope.getInvestors();
-                var anybad = false;
-                if (msg.recipients.length===0
+                // $scope.getInvestors();
+                // var anybad = false;
+                if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
                 }
-                angular.forEach(msg.recipients, function(e) {
-                    if ($scope.investors.indexOf(e) === -1) {
-                        anybad = true;
-                    }
-                });
-                return !anybad;
+                else {
+                    return true;
+                }
+                // angular.forEach(msg.recipients, function(e) {
+                //     if ($scope.investors.indexOf(e) === -1) {
+                //         anybad = true;
+                //     }
+                // });
+                // return !anybad;
             };
-            $scope.composeModalClose = function() {
-                $scope.resetMessage();
-                $scope.composeModal = false;
-            };
+
         }]
     };
 });

@@ -653,7 +653,6 @@ textarea.email-text {
     margin-left: 0;
     width: 350px;
     border-left: 6px solid white;
-    padding-top: 14px;
     padding-left: 20px;
     padding-right: 40px;
 }
@@ -1391,7 +1390,7 @@ doc-viewer > .modal-backdrop {
     box-shadow: none;
 }
 
-.docViewerTitle div.small-standard-button {
+.docViewerTitle div.standard-button {
     padding-top: 14px;
     padding-right: 20px;
 }
