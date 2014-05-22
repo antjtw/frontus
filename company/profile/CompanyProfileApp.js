@@ -532,7 +532,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
         };
-
+        
+        //want the email directive to bind to this property in the controller
        $scope.emailRecipient = function(person){
             if ($scope.recipients.indexOf(person.email)=== -1){
                  $scope.recipients.push(person.email);
@@ -616,7 +617,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
         };
         $scope.showSharebar = function() {
-            console.log($scope.hideSharebar);
             return !$scope.hideShareBar;
         }
         // email sidebar
@@ -624,9 +624,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             // console.log(button);
             if (!$scope.hideSharebar && button==undefined) {
                 $scope.hideSharebar = true;
-                console.log(button);
-                console.log($scope.hideSharebar);
-                // $scope.sidebarPage = button
+
+                $scope.sidebarPage = button
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;

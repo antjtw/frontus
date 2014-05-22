@@ -81,6 +81,8 @@ m.directive('composeMessage', function() {
             $scope.readyToSend = function(msg) {
                 // $scope.getInvestors();
                 // var anybad = false;
+                console.log($scope.recipients)
+
                 if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
