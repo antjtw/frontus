@@ -531,6 +531,7 @@ div.rightTitle {
     height: 32px;
     line-height: 32px;
     margin: 0 0 10px 0;
+    position: relative;
 }
 
 div.rightTitle.double > span, p.rightTitle.double > span {
@@ -602,8 +603,8 @@ p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-ic
 }
 
 .rightTitle > div.tooltip {
-    left: auto !important;
-    right: 12px !important;
+    left: 96px !important;
+    right: auto !important;
     width: 200px;
 }
 
