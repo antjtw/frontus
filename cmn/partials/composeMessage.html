@@ -40,7 +40,7 @@
         <div class = "standard-button green">
             <button class="btn"
                 ng-disabled="!readyToSend(message)  || clicked"
-                ng-click="sendMessage(message);">
+                ng-click="sendMessage(message); $parent.toggleSide()">
                 Send
             </button>
         </div>
@@ -51,7 +51,7 @@
 
         <div class="footer-headline-right">
         <div class= "standard-button white">
-            <button class="btn" ng-click="toggleSide(); resetMessage()">
+            <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
             Cancel
             </button>
         </div>

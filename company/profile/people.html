@@ -30,7 +30,7 @@
 
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || adminModalOpen();"
+                         ng-click="companyIsZombie() || toggleSide('hi');"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
@@ -97,10 +97,14 @@
                 </table>
             </div>
         </div>
-        <div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
+        <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
-                slidingcss25:oldSafari()}" class="span4 capright button-offset">
-                    <compose-message></compose-message>
+                slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
+                <compose-message ng-switch-when="email">
+                 </compose-message>
+                <div ng-switch-when= "hi">
+                        hello
+                </div>
         </div>
     </div>
 

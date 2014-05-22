@@ -615,11 +615,22 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.$emit("notification:fail", "Something went wrong, please try again later.");
             });
         };
+        $scope.showSharebar = function() {
+            console.log($scope.hideSharebar);
+            return !$scope.hideShareBar;
+        }
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar) {
+            // console.log(button);
+            if (!$scope.hideSharebar && button==undefined) {
                 $scope.hideSharebar = true;
+                console.log(button);
+                console.log($scope.hideSharebar);
+                // $scope.sidebarPage = button
             } 
+            else if(!$scope.hideSharebar && button){
+                $scope.sidebarPage = button;
+            }
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
