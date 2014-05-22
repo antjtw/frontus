@@ -19,7 +19,9 @@ active.directive('activityFeed', function() {
         scope: {
             type: '@',
             user: '=',
-            view: '='
+            view: '=',
+            filter: '=',
+            filterVal: '='
         },
         templateUrl: '/cmn/activity/activity.html',
         controller: ['$scope', 'SWBrijj', function($scope, SWBrijj) {
@@ -27,21 +29,25 @@ active.directive('activityFeed', function() {
             $scope.loading = false;
             $scope.activity = [];
             var quantity = 10; // number of items to load
+            function processFeed(feed) {
+                //Generate the groups for the activity feed
+                angular.forEach(feed, function(event) {
+                    event.when = moment(event.time).from(event.timenow);
+                    $scope.activity.push(event);
+                });
+                if (feed.length >= quantity) {
+                    // only fetch the next page if the last one was complete
+                    $scope.iteration = $scope.iteration + 1;
+                    $scope.loading = false;
+                }
+            }
             $scope.load = function() {
                 $scope.loading = true;
-
-                SWBrijj.tblmlimit($scope.view, quantity, $scope.iteration * quantity).then(function(feed) {
-                    //Generate the groups for the activity feed
-                    angular.forEach(feed, function(event) {
-                        event.when = moment(event.time).from(event.timenow);
-                        $scope.activity.push(event);
-                    });
-                    if (feed.length >= quantity) {
-                        // only fetch the next page if the last one was complete
-                        $scope.iteration = $scope.iteration + 1;
-                        $scope.loading = false;
-                    }
-                });
+                if ($scope.filter == null) {
+                    SWBrijj.tblmlimit($scope.view, quantity, $scope.iteration * quantity).then(processFeed);
+                } else {
+                    SWBrijj.tblmmlimit($scope.view, $scope.filter, $scope.filterVal, quantity, $scope.iteration * quantity).then(processFeed);
+                }
             };
 
         }]
