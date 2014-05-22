@@ -701,6 +701,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
 
         $scope.activityFeed = "global.get_company_activity";
         $scope.activityFeedFilter = "email";
+        $scope.activityFeedFilterVal = userId;
 
         $scope.getDocumentActivity = function() {
             SWBrijj.tblmm("document.company_activity", "person", $scope.user.email).then(function(data) {
