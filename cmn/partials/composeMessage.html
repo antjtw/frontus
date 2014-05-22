@@ -7,7 +7,7 @@
 
     <div class="sidebarText">
         <div class="input-list">
-        <div ng-if="triggerUpgradeMessages(message.recipients)"
+        <div ng-if="triggerUpgradeMessages(recipients)"
             class="upgradeWarning">
                 <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
             </div> 
@@ -51,7 +51,7 @@
 
         <div class="footer-headline-right">
         <div class= "standard-button white">
-            <button class="btn" ng-click="toggleSide()">
+            <button class="btn" ng-click="toggleSide(); resetMessage()">
             Cancel
             </button>
         </div>

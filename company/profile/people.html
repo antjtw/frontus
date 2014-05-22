@@ -10,12 +10,13 @@
                         <div class="pull-left" >
                             <span>SEARCH</span>
                             <input type="text" class="search-box" ng-model="filterText">
+                            {{sidebarPage}}
                         </div>
                     </div>
-                   <!--  <compose-message/></compose-message> -->
+                 
                     <div class="box-button pull-right"
                          ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide();"
+                         ng-click="companyIsZombie() || toggleSide('email')"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -99,7 +100,7 @@
         <div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
-            <compose-message/></compose-message>
+                    <compose-message></compose-message>
         </div>
     </div>
 

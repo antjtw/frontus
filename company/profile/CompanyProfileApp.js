@@ -443,7 +443,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
-            $scope.hideSharebar = true;
+        $scope.hideSharebar = true;
+        $scope.sidebarPage = null;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -637,21 +638,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
         };
         // email sidebar
-        $scope.toggleSide = function () {
+        $scope.toggleSide = function(button) {
             if (!$scope.hideSharebar) {
                 $scope.hideSharebar = true;
             } 
             else {
                 $scope.hideSharebar = false;
+                $scope.sidebarPage = button;
             };
         };
+
+     
 
         $scope.getRecipients = function() {
                 var email = [];
                 if(emailRecipient === true){
                     email.push(emailRecipient);
                 }
-                console.log(email);
+              
         };
        
     }
