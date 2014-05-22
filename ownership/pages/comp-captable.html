@@ -1360,13 +1360,12 @@
 
 <!-- Issues Side Bar when UnEditable -->
                       <span ng-switch-when="5">
-                        <div class="headsection row-fluid">
-                            <h1>{{activeIssue.issue}}
-                            </h1>
-                        </div>
 
                         <!-- Global Tab -->
                             <div class="capGuide cap-overflow global">
+
+                                <p class="belowTitle"><span ng-bind="activeIssue.issue"></span><span>SECURITY NAME</span></p>
+
                                 <p class="belowTitle"><span ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
 
                                 <p ng-show="activeIssue.type" class="belowTitle"><span ng-bind="activeIssue.type"></span><span>SECURITY TYPE</span></p>
@@ -1591,22 +1590,25 @@
                             </div>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
-                            <div class="headsection row-fluid tabbed">
+                            <div class="headsection row-fluid tabbed company-info">
                                 <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
                             </div>
 
                             <div class="summary-bar">
                                 <div ng-show="totalPaid(rows)" class="belowTitle">
+                                    <img src="/img/activity/invested.png">
                                     <div>
                                         <span ng-bind="totalPaid(rows)"></span><span>Total Invested</span>
                                     </div>
                                 </div>
                                 <div ng-show="totalShares(rows)" class="belowTitle">
+                                    <img src="/img/activity/sharews.png">
                                     <div>
                                         <span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span>
                                     </div>
                                 </div>
                                 <div ng-show="numShareholders()" class="belowTitle">
+                                    <img src="/img/activity/people.png">
                                     <div>
                                         <span ng-bind="numShareholders()"></span><span>Shareholders</span>
                                     </div>

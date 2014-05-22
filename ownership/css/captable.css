@@ -384,6 +384,17 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border: none;
 }
 
+.capright .headsection.company-info {
+    margin-bottom: 37px;
+}
+
+.capright .headsection.company-info  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 3px;
+    margin-right: 20px;
+}
+
 .capright .headsection {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     padding-left: 20px;
@@ -454,13 +465,27 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-right: 40px;
 }
 
-.capright .in-brief div > div > div {
-    padding-top: 12px;
-    height: 30px;
+.capright .in-brief div.belowTitle > img {
+    vertical-align: top;
+    margin-top: 13px;
+    margin-right: 10px;
 }
 
-.capright .in-brief div > div > div > span {
+.capright .in-brief div.belowTitle > div {
+    padding-top: 14px;
+    height: 30px;
+    display: inline-block;
+}
+
+.capright .in-brief div.belowTitle > div > span {
     line-height: 15px;
+}
+
+.capright .in-brief div.belowTitle > div > span:last-child {
+    text-transform: uppercase;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-size: 10px;
+    color: #A5A5A5;
 }
 
 .capright .in-brief span {
@@ -680,7 +705,7 @@ div.rightTitle.interest-rate {
 
 p.belowTitle {
     display: inline-block;
-    width: 160px;
+    width: 100%;
     float: left;
     position: relative;
 }
