@@ -7,27 +7,27 @@
     <title>Authentication Successful</title>
 </head>
 <body>
-<div class="wrap">
-    <navbar></navbar>
-    <div class="spacer100"></div>
-    <div class="row-fluid">
-        <div class="span12 text-center">
-            <a href="/"><img src="/img/ike-yay.png" alt="yay!" /> </a>
+    <div class="wrap">
+        <navbar></navbar>
+        <div class="spacer100"></div>
+        <div class="row-fluid">
+            <div class="span12 text-center">
+                <a href="/"><img src="/img/ike-yay.png" alt="yay!" /> </a>
+            </div>
         </div>
+        <div class="spacer10"></div>
+        <div class="row-fluid">
+            <div class="span12 text-center"><h1>Success!</h1></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12 text-center"><h2>You have successfully authenticated Dropbox.</h2></div>
+        </div>
+        <div class="minimumGap"></div>
+        <div class="push"></div>
     </div>
-    <div class="spacer10"></div>
-    <div class="row-fluid">
-        <div class="span12 text-center"><h1>Success!</h1></div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12 text-center"><h2>You have successfully authenticated Dropbox.</h2></div>
-    </div>
-    <div class="minimumGap"></div>
-    <div class="push"></div>
-</div>
-<script>
-    window.opener.oauthSuccessCallback();
-    setTimeout(function(){window.close();}, 3000);
-</script>
+    <script>
+        window.opener.oauthSuccessCallback();
+        setTimeout(function(){window.close();}, 3000);
+    </script>
 </body>
 </html>
