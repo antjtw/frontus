@@ -715,6 +715,10 @@ navm.controller('NavCtrl',
             }
         };
 
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
+
         //I don't love this but it works, should probably make a directive.
         if ($rootScope.companyIsZombie()) {
             $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
