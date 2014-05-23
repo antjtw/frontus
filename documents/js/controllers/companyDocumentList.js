@@ -382,7 +382,9 @@ app.controller('CompanyDocumentListController',
                 'docid': doc.doc_id,
                 'filename': doc.docname,
                 'role': 'company'
-            }).error(function(x) {
+            }).success(function(x) {
+                    $scope.$emit("notification:success", "Successfully Uploaded to Dropbox");
+                }).error(function(x) {
                     $scope.response = x;
                 });
         };
