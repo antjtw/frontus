@@ -714,13 +714,9 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
-        SWBrijj.tblm('oauth.my_tokens').then(function(data) {
-            if (!data.length)
-            {
-                $scope.access_token = null;
-                return;
-            }
-            $scope.access_token = data[0].access_token;
+        SWBrijj.view('select swid from oauth.my_tokens where access_token is not null;'.then(function(data) {
+            $scope.access_token = data.length;
+            console.log(data.length);
         });
 
         //I don't love this but it works, should probably make a directive.
