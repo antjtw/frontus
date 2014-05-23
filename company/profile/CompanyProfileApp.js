@@ -364,7 +364,6 @@ app.controller('CompContactCtrl',
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                         alert("Linked to Dropbox");
                     };
-                    $rootScope.$emit("notification:success", "Starting");
                     window.open(x);
                     console.log(x);
                 })
