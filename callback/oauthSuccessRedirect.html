@@ -3,9 +3,8 @@
 <body>
 	<script>
 	    var domain = window.opener.location.hostname;
-	    alert(domain);
-	    alert(domain + "/callback/oauthSuccess.html");
-	    window.location.assign("https://" + domain + "/callback/oauthSuccess.html");
+	    var prot = window.opener.location.protocol;
+	    window.location.assign(prot + "//" + domain + "/callback/oauthSuccess.html");
     </script>
 </body>
 </html>
