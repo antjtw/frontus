@@ -715,12 +715,9 @@ navm.controller('NavCtrl',
             }
         };
         SWBrijj.procm('oauth.token_num').then(function(data) {
-            $scope.access_token = data.length;
-            console.log(data);
-            if (data.length > 0)
-            {
-                console.log(data[0]);
-            }
+            $scope.access_token = data[0]['token_num'];
+            console.log(data[0]);
+            console.log(%scope.access_token);
         });
 
         //I don't love this but it works, should probably make a directive.
