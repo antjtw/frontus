@@ -361,6 +361,8 @@ app.controller('CompContactCtrl',
             }).success(function(x) {
                     window.oauthSuccessCallback = function (){
                         $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
                     };
                     window.open(x);
                     console.log(x);
