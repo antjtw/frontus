@@ -361,10 +361,10 @@ app.controller('CompContactCtrl',
             }).success(function(x) {
                     window.oauthSuccessCallback = function (){
                         $rootScope.access_token = 1;
-                        $scope.$emit("notification:success", "Linked to Dropbox");
+                        $rootScope.$broadcast("notification:success", "Linked to Dropbox");
                         alert("Linked to Dropbox");
                     };
-                    $scope.$emit("notification:success", "Starting");
+                    $rootScope.$broadcast("notification:success", "Starting");
                     window.open(x);
                     console.log(x);
                 })
