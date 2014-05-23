@@ -77,12 +77,12 @@ navm.directive('notifications', function() {
                 if (name.length > 20){
                     return name;
                 }
-                    
+
                 else{
                     return null;
-                }        
+                }
             };
-                
+
 
 
         }]
@@ -485,7 +485,7 @@ navm.controller('NavCtrl',
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-            
+
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
@@ -742,7 +742,7 @@ navm.controller('NavCtrl',
             }
             $scope.$apply();
         };
-        
+
     }
 ]);
 

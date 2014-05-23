@@ -1,385 +1,386 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <script src="/cmn/spin.js"></script>
 <div class="company-list maincontent openflow">
-    <div class="container dynamic-page doclistFlow">
-        <div class="row-fluid">
-            <div class="row-fluid">
-                <div class="subnav-controls doclist-controls">
-                    <div>
-                        <div class="pull-left" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>VIEW BY</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ viewBy | viewByPrinter }}
-                            </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a ng-click="setViewBy('document')" class="button">Document</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setViewBy('name')" class="button">Recipient</a>
-                                        </li>
-                                    </ul>
+<div class="container dynamic-page doclistFlow">
+<div class="row-fluid">
+    <div class="row-fluid">
+        <div class="subnav-controls doclist-controls">
+            <div>
+                <div class="pull-left" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>VIEW BY</span>
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ viewBy | viewByPrinter }}
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="setViewBy('document')" class="button">Document</a>
+                                </li>
+                                <li>
+                                    <a ng-click="setViewBy('name')" class="button">Recipient</a>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                            <span>HIDE COMPLETED</span>
-                            <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
-                                <span data-icon="&#xe023;" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                            <span>SHOW ARCHIVED</span>
-                            <button class="check-box-button" ng-class="{'selected':show_archived==true}" ng-click="toggleArchived();">
-                                <span data-icon="&#xe023;" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <div class="pull-left"> <span>SEARCH</span>
-                            <input type="text" class="search-box" ng-model="query">
-                        </div>
-                        <div class="box-button pull-right"
-                             ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
-                             ng-show="documents.length!==0"
-                             ng-click="companyIsZombie() || toggleSide();"
-                             data-placement="bottom" bs-tooltip="zombiemessage">
-                            <ul>
-                                <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                    <span>HIDE COMPLETED</span>
+                    <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                    <span>SHOW ARCHIVED</span>
+                    <button class="check-box-button" ng-class="{'selected':show_archived==true}" ng-click="toggleArchived();">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="pull-left"> <span>SEARCH</span>
+                    <input type="text" class="search-box" ng-model="query">
+                </div>
+                <div class="box-button pull-right"
+                     ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
+                     ng-show="documents.length!==0"
+                     ng-click="companyIsZombie() || toggleSide();"
+                     data-placement="bottom" bs-tooltip="zombiemessage">
+                    <ul>
+                        <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
-                                </li>
-                                <li> <span>Share</span>
+                        </li>
+                        <li> <span>Share</span>
 
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="box-button pull-right"
-                             ng-class="{selected: uploadModal, 'disabledme': companyIsZombie()}"
-                             ng-click="companyIsZombie() || documentUploadOpen();"
-                             data-placement="bottom" bs-tooltip="zombiemessage">
-                            <ul>
-                                <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
-                                </li>
-                                <li> <span>Add Files</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-button pull-right"
+                     ng-class="{selected: uploadModal, 'disabledme': companyIsZombie()}"
+                     ng-click="companyIsZombie() || documentUploadOpen();"
+                     data-placement="bottom" bs-tooltip="zombiemessage">
+                    <ul>
+                        <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                        </li>
+                        <li> <span>Add Files</span>
 
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="DivHelper"></div>
+                        </li>
+                    </ul>
                 </div>
             </div>
+            <div class="DivHelper"></div>
         </div>
-        <div class="row-fluid leftTabWindow">
-            <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}"
-            class="span8 recipientInfo statusBlock leftBlock">
-                <div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
-                    <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
-                        <tbody class="empty-table">
-                            <tr>
-                                <td> <span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span>
+    </div>
+</div>
+<div class="row-fluid leftTabWindow">
+<div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}"
+     class="span8 recipientInfo statusBlock leftBlock">
+<div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
+<table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
+    <tbody class="empty-table">
+    <tr>
+        <td> <span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span>
 
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="status-table" ng-show="!investorDocs && viewBy==='name'">
-                        <tbody class="empty-table">
-                            <tr>
-                                <td>
-                                    <!-- todo update ng-click --> <span>Welcome! </span><span class="link" ng-click="multishareOpen();">Share a document</span><span> to get started.</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="status-table" ng-show="documents.length!==0 && viewBy==='document'">
-                        <tbody>
-                            <tr>
-                                <th colspan="2" style="width: 40%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
-                                <th colspan="2" style="width: 20%" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                                class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
-                                <th colspan="2">Tags</th>
-                            </tr>
-                        </tbody>
-                        <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
-                            <tr class="empty-row"></tr>
-                            <tr ng-class="{selectedrow:doc.shown}">
-                                <td class="status-toggle"
-                                    ng-class="{'pointer':(doc.versions[0] && hideSharebar && versionsVisible(doc.versions)),
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table class="status-table" ng-show="!investorDocs && viewBy==='name'">
+    <tbody class="empty-table">
+    <tr>
+        <td>
+            <!-- todo update ng-click --> <span>Welcome! </span><span class="link" ng-click="multishareOpen();">Share a document</span><span> to get started.</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table class="status-table" ng-show="documents.length!==0 && viewBy==='document'">
+    <tbody>
+    <tr>
+        <th colspan="2" style="width: 40%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
+        <th colspan="2" style="width: 20%" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+            class="left doc-status-header" ng-click="setOrder('statusRatio')">Status</th>
+        <th colspan="2">Tags</th>
+    </tr>
+    </tbody>
+    <tbody class="animate" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
+    <tr class="empty-row"></tr>
+    <tr ng-class="{selectedrow:doc.shown}">
+        <td class="status-toggle"
+            ng-class="{'pointer':(doc.versions[0] && hideSharebar && versionsVisible(doc.versions)),
                                                'status-toggle-on': (doc.shown && versionsVisible(doc.versions))}"
-                                    ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
-                                    <div ng-switch on="hideSharebar">
-                                        <div ng-switch-when="true" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-hide="!hideSharebar">
-                                            <span ng-hide="!versionsVisible(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                            <span ng-show="versionsVisible(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
-                                        </div>
-                                        <div ng-switch-when="false" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="!hideSharebar">
-                                            <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
-                                                <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
-                                    <ul>
-                                        <li>{{doc.docname | caplength:50}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
-                                        <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                                        ng-hide="!hideSharebar">{{docStatusA(doc)}}</li>
-                                    </ul>
-                                </td>
-                                <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
-                                    <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-                                    <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
-                                </td>
-                                <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
-                                ng-click="doc.uploading || viewStatus(doc)">
-                                    <ul>
-                                        <li>{{formatDocStatusRatio(doc)}}</li>
-                                    </ul>
-                                </td>
-                                <td ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+            ng-click="!doc.versions[0] || !hideSharebar || opendetails(doc)">
+            <div ng-switch on="hideSharebar">
+                <div ng-switch-when="true" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-hide="!hideSharebar">
+                    <span ng-hide="!versionsVisible(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+                    <span ng-show="versionsVisible(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+                </div>
+                <div ng-switch-when="false" ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="!hideSharebar">
+                    <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
+            <ul>
+                <li>{{doc.docname | caplength:50}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
+                <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
+                    ng-hide="!hideSharebar">{{docStatusA(doc)}}</li>
+            </ul>
+        </td>
+        <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
+            <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+            <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
+        </td>
+        <td ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
+            ng-click="doc.uploading || viewStatus(doc)">
+            <ul>
+                <li>{{formatDocStatusRatio(doc)}}</li>
+            </ul>
+        </td>
+        <td ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                                     <span class="tag"
                                           ng-repeat="tag in doc.tags"
                                           ng-click="setQuery(tag)">
                                         {{tag + (($last && ' ') || ', ')}}
                                     </span>
-                                </td>
-                                <td>
-                                    <div ng-switch on="hideSharebar">
-                                        <div ng-switch-when="false" ng-show="!hideSharebar && doc.forShare" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                                            <ul class="dropdown-list drop-selector">
-                                                <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
-                                         {{ formatShareType(getShareType(doc)) }}
-                                     </a>
+        </td>
+        <td>
+            <div ng-switch on="hideSharebar">
+                <div ng-switch-when="false" ng-show="!hideSharebar && doc.forShare" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
+                            {{ formatShareType(getShareType(doc)) }}
+                        </a>
 
-                                                    <ul class="dropdown-menu">
-                                                        <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
+                            <ul class="dropdown-menu">
+                                <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
 
-                                                        </li>
-                                                        <li ng-show="docIsPrepared(doc)"> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
+                                </li>
+                                <li ng-show="docIsPrepared(doc)"> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
 
-                                                        </li>
-                                                        <li ng-show="!docIsPrepared(doc)"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
+                                </li>
+                                <li ng-show="!docIsPrepared(doc)"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
 
-                                                        </li>
-                                                        <li ng-show="docIsPrepared(doc)"> <a class="button" ng-click="prepareDocument(doc);">Re-prepare</a>
+                                </li>
+                                <li ng-show="docIsPrepared(doc)"> <a class="button" ng-click="prepareDocument(doc);">Re-prepare</a>
 
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div ng-switch-when="true" ng-show="hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                                            <ul ng-show="(doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
-                                                <li class="dropdown standard menu-drop">
-                                                    <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-switch-when="true" ng-show="hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+                    <ul ng-show="(doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
+                        <li class="dropdown standard menu-drop">
+                            <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
-                                                    </a>
-                                                    <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                        <li ng-show="(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
-                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
-                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
-                                                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                                                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
-                                                        <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
-                                                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
-                                                        <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
-                                                        <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- TODO animate show/hide by sliding down/up -->
-                            <tr ng-if="doc.shown" class="sub-row"
-                                ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
-                                <td class="status-toggle"></td>
-                                <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
-                                    <ul>
-                                        <li>{{version.name || version.investor}}</li>
-                                        <li>{{versionStatus(version)}}</li>
-                                    </ul>
-                                </td>
-                                <td class="status-toggle status-icon">
-                                    <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
-                                    class="circle green" aria-hidden="true"></div>
-                                    <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted && !isPendingVoid(version)" class="circle green"
-                                    aria-hidden="true"><span>-</span>
-                                    </div>
-                                    <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
-                                         aria-hidden="true"><span>x</span>
-                                    </div>
-                                    <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
-                                </td>
-                                <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
-                                    <ul>
-                                        <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
-                                    </ul>
-                                </td>
-                                <td colspan="2">
-                                    <div class="standard-button small-standard-button doc-share-button">
-                                        <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn"
-                                        ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
-                                        <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
-                                        <button ng-show="isPendingIssuerFinalization(version)" class="btn"
-                                        ng-click="viewInvestorCopy(version)">Approve</button>
-                                    </div>
-                                    <ul class="dropdown-list">
-                                        <li class="dropdown standard menu-drop">
-                                            <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
-
-                                            </a>
-                                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
-                                                    ng-click="switchSignatureFlow(version, 0)">
-                                                    Switch to View Only
-                                                </li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
-                                                <li ng-click="viewStatus(doc)">View Status</li>
-                                                <li ng-click="viewInvestorCopy(version)">View Document</li>
-                                                <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
-                                                <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                                                    ng-click="exportVersionToPdf(version)">Export Final to PDF</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="status-table" ng-show="investorDocs && viewBy==='name'">
-                        <tbody>
-                            <tr>
-                                <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Name</th>
-                                <th colspan="2" class="left doc-status-header" ng-click="setInvestorOrder('statusRatio')">Status</th>
-                                <th></th>
-                            </tr>
-                        </tbody>
-                        <tbody ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
-                            <tr class="empty-row"></tr>
-                            <tr ng-class="{selectedrow:investor.shown}">
-                                <td class="status-toggle"
-                                    ng-class="{'pointer':(investor.versions[0] && versionsVisible(investor.versions)), 'status-toggle-on':(investor.shown && versionsVisible(investor.versions))}"
-                                    ng-click="!investor.versions[0] || opendetails(investor)">
-                                    <span ng-hide="!versionsVisible(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-                                    <span ng-show="versionsVisible(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
-                                </td>
-                                <td class="shareholder-column docname-column">
-                                    <ul>
-                                        <li>{{investor.name || investor.investor | caplength:40}}</li>
-                                        <li>{{docStatus(investor)}}</li>
-                                    </ul>
-                                </td>
-                                <td class="status-toggle status-icon">
-                                    <div ng-show="docIsComplete(investor)" data-icon="&#xe023;" class="circle green"
-                                    aria-hidden="true"></div>
-                                    <div ng-hide="docIsComplete(investor)" class="circle" ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div>
-                                </td>
-                                <td class="shareholder-column status-column issuer pointer">
-                                    <ul>
-                                        <li>{{formatDocStatusRatio(investor)}}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul ng-show="investor.name" class="dropdown-list">
-                                        <li class="dropdown standard menu-drop">
-                                            <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
-
-                                            </a>
-                                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                                <li ng-click="viewProfile(investor)">View Profile</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr ng-show="investor.shown" class="sub-row"
-                                ng-repeat="version in investor.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
-                                <td class="status-toggle"></td>
-                                <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
-                                    <ul>
-                                        <li>{{version.docname}}</li>
-                                        <li>{{versionStatus(version)}}</li>
-                                    </ul>
-                                </td>
-                                <td class="status-toggle status-icon">
-                                    <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
-                                         class="circle green" aria-hidden="true"></div>
-                                    <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted && !isPendingVoid(version)" class="circle green"
-                                         aria-hidden="true"><span>-</span>
-                                    </div>
-                                    <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
-                                         aria-hidden="true"><span>x</span>
-                                    </div>
-                                    <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
-                                </td>
-                                <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(version)">
-                                    <ul>
-                                        <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <div class="standard-button small-standard-button doc-share-button">
-                                        <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
-                                    </div>
-                                    <ul class="dropdown-list">
-                                        <li class="dropdown standard menu-drop">
-                                            <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
-
-                                            </a>
-                                            <ul ng-hiden="toggleView();" class="dropdown-menu">
-                                                <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
-                                                    ng-click="switchSignatureFlow(version, 0)">
-                                                    Switch to View Only
-                                                </li>
-                                                <li ng-click="viewVersionStatus(version)">View Status</li>
-                                                <li ng-click="viewDoc(version.original)">View Document</li>
-                                                <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
-                                                <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                                                    ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
-                                                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
-                                                <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </a>
+                            <ul ng-hide="toggleView();" class="dropdown-menu">
+                                <li ng-show="(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
+                                <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
+                                <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
+                                <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                                <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
+                                <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
+                                <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
+                                <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
+                                <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
+                                <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
+        </td>
+    </tr>
+    <!-- TODO animate show/hide by sliding down/up -->
+    <tr ng-if="doc.shown" class="sub-row"
+        ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
+        <td class="status-toggle"></td>
+        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
+            <ul>
+                <li>{{version.name || version.investor}}</li>
+                <li>{{versionStatus(version)}}</li>
+            </ul>
+        </td>
+        <td class="status-toggle status-icon">
+            <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
+                 class="circle green" aria-hidden="true"></div>
+            <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+                 aria-hidden="true"><span>-</span>
+            </div>
+            <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+                 aria-hidden="true"><span>x</span>
+            </div>
+            <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
+        </td>
+        <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
+            <ul>
+                <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
+            </ul>
+        </td>
+        <td colspan="2">
+            <div class="standard-button small-standard-button doc-share-button">
+                <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn"
+                ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
+                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
+                <button ng-show="isPendingIssuerFinalization(version)" class="btn"
+                        ng-click="viewInvestorCopy(version)">Approve</button>
+            </div>
+            <ul class="dropdown-list">
+                <li class="dropdown standard menu-drop">
+                    <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+
+                    </a>
+                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                        <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
+                        <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
+                            ng-click="switchSignatureFlow(version, 0)">
+                            Switch to View Only
+                        </li>
+                        <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
+                        <li ng-click="viewStatus(doc)">View Status</li>
+                        <li ng-click="viewInvestorCopy(version)">View Document</li>
+                        <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
+                        <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
+                        <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                            ng-click="exportVersionToPdf(version)">Export Final to PDF</li>
+                        <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table class="status-table" ng-show="investorDocs && viewBy==='name'">
+    <tbody>
+    <tr>
+        <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Name</th>
+        <th colspan="2" class="left doc-status-header" ng-click="setInvestorOrder('statusRatio')">Status</th>
+        <th></th>
+    </tr>
+    </tbody>
+    <tbody ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
+    <tr class="empty-row"></tr>
+    <tr ng-class="{selectedrow:investor.shown}">
+        <td class="status-toggle"
+            ng-class="{'pointer':(investor.versions[0] && versionsVisible(investor.versions)), 'status-toggle-on':(investor.shown && versionsVisible(investor.versions))}"
+            ng-click="!investor.versions[0] || opendetails(investor)">
+            <span ng-hide="!versionsVisible(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
+            <span ng-show="versionsVisible(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+        </td>
+        <td class="shareholder-column docname-column">
+            <ul>
+                <li>{{investor.name || investor.investor | caplength:40}}</li>
+                <li>{{docStatus(investor)}}</li>
+            </ul>
+        </td>
+        <td class="status-toggle status-icon">
+            <div ng-show="docIsComplete(investor)" data-icon="&#xe023;" class="circle green"
+                 aria-hidden="true"></div>
+            <div ng-hide="docIsComplete(investor)" class="circle" ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div>
+        </td>
+        <td class="shareholder-column status-column issuer pointer">
+            <ul>
+                <li>{{formatDocStatusRatio(investor)}}</li>
+            </ul>
+        </td>
+        <td>
+            <ul ng-show="investor.name" class="dropdown-list">
+                <li class="dropdown standard menu-drop">
+                    <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+
+                    </a>
+                    <ul ng-hide="toggleView();" class="dropdown-menu">
+                        <li ng-click="viewProfile(investor)">View Profile</li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr ng-show="investor.shown" class="sub-row"
+        ng-repeat="version in investor.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
+        <td class="status-toggle"></td>
+        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
+            <ul>
+                <li>{{version.docname}}</li>
+                <li>{{versionStatus(version)}}</li>
+            </ul>
+        </td>
+        <td class="status-toggle status-icon">
+            <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
+                 class="circle green" aria-hidden="true"></div>
+            <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+                 aria-hidden="true"><span>-</span>
+            </div>
+            <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+                 aria-hidden="true"><span>x</span>
+            </div>
+            <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
+        </td>
+        <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(version)">
+            <ul>
+                <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
+            </ul>
+        </td>
+        <td>
+            <div class="standard-button small-standard-button doc-share-button">
+                <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
+            </div>
+            <ul class="dropdown-list">
+                <li class="dropdown standard menu-drop">
+                    <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+
+                    </a>
+                    <ul ng-hiden="toggleView();" class="dropdown-menu">
+                        <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
+                        <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
+                            ng-click="switchSignatureFlow(version, 0)">
+                            Switch to View Only
+                        </li>
+                        <li ng-click="viewVersionStatus(version)">View Status</li>
+                        <li ng-click="viewDoc(version.original)">View Document</li>
+                        <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
+                        <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
+                        <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                            ng-click="exportVersionToPdf(version)">Export Final Copy to PDF</li>
+                        <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
+                        <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
+<div ng-style="viewportheight" ng-show="!hideSharebar" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
-                 <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
-     <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
-     <div class="shareForm">
-         <span>Recipients</span>
-         <div class="sharepeople-input">
+    <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
+    <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
+    <div class="shareForm">
+        <span>Recipients</span>
+        <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="docShareState.emails">
-         </div>
-         <span>Message</span>
-         <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
-         <div class="controls" my-loading-spinner="processing">
-             <div class="standard-button pull-right">
-                 <button class="btn"
-                         ng-if="!companyIsZombie()"
-                         ng-click="shareDocuments(docShareState.doclist,
+        </div>
+        <span>Message</span>
+        <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
+        <div class="controls" my-loading-spinner="processing">
+            <div class="standard-button pull-right">
+                <button class="btn"
+                        ng-if="!companyIsZombie()"
+                        ng-click="shareDocuments(docShareState.doclist,
                                    docShareState.emails, messageText)"
-                         ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
+                        ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
                                       || !docsReadyToShare(docShareState.doclist)">
-                     Share Documents
-                 </button>
-             </div>
+                    Share Documents
+                </button>
+            </div>
              <span class="pull-right pointer" ng-click="toggleSide(); saveShareState(true);">
                  Cancel
              </span>
-         </div>
+        </div>
     </div>
 </div>
 </div>
@@ -589,4 +590,3 @@
 
 </div>
 </div>
-
