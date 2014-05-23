@@ -360,8 +360,7 @@ app.controller('CompContactCtrl',
                 'role': navState.role
             }).success(function(x) {
                     window.oauthSuccessCallback = function (){
-                        $scope.access_token = 1;
-                        alert("Authentication succeeded.");
+                        $rootScope.access_token = 1;
                     };
                     window.open(x);
                     console.log(x);
