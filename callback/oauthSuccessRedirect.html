@@ -3,6 +3,8 @@
 <body>
 	<script>
 	    var domain = window.opener.location.hostname;
+	    alert(domain);
+	    alert(domain + "/callback/oauthSuccess.html");
 	    window.location = domain + "/callback/oauthSuccess.html";
     </script>
 </body>
