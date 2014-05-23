@@ -5,7 +5,7 @@
 	    var domain = window.opener.location.hostname;
 	    alert(domain);
 	    alert(domain + "/callback/oauthSuccess.html");
-	    window.location.assign(domain + "/callback/oauthSuccess.html");
+	    window.location.assign("https://" + domain + "/callback/oauthSuccess.html");
     </script>
 </body>
 </html>
