@@ -60,6 +60,19 @@
 
                                         </div>
                                     </div>
+                                    <div class="row-fluid">
+                                        <div class="pull-left span5">Dropbox</div>
+                                        <div class="pull-left" ng-if="!access_token">
+                                            Not Linked
+                                        </div>
+                                        <div class="pull-left" ng-if="access_token">
+                                            Linked
+                                        </div>
+                                        <div class="pull-right pointer"> <span data-icon="&#xe00e;" aria-hidden="true" ng-click="startOauth('dropbox')">
+                                        </span>
+
+                                        </div>
+                                    </div>
                                     <div class="row-fluid"
                                          ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
                                         <div class="pull-left span5">Plan Level</div>
@@ -249,11 +262,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modalText">
-                            <img width=40px src="https://dt8kf6553cww8.cloudfront.net/static/images/brand/ios-vfl1pMuXY.png"/>
-                            &nbsp;&nbsp;
-                            <div class="authButton" ng-click="startOauth('dropbox')">Authenticate Dropbox</div>
                         </div>
                     </div>
                 </div>
