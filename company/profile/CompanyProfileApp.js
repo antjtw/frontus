@@ -352,6 +352,7 @@ app.controller('CompContactCtrl',
                 $scope.response = "User role not selected.";
                 return;
             }
+            document.domain = "sharewave.com";
             $http.post('/cgi/suDbProc.py', {
                 'proc': 'oauth.request_authorization',
                 'service': svc,
