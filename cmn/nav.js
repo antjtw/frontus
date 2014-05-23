@@ -714,7 +714,7 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
-        SWBrijj.view('select * from oauth.my_tokens where access_token is not null;').then(function(data) {
+        SWBrijj.view('oauth.my_tokens where access_token is not null').then(function(data) {
             $scope.access_token = data.length;
             console.log(data.length);
             if (data.length > 0)
