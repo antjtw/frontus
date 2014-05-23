@@ -714,6 +714,9 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
 
         SWBrijj.procm('oauth.token_num').then(function(data) {
             $scope.access_token = data[0]['token_num'];

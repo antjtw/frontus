@@ -382,7 +382,9 @@ app.controller('CompanyDocumentListController',
                     'docid': doc.doc_id,
                     'filename': doc.docname,
                     'role': 'company'
-                }).error(function(x) {
+                }).success(function(x) {
+                        $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                    }).error(function(x) {
                         $scope.response = x;
                     });
             };
@@ -401,7 +403,6 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
-
             $scope.prepareDocument = function(doc) {
                 if (doc.template_id) {
                     $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
