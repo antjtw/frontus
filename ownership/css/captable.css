@@ -509,6 +509,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin: 10px 0 0 115px;
 }
 
+.transaction-accordion .accordion-heading {
+    padding: 0;
+}
+
 
 .trantabs .nav.nav-tabs {
     padding: 0 0 0 0;
@@ -1536,74 +1540,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     width: 300px;
 }
 
-
-/* ios button thingy */
-
-.onoffswitch {
-    margin: 2px 0 0 0;
-    position: relative; width: 50px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-}
-
-.onoffswitch-checkbox {
-    display: none;
-}
-
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border-radius: 20px;
-}
-
-.onoffswitch-inner {
-    width: 200%; margin-left: -100%;
-
-    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
-    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
-}
-
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    float: left; width: 50%; height: 26px; padding: 0; line-height: 26px;
-    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-}
-
-.onoffswitch-inner:before {
-    content: "ON";
-    font-size: 12px;
-    padding-left: 8px;
-    color: #8D8D8D;
-    background-color: #E3E3E3;
-}
-
-.onoffswitch-inner:after {
-    content: "OFF";
-    font-size: 12px;
-    padding-right: 6px;
-    color: #FFFFFF;
-    text-align: right;
-    background-color: #C7C7C7;
-}
-
-.onoffswitch-switch {
-    width: 14px;
-    background: #F1F1F1;
-    border-radius: 18px;
-    position: absolute;
-    top: 4px;
-    margin: 2px 0 0 0;
-    bottom: 0;
-    height: 14px;
-    right: 32px;
-    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
-    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
-}
-
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
-}
-
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 5px;
-}
 
 /* Empty Table */
 

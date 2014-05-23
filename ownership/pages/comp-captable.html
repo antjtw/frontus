@@ -1455,10 +1455,12 @@
                             <h1>{{activeInvestor}}
                             </h1>
                         </div>
-                        <accordion close-others="true">
+                        <accordion class="transaction-accordion" close-others="true">
                         <accordion-group is-open="tran.active" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
                             <accordion-heading>
-                                {{tran.date | date:settings.shortdate}} Transaction
+                                <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active"></span>
+                                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active"></span>
+                                <span>{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
 
                                 <!-- Global Tab -->
