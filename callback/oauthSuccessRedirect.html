@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html ng-app="err">
+<body>
+	<script>
+	    var domain = window.opener.location.hostname;
+	    var prot = window.opener.location.protocol;
+	    window.location.assign(prot + "//" + domain + "/callback/oauthSuccess.html");
+    </script>
+</body>
+</html>
+

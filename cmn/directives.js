@@ -20,6 +20,7 @@ m.directive('composeMessage', function() {
                 $scope.message = {recipients:[],
                                   text:"",
                                   subject:""};
+                $scope.recipients = []
             };
             $scope.resetMessage();
             $scope.composeopts = {

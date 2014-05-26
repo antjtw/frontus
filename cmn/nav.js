@@ -77,12 +77,12 @@ navm.directive('notifications', function() {
                 if (name.length > 20){
                     return name;
                 }
-                    
+
                 else{
                     return null;
-                }        
+                }
             };
-                
+
 
 
         }]
@@ -485,7 +485,7 @@ navm.controller('NavCtrl',
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-            
+
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
@@ -714,6 +714,13 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
+
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
 
         //I don't love this but it works, should probably make a directive.
         if ($rootScope.companyIsZombie()) {
@@ -742,7 +749,7 @@ navm.controller('NavCtrl',
             }
             $scope.$apply();
         };
-        
+
     }
 ]);
 
