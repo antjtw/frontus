@@ -388,6 +388,20 @@ app.controller('CompanyDocumentListController',
                         $scope.response = x;
                     });
             };
+
+            $scope.exportVersionToDropbox = function(version) {
+                console.log("Posting: " + navState.company + " " + version.doc_id + " " + doc.docname);
+                $http.post('/amber/cgi/dropboxBackupFile.py', {
+                    'swid': navState.company,
+                    'docid': version.doc_id,
+                    'filename': version.docname,
+                    'role': 'investor'
+                }).success(function(x) {
+                        $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                    }).error(function(x) {
+                        $scope.response = x;
+                    });
+            };
             $scope.exportOriginalDocidToPdf = function(docid) {
                 SWBrijj.procd('sharewave-' + docid + '.pdf', 'application/pdf', 'document.genOriginalPdf', docid.toString()).then(function(url) {
                     document.location.href = url;
