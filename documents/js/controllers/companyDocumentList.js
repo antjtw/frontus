@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
@@ -12,7 +12,7 @@ app.controller('CompanyDocumentListController',
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
                 return;
             }
-            $scope.syncShareAndURL = function() {
+            function syncShareAndURL() {
                 if ($routeParams.share) {
                     $scope.hideSharebar = false;
                 } else {
@@ -20,9 +20,9 @@ app.controller('CompanyDocumentListController',
                 }
             };
             $scope.$on('$routeChangeSuccess', function(current, previous) {
-                $scope.syncShareAndURL();
+                syncShareAndURL();
             });
-            $scope.syncShareAndURL();
+            syncShareAndURL();
 
             SWBrijj.tblm('global.server_time').then(function(time) {
                 $rootScope.servertime = time[0].fromnow;
@@ -58,7 +58,7 @@ app.controller('CompanyDocumentListController',
                         if (x && x[0] && x[0].signature && x[0].signature.length>0) {
                             $rootScope.person.has_signature = true;
                         }
-                        $scope.loadSmartDocuments();
+                        loadSmartDocuments();
                     }).except(function(x) {
                         console.log(x);
                     });
@@ -71,15 +71,15 @@ app.controller('CompanyDocumentListController',
                 sessionStorage.removeItem("sharewave");
                 if (!st || st==[] || st.length===0
                     || !st.doclist) {
-                    $scope.docShareState = $scope.emptyShareState();
+                    $scope.docShareState = emptyShareState();
                 } else {
                     $scope.docShareState = st;
                 }
             };
-            $scope.emptyShareState = function() {
+            function emptyShareState() {
                 return {doclist: [], emails: [], message: ""};
             };
-            $scope.loadPrepareState = function() {
+            function loadPrepareState() {
                 var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
                 sessionStorage.removeItem("docPrepareState");
                 if (st1) {
@@ -98,17 +98,17 @@ app.controller('CompanyDocumentListController',
                     });
                 }
                 $scope.finishedLoading = true;
-                $scope.loadDocumentVersions();
+                loadDocumentVersions();
                 return st1;
             };
             $scope.saveShareState = function(clear) {
                 if (clear) {
                     sessionStorage.removeItem("sharewave");
                     sessionStorage.setItem("sharewave",
-                        angular.toJson($scope.emptyShareState()));
+                        angular.toJson(emptyShareState()));
                 } else  {
                     if (!$scope.docShareState) {
-                        $scope.docShareState = $scope.emptyShareState();
+                        $scope.docShareState = emptyShareState();
                     }
                     //$scope.docShareState.emails = $scope.multipeople;
                     $scope.docShareState.message = $scope.messageText;
@@ -154,20 +154,20 @@ app.controller('CompanyDocumentListController',
                                     });
                             }
                         });
-                        $scope.initShareState();
-                        $scope.loadTags();
+                        initShareState();
+                        loadTags();
                     });
 
             };
 
-            $scope.loadSmartDocuments = function() {
+            function loadSmartDocuments() {
                 SWBrijj.tblm('smartdoc.document').then(function(data) {
                     $scope.smarttemplates = data;
-                    $scope.loadDocuments();
+                    loadDocuments();
                 }).except(function(x) {
-                    });
+                });
             };
-            $scope.loadDocuments = function() {
+            function loadDocuments() {
                 SWBrijj.tblm('document.my_company_library',
                         ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
                             'uploaded_by', 'annotations', 'iss_annotations', 'tags']).then(function(data) {
@@ -178,9 +178,9 @@ app.controller('CompanyDocumentListController',
                         $scope.mergeSmartIntoDumb();
                     });
             };
-            $scope.initShareState = function() {
+            function initShareState() {
                 $scope.getShareState();
-                $scope.loadPrepareState();
+                loadPrepareState();
                 if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
                     angular.forEach($scope.documents, function(doc) {
                         angular.forEach($scope.docShareState.doclist, function(docToShare) {
@@ -194,7 +194,7 @@ app.controller('CompanyDocumentListController',
                 $scope.messageText = $scope.docShareState.message;
                 $scope.multipeople = $scope.docShareState.emails;
             };
-            $scope.loadTags = function() {
+            function loadTags() {
                 SWBrijj.tblm('document.my_company_tags').then(function(x) {
                     $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
                         return el.replace(/"/g, "");
@@ -216,7 +216,7 @@ app.controller('CompanyDocumentListController',
                                 el.tags = new_tags;
                             }
                         });
-                        $scope.loadTags();
+                        loadTags();
                         $scope.$emit("notification:success", "Tags updated");
                     }).except(function(err) {
                         $scope.updateTagsClose();
@@ -225,7 +225,7 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            $scope.loadDocumentVersions = function () {
+            function loadDocumentVersions() {
                 SWBrijj.tblm("document.my_counterparty_library").then(function(data) {
                     Intercom('update', {company : {"document_shares":data.length}});
                     angular.forEach($scope.documents, function(doc) {
@@ -236,7 +236,7 @@ app.controller('CompanyDocumentListController',
                             }
                         });
                     });
-                    $scope.loadDocumentActivity();
+                    loadDocumentActivity();
                 });
             };
 
@@ -251,10 +251,10 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.setVersionStatusRank = function(version) {
-                version.statusRank = $scope.eventRank(version.last_event);
+                version.statusRank = eventRank(version.last_event);
             };
 
-            $scope.constructDocumentsByInvestor = function() {
+            function constructDocumentsByInvestor() {
                 $scope.investorDocs = null;
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach(doc.versions, function(version) {
@@ -262,7 +262,8 @@ app.controller('CompanyDocumentListController',
                             $scope.investorDocs[version.investor].versions.push(version);
                         } else {
                             if (!$scope.investorDocs) {$scope.investorDocs = {};}
-                            $scope.investorDocs[version.investor] = {'versions': [version],
+                            $scope.investorDocs[version.investor] = {
+                                'versions': [version],
                                 'name': version.name,
                                 'investor': version.investor};
                         }
@@ -280,42 +281,43 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
-            $scope.loadDocumentActivity = function() {
+            function loadDocumentActivity() {
                 SWBrijj.tblm("document.recent_company_activity").then(function(data) {
                     angular.forEach($scope.documents, function(doc) {
                         angular.forEach(doc.versions, function(version) {
-                            var version_activity = data.filter(function(el) {return el.doc_id === version.doc_id;});
-                            version.last_event = version_activity.sort($scope.compareEvents)[0];
-                            if (version.last_event.activity == 'finalized') {version.last_event.activity = 'approved';}
-                            var version_activities = version_activity.filter(function(el) {return el.person === version.investor && el.activity === "viewed";});
+                            var version_activity = data.filter(
+                                function(el) {
+                                    return el.doc_id === version.doc_id;
+                                });
+                            version.last_event = version_activity.sort(compareEvents)[0];
+                            if (version.last_event.activity == 'finalized') {
+                                version.last_event.activity = 'approved';
+                            }
+                            var version_activities = version_activity.filter(
+                                function(el) {
+                                    return el.person === version.investor && el.activity === "viewed";
+                                });
                             version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
                             $scope.setVersionStatusRank(version);
                         });
                         $scope.setDocumentStatusRatio(doc);
                         $scope.setSigRequired(doc);
                     });
-                    $scope.constructDocumentsByInvestor();
+                    constructDocumentsByInvestor();
                 });
             };
 
-            $scope.compareEvents = function(a, b) {
-                var initRank = $scope.eventRank(b) - $scope.eventRank(a);
+            function compareEvents(a, b) {
+                var initRank = eventRank(b) - eventRank(a);
                 return initRank === 0 ? (Date.parse(b.event_time) - Date.parse(a.event_time)) : initRank;
             };
 
-            $scope.eventRank = function (ev) {
+            function eventRank(ev) {
                 return basics.eventRank(ev);
-            };
-
-            $scope.noInvestors = function() {
-                return Object.keys($scope.investorDocs).length !== 0;
             };
 
             $scope.toggleMaxRatio = function() {
                 $scope.maxRatio = ($scope.maxRatio===1000) ? 2 : 1000;
-            };
-            $scope.viewAll = function() {
-                return $scope.maxRatio === 1000;
             };
 
             $scope.viewBy = 'document';
