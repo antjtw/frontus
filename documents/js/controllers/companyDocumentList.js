@@ -390,7 +390,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.exportVersionToDropbox = function(version) {
-                console.log("Posting: " + navState.company + " " + version.doc_id + " " + doc.docname);
+                console.log("Posting: " + navState.company + " " + version.doc_id + " " + version.docname);
                 $http.post('/amber/cgi/dropboxBackupFile.py', {
                     'swid': navState.company,
                     'docid': version.doc_id,
