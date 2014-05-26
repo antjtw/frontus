@@ -513,6 +513,30 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     padding: 0;
 }
 
+.transaction-accordion .accordion-heading .accordion-toggle {
+    padding: 11px 12px;
+}
+
+.transaction-accordion .accordion-heading > a > span:not(:last-of-type) {
+    vertical-align: -15%;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type {
+    color: #1D2C3C;
+}
+
+.transaction-accordion .accordion-group {
+    border-bottom: none;
+}
+
+.transaction-accordion .accordion-inner {
+    border-top: none;
+}
+
+.transaction-accordion .capGuide.global {
+    margin-top: 0;
+}
+
 
 .trantabs .nav.nav-tabs {
     padding: 0 0 0 0;
