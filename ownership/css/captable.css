@@ -597,7 +597,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 
 div.rightTitle {
-    height: 32px;
     line-height: 32px;
     margin: 0 0 10px 0;
     position: relative;
@@ -612,17 +611,25 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     vertical-align: top;
 }
 
+.rightTitle .standard .dropdown-toggle {
+    width:  230px;
+}
+
+.rightTitle .drop-selector .standard .dropdown-menu {
+    width: 234px;
+}
+
 .rightTitle > span:first-child {
     display: inline-block;
-    width: 100px;
+    width: 300px;
     margin-right: 10px;
     font-size: 10px;
-    text-align: right;
+    text-align: left;
     text-transform: uppercase;
 }
 
 .rightTitle > input, .rightTitle > span:last-child {
-    width:140px;
+    width:216px;
     height: 30px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
