@@ -376,29 +376,18 @@ app.controller('CompanyDocumentListController',
                 });
             };
             $scope.exportOriginalToDropbox = function(doc) {
-                console.log("Posting: " + navState.company + " " + doc.doc_id + " " + doc.docname);
-                $http.post('/amber/cgi/dropboxBackupFile.py', {
-                    'swid': navState.company,
-                    'docid': doc.doc_id,
-                    'filename': doc.docname,
-                    'role': 'company'
-                }).success(function(x) {
+                SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-                    }).error(function(x) {
+                    }).except(function(x) {
                         $scope.response = x;
                     });
             };
 
             $scope.exportVersionToDropbox = function(version) {
-                console.log("Posting: " + navState.company + " " + version.doc_id + " " + version.docname);
-                $http.post('/amber/cgi/dropboxBackupFile.py', {
-                    'swid': navState.company,
-                    'docid': version.doc_id,
-                    'filename': version.docname,
-                    'role': 'investor'
-                }).success(function(x) {
-                        $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-                    }).error(function(x) {
+                SWBrijj.document_dropbox_export(version.doc_id, version.docname, 'investor').then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                    void(x);
+                    }).except(function(x) {
                         $scope.response = x;
                     });
             };
