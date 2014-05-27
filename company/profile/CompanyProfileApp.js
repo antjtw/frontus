@@ -622,8 +622,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         }
         // email sidebar
         $scope.toggleSide = function(button) {
-            // console.log(button);
-            if (!$scope.hideSharebar && button==undefined) {
+            console.log(button);
+            console.log(button.typeof)
+            if (!$scope.hideSharebar && button == undefined) {
                 $scope.hideSharebar = true;
                 $scope.sidebarPage = button
             } 
