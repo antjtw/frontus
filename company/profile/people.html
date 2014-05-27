@@ -32,7 +32,7 @@
                     <!-- peoplebutton -->
                     <div class="box-button pull-right"
                          ng-class="{selected: !hideSharebar, 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('other');"
+                         ng-click="companyIsZombie() || toggleSide('other')"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
@@ -103,7 +103,7 @@
         <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
-                <compose-message  recipients="recipients">
+                <compose-message  recipients="recipients" ng-switch-when="email">
                  </compose-message>
                 <div ng-switch-when= "hi">
                         hello

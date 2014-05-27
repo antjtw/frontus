@@ -2,7 +2,7 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "=",},
+        scope: {recipients: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
