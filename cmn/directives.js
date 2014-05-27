@@ -36,7 +36,7 @@ m.directive('composeMessage', function() {
             };
 
             
-
+            
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
@@ -78,11 +78,8 @@ m.directive('composeMessage', function() {
                     $scope.clicked = false;
                 });
             };
-            $scope.readyToSend = function(msg) {
-                // $scope.getInvestors();
-                // var anybad = false;
-                console.log($scope.recipients)
 
+            $scope.readyToSend = function(msg) {
                 if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {

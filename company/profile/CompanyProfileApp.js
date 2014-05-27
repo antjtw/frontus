@@ -534,7 +534,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         
         //want the email directive to bind to this property in the controller
-       $scope.emailRecipient = function(person){
+
+        $scope.personIs = function(person){
+            return $scope.recipients.indexOf(person.email) != -1;
+            console.log($scope.recipients)
+        };
+
+        $scope.emailRecipient = function(person){
             if ($scope.recipients.indexOf(person.email)=== -1){
                  $scope.recipients.push(person.email);
             }
@@ -544,12 +550,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }; 
             
         };
-
         $scope.recipients = [];
-        $scope.personIs = function(person){
-            return $scope.recipients.indexOf(person.email) != -1;
-            console.log($scope.recipients)
-        };
 
 
         $scope.narrowopts = {
@@ -624,11 +625,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             // console.log(button);
             if (!$scope.hideSharebar && button==undefined) {
                 $scope.hideSharebar = true;
-
                 $scope.sidebarPage = button
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
+            }
+            else if($scope.hideSharebar && button == undefined){
+                $scope.hideSharebar = false;
             }
             else {
                 $scope.hideSharebar = false;
@@ -638,13 +641,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
      
 
-        $scope.getRecipients = function() {
-                var email = [];
-                if(emailRecipient === true){
-                    email.push(emailRecipient);
-                }
+        // $scope.getRecipients = function() {
+        //         var email = [];
+        //         if(emailRecipient === true){
+        //             email.push(emailRecipient);
+        //         }
               
-        };
+        // };
        
     }
 ]);
