@@ -8,15 +8,16 @@ app.controller('CompanyDocumentListController',
                  $routeParams, $rootScope, $route, SWBrijj, navState,
                  basics, $http) {
             $scope.docShareState={};
+            $scope.state = {hideSharebar: true};
             if (navState.role == 'investor') {
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
                 return;
             }
             function syncShareAndURL() {
                 if ($routeParams.share) {
-                    $scope.hideSharebar = false;
+                    $scope.state.hideSharebar = false;
                 } else {
-                    $scope.hideSharebar = true;
+                    $scope.state.hideSharebar = true;
                 }
             };
             $scope.$on('$routeChangeSuccess', function(current, previous) {
@@ -235,6 +236,7 @@ app.controller('CompanyDocumentListController',
                 // possibly load it on the hover of the document
                 SWBrijj.tblm("document.my_counterparty_library").then(function(data) {
                     Intercom('update', {company : {"document_shares":data.length}});
+                    /* // moved to DocumentSummaryRowController
                     angular.forEach($scope.documents, function(doc) {
                         doc.versions = [];
                         angular.forEach(data, function(version) {
@@ -242,7 +244,7 @@ app.controller('CompanyDocumentListController',
                                 doc.versions.push(version);
                             }
                         });
-                    });
+                    });*/
                     loadDocumentActivity();
                 });
             };
@@ -251,7 +253,7 @@ app.controller('CompanyDocumentListController',
                 // loads the summary information for each document / version
                 // TODO: call document.recent_company_activity on a per document basis
                 SWBrijj.tblm("document.recent_company_activity").then(function(data) {
-                    angular.forEach($scope.documents, function(doc) {
+                    /*angular.forEach($scope.documents, function(doc) {
                         angular.forEach(doc.versions, function(version) {
                             var version_activity = data.filter(
                                 function(el) {
@@ -270,7 +272,7 @@ app.controller('CompanyDocumentListController',
                         });
                         // move this to loadDocuments once status data is available
                         doc.statusRatio = $scope.docStatusRatio(doc);
-                    });
+                    });*/
                     constructDocumentsByInvestor();
                 });
             };
@@ -301,15 +303,6 @@ app.controller('CompanyDocumentListController',
                     investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                     investor.statusRatio = $scope.docStatusRatio(investor);
                 });
-            };
-
-            function compareEvents(a, b) {
-                var initRank = eventRank(b) - eventRank(a);
-                return initRank === 0 ? (Date.parse(b.event_time) - Date.parse(a.event_time)) : initRank;
-            };
-
-            function eventRank(ev) {
-                return basics.eventRank(ev);
             };
 
             $scope.toggleMaxRatio = function() {
@@ -353,7 +346,7 @@ app.controller('CompanyDocumentListController',
                 var re = new RegExp($scope.query, 'i');
                 /** @name obj#docname
                  * @type { string} */
-                if (!$scope.hideSharebar && obj.forShare) {
+                if (!$scope.state.hideSharebar && obj.forShare) {
                     return true;
                 } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
                     // if hide_completed and all versions are completed then return false
@@ -890,14 +883,14 @@ app.controller('CompanyDocumentListController',
             };
             $scope.toggleSide = function () {
                 var s = $location.search();
-                if (!$scope.hideSharebar) {
+                if (!$scope.state.hideSharebar) {
                     s={};
-                    $scope.hideSharebar = true;
+                    $scope.state.hideSharebar = true;
                     $scope.restoreViewState();
                 } else {
                     s.share=true;
                     $scope.saveAndClearViewState();
-                    $scope.hideSharebar = false;
+                    $scope.state.hideSharebar = false;
                 }
                 $location.search(s);
             };
@@ -1172,6 +1165,7 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
+            // TODO: remove (currently used by investor list)
             $scope.versionsVisible = function(versions) {
                 if (!versions) return false;
                 var total = versions.length;
