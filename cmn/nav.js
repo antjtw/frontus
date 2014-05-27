@@ -471,8 +471,14 @@ navm.controller('NavCtrl',
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-                    _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
+                    Intercom('boot', {email:$rootScope.navState.userid,
+                                      user_hash: $rootScope.navState.userhash,
+                                      app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa",
+                                      company: {id: $rootScope.navState.company,
+                                                name: $rootScope.navState.name}
+                                      }
+                    );
+                    _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
 
@@ -488,7 +494,7 @@ navm.controller('NavCtrl',
 
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
+                    _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
