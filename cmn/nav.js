@@ -467,7 +467,7 @@ navm.controller('NavCtrl',
 
         $scope.notifications = function() {
             if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                _kmq.push(['identify', $rootScope.navState.userid]);
+                _kmq.push(['identify', $rootScope.navState.company]);
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
