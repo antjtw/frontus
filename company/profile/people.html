@@ -103,10 +103,13 @@
         <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
-                <compose-message ng-switch-when='email'>
+                <compose-message  recipients="recipients">
                  </compose-message>
                 <div ng-switch-when= "hi">
                         hello
+                </div>
+                <div ng-switch-when="other">
+                    other
                 </div>
         </div>
     </div>

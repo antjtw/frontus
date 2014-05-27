@@ -549,6 +549,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.recipients.splice(toDelete, 1);
             };   
             console.log($scope.recipients);
+            return $scope.recipients
             
         };
         $scope.recipients = [];
@@ -560,11 +561,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             dialogClass: 'narrowModal modal'
         };
 
-        $scope.profileopts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'profile-modal wideModal modal'
-        };
 
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         $scope.fieldCheck = function() {
@@ -629,7 +625,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if (!$scope.hideSharebar && button == undefined) {
                 $scope.hideSharebar = true;
                 $scope.sidebarPage = button
-                console.log("1");
+                console.log("1, closes the bar");
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
@@ -639,9 +635,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.hideSharebar = false;
                 console.log("3")
             }
+            // else if($scope.hideSharebar && button){
+            //     $scope.hideSharebar = false;
+            // }
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
+                console.log("4")
                // opens sidebar with email
             };
         };

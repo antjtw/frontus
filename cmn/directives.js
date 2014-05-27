@@ -2,25 +2,21 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "="},
+        scope: {recipients: "=",},
         // replace: true,
+        // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', 
         function($scope, $rootScope, SWBrijj) {
-            $scope.getInvestors = function() {
-                $scope.investors = [];
-                angular.forEach($scope.people, function(p) {
-                    $scope.investors.push(p.selector);
-                });
-            };
+            // $scope.getInvestors = function() {
+            //     $scope.investors = [];
+            //     angular.forEach($scope.people, function(p) {
+            //         $scope.investors.push(p.selector);
+            //     });
+            // };
 
-            $scope.getInvestors();
-       
-            $scope.debug = function(){
-                console.log($scope.recipiens)
-            }
-            $scope.debug();
+            // $scope.getInvestors();
 
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
@@ -33,13 +29,13 @@ m.directive('composeMessage', function() {
                 backdropFade: true,
                 dialogFade: true,
             };
-            $scope.select2Options = {
-                'multiple': true,
-                'simple_tags': true,
-                'tags': function(){return $scope.investors;},
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter'
-            };
+            // $scope.select2Options = {
+            //     'multiple': true,
+            //     'simple_tags': true,
+            //     'tags': function(){return $scope.investors;},
+            //     'tokenSeparators': [",", " "],
+            //     'placeholder': 'Enter email address & press enter'
+            // };
 
 
             
@@ -90,6 +86,7 @@ m.directive('composeMessage', function() {
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
+                    console.log("notreadytosend")
                 }
                 else {
                     return true;
