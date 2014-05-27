@@ -2,8 +2,8 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('composeMessage', function() {
     return {
-        scope: false,
-        replace: true,
+        scope: {recipients: "="},
+        // replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', 
@@ -16,6 +16,12 @@ m.directive('composeMessage', function() {
             };
 
             $scope.getInvestors();
+       
+            $scope.debug = function(){
+                console.log($scope.recipiens)
+            }
+            $scope.debug();
+
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
@@ -35,7 +41,7 @@ m.directive('composeMessage', function() {
                 'placeholder': 'Enter email address & press enter'
             };
 
-            
+
             
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
@@ -88,6 +94,7 @@ m.directive('composeMessage', function() {
                 else {
                     return true;
                 }
+
                 // angular.forEach(msg.recipients, function(e) {
                 //     if ($scope.investors.indexOf(e) === -1) {
                 //         anybad = true;

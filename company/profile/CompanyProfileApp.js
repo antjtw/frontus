@@ -537,7 +537,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.personIs = function(person){
             return $scope.recipients.indexOf(person.email) != -1;
-            console.log($scope.recipients)
+            
         };
 
         $scope.emailRecipient = function(person){
@@ -547,7 +547,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else {
                 var toDelete = $scope.recipients.indexOf(person.email)
                 $scope.recipients.splice(toDelete, 1);
-            }; 
+            };   
+            console.log($scope.recipients);
             
         };
         $scope.recipients = [];
@@ -619,37 +620,32 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         $scope.showSharebar = function() {
             return !$scope.hideShareBar;
-        }
+        };
+
+
         // email sidebar
         $scope.toggleSide = function(button) {
             console.log(button);
-            console.log(button.typeof)
             if (!$scope.hideSharebar && button == undefined) {
                 $scope.hideSharebar = true;
                 $scope.sidebarPage = button
+                console.log("1");
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
+                console.log("2");
             }
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
+                console.log("3")
             }
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
+               // opens sidebar with email
             };
         };
 
-     
-
-        // $scope.getRecipients = function() {
-        //         var email = [];
-        //         if(emailRecipient === true){
-        //             email.push(emailRecipient);
-        //         }
-              
-        // };
-       
     }
 ]);
 
