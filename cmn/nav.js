@@ -423,7 +423,6 @@ navm.controller('NavCtrl',
 
         $scope.verifyPayment = function(status, response) {
             if (response.error) {
-                console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
@@ -619,7 +618,6 @@ navm.controller('NavCtrl',
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
-                            console.log(x);
                         }
                     });
                 } else {
@@ -670,7 +668,6 @@ navm.controller('NavCtrl',
                         $rootScope.billing.next_invoice_received = true;
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };

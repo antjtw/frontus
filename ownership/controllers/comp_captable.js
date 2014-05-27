@@ -971,27 +971,24 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Creates a new blank transaction with today's date
     $scope.createTrantab = function () {
-        if ($scope.activeTran[0] && $scope.activeTran[0].go) {
-            var inIssue = $scope.activeTran[0].issue
-            var newTran = {};
-            newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined", "convert": []};
-            angular.forEach($scope.issues, function (issue) {
-                if (issue.issue == inIssue) {
-                    newTran = $scope.tranInherit(newTran, issue);
-                }
-            });
-            $scope.trans.push(newTran);
-            $scope.activeTran.push(newTran);
-            for (var i = 0; i < $scope.activeTran.length; i++) {
-                if (i + 1 == $scope.activeTran.length) {
-                    $scope.activeTran[i].active = true;
-                }
-                else {
-                    $scope.activeTran[i].active = false;
-                }
+        var inIssue = $scope.activeTran[0].issue
+        var newTran = {};
+        newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined", "convert": []};
+        angular.forEach($scope.issues, function (issue) {
+            if (issue.issue == inIssue) {
+                newTran = $scope.tranInherit(newTran, issue);
+            }
+        });
+        $scope.trans.push(newTran);
+        $scope.activeTran.push(newTran);
+        for (var i = 0; i < $scope.activeTran.length; i++) {
+            if (i + 1 == $scope.activeTran.length) {
+                $scope.activeTran[i].active = true;
+            }
+            else {
+                $scope.activeTran[i].active = false;
             }
         }
-        $scope.activeTran[0].go = true;
     };
 
     $scope.revertTran = function (transaction) {

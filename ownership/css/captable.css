@@ -623,6 +623,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     display: inline-block;
     width: 300px;
     margin-right: 10px;
+    margin-left: 2px;
     font-size: 10px;
     text-align: left;
     text-transform: uppercase;
@@ -663,7 +664,7 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     height: 24px;
     font-size: 16px;
     padding-left: 0;
-    margin-left: 0;
+    margin-left: 10px;
     margin-top: 6px;
     cursor: pointer;
     vertical-align: middle;
@@ -672,6 +673,7 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
 
 p.rightTitle {
     position: relative;
+    margin: 0 0 5px;
 }
 
 p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
@@ -685,11 +687,6 @@ div.rightTitle.interest-rate span.tooltip-icon {
 
 div.rightTitle.interest-rate span.tooltip-icon + .tooltip {
     left: -77px !important;
-}
-
-
-p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
-    margin-top: -5px;
 }
 
 .rightTitle > div.tooltip {
