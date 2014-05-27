@@ -1,5 +1,4 @@
-//'use strict';
-// this broke usersnap and intercom.io
+'use strict';
 
 app.directive('library', function() {
     return {
@@ -103,3 +102,24 @@ app.directive('contenteditable', function() {
     };
 });
 
+app.directive('documentSummaryRow', function() {
+    // must be used in a tbody for valid html
+    return {
+	restrict: "A",
+        scope: {
+            doc: '='
+        },
+        templateUrl: '/documents/partials/documentSummaryRow.html'
+    }
+});
+
+app.directive('documentVersionRow', function() {
+    // must be used in a tr for valid html
+    return {
+	restrict: "A",
+        scope: {
+            version: '='
+        },
+        templateUrl: '/documents/partials/documentVersionRow.html'
+    }
+});

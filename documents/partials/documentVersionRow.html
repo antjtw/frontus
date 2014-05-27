@@ -1,0 +1,53 @@
+<td class="status-toggle"></td>
+<td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
+    <ul>
+        <li>{{version.name || version.investor}}</li>
+        <li>{{versionStatus(version)}}</li>
+    </ul>
+</td>
+<td class="status-toggle status-icon">
+    <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
+         class="circle green" aria-hidden="true"></div>
+    <div ng-show="versionIsComplete(version) && version.when_retracted  && !version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+         aria-hidden="true"><span>-</span>
+    </div>
+    <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
+         aria-hidden="true"><span>x</span>
+    </div>
+    <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
+</td>
+<td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)">
+    <ul>
+        <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
+    </ul>
+</td>
+<td colspan="2">
+    <div class="standard-button small-standard-button doc-share-button">
+        <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
+        <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
+        <button ng-show="isPendingIssuerFinalization(version)" class="btn"
+                ng-click="viewInvestorCopy(version)">Approve</button>
+    </div>
+    <ul class="dropdown-list">
+        <li class="dropdown standard menu-drop">
+            <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+
+            </a>
+            <ul ng-hide="toggleView();" class="dropdown-menu">
+                <li ng-show="!versionIsComplete(version)" ng-click="retractVersionOpen(version)">Retract</li>
+                <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
+                    ng-click="switchSignatureFlow(version, 0)">
+                    Switch to View Only
+                </li>
+                <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="remindDocOpen(version)">Send Reminder</li>
+                <li ng-click="viewStatus(doc)">View Status</li>
+                <li ng-click="viewInvestorCopy(version)">View Document</li>
+                <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
+                <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
+                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
+                    ng-click="exportVersionToPdf(version)">Export Final to PDF</li>
+                <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="voidDocOpen(version)">Void Document</li>
+            </ul>
+        </li>
+    </ul>
+</td>
