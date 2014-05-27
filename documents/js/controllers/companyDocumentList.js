@@ -300,7 +300,7 @@ app.controller('CompanyDocumentListController',
                 });
                 $scope.investorDocs = tmp;
                 angular.forEach($scope.investorDocs, function(investor) {
-                    investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
+                    //investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                     investor.statusRatio = $scope.docStatusRatio(investor);
                 });
             };
@@ -592,6 +592,7 @@ app.controller('CompanyDocumentListController',
                 return moment(date).from(zerodate);
             };
 
+            // TODO: remove (only in use for investor)
             $scope.versionStatus = function(version) {
                 if (version.last_event) {
                     return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity === 'retracted' ? (version.last_event.activity + " from ") : (version.last_event.activity + " by "))) +
@@ -611,23 +612,7 @@ app.controller('CompanyDocumentListController',
                 }
             };
 
-            $scope.shortDocStatus = function(doc) {
-                if (doc.versions) {
-                    if (doc.uploading) {
-                        return "Processing";
-                    }
-                    else if (doc.versions.length === 0) {
-                        return "Uploaded";
-                    } else if ($scope.docIsComplete(doc)) {
-                        return "Complete";
-                    } else if (!$scope.docIsComplete(doc)) {
-                        return "Pending";
-                    } else {
-                        return "Error";
-                    }
-                }
-            };
-
+            // TODO: remove, only in use in investor
             $scope.shortVersionStatus = function(version) {
                 if (!version) return "";
                 if ($scope.isVoided(version)) {

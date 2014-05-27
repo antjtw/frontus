@@ -99,7 +99,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder | limitTo: 5" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'">

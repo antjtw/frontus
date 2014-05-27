@@ -1,6 +1,8 @@
 'use strict';
 
 function DocumentSummaryRowController($scope, SWBrijj, basics) {
+    $scope.versionOrder = 'statusRank';
+
     // load the versions
     // TODO: load on hover, since most of this data is hidden?
     $scope.doc.versions = [];
@@ -97,4 +99,4 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
         return basics.eventRank(ev);
     };
 }
-DocumentSummaryRowController.$inject = ['$scope', 'SWBrijj', 'basics']
+DocumentSummaryRowController.$inject = ['$scope', 'SWBrijj', 'basics'];
