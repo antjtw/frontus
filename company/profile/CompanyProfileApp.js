@@ -623,7 +623,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         // email sidebar
         $scope.toggleSide = function(button) {
-            console.log(button);
             if (!$scope.hideSharebar && button == undefined) {
                 $scope.hideSharebar = true;
                 $scope.sidebarPage = button
@@ -632,14 +631,15 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
                 console.log("2");
+             
             }
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
                 console.log("3")
             }
-            // else if($scope.hideSharebar && button){
-            //     $scope.hideSharebar = false;
-            // }
+            else if(!$scope.hideSharebar && $scope.hideSharbarPage == button){
+                $scope.hideSharebar = false;
+            }
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;

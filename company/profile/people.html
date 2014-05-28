@@ -10,7 +10,7 @@
                         <div class="pull-left" >
                             <span>SEARCH</span>
                             <input type="text" class="search-box" ng-model="filterText">
-                            {{sidebarPage}}
+                            
                         </div>
                     </div>
 
@@ -31,8 +31,8 @@
 
                     <!-- peoplebutton -->
                     <div class="box-button pull-right"
-                         ng-class="{selected: !hideSharebar, 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || adminModalOpen()"
+                         ng-class="{'disabledme': companyIsZombie(), selected: !hideSharebar}"
+                         ng-click="companyIsZombie() || toggleSide('people')"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
@@ -105,12 +105,50 @@
                 slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                  </compose-message>
-                <div ng-switch-when= "hi">
-                        hello
+                <div ng-switch-when= "people">
+                    <div class="sidebarHeader">
+                        <span>ADD PERSON</span>
+                    </div>
+
+                    <div class="headerText">
+                        <div class="add-person input-list">
+                            <div>
+                                <span>Name</span><input type="text" ng-model="newName" />
+                            </div>
+                            <div>
+                                <span>Email</span><input type="text" ng-model="newEmail" />
+                            </div>
+                            <div>
+                                <span>Admin</span>
+                                 <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button email"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                            </div>
+                            <div ng-if="newRole && triggerUpgradeAdmins(1)"class="upgradeWarning">
+                                <span>
+                                    Note that making this person an admin will upgrade your subscription plan.
+                                </span>
+                            </div>
+                            <div class="sidebarFooter">
+
+                                <div class="footer-headline-right">
+                                    <div class= "standard-button white">
+                                    <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
+                                    Cancel
+                                     </button>
+                                    </div>
+                                </div>
+
+                                <div class="footer-headline-left">
+                                    <div class = "standard-button green">
+                                        <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); $parent.toggleSide()">Confirm</button>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
-                <div ng-switch-when="other">
-                    other
-                </div>
+                
         </div>
     </div>
 
@@ -119,40 +157,7 @@
 </div>
 
 
-<div modal="adminModal" close="adminModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Add Person</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
-    </div>
 
-    <div class="modalText">
-        <div class="add-person input-list">
-            <div>
-                <span>Name</span><input type="text" ng-model="newName" />
-            </div>
-            <div>
-                <span>Email</span><input type="text" ng-model="newEmail" />
-            </div>
-            <div>
-                <span>Admin</span>
-                <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button email"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-            </div>
-            <div ng-if="newRole && triggerUpgradeAdmins(1)"
-                 class="upgradeWarning">
-                <span>
-                    Note that making this person an admin will upgrade your subscription plan.
-                </span>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="adminModalClose()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
-        </div>
     </div>
 </div>
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
