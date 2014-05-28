@@ -2,6 +2,9 @@
 
 function DocumentSummaryRowController($scope, SWBrijj, basics) {
     $scope.versionOrder = 'statusRank';
+    // TODO: pull from parentContext
+    $scope.show_archived = false;
+    $scope.maxRatio = 1000;
 
     // load the versions
     // TODO: load on hover, since most of this data is hidden?
@@ -31,20 +34,15 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
                 version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
                 version.statusRank = eventRank(version.last_event);
             });
-            // move this to loadDocuments once status data is available
-            $scope.doc.statusRatio = $scope.docStatusRatio($scope.doc);
         });
     }
 
-    $scope.versionsVisible = function(versions) {
-        if (!versions) return false;
-        var total = versions.length;
-        if ($scope.maxRatio!==1000) {
-            total -= versions.filter($scope.versionIsComplete)
-                .length;
+    $scope.versionsVisible = function(doc) {
+        var total = doc.version_count;
+        if ($scope.maxRatio != 1000) {
+            total -= doc.complete_count;
         } else if (!$scope.show_archived) {
-            total -= versions.filter(function(el) {return el.archived;})
-                .length;
+            total -= doc.archive_count;
         }
         return total > 0;
     };
@@ -53,41 +51,8 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
         $scope.doc.shown = $scope.doc.shown !== true;
     };
 
-    $scope.isCompleteSigned = function(version) {
-        return basics.isCompleteSigned(version);
-    };
-    $scope.isCompleteViewed = function(version) {
-        return basics.isCompleteViewed(version);
-    };
-    $scope.isCompleteVoided = function(version) {
-        return basics.isCompleteVoided(version);
-    };
-    $scope.isCompleteRetracted = function(version) {
-        return version.when_retracted;
-    };
-
-    $scope.versionIsComplete = function(version) {
-        return $scope.isCompleteSigned(version)
-            || $scope.isCompleteViewed(version)
-            || $scope.isCompleteRetracted(version);
-    };
-
-    $scope.docStatusRatio = function(doc) {
-        if (doc && doc.versions) {
-            var initRatio = (doc.versions.filter($scope.versionIsComplete).length / doc.versions.length) + 1 || 0;
-            // This ensure documents with no versions appear before completed documents.
-            // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-            if (doc.versions.length > 0 && initRatio === 0) {
-                initRatio = (1 / doc.versions.length);
-            }
-            if (initRatio == 2) {
-                initRatio += (doc.versions.length);
-            }
-            if (initRatio === Infinity) {initRatio = 0;}
-            return initRatio;
-        } else {
-            return 0;
-        }
+    $scope.docIsComplete = function(doc) {
+        return (doc.version_count > 0 && doc.version_count == doc.complete_count);
     };
 
     function compareEvents(a, b) {
@@ -97,6 +62,29 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
 
     function eventRank(ev) {
         return basics.eventRank(ev);
+    };
+
+    $scope.formatDocStatusRatio = function(doc) {
+        if (doc.version_count == 0) return "Uploaded";
+
+        var show_archived = $scope.show_archived;
+
+        var hide_completed = ($scope.maxRatio !== 1000);
+
+        // fixme what if a completed document is archived?
+        var num = (hide_completed ? 0 : doc.complete_count);// + (show_archived ? archived : 0);
+        var total = doc.version_count;
+        var display_total = doc.version_count + (hide_completed ? -doc.completed_count : 0);
+
+        if (total == doc.archive_count && !show_archived) {
+            return "All documents archived";
+        } else if (total == doc.complete_count && hide_completed) {
+            return "All documents completed";
+        } else if (total == (doc.archive_count + doc.complete_count) && (!show_archived && hide_completed)) {
+            return "All documents are archived or completed";
+        } else {
+            return num + " / " + display_total+" completed";
+        }
     };
 }
 DocumentSummaryRowController.$inject = ['$scope', 'SWBrijj', 'basics'];

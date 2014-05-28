@@ -174,15 +174,18 @@ app.controller('CompanyDocumentListController',
                 // need # versions total, archived, and completed for later calculations
                 // will need to calculate statusRatio for sorting (can be alpha, statusRatio, or tags)
                 // will need to merge list of documents received into current list
-                SWBrijj.tblm('document.my_company_library',
-                        ['doc_id', 'template_id', 'company', 'docname', 'last_updated',
-                            'uploaded_by', 'annotations', 'iss_annotations', 'tags']).then(function(data) {
-                        $scope.documents = data;
-                        angular.forEach($scope.documents, function(d) {
-                            if (d.tags !== null) d.tags = JSON.parse(d.tags);
-                        });
-                        $scope.mergeSmartIntoDumb();
+                SWBrijj.tblm('document.my_company_library_view_list').then(function(data) {
+                    $scope.documents = data;
+                    angular.forEach($scope.documents, function(d) {
+                        if (d.tags !== null) {
+                            d.tags = JSON.parse(d.tags);
+                        }
+                        d.statusRatio = newDocStatusRatio(d);
                     });
+                    //$scope.mergeSmartIntoDumb();
+                    initShareState();
+                    loadTags();
+                });
             };
             function initShareState() {
                 getShareState();
@@ -271,7 +274,6 @@ app.controller('CompanyDocumentListController',
                             version.statusRank = eventRank(version.last_event);
                         });
                         // move this to loadDocuments once status data is available
-                        doc.statusRatio = $scope.docStatusRatio(doc);
                     });*/
                     constructDocumentsByInvestor();
                 });
@@ -709,12 +711,32 @@ app.controller('CompanyDocumentListController',
                     if (initRatio == 2) {
                         initRatio += (doc.versions.length);
                     }
-                    if (initRatio === Infinity) {initRatio = 0;}
+                    if (initRatio === Infinity) {
+                        initRatio = 0;
+                    }
                     return initRatio;
                 } else {
                     return 0;
                 }
             };
+            function newDocStatusRatio(doc) {
+                if (doc.version_count == 0) {
+                    return 0;
+                }
+                var initRatio = (doc.complete_count / doc.version_count) + 1 || 0;
+                // This ensure documents with no versions appear before completed documents.
+                // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
+                if (doc.version_count > 0 && initRatio == 0) {
+                    initRatio = (1 / doc.versions.length);
+                }
+                if (initRatio == 2) {
+                    initRatio += doc.version_count;
+                }
+                if (initRatio === Infinity) {
+                    initRatio = 0;
+                }
+                return initRatio;
+            }
 
             $scope.versionsArchived = function(doc) {
                 return doc.versions.filter(function(el) {return el.archived;});

@@ -1,12 +1,12 @@
 <tr class="empty-row"></tr>
 <tr ng-class="{selectedrow:doc.shown}">
     <td class="status-toggle"
-        ng-class="{'pointer':(doc.versions[0] && viewState.hideSharebar && versionsVisible(doc.versions)),
-                  'status-toggle-on': (doc.shown && versionsVisible(doc.versions))}"
-        ng-click="!doc.versions[0] || !viewState.hideSharebar || opendetails()">
+        ng-class="{'pointer':(doc.version_count != 0 && viewState.hideSharebar && versionsVisible(doc)),
+                  'status-toggle-on': (doc.shown && versionsVisible(doc))}"
+        ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()">
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="viewState.hideSharebar">
-            <span ng-hide="!versionsVisible(doc.versions) || (doc.shown || !doc.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span>
-            <span ng-show="versionsVisible(doc.versions) && doc.shown && doc.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span>
+            <span ng-hide="!versionsVisible(doc) || (doc.shown || doc.version_count == 0)" data-icon="&#xe017;" aria-hidden="true"></span>
+            <span ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
         </div>
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="!viewState.hideSharebar">
             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
@@ -16,14 +16,14 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
         <ul>
-            <li>{{doc.docname | caplength:50}} <span ng-show="doc.versions.length == 0 && !doc.uploaded_by">(Template)</span></li>
+            <li>{{doc.docname | caplength:50}} <span ng-show="doc.version_count == 0 && !doc.uploaded_by">(Template)</span></li>
             <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                 ng-show="viewState.hideSharebar">{{docStatusA(doc)}}</li>
         </ul>
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
-        <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-        <div ng-hide="docIsComplete(doc)" class="circle" ng-class="{gray:doc.versions.length===0, yellow:doc.versions.length>0}"></div>
+        <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
+        <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
         ng-click="doc.uploading || viewStatus(doc)">
@@ -63,21 +63,21 @@
             </ul>
         </div>
         <div ng-if="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-            <ul ng-show="(doc.doc_id || (doc.versions.length == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
+            <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
 
                     </a>
                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                        <li ng-show="(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
-                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
-                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
-                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                        <li ng-show="!(doc.versions.length == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
-                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
+                        <li ng-show="(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
+                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
+                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
+                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
+                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
+                        <li ng-show="!doc.versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
-                        <li ng-show="!doc.versions[0] && !(doc.versions.length == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
+                        <li ng-show="!doc.versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
                         <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
                         <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                     </ul>
