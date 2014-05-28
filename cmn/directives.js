@@ -21,7 +21,8 @@ m.directive('composeMessage', function() {
                 dialogFade: true,
             };
 
-
+            $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
+            console.log($scope.triggerUpgradeMessages($scope.recipients));
     
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
@@ -50,7 +51,7 @@ m.directive('composeMessage', function() {
 
                 }).except(function(err) {
                     void(err);
-                    $scope.$emit("notification:fail",
+                    $rootScope.$emit("notification:fail",
                         "Oops, something went wrong.");
                     $scope.clicked = false;
                 });
