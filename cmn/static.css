@@ -269,7 +269,7 @@ address {
 
 .static .feature-block.dark-feature h1, .static .feature-block.dark-feature h2 {
     color: #FFFFFF;
-    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
 }
 
 .static .feature-block.feature-permission {
