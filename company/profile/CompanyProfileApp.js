@@ -538,11 +538,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.personIs = function(person){
             return $scope.messageData.recipients.indexOf(person.email) != -1;
-            
+            console.log("personIs function")   
         };
 
         $scope.clearRecipient = function(){
             console.log($scope.messageData.recipients.length)
+            while($scope.messageData.recipients.length > 0) {
+                $scope.messageData.recipients.pop();
+            };
         };
       
 
@@ -637,6 +640,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
                 console.log("2");
+                $scope.clearRecipient();
              
             }
             else if($scope.hideSharebar && button == undefined){
