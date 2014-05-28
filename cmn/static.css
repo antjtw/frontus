@@ -1,5 +1,9 @@
 /* Marketing Pages */
 
+#register h1 {
+    margin-top: 40px;
+}
+
 .static {
     padding-top: 75px;
 }
@@ -257,6 +261,44 @@ address {
     text-align: center;
 }
 
+.static .feature-block.dark-feature {
+    background-color: rgb(30, 45, 61);
+    padding: 80px 0;
+    margin-left: 0;
+}
+
+.static .feature-block.dark-feature h1, .static .feature-block.dark-feature h2 {
+    color: #FFFFFF;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+}
+
+.static .feature-block.feature-permission {
+    padding: 0;
+    background-color: #E3E3E3;
+    margin-left: 0;
+    overflow: auto;
+}
+
+.feature-block.feature-permission .screen:nth-child(odd) {
+    margin-right: 0;
+    max-width: 400px;
+    margin-left: 40px;
+}
+
+.feature-block.feature-permission .text {
+    max-width: 550px;
+    margin-top: 90px;
+}
+
+.feature-block.feature-permission .screen {
+    max-width: 400px;
+}
+
+.static .feature-block.feature-permission + .icon-set {
+    margin-top: -4px;
+    background-color: #FFFFFF;
+}
+
 .features .header-section ul {
     float: right;
 }
@@ -281,21 +323,31 @@ address {
 
 
 .features h2 {
-    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
     font-size: 20px; 
     line-height: 26px;
     color: #666666;
 }
 
-/*.feature-block h2 {
-    color: #666666;
-}*/
+.features .grey-stripe {
+    padding: 30px 0;
+    background-color: #E3E3E3;
+}
+
+.features .grey-stripe div {
+    max-width: 700px;
+    margin: 0 auto;
+}
 
 .features .icon-set {
     background-color: #E3E3E3;
     width: 100%;
     height: 100%;
     padding: 80px 0;
+    margin-top: 80px;
+}
+
+.features .icon-set .second-icons {
     margin-top: 80px;
 }
 
@@ -308,6 +360,8 @@ address {
 .features .full-image > img {
     width: 100%;
     margin-top: 60px;
+    border: 1px solid #E3E3E3;
+    border-bottom: none;
 }
 
 .feature-block .screen {
@@ -348,6 +402,10 @@ address {
     padding: 40px 0;
     margin-top: 100px;
     background: url(/img/backgrounds/bgnoise_lg.png);
+}
+
+.feature-block.feature-docs img {
+    border: 1px solid #E3E3E3;
 }
 
 
@@ -673,9 +731,92 @@ address {
     padding-left: 4px;
 }
 
+@media (max-width: 1024px)  {
+    .container.full-image {
+        width: 100%;
+    }
+
+    .feature-block.feature-permission .screen {
+        max-width: 400px;
+        margin: 0 auto;
+        float: inherit;
+    }
+
+    .static .feature-block.feature-permission {
+        padding: 80px 0;
+    }
+
+    .feature-block.feature-permission .text {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 1000px) {
+    .feature-block.feature-docs .screen {
+        display: inline-block;
+        margin-right: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .features .grey-stripe div {
+        margin-left: 60px;
+        margin-right: 60px;
+    }
+
+    .features .header-section .header h1 {
+        margin-left: 60px;
+        margin-bottom: 20px;
+    }
+
+    .features .header-section ul {
+        float: left;
+        margin-left: 40px;
+    }
+
+    .feature-block.feature-permission .text {
+        margin-top: 0;
+    }
+
+    .features .icon-set .second-icons {
+        margin-top: 20px;
+    }
+
+    .trio-icons > div > img {
+        margin-top: 20px;
+    }
+
+    .static .feature-block.feature-permission {
+        padding: 20px 0;
+    }
+
+    .static .feature-block.dark-feature, .static .feature-block.feature-permission {
+        padding-left: 60px;
+    }
+}
+
 
 
 @media (max-width: 480px) {
+
+    .features .grey-stripe div {
+        margin-left: 40px;
+        margin-right: 40px;
+    }
+
+    .features .header-section ul {
+        margin-left: 20px;
+    }
+
+    .features .header-section .header h1 {
+        margin-left: 40px;
+        margin-bottom: 20px;
+    }
+
+    .features .header-section {
+        padding-top: 40px;
+    }
 
     .pricing .pricing-blocks.pricing-blocks-phone > div > ul > li:nth-child(1) > ul {
         width: 290px;
@@ -683,6 +824,10 @@ address {
 
     .container.pricing-container {
         width: 90%;
+    }
+
+    .static .feature-block.dark-feature, .static .feature-block.feature-permission {
+        padding-left: 40px;
     }
 }
 

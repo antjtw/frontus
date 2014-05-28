@@ -206,6 +206,22 @@
 
 @media (max-width: 480px) {
 
+    .navBarLoggedOut {
+        height: 40px;
+    }
+
+    .topnav.navheight {
+        height: 40px;
+    }
+
+    .topnav.navheight > div > ul.nav-logo {
+        margin-top: 0;
+    }
+
+    .fixednavoffset {
+        margin-top: 40px;
+    }
+
 	.home h1 {
 		font-size: 34px;
 	}
