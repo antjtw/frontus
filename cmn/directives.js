@@ -1,5 +1,6 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+
 m.directive('composeMessage', function() {
     return {
         scope: {recipients: "="},
@@ -7,8 +8,12 @@ m.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+
+        
+
         function($scope, $rootScope, SWBrijj) {
+
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
@@ -22,7 +27,18 @@ m.directive('composeMessage', function() {
             };
 
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
-    
+            
+            $scope.howMany = function (){
+                if(location.host == 'share.wave'){
+                    console.log($scope.recipients + "i'm at sharewave!");
+                };
+            };
+
+            // var rr = getCSSRule('.for-r0ml');
+            // if (rr) {
+            //     rr.style.display="inline";
+            // }
+
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';

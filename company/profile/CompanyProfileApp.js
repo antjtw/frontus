@@ -513,6 +513,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.toggleRole = function() {
             $scope.newRole = !$scope.newRole;
+            console.log("i'm a function!")
         };
 
         $scope.removeAdminModalOpen = function(email) {
@@ -540,12 +541,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             
         };
 
+        $scope.clearRecipient = function(){
+            console.log($scope.messageData.recipients.length)
+        };
+      
+
         $scope.emailRecipient = function(person){
             if ($scope.messageData.recipients.indexOf(person.email)=== -1){
                  $scope.messageData.recipients.push(person.email);
             }
             else {
-                var toDelete = $scope.recipients.indexOf(person.email)
+                var toDelete = $scope.messageData.recipients.indexOf(person.email)
                 $scope.messageData.recipients.splice(toDelete, 1);
             };   
             console.log($scope.messageData.recipients);
