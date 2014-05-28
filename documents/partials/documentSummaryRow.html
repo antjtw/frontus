@@ -87,4 +87,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" ng-if="doc.shown" class="sub-row" ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" viewState="viewState" ng-if="doc.shown" class="sub-row" ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder"></tr>

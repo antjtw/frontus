@@ -120,7 +120,8 @@ app.directive('documentVersionRow', function() {
     return {
         restrict: "A",
         scope: {
-            version: '='
+            version: '=',
+            viewState: '='
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController

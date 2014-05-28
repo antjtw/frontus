@@ -3,18 +3,25 @@
 function DocumentSummaryRowController($scope, SWBrijj, basics) {
     $scope.versionOrder = 'statusRank';
     // TODO: pull from parentContext
-    $scope.show_archived = false;
-    $scope.maxRatio = 1000;
+    $scope.viewState.show_archived;
+    $scope.viewState.maxRatio;
 
     // load the versions
     // TODO: load on hover, since most of this data is hidden?
     $scope.doc.versions = [];
-    SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.doc.doc_id).then(function(data) {
-        angular.forEach(data, function(version) {
-            $scope.doc.versions.push(version);
+    var loadingVersions = false
+    function loadVersions() {
+        if (loadingVersions) {
+            return
+        }
+        loadingVersions = true;
+        SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.doc.doc_id).then(function(data) {
+            angular.forEach(data, function(version) {
+                $scope.doc.versions.push(version);
+            });
+            loadDocumentActivity();
         });
-        loadDocumentActivity();
-    });
+    }
 
     function loadDocumentActivity() {
         SWBrijj.tblmm("document.recent_company_activity", "original", $scope.doc.doc_id).then(function(data) {
@@ -39,9 +46,9 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
 
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
-        if ($scope.maxRatio != 1000) {
+        if ($scope.viewState.maxRatio != 1000) {
             total -= doc.complete_count;
-        } else if (!$scope.show_archived) {
+        } else if (!$scope.viewState.show_archived) {
             total -= doc.archive_count;
         }
         return total > 0;
@@ -49,6 +56,7 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
 
     $scope.opendetails = function() {
         $scope.doc.shown = $scope.doc.shown !== true;
+        loadVersions();
     };
 
     $scope.docIsComplete = function(doc) {
@@ -67,14 +75,14 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
     $scope.formatDocStatusRatio = function(doc) {
         if (doc.version_count == 0) return "Uploaded";
 
-        var show_archived = $scope.show_archived;
+        var show_archived = $scope.viewState.show_archived;
 
-        var hide_completed = ($scope.maxRatio !== 1000);
+        var hide_completed = ($scope.viewState.maxRatio !== 1000);
 
         // fixme what if a completed document is archived?
         var num = (hide_completed ? 0 : doc.complete_count);// + (show_archived ? archived : 0);
         var total = doc.version_count;
-        var display_total = doc.version_count + (hide_completed ? -doc.completed_count : 0);
+        var display_total = doc.version_count - (hide_completed ? doc.complete_count : 0);
 
         if (total == doc.archive_count && !show_archived) {
             return "All documents archived";
@@ -83,7 +91,7 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
         } else if (total == (doc.archive_count + doc.complete_count) && (!show_archived && hide_completed)) {
             return "All documents are archived or completed";
         } else {
-            return num + " / " + display_total+" completed";
+            return num + " / " + display_total + " completed";
         }
     };
 }

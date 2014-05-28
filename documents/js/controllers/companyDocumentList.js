@@ -8,7 +8,12 @@ app.controller('CompanyDocumentListController',
                  $routeParams, $rootScope, $route, SWBrijj, navState,
                  basics, $http) {
             $scope.docShareState={};
-            $scope.state = {hideSharebar: true};
+            $scope.state = {
+                hideSharebar: true,
+                maxRatio: 1000,
+                show_archived: false,
+            };
+
             if (navState.role == 'investor') {
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
                 return;
@@ -174,7 +179,7 @@ app.controller('CompanyDocumentListController',
                 // need # versions total, archived, and completed for later calculations
                 // will need to calculate statusRatio for sorting (can be alpha, statusRatio, or tags)
                 // will need to merge list of documents received into current list
-                SWBrijj.tblm('document.my_company_library_view_list').then(function(data) {
+                SWBrijj.tblmlimit('document.my_company_library_view_list', 10, 0).then(function(data) {
                     $scope.documents = data;
                     angular.forEach($scope.documents, function(d) {
                         if (d.tags !== null) {
@@ -308,7 +313,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.toggleMaxRatio = function() {
-                $scope.maxRatio = ($scope.maxRatio===1000) ? 2 : 1000;
+                $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
             };
 
             $scope.viewBy = 'document';
@@ -316,19 +321,17 @@ app.controller('CompanyDocumentListController',
             $scope.shareOrder = 'docname';
             $scope.versionOrder = 'statusRank';
             $scope.investorOrder = 'name';
-            $scope.maxRatio = 1000;
             $scope.selectedDoc = 0;
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
             $scope.signeeded = "No";
             $scope.query = $routeParams.q || "";
-            $scope.show_archived = false;
             $scope.setQuery = function(q) {
                 $scope.query = q;
             };
 
             $scope.toggleArchived = function() {
-                $scope.show_archived = !$scope.show_archived;
+                $scope.state.show_archived = !$scope.state.show_archived;
             };
 
             // Only allow docOrder to be set -- versionOrder is fixed
@@ -350,10 +353,10 @@ app.controller('CompanyDocumentListController',
                  * @type { string} */
                 if (!$scope.state.hideSharebar && obj.forShare) {
                     return true;
-                } else if ($scope.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
+                } else if ($scope.state.maxRatio!==1000 && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsCompleted(obj).length) {
                     // if hide_completed and all versions are completed then return false
                     return false;
-                } else if (!$scope.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
+                } else if (!$scope.state.show_archived && obj.versions && obj.versions.length>0 && obj.versions.length==$scope.versionsArchived(obj).length) {
                     // if !show_archived and all versions are archived then return false
                     return false;
                 } else {
@@ -361,7 +364,7 @@ app.controller('CompanyDocumentListController',
                 }
             };
             $scope.versionFilter = function(obj) {
-                return $scope.maxRatio==1000 || !$scope.versionIsComplete(obj);
+                return $scope.state.maxRatio==1000 || !$scope.versionIsComplete(obj);
             };
             $scope.exportOriginalToPdf = function(doc) {
                 SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
@@ -679,11 +682,11 @@ app.controller('CompanyDocumentListController',
 
 
                 var archived = $scope.versionsArchived(doc).length;
-                var show_archived = $scope.show_archived;
+                var show_archived = $scope.state.show_archived;
 
                 // fixme what if a completed document is archived?
                 var completed = $scope.versionsCompleted(doc).length;
-                var hide_completed = ($scope.maxRatio !== 1000);
+                var hide_completed = ($scope.state.maxRatio !== 1000);
 
                 var num = (hide_completed ? 0 : completed);// + (show_archived ? archived : 0);
                 var total = doc.versions.length;
@@ -920,12 +923,12 @@ app.controller('CompanyDocumentListController',
                 return res;
             };
             $scope.clearHideCompleted = function() {
-                var res = $scope.maxRatio;
-                $scope.maxRatio = 1000;
+                var res = $scope.state.maxRatio;
+                $scope.state.maxRatio = 1000;
                 return res;
             };
             $scope.restoreHideCompleted = function(oldratio) {
-                $scope.maxRatio = oldratio;
+                $scope.state.maxRatio = oldratio;
             };
             $scope.clearSelectedDocs = function() {
                 var res = [];
@@ -1179,10 +1182,10 @@ app.controller('CompanyDocumentListController',
             $scope.versionsVisible = function(versions) {
                 if (!versions) return false;
                 var total = versions.length;
-                if ($scope.maxRatio!==1000) {
+                if ($scope.state.maxRatio!==1000) {
                     total -= versions.filter($scope.versionIsComplete)
                         .length;
-                } else if (!$scope.show_archived) {
+                } else if (!$scope.state.show_archived) {
                     total -= versions.filter(function(el) {return el.archived;})
                         .length;
                 }

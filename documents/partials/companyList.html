@@ -24,13 +24,13 @@
                 </div>
                 <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                     <span>HIDE COMPLETED</span>
-                    <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
+                    <button class="check-box-button" ng-class="{'selected':state.maxRatio===2}" ng-click="toggleMaxRatio()">
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
                     <span>SHOW ARCHIVED</span>
-                    <button class="check-box-button" ng-class="{'selected':show_archived==true}" ng-click="toggleArchived();">
+                    <button class="check-box-button" ng-class="{'selected':state.show_archived==true}" ng-click="toggleArchived();">
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -99,7 +99,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder | limitTo: 5" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'">
@@ -149,7 +149,7 @@
         </td>
     </tr>
     <tr ng-show="investor.shown" class="sub-row"
-        ng-repeat="version in investor.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder">
+        ng-repeat="version in investor.versions | filter: versionFilter | archived: state.show_archived | orderBy:versionOrder">
         <td class="status-toggle"></td>
         <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
             <ul>
@@ -170,7 +170,7 @@
         </td>
         <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(version)">
             <ul>
-                <li>{{shortVersionStatus(version)}} <span ng-show="show_archived && version.archived"> & archived</span></li>
+                <li>{{shortVersionStatus(version)}} <span ng-show="state.show_archived && version.archived"> & archived</span></li>
             </ul>
         </td>
         <td>
