@@ -23,6 +23,7 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
     }
 
     function loadDocumentActivity() {
+        // TODO: only pull last event per document, instead of all events, possibly in conjunction with my_counterparty_library
         SWBrijj.tblmm("document.recent_company_activity", "original", $scope.doc.doc_id).then(function(data) {
             angular.forEach($scope.doc.versions, function(version) {
                 var version_activity = data.filter(
