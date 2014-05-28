@@ -292,6 +292,7 @@ address {
 
 .feature-block.feature-permission .screen {
     max-width: 400px;
+    text-align: right;
 }
 
 .static .feature-block.feature-permission + .icon-set {
