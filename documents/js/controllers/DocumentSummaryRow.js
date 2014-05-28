@@ -2,15 +2,11 @@
 
 function DocumentSummaryRowController($scope, SWBrijj, basics) {
     $scope.versionOrder = 'statusRank';
-    // TODO: pull from parentContext
-    $scope.viewState.show_archived;
-    $scope.viewState.maxRatio;
 
     // load the versions
-    // TODO: load on hover, since most of this data is hidden?
     $scope.doc.versions = [];
     var loadingVersions = false
-    function loadVersions() {
+    $scope.loadVersions = function() {
         if (loadingVersions) {
             return
         }
@@ -21,6 +17,9 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
             });
             loadDocumentActivity();
         });
+    };
+    if ($scope.doc.shown) {
+        $scope.loadVersions();
     }
 
     function loadDocumentActivity() {
@@ -56,7 +55,7 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
 
     $scope.opendetails = function() {
         $scope.doc.shown = $scope.doc.shown !== true;
-        loadVersions();
+        $scope.loadVersions();
     };
 
     $scope.docIsComplete = function(doc) {
@@ -93,6 +92,12 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
         } else {
             return num + " / " + display_total + " completed";
         }
+    };
+
+    $scope.versionIsComplete = function(version) {
+        return basics.isCompleteSigned(version)
+            || basics.isCompleteViewed(version)
+            || version.when_retracted;
     };
 }
 DocumentSummaryRowController.$inject = ['$scope', 'SWBrijj', 'basics'];

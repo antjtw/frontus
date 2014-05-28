@@ -1,5 +1,5 @@
 <tr class="empty-row"></tr>
-<tr ng-class="{selectedrow:doc.shown}">
+<tr ng-class="{selectedrow:doc.shown}" ng-mouseenter="loadVersions()">
     <td class="status-toggle"
         ng-class="{'pointer':(doc.version_count != 0 && viewState.hideSharebar && versionsVisible(doc)),
                   'status-toggle-on': (doc.shown && versionsVisible(doc))}"
@@ -66,8 +66,6 @@
             <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
-
-
                     </a>
                     <ul ng-hide="toggleView();" class="dropdown-menu">
                         <li ng-show="(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewTemplate(doc)">View Template</li>
@@ -87,4 +85,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" viewState="viewState" ng-if="doc.shown" class="sub-row" ng-repeat="version in doc.versions | filter: versionFilter | archived: show_archived | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" ng-show="doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder"></tr>
