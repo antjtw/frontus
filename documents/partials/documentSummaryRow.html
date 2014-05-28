@@ -16,7 +16,7 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
         <ul>
-            <li>{{doc.docname | caplength:50}} <span ng-show="doc.version_count == 0 && !doc.uploaded_by">(Template)</span></li>
+            <li>{{(doc.type == "doc" ? doc.docname : doc.name || doc.email) | caplength:50}} <span ng-show="doc.version_count == 0 && !doc.uploaded_by">(Template)</span></li>
             <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
                 ng-show="viewState.hideSharebar">{{docStatusA(doc)}}</li>
         </ul>
@@ -31,6 +31,7 @@
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
     </td>
+    <!-- TODO: only for documents -->
     <td ng-animate="{show:'fadeShow', hide:'fadeHide'}">
         <span class="tag"
               ng-repeat="tag in doc.tags"
@@ -38,6 +39,7 @@
             {{tag + (($last && ' ') || ', ')}}
         </span>
     </td>
+    <!-- TODO: for "investor" layout, should be 1 option, viewProfile(investor) -->
     <td>
         <div ng-if="!viewState.hideSharebar && doc.forShare" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
             <ul class="dropdown-list drop-selector">

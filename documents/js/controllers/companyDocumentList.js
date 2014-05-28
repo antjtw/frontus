@@ -185,6 +185,7 @@ app.controller('CompanyDocumentListController',
                         if (d.tags !== null) {
                             d.tags = JSON.parse(d.tags);
                         }
+                        d.type = "doc";
                         d.statusRatio = newDocStatusRatio(d);
                     });
                     //$scope.mergeSmartIntoDumb();
@@ -280,19 +281,25 @@ app.controller('CompanyDocumentListController',
                         });
                         // move this to loadDocuments once status data is available
                     });*/
-                    constructDocumentsByInvestor();
+                    //constructDocumentsByInvestor();
                 });
             };
 
-            function constructDocumentsByInvestor() {
+            SWBrijj.tblm("document.my_company_library_view_recipient_list").then(function(data) {
+                $scope.investorDocs = data;
+                angular.forEach($scope.investorDocs, function(investor) {
+                    investor.type = "investor";
+                    investor.statusRatio = newDocStatusRatio(investor);
+                });
+            });
+/*            function constructDocumentsByInvestor() {
                 // TODO: needs its own view
-                $scope.investorDocs = null;
+                $scope.investorDocs = {};
                 angular.forEach($scope.documents, function(doc) {
                     angular.forEach(doc.versions, function(version) {
-                        if ($scope.investorDocs && $scope.investorDocs[version.investor]) {
+                        if ($scope.investorDocs[version.investor]) {
                             $scope.investorDocs[version.investor].versions.push(version);
                         } else {
-                            if (!$scope.investorDocs) {$scope.investorDocs = {};}
                             $scope.investorDocs[version.investor] = {
                                 'versions': [version],
                                 'name': version.name,
@@ -310,7 +317,7 @@ app.controller('CompanyDocumentListController',
                     //investor.versions.sort(function(a,b) {return Date.parse(b.last_event.event_time)-Date.parse(a.last_event.event_time);});
                     investor.statusRatio = $scope.docStatusRatio(investor);
                 });
-            };
+            };*/
 
             $scope.toggleMaxRatio = function() {
                 $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
