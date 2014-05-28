@@ -16,7 +16,7 @@
                  
                     <div class="box-button pull-right"
                          ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('email')"
+                         ng-click="companyIsZombie() || toggleSide()"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -30,7 +30,7 @@
 
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide();"
+                         ng-click="companyIsZombie() || adminModalOpen();"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
