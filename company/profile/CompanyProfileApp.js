@@ -536,23 +536,25 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         //want the email directive to bind to this property in the controller
 
         $scope.personIs = function(person){
-            return $scope.recipients.indexOf(person.email) != -1;
+            return $scope.messageData.recipients.indexOf(person.email) != -1;
             
         };
 
         $scope.emailRecipient = function(person){
-            if ($scope.recipients.indexOf(person.email)=== -1){
-                 $scope.recipients.push(person.email);
+            if ($scope.messageData.recipients.indexOf(person.email)=== -1){
+                 $scope.messageData.recipients.push(person.email);
             }
             else {
                 var toDelete = $scope.recipients.indexOf(person.email)
-                $scope.recipients.splice(toDelete, 1);
+                $scope.messageData.recipients.splice(toDelete, 1);
             };   
-            console.log($scope.recipients);
-            return $scope.recipients
+            console.log($scope.messageData.recipients);
+            return $scope.messageData.recipients
             
         };
-        $scope.recipients = [];
+        
+        $scope.messageData = {};
+        $scope.messageData.recipients = [];
 
 
         $scope.narrowopts = {

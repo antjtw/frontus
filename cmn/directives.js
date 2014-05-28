@@ -9,15 +9,6 @@ m.directive('composeMessage', function() {
         templateUrl: '/cmn/partials/composeMessage.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', 
         function($scope, $rootScope, SWBrijj) {
-            // $scope.getInvestors = function() {
-            //     $scope.investors = [];
-            //     angular.forEach($scope.people, function(p) {
-            //         $scope.investors.push(p.selector);
-            //     });
-            // };
-
-            // $scope.getInvestors();
-
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
@@ -29,13 +20,7 @@ m.directive('composeMessage', function() {
                 backdropFade: true,
                 dialogFade: true,
             };
-            // $scope.select2Options = {
-            //     'multiple': true,
-            //     'simple_tags': true,
-            //     'tags': function(){return $scope.investors;},
-            //     'tokenSeparators': [",", " "],
-            //     'placeholder': 'Enter email address & press enter'
-            // };
+   
 
 
             
@@ -46,17 +31,7 @@ m.directive('composeMessage', function() {
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
                 console.log(recipients)
-                 // assume that recipients are valid
-                // var regExp = /\(([^)]+)\)/;
-                // var recipients = [];
-    
-                // angular.forEach(msg.recipients, function(person) {
-                //     var matches = regExp.exec(person);
-                //     if (matches == null) {
-                //         matches = ["", person];
-                //     }
-                //     recipients.push(matches[1]);
-                // });
+             
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -66,9 +41,9 @@ m.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-                    $scope.$emit("notification:success",
+                    $rootScope.$emit("notification:success",
                         "Message sent!");
-                    // $scope.toggleSide();
+                    //this works but i don't know why for the root scope
                     $scope.resetMessage();
                     $scope.recipients = [];
                     $scope.clicked = false;
