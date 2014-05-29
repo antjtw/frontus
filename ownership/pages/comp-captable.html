@@ -719,7 +719,7 @@
     </div>
 </div>
 
-<div ng-style="viewportheight" ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
+<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
 <span ng-hide="toggleView() || tourstate == 0" class="tour-icon side-toggle" data-placement="left" bs-tooltip="tourmessages.sidebar"><span>?</span></span>
 <button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
     {{sideToggleName}}
@@ -727,7 +727,7 @@
 <div class="row-fluid">
 <tabset>
 <tab heading="Information">
-<div ng-switch on="sideBar">
+<div ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
                         <div class="headsection row-fluid">
@@ -1458,10 +1458,6 @@
 
 <!-- Transactions Side Bar when UnEditable -->
                       <span ng-switch-when="4">
-                        <div class="tabbed headsection row-fluid">
-                            <h1>{{activeInvestor}}
-                            </h1>
-                        </div>
                         <accordion class="transaction-accordion" close-others="true">
                         <accordion-group is-open="tran.active" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
                             <accordion-heading>
@@ -1635,7 +1631,7 @@
                       </span>
                 </div>
             </tab>
-            <tab heading="Activity">
+            <tab ng-show="toggleView()" heading="Activity">
                 <div>
                     <div activity-feed height='viewportactivity' user='navState.userid' type="iss" view="activityView"></div>
                 </div>
@@ -1644,6 +1640,7 @@
 </div>
 </div>
 </div>
+<button class="right-rail-button" ng-click="sideToggle = !sideToggle">Close</button>
 
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">

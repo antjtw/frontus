@@ -10,6 +10,22 @@ input[disabled].default-pointer {
 
 /* Captable */
 
+button.right-rail-button {
+    position: absolute;
+    right: 0;
+    top: 100px;
+    height: 40px;
+    width: 40px;
+    border: none;
+    background-color: #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
+    border-left: 1px solid #C6C6C6;
+}
+
+.dynamic-page .row-fluid .span8.leftBlock {
+    padding-bottom: 0;
+}
+
 div.last-saved {
     display: inline-block;
     float: right;
@@ -541,6 +557,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .trantabs .nav.nav-tabs, .tabbable .nav.nav-tabs {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
+    background-color: #E3E3E3;
+    border-color: #C6C6C6;
 }
 
 .tabbable .info-box > .head-box {
@@ -553,12 +571,17 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .info-box {
     margin-bottom: 0;
+    border-top: none;
 }
 
 .nav-tabs > li > a {
     border-radius: 0;
     margin-right: 0px;
     cursor: pointer;
+    background-color: #E3E3E3;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    border-right-color: #C6C6C6;
 }
 
 .trancore {
@@ -597,10 +620,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
-    border-top: 2px solid #1ABC96;
     border-radius: 0;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
+    background-color: #F1F1F1;
 }
 
 .nav-tabs > li:first-child > a, .nav-tabs > li:first-child > a:hover, .nav-tabs > li:first-child > a:focus {
