@@ -7,9 +7,9 @@ m.directive('addPerson', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/addPerson.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
 
-        function($scope, $rootScope, SWBrijj) {
+        function($scope, $rootScope, SWBrijj, $route) {
 
             $scope.createPerson = function() {
                 if ($scope.newRole) {
