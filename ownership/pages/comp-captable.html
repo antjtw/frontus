@@ -730,10 +730,8 @@
 <div ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
-                        <div class="headsection row-fluid">
-                            <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
-                                       ng-model="activeIssue.issue"
-                                       onkeydown="testForEnter();">
+                        <!-- <div class="headsection row-fluid">
+                            <h2>
 
                                 <ul class="dropdown-list transaction-icon pull-right">
                                     <li class="dropdown standard menu-drop">
@@ -748,14 +746,17 @@
                                     </li>
                                 </ul>
                             </h2>
-
-                            <p>Customize terms for this security</p>
-                        </div>
+                        </div> -->
 
                         <!-- Global Tab -->
                         <div class="capGuide global"  ng-class="{'issue-rail':tourstate==3}">
                             <span class="next-button" ng-click="moveTour();">Next</span>
-                            <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
+
+                            <p class="rightTitle"><span>Security name</span><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
+                                                                                   ng-model="activeIssue.issue"
+                                                                                   onkeydown="testForEnter();">
+
+                            <p class="rightTitle"><span>Security Date</span><input ng-disabled="toggleView();" id="date{{activeIssue.$$hashKey}}" ng-change="saveIssueCheckDate(activeIssue, 'date')" ui-event="{keydown:'saveIssueCheckDate(activeIssue, \'date\', $event)', blur:'saveIssueCheckDate(activeIssue, \'date\', \'blur\')'}" type="text"
                                                                                 ng-model="activeIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
                                                                                 onkeydown="testForEnter();"></p>
 
@@ -774,7 +775,7 @@
                                             </li>
                                         </ul>
                                     </span>
-                                    <span ng-hide="typeLocked(activeIssue);">
+                                    <span class="locked-security" ng-hide="typeLocked(activeIssue);">
                                         {{activeIssue.type}}
                                     </span>
                             </div>
@@ -1640,7 +1641,9 @@
 </div>
 </div>
 </div>
-<button class="right-rail-button" ng-click="sideToggle = !sideToggle">Close</button>
+<button class="right-rail-button" ng-click="sideToggle = !sideToggle">
+    <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
+</button>
 
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">

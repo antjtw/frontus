@@ -730,6 +730,7 @@ navm.controller('NavCtrl',
             $scope.windowheight = $window.innerHeight;
         }
         $rootScope.$watch('billingLoaded', function() {
+            console.log($rootScope.companyIsZombie());
             $scope.windowheight = $window.innerHeight;
         });
         window.onresize = function() {
@@ -738,7 +739,6 @@ navm.controller('NavCtrl',
         };
 
         $scope.$watch('windowheight', function() {
-            console.log($scope.windowheight);
             if ($rootScope.companyIsZombie()) {
                 $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
