@@ -1,12 +1,13 @@
-
-<div ng-controller="PeopleCtrl">
+<div>
+<!-- 
+    <div ng-class="for-r0ml">{{recipients.length}}</div> -->
 
     <div class="sidebarHeader">
         <span>SEND MESSAGE</span>
     </div>
 
     <div class="sidebarText">
-        <div class="input-list">
+    <!--     <div class="input-list"> -->
         <div ng-if="triggerUpgradeMessages(recipients)"
             class="upgradeWarning">
                 <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
@@ -37,13 +38,13 @@
         </div> -->
 
         <div class="footer-headline-left">
-        <div class = "standard-button green">
-            <button class="btn"
-                ng-disabled="!readyToSend(message)  || clicked"
-                ng-click="sendMessage(message);">
-                Send
-            </button>
-        </div>
+            <div class = "standard-button green">
+                <button class="btn"
+                    ng-disabled="!readyToSend(message)  || clicked"
+                    ng-click="sendMessage(message); $parent.toggleSide()">
+                    Send
+                </button>
+            </div>
         </div>
 
 
@@ -51,7 +52,7 @@
 
         <div class="footer-headline-right">
         <div class= "standard-button white">
-            <button class="btn" ng-click="toggleSide(); resetMessage()">
+            <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
             Cancel
             </button>
         </div>
