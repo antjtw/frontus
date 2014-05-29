@@ -538,9 +538,17 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 
-.trantabs .nav.nav-tabs {
+.trantabs .nav.nav-tabs, .tabbable .nav.nav-tabs {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
+}
+
+.tabbable .info-box > .head-box {
+    display: none;
+}
+
+.tabbable .tab-content {
+    padding-bottom: 0;
 }
 
 .nav-tabs > li > a {

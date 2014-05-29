@@ -725,6 +725,8 @@
     {{sideToggleName}}
 </button>
 <div class="row-fluid">
+<tabset>
+<tab heading="Information">
 <div ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
@@ -1631,7 +1633,14 @@
                             </div>
                         </span>
                       </span>
-</div>
+                </div>
+            </tab>
+            <tab heading="Activity">
+                <div>
+                    <div activity-feed user='navState.userid' type="iss" view="activityView"></div>
+                </div>
+            </tab>
+        </tabset>
 </div>
 </div>
 </div>

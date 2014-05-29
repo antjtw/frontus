@@ -193,7 +193,7 @@ input:focus, textarea:focus {
 /* Fonts */
 p, button, select, textarea, a, address, div, input, button {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(141, 141, 141);
 }
@@ -209,7 +209,7 @@ p strong {
     font-weight: normal;
 }
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    font-size:12px
+    font-size:14px
 }
 h1 {
     font-family:'FS Elliot Web Light', sans-serif !important;
@@ -229,7 +229,7 @@ h2 {
 
 .bodyText, .bodyText input, .bodyText a {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(127, 140, 141);
 }

@@ -54,6 +54,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
+    $scope.activityView = "ownership.company_activity_feed";
+
 
 
     // Variables for the select boxes to limit the selections to the available database types
