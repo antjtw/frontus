@@ -517,6 +517,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
+        
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
@@ -535,15 +536,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = true;
         };
 
+       
+
         $scope.adminModalClose = function() {
             $scope.closeMsg = 'I was closed at: ' + new Date();
             $scope.adminModal = false;
         };
 
-        $scope.toggleRole = function() {
-            $scope.newRole = !$scope.newRole;
-        };
-
+        
         $scope.removeAdminModalOpen = function(email) {
             $scope.selectedToRevoke = email;
             $scope.removeAdminModal = true;
@@ -561,23 +561,38 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
         };
+        
+        //want the email directive to bind to this property in the controller
+
+        $scope.personIs = function(person){
+            return $scope.messageData.recipients.indexOf(person.email) != -1;
+            // select person in email
+        };
+
+        $scope.showCheck = function(){
+            $scope.sidebarPage = 'email';
+        }
+
+        $scope.clearRecipient = function(){
+            while($scope.messageData.recipients.length > 0) {
+                $scope.messageData.recipients.pop();
+            };
+        };
+      
 
         $scope.emailRecipient = function(person){
-            if ($scope.recipients.indexOf(person.email)=== -1){
-                $scope.recipients.push(person.email);
+            if ($scope.messageData.recipients.indexOf(person.email)=== -1){
+                 $scope.messageData.recipients.push(person.email);
             }
             else {
-                var toDelete = $scope.recipients.indexOf(person.email)
-                $scope.recipients.splice(toDelete, 1);
-            };
-
+                var toDelete = $scope.messageData.recipients.indexOf(person.email)
+                $scope.messageData.recipients.splice(toDelete, 1);
+            };   
+            return $scope.messageData.recipients
         };
-
-        $scope.recipients = [];
-        $scope.personIs = function(person){
-            return $scope.recipients.indexOf(person.email) != -1;
-            console.log($scope.recipients)
-        };
+        
+        $scope.messageData = {};
+        $scope.messageData.recipients = [];
 
 
         $scope.narrowopts = {
@@ -586,40 +601,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             dialogClass: 'narrowModal modal'
         };
 
-        $scope.profileopts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'profile-modal wideModal modal'
-        };
 
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        $scope.fieldCheck = function() {
-            return re.test($scope.newEmail);
-        };
-
-        $scope.create_person = function() {
-            if ($scope.newRole) {
-                SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-                    void(x);
-                    $rootScope.billing.usage.admins_total += 1;
-                    $scope.$emit("notification:success", "Admin Added");
-                    $route.reload();
-                }).except(function(x) {
-                        void(x);
-                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                    });
-            } else {
-                SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
-                    void(x);
-                    $scope.$emit("notification:success", "Investor Added");
-                    $route.reload();
-                }).except(function(x) {
-                        void(x);
-                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                    });
-            }
-            $scope.newEmail = "";
-        };
         $scope.revoke_admin = function() {
             SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
                 void(x);
@@ -644,26 +626,38 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         };
+        $scope.showSharebar = function() {
+            return !$scope.hideShareBar;
+        };
+
+
+
+
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar) {
+            if (!$scope.hideSharebar && (button == undefined || button == $scope.sidebarPage) ) {
                 $scope.hideSharebar = true;
+                $scope.sidebarPage = button
+                
+            } 
+            else if(!$scope.hideSharebar && button){
+                $scope.sidebarPage = button;
+                $scope.hideSharebar = false;
+              
+                // $scope.clearRecipient(); 
+            }
+            else if($scope.hideSharebar && button == undefined){
+                $scope.hideSharebar = false;
+                
             }
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
+          
+               // opens sidebar with email
             };
         };
 
-
-
-        $scope.getRecipients = function() {
-            var email = [];
-            if(emailRecipient === true){
-                email.push(emailRecipient);
-            }
-
-        };
 
     }
 ]);

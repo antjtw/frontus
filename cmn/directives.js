@@ -1,21 +1,76 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
-m.directive('composeMessage', function() {
+m.directive('addPerson', function(){
     return {
         scope: false,
-        replace: true,
+        // replace: true,
+        // transclude: false,
         restrict: 'E',
-        templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 
-        function($scope, $rootScope, SWBrijj) {
-            $scope.getInvestors = function() {
-                $scope.investors = [];
-                angular.forEach($scope.people, function(p) {
-                    $scope.investors.push(p.selector);
-                });
+        templateUrl: '/cmn/partials/addPerson.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.createPerson = function() {
+                if ($scope.newRole) {
+                    SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
+                        void(x);
+                        $rootScope.billing.usage.admins_total += 1;
+                        $rootScope.$emit("notification:success", "Admin Added");
+                       
+                        $route.reload();
+                    }).except(function(x) {
+                        void(x);
+                        $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
+                    });
+                } else {
+                    SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
+                        void(x);        
+                        $rootScope.$emit("notification:success", "Investor Added");        
+                        $route.reload();
+                    }).except(function(x) {
+                        void(x);
+                        $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
+                    });
+                }
+                $scope.newEmail = "";
             };
 
-            $scope.getInvestors();
+            $scope.resetAdmin = function() {
+                $scope.newEmail = "";
+                $scope.newName = "";
+                $scope.newRole = false;
+            };
+
+            
+            $scope.toggleRole = function() {
+                $scope.newRole = !$scope.newRole;
+                console.log("this makes someone an admin or not")
+            };
+
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            $scope.fieldCheck = function() {
+                return re.test($scope.newEmail);
+
+            };
+
+        }]
+    };
+});
+
+m.directive('composeMessage', function() {
+    return {
+        scope: {recipients: "="},
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/composeMessage.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+
+        
+
+        function($scope, $rootScope, SWBrijj) {
+
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
@@ -27,15 +82,19 @@ m.directive('composeMessage', function() {
                 backdropFade: true,
                 dialogFade: true,
             };
-            $scope.select2Options = {
-                'multiple': true,
-                'simple_tags': true,
-                'tags': function(){return $scope.investors;},
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter'
+
+            $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
+            
+            $scope.howMany = function (){
+                if(location.host == 'share.wave'){
+                    console.log($scope.recipients + "i'm at sharewave!");
+                };
             };
 
-            
+            // var rr = getCSSRule('.for-r0ml');
+            // if (rr) {
+            //     rr.style.display="inline";
+            // }
 
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
@@ -44,17 +103,7 @@ m.directive('composeMessage', function() {
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
                 console.log(recipients)
-                 // assume that recipients are valid
-                // var regExp = /\(([^)]+)\)/;
-                // var recipients = [];
-    
-                // angular.forEach(msg.recipients, function(person) {
-                //     var matches = regExp.exec(person);
-                //     if (matches == null) {
-                //         matches = ["", person];
-                //     }
-                //     recipients.push(matches[1]);
-                // });
+             
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -64,31 +113,33 @@ m.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-                    $scope.$emit("notification:success",
+              
+                    $rootScope.$emit("notification:success",
                         "Message sent!");
-                    $scope.toggleSide();
+                    //this works but i don't know why for the root scope
                     $scope.resetMessage();
                     $scope.recipients = [];
                     $scope.clicked = false;
 
                 }).except(function(err) {
                     void(err);
-                    $scope.$emit("notification:fail",
+                    $rootsScope.$emit("notification:fail",
                         "Oops, something went wrong.");
                     $scope.clicked = false;
                 });
             };
+
             $scope.readyToSend = function(msg) {
-                // $scope.getInvestors();
-                // var anybad = false;
                 if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
+                    console.log("notreadytosend")
                 }
                 else {
                     return true;
                 }
+
                 // angular.forEach(msg.recipients, function(e) {
                 //     if ($scope.investors.indexOf(e) === -1) {
                 //         anybad = true;
