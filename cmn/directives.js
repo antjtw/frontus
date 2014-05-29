@@ -17,6 +17,7 @@ m.directive('addPerson', function(){
                         void(x);
                         $rootScope.billing.usage.admins_total += 1;
                         $rootScope.$emit("notification:success", "Admin Added");
+                        console.log("adminadded")
                         $route.reload();
                     }).except(function(x) {
                         void(x);
@@ -27,6 +28,7 @@ m.directive('addPerson', function(){
                         void(x);
                         console.log("investor")
                         $rootScope.$emit("notification:success", "Investor Added");
+                        console.log($scope.newName)
                         $route.reload();
                     }).except(function(x) {
                         void(x);
@@ -50,7 +52,6 @@ m.directive('addPerson', function(){
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             $scope.fieldCheck = function() {
-                console.log($scope.newEmail)
                 return re.test($scope.newEmail);
 
             };
