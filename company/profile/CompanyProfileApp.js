@@ -488,30 +488,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
-        $scope.create_person = function() {
-            if ($scope.newRole) {
-                SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-                    void(x);
-                    $rootScope.billing.usage.admins_total += 1;
-                    $scope.$emit("notification:success", "Admin Added");
-                    $route.reload();
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            } else {
-                SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
-                    void(x);
-                    $scope.$emit("notification:success", "Investor Added");
-                    $route.reload();
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            }
-            $scope.newEmail = "";
-        };
-
+        
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
@@ -568,7 +545,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         }
 
         $scope.clearRecipient = function(){
-            console.log($scope.messageData.recipients.length)
             while($scope.messageData.recipients.length > 0) {
                 $scope.messageData.recipients.pop();
             };
@@ -629,9 +605,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
+
+
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar && button == undefined) {
+            if (!$scope.hideSharebar && (button == undefined || button == $scope.sidebarPage) ) {
                 $scope.hideSharebar = true;
                 $scope.sidebarPage = button
                 console.log("1, closes the bar");
@@ -645,9 +623,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
                 console.log("3")
-            }
-            else if(!$scope.hideSharebar && $scope.hideSharbarPage == button){
-                $scope.hideSharebar = false;
             }
             else {
                 $scope.hideSharebar = false;
