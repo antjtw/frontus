@@ -16,7 +16,7 @@
 
                  <!--    email button -->
                     <div class="box-button pull-right"
-                         ng-class="{selected:!hideSharebar, 'disabledme': companyIsZombie()}"
+                         ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
                          ng-click="companyIsZombie() || toggleSide('email'); clearRecipient()"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
@@ -31,7 +31,7 @@
 
                     <!-- peoplebutton -->
                     <div class="box-button pull-right"
-                         ng-class="{'disabledme': companyIsZombie(), selected: !hideSharebar}"
+                         ng-class="{'disabledme': companyIsZombie(), selected: sidebarPage == 'people'}"
                          ng-click="companyIsZombie() || toggleSide('people'); clearRecipient()"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
