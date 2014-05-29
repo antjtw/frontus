@@ -551,6 +551,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     padding-bottom: 0;
 }
 
+.tabbable .info-box {
+    margin-bottom: 0;
+}
+
 .nav-tabs > li > a {
     border-radius: 0;
     margin-right: 0px;

@@ -21,10 +21,12 @@ active.directive('activityFeed', function() {
             user: '=',
             view: '=',
             filter: '=',
-            filterVal: '='
+            filterVal: '=',
+            height: '='
         },
         templateUrl: '/cmn/activity/activity.html',
         controller: ['$scope', 'SWBrijj', function($scope, SWBrijj) {
+
             $scope.iteration = 0;
             $scope.loading = false;
             $scope.activity = [];

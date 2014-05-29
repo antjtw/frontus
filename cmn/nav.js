@@ -727,31 +727,29 @@ navm.controller('NavCtrl',
 
         //I don't love this but it works, should probably make a directive.
         if ($rootScope.companyIsZombie()) {
-            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-        } else {
-            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+            $scope.windowheight = $window.innerHeight;
         }
-        $rootScope.$on('billingLoaded', function() {
-            if ($rootScope.companyIsZombie()) {
-                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-            } else {
-                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
-            }
+        $rootScope.$watch('billingLoaded', function() {
+            $scope.windowheight = $window.innerHeight;
         });
         window.onresize = function() {
+            $scope.windowheight = $window.innerHeight;
+            $scope.$apply();
+        };
+
+        $scope.$watch('windowheight', function() {
+            console.log($scope.windowheight);
             if ($rootScope.companyIsZombie()) {
                 $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 191) + "px", 'overflow-y': 'auto'};
             } else {
                 $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 141) + "px", 'overflow-y': 'auto'};
+
             }
-            $scope.$apply();
-        };
+        });
 
     }
 ]);
