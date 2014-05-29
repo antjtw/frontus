@@ -7,7 +7,7 @@ m.directive('addPerson', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/addPerson.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
 
         function($scope, $rootScope, SWBrijj) {
 
@@ -20,7 +20,7 @@ m.directive('addPerson', function(){
                         $route.reload();
                     }).except(function(x) {
                         void(x);
-                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                        $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
                     });
                 } else {
                     SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
@@ -30,7 +30,7 @@ m.directive('addPerson', function(){
                         $route.reload();
                     }).except(function(x) {
                         void(x);
-                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                        $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
                     });
                 }
                 $scope.newEmail = "";
