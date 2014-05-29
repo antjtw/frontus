@@ -481,7 +481,7 @@ navm.controller('NavCtrl',
                  //   _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
-                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.namej,
+                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
                                                                         "emailId": $rootScope.navState.userid,
                                                                         "role":"issuer"});
 
