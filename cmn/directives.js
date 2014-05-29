@@ -1,5 +1,63 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('addPerson', function(){
+    return {
+        scope: false,
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/addPerson.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+
+        function($scope, $rootScope, SWBrijj) {
+
+            $scope.createPerson = function() {
+                if ($scope.newRole) {
+                    SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
+                        void(x);
+                        $rootScope.billing.usage.admins_total += 1;
+                        $rootScope.$emit("notification:success", "Admin Added");
+                        $route.reload();
+                    }).except(function(x) {
+                        void(x);
+                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                    });
+                } else {
+                    SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
+                        void(x);
+                        console.log("investor")
+                        $rootScope.$emit("notification:success", "Investor Added");
+                        $route.reload();
+                    }).except(function(x) {
+                        void(x);
+                        $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                    });
+                }
+                $scope.newEmail = "";
+            };
+
+            $scope.resetAdmin = function() {
+                $scope.newEmail = "";
+                $scope.newName = "";
+                $scope.newRole = false;
+            };
+
+            
+            $scope.toggleRole = function() {
+                $scope.newRole = !$scope.newRole;
+                console.log("this makes someone an admin or not")
+            };
+
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            $scope.fieldCheck = function() {
+                console.log($scope.newEmail)
+                return re.test($scope.newEmail);
+
+            };
+
+        }]
+    };
+});
 
 m.directive('composeMessage', function() {
     return {

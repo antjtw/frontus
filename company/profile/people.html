@@ -32,7 +32,7 @@
                     <!-- peoplebutton -->
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie(), selected: !hideSharebar}"
-                         ng-click="companyIsZombie() || toggleSide('people')"
+                         ng-click="companyIsZombie() || toggleSide('people'); clearRecipient()"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
@@ -106,50 +106,21 @@
 
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                  </compose-message>
-                <div ng-switch-when= "people">
+                <add-person ng-switch-when= "people">
+                    </add-person>
+              
+               <!--  <div ng-switch-when="people">
                     <div class="sidebarHeader">
-                        <span>ADD PERSON</span>
+                        <span>ADD PERSON</span>    
                     </div>
 
-                    <div class="headerText">
-                        <div class="add-person input-list">
-                            <div>
-                                <span>Name</span><input type="text" ng-model="newName" />
-                            </div>
-                            <div>
-                                <span>Email</span><input type="text" ng-model="newEmail" />
-                            </div>
-                            <div>
-                                <span>Admin</span>
-                                 <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button email"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-                            </div>
-                            <div ng-if="newRole && triggerUpgradeAdmins(1)"class="upgradeWarning">
-                                <span>
-                                    Note that making this person an admin will upgrade your subscription plan.
-                                </span>
-                            </div>
-                            <div class="sidebarFooter">
-
-                                <div class="footer-headline-right">
-                                    <div class= "standard-button white">
-                                    <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
-                                    Cancel
-                                     </button>
-                                    </div>
-                                </div>
-
-                                <div class="footer-headline-left">
-                                    <div class = "standard-button green">
-                                        <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); $parent.toggleSide()">Confirm</button>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-
+                    <div>
+                        <span>Email<span>
+                        <input type="text" ng-model="newPerson.email"/>
                     </div>
 
-                </div>
-                
+                </div> -->
+                        
         </div>
     </div>
 
@@ -157,10 +128,7 @@
     </section>
 </div>
 
-
-
-    </div>
-</div>
+<!-- admin toolbar -->
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
     <div class="modalHeader">
         <span>Remove administrator</span>

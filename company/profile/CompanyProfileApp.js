@@ -488,6 +488,30 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
+        $scope.create_person = function() {
+            if ($scope.newRole) {
+                SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.admins_total += 1;
+                    $scope.$emit("notification:success", "Admin Added");
+                    $route.reload();
+                }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                });
+            } else {
+                SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
+                    void(x);
+                    $scope.$emit("notification:success", "Investor Added");
+                    $route.reload();
+                }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                });
+            }
+            $scope.newEmail = "";
+        };
+
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
@@ -506,16 +530,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = true;
         };
 
+       
+
         $scope.adminModalClose = function() {
             $scope.closeMsg = 'I was closed at: ' + new Date();
             $scope.adminModal = false;
         };
 
-        $scope.toggleRole = function() {
-            $scope.newRole = !$scope.newRole;
-            console.log("i'm a function!")
-        };
-
+        
         $scope.removeAdminModalOpen = function(email) {
             $scope.selectedToRevoke = email;
             $scope.removeAdminModal = true;
@@ -577,34 +599,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        $scope.fieldCheck = function() {
-            return re.test($scope.newEmail);
-        };
-
-        $scope.create_person = function() {
-            if ($scope.newRole) {
-                SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-                    void(x);
-                    $rootScope.billing.usage.admins_total += 1;
-                    $scope.$emit("notification:success", "Admin Added");
-                    $route.reload();
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            } else {
-                SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
-                    void(x);
-                    $scope.$emit("notification:success", "Investor Added");
-                    $route.reload();
-                }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            }
-            $scope.newEmail = "";
-        };
+       
         $scope.revoke_admin = function() {
             SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
                 void(x);
@@ -643,9 +638,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
+                $scope.hideSharebar = false;
                 console.log("2");
-                $scope.clearRecipient();
-             
+                // $scope.clearRecipient(); 
             }
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
