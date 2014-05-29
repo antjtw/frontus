@@ -538,8 +538,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.personIs = function(person){
             return $scope.messageData.recipients.indexOf(person.email) != -1;
-            console.log("personIs function")   
+            // select person in email
         };
+
+        $scope.showCheck = function(){
+            $scope.sidebarPage = 'email';
+        }
 
         $scope.clearRecipient = function(){
             console.log($scope.messageData.recipients.length)
