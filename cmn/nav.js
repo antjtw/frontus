@@ -467,7 +467,7 @@ navm.controller('NavCtrl',
 
         $scope.notifications = function() {
             if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                _kmq.push(['identify', $rootScope.navState.company]);
+                //_kmq.push(['identify', $rootScope.navState.company]);
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
@@ -478,7 +478,7 @@ navm.controller('NavCtrl',
                                                 name: $rootScope.navState.name}
                                       }
                     );
-                    _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
+                 //   _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
                 window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.namej,
@@ -497,7 +497,7 @@ navm.controller('NavCtrl',
 
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
+                   // _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
                 window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,

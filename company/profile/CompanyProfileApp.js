@@ -234,12 +234,12 @@ app.controller('CompContactCtrl',
             };
             $scope.getPaymentToken = function(status, response) {
                 if (!$scope.initPaymentModal) return;
-                _kmq.push(['record', 'Subscription Submitted - Existing Customer']);
+                //_kmq.push(['record', 'Subscription Submitted - Existing Customer']);
                 if (response.error) {
                     console.log(response);
                     $scope.$emit("notification:fail",
                         "Invalid credit card. Please try again.");
-                    _kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
+                    //_kmq.push(['record', 'Subscription Submitted - Invalid Credit Card']);
                 } else {
                     $scope.payment_token = response.id;
                     $scope.create_customer($scope.payment_token,
@@ -282,9 +282,9 @@ app.controller('CompContactCtrl',
             $scope.updateSubscription = function() {
                 var newplan = $rootScope.selectedPlan;
                 if (newplan == "cancel") {
-                    _kmq.push(['record', 'Subscription Cancelled']);
+                    //_kmq.push(['record', 'Subscription Cancelled']);
                 } else {
-                    _kmq.push(['record', 'Subscription Modified']);
+                    //_kmq.push(['record', 'Subscription Modified']);
                 }
                 payments.update_subscription(newplan)
                     .then(function(x) {
