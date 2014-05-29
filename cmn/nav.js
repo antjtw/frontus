@@ -480,6 +480,9 @@ navm.controller('NavCtrl',
                     );
                     _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
+                    window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.namej,
+                                                                            "emailId": $rootScope.navState.userid,
+                                                                            "role":"issuer"});
                 }
 
                 // Get Notifications for docs
@@ -496,6 +499,9 @@ navm.controller('NavCtrl',
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
                     _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
+                    window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
+                                                                            "emailId": $rootScope.navState.userid,
+                                                                            "role":"shareholder"});
                 }
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
