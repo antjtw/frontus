@@ -83,6 +83,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
             || version.when_retracted;
     };
 
+    // dropdown list functions
     $scope.docStatus = function(doc) {
         return "Last Updated " + moment(((doc.last_event_time) ?
                                          doc.last_event_time :
@@ -93,5 +94,39 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
     };
 
+    $scope.viewStatus = function(doc) {
+        if (doc.doc_id) {
+            $location.url("/app/documents/company-status?doc=" + doc.doc_id);
+        }
+    };
+
+    $scope.prepareDocument = function(doc) {
+        if (doc.template_id) {
+            $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
+        } else {
+            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true");
+        }
+    };
+
+    $scope.viewTemplate = function(doc) {
+        $location.url("/app/documents/company-view?template=" + doc.template_id);
+    };
+
+    $scope.viewOriginal = function(doc) {
+        $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1");
+    };
+
+    $scope.exportOriginalToPdf = function(doc) {
+        SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
+            document.location.href = url;
+        });
+    };
+    $scope.exportOriginalToDropbox = function(doc) {
+        SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
+            $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+        }).except(function(x) {
+            $scope.response = x;
+        });
+    };
 }
 DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];

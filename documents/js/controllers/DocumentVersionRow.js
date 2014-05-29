@@ -97,5 +97,79 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics) {
             || $scope.isCompleteViewed(version)
             || $scope.isCompleteRetracted(version);
     };
+
+    // dropdown actions and misc. buttons
+    $scope.viewInvestorCopy = function(version) {
+        $location.url("/app/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
+    };
+
+    $scope.viewStatus = function(doc) {
+        $location.url("/app/documents/company-status?doc=" + doc.original);
+    };
+
+    $scope.remind = function(doc_id, user_email) {
+        /*
+          SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
+          $scope.emit('event:remind');
+          });
+        */
+    };
+
+    $scope.switchSignatureFlow = function(version, sigflow) {
+        SWBrijj.procm("document.update_signature_flow", version.doc_id, sigflow).then(function(x) {
+            void(x);
+            version.when_signed = null;
+            version.when_countersigned = null;
+            version.signature_flow = sigflow;
+            $scope.$emit("notification:success", "Document switched to view only.");
+        }).except(function(err) {
+            console.log(err);
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+        });
+    };
+
+    $scope.archiveDoc = function(version) {
+	// TODO: update parent summary archived stats
+        SWBrijj.procm("document.change_archive_state", version.doc_id, "true").then(function(data) {
+            void(data);
+            version.archived = true;
+            $scope.$emit("notification:success", "Document archived.");
+        }).except(function(x) {
+            void(x);
+            $scope.$emit("notification:fail", "Document archive failed.");
+        });
+    };
+
+    $scope.unarchiveDoc = function(version) {
+	// TODO: update parent summary archived stats
+        SWBrijj.procm("document.change_archive_state", version.doc_id, "false").then(function(data) {
+            void(data);
+            version.archived = false;
+            $scope.$emit("notification:success", "Document unarchived.");
+        }).except(function(x) {
+            void(x);
+            $scope.$emit("notification:fail", "Document unarchive failed.");
+        });
+    };
+
+    $scope.exportVersionToDropbox = function(version) {
+        SWBrijj.document_dropbox_export(version.doc_id, version.docname, 'investor').then(function(x) {
+            $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+            void(x);
+        }).except(function(x) {
+            $scope.response = x;
+        });
+    };
+
+    $scope.exportVersionToPdf = function(version) {
+        $scope.$emit("notification:success", "Export in progress.");
+        SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {
+            document.location.href = url;
+        }).except(function(x) {
+            console.log(x);
+            $scope.$emit("notification:fail", "Oops, something went wrong.");
+        });
+    };
+
 }
 DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];
