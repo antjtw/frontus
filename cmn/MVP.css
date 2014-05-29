@@ -1909,12 +1909,12 @@ ul.spaced-list > li:nth-child(odd) {
     background-color: #F1F1F1;
 }
 
-.status-table > tbody > tr > td.status-toggle > span {
+.status-table > tbody > tr > td.status-toggle span {
     vertical-align: middle;
     color: #C7C7C7;
 }
 
-.status-table > tbody > tr > td.status-toggle > span:hover {
+.status-table > tbody > tr > td.status-toggle span:hover {
     color: #A6A6A6;
 }
 

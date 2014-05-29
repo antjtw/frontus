@@ -1,47 +1,38 @@
 'use strict';
 
-function DocumentSummaryRowController($scope, SWBrijj, basics) {
+function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
+    // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
 
     // load the versions
-    $scope.doc.versions = [];
+    $scope.versions = [];
     var loadingVersions = false
     $scope.loadVersions = function() {
-        if (loadingVersions) {
+        if (loadingVersions || $scope.doc.version_count == 0) {
             return
         }
         loadingVersions = true;
-        SWBrijj.tblmm("document.my_counterparty_library", "original", $scope.doc.doc_id).then(function(data) {
+        var queryParam = "";
+        var queryVal = null;
+        if ($scope.doc.type == 'doc') {
+            queryParam = "original";
+            queryVal = $scope.doc.doc_id;
+        } else if ($scope.doc.type == "investor") {
+            queryParam = "investor";
+            queryVal = $scope.doc.email;
+        }
+        SWBrijj.tblmm("document.my_counterpart_document_library_view", queryParam, queryVal).then(function(data) {
             angular.forEach(data, function(version) {
-                $scope.doc.versions.push(version);
+                if (version.last_event_activity == 'finalized') {
+                    version.last_event_activity = 'approved';
+                }
+                version.statusRank = basics.eventRank({activity: version.last_event_activity});
+                $scope.versions.push(version);
             });
-            loadDocumentActivity();
         });
     };
     if ($scope.doc.shown) {
         $scope.loadVersions();
-    }
-
-    function loadDocumentActivity() {
-        // TODO: only pull last event per document, instead of all events, possibly in conjunction with my_counterparty_library
-        SWBrijj.tblmm("document.recent_company_activity", "original", $scope.doc.doc_id).then(function(data) {
-            angular.forEach($scope.doc.versions, function(version) {
-                var version_activity = data.filter(
-                    function(el) {
-                        return el.doc_id === version.doc_id;
-                    });
-                version.last_event = version_activity.sort(compareEvents)[0];
-                if (version.last_event.activity == 'finalized') {
-                    version.last_event.activity = 'approved';
-                }
-                var version_activities = version_activity.filter(
-                    function(el) {
-                        return el.person === version.investor && el.activity === "viewed";
-                    });
-                version.last_viewed = version_activities.length > 0 ? version_activities[0].event_time : null;
-                version.statusRank = eventRank(version.last_event);
-            });
-        });
     }
 
     $scope.versionsVisible = function(doc) {
@@ -61,15 +52,6 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
 
     $scope.docIsComplete = function(doc) {
         return (doc.version_count > 0 && doc.version_count == doc.complete_count);
-    };
-
-    function compareEvents(a, b) {
-        var initRank = eventRank(b) - eventRank(a);
-        return initRank === 0 ? (Date.parse(b.event_time) - Date.parse(a.event_time)) : initRank;
-    };
-
-    function eventRank(ev) {
-        return basics.eventRank(ev);
     };
 
     $scope.formatDocStatusRatio = function(doc) {
@@ -100,5 +82,16 @@ function DocumentSummaryRowController($scope, SWBrijj, basics) {
             || basics.isCompleteViewed(version)
             || version.when_retracted;
     };
+
+    $scope.docStatus = function(doc) {
+        return "Last Updated " + moment(((doc.last_event_time) ?
+                                         doc.last_event_time :
+                                         doc.last_updated)).from($rootScope.servertime);
+    };
+
+    $scope.viewProfile = function(investor) {
+        document.location.href = "/app/company/profile/view?id=" + investor.email;
+    };
+
 }
-DocumentSummaryRowController.$inject = ['$scope', 'SWBrijj', 'basics'];
+DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];

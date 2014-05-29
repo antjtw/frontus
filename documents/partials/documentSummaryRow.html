@@ -1,9 +1,10 @@
 <tr class="empty-row"></tr>
-<tr ng-class="{selectedrow:doc.shown}" ng-mouseenter="loadVersions()">
+<tr ng-class="{selectedrow:doc.shown}">
     <td class="status-toggle"
         ng-class="{'pointer':(doc.version_count != 0 && viewState.hideSharebar && versionsVisible(doc)),
                   'status-toggle-on': (doc.shown && versionsVisible(doc))}"
-        ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()">
+        ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()"
+        ng-mouseenter="loadVersions()">
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="viewState.hideSharebar">
             <span ng-hide="!versionsVisible(doc) || (doc.shown || doc.version_count == 0)" data-icon="&#xe017;" aria-hidden="true"></span>
             <span ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
@@ -16,9 +17,8 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="doc.uploading || viewStatus(doc)">
         <ul>
-            <li>{{(doc.type == "doc" ? doc.docname : doc.name || doc.email) | caplength:50}} <span ng-show="doc.version_count == 0 && !doc.uploaded_by">(Template)</span></li>
-            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}"
-                ng-show="viewState.hideSharebar">{{docStatusA(doc)}}</li>
+            <li>{{(doc.type == "doc" ? doc.docname : doc.name || doc.email) | caplength:50}} <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span></li>
+            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar">{{docStatus(doc)}}</li>
         </ul>
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
@@ -31,16 +31,26 @@
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
     </td>
-    <!-- TODO: only for documents -->
-    <td ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+    <td ng-if="doc.type == 'doc'" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
         <span class="tag"
               ng-repeat="tag in doc.tags"
               ng-click="setQuery(tag)">
             {{tag + (($last && ' ') || ', ')}}
         </span>
     </td>
-    <!-- TODO: for "investor" layout, should be 1 option, viewProfile(investor) -->
-    <td>
+    <td ng-if="doc.type == 'investor'">
+        <ul ng-show="doc.name" class="dropdown-list">
+            <li class="dropdown standard menu-drop">
+                <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+
+                </a>
+                <ul ng-hide="toggleView();" class="dropdown-menu">
+                    <li ng-click="viewProfile(doc)">View Profile</li>
+                </ul>
+            </li>
+        </ul>
+    </td>
+    <td ng-if="doc.type == 'doc'">
         <div ng-if="!viewState.hideSharebar && doc.forShare" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
             <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
@@ -75,9 +85,9 @@
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
-                        <li ng-show="!doc.versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
+                        <li ng-show="!versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="updateTagsOpen(doc)">Edit Tags</li>
-                        <li ng-show="!doc.versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
+                        <li ng-show="!versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="deleteDocOpen(doc)">Delete</li>
                         <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
                         <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                     </ul>
@@ -87,4 +97,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" view-state="viewState" ng-show="doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in doc.versions | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" ng-show="doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>

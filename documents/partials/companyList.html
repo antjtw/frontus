@@ -111,46 +111,6 @@
     </tr>
     </tbody>
     <tbody document-summary-row view-state="state" doc="investor" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
-    <!-- <tr class="empty-row"></tr> -->
-    <!-- <tr ng-class="{selectedrow:investor.shown}"> -->
-    <!--     <td class="status-toggle" -->
-    <!--         ng-class="{'pointer':(investor.versions[0] && versionsVisible(investor.versions)), 'status-toggle-on':(investor.shown && versionsVisible(investor.versions))}" -->
-    <!--         ng-click="!investor.versions[0] || opendetails(investor)"> -->
-    <!--         <span ng-hide="!versionsVisible(investor.versions) || (investor.shown || !investor.versions[0])" data-icon="&#xe017;" aria-hidden="true"></span> -->
-    <!--         <span ng-show="versionsVisible(investor.versions) && investor.shown && investor.versions[0]" data-icon="&#xe01c;" aria-hidden="true"></span> -->
-    <!--     </td> -->
-    <!--     <td class="shareholder-column docname-column"> -->
-    <!--         <ul> -->
-    <!--             <li>{{investor.name || investor.investor | caplength:40}}</li> -->
-    <!--             <li>{{docStatus(investor)}}</li> -->
-    <!--         </ul> -->
-    <!--     </td> -->
-    <!--     <td class="status-toggle status-icon"> -->
-    <!--         <div ng-show="docIsComplete(investor)" data-icon="&#xe023;" class="circle green" -->
-    <!--              aria-hidden="true"></div> -->
-    <!--         <div ng-hide="docIsComplete(investor)" class="circle" ng-class="{gray:investor.versions.length===0, yellow:investor.versions.length>0}"></div> -->
-    <!--     </td> -->
-    <!--     <td class="shareholder-column status-column issuer pointer"> -->
-    <!--         <ul> -->
-    <!--             <li>{{formatDocStatusRatio(investor)}}</li> -->
-    <!--         </ul> -->
-    <!--     </td> -->
-    <!--     <td> -->
-    <!--         <ul ng-show="investor.name" class="dropdown-list"> -->
-    <!--             <li class="dropdown standard menu-drop"> -->
-    <!--                 <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span> -->
-
-    <!--                 </a> -->
-    <!--                 <ul ng-hide="toggleView();" class="dropdown-menu"> -->
-    <!--                     <li ng-click="viewProfile(investor)">View Profile</li> -->
-    <!--                 </ul> -->
-    <!--             </li> -->
-    <!--         </ul> -->
-    <!--     </td> -->
-    <!-- </tr> -->
-    <!-- <tr document-version-row version="version" view-state="state" ng-show="investor.shown" class="sub-row" -->
-    <!--     ng-repeat="version in investor.versions | filter: versionFilter | archived: state.show_archived | orderBy:versionOrder"> -->
-    <!-- </tr> -->
     </tbody>
 </table>
 </div>

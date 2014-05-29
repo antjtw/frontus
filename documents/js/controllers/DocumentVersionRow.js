@@ -1,12 +1,12 @@
 'use strict';
 
-function DocumentVersionRowController($scope, SWBrijj, basics) {
+function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics) {
     $scope.versionStatus = function(version) {
-        if (version.last_event) {
-            return (version.last_event.activity==='received' ? 'sent to ' : (version.last_event.activity === 'retracted' ? (version.last_event.activity + " from ") : (version.last_event.activity + " by "))) +
-                (version.last_event.name || version.investor) +
-                " " + moment(version.last_event.event_time).from(version.last_event.timenow) +
-                (version.signature_flow===2 && version.last_event.activity==='signed' ? " (awaiting countersign)" : "");
+        if (version.last_event_activity) {
+            return (version.last_event_activity==='received' ? 'sent to ' : (version.last_event_activity === 'retracted' ? (version.last_event_activity + " from ") : (version.last_event_activity + " by "))) +
+                (version.last_event_name) +
+                " " + moment(version.last_event_time).from($rootScope.servertime) +
+                (version.signature_flow===2 && version.last_event_activity==='signed' ? " (awaiting countersign)" : "");
         } else {
             return "";
         }
@@ -98,4 +98,4 @@ function DocumentVersionRowController($scope, SWBrijj, basics) {
             || $scope.isCompleteRetracted(version);
     };
 }
-DocumentVersionRowController.$inject = ['$scope', 'SWBrijj', 'basics'];
+DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];
