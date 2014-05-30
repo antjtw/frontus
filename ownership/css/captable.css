@@ -537,7 +537,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .paripassu-list > div.rightTitle:last-child > button {
     display: block;
-    margin: 10px 0 0 115px;
+    margin: 10px 0 0 0;
 }
 
 .transaction-accordion .accordion-heading {
@@ -566,6 +566,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .capGuide.global {
     margin-top: 0;
+}
+
+.transaction-accordion .accordion {
+    margin-top: 20px;
 }
 
 
@@ -689,6 +693,33 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     box-shadow: none;
 }
 
+.rightTitle.security-type > input {
+    width: 146px;
+}
+
+.rightTitle.security-type > span.locked-security {
+    width: 146px;
+    padding-left: 10px;
+    margin-left: 2px;
+    border-radius: 3px;
+}
+
+.rightTitle.security-type > span.common-toggle {
+    line-height: 32px;
+}
+
+.rightTitle.security-type > span.common-toggle > span {
+    margin-left: 5px;
+}
+
+.rightTitle.security-type .standard .dropdown-toggle {
+    width: 160px;
+}
+
+.rightTitle.security-type .drop-selector .standard .dropdown-menu {
+    width: 164px;
+}
+
 .rightTitle > span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
@@ -767,27 +798,48 @@ div.rightTitle.interest-rate span.tooltip-icon + .tooltip {
     height: 25px;
 }
 
-p.rightTitle.interest-rate {
+div.rightTitle.interest-rate {
     float: left;
 }
 
-p.rightTitle.interest-rate > input {
+div.rightTitle.interest-rate > input {
     width: 40px;
 }
 
 div.rightTitle.interest-rate {
-    width: 140px;
     float: left;
-    margin-left: 10px;
+}
+
+.rightTitle.interest-rate .dropdown-list {
+    vertical-align: bottom;
 }
 
 .rightTitle.interest-rate .standard .dropdown-toggle {
-    width: 90px;
+    width: 100px;
 }
 
 .rightTitle.interest-rate .standard .dropdown-menu {
-    width: 90px;
+    width: 104px;
     min-width: 90px;
+}
+
+.add-transaction-link {
+    display: inline-block;
+    margin-left: 35px;
+    line-height: 32px;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
+
+.add-transaction-link:hover {
+    background-color: #E3E3E3;
+}
+
+.add-transaction-link > span:first-of-type {
+    vertical-align: -10%;
 }
 
 p.belowTitle {

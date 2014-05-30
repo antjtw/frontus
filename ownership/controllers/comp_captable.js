@@ -55,6 +55,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
     $scope.activityView = "ownership.company_activity_feed";
+    $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
 
 
 
@@ -472,64 +473,82 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
         $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.oldActive = angular.copy($scope.activeTran);
-        if ($scope.toggleView()) {
-            $scope.sideBar = 4;
-        }
-        else {
-            $scope.sideBar = 2;
-        }
-        $scope.activeTran = [];
-        $scope.activeIssue = currentcolumn;
-        $scope.activeInvestor = currenttran;
-        // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
-        var index = allowablekeys.indexOf(currentcolumn);
-        allowablekeys.splice(index, 1);
-        $scope.allowKeys = allowablekeys;
+        if ($scope.toggleView() && $scope.oldActive && $scope.oldActive[0] && $scope.oldActive[0].investorkey == currenttran && $scope.oldActive[0].key == currentcolumn) {
+            $scope.activeTran = [];
+            $scope.activeIssue = undefined;
+            $scope.activeInvestor = undefined;
+            $scope.sideBar = "home";
 
-        angular.forEach($scope.rows, function (row) {
-            row.state = false;
-            angular.forEach($scope.issues, function (issue) {
-                if (issue.issue) {
-                    if (row.name == currenttran && currentcolumn == issue.issue) {
-                        row[currentcolumn].state = true;
-                    }
-                    else {
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
                         row[issue.issue].state = false;
                         issue.state = false;
                     }
-                }
+                });
             });
-        });
 
-        var first = 0;
-        angular.forEach($scope.trans, function (tran) {
-            if (tran.investor == currenttran) {
-                if (tran.issue == currentcolumn) {
-                    if (first == 0) {
-                        tran['active'] = true;
-                        first = first + 1
-                    }
-                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
-                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
-                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
-                    $scope.activeTran.push(tran);
-                }
+        } else {
+            if ($scope.toggleView()) {
+                $scope.sideBar = 4;
             }
-        });
-        if ($scope.activeTran.length < 1) {
-            var anewTran = {};
-            anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
-            angular.forEach($scope.issues, function (issue) {
-                if (issue.issue == currentcolumn) {
-                    anewTran = $scope.tranInherit(anewTran, issue);
+            else {
+                $scope.sideBar = 2;
+            }
+            $scope.activeTran = [];
+            $scope.activeIssue = currentcolumn;
+            $scope.activeInvestor = currenttran;
+            // Get the all the issues that aren't the current issue for the drop downs
+            var allowablekeys = angular.copy($scope.issuekeys);
+            var index = allowablekeys.indexOf(currentcolumn);
+            allowablekeys.splice(index, 1);
+            $scope.allowKeys = allowablekeys;
+
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        if (row.name == currenttran && currentcolumn == issue.issue) {
+                            row[currentcolumn].state = true;
+                        }
+                        else {
+                            row[issue.issue].state = false;
+                            issue.state = false;
+                        }
+                    }
+                });
+            });
+
+            var first = 0;
+            angular.forEach($scope.trans, function (tran) {
+                if (tran.investor == currenttran) {
+                    if (tran.issue == currentcolumn) {
+                        if (first == 0) {
+                            tran['active'] = true;
+                            first = first + 1
+                        }
+                        tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                        tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                        tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
+                        $scope.activeTran.push(tran);
+                    }
                 }
             });
-            $scope.trans.push(anewTran);
-            $scope.activeTran.push(anewTran);
-        }
-        if ($scope.oldActive[0] != $scope.activeTran[0]) {
-            $scope.activeTran[0].go = false;
+            if ($scope.activeTran.length < 1) {
+                var anewTran = {};
+                anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue == currentcolumn) {
+                        anewTran = $scope.tranInherit(anewTran, issue);
+                    }
+                });
+                $scope.trans.push(anewTran);
+                $scope.activeTran.push(anewTran);
+            }
+            if ($scope.oldActive[0] != $scope.activeTran[0]) {
+                $scope.activeTran[0].go = false;
+            }
         }
     };
 
@@ -1524,6 +1543,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     };
 
+    $scope.tabvisible = function(tab) {
+        if (tab.title == "Activity") {
+            if (tab.active == true && !($scope.toggleView() && $scope.fieldActive())) {
+                tab.active = false;
+                $scope.tabs[0].active = true;
+            }
+            return $scope.toggleView() && $scope.fieldActive()
+        } else {
+            return true;
+        }
+    };
+
     $scope.toggleView = function () {
         if ($scope.maintoggle) {
             $scope.captablestate = 1;
@@ -1540,6 +1571,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
             return false;
         }
+    };
+
+    $scope.fieldActive = function () {
+        return isNaN(parseInt($scope.sideBar));
     };
 
     // Toggles editable to view
@@ -2545,6 +2580,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         else {
             return true
         }
+    };
+
+    $scope.chosenTab = function(tab, type) {
+        return (tab.title == type);
     };
 
     // CSV Generation
