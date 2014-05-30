@@ -1555,6 +1555,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.tabnumber = function() {
+        var total = 0;
+        angular.forEach($scope.tabs, function(tab) {
+            if ($scope.tabvisible(tab)) {
+                total += 1
+            }
+        });
+        return total;
+    }
+
     $scope.singleTransaction = function(trans) {
         return (trans.length == 1);
     };

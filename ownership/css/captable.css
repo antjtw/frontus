@@ -540,6 +540,18 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin: 10px 0 0 0;
 }
 
+.tabbable .nav-tabs > li {
+    width: -moz-calc(50% - 20px);
+    width: -webkit-calc(50% - 20px);
+    width: calc(50% - 20px);
+}
+
+.singletab .tabbable .nav-tabs > li {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+}
+
 .transaction-accordion .accordion-heading {
     padding: 0;
 }

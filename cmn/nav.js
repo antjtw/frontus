@@ -625,7 +625,6 @@ navm.controller('NavCtrl',
                             $rootScope.$broadcast('billingLoaded');
                         } else {
                             $rootScope.billingLoaded = true;
-                            console.log($scope.companyIsZombie());
                         }
                     });
                 } else {
@@ -662,7 +661,6 @@ navm.controller('NavCtrl',
                         $scope.load_upcoming_invoice();
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };
