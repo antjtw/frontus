@@ -1132,8 +1132,6 @@
                                                                               ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
                                                                               ng-change="saveTranDate(tran, 'date')"
                                                                               type="text" ng-model="tran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
-                                            <span class="delete-icon" data-icon="&#xe00c;"
-                                                  ng-click="tranDeleteUp(tran);" aria-hidden="true"></span>
 
                                 </p>
 
@@ -1360,6 +1358,8 @@
                                 </p>
 
                             </div>
+
+                            <span class="blue-link delete-link" ng-click="tranDeleteUp(tran);">Delete transaction</span>
 
                             </accordion-group>
                         </accordion>

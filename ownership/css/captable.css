@@ -552,6 +552,13 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     width: calc(100% - 40px);
 }
 
+.delete-link.blue-link {
+    display: inline-block;
+    margin-left: 25px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
 .transaction-accordion .accordion-heading {
     padding: 0;
 }
