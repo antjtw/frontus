@@ -1126,6 +1126,8 @@
                             <!-- Global Tab -->
                             <div class="capGuide global">
 
+                                <p class="rightTitle"><span>Investor</span><input disabled ng-model="tran.investor"></p>
+
                                 <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
                                                                               ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
                                                                               ng-change="saveTranDate(tran, 'date')"
@@ -1470,6 +1472,8 @@
 
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
+                                    <p ng-show="tran.investor" class="belowTitle"><span ng-bind="tran.investor"></span><span>Investor</span></p>
+
                                     <p ng-show="tran.units" class="belowTitle"><span ng-bind="formatAmount(tran.units)"></span><span>{{grantbyIssue(tran.issue)}}</span></p>
 
                                     <p ng-show="tran.forfeited" class="belowTitle"><span ng-bind="formatAmount(tran.forfeited)"></span><span>Forfeit</span></p>
