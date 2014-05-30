@@ -624,6 +624,8 @@ navm.controller('NavCtrl',
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
+                            $rootScope.billingLoaded = true;
+                            console.log($scope.companyIsZombie());
                         }
                     });
                 } else {
@@ -726,13 +728,13 @@ navm.controller('NavCtrl',
         });
 
         //I don't love this but it works, should probably make a directive.
-        if ($rootScope.companyIsZombie()) {
-            $scope.windowheight = $window.innerHeight;
-        }
+
         $rootScope.$watch('billingLoaded', function() {
-            console.log($rootScope.companyIsZombie());
-            $scope.windowheight = $window.innerHeight;
+            if ($scope.billingLoaded == true) {
+                $scope.windowheight = $window.innerHeight;
+            }
         });
+
         window.onresize = function() {
             $scope.windowheight = $window.innerHeight;
             $scope.$apply();
@@ -747,7 +749,6 @@ navm.controller('NavCtrl',
                 $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
                 $scope.viewportactivity = {'height': String($window.innerHeight - 141) + "px", 'overflow-y': 'auto'};
-
             }
         });
 
