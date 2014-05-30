@@ -552,6 +552,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     vertical-align: -15%;
 }
 
+.transaction-accordion .accordion-heading span.extramargin {
+    margin-left: 20px;
+}
+
 .transaction-accordion .accordion-heading > a > span:last-of-type {
     color: #1D2C3C;
 }

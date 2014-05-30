@@ -1116,11 +1116,11 @@
                         </div> -->
 
                         <accordion class="transaction-accordion" close-others="true">
-                        <accordion-group is-open="tran.active" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
+                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
                             <accordion-heading>
-                                <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active"></span>
-                                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active"></span>
-                                <span>{{tran.date | date:settings.shortdate}} Transaction</span>
+                                <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
+                                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
+                                <span ng-class="{'extramargin': (activeTran.length == 1)}">{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
 
                             <!-- Global Tab -->

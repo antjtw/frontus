@@ -1555,6 +1555,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
+    $scope.singleTransaction = function(trans) {
+        return (trans.length == 1);
+    };
+
     $scope.toggleView = function () {
         if ($scope.maintoggle) {
             $scope.captablestate = 1;
