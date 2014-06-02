@@ -728,6 +728,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 var expire = null;
                 if ($scope.issues.length == 1 && (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com")) {
                     _kmq.push(['record', 'cap table creator']);
+                    analytics.track('cap table creator');
                 }
 
                 if (issue.issue == "name") {

@@ -41,7 +41,7 @@ div.last-saved {
 }
 
 .capGuide.cap-overflow {
-    overflow: auto;
+    overflow: visible;
 }
 
 .capGuide.grants {
@@ -531,6 +531,7 @@ div.rightTitle {
     height: 32px;
     line-height: 32px;
     margin: 0 0 10px 0;
+    position: relative;
 }
 
 div.rightTitle.double > span, p.rightTitle.double > span {
@@ -590,24 +591,46 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     margin-top: 6px;
     cursor: pointer;
     vertical-align: middle;
+    position: relative;
 }
+
+p.rightTitle {
+    position: relative;
+}
+
+p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
+    left: -23px !important;
+}
+
+div.rightTitle.interest-rate span.tooltip-icon {
+    margin-top: -8px;
+}
+
+
+div.rightTitle.interest-rate span.tooltip-icon + .tooltip {
+    left: -77px !important;
+}
+
 
 p.double.rightTitle > span.tooltip-icon, div.double.rightTitle > span.tooltip-icon {
     margin-top: -5px;
 }
 
 .rightTitle > div.tooltip {
-    left: auto !important;
-    right: 14px !important;
+    left: 96px !important;
+    right: auto !important;
     width: 200px;
 }
 
 .rightTitle.common-toggle > div.tooltip {
-    left: auto !important;
-    right: 147px !important;
+    right: 132px !important;
 }
 
 .rightTitle > div.tooltip > .tooltip-arrow {
+    left: 88.8%;
+}
+
+.rightTitle.common-toggle > div.tooltip > .tooltip-arrow {
     left: 81.8%;
 }
 
@@ -643,6 +666,7 @@ p.belowTitle {
     display: inline-block;
     width: 160px;
     float: left;
+    position: relative;
 }
 
 .belowTitle > span:first-child {
@@ -2080,4 +2104,10 @@ span.tour-icon.issue-cog + .tooltip {
 
 .select2-container-multi .select2-choices .select2-search-field input {
     font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+/* Chrome visual bug fix */
+
+.span4.capright, .span4.capright span, .span4.capright input {
+    -webkit-transform: translateZ(0);
 }

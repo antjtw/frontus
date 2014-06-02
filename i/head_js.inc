@@ -14,6 +14,10 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
     _kms('//i.kissmetrics.com/i.js');
     _kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
 }
+
+window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
+document.location.hostname == 'sharewave.com' ? window.analytics.load("np96eeicam") : window.analytics.load("inkrdebi0h");
+window.analytics.page()
 </script>
 
 <!--[if lt IE 9]>
@@ -32,6 +36,9 @@ if ((window.location.hostname == "www.sharewave.com" || window.location.hostname
 <script src="/lib/angular/angular-resource.js"></script>
 <script src="/lib/angular/ui-bootstrap-tpls-0.4.0.js"></script>
 <script src="/lib/angular/ui-utils/event.js"></script>
+<script src="/lib/angular/ng-infinite-scroll.js"></script>
+<script src="/lib/bootstrap/bootstrap-tagsinput.min.js"></script>
+<script src="/lib/bootstrap/bootstrap-tagsinput-angular.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
 <script src="/lib/placeholders.min.js"></script>
 <script src="/brijj/aBrijj.js"></script>

@@ -77,12 +77,12 @@ navm.directive('notifications', function() {
                 if (name.length > 20){
                     return name;
                 }
-                    
+
                 else{
                     return null;
-                }        
+                }
             };
-                
+
 
 
         }]
@@ -95,14 +95,6 @@ navm.directive('navbar', function () {
     return {
         restrict: 'E',
         templateUrl: '/cmn/nav.html',
-        controller: 'NavCtrl'
-    };
-});
-
-navm.directive('verticalnav', function () {
-    return {
-        restrict: 'E',
-        templateUrl: '/cmn/verticalnav.html',
         controller: 'NavCtrl'
     };
 });
@@ -154,7 +146,6 @@ navm.controller('NavCtrl',
             if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
             return M;
         })();
-
         var singleBarPages = ["/", "/team/", "/careers/", "/press/", "/privacy/", "/terms/", "/features/", "/pricing/", "/survey/"];
         navState.path = document.location.pathname;
         $scope.navState = navState;
@@ -476,13 +467,23 @@ navm.controller('NavCtrl',
 
         $scope.notifications = function() {
             if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                _kmq.push(['identify', $rootScope.navState.userid]);
+                //_kmq.push(['identify', $rootScope.navState.company]);
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-                    _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
+                    Intercom('boot', {email:$rootScope.navState.userid,
+                                      user_hash: $rootScope.navState.userhash,
+                                      app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa",
+                                      company: {id: $rootScope.navState.company,
+                                                name: $rootScope.navState.name}
+                                      }
+                    );
+                 //   _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
+                    //analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
+                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
+                                                                        "emailId": $rootScope.navState.userid,
+                                                                        "role":"issuer"});
 
                 // Get Notifications for docs
                 SWBrijj.tblm('document.action_library').then(function (x) {
@@ -493,11 +494,15 @@ navm.controller('NavCtrl',
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-            
-                 else {
+
+            else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
+                   // _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
+                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
+                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
+                                                                        "emailId": $rootScope.navState.userid,
+                                                                        "role":"shareholder"});
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
@@ -613,12 +618,17 @@ navm.controller('NavCtrl',
                         $rootScope.selectedPlan = data[0].plan || '000';
                     $rootScope.billing.customer_id = data[0].customer_id;
                     $rootScope.billing.payment_token = data[0].cc_token;
+                    $rootScope.billing.last_status = data[0].status;
                     $rootScope.load_invoices();
                     payments.get_customer($rootScope.billing.customer_id)
                     .then(function(x) {
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
                             $rootScope.billing.current_card = rsp.cards.data[0];
+                            if (rsp.subscriptions.count>0) {
+                                $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
+                            }
+                            $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
                             console.log(x);
@@ -716,6 +726,13 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
+
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $scope.access_token = data[0]['token_num'];
+        });
 
         //I don't love this but it works, should probably make a directive.
         if ($rootScope.companyIsZombie()) {
@@ -744,7 +761,7 @@ navm.controller('NavCtrl',
             }
             $scope.$apply();
         };
-        
+
     }
 ]);
 

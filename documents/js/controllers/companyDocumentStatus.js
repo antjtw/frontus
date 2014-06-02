@@ -28,9 +28,11 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
 
         // $scope.$on('$locationChangeSuccess', function(event) {delete $rootScope.errorMessage; });
 
-        var docId = parseInt($routeParams.doc);
-        SWBrijj.tblm("document.my_company_library", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages'], "doc_id", docId).then(function(data) {
+        var docId = parseInt($routeParams.doc, 10);
+        SWBrijj.tblm("document.my_company_library_doc", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages', 'tags', 'lastedit', 'lastsent'], "doc_id", docId).then(function(data) {
+            if (data.tags !== null) data.tags = JSON.parse(data.tags);
             $scope.document = data;
+            console.log($scope.document);
         });
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
@@ -53,28 +55,12 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
             });
         };
 
-        SWBrijj.tblmm("document.company_activity", "original", docId).then(function(data) {
-            $scope.activity = data;
-            $scope.setLastUpdates();
-            $scope.makeFeed();
-        });
+        $scope.activityFeed = "document.company_activity_feed";
+        $scope.activityFeedFilter = "original";
+        $scope.activityFeedFilterValue = docId;
 
         $scope.initInfoVar = function(infoVar, eventTime) {
             if(!infoVar || eventTime > infoVar) {infoVar = eventTime;}
-        };
-        $scope.initLastSent = function(act) {
-            if (!$scope.lastsent) {
-                $scope.lastsent = act.event_time;
-            } else if (act.event_time > $scope.lastsent) {
-                $scope.lastsent = act.event_time;
-            }
-        };
-        $scope.initLastEdit = function(act) {
-            if (!$scope.lastedit) {
-                $scope.lastedit = act.event_time;
-            } else if (act.event_time > $scope.lastedit) {
-                $scope.lastedit = act.event_time;
-            }
         };
         $scope.initLastDeadline = function(act) {
             $scope.initInfoVar($scope.lastdeadline, act.event_time);
@@ -88,38 +74,13 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
             }
             $scope.lastdeadline = lastdeadline;
         };
-        $scope.setLastUpdates = function() {
-            var i = 0;
-            while ((!$scope.lastsent || !$scope.lastedit) &&
-                    i <= $scope.activity.length-1) {
-                switch ($scope.activity[i].activity) {
-                    case "received":
-                    case "reminder":
-                        $scope.initLastSent($scope.activity[i]);
-                        break;
-                    case "edited":
-                        $scope.initLastEdit($scope.activity[i]);
-                        break;
-                    case "uploaded":
-                        $scope.initLastEdit($scope.activity[i]);
-                        break;
-                }
-                i++;
-            }
-        };
-        $scope.makeFeed = function() {
-            $scope.feed = [];
-            angular.forEach($scope.activity, function(event) {
-                if (event.activity != "sent") {
-                    event.when = moment(event.event_time).from(event.timenow);
-                    $scope.feed.push(event);
-                }
-            });
-        };
 
         $scope.documentshareOpen = function() {
             $location.path('/company-list?share');
             $location.search({});
+        };
+        $scope.gotoTag = function(tag) {
+            $location.url('/app/documents/company-list?q='+tag);
         };
 
         $scope.$watch('document.docname', function(newValue, oldValue) {
@@ -181,7 +142,7 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
         $scope.formatDate = function(date, fallback) {
             if (!date) {
                 return fallback ? fallback : "ERROR";
-            } else if (!$rootScope.settings.dateformat) {
+            } else if (!$rootScope.settings || !$rootScope.settings.dateformat) {
                 return "";
             } else {
                 return "" + $filter('date')(date, $rootScope.settings.dateformat) + "\n" + $filter('date')(date, 'shortTime');
