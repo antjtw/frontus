@@ -698,6 +698,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-left: 0;
 }
 
+.nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
+    border-right: 0;
+}
+
 
 div.rightTitle {
     margin: 0 0 10px 0;
@@ -1420,10 +1424,6 @@ ul.last-edited > li:last-child {
     margin-bottom: 10px;
 }
 
-.convertModal > div.modalText.convert-step-one > div.pull-right {
-    float: right;
-}
-
 .convertModal > div.modalText.convert-step-one > div > span:first-child {
     text-transform: uppercase;
     font-size: 10px;
@@ -1431,6 +1431,10 @@ ul.last-edited > li:last-child {
     display: inline-block;
     text-align: right;
     margin-right: 5px;
+}
+
+.convertModal .standard-button.arrow-right > button:after {
+    border-left-color: #3498DB;
 }
 
 
