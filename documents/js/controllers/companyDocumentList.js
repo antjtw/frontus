@@ -54,21 +54,6 @@ app.controller('CompanyDocumentListController',
                     }
                 }
             });
-            // Needed for docIsPrepared
-            var loaded_once = false;
-            $scope.$on("profile_loaded", function() {
-                if (loaded_once) {return;}
-                loaded_once = true;
-                SWBrijj.tblm('account.my_signature', ['signature']
-                    ).then(function(x) {
-                        if (x && x[0] && x[0].signature && x[0].signature.length>0) {
-                            $rootScope.person.has_signature = true;
-                        }
-                        loadSmartDocuments();
-                    }).except(function(x) {
-                        console.log(x);
-                    });
-            });
             if ($rootScope.person) {
                 $rootScope.$broadcast("profile_loaded");
             }
@@ -91,7 +76,7 @@ app.controller('CompanyDocumentListController',
                 if (st1) {
                     angular.forEach($scope.documents, function(doc) {
                         if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                            if ($scope.docIsPrepared(doc)) {
+                            if (doc.is_prepared) {
                                 $scope.updateShareType(doc, 2);
                                 $scope.$emit("notification:success",
                                     "Success! Document prepared for signature.");
@@ -130,7 +115,7 @@ app.controller('CompanyDocumentListController',
                     $scope.saveShareState();
                 }
             };
-            $scope.mergeSmartIntoDumb = function() {
+            function mergeSmartIntoDumb(smarttemplates) {
                 var smartdocs = [];
                 var prepared = null;
                 SWBrijj.tblm('account.my_company', ['name', 'state']
@@ -144,7 +129,7 @@ app.controller('CompanyDocumentListController',
                                 doc.is_prepared = prepared;
                             }
                         });
-                        angular.forEach($scope.smarttemplates, function(smart) {
+                        angular.forEach(smarttemplates, function(smart) {
                             if (smartdocs.indexOf(smart.template_id) === -1) {
                                 $scope.documents.push(
                                     {"docname": smart.template_name,
@@ -167,18 +152,18 @@ app.controller('CompanyDocumentListController',
 
             function loadSmartDocuments() {
                 SWBrijj.tblm('smartdoc.document').then(function(data) {
-                    $scope.smarttemplates = data;
-                    loadDocuments();
+                    mergeSmartIntoDumb(data);
                 }).except(function(x) {
                 });
             };
+
             function loadDocuments() {
                 // TODO: page w/ infinite scroll
                 // order is alpha right now
                 // need # versions total, archived, and completed for later calculations
                 // will need to calculate statusRatio for sorting (can be alpha, statusRatio, or tags)
                 // will need to merge list of documents received into current list
-                SWBrijj.tblmlimit('document.my_company_library_view_list', 20, 0).then(function(data) {
+                SWBrijj.tblm('document.my_company_library_view_list').then(function(data) {
                     $scope.documents = data;
                     angular.forEach($scope.documents, function(d) {
                         if (d.tags !== null) {
@@ -187,11 +172,13 @@ app.controller('CompanyDocumentListController',
                         d.type = "doc";
                         d.statusRatio = docStatusRatio(d);
                     });
-                    //$scope.mergeSmartIntoDumb();
+                    loadSmartDocuments();
                     initShareState();
                     loadTags();
                 });
             };
+            loadDocuments();
+
             function initShareState() {
                 getShareState();
                 loadPrepareState();
@@ -239,7 +226,7 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            SWBrijj.tblmlimit("document.my_company_library_view_recipient_list", 20, 0).then(function(data) {
+            SWBrijj.tblm("document.my_company_library_view_recipient_list").then(function(data) {
                 $scope.investorDocs = data;
                 angular.forEach($scope.investorDocs, function(investor) {
                     investor.type = "investor";
@@ -688,45 +675,6 @@ app.controller('CompanyDocumentListController',
                     return 'Prepare for Signature';
                 } else if (tp > 0) {
                     return 'Request Signature';
-                }
-            };
-            $scope.smartdocIsPrepared = function(doc) {
-                return doc.template_id && doc.is_prepared;
-            };
-            $scope.dumbdocIsPrepared = function(doc) {
-                if (!doc) {return false;}
-                var res = true;
-                if (doc.iss_annotations && doc.iss_annotations.length>5) {
-                    var notes = angular.fromJson(doc.iss_annotations);
-                    angular.forEach(notes, function(note) {
-                        if (note[4].required) {
-                            switch (note[4].whattype) {
-                                case "Text":
-                                    if (!note[2][0]) {res = false;}
-                                    break;
-                                case "ImgSignature":
-                                    if (!$rootScope.person.has_signature) {
-                                        res = false;
-                                    }
-                                    break;
-                                default:
-                                    if (!note[2][0]) {res = false;}
-                                    break;
-                            }
-                        }
-                    });
-                    return res;
-                } else if (doc.annotations && doc.annotations.length>5) {
-                    return res;
-                }
-            };
-
-            $scope.docIsPrepared = function(doc) {
-                if (!doc) {return false;}
-                if (doc.template_id) {
-                    return $scope.smartdocIsPrepared(doc);
-                } else {
-                    return $scope.dumbdocIsPrepared(doc);
                 }
             };
 
