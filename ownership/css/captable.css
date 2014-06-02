@@ -523,6 +523,27 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     display: block;
 }
 
+.capright .in-brief div.profile-link {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding: 5px;
+    display: inline-block;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.capright .in-brief div.profile-link:hover {
+    background-color: #E3E3E3;
+}
+
+.capright .in-brief div.profile-link > span {
+    display: inline-block;
+}
+
+.capright .in-brief div.profile-link > span:first-of-type {
+    vertical-align: -16%;
+}
+
 .paripassu-list > div.rightTitle > span {
     visibility: hidden;
 }

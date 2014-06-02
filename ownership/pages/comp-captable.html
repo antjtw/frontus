@@ -1568,7 +1568,10 @@
                             </div>
                         </div>
 
-                        <span ng-show="userDict[activeInvestorEmail]" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">View Full Profile</span>
+                        <div class="profile-link" ng-show="userDict[activeInvestorEmail]" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">
+                            <span data-icon="&#xe001;" aria-hidden="true"></span>
+                            <span>View Full Profile</span>
+                        </div>
                       </span>
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
