@@ -104,7 +104,6 @@ app.controller('CompanyDocumentListController',
                     });
                 }
                 $scope.finishedLoading = true;
-                loadDocumentVersions();
                 return st1;
             };
             $scope.saveShareState = function(clear) {
@@ -238,14 +237,6 @@ app.controller('CompanyDocumentListController',
                         console.log(err);
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
-            };
-
-            function loadDocumentVersions() {
-                // TODO: move my_counterparty_library call into the angular.forEach and do it per document
-                // possibly load it on the hover of the document
-                SWBrijj.tblm("document.my_counterparty_library").then(function(data) {
-                    Intercom('update', {company : {"document_shares":data.length}});
-                });
             };
 
             SWBrijj.tblmlimit("document.my_company_library_view_recipient_list", 20, 0).then(function(data) {
