@@ -2025,7 +2025,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     z-index: 10;
     content: ' ';
     width: 152px;
-    height: 18px;
+    height: 38px;
     border: 2px solid #19BB95;
     pointer-events: none;
 }
@@ -2038,7 +2038,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     right: -156px;
-    bottom: -36px;
+    bottom: -46px;
     z-index: 1;
     text-align: center;
     color: #FFFFFF;
@@ -2069,7 +2069,7 @@ div.issue-rail:before {
     width: -moz-calc(100% - 30px);
     width: -webkit-calc(100% - 30px);
     width: calc(100% - 30px);
-    height: 550px;
+    height: 644px;
     border: 2px solid #19BB95;
     pointer-events: none;
 }
