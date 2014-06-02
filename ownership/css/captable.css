@@ -764,6 +764,10 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
+.rightTitle.security-type > div > span:first-of-type {
+    vertical-align: -8%;
+}
+
 .rightTitle.security-type > div > span:last-of-type {
     margin-left: 5px;
 }
