@@ -743,6 +743,26 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     width: 164px;
 }
 
+.rightTitle.security-type > div {
+    display: inline-block;
+    margin-left: 5px;
+    line-height: 32px;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #3498DB;
+}
+
+.rightTitle.security-type > div:hover {
+    background-color: #E3E3E3;
+}
+
+.rightTitle.security-type > div > span:last-of-type {
+    margin-left: 5px;
+}
+
 .rightTitle > span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
@@ -789,17 +809,12 @@ p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
     left: -23px !important;
 }
 
-div.rightTitle.interest-rate span.tooltip-icon {
-    margin-top: -8px;
-}
-
-
 div.rightTitle.interest-rate span.tooltip-icon + .tooltip {
-    left: -77px !important;
+    left: 0 !important;
 }
 
 .rightTitle > div.tooltip {
-    left: 96px !important;
+    left: 73px !important;
     right: auto !important;
     width: 200px;
 }
