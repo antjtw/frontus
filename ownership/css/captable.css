@@ -1383,6 +1383,10 @@ ul.last-edited > li:last-child {
     color: rgb(30, 45, 61);
 }
 
+.docLibrary .captable .column-label {
+    border-top: 0;
+}
+
 .status-columns.column-label > th {
     padding-left: 10px;
 }
