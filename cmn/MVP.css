@@ -1587,10 +1587,6 @@ ul.spaced-list > li:nth-child(odd) {
     border-bottom: 1px solid #E3E3E3;
 }
 
-.activity-feed2 li.event:last-of-type {
-    border-bottom: none;
-}
-
 .activity-feed2 a {
     color: #3397DA;
 }
