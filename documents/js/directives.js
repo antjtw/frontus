@@ -108,7 +108,9 @@ app.directive('documentSummaryRow', function() {
         restrict: "A",
         scope: {
             doc: '=',
-            viewState: '='
+            viewState: '=',
+            modals: '=',
+            docShareState: '=',
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
@@ -121,7 +123,8 @@ app.directive('documentVersionRow', function() {
         restrict: "A",
         scope: {
             version: '=',
-            viewState: '='
+            viewState: '=',
+            modals: '=',
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController

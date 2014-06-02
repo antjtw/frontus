@@ -14,6 +14,7 @@ app.controller('CompanyDocumentListController',
                 show_archived: false,
                 query: $routeParams.q || "",
             };
+            $scope.modals = {};
 
             if (navState.role == 'investor') {
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -212,7 +213,7 @@ app.controller('CompanyDocumentListController',
                 SWBrijj.procm('document.update_tags',
                         id, JSON.stringify(new_tags))
                     .then(function(data) {
-                        $scope.updateTagsClose();
+                        $scope.modals.updateTagsClose();
                         angular.forEach($scope.documents, function(el) {
                             if (el.doc_id===doc.doc_id) {
                                 el.tags = new_tags;
@@ -221,7 +222,7 @@ app.controller('CompanyDocumentListController',
                         loadTags();
                         $scope.$emit("notification:success", "Tags updated");
                     }).except(function(err) {
-                        $scope.updateTagsClose();
+                        $scope.modals.updateTagsClose();
                         console.log(err);
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
@@ -289,14 +290,14 @@ app.controller('CompanyDocumentListController',
             // Document Upload pieces
             // Modal Up and Down Functions
 
-            $scope.documentUploadOpen = function() {
+            $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
                 $scope.showProgress = false;
                 $scope.showProcessing = false;
                 $scope.documentUploadModal = true;
             };
 
-            $scope.documentUploadClose = function() {
+            $scope.modals.documentUploadClose = function() {
                 $scope.showProgress = false;
                 $scope.showProcessing = false;
                 $rootScope.errorMessage = '';
@@ -390,7 +391,7 @@ app.controller('CompanyDocumentListController',
                     void(arg);
                     $rootScope.showProgress = false;
                     $rootScope.showProcessing = true;
-                    $scope.documentUploadClose();
+                    $scope.modals.documentUploadClose();
                     $scope.$emit("notification:success", "Success! We're preparing your file.");
                     $scope.$apply();
                 });
@@ -398,7 +399,7 @@ app.controller('CompanyDocumentListController',
                     "upload:error", function(evt, arg) {
                         $rootScope.errorMessage = arg;
                         $scope.showProgress = false;
-                        $scope.documentUploadClose();
+                        $scope.modals.documentUploadClose();
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                         $scope.$apply();
                         console.log(arg);
@@ -437,7 +438,7 @@ app.controller('CompanyDocumentListController',
                         $scope.documents.push(newdocument);
                     }
                     $timeout($scope.checkReady, 2000);
-                    $scope.documentUploadClose();
+                    $scope.modals.documentUploadClose();
 
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
@@ -581,18 +582,6 @@ app.controller('CompanyDocumentListController',
             $scope.restoreSelectedDocs = function(docs) {
                 $scope.opendetailsExclusive(docs);
             };
-            $scope.toggleForShare = function(doc) {
-                // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
-                if (!doc.forShare) {
-                    $scope.docShareState.doclist
-                        = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
-                    doc.forShare = true;
-                } else {
-                    $scope.docShareState.doclist
-                        = $scope.removeShareItem(doc, $scope.docShareState.doclist);
-                    doc.forShare = false;
-                }
-            };
             $scope.getShareType = function(doc) {
                 if (!doc) {return 0;}
                 if (!doc.signature_flow && !doc.template_id) {
@@ -612,13 +601,13 @@ app.controller('CompanyDocumentListController',
                 }
             };
 
-            $scope.retractVersionOpen = function(version) {
+            $scope.modals.retractVersionOpen = function(version) {
                 $scope.docForModal = version;
                 $scope.modalArchive = false;
                 $scope.retractDocModal = true;
             };
 
-            $scope.retractVersionClose = function() {
+            $scope.modals.retractVersionClose = function() {
                 $scope.modalArchive = false;
                 $scope.retractDocModal = false;
             };
@@ -655,13 +644,15 @@ app.controller('CompanyDocumentListController',
             //My parentheses format
             var regExp = /\(([^)]+)\)/;
 
-            $scope.updateTitleOpen = function(doc) {
+            // TODO: all of these modals should be separate directives
+
+            $scope.modals.updateTitleOpen = function(doc) {
                 $scope.docForModal = doc;
                 $scope.updateTitleModal = true;
                 $scope.docForModal.originalName = $scope.docForModal.docname;
             };
 
-            $scope.updateTitleClose = function() {
+            $scope.modals.updateTitleClose = function() {
                 $scope.updateTitleModal = false;
                 $scope.$emit('updated:name', $scope.docForModal);
                 if ($scope.docForModal.docname.length < 1) {
@@ -679,21 +670,21 @@ app.controller('CompanyDocumentListController',
                     });
                 }
             });
-            $scope.updateTagsOpen = function(doc) {
+            $scope.modals.updateTagsOpen = function(doc) {
                 $scope.docForModal = angular.copy(doc);
                 $scope.docForModal.new_tags = angular.copy(doc.tags);
                 $scope.updateTagsModal = true;
             };
-            $scope.updateTagsClose = function() {
+            $scope.modals.updateTagsClose = function() {
                 $scope.updateTagsModal = false;
             };
 
-            $scope.deleteDocOpen = function(doc) {
+            $scope.modals.deleteDocOpen = function(doc) {
                 $scope.docForModal = doc;
                 $scope.deleteDocModal = true;
             };
 
-            $scope.deleteDocClose = function() {
+            $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
             };
 
@@ -726,21 +717,21 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            $scope.voidDocOpen = function(doc) {
+            $scope.modals.voidDocOpen = function(doc) {
                 $scope.voiddocForModal = doc;
                 $scope.voidDocModal = true;
             };
 
-            $scope.voidDocClose = function() {
+            $scope.modals.voidDocClose = function() {
                 $scope.voidDocModal = false;
             };
 
-            $scope.remindDocOpen = function(doc) {
+            $scope.modals.remindDocOpen = function(doc) {
                 $scope.reminddocForModal = doc;
                 $scope.remindDocModal = true;
             };
 
-            $scope.remindDocClose = function() {
+            $scope.modals.remindDocClose = function() {
                 $scope.remindDocModal = false;
             };
 

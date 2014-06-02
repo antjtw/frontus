@@ -53,7 +53,7 @@
                 </div>
                 <div class="box-button pull-right"
                      ng-class="{selected: uploadModal, 'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || documentUploadOpen();"
+                     ng-click="companyIsZombie() || modals.documentUploadOpen();"
                      data-placement="bottom" bs-tooltip="zombiemessage">
                     <ul>
                         <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
@@ -75,7 +75,7 @@
 <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
     <tbody class="empty-table">
     <tr>
-        <td> <span>Welcome! </span><span class="link" ng-click="documentUploadOpen();">Upload a document</span><span> to get started.</span>
+        <td> <span>Welcome! </span><span class="link" ng-click="modals.documentUploadOpen();">Upload a document</span><span> to get started.</span>
 
         </td>
     </tr>
@@ -99,7 +99,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'">
@@ -110,7 +110,7 @@
         <th></th>
     </tr>
     </tbody>
-    <tbody document-summary-row view-state="state" doc="investor" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
+    <tbody document-summary-row view-state="state" doc="investor" modals="modals" doc-share-state="docShareState" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
     </tbody>
 </table>
 </div>
@@ -146,7 +146,7 @@
 </div>
 </div>
 
-<div modal="documentUploadModal" close="documentUploadClose()" options="narrowopts">
+<div modal="documentUploadModal" close="modals.documentUploadClose()" options="narrowopts">
     <div class="modalHeader">
         <span>Upload Documents</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
@@ -192,7 +192,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="documentUploadClose()">Cancel</button>
+            <button class="btn" ng-click="modals.documentUploadClose()">Cancel</button>
         </div>
         <div class="standard-button green">
             <button class="btn"
@@ -202,28 +202,28 @@
     </div>
 </div>
 
-<div modal="updateTitleModal" close="updateTitleClose()" options="opts">
+<div modal="updateTitleModal" close="modals.updateTitleClose()" options="opts">
     <div class="modalHeader">
         <span>Rename Document</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTitleClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="modals.updateTitleClose()"></span>
     </div>
     <div class="modalText updateTitleModal">
         <input ng-model="docForModal.docname" type="text">
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="updateTitleClose()">Cancel</button>
+            <button class="btn" ng-click="modals.updateTitleClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm
+            <button class="btn" ng-click="modals.updateTitleClose()" ng-disabled="docForModal.docname.length < 1">Confirm
             </button>
         </div>
     </div>
 </div>
-<div modal="updateTagsModal" close="updateTagsClose()" options="wideopts">
+<div modal="updateTagsModal" close="modals.updateTagsClose()" options="wideopts">
     <div class="tagsModalHeader modalHeader">
         <span>{{docForModal.docname | caplength:50}} Tags</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="updateTagsClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="modals.updateTagsClose()"></span>
     </div>
     <div class="modalText tagsModal">
         <div>
@@ -240,7 +240,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="updateTagsClose()">Cancel</button>
+            <button class="btn" ng-click="modals.updateTagsClose()">Cancel</button>
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="updateTags(docForModal);">
@@ -249,10 +249,10 @@
         </div>
     </div>
 </div>
-<div modal="retractDocModal" close="retractVersionClose()" options="opts" class="updateTitleModal">
+<div modal="retractDocModal" close="modals.retractVersionClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
         <span>Retract Document</span>
-        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="retractVersionClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.retractVersionClose()"></span>
     </div>
     <div class="modalText deleteDocModal retractModal">
         <span>Are you sure you want to retract {{docForModal.docname}} from {{docForModal.name || docForModal.investor}}?</span>
@@ -274,7 +274,7 @@
 
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="retractVersionClose()">Cancel</button>
+            <button class="btn" ng-click="modals.retractVersionClose()">Cancel</button>
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="retractVersion(docForModal, modalArchive); retractVersionClose();">Confirm</button>
@@ -282,10 +282,10 @@
     </div>
 </div>
 
-<div modal="deleteDocModal" close="deleteDocClose()" options="opts" class="updateTitleModal">
+<div modal="deleteDocModal" close="modals.deleteDocClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
         <span>Delete Document</span>
-        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="deleteDocClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.deleteDocClose()"></span>
     </div>
     <div class="modalText deleteDocModal">
         <span>Are you sure you want to delete </span>
@@ -293,18 +293,18 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="deleteDocClose()">Cancel</button>
+            <button class="btn" ng-click="modals.deleteDocClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="reallyDeleteDoc(docForModal); deleteDocClose();">Confirm</button>
+            <button class="btn" ng-click="reallyDeleteDoc(docForModal); modals.deleteDocClose();">Confirm</button>
         </div>
     </div>
 </div>
 
-<div modal="voidDocModal" close="voidDocClose()" options="opts" class="updateTitleModal">
+<div modal="voidDocModal" close="modals.voidDocClose()" options="opts" class="updateTitleModal">
     <div class="modalHeader">
         <span>Void Document</span>
-        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="voidDocClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.voidDocClose()"></span>
     </div>
     <div class="modalText voidDocModal">
         <span>Voiding a document will nullify the agreement, as if it had never existed. Your confirmation will send a void request to the other party, who must also agree to void the document before the process is complete.</span>
@@ -317,18 +317,18 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="voidDocClose()">Cancel</button>
+            <button class="btn" ng-click="modals.voidDocClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="voidDocument(voiddocForModal, voidText); voidDocClose();">Confirm</button>
+            <button class="btn" ng-click="voidDocument(voiddocForModal, voidText); modals.voidDocClose();">Confirm</button>
         </div>
     </div>
 </div>
 
-<div modal="remindDocModal" close="remindDocClose()" options="opts">
+<div modal="remindDocModal" close="modals.remindDocClose()" options="opts">
     <div class="modalHeader">
         <span>Send Signature Reminder</span>
-        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="remindDocClose()"></span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.remindDocClose()"></span>
     </div>
     <div class="modalText voidDocModal">
         <span>Send a reminder to the original recipient.</span>
@@ -341,10 +341,10 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="remindDocClose()">Cancel</button>
+            <button class="btn" ng-click="modals.remindDocClose()">Cancel</button>
         </div>
         <div class="standard-button green">
-            <button class="btn" ng-click="remindDocument(reminddocForModal, remindText); remindDocClose();">Confirm</button>
+            <button class="btn" ng-click="remindDocument(reminddocForModal, remindText); modals.remindDocClose();">Confirm</button>
         </div>
     </div>
 </div>

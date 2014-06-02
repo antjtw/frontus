@@ -83,6 +83,19 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
             || version.when_retracted;
     };
 
+    $scope.toggleForShare = function(doc) {
+        // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
+        if (!doc.forShare) {
+            $scope.docShareState.doclist
+                = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
+            doc.forShare = true;
+        } else {
+            $scope.docShareState.doclist
+                = $scope.removeShareItem(doc, $scope.docShareState.doclist);
+            doc.forShare = false;
+        }
+    };
+
     // dropdown list functions
     $scope.docStatus = function(doc) {
         return "Last Updated " + moment(((doc.last_event_time) ?
