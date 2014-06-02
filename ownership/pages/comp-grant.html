@@ -182,11 +182,11 @@
                     <span ng-hide="issue.shown || !issue.trans" data-icon="&#xe017;" aria-hidden="true"></span>
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
-                <td>
+                <td ng-class="{'selectablerow': maintoggle}" ng-click="!maintoggle || getActiveIssue(issue, '', 'view')">
                     <input ng-show="!maintoggle" placeholder="Add new security"
                            ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}"
                            ng-model="issue.issue">
-                    <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
+                    <span ng-show="maintoggle">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
                 <td>{{formatAmount(issueVested(issue))}}</td>

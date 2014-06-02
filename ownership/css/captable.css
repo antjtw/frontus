@@ -970,6 +970,10 @@ textarea {
     background-color: transparent;
 }
 
+.tableView.grant-table td.selectablerow {
+    cursor: pointer;
+}
+
 .tableView.grant-table input {
     width: -moz-calc(100% - 9px);
     width: -webkit-calc(100% - 9px);
