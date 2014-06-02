@@ -505,21 +505,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             allowablekeys.splice(index, 1);
             $scope.allowKeys = allowablekeys;
 
-            angular.forEach($scope.rows, function (row) {
-                row.state = false;
-                angular.forEach($scope.issues, function (issue) {
-                    if (issue.issue) {
-                        if (row.name == currenttran && currentcolumn == issue.issue) {
-                            row[currentcolumn].state = true;
-                        }
-                        else {
-                            row[issue.issue].state = false;
-                            issue.state = false;
-                        }
-                    }
-                });
-            });
-
             var first = 0;
             angular.forEach($scope.trans, function (tran) {
                 if (tran.investor == currenttran) {
@@ -535,7 +520,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 }
             });
-            if ($scope.activeTran.length < 1) {
+            if ($scope.activeTran.length < 1 && !$scope.toggleView()) {
                 var anewTran = {};
                 anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (currentcolumn), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
                 angular.forEach($scope.issues, function (issue) {
@@ -546,9 +531,27 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 $scope.trans.push(anewTran);
                 $scope.activeTran.push(anewTran);
             }
-            if ($scope.oldActive[0] != $scope.activeTran[0]) {
-                $scope.activeTran[0].go = false;
+
+            if ($scope.activeTran.length < 1 && $scope.toggleView()) {
+                $scope.activeIssue = undefined;
+                $scope.activeInvestor = undefined;
+                $scope.sideBar = "home";
             }
+
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        if (row.name == currenttran && currentcolumn == issue.issue && $scope.activeTran.length > 0) {
+                            row[currentcolumn].state = true;
+                        }
+                        else {
+                            row[issue.issue].state = false;
+                            issue.state = false;
+                        }
+                    }
+                });
+            });
         }
     };
 
