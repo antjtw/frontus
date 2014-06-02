@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="subnav-controls doclist-controls">
             <div>
-                <div class="pull-left" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>VIEW BY</span>
+                <div class="pull-left" ng-hide="!hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>View By</span>
                     <ul class="dropdown-list drop-selector">
                         <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             {{ viewBy | viewByPrinter }}
@@ -23,18 +23,18 @@
                     </ul>
                 </div>
                 <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                    <span>HIDE COMPLETED</span>
+                    <span>Hide Completed</span>
                     <button class="check-box-button" ng-class="{'selected':maxRatio===2}" ng-click="toggleMaxRatio()">
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                    <span>SHOW ARCHIVED</span>
+                    <span>Show Archived</span>
                     <button class="check-box-button" ng-class="{'selected':show_archived==true}" ng-click="toggleArchived();">
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
-                <div class="pull-left"> <span>SEARCH</span>
+                <div class="pull-left"> <span>Search</span>
                     <input type="text" class="search-box" ng-model="query">
                 </div>
                 <div class="box-button pull-right"

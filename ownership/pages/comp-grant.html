@@ -561,48 +561,48 @@
 
               <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
 
-                  <p class="belowTitle"><span ng-bind="activeIssue.issue"></span><span>SECURITY NAME</span></p>
+                  <p class="belowTitle"><span ng-bind="activeIssue.issue"></span><span>Security Name</span></p>
 
                   <p class="belowTitle"><span
-                          ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
+                          ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>Date</span></p>
 
                   <p ng-show="activeIssue.optundersec" class="belowTitle"><span
                           ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top"
-                                                                         tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span>
+                                                                         tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                   </p>
 
                   <p ng-show="activeIssue.totalauth" class="belowTitle"><span
                           ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top"
-                                                                                     tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span>
+                                                                                     tooltip="The sum total of shares authorized to be issued">Total Authorized</span>
                   </p>
 
                   <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span
                           ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span
-                          tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
+                          tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span>
                   </p>
 
                   <p ng-show="activeIssue.price" class="belowTitle"><span
                           ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top"
-                                                                                       tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span>
+                                                                                       tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
                   </p>
 
                   <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span
-                          tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span>
+                          tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (Months)</span>
                   </p>
 
                   <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span
                           ng-bind="activeIssue.vestingbeginsdisplay"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF (Months)</span>
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                   </p>
 
                   <p ng-show="activeIssue.vestcliff" class="belowTitle"><span
                           ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top"
-                                                                       tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span>
+                                                                       tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
                   </p>
 
                   <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span
                           tooltip-placement="top"
-                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span>
+                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
                   </p>
 
               </div>
