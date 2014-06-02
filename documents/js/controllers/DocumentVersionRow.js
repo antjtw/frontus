@@ -1,6 +1,6 @@
 'use strict';
 
-function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics) {
+function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location) {
     $scope.versionStatus = function(version) {
         if (version.last_event_activity) {
             return (version.last_event_activity==='received' ? 'sent to ' : (version.last_event_activity === 'retracted' ? (version.last_event_activity + " from ") : (version.last_event_activity + " by "))) +
@@ -172,4 +172,4 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics) {
     };
 
 }
-DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];
+DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];

@@ -133,17 +133,22 @@ app.controller('CompanyDocumentListController',
                         });
                         angular.forEach(smarttemplates, function(smart) {
                             if (smartdocs.indexOf(smart.template_id) === -1) {
-                                $scope.documents.push(
-                                    {"docname": smart.template_name,
-                                        "uploaded_by": null,
-                                        "company": null,
-                                        "doc_id": null,
-                                        "template_id": smart.template_id,
-                                        "last_updated": null,
-                                        "annotations": null,
-                                        "versions": null,
-                                        "is_prepared": prepared
-                                    });
+                                $scope.documents.push({
+                                    "docname": smart.template_name,
+                                    "uploaded_by": null,
+                                    "company": null,
+                                    "doc_id": null,
+                                    "template_id": smart.template_id,
+                                    "last_updated": null,
+                                    "annotations": null,
+                                    "versions": null,
+                                    "is_prepared": prepared,
+                                    "version_count": 0,
+                                    "complete_count": 0,
+                                    "archive_count": 0,
+                                    "type": "doc",
+                                    "last_event_time": null,
+                                });
                             }
                         });
                         initShareState();
@@ -863,8 +868,6 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
-
-
         }
     ]);
 

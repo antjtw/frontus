@@ -1,6 +1,6 @@
 'use strict';
 
-function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
+function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
     // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
 
@@ -96,13 +96,25 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
         }
     };
 
-    // dropdown list functions
     $scope.docStatus = function(doc) {
-        return "Last Updated " + moment(((doc.last_event_time) ?
-                                         doc.last_event_time :
-                                         doc.last_updated)).from($rootScope.servertime);
+        if (doc.last_event_time || doc.last_updated) {
+            return "Last Updated " + moment(((doc.last_event_time) ?
+                                              doc.last_event_time :
+                                              doc.last_updated)).from($rootScope.servertime);
+        } else {
+            return "";
+        }
     };
 
+    $scope.title = function(summary) {
+        if (summary.type == "doc") {
+            return summary.docname;
+        } else if (summary.type == "investor") {
+            return summary.name || summary.email;
+        };
+    }
+
+    // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
     };
@@ -142,4 +154,4 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics) {
         });
     };
 }
-DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics'];
+DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
