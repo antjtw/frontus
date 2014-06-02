@@ -12,6 +12,7 @@ app.controller('CompanyDocumentListController',
                 hideSharebar: true,
                 maxRatio: 1000,
                 show_archived: false,
+                query: $routeParams.q || "",
             };
 
             if (navState.role == 'investor') {
@@ -247,10 +248,6 @@ app.controller('CompanyDocumentListController',
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
             $scope.signeeded = "No";
-            $scope.query = $routeParams.q || "";
-            $scope.setQuery = function(q) {
-                $scope.query = q;
-            };
 
             $scope.toggleArchived = function() {
                 $scope.state.show_archived = !$scope.state.show_archived;
@@ -270,7 +267,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.searchFilter = function(obj) {
-                var re = new RegExp($scope.query, 'i');
+                var re = new RegExp($scope.state.query, 'i');
                 /** @name obj#docname
                  * @type { string} */
                 if (!$scope.state.hideSharebar && obj.forShare) {
@@ -282,7 +279,7 @@ app.controller('CompanyDocumentListController',
                     // if !show_archived and all versions are archived then return false
                     return false;
                 } else {
-                    return !$scope.query || re.test(obj.docname) || re.test(obj.tags);
+                    return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
                 }
             };
             $scope.versionFilter = function(obj) {
@@ -635,14 +632,6 @@ app.controller('CompanyDocumentListController',
                     }
                 });
                 return res;
-            };
-            $scope.clearSearchFilter = function() {
-                var res = $scope.query;
-                $scope.query = "";
-                return res;
-            };
-            $scope.restoreSearchFilter = function(q) {
-                $scope.query = q;
             };
             $scope.restoreSelectedDocs = function(docs) {
                 $scope.opendetailsExclusive(docs);

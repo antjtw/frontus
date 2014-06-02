@@ -34,7 +34,7 @@
     <td ng-if="doc.type == 'doc'" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
         <span class="tag"
               ng-repeat="tag in doc.tags"
-              ng-click="setQuery(tag)">
+              ng-click="viewState.query = tag">
             {{tag + (($last && ' ') || ', ')}}
         </span>
     </td>
