@@ -534,15 +534,6 @@
     <div class="row-fluid">
         <div class="captable-controls subnav-controls">
             <div>
-                <div class="pull-left back-section">
-                    <div class="backbutton" ng-click="gotoPage('/app/ownership/company-status')">
-                        <span data-icon="&#xe033;" aria-hidden="true"></span>
-                    </div>
-                    <div>
-                        <span>View</span>
-                        <span>Status</span>
-                    </div>
-                </div>
                 <div class="box-button pull-right"
                      ng-class="{'disabledme': companyIsZombie()}"
                      ng-click="companyIsZombie() || modalUp();"
@@ -1088,24 +1079,6 @@
 
 <!-- Transaction Side Bar when Editable -->
                       <span ng-switch-when="2">
-                        <!-- <div class="tabbed headsection row-fluid">
-                            <h1>{{activeInvestor}}
-                                <ul class="dropdown-list transaction-icon pull-right">
-                                    <li class="dropdown standard menu-drop">
-                                        <a class="dropdown-toggle">
-                                            <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                        </a>
-                                        <ul ng-hide="toggleView();" class="dropdown-menu">
-                                            <li ng-show="activeTran[0].type == 'Debt'" ng-click="convertSharesUp(activeTran);">Convert Debt</li>
-                                            <li ng-show="activeTran[0].type == 'Equity'" ng-click="transferSharesUp(activeTran);">Transfer Shares</li>
-                                            <li ng-click="deletePersonButton(activeInvestor);">Delete</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </h1>
-
-                            <p>Customize terms for this shareholder</p>
-                        </div> -->
 
                         <accordion class="transaction-accordion" close-others="true">
                         <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index">

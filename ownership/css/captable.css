@@ -80,8 +80,6 @@ div.last-saved {
 .capGuide.grants {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #E3E3E3;
-
 }
 
 .capGuide > .rightTitle:last-child {
@@ -558,7 +556,12 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     display: inline-block;
     margin-left: 25px;
     margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 12px;
+}
+
+.delete-link.blue-link.grant-link {
+    margin-left: 0;
 }
 
 .transaction-accordion .accordion-heading {

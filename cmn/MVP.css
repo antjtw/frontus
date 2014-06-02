@@ -1926,7 +1926,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child {
-    font-size: 12px;
+    font-size: 14px;
     color: #666666;
     line-height: 18px;
 }
@@ -2676,7 +2676,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
