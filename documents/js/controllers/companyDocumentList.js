@@ -447,20 +447,6 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            $scope.opendetailsExclusive = function(selected) {
-                $scope.documents.forEach(function(doc) {
-                    if (selected.indexOf(doc.doc_id) !== -1) {
-                        doc.shown = doc.shown !== true;
-                    } else {
-                        doc.shown = false;
-                    }
-                });
-            };
-
-            $scope.opendetails = function(selected) {
-                selected.shown = selected.shown !== true;
-            };
-
             $scope.momentFromNow = function(date, zerodate) {
                 return moment(date).from(zerodate);
             };
@@ -484,47 +470,6 @@ app.controller('CompanyDocumentListController',
                 return initRatio;
             }
 
-            $scope.isPendingView = function(version) {
-                return version.signature_flow===0 && !version.last_viewed;
-            };
-
-            $scope.isPendingSignature = function(version) {
-                return version.signature_flow>0 && !version.when_signed && !version.when_retracted;
-            };
-
-            $scope.isPendingCountersignature = function(version) {
-                return version.when_signed && !version.when_countersigned && !version.when_retracted && version.signature_flow===2;
-            };
-
-            $scope.isPendingInvestorFinalization = function(version) {
-                return (version.signature_flow===2 && version.when_signed && version.when_countersigned && !version.when_finalized && !version.when_retracted);
-            };
-            $scope.isPendingIssuerFinalization = function(version) {
-                return (version.signature_flow===1 && version.when_signed && !version.when_finalized && !version.when_retracted);
-            };
-
-            $scope.isPendingVoid = function(version) {
-                return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
-            };
-
-            $scope.isVoided = function(version) {
-                return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
-            };
-
-            $scope.messageWritten = function(text) {
-                return !text || !text.length > 0;
-            };
-
-
-            $scope.docIsComplete = function(doc) {
-                if (doc.versions) {
-                    if (doc.versions.length === 0) {
-                        return false;
-                    } else {
-                        return doc.versions.length == doc.versions.filter($scope.versionIsComplete).length;
-                    }
-                }
-            };
             // TODO is it necessary to wrap with new functions?
             $scope.isCompleteSigned = function(version) {
                 return basics.isCompleteSigned(version);
