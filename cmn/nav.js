@@ -784,7 +784,7 @@ navm.filter('notifications', function () {
         var url = "";
         if (note.signature_status == -1) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
@@ -793,23 +793,23 @@ navm.filter('notifications', function () {
             else {
                 url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 2) {
             url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
             url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 5 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
     };
 });
