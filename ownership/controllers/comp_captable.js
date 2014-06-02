@@ -926,38 +926,52 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveInvestor = function (investor) {
-        $scope.sideBar = 3;
-
-        angular.forEach($scope.rows, function (row) {
-            row.state = false;
-            angular.forEach($scope.issues, function (issue) {
-                if (issue.issue) {
-                    if (row[issue.issue]) {
+        if ($scope.toggleView() && investor.name && investor.name == $scope.activeInvestorName) {
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
                         row[issue.issue].state = false;
                     }
-                    issue.state = false;
+                });
+            });
+            $scope.sideBar = "home";
+            $scope.activeInvestorName = undefined;
+            $scope.activeInvestorEmail = undefined;
+        } else {
+            $scope.sideBar = 3;
+
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        if (row[issue.issue]) {
+                            row[issue.issue].state = false;
+                        }
+                        issue.state = false;
+                    }
+                });
+            });
+
+            investor.state = true;
+            var rowindex = $scope.rows.indexOf(investor);
+
+            if (investor.name == "" && rowindex >= 4) {
+                var values = {"name": "", "editable": "0"};
+                angular.forEach($scope.issuekeys, function (key) {
+                    values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                });
+                $scope.rows.push(values);
+            }
+            $scope.activeInvestorName = investor.name;
+            $scope.activeInvestorEmail = investor.email;
+            angular.forEach($scope.userstatuses, function(user) {
+                if (investor.email == user.email) {
+                    $scope.activeInvestorRealName = user.name;
                 }
             });
-        });
-
-        investor.state = true;
-        var rowindex = $scope.rows.indexOf(investor);
-
-        if (investor.name == "" && rowindex >= 4) {
-            var values = {"name": "", "editable": "0"};
-            angular.forEach($scope.issuekeys, function (key) {
-                values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
-            });
-            $scope.rows.push(values);
+            $scope.activeInvestorNameKey = angular.copy(investor.name);
         }
-        $scope.activeInvestorName = investor.name;
-        $scope.activeInvestorEmail = investor.email;
-        angular.forEach($scope.userstatuses, function(user) {
-            if (investor.email == user.email) {
-                $scope.activeInvestorRealName = user.name;
-            }
-        });
-        $scope.activeInvestorNameKey = angular.copy(investor.name);
     };
 
     $scope.nameChangeLR = function (investor) {
