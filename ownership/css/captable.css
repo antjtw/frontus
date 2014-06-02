@@ -146,6 +146,7 @@ div.last-saved {
     margin: 0;
     padding: 0;
     background-clip: padding-box;
+    line-height: 40px;
 }
 
 .tableView th:first-of-type {
@@ -211,6 +212,7 @@ div.last-saved {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     background-color: #FFFFFF;
     padding: 0 0 0 6px;
+    line-height: 40px;
 }
 
 .tableView.captable th > input::-webkit-input-placeholder {
@@ -580,6 +582,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-size: 12px;
 }
 
+.transaction-accordion.lessmargin .delete-link.blue-link {
+    margin-left: 5px;
+}
+
 .delete-link.blue-link.grant-link {
     margin-left: 0;
 }
@@ -596,8 +602,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     vertical-align: -15%;
 }
 
-.transaction-accordion .accordion-heading span.extramargin {
-    margin-left: 20px;
+.transaction-accordion.lessmargin .capGuide {
+    padding-left: 0;
 }
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
@@ -984,7 +990,6 @@ textarea {
 
 .tableView.grant-table {
     margin-bottom: 60px;
-    margin-top: 20px;
     background: url("/img/stripe-pattern.png") repeat;
     table-layout: fixed;
 }
@@ -1383,7 +1388,7 @@ ul.last-edited > li:last-child {
     color: rgb(30, 45, 61);
 }
 
-.docLibrary .captable .column-label {
+.docLibrary .captable .column-label, .docLibrary .grant-table .column-label {
     border-top: 0;
 }
 

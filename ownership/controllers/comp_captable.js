@@ -554,48 +554,62 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.getActiveIssue = function (issuekey) {
 
-        angular.forEach($scope.issues, function(issuefull) {
-            if (issuefull.issue == issuekey) {
-                issue = issuefull;
-            }
-        });
-
-        if ($scope.toggleView()) {
-            $scope.sideBar = 5;
-        }
-        else {
-            $scope.sideBar = 1;
-        }
-        $scope.activeIssue = issue;
-        $scope.issueRevert = angular.copy(issue);
-
-        angular.forEach($scope.rows, function (row) {
-            row.state = false;
-            angular.forEach($scope.issues, function (issue) {
-                if (issue.issue) {
-                    row[issue.issue].state = false;
-                    issue.state = false;
+        if ($scope.toggleView() && $scope.activeIssue &&  $scope.activeIssue.issue == issuekey) {
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        row[issue.issue].state = false;
+                        issue.state = false;
+                    }
+                });
+            });
+            $scope.sideBar = "home";
+            $scope.activeIssue = undefined;
+        } else {
+            angular.forEach($scope.issues, function(issuefull) {
+                if (issuefull.issue == issuekey) {
+                    issue = issuefull;
                 }
             });
-        });
 
-        issue.state = true;
+            if ($scope.toggleView()) {
+                $scope.sideBar = 5;
+            }
+            else {
+                $scope.sideBar = 1;
+            }
+            $scope.activeIssue = issue;
+            $scope.issueRevert = angular.copy(issue);
 
-        // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
-        var index = allowablekeys.indexOf(issue.issue);
-        allowablekeys.splice(index, 1);
-        $scope.allowKeys = allowablekeys;
+            angular.forEach($scope.rows, function (row) {
+                row.state = false;
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue) {
+                        row[issue.issue].state = false;
+                        issue.state = false;
+                    }
+                });
+            });
 
-        $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
-        $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
-        $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
-        if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
-            $scope.activeIssue.date = (Date.today());
+            issue.state = true;
+
+            // Get the all the issues that aren't the current issue for the drop downs
+            var allowablekeys = angular.copy($scope.issuekeys);
+            var index = allowablekeys.indexOf(issue.issue);
+            allowablekeys.splice(index, 1);
+            $scope.allowKeys = allowablekeys;
+
+            $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
+            $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
+            $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
+            if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
+                $scope.activeIssue.date = (Date.today());
+            }
+            // Set Freq Value for Angularjs Select
+            var index = $scope.freqtypes.indexOf(issue.vestfreq);
+            $scope.activeIssue.vestfreq = $scope.freqtypes[index];
         }
-        // Set Freq Value for Angularjs Select
-        var index = $scope.freqtypes.indexOf(issue.vestfreq);
-        $scope.activeIssue.vestfreq = $scope.freqtypes[index];
     };
 
     $scope.saveIssueAssign = function (issue, field, i) {
