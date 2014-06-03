@@ -163,96 +163,107 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //Get the active row for the sidebar
     $scope.getActiveTransaction = function (currenttran, mode, view) {
-        if (view == "view") {
-            $scope.sideBar = 3;
-            $scope.mode = 1;
+        if (currenttran == $scope.activeTran && view == "view") {
+            $scope.activeTran = undefined;
             angular.forEach($scope.issues, function(issue) {
                 angular.forEach(issue.trans, function(tran) {
                     tran.fields = [false,false,false,false];
                 })
             });
-            if (mode == "forfeited") {
-                if (currenttran.forfeited) {
-                    currenttran.fields[2] = true;
-                    $scope.mode = 2;
+            $scope.sideBar = "x";
+        }
+        else {
+            if (view == "view") {
+                $scope.sideBar = 3;
+                $scope.mode = 1;
+                angular.forEach($scope.issues, function(issue) {
+                    angular.forEach(issue.trans, function(tran) {
+                        tran.fields = [false,false,false,false];
+                    })
+                });
+                if (mode == "forfeited") {
+                    if (currenttran.forfeited) {
+                        currenttran.fields[2] = true;
+                        $scope.mode = 2;
+                    }
+                    else {
+                        $scope.sideBar = "x";
+                        return
+                    }
+                }
+                else if (mode == "exercised") {
+                    if (currenttran.exercised) {
+                        currenttran.fields[3] = true;
+                        $scope.mode = 3;
+                    }
+                    else {
+                        $scope.sideBar = "x";
+                        return
+                    }
+                }
+                else if (mode == "vested") {
+                    if (currenttran.vested.length > 0) {
+                        $scope.mode = 4;
+                        currenttran.fields[1] = true;
+                    }
+                    else {
+                        $scope.sideBar = "x";
+                        return
+                    }
                 }
                 else {
-                    $scope.sideBar = "x";
-                    return
-                }
-            }
-            else if (mode == "exercised") {
-                if (currenttran.exercised) {
-                    currenttran.fields[3] = true;
-                    $scope.mode = 3;
-                }
-                else {
-                    $scope.sideBar = "x";
-                    return
-                }
-            }
-            else if (mode == "vested") {
-                if (currenttran.vested.length > 0) {
-                    $scope.mode = 4;
-                    currenttran.fields[1] = true;
-                }
-                else {
-                    $scope.sideBar = "x";
-                    return
+                    currenttran.fields[0] = true;
                 }
             }
             else {
-                currenttran.fields[0] = true;
-            }
-        }
-        else {
-            $scope.sideBar = 1;
-            $scope.mode = 1;
-            if (mode == "forfeited") {
-                $scope.mode = 2;
-            }
-            else if (mode == "exercised") {
-                $scope.mode = 3;
-            }
-            else if (mode == "vested") {
-                $scope.mode = 4;
-            }
-            else if (mode == "vested") {
-                $scope.mode = 4;
-                currenttran.fields[1] = true;
-            }
-        }
-        var activeAct = [];
-
-        // Only the issues that are not the active transactions (for underlying issue)
-        var allowablekeys = angular.copy($scope.issuekeys);
-        var index = allowablekeys.indexOf(currenttran.issue);
-        allowablekeys.splice(index, 1);
-        currenttran.allowKeys = allowablekeys;
-
-        $scope.activeTran = currenttran;
-        $scope.activeInvestor = currenttran.investor;
-
-        //Pair the correct grants with the selected transactions
-        for (var j = 0, a = $scope.grants.length; j < a; j++) {
-            if ($scope.activeTran.tran_id == $scope.grants[j].tran_id) {
-                activeAct.push($scope.grants[j]);
-            }
-        }
-        activeAct.push({"unit": null, "tran_id": $scope.activeTran.tran_id, "date": (Date.today()), "action": null, "investor": $scope.activeTran.investor, "issue": $scope.activeTran.issue});
-        $scope.activeTran.activeAct = activeAct;
-
-        if (currenttran.investor == null) {
-            angular.forEach($scope.issues, function(issue) {
-                if (issue.issue == currenttran.issue) {
-                    var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
-                    newTran.vestcliff = null;
-                    newTran.terms = null;
-                    newTran.vestfreq = null;
-                    newTran.vestingbegins = null;
-                    issue.trans.push(newTran);
+                $scope.sideBar = 1;
+                $scope.mode = 1;
+                if (mode == "forfeited") {
+                    $scope.mode = 2;
                 }
-            });
+                else if (mode == "exercised") {
+                    $scope.mode = 3;
+                }
+                else if (mode == "vested") {
+                    $scope.mode = 4;
+                }
+                else if (mode == "vested") {
+                    $scope.mode = 4;
+                    currenttran.fields[1] = true;
+                }
+            }
+            var activeAct = [];
+
+            // Only the issues that are not the active transactions (for underlying issue)
+            var allowablekeys = angular.copy($scope.issuekeys);
+            var index = allowablekeys.indexOf(currenttran.issue);
+            allowablekeys.splice(index, 1);
+            currenttran.allowKeys = allowablekeys;
+
+            $scope.activeTran = currenttran;
+            $scope.activeInvestor = currenttran.investor;
+
+            //Pair the correct grants with the selected transactions
+            for (var j = 0, a = $scope.grants.length; j < a; j++) {
+                if ($scope.activeTran.tran_id == $scope.grants[j].tran_id) {
+                    activeAct.push($scope.grants[j]);
+                }
+            }
+            activeAct.push({"unit": null, "tran_id": $scope.activeTran.tran_id, "date": (Date.today()), "action": null, "investor": $scope.activeTran.investor, "issue": $scope.activeTran.issue});
+            $scope.activeTran.activeAct = activeAct;
+
+            if (currenttran.investor == null) {
+                angular.forEach($scope.issues, function(issue) {
+                    if (issue.issue == currenttran.issue) {
+                        var newTran = $scope.tranInherit({"investor": null, "investorkey": null, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": issue.issue, "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": undefined}, issue);
+                        newTran.vestcliff = null;
+                        newTran.terms = null;
+                        newTran.vestfreq = null;
+                        newTran.vestingbegins = null;
+                        issue.trans.push(newTran);
+                    }
+                });
+            }
         }
     };
 
@@ -264,6 +275,15 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         else {
             $scope.sideBar = 4;
         }
+
+        // Clean up the transaction states.
+        angular.forEach($scope.issues, function(issue) {
+            angular.forEach(issue.trans, function(tran) {
+                tran.fields = [false,false,false,false];
+            })
+        });
+        $scope.activeTran = undefined;
+
         $scope.mode = 1;
         $scope.activeIssue = issue;
         $scope.issueRevert = angular.copy(issue);

@@ -423,7 +423,6 @@ navm.controller('NavCtrl',
 
         $scope.verifyPayment = function(status, response) {
             if (response.error) {
-                console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
@@ -631,7 +630,7 @@ navm.controller('NavCtrl',
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
-                            console.log(x);
+                            $rootScope.billingLoaded = true;
                         }
                     });
                 } else {
@@ -668,7 +667,6 @@ navm.controller('NavCtrl',
                         $scope.load_upcoming_invoice();
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };
@@ -682,7 +680,6 @@ navm.controller('NavCtrl',
                         $rootScope.billing.next_invoice_received = true;
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };
@@ -735,32 +732,29 @@ navm.controller('NavCtrl',
         });
 
         //I don't love this but it works, should probably make a directive.
-        if ($rootScope.companyIsZombie()) {
-            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-        } else {
-            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
-        }
-        $rootScope.$on('billingLoaded', function() {
-            if ($rootScope.companyIsZombie()) {
-                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-            } else {
-                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+
+        $rootScope.$watch('billingLoaded', function() {
+            if ($scope.billingLoaded == true) {
+                $scope.windowheight = $window.innerHeight;
             }
         });
+
         window.onresize = function() {
+            $scope.windowheight = $window.innerHeight;
+            $scope.$apply();
+        };
+
+        $scope.$watch('windowheight', function() {
             if ($rootScope.companyIsZombie()) {
                 $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 191) + "px", 'overflow-y': 'auto'};
             } else {
                 $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 141) + "px", 'overflow-y': 'auto'};
             }
-            $scope.$apply();
-        };
+        });
 
     }
 ]);
@@ -796,7 +790,7 @@ navm.filter('notifications', function () {
         var url = "";
         if (note.signature_status == -1) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
@@ -805,23 +799,23 @@ navm.filter('notifications', function () {
             else {
                 url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 2) {
             url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
             url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 5 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
     };
 });
