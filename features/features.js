@@ -1,5 +1,5 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
-    'ownerDirectives', 'ownerServices'], function($routeProvider, $locationProvider){
+    'ownerDirectives', 'ownerServices', '$strap.directives'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -35,13 +35,17 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         };
 
         $scope.tabs = [{'title': "Information"}];
-        $scope.issuetypes = [];
-        $scope.freqtypes = [];
+        $scope.issuetypes = ["Equity", "Debt", "Option", "Safe", "Warrant"];
+        $scope.freqtypes = ["weekly", "bi-weekly", "monthly", "quarterly", "yearly"];
         $scope.tf = ["yes", "no"];
         $scope.liquidpref = ['None','1X','2X', '3X'];
         // Empty variables for issues
         $scope.issuekeys = [];
         $scope.issues = [];
+
+        $scope.settings = {};
+
+        $scope.settings.lowercasedate = 'mm/dd/yyyy';
 
         // Sorting variables
         $scope.issueSort = 'date';
@@ -331,6 +335,31 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             });
         };
 
+        var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
+        $scope.saveTranDate = function (transaction, field, evt) {
+            if (evt) { // User is typing
+                if (evt != 'blur')
+                    keyPressed = true;
+                var dateString = angular.element(field + '#' + transaction.$$hashKey).val();
+                var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                    var date = Date.parse(dateString);
+                    if (date) {
+                        transaction[field] = calculate.timezoneOffset(date);
+                        keyPressed = false;
+                        $scope.saveTran(transaction);
+                    }
+                }
+            } else { // User is using calendar
+                //Fix the dates to take into account timezone differences.
+                if (transaction[field] instanceof Date) {
+                    transaction[field] = calculate.timezoneOffset(transaction[field]);
+                    keyPressed = false;
+                    $scope.saveTran(transaction);
+                }
+            }
+        };
+
         $scope.getActiveIssue = function (issuekey) {
 
             if ($scope.toggleView() && $scope.activeIssue &&  $scope.activeIssue.issue == issuekey) {
@@ -488,6 +517,53 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 });
                 if (investor.name) {
                     $scope.rows[index].namekey = investor.name
+                }
+            }
+        };
+
+        $scope.saveIssueAssign = function (issue, field, i) {
+            if (i) {
+                issue[field] = i;
+            }
+            $scope.saveIssueCheck(issue, field)
+        };
+
+        $scope.saveIssueCheckDate = function (issue, field, evt) {
+            //Fix the dates to take into account timezone differences
+            if (evt) { // User is typing
+                if (evt != 'blur')
+                    keyPressed = true;
+                var dateString = angular.element(field + '#' + issue.$$hashKey).val();
+                var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                    var date = Date.parse(dateString);
+                    if (date) {
+                        issue[field] = calculate.timezoneOffset(date);
+                        $scope.saveIssueCheck(issue, field);
+                        keyPressed = false;
+                    }
+                }
+            } else { // User is using calendar
+                if (issue[field] instanceof Date) {
+                    issue[field] = calculate.timezoneOffset(issue[field]);
+                    $scope.saveIssueCheck(issue, field);
+                    keyPressed = false;
+                }
+            }
+        };
+
+        $scope.saveIssueCheck = function (issue, field) {
+            var x = false;
+            var testcopy = angular.copy(issue);
+            if ($scope.issueModal == true) {
+                return;
+            }
+            else {
+                if (!angular.equals(testcopy, $scope.issueRevert)) {
+                    $scope.saveIssue(issue, field);
+                }
+                else {
+                    return;
                 }
             }
         };
