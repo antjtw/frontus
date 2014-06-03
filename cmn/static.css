@@ -428,8 +428,30 @@ address {
     margin-right: 20px;
 }
 
+/* External Cap Table */
 
+.features .demo-captable {
+    margin-top: 100px;
+    position: relative;
+    border: 1px solid #C6C6C6;
+}
 
+.features .demo-captable button.right-rail-button {
+    top: 0;
+}
+
+.features .demo-captable .leftTabWindow {
+    overflow-y: hidden;
+    height: 775px;
+}
+
+.features .demo-captable .span4.capright {
+    height: 775px;
+}
+
+.features .demo-captable .capcontainer {
+    height: 775px;
+}
 
 @media (min-width: 1000px) {
     .feature-block .screen {
