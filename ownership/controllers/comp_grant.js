@@ -705,9 +705,10 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     }
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], String(transaction['investor']), String(transaction['issue']), calculate.toFloat(transaction['units']), d1, String(transaction['type']), calculate.toFloat(transaction['amount']), calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), Boolean(transaction.partpref), transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), Boolean(transaction['dragalong']), Boolean(transaction['tagalong'])).then(function (data) {
+                    var returneddata = data[1][0].split("!!!");
                     $scope.lastsaved = Date.now();
                     if (transaction.tran_id == '') {
-                        transaction.tran_id = data[1][0];
+                        transaction.tran_id = returneddata[0];
                         $scope.trans.push(transaction);
                     }
                     transaction.unitskey = transaction.units;
