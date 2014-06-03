@@ -1572,6 +1572,14 @@
                             <span data-icon="&#xe001;" aria-hidden="true"></span>
                             <span>View Full Profile</span>
                         </div>
+
+                        <div ng-show="!companyIsZombie() && !userDict[activeInvestorEmail]" class="share-link">
+                            <div ng-click="companyIsZombie() || modalUp();" class="profile-link">
+                                <span data-icon="&#xe604;" aria-hidden="true"></span>
+                                <span>Share with Investor</span>
+                            </div>
+                        </div>
+
                       </span>
                       <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
