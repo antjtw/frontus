@@ -6,8 +6,8 @@
         ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()"
         ng-mouseenter="loadVersions()">
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="viewState.hideSharebar">
-            <span ng-hide="!versionsVisible(doc) || (doc.shown || doc.version_count == 0)" data-icon="&#xe017;" aria-hidden="true"></span>
-            <span ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
+            <span class="toggle-icon" ng-hide="!versionsVisible(doc) || (doc.shown || doc.version_count == 0)" data-icon="&#xe017;" aria-hidden="true"></span>
+            <span class="toggle-icon" ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
         </div>
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="!viewState.hideSharebar">
             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
@@ -85,9 +85,9 @@
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by) && access_token" ng-click="exportOriginalToDropbox(doc)">Export to Dropbox</li>
-                        <li ng-show="!versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="modals.updateTitleOpen(doc)">Rename</li>
+                        <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="modals.updateTagsOpen(doc)">Edit Tags</li>
-                        <li ng-show="!versions[0] && !(doc.version_count == 0 && !doc.uploaded_by)" ng-click="modals.deleteDocOpen(doc)">Delete</li>
+                        <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.deleteDocOpen(doc)">Delete</li>
                         <li ng-show="!docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
                         <li ng-show="docIsPrepared(doc) && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                     </ul>
