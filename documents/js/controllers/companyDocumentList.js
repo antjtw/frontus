@@ -428,18 +428,21 @@ app.controller('CompanyDocumentListController',
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
                     for (var i = 0; i < files.length; i++) {
-                        var newdocument = {uploaded_by: $rootScope.person.email,
+                        var newdocument = {
+                            uploaded_by: $rootScope.person.email,
                             iss_annotations: null,
                             company: $rootScope.navState.company,
                             doc_id: x[i],
                             template_id: null,
-                            last_updated:  new Date.today(),
                             annotations: null,
                             docname: files[i].name,
-                            versions:
-                                [  ],
+                            version_count: 0,
+                            complete_count: 0,
+                            archive_count: 0,
                             statusRatio: 0,
-                            uploading: true};
+                            uploading: true,
+                            type: "doc"
+                        };
                         $scope.documents.push(newdocument);
                     }
                     $timeout($scope.checkReady, 2000);
