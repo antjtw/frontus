@@ -548,8 +548,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .capright .in-brief .share-link {
-    margin-right: 20px;
-    border-top: 1px solid #A6A6A6;
+    margin-right: 40px;
+    border-top: 1px solid #C6C6C6;
 }
 
 .capright .in-brief .share-link div.profile-link:hover {
@@ -853,6 +853,7 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     cursor: pointer;
     vertical-align: middle;
     position: relative;
+    color: #C6C6C6;
 }
 
 p.rightTitle {
@@ -918,7 +919,7 @@ div.rightTitle.interest-rate {
 
 .add-transaction-link {
     display: inline-block;
-    margin-left: 35px;
+    margin-left: 10px;
     line-height: 32px;
     cursor: pointer;
     padding-left: 5px;

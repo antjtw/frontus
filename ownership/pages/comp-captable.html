@@ -1093,7 +1093,9 @@
 
                                 <div class="rightTitle security-type">
                                     <span>Investor</span>
-                                    <input disabled ng-model="tran.investor">
+                                    <span class="locked-security">
+                                        {{tran.investor}}
+                                    </span>
 
                                     <div ng-click="transferSharesUp(activeTran);" ng-show="activeTran[0].type == 'Equity'">
                                         <span data-icon="&#xe60a;" aria-hidden="true"></span>
@@ -1542,19 +1544,19 @@
                                 <h1><img ng-src="{{ navState.company && '/photo/user?id='+activeInvestorEmail || '' }}">{{activeInvestorName}}</h1>
                         </div>
                         <div ng-show="userDict[activeInvestorEmail]" class="summary-bar">
-                            <div class="belowTitle">
+                            <div ng-show="userDict[activeInvestorEmail].lastlogin" class="belowTitle">
                                 <img src="/img/activity/login.png">
                                 <div>
                                     <span>{{userDict[activeInvestorEmail].lastlogin | date:settings.shortdate}}</span><span>Last Login</span>
                                 </div>
                             </div>
-                            <div class="belowTitle">
+                            <div ng-show="userDict[activeInvestorEmail].received" class="belowTitle">
                                 <img src="/img/activity/received.png">
                                 <div>
                                     <span>{{userDict[activeInvestorEmail].received | date:settings.shortdate}}</span><span>Delivered</span>
                                 </div>
                             </div>
-                            <div class="belowTitle">
+                            <div ng-show="userDict[activeInvestorEmail].viewed" class="belowTitle">
                                 <img src="/img/activity/view.png">
                                 <div>
                                     <span>{{userDict[activeInvestorEmail].viewed | date:settings.shortdate}}</span><span>Last Viewed</span>
