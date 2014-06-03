@@ -725,6 +725,17 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
         };
 
+        $scope.tranChangeU = function (value, issue) {
+            angular.forEach($scope.issues, function (x) {
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+            });
+
+            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue));
+            if ($scope.activeTran.length < 2) {
+                $scope.activeTran[0]['units'] = value;
+            }
+        };
+
         $scope.grantbyIssue = function (key) {
             var type = "";
             angular.forEach($scope.issues, function(issue) {
@@ -742,6 +753,198 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 }
             });
             return type
+        };
+
+        $scope.saveTranAssign = function (transaction, field, value) {
+            if (value) {
+                transaction[field] = value;
+            }
+            $scope.saveTran(transaction);
+        };
+
+        // Preformatting on the date to factor in the local timezone offset
+        var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
+        $scope.saveTranDate = function (transaction, field, evt) {
+            if (evt) { // User is typing
+                if (evt != 'blur')
+                    keyPressed = true;
+                var dateString = angular.element(field + '#' + transaction.$$hashKey).val();
+                var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                    var date = Date.parse(dateString);
+                    if (date) {
+                        transaction[field] = calculate.timezoneOffset(date);
+                        keyPressed = false;
+                        $scope.saveTran(transaction);
+                    }
+                }
+            } else { // User is using calendar
+                //Fix the dates to take into account timezone differences.
+                if (transaction[field] instanceof Date) {
+                    transaction[field] = calculate.timezoneOffset(transaction[field]);
+                    keyPressed = false;
+                    $scope.saveTran(transaction);
+                }
+            }
+        };
+
+        // Save transaction function
+        $scope.saveTran = function (transaction) {
+            //Triggers the multi modal if more than one transaction exists
+            if (transaction.length > 1) {
+                // Reverts in the case where multitransaction rows are set to blank
+                angular.forEach($scope.rows, function(row) {
+                    if (row.name == transaction[0].investor) {
+                        row[transaction[0].issue]['u'] = row[transaction[0].issue]['ukey'];
+                        row[transaction[0].issue]['a'] = row[transaction[0].issue]['akey'];
+                    }
+                });
+                return
+            }
+            // Remove any commas added to the numbers
+            if (transaction.units) {
+                transaction.units = calculate.cleannumber(transaction.units);
+            }
+            if (transaction.amount) {
+                transaction.amount = calculate.cleannumber(transaction.amount);
+            }
+            if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
+                transaction.units = transaction.unitskey;
+            }
+            if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
+                transaction.amount = transaction.paidkey;
+            }
+            // Bail out if insufficient data has been added for the transaction
+            if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
+                return
+            }
+            // Not quite enough information to save
+            else if (transaction['issue'] == undefined || (isNaN(parseFloat(transaction['units'])) && isNaN(parseFloat(transaction['amount'])))) {
+                return
+            }
+            // We have enough info to begin the saving process
+            else {
+                if (transaction.type == "Option" && transaction.units < 0) {
+                    transaction.units = transaction.unitskey;
+                    $scope.$emit("notification:fail", "Cannot have a negative number of shares");
+                    return
+                }
+                else if (transaction.amount < 0) {
+                    transaction.amount = transaction.paidkey;
+                    $scope.$emit("notification:fail", "Cannot have a negative amount for options");
+                    return
+                }
+                else {
+                    if (transaction['tran_id'] == undefined) {
+                        transaction['tran_id'] = '';
+                    }
+
+                    var vestcliffdate = null;
+                    if (!isNaN(parseInt(transaction.vestingbeginsdisplay))) {
+                        vestcliffdate = angular.copy(transaction.date).addMonths(parseInt(transaction.vestingbeginsdisplay));
+                        transaction.vestingbegins = vestcliffdate;
+                    }
+
+                    // Convert amount to a float but remove the NaNs if amount is undefined
+                    transaction['amount'] = parseFloat(transaction['amount']);
+                    if (isNaN(transaction['amount'])) {
+                        transaction['amount'] = null;
+                    }
+                    transaction['units'] = parseFloat(transaction['units']);
+                    if (isNaN(transaction['units'])) {
+                        transaction['units'] = null;
+                    }
+                    transaction['ppshare'] = parseFloat(transaction['ppshare']);
+                    if (isNaN(transaction['ppshare'])) {
+                        transaction['ppshare'] = null;
+                    }
+                    angular.forEach($scope.rows, function (row) {
+                        if ((row.name == transaction.investor) && row.email) {
+                            transaction.email = row.email;
+                        }
+                    });
+                    if (!transaction.email) {
+                        transaction.email = null
+                    }
+                    // Autocomplete for Equity transactions, fill out the third of units, amount or price per share
+                    if (transaction.type == "Equity") {
+                        if (transaction.units && transaction.amount && transaction.ppshare != 0 && !transaction.ppshare) {
+                            transaction.ppshare = parseFloat(transaction.amount) / parseFloat(transaction.units);
+                        }
+                        else if (!transaction.units && transaction.units != 0 && transaction.amount && transaction.ppshare) {
+                            transaction.units = parseFloat(transaction.amount) / parseFloat(transaction.ppshare);
+                        }
+                        else if (transaction.units && !transaction.amount && transaction.amount != 0 && transaction.ppshare) {
+                            transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
+                        }
+                    }
+                        $scope.lastsaved = Date.now();
+                        var tempunits = 0;
+                        var tempamount = 0;
+                        angular.forEach($scope.rows, function (row) {
+                            angular.forEach($scope.trans, function (tran) {
+                                if (row.name == tran.investor) {
+                                    if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
+                                        tran.tran_id = String(Math.random()*10000);
+                                    }
+                                    if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
+                                        tran.key = tran.issue;
+                                        tran.unitskey = tran.units;
+                                        tran.paidkey = tran.amount;
+                                        tempunits = calculate.sum(tempunits, tran.units);
+                                        tempamount = calculate.sum(tempamount, tran.amount);
+                                        if (!isNaN(parseFloat(tran.forfeited))) {
+                                            tempunits = calculate.sum(tempunits, (-tran.forfeited));
+                                        }
+                                        row[tran.issue]['u'] = tempunits;
+                                        row[tran.issue]['ukey'] = tempunits;
+                                        row[tran.issue]['a'] = tempamount;
+                                        row[tran.issue]['akey'] = tempamount;
+
+                                        if (row[tran.issue]['u'] == 0) {
+                                            row[tran.issue]['u'] = null;
+                                            row[tran.issue]['ukey'] = null;
+                                        }
+                                        if (row[tran.issue]['a'] == 0) {
+                                            row[tran.issue]['a'] = null;
+                                            row[tran.issue]['akey'] = null;
+                                        }
+                                        row[tran.issue]['x'] = 0;
+                                    }
+                                }
+                            });
+                        });
+
+                        angular.forEach($scope.issues, function (x) {
+                            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                        });
+
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(transaction.issue));
+
+
+                        angular.forEach($scope.rows, function (row) {
+                            angular.forEach($scope.issues, function (issue) {
+                                if (row[issue.issue] != undefined) {
+                                    if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                        row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                    }
+                                }
+                            });
+                        });
+
+
+                        // Make sure we have a clean slate for everyone (including any new unissued rows
+                        angular.forEach($scope.rows, function (row) {
+                            angular.forEach($scope.issuekeys, function (issuekey) {
+                                if (issuekey in row) {
+                                }
+                                else {
+                                    row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                                }
+                            });
+                        });
+                }
+            }
         };
 
         // Toggles sidebar back and forth
