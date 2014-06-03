@@ -654,16 +654,21 @@ app.controller('CompanyDocumentListController',
             $scope.modals.updateTitleOpen = function(doc) {
                 $scope.docForModal = doc;
                 $scope.updateTitleModal = true;
-                $scope.docForModal.originalName = $scope.docForModal.docname;
+                $scope.docForModal.tempName = $scope.docForModal.docname;
             };
 
             $scope.modals.updateTitleClose = function() {
                 $scope.updateTitleModal = false;
-                $scope.$emit('updated:name', $scope.docForModal);
-                if ($scope.docForModal.docname.length < 1) {
-                    $scope.docForModal.docname = $scope.docForModal.originalName;
-                }
                 $scope.docForModal = null;
+            };
+
+            $scope.updateTitle = function() {
+                if ($scope.docForModal.tempName.length < 1) {
+                    return;
+                }
+                $scope.docForModal.docname = $scope.docForModal.tempName;
+                $scope.$emit('updated:name', $scope.docForModal);
+                $scope.modals.updateTitleClose();
             };
 
             $scope.$on('updated:name', function(ev, doc) {
