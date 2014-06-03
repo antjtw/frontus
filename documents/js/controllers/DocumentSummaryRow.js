@@ -87,11 +87,11 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
         if (!doc.forShare) {
             $scope.docShareState.doclist
-                = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
+                = $scope.modals.upsertShareItem(doc, $scope.docShareState.doclist);
             doc.forShare = true;
         } else {
             $scope.docShareState.doclist
-                = $scope.removeShareItem(doc, $scope.docShareState.doclist);
+                = $scope.modals.removeShareItem(doc, $scope.docShareState.doclist);
             doc.forShare = false;
         }
     };
@@ -113,6 +113,25 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return summary.name || summary.email;
         };
     }
+
+    $scope.getShareType = function(doc) {
+        if (!doc) {return 0;}
+        if (!doc.signature_flow && !doc.template_id) {
+            doc.signature_flow = 0;
+        } else if (!doc.signature_flow && doc.template_id) {
+            doc.signature_flow = -1;
+        }
+        return doc.signature_flow;
+    };
+    $scope.formatShareType = function(tp) {
+        if (!tp || tp === 0) {
+            return 'View Only';
+        } else if (tp < 0) {
+            return 'Prepare for Signature';
+        } else if (tp > 0) {
+            return 'Request Signature';
+        }
+    };
 
     // dropdown list functions
     $scope.viewProfile = function(investor) {

@@ -507,7 +507,7 @@ app.controller('CompanyDocumentListController',
                 $location.url("/app/documents/company-view?doc=" + docid + "&page=1");
             };
 
-            $scope.upsertShareItem = function(item, list) {
+            $scope.modals.upsertShareItem = function(item, list) {
                 var updated = false;
                 var listcopy = angular.copy(list);
                 angular.forEach(listcopy, function(el) {
@@ -527,7 +527,7 @@ app.controller('CompanyDocumentListController',
                 }
                 return listcopy;
             };
-            $scope.removeShareItem = function(item, list) {
+            $scope.modals.removeShareItem = function(item, list) {
                 return list.filter(function(el) {
                     return !(item.doc_id==el.doc_id
                         && item.template_id==el.template_id
@@ -539,7 +539,7 @@ app.controller('CompanyDocumentListController',
                     tp = 1;
                 }
                 doc.signature_flow = tp;
-                $scope.docShareState.doclist = $scope.upsertShareItem(doc, $scope.docShareState.doclist);
+                $scope.docShareState.doclist = $scope.modals.upsertShareItem(doc, $scope.docShareState.doclist);
             };
             $scope.toggleSide = function () {
                 var s = $location.search();
@@ -590,24 +590,6 @@ app.controller('CompanyDocumentListController',
             $scope.restoreSelectedDocs = function(docs) {
                 $scope.opendetailsExclusive(docs);
             };
-            $scope.getShareType = function(doc) {
-                if (!doc) {return 0;}
-                if (!doc.signature_flow && !doc.template_id) {
-                    doc.signature_flow = 0;
-                } else if (!doc.signature_flow && doc.template_id) {
-                    doc.signature_flow = -1;
-                }
-                return doc.signature_flow;
-            };
-            $scope.formatShareType = function(tp) {
-                if (!tp || tp === 0) {
-                    return 'View Only';
-                } else if (tp < 0) {
-                    return 'Prepare for Signature';
-                } else if (tp > 0) {
-                    return 'Request Signature';
-                }
-            };
 
             $scope.modals.retractVersionOpen = function(version) {
                 $scope.docForModal = version;
@@ -626,10 +608,9 @@ app.controller('CompanyDocumentListController',
                     void(data);
                     $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                     version.when_retracted = new Date.today();
-                    version.last_event.activity = "retracted";
-                    version.last_event.event_time = new Date.today();
-                    version.last_event.timenow = new Date.today();
-                    version.last_event.person = $rootScope.person.name;
+                    version.last_event_activity = "retracted";
+                    version.last_event_time = new Date.today();
+                    version.last_event_name = $rootScope.person.name;
                     if (archive) {
                         version.archived = true;
                     }
