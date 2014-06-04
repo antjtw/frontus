@@ -1185,6 +1185,76 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             });
         };
 
+        $scope.rmodalUp = function (investor) {
+            $scope.rowDelete = true;
+            $scope.minvestor = investor.namekey;
+        };
+
+        $scope.rclose = function () {
+            $scope.closeMsg = 'I was closed at: ' + new Date();
+            $scope.rowDelete = false;
+        };
+
+        $scope.revertPerson = function (investor) {
+            angular.forEach($scope.rows, function (row) {
+                if (row.namekey == investor) {
+                    row.name = row.namekey;
+                    $scope.nameChangeLR(row)
+                }
+            });
+        };
+
+        $scope.deletePerson = function (investor) {
+            $scope.sideBar = "x";
+            $scope.lastsaved = Date.now();
+            angular.forEach($scope.trans, function (tran) {
+                if (tran.investor == investor) {
+                    var index = $scope.trans.indexOf(tran);
+                    $scope.trans.splice(index, 1);
+                    angular.forEach($scope.rows, function (row) {
+                        if (row.name === tran['investor']) {
+                            if (!isNaN(tran.units)) {
+                                row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
+                                row[tran.issue]['ukey'] = row[tran.issue]['u']
+                                if (row[tran.issue]['u'] == 0) {
+                                    row[tran.issue]['u'] = null
+                                    row[tran.issue]['ukey'] = null
+                                }
+                            }
+                            if (!isNaN(tran.amount)) {
+                                row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
+                                row[tran.issue]['akey'] = row[tran.issue]['a']
+                                if (row[tran.issue]['a'] == 0) {
+                                    row[tran.issue]['a'] = null
+                                    row[tran.issue]['akey'] = null
+                                }
+                            }
+                        }
+                    });
+
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    });
+
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(tran.issue));
+                }
+            });
+
+            angular.forEach($scope.rows, function (row) {
+                if (row.namekey == investor) {
+                    var index = $scope.rows.indexOf(row);
+                    $scope.rows.splice(index, 1);
+                    if ($scope.rows.length <= 5) {
+                        var values = {"name": "", "editable": "0"};
+                        angular.forEach($scope.issuekeys, function (key) {
+                            values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                        });
+                        $scope.rows.splice(index, 0, values);
+                    }
+                }
+            });
+        };
+
         var clean_company_access = [({"level":"Personal View","email":"ellen@sharewave.com","name":"Ellen Orford","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Full View","email":"owen@sharewave.com","name":"Owen Wingrave","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Full View","email":"claggart@sharewave.com","name":"John Claggart","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Personal View","email":"albert@sharewave.com","name":"Albert Herring","company":"be7daaf65fcf.sharewave.com"}),({"level":"Personal View","email":"peter@sharewave.com","name":"Peter Quint","company":"be7daaf65fcf.sharewave.com"})];
         var activities = [({"timenow":new Date(1401897074181),"email":"ellen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"ellen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1401825801937),"activity":"viewed"}), ({"timenow":new Date(1401897074181),"email":"owen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"claggart@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"claggart@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1401825801937),"activity":"viewed"}),({"timenow":new Date(1401897074181),"email":"albert@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}), ({"timenow":new Date(1401897074181),"email":"peter@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"})];
         var user_tracker = [({"email":"ellen@sharewave.com","logintime":new Date(1401907608160)}), ({"email":"claggart@sharewave.com","logintime":new Date(1401907608160)})];
