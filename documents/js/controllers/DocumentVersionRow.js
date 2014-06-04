@@ -129,9 +129,9 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.archiveDoc = function(version) {
-	// TODO: update parent summary archived stats
         SWBrijj.procm("document.change_archive_state", version.doc_id, "true").then(function(data) {
             void(data);
+            version.doc.archive_count += 1;
             version.archived = true;
             $scope.$emit("notification:success", "Document archived.");
         }).except(function(x) {
@@ -141,9 +141,9 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.unarchiveDoc = function(version) {
-	// TODO: update parent summary archived stats
         SWBrijj.procm("document.change_archive_state", version.doc_id, "false").then(function(data) {
             void(data);
+            version.doc.archive_count -= 1;
             version.archived = false;
             $scope.$emit("notification:success", "Document unarchived.");
         }).except(function(x) {
