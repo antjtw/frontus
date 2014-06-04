@@ -34,6 +34,35 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             $location.url("/features/" + link);
         };
 
+
+        $scope.captabletips = {};
+        $scope.captabletips.premoneyval = "The valuation before taking in money in this round";
+        $scope.captabletips.postmoneyval = "The sum of the pre-money valuation and the total money paid into this round";
+        $scope.captabletips.ppshare = "The price at which each share was purchased";
+        $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
+        $scope.captabletips.liquidpref = "The minimum return multiple each investor is guaranteed on a liquidity event";
+        $scope.captabletips.partpref = "Allows an investor to collect their liquidation preference AND stock on a liquidity event";
+        $scope.captabletips.dragalong = "When a majority shareholder enters a sale, minority shareholders are also forced sell their shares";
+        $scope.captabletips.tagalong = "When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares";
+        $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
+        $scope.captabletips.totalgranted = "The sum total of shares granted";
+        $scope.captabletips.price = "The price each granted share can be purchased at when vested";
+        $scope.captabletips.pricewarrant = "The price each granted share can be purchased at";
+        $scope.captabletips.terms = "The total number of months until fully vested";
+        $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
+        $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
+        $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
+        $scope.captabletips.price = "The price at which each granted share can be purchased when vested";
+        $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
+        $scope.captabletips.valcapsafe = "The maximum pre-money valuation at which the safe converts to equity";
+        $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
+        $scope.captabletips.discount = "The percentage discount applied upon conversion";
+        $scope.captabletips.term = "The term of the note before expiration";
+        $scope.captabletips.termwarrant = "The term of the warrant before expiration";
+        $scope.captabletips.common = "Indicates that a security is common stock";
+        $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
+        $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
+
         $scope.tabs = [{'title': "Information"}];
         $scope.issuetypes = ["Equity", "Debt", "Option", "Safe", "Warrant"];
         $scope.freqtypes = ["weekly", "bi-weekly", "monthly", "quarterly", "yearly"];

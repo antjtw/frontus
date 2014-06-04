@@ -340,6 +340,10 @@ address {
     margin: 0 auto;
 }
 
+.features .white-stripe.grey-stripe {
+    background-color: transparent;
+}
+
 .features .icon-set {
     background-color: #E3E3E3;
     width: 100%;
@@ -431,7 +435,6 @@ address {
 /* External Cap Table */
 
 .features .demo-captable {
-    margin-top: 100px;
     position: relative;
     border: 1px solid #C6C6C6;
 }
