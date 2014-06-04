@@ -120,6 +120,7 @@ app.controller('CompanyDocumentListController',
             function mergeSmartIntoDumb(smarttemplates) {
                 var smartdocs = [];
                 var prepared = null;
+                // need company name and state to prep the Investor Suitability Questionnaire
                 SWBrijj.tblm('account.my_company', ['name', 'state']
                     ).then(function(data) {
                         if (data[0].name && data[0].state && data[0].state!=="  ") {
@@ -180,10 +181,10 @@ app.controller('CompanyDocumentListController',
                     });
                     loadSmartDocuments();
                     initShareState();
-                    loadTags();
                 });
             };
             loadDocuments();
+            loadTags();
 
             function initShareState() {
                 getShareState();
@@ -258,7 +259,7 @@ app.controller('CompanyDocumentListController',
                 $scope.state.show_archived = !$scope.state.show_archived;
             };
 
-            // Only allow docOrder to be set -- versionOrder is fixed
+            // only allow docOrder to be set -- versionOrder is fixed
             $scope.setOrder = function(field) {
                 $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
             };
@@ -462,19 +463,16 @@ app.controller('CompanyDocumentListController',
 
             function docStatusRatio(doc) {
                 if (doc.version_count == 0) {
+                    // This ensure documents with no versions appear before completed documents.
+                    // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
                     return 0;
                 }
-                var initRatio = (doc.complete_count / doc.version_count) + 1 || 0;
-                // This ensure documents with no versions appear before completed documents.
-                // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-                if (doc.version_count > 0 && initRatio == 0) {
-                    initRatio = (1 / doc.versions.length);
-                }
-                if (initRatio == 2) {
+                // 0 / x == 0, so bump up the complete number a bit so that the 0 completes can be ordered as well
+                var complete = ((doc.complete_count == 0) ? .001 : doc.complete_count);
+                var initRatio = (complete / doc.version_count);
+                if (initRatio == 1) {
+                    // all completed
                     initRatio += doc.version_count;
-                }
-                if (initRatio === Infinity) {
-                    initRatio = 0;
                 }
                 return initRatio;
             }
