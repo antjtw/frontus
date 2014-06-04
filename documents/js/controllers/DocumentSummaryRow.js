@@ -56,16 +56,15 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.formatDocStatusRatio = function(doc) {
-        if (doc.version_count == 0) return "Uploaded";
+        if (doc.version_count == 0) return (doc.template_id == null ? "Uploaded" : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
 
         var hide_completed = ($scope.viewState.maxRatio !== 1000);
 
-        // fixme what if a completed document is archived?
-        var num = (hide_completed ? 0 : doc.complete_count);// + (show_archived ? archived : 0);
+        var num = (hide_completed ? 0 : (!show_archived ? doc.complete_count - doc.archive_complete_count : doc.complete_count));
         var total = doc.version_count;
-        var display_total = doc.version_count - (hide_completed ? doc.complete_count : 0);
+        var display_total = doc.version_count - (hide_completed ? doc.complete_count : 0) - (!show_archived ? doc.archive_count : 0) + ((hide_completed && !show_archived) ? doc.archive_complete_count : 0);
 
         if (total == doc.archive_count && !show_archived) {
             return "All documents archived";
