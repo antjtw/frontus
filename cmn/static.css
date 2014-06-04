@@ -340,6 +340,10 @@ address {
     margin: 0 auto;
 }
 
+.features .white-stripe.grey-stripe {
+    background-color: transparent;
+}
+
 .features .icon-set {
     background-color: #E3E3E3;
     width: 100%;
@@ -428,7 +432,67 @@ address {
     margin-right: 20px;
 }
 
+/* External Cap Table */
 
+.features .demo-captable {
+    position: relative;
+    border: 1px solid #C6C6C6;
+}
+
+.features .demo-captable h1 {
+    font-size: 20px;
+    line-height: 24px;
+    color: #3498DB;
+}
+
+.features .demo-captable button.right-rail-button {
+    top: 0;
+}
+
+.features .demo-captable .leftTabWindow {
+    overflow-y: hidden;
+    height: 775px;
+}
+
+.features .demo-captable .span4.capright {
+    height: 775px;
+}
+
+.features .demo-captable .capcontainer {
+    height: 775px;
+}
+
+.features .demo-captable .captour > ul {
+    padding-top: 10px;
+}
+
+.features .demo-captable .captour > ul > li:nth-child(even) {
+    font-size: 16px;
+}
+
+.features .demo-captable .captour > ul > li:nth-child(odd) {
+    font-size: 16px;
+}
+
+.features .demo-captable .captour > ul > li:nth-child(odd) {
+    color: #666666;
+}
+
+.features .demo-captable .captour > ul > li > ul {
+    margin-top: 20px;
+    list-style: circle;
+    margin-left: 40px;
+    color: #666666;
+}
+
+.features .demo-captable .captour > ul > li > ul > li {
+    margin-top: 10px;
+}
+
+.features .demo-captable .captour > ul > li > ul > li:first-of-type {
+    list-style: none;
+    margin-left: -40px;
+}
 
 
 @media (min-width: 1000px) {
@@ -732,9 +796,18 @@ address {
     padding-left: 4px;
 }
 
+.container.full-image {
+    display: none;
+}
+
 @media (max-width: 1024px)  {
     .container.full-image {
         width: 100%;
+        display: inline-block;
+    }
+
+    .container.demo-captable {
+        display: none;
     }
 
     .feature-block.feature-permission .screen {
