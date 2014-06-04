@@ -172,7 +172,7 @@
 <div class="row-fluid">
 <tabset ng-class="{'singletab': tabnumber() == 1}">
 <tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
-<div ng-show="chosenTab(tab, 'Information')" style="overflow-y: auto; height: 735px;" ng-switch on="sideBar">
+<div ng-show="chosenTab(tab, '')" style="overflow-y: auto; height: 735px;" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                             <span ng-switch-when="1">
 

@@ -63,7 +63,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
         $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
-        $scope.tabs = [{'title': "Information"}];
+        $scope.tabs = [{'title': ""}];
         $scope.issuetypes = ["Equity", "Debt", "Option", "Safe", "Warrant"];
         $scope.freqtypes = ["weekly", "bi-weekly", "monthly", "quarterly", "yearly"];
         $scope.tf = ["yes", "no"];
