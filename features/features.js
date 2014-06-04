@@ -736,6 +736,12 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             }
         };
 
+        $scope.tranChangeA = function (value) {
+            if ($scope.activeTran.length < 2) {
+                $scope.activeTran[0]['amount'] = value;
+            }
+        };
+
         $scope.grantbyIssue = function (key) {
             var type = "";
             angular.forEach($scope.issues, function(issue) {
