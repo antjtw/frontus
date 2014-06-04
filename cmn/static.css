@@ -442,6 +442,7 @@ address {
 .features .demo-captable h1 {
     font-size: 20px;
     line-height: 24px;
+    color: #3498DB;
 }
 
 .features .demo-captable button.right-rail-button {
@@ -462,16 +463,37 @@ address {
 }
 
 .features .demo-captable .captour > ul {
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .features .demo-captable .captour > ul > li:nth-child(even) {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .features .demo-captable .captour > ul > li:nth-child(odd) {
     font-size: 16px;
 }
+
+.features .demo-captable .captour > ul > li:nth-child(odd) {
+    color: #666666;
+}
+
+.features .demo-captable .captour > ul > li > ul {
+    margin-top: 20px;
+    list-style: circle;
+    margin-left: 40px;
+    color: #666666;
+}
+
+.features .demo-captable .captour > ul > li > ul > li {
+    margin-top: 10px;
+}
+
+.features .demo-captable .captour > ul > li > ul > li:first-of-type {
+    list-style: none;
+    margin-left: -40px;
+}
+
 
 @media (min-width: 1000px) {
     .feature-block .screen {
