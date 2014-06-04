@@ -2,7 +2,7 @@
 <tr ng-class="{selectedrow:doc.shown}">
     <td class="status-toggle"
         ng-class="{'pointer':(doc.version_count != 0 && viewState.hideSharebar && versionsVisible(doc)),
-                  'status-toggle-on': (doc.shown && versionsVisible(doc))}"
+                  'status-toggle-on': (viewState.hideSharebar && doc.shown && versionsVisible(doc))}"
         ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()"
         ng-mouseenter="loadVersions()">
         <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="viewState.hideSharebar">
@@ -58,10 +58,10 @@
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a>
+                        <li ng-show="!doc.template_id"> <a class="button" ng-click="modals.updateShareType(doc,0);">View Only</a>
 
                         </li>
-                        <li ng-show="doc.is_prepared"> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a>
+                        <li ng-show="doc.is_prepared"> <a class="button" ng-click="modals.updateShareType(doc,2);">Request Signature</a>
 
                         </li>
                         <li ng-show="!doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
@@ -97,4 +97,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" view-state="viewState" modals="modals" ng-show="doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>

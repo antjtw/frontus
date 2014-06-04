@@ -79,11 +79,11 @@ app.controller('CompanyDocumentListController',
                     angular.forEach($scope.documents, function(doc) {
                         if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
                             if (doc.is_prepared) {
-                                $scope.updateShareType(doc, 2);
+                                $scope.modals.updateShareType(doc, 2);
                                 $scope.$emit("notification:success",
                                     "Success! Document prepared for signature.");
                             } else {
-                                $scope.updateShareType(doc, -1);
+                                $scope.modals.updateShareType(doc, -1);
                                 $scope.$emit("notification:fail",
                                     "Oops, the document is not ready for signature. Please try again.");
                             }
@@ -508,12 +508,13 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.modals.upsertShareItem = function(item, list) {
+                // TODO: why does this make a copy of the list and return that?
                 var updated = false;
                 var listcopy = angular.copy(list);
                 angular.forEach(listcopy, function(el) {
                     if (el.doc_id == item.doc_id
                         || (!el.doc_id && !item.doc_id
-                        && el.template_id==item.template_id)) {
+                            && el.template_id==item.template_id)) {
                         el.signature_flow = item.signature_flow;
                         updated = true;
                     }
@@ -534,7 +535,7 @@ app.controller('CompanyDocumentListController',
                         && item.signature_flow==el.signature_flow);
                 });
             };
-            $scope.updateShareType = function(doc, tp) {
+            $scope.modals.updateShareType = function(doc, tp) {
                 if (doc.template_id && tp > 0) {
                     tp = 1;
                 }
@@ -555,12 +556,11 @@ app.controller('CompanyDocumentListController',
                 $location.search(s);
             };
             $scope.saveAndClearViewState = function() {
-                $scope.viewState = {selectedDocs: $scope.clearSelectedDocs(),
+                $scope.viewState = {
                     viewBy: $scope.clearViewBy()};
             };
             $scope.restoreViewState = function() {
                 if (!$scope.viewState) {return;}
-                $scope.restoreSelectedDocs($scope.viewState.selectedDocs);
                 $scope.setViewBy($scope.viewState.viewBy);
                 delete $scope.viewState;
             };
@@ -576,19 +576,6 @@ app.controller('CompanyDocumentListController',
             };
             $scope.restoreHideCompleted = function(oldratio) {
                 $scope.state.maxRatio = oldratio;
-            };
-            $scope.clearSelectedDocs = function() {
-                var res = [];
-                $scope.documents.forEach(function(doc) {
-                    if (doc.shown) {
-                        res.push(doc.doc_id);
-                        doc.shown = false;
-                    }
-                });
-                return res;
-            };
-            $scope.restoreSelectedDocs = function(docs) {
-                $scope.opendetailsExclusive(docs);
             };
 
             $scope.modals.retractVersionOpen = function(version) {
