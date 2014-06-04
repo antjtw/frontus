@@ -27,6 +27,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
                     version.last_event_activity = 'approved';
                 }
                 version.statusRank = basics.eventRank({activity: version.last_event_activity});
+                version.doc = $scope.doc;
                 $scope.versions.push(version);
             });
         });
