@@ -162,7 +162,7 @@ input:focus, textarea:focus {
     text-transform: uppercase;
 }
 .tooltip-date > div.tooltip > .tooltip-inner {
-    font-size: 10px;
+    font-size: 12px;
 }
 .tooltip.in {
     opacity: 1;
@@ -193,7 +193,7 @@ input:focus, textarea:focus {
 /* Fonts */
 p, button, select, textarea, a, address, div, input, button {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(141, 141, 141);
 }
@@ -209,7 +209,7 @@ p strong {
     font-weight: normal;
 }
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    font-size:12px
+    font-size:14px
 }
 h1 {
     font-family:'FS Elliot Web Light', sans-serif !important;
@@ -229,7 +229,7 @@ h2 {
 
 .bodyText, .bodyText input, .bodyText a {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(127, 140, 141);
 }
@@ -253,8 +253,8 @@ h2 {
     color: rgb(255, 0, 0);
 }
 .capital-text {
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .blue-link {
@@ -953,15 +953,17 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #1E2D3D;
 }
 .subnav-controls {
+    box-sizing: border-box;
     height: 60px;
     white-space: nowrap;
     margin: 0;
     background-color: #F1F1F1;
     text-align: center;
+    border-bottom: 1px solid #C6C6C6;
 }
 .subnav-controls span {
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 .subnav-controls button.check-box-button {
     margin-left: 10px;
@@ -1157,8 +1159,8 @@ form.inputs {
 }
 
 .navlogin > form > fieldset > span {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 .navlogin input:focus {
@@ -1242,7 +1244,7 @@ form.inputs {
 }
 .forgotLog > a {
     color: rgb(0, 136, 204);
-    font-size: 10px;
+    font-size: 12px;
 }
 /* Side Bar Navigation */
 .sidebar {
@@ -1326,11 +1328,9 @@ form.inputs {
 .docLibrary .column-label {
     border-top: 1px solid rgb(227, 227, 227);
     border-bottom: 1px solid rgb(227, 227, 227);
-    font-family:'FS Elliot Web Bold', sans-serif;
     color: rgb(30, 45, 61);
 }
 .docLibrary .column-label input {
-    font-family:'FS Elliot Web Bold', sans-serif;
     color: rgb(30, 45, 61);
     width: 150px;
     vertical-align: top;
@@ -1495,8 +1495,8 @@ form.inputs {
     color: #1E2D3D;
 }
 .info-box > .body-box > .ownershipPermissions > span {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
     color: #8D8D8D;
     padding-right: 10px;
 }
@@ -1526,8 +1526,8 @@ table.settingtable tr > td {
     height: 30px;
 }
 table.settingtable tr > td:first-child {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
     color: #A6A6A6;
 }
 table.settingtable tr > td:last-child {
@@ -1561,8 +1561,8 @@ ul.last-edited > li:nth-child(odd) {
 }
 
 ul.last-edited > li:nth-child(even) {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 ul.spaced-list > li:first-child {
@@ -1585,10 +1585,6 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 li.event {
     min-height: 50px;
     border-bottom: 1px solid #E3E3E3;
-}
-
-.activity-feed2 li.event:last-of-type {
-    border-bottom: none;
 }
 
 .activity-feed2 a {
@@ -1621,8 +1617,8 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 /* Document Status */
@@ -1656,10 +1652,10 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 14px;
 }
 .activityBlock td.time {
-    font-size: 10px;
+    font-size: 12px;
     font-family:'FS Elliot Web Regular', sans-serif;
     color: rgb(166, 166, 166);
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock td.item {
     padding-bottom: 15px;
@@ -1871,11 +1867,11 @@ ul.spaced-list > li:nth-child(odd) {
     -webkit-border-radius: 50%;
     border-radius: 50%;
     color: white;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .status-toggle > .circle:before {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .status-toggle > .circle > span {
@@ -1924,14 +1920,14 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child {
-    font-size: 12px;
+    font-size: 14px;
     color: #666666;
     line-height: 18px;
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
     color: #A6A6A6;
     line-height: 14px;
     min-width: 40px;
@@ -2081,7 +2077,7 @@ tr.preparedDoc {
     color: rgb(141, 141, 141);
 }
 .status-detail > td:last-of-type > span {
-    font-size: 10px;
+    font-size: 12px;
     float: right;
     margin-right: 60px;
     text-align: center;
@@ -2091,7 +2087,7 @@ tr.preparedDoc {
     border: 1px solid rgb(26, 188, 150);
     color: rgb(26, 188, 150);
     background-color: rgb(255, 255, 255);
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock {
     width: 220px;
@@ -2101,7 +2097,7 @@ tr.preparedDoc {
     color: rgb(102, 102, 102);
 }
 .activityBlock span:last-of-type {
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock > li {
     margin-bottom: 15px;
@@ -2190,7 +2186,7 @@ tr.preparedDoc {
 .copyrightLinks li a {
     color: rgb(141, 141, 141);
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: normal;
     text-decoration: none;
 }
@@ -2256,7 +2252,7 @@ tr.preparedDoc {
 }
 .box-button {
     width: 76px;
-    height: 60px;
+    height: 59px;
     margin-top: -14px;
     color: #34495E;
     -moz-box-sizing: border-box;
@@ -2276,7 +2272,7 @@ tr.preparedDoc {
     padding-top: 14px;
 }
 .box-button > ul > li:nth-child(1) > span {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .box-button > ul > li {
@@ -2284,7 +2280,7 @@ tr.preparedDoc {
 }
 
 .box-button > ul > li:nth-child(2) > span {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .box-button.disabledme {
@@ -2674,7 +2670,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
@@ -3373,9 +3369,9 @@ button.icon-button:hover {
 }
 .modal label {
     display: inline;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     padding: 15px 0 15px 20px;
 }
 .modal input {
@@ -3509,8 +3505,8 @@ button.icon-button:hover {
 }
 .compose-modal.modal > div.modalText .input-list>div>span {
     margin-right: 10px;
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div,
 .compose-modal.modal > div.modalText .input-list>div>input,
@@ -3602,8 +3598,8 @@ button.icon-button:hover {
 }
 
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
     width: 60px;
     margin-right: 5px;
     display: inline-block;
@@ -3714,8 +3710,8 @@ button.icon-button:hover {
     width: 100px;
     text-align: right;
     line-height: 32px;
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 .modal .input-row-new > input {
@@ -4111,9 +4107,9 @@ h2.onboard {
 }
 .big-input-list .input-list span {
     display: block;
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .big-input-list .input-list div.span6 {
     width: -moz-calc(50% - 10px);
@@ -4343,7 +4339,7 @@ div.upgradeWarning > span {
 }
 
 .sidebarText span{
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .footer-headline-left{
