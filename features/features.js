@@ -446,7 +446,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 $scope.rows.push(values);
             }
             $scope.activeInvestorName = investor.name;
-            $scope.activeInvestorEmail = investor.email;
+            $scope.activeInvestorEmail = investor.email || 'null';
             angular.forEach($scope.userstatuses, function(user) {
                 if (investor.email == user.email) {
                     $scope.activeInvestorRealName = user.name;
