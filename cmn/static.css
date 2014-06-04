@@ -774,9 +774,18 @@ address {
     padding-left: 4px;
 }
 
+.container.full-image {
+    display: none;
+}
+
 @media (max-width: 1024px)  {
     .container.full-image {
         width: 100%;
+        display: inline-block;
+    }
+
+    .container.demo-captable {
+        display: none;
     }
 
     .feature-block.feature-permission .screen {
