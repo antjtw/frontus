@@ -890,7 +890,7 @@
                               <span class="capGuide in-brief" ng-switch-when="3">
                                 <div class="headsection row-fluid tabbed company-info">
                                     <h1><img
-                                            ng-src="{{ navState.company && '/photo/user?id='+activeInvestorEmail || '' }}">{{activeInvestorName}}
+                                            ng-src="{{'/img/features/'+activeInvestorEmail+'.jpg' || '' }}">{{activeInvestorName}}
                                     </h1>
                                 </div>
                                 <div ng-show="userDict[activeInvestorEmail]" class="summary-bar">
@@ -921,18 +921,6 @@
                                         <div>
                                             <span>{{userDict[activeInvestorEmail].level}}</span><span>Permissions</span>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="profile-link" ng-show="userDict[activeInvestorEmail]">
-                                    <span data-icon="&#xe001;" aria-hidden="true"></span>
-                                    <span>View Full Profile</span>
-                                </div>
-
-                                <div ng-show="!companyIsZombie() && !userDict[activeInvestorEmail]" class="share-link">
-                                    <div class="profile-link">
-                                        <span data-icon="&#xe604;" aria-hidden="true"></span>
-                                        <span>Share with Investor</span>
                                     </div>
                                 </div>
 
@@ -1084,9 +1072,6 @@
     </div>
 </div>
 
-</div>
-</div>
-
 <div id="register">
     <div class="row-fluid">
         <div class="span10 offset1 text-center">
@@ -1099,8 +1084,49 @@
     </div>
     <div class="spacer30"></div>
 </div>
+
+</div>
+</div>
+<div class="push"></div>
+
+<div modal="tranDelete" close="deleteclose();" options="opts">
+    <div class="modalHeader">
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="deleteclose(); revertTran(deleteTran);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Are you sure you want to delete this transaction?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="deleteclose(); revertTran(deleteTran);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
+        </div>
+    </div>
 </div>
 
-
-<div class="push"></div>
+<div modal="capDelete" close="dclose(); revertIssue(missue);" options="opts">
+    <div class="modalHeader">
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose(); revertIssue(missue);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Do you want to delete this issue, including all associated transactions?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="dclose(); revertIssue(missue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="dclose(); deleteIssue(missue);">Yes</button>
+        </div>
+    </div>
 </div>

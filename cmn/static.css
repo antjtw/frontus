@@ -436,6 +436,11 @@ address {
     border: 1px solid #C6C6C6;
 }
 
+.features .demo-captable h1 {
+    font-size: 20px;
+    line-height: 24px;
+}
+
 .features .demo-captable button.right-rail-button {
     top: 0;
 }

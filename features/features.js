@@ -755,6 +755,28 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             return type
         };
 
+        // Creates a new blank transaction with today's date
+        $scope.createTrantab = function () {
+            var inIssue = $scope.activeTran[0].issue
+            var newTran = {};
+            newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined", "convert": []};
+            angular.forEach($scope.issues, function (issue) {
+                if (issue.issue == inIssue) {
+                    newTran = $scope.tranInherit(newTran, issue);
+                }
+            });
+            $scope.trans.push(newTran);
+            $scope.activeTran.push(newTran);
+            for (var i = 0; i < $scope.activeTran.length; i++) {
+                if (i + 1 == $scope.activeTran.length) {
+                    $scope.activeTran[i].active = true;
+                }
+                else {
+                    $scope.activeTran[i].active = false;
+                }
+            }
+        };
+
         $scope.saveTranAssign = function (transaction, field, value) {
             if (value) {
                 transaction[field] = value;
@@ -994,10 +1016,167 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             return tran
         };
 
-        // Get the company's Issues
+
+        // Captable transaction delete modal
+        $scope.tranDeleteUp = function (transaction) {
+            $scope.deleteTran = transaction;
+            $scope.tranDelete = true;
+        };
+
+        $scope.deleteclose = function () {
+            $scope.closeMsg = 'I was closed at: ' + new Date();
+            $scope.tranDelete = false;
+        };
+
+        $scope.revertTran = function (transaction) {
+            angular.forEach($scope.trans, function(tran) {
+                if (tran.tran_id == transaction.tran_id) {
+                    tran.units = tran.unitskey;
+                    tran.amount = tran.paidkey;
+                    $scope.saveTran(tran);
+                }
+            });
+        };
+
+        // Function for when the delete transaction button is pressed in the right sidebar
+        $scope.manualdeleteTran = function (tran) {
+            var d1 = tran['date'].toUTCString();
+            $scope.lastsaved = Date.now();
+            var index = $scope.trans.indexOf(tran);
+            $scope.trans.splice(index, 1);
+            var index = $scope.activeTran.indexOf(tran);
+            if (index != -1) {
+                $scope.activeTran.splice(index, 1);
+            }
+            if ($scope.activeTran.length == 0) {
+                var anewTran = {};
+                anewTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (tran.issue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": 'undefined', "convert": []};
+                angular.forEach($scope.issues, function (issue) {
+                    if (issue.issue == tran.issue) {
+                        anewTran = $scope.tranInherit(anewTran, issue);
+                    }
+                });
+                $scope.trans.push(anewTran);
+                $scope.activeTran.push(anewTran);
+            }
+            angular.forEach($scope.rows, function (row) {
+                if (row.name === tran['investor']) {
+                    if (!isNaN(tran.units)) {
+                        row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
+                        row[tran.issue]['ukey'] = row[tran.issue]['u']
+                        if (row[tran.issue]['u'] == 0) {
+                            row[tran.issue]['u'] = null;
+                            row[tran.issue]['ukey'] = null;
+                        }
+                    }
+                    if (!isNaN(tran.amount)) {
+                        row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
+                        row[tran.issue]['akey'] = row[tran.issue]['a']
+                        if (row[tran.issue]['a'] == 0) {
+                            row[tran.issue]['a'] = null;
+                            row[tran.issue]['akey'] = null;
+                        }
+                    }
+                }
+            });
+            angular.forEach($scope.issues, function (x) {
+                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+            });
+
+            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(tran.issue));
+        };
+
+        //Captable Delete Issue Modal
+
+        $scope.dmodalUp = function (issue) {
+            $scope.capDelete = true;
+            $scope.missue = issue;
+        };
+
+        $scope.dclose = function () {
+            $scope.closeMsg = 'I was closed at: ' + new Date();
+            $scope.capDelete = false;
+        };
+
+        $scope.deleteIssueButton = function (activeIssue) {
+            $scope.dmodalUp(activeIssue);
+        };
+
+        $scope.deleteIssue = function (issue) {
+            $scope.lastsaved = Date.now();
+            angular.forEach($scope.issues, function (oneissue) {
+                if (oneissue['key'] == issue['key']) {
+                    var index = $scope.issues.indexOf(oneissue);
+                    $scope.issues.splice(index, 1);
+                    var indexed = $scope.issuekeys.indexOf(oneissue.key);
+                    $scope.issuekeys.splice(indexed, 1);
+                }
+            });
+            angular.forEach($scope.rows, function (row) {
+                if (issue.key in row) {
+                    delete row[issue.key];
+                }
+                if (row["name"] == issue.key + " (unissued)") {
+                    var index = $scope.rows.indexOf(row);
+                    $scope.rows.splice(index, 1);
+                }
+            });
+            angular.forEach($scope.trans, function(tran) {
+                if (tran.issue == issue.key) {
+                    var index = $scope.trans.indexOf(tran);
+                    $scope.trans.splice(index, 1);
+                }
+            })
+            if ($scope.issues.length == 0 || ($scope.issues[$scope.issues.length-1].name != "")) {
+                $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
+            }
+            $scope.sideBar = "x";
+        };
+
+        $scope.revertIssue = function (issue) {
+            angular.forEach($scope.issues, function (x) {
+                if (x.key == issue.key) {
+                    x.issue = issue.key;
+                }
+            });
+        };
+
+        var clean_company_access = [({"level":"Personal View","email":"ellen@sharewave.com","name":"Ellen Orford","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Full View","email":"owen@sharewave.com","name":"Owen Wingrave","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Full View","email":"claggart@sharewave.com","name":"John Claggart","company":"be7daaf65fcf.sharewave.com"}), ({"level":"Personal View","email":"albert@sharewave.com","name":"Albert Herring","company":"be7daaf65fcf.sharewave.com"}),({"level":"Personal View","email":"peter@sharewave.com","name":"Peter Quint","company":"be7daaf65fcf.sharewave.com"})];
+        var activities = [({"timenow":new Date(1401897074181),"email":"ellen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"ellen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1401825801937),"activity":"viewed"}), ({"timenow":new Date(1401897074181),"email":"owen@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"claggart@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}),({"timenow":new Date(1401897074181),"email":"claggart@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1401825801937),"activity":"viewed"}),({"timenow":new Date(1401897074181),"email":"albert@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"}), ({"timenow":new Date(1401897074181),"email":"peter@sharewave.com","company":"be7daaf65fcf.sharewave.com","event_time":new Date(1398296670142),"activity":"received"})];
+        var user_tracker = [({"email":"ellen@sharewave.com","logintime":new Date(1401907608160)}), ({"email":"claggart@sharewave.com","logintime":new Date(1401907608160)})];
+
+        $scope.userstatuses = clean_company_access;
+
+        $scope.userStatus = clean_company_access;
+        $scope.userDict = {};
+        for (var i = 0; i < $scope.userstatuses.length; i++) {
+            $scope.userDict[$scope.userstatuses[i].email] = {};
+            $scope.userDict[$scope.userstatuses[i].email].name = ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
+            $scope.userDict[$scope.userstatuses[i].email].shown = false;
+            $scope.userDict[$scope.userstatuses[i].email].level = $scope.userstatuses[i].level;
+        }
+        angular.forEach($scope.userstatuses, function (person) {
+            angular.forEach(activities, function (activity) {
+                if (activity.email == person.email) {
+                    var act = activity.activity;
+                    var time;
+                    time = activity.event_time;
+                    $scope.userDict[person.email][act] = time;
+                }
+            });
+        });
+        angular.forEach($scope.userStatus, function (person) {
+            angular.forEach(user_tracker, function (login) {
+                if (login.email == person.email) {
+                    $scope.userDict[person.email].lastlogin = login.logintime;
+                }
+            });
+        });
+
+        // Generate the Captable from the dummy data.
         $scope.issues = [({"liquidpref":null,"common":null,"issue":"Common A","terms":null,"dragalong":null,"totalauth":null,"type":"Equity","date":new Date(1388552400000),"interestratefreq":null,"debtundersec":null,"created":new Date(1401829586274),"vestingbegins":null,"ppshare":null,"valcap":null,"lastupdated":new Date(1401829593179),"partpref":null,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"premoney":null,"term":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"interestrate":null}),({"liquidpref":null,"common":null,"issue":"Options","terms":null,"dragalong":null,"totalauth":20000.0,"type":"Option","date":new Date(1401768000000),"interestratefreq":null,"debtundersec":null,"created":new Date(1401829621182),"vestingbegins":null,"ppshare":null,"valcap":null,"lastupdated":new Date(1401829632373),"partpref":null,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":null,"price":null,"premoney":null,"term":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"interestrate":null})];
         var names = [({"name":"Ellen Orford","company":"be7daaf65fcf.sharewave.com"}),({"name":"Peter Quint","company":"be7daaf65fcf.sharewave.com"}),({"name":"Albert Herring","company":"be7daaf65fcf.sharewave.com"}),({"name":"John Claggart","company":"be7daaf65fcf.sharewave.com"}),({"name":"Owen Wingrave","company":"be7daaf65fcf.sharewave.com"})];
-        $scope.trans = [({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829600758),"partpref":null,"units":50000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null}),({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Albert Herring","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":20000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829613671),"partpref":null,"units":20000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":1067443693,"interestrate":null}),({"liquidpref":null,"issue":"Options","terms":48.0,"investor":"Owen Wingrave","dragalong":null,"totalauth":20000.0,"interestratefreq":null,"type":"Option","date":new Date(1401768000000),"amount":null,"debtundersec":null,"vestingbegins":new Date(1433304000000),"ppshare":null,"converted":false,"valcap":null,"lastupdated":new Date(1401829661748),"partpref":null,"units":2500.0,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":"bi-weekly","price":1.0,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":25.0,"tran_id":258935959,"interestrate":null}),({"liquidpref":null,"issue":"Options","terms":48.0,"investor":"John Claggart","dragalong":null,"totalauth":20000.0,"interestratefreq":null,"type":"Option","date":new Date(1401768000000),"amount":null,"debtundersec":null,"vestingbegins":new Date(1433304000000),"ppshare":null,"converted":false,"valcap":null,"lastupdated":new Date(1401829792391),"partpref":null,"units":2500.0,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":"monthly","price":1.0,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":25.0,"tran_id":925349974,"interestrate":null}),({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Peter Quint","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":20000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829607416),"partpref":null,"units":20000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":609665841,"interestrate":null})];
+        $scope.trans = [({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829600758),"partpref":null,"units":50000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":"ellen@sharewave.com","tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null}),({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Albert Herring","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":20000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829613671),"partpref":null,"units":20000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":"albert@sharewave.com","tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":1067443693,"interestrate":null}),({"liquidpref":null,"issue":"Options","terms":48.0,"investor":"Owen Wingrave","dragalong":null,"totalauth":20000.0,"interestratefreq":null,"type":"Option","date":new Date(1401768000000),"amount":null,"debtundersec":null,"vestingbegins":new Date(1433304000000),"ppshare":null,"converted":false,"valcap":null,"lastupdated":new Date(1401829661748),"partpref":null,"units":2500.0,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":"bi-weekly","price":1.0,"term":null,"premoney":null,"email":"owen@sharewave.com","tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":25.0,"tran_id":258935959,"interestrate":null}),({"liquidpref":null,"issue":"Options","terms":48.0,"investor":"John Claggart","dragalong":null,"totalauth":20000.0,"interestratefreq":null,"type":"Option","date":new Date(1401768000000),"amount":null,"debtundersec":null,"vestingbegins":new Date(1433304000000),"ppshare":null,"converted":false,"valcap":null,"lastupdated":new Date(1401829792391),"partpref":null,"units":2500.0,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":"monthly","price":1.0,"term":null,"premoney":null,"email":"claggart@sharewave.com","tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":25.0,"tran_id":925349974,"interestrate":null}),({"liquidpref":null,"issue":"Common A","terms":null,"investor":"Peter Quint","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Equity","date":new Date(1401768000000),"amount":20000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829607416),"partpref":null,"units":20000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":"peter@sharewave.com","tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":609665841,"interestrate":null})];
         $scope.grants = [];
         $scope.generateCaptable(names);
     }
