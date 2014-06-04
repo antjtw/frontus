@@ -461,6 +461,18 @@ address {
     height: 775px;
 }
 
+.features .demo-captable .captour > ul {
+    padding-top: 20px;
+}
+
+.features .demo-captable .captour > ul > li:nth-child(even) {
+    font-size: 14px;
+}
+
+.features .demo-captable .captour > ul > li:nth-child(odd) {
+    font-size: 16px;
+}
+
 @media (min-width: 1000px) {
     .feature-block .screen {
         width: 514px;

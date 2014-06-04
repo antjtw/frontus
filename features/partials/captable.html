@@ -36,7 +36,7 @@
     <img src="/img/features/captable.png">
 </div>
 
-<div class="container demo-captable">
+<div ng-show="finishedsorting" class="container demo-captable">
 <div class="row-fluid leftTabWindow">
 <div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}"
      class="span8 docLibrary leftBlock">
@@ -92,8 +92,6 @@
                               </span>
                 </td>
                 <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
-                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button"
-                                                                           ng-click="closeTour(); tourNotification();">Done!</span></span>
                               <span ng-switch on="row.editable">
                                 <span ng-class="{tranSelected:row[key].state}" class="captablepair-box"
                                       ng-switch-default>
@@ -935,23 +933,21 @@
                               <span class="capGuide" ng-switch-default>
                                 <span ng-hide="toggleView();">
                                     <div class="captour railpadding">
-                                        <h1 class="right-bar-header">Understand your Ownership</h1>
+                                        <h1>Understand your Ownership</h1>
 
-                                        <p> This capitalization table, often referred to as a cap table, will show you
-                                            exactly what percentage
-                                            of your company each shareholder owns.</p>
-
-                                        <p>Enter your company's securities, shareholders and their holdings, and we'll
-                                            take care of the rest.</p>
-                                        <br>
                                         <ul>
-                                            <li>What's a security?</li>
-                                            <li>A financial instrument representing ownership, debt, or rights to
-                                                ownership (e.g. Common, Series A, 2012 Option Pool)
+                                            <li>A simple example</li>
+                                            <li>This example captable provides a glimpse at what Sharewave has to offer.
+                                                Modify it as you wish, add and remove securities and transactions and watch the ownership auto calculate.
                                             </li>
-                                            <li>Why should I enter terms?</li>
-                                            <li>These terms influence capitalization calculations, the more terms you
-                                                enter the more accurate your information
+                                            <li>Track your investors</li>
+                                            <li>Select any shareholder to see extra details. See all your shareholder documentation and transactions in one place and give them access using different permission levels.
+                                            </li>
+                                            <li>The underlying terms.</li>
+                                            <li>Our full product makes performing conversions, transfers, splits and more as simple as the press of a button.
+                                            </li>
+                                            <li>Don't know what something means</li>
+                                            <li>The tooltips provide definitions for all the complex terms on the captable. You shouldn't need an MBA to understand your ownership.
                                             </li>
                                         </ul>
                                     </div>
