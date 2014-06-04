@@ -151,8 +151,6 @@ app.controller('CompanyDocumentListController',
                                 });
                             }
                         });
-                        initShareState();
-                        loadTags();
                     });
 
             };
@@ -520,19 +518,19 @@ app.controller('CompanyDocumentListController',
                     }
                 });
                 if (!updated) {
-                    listcopy.push(
-                        {"doc_id": item.doc_id,
-                            "template_id": item.template_id,
-                            "signature_flow": item.signature_flow
-                        });
+                    var obj = {
+                        "doc_id": item.doc_id,
+                        "template_id": item.template_id,
+                        "signature_flow": item.signature_flow
+                    }
+                    listcopy.push(obj);
                 }
                 return listcopy;
             };
             $scope.modals.removeShareItem = function(item, list) {
                 return list.filter(function(el) {
                     return !(item.doc_id==el.doc_id
-                        && item.template_id==el.template_id
-                        && item.signature_flow==el.signature_flow);
+                        && item.template_id==el.template_id);
                 });
             };
             $scope.modals.updateShareType = function(doc, tp) {
@@ -782,7 +780,9 @@ app.controller('CompanyDocumentListController',
                 return anybad;
             };
             $scope.docsReadyToShare = function(docs) {
-                if (!docs || docs.length===0) {return false;}
+                if (!docs || docs.length===0) {
+		    return false;
+		}
                 var count = 0;
                 angular.forEach($scope.documents, function(doc) {
                     if (doc.forShare) {
