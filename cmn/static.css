@@ -442,6 +442,9 @@ address {
 .features .demo-captable h1 {
     font-size: 20px;
     line-height: 24px;
+}
+
+.features .demo-captable .captour h1 {
     color: #3498DB;
 }
 
