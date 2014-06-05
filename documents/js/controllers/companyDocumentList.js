@@ -183,13 +183,17 @@ app.controller('CompanyDocumentListController',
                     initShareState();
                 });
             };
-            loadDocuments();
+            // loadDocuments is now replaced by loadDocs (called by infinite scroll
+            // TODO: load and merge smartDocs with known state of the world
+            // TODO: fix initShareState
+            //loadDocuments();
             loadTags();
 
             function initShareState() {
                 getShareState();
                 loadPrepareState();
                 if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
+                    // TODO: rewrite to not depend on having a fully loaded $scope.documents
                     angular.forEach($scope.documents, function(doc) {
                         angular.forEach($scope.docShareState.doclist, function(docToShare) {
                             if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
@@ -843,6 +847,32 @@ app.controller('CompanyDocumentListController',
                         console.log(err);
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
+            };
+
+            // Infinite Scroll
+            var loadState = {
+                quantity: 10,
+                docsIteration: 0
+            };
+            $scope.documents = [];
+            $scope.loadingDocs = false;
+            $scope.loaddocs = function() {
+		$scope.loadingDocs = true;
+                SWBrijj.tblmlimit('document.my_company_library_view_list', loadState.quantity, loadState.quantity * loadState.docsIteration).then(function(data) {
+		    loadState.docsIteration += 1;
+		    if (data.length >= loadState.quantity) {
+			$scope.loadingDocs = false;
+		    }
+                    $scope.finishedLoading = true;
+                    angular.forEach(data, function(d) {
+                        if (d.tags !== null) {
+                            d.tags = JSON.parse(d.tags);
+                        }
+                        d.type = "doc";
+                        d.statusRatio = docStatusRatio(d);
+                        $scope.documents.push(d);
+                    });
+                });
             };
         }
     ]);

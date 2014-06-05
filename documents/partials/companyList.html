@@ -71,12 +71,14 @@
 <div class="row-fluid leftTabWindow">
 <div ng-style="viewportheight" ng-class="{leftFullTableBlock:state.hideSharebar, widthtransition25:oldSafari()}"
      class="span8 recipientInfo statusBlock leftBlock">
-<div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
+<div class="row-fluid listcontainer" infinite-scroll="loaddocs()" infinite-scroll-distance="1" infinite-scroll-disabled="loadingDocs" infinite-scroll-parent="">
 <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
     <tbody class="empty-table">
     <tr>
-        <td> <span>Welcome! </span><span class="link" ng-click="modals.documentUploadOpen();">Upload a document</span><span> to get started.</span>
-
+        <td>
+            <div my-loading-spinner="!finishedLoading">
+                <span>Welcome! </span><span class="link" ng-click="modals.documentUploadOpen();">Upload a document</span><span> to get started.</span>
+            </div>
         </td>
     </tr>
     </tbody>
