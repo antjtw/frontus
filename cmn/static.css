@@ -340,6 +340,14 @@ address {
     margin: 0 auto;
 }
 
+.features .white-stripe.grey-stripe > div {
+    max-width: 1024px;
+}
+
+.features .white-stripe.grey-stripe > div > h2 {
+    max-width: 700px;
+}
+
 .features .white-stripe.grey-stripe {
     background-color: transparent;
 }
@@ -876,6 +884,10 @@ address {
 
     .static .feature-block.dark-feature, .static .feature-block.feature-permission {
         padding-left: 60px;
+    }
+
+    .features .white-stripe.grey-stripe > div {
+        padding-top: 60px;
     }
 }
 
