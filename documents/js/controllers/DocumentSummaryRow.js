@@ -3,6 +3,8 @@
 function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
     // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
+    
+    $scope.access_token = $rootScope.access_token;
 
     // load the versions
     $scope.versions = [];

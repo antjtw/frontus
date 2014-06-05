@@ -188,7 +188,7 @@ active.filter('description', function() {
         else if (which == "issdoc") {
             var activity = ac.activity;
             var person = ac.name;
-            if (person === "") {
+            if ((person === "")||(person == null)) {
                 person = ac.person;
             }
             if (activity == "sent") return "";
