@@ -34,7 +34,7 @@
     <div class="sidebarFooter">
 
         <div class="preview-message" 
-            ng-click="comapnyIsZombie || previewModalOpen()"
+            ng-click= "previewModalOpen()"
             ng-class="{'disabledme':companyIsZombie()}"
         >   Preview Modal 
 
@@ -68,9 +68,12 @@
 </div>
 
 <div modal="previewModal" close="previewModalClose" options="narrowopts">
-    To: <div ng-repeat="recipient in recipients">
+    <div class="modalHeader">To
+        <span><div ng-repeat="recipient in recipients"></span>
         {{recipient}}
     </div>
+    <div>Subject</div>
+    <span>
 </div>
 
 
