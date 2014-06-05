@@ -33,9 +33,13 @@
   
     <div class="sidebarFooter">
 
-       <!--  <div class="preview-message">     
-            PREVIEW MESSAGE 
-        </div> -->
+        <div class="preview-message" 
+            ng-click="comapnyIsZombie || previewModalOpen()"
+            ng-class="{'disabledme':companyIsZombie()}"
+        >   Preview Modal 
+
+            <!-- <button ng-click "previewModalOpen()">PREVIEW MESSAGE </button> -->
+        </div>
 
         <div class="footer-headline-left">
             <div class = "standard-button green">
@@ -61,6 +65,10 @@
     </div>
 
    
+</div>
+
+<div modal="previewModal" close="previewModalClose" options="narrowopts">
+    Test modal open
 </div>
 
 

@@ -139,14 +139,16 @@ m.directive('composeMessage', function() {
                 else {
                     return true;
                 }
-
-                // angular.forEach(msg.recipients, function(e) {
-                //     if ($scope.investors.indexOf(e) === -1) {
-                //         anybad = true;
-                //     }
-                // });
-                // return !anybad;
             };
+
+            $scope.previewModalOpen = function() {
+                $scope.previewModal = true;
+                console.log("modal to open");
+            };
+
+            $scope.previewModalClose = function(){
+                $scope.previewModal = false
+            }
 
         }]
     };
