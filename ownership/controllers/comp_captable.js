@@ -546,7 +546,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             row[currentcolumn].state = true;
                         }
                         else {
-                            row[issue.issue].state = false;
+                            if (row[issue.issue]) {
+                                row[issue.issue].state = false;
+                            }
                             issue.state = false;
                         }
                     }
