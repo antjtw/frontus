@@ -458,6 +458,32 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         return type
     };
 
+    $scope.tabvisible = function(tab) {
+        if (tab.title == "Activity") {
+            if (tab.active == true && !($scope.toggleView() && $scope.fieldActive())) {
+                tab.active = false;
+                $scope.tabs[0].active = true;
+            }
+            return $scope.toggleView() && $scope.fieldActive()
+        } else {
+            return true;
+        }
+    };
+
+    $scope.tabnumber = function() {
+        var total = 0;
+        angular.forEach($scope.tabs, function(tab) {
+            if ($scope.tabvisible(tab)) {
+                total += 1
+            }
+        });
+        return total;
+    }
+
+    $scope.singleTransaction = function(trans) {
+        return (trans.length == 1);
+    };
+
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
     $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
         $scope.stretchheight = {height: String(newValue + 59) + "px"}

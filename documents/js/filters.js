@@ -63,3 +63,15 @@ app.filter('archived', function () {
         return returnrows;
     };
 });
+app.filter('arrayPrinter', function() {
+    return function(arr) {
+        var res = "";
+        angular.forEach(arr, function(el, i) {
+            res += el;
+            if (i!=arr.length-1) {
+                res += ', ';
+            }
+        });
+        return res;
+    };
+});

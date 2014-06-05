@@ -24,6 +24,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     $scope.password = "";
     if ($routeParams.error) {
       $scope.showError = true;
+      $scope.username = $routeParams.error;
     } else {
       $scope.showError = false;
     }

@@ -9,7 +9,7 @@
     -moz-transition: left 0.35s ease;
     -o-transition: left 0.35s ease;
     transition: left 0.35s ease;
-    z-index: 1000;
+    z-index: 999;
 }
 
 .new-nav:hover {
@@ -46,7 +46,7 @@
 }
 
 .new-nav .accordion-heading a {
-    font-size: 12px;
+    font-size: 14px;
     font-family: 'FS Elliot Web Light', sans-serif !important;
 }
 
@@ -57,7 +57,7 @@
 
 .new-nav .nav-section-header {
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 14px;
     text-shadow: none;
     margin-left: 19px;
     color: #E3E3E3;

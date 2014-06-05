@@ -1,3 +1,4 @@
+'use strict';
 var active = angular.module('activityDirective', ['ngSanitize']);
 
 function caplength(word, length) {
@@ -16,12 +17,41 @@ active.directive('activityFeed', function() {
         restrict: 'A',
         require: '^activity',
         scope: {
-            activity: '=',
             type: '@',
-            user: '='
+            user: '=',
+            view: '=',
+            filter: '=',
+            filterVal: '=',
+            height: '='
         },
         templateUrl: '/cmn/activity/activity.html',
-        controller: ['$scope', function($scope) {
+        controller: ['$scope', 'SWBrijj', function($scope, SWBrijj) {
+
+            $scope.iteration = 0;
+            $scope.loading = false;
+            $scope.activity = [];
+            var quantity = 10; // number of items to load
+            function processFeed(feed) {
+                //Generate the groups for the activity feed
+                angular.forEach(feed, function(event) {
+                    event.when = moment(event.time).from(event.timenow);
+                    $scope.activity.push(event);
+                });
+                if (feed.length >= quantity) {
+                    // only fetch the next page if the last one was complete
+                    $scope.iteration = $scope.iteration + 1;
+                    $scope.loading = false;
+                }
+            }
+            $scope.load = function() {
+                $scope.loading = true;
+                if ($scope.filter == null) {
+                    SWBrijj.tblmlimit($scope.view, quantity, $scope.iteration * quantity).then(processFeed);
+                } else {
+                    SWBrijj.tblmmlimit($scope.view, $scope.filter, $scope.filterVal, quantity, $scope.iteration * quantity).then(processFeed);
+                }
+            };
+
         }]
     }
 });
@@ -73,8 +103,8 @@ active.filter('description', function() {
             }
             var type = ac.type;
             if (type == "ownership") {
-                if (activity == "received") return "Capitalization Table sent to " + person;
-                else if (activity == "viewed") return "Capitalization Table viewed by "+person;
+                if (activity == "received") return "Sent to " + person;
+                else if (activity == "viewed") return "Viewed by "+person;
                 else return "Something with Capitalization Table";
             }
             else {
@@ -88,11 +118,11 @@ active.filter('description', function() {
                 var doclink = "";
                 var doclinkperson = "";
                 if (!ac.deleted) {
-                    doclink = "<a href=" + url + ">" + caplength(document, 35) + "</a>";
-                    doclinkperson = "<a href=" + url + urlperson + ">" + caplength(document, 35) + "</a>";
+                    doclink = "<a href=" + url + ">" + caplength(document, 30) + "</a>";
+                    doclinkperson = "<a href=" + url + urlperson + ">" + caplength(document, 30) + "</a>";
                 } else {
-                    doclink = caplength(document, 35);
-                    doclinkperson = caplength(document, 35);
+                    doclink = caplength(document, 30);
+                    doclinkperson = caplength(document, 30);
                 }
                 if (activity == "sent") return "";
                 else if (activity == "viewed") {
@@ -137,16 +167,16 @@ active.filter('description', function() {
             else if (type == "document") {
                 var document = ac.docname;
                 var url = '/app/documents/investor-view?doc=' + ac.docid + "&page=1";
-                if (activity == "received") return "You received <a href=" + url + ">" + caplength(document, 35) + "</a>" + " from " + company;
-                else if (activity == "viewed") return "You viewed <a href=" + url + ">" + + caplength(document, 35) + "</a>";
-                else if (activity == "reminder") return "You were reminded about <a href=" + url + ">" + caplength(document, 35) + "</a>";
-                else if (activity == "signed") return "You signed <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "rejected") return person + " rejected your signature on <a href=" + url + ">" + caplength(document, 35) + "</a>";
-                else if (activity == "countersigned") return person + " countersigned <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "void requested") return person + " requested voiding <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "void rejected") return "You rejected the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "void accepted") return "You accepted the voiding of <a href=" + url + ">" +caplength(document, 35) + "</a>";
-                else if (activity == "finalized") return "You approved <a href=" + url + ">" + caplength(document, 35) + "</a>";
+                if (activity == "received") return "You received <a href=" + url + ">" + caplength(document, 30) + "</a>" + " from " + company;
+                else if (activity == "viewed") return "You viewed <a href=" + url + ">" + + caplength(document, 30) + "</a>";
+                else if (activity == "reminder") return "You were reminded about <a href=" + url + ">" + caplength(document, 30) + "</a>";
+                else if (activity == "signed") return "You signed <a href=" + url + ">" +caplength(document, 30) + "</a>";
+                else if (activity == "rejected") return person + " rejected your signature on <a href=" + url + ">" + caplength(document, 30) + "</a>";
+                else if (activity == "countersigned") return person + " countersigned <a href=" + url + ">" +caplength(document, 30) + "</a>";
+                else if (activity == "void requested") return person + " requested voiding <a href=" + url + ">" +caplength(document, 30) + "</a>";
+                else if (activity == "void rejected") return "You rejected the voiding of <a href=" + url + ">" +caplength(document, 30) + "</a>";
+                else if (activity == "void accepted") return "You accepted the voiding of <a href=" + url + ">" +caplength(document, 30) + "</a>";
+                else if (activity == "finalized") return person + " approved <a href=" + url + ">" +caplength(document, 30) + "</a>";
                 else  {
                     return activity + " by "+person;
                 }

@@ -1,0 +1,50 @@
+
+<div class="sidebarHeader">
+    <span>ADD PERSON</span>    
+</div>
+
+<div class="sidebarText">
+     <div class="add-person input-list">
+        <div>
+            <span>NAME</span>
+        </div>
+
+        <div class="email-subject">
+            <input type="text" ng-model="newName">
+        </div>
+
+        <div>
+            <span>EMAIL</span>
+        </div>
+            <input type="text" ng-model="newEmail">
+        </div>
+
+        <div>
+            <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button email"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+            <span>ADMIN</span>
+              
+        </div>
+        <div ng-if="newRole && triggerUpgradeAdmins(1)"class="upgradeWarning">
+            <span>
+                Note that making this person an admin will upgrade your subscription plan.
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="sidebarFooter">
+    <div class="footer-headline-right">
+        <div class= "standard-button white">
+            <button class="btn" ng-click="$parent.toggleSide()"> Cancel
+                     </button>
+        </div>
+    </div>
+
+    <div class="footer-headline-left">
+        <div class = "standard-button green">
+            <button class="btn" ng-disabled="!fieldCheck()" ng-click="$parent.toggleSide(); createPerson()">Confirm</button>
+        </div> 
+    </div>
+</div>
+
+

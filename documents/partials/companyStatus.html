@@ -127,10 +127,18 @@
                     </div>
                     <div class="body-box">
                         <ul class="last-edited spaced-list">
-                            <li ng-show="lastsent">{{lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
-                            <li ng-show="lastsent">Sent</li>
-                            <li>{{lastedit || document.last_updated | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li ng-show="document.lastsent">{{document.lastsent | date:(settings.longdate+', yyyy, h:mm a')}}</li>
+                            <li ng-show="document.lastsent">Sent</li>
+                            <li>{{document.lastedit || document.last_updated | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                             <li>Last Edited</li>
+                            <li ng-if="document.tags">
+                                <span class="tag"
+                                      ng-repeat="tag in document.tags"
+                                      ng-click="gotoTag(tag)">
+                                    {{tag + (($last && ' ') || ', ')}}
+                                </span>
+                            </li>
+                            <li>Tags</li>
                             <!--
                             <li>{{lastdeadline | date:(settings.longdate+', yyyy, h:mm a')}}</li>
                             <li>Deadline</li>
@@ -144,7 +152,7 @@
             </div>
 
             <div>
-                <div activity-feed user='navState.userid' activity="feed" type="issdoc"></div>
+                <div activity-feed user='navState.userid' type="issdoc" view="activityFeed" filter="activityFeedFilter" filter-val="activityFeedFilterValue"></div>
             </div>
         </div>
     </div>

@@ -18,7 +18,7 @@ body {
     min-height: 100%;
     height: auto !important;
     /*height: 100%; */
-    margin: 0 auto -112px;
+    margin: 0 auto -170px;
     -webkit-transition: margin 0.35s ease;
     -moz-transition: margin 0.35s ease;
     -o-transition: margin 0.35s ease;
@@ -162,7 +162,7 @@ input:focus, textarea:focus {
     text-transform: uppercase;
 }
 .tooltip-date > div.tooltip > .tooltip-inner {
-    font-size: 10px;
+    font-size: 12px;
 }
 .tooltip.in {
     opacity: 1;
@@ -193,7 +193,7 @@ input:focus, textarea:focus {
 /* Fonts */
 p, button, select, textarea, a, address, div, input, button {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(141, 141, 141);
 }
@@ -209,7 +209,7 @@ p strong {
     font-weight: normal;
 }
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    font-size:12px
+    font-size:14px
 }
 h1 {
     font-family:'FS Elliot Web Light', sans-serif !important;
@@ -229,7 +229,7 @@ h2 {
 
 .bodyText, .bodyText input, .bodyText a {
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: rgb(127, 140, 141);
 }
@@ -253,8 +253,8 @@ h2 {
     color: rgb(255, 0, 0);
 }
 .capital-text {
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .blue-link {
@@ -512,9 +512,9 @@ h2 {
 
 div.fixednav{
     position: fixed;
-    z-index: 1000;
     width: 100%;
     top: 0;
+    z-index: 998;
 }
 
 .fixednavoffset {
@@ -885,6 +885,7 @@ ul.nav-logo > li > a > img {
 /* Notifications */
 .notification {
     position: fixed;
+    top: 0;
     width: 100%;
     text-align: center;
     z-index: 1050;
@@ -895,6 +896,7 @@ ul.nav-logo > li > a > img {
     display: block;
     height: 50px;
     overflow: hidden;
+    cursor: pointer;
 }
 .notification.success {
     background-color: rgb(28, 202, 161);
@@ -951,15 +953,17 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     color: #1E2D3D;
 }
 .subnav-controls {
+    box-sizing: border-box;
     height: 60px;
     white-space: nowrap;
     margin: 0;
     background-color: #F1F1F1;
     text-align: center;
+    border-bottom: 1px solid #C6C6C6;
 }
 .subnav-controls span {
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 .subnav-controls button.check-box-button {
     margin-left: 10px;
@@ -1155,8 +1159,8 @@ form.inputs {
 }
 
 .navlogin > form > fieldset > span {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 .navlogin input:focus {
@@ -1175,6 +1179,7 @@ form.inputs {
 
 .collapse-well {
     height: 160px;
+    z-index: 999;
 }
 
 #login_password {
@@ -1239,7 +1244,7 @@ form.inputs {
 }
 .forgotLog > a {
     color: rgb(0, 136, 204);
-    font-size: 10px;
+    font-size: 12px;
 }
 /* Side Bar Navigation */
 .sidebar {
@@ -1279,6 +1284,11 @@ form.inputs {
     padding-top: 90px;
 }
 
+
+
+.email-subject input {
+    width: 270px;
+}
 .span10.coreEdit {
     height:100%;
     margin-left:0;
@@ -1287,9 +1297,15 @@ form.inputs {
     border-color: rgb(189, 195, 199);
     border-left: 1px solid;
 }
+
 .coreEdit input {
     box-shadow: none !important;
+} 
+
+.input-list .inner-editor{
+    width: 270px;
 }
+
 .formBounder {
     width:620px;
 }
@@ -1312,11 +1328,9 @@ form.inputs {
 .docLibrary .column-label {
     border-top: 1px solid rgb(227, 227, 227);
     border-bottom: 1px solid rgb(227, 227, 227);
-    font-family:'FS Elliot Web Bold', sans-serif;
     color: rgb(30, 45, 61);
 }
 .docLibrary .column-label input {
-    font-family:'FS Elliot Web Bold', sans-serif;
     color: rgb(30, 45, 61);
     width: 150px;
     vertical-align: top;
@@ -1481,8 +1495,8 @@ form.inputs {
     color: #1E2D3D;
 }
 .info-box > .body-box > .ownershipPermissions > span {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
     color: #8D8D8D;
     padding-right: 10px;
 }
@@ -1512,8 +1526,8 @@ table.settingtable tr > td {
     height: 30px;
 }
 table.settingtable tr > td:first-child {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
     color: #A6A6A6;
 }
 table.settingtable tr > td:last-child {
@@ -1547,8 +1561,8 @@ ul.last-edited > li:nth-child(odd) {
 }
 
 ul.last-edited > li:nth-child(even) {
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 ul.spaced-list > li:first-child {
@@ -1568,20 +1582,16 @@ ul.spaced-list > li:nth-child(odd) {
     overflow: auto;
 }
 
-.activity-feed2 > li {
+.activity-feed2 li.event {
     min-height: 50px;
     border-bottom: 1px solid #E3E3E3;
-}
-
-.activity-feed2 > li:last-of-type {
-    border-bottom: none;
 }
 
 .activity-feed2 a {
     color: #3397DA;
 }
 
-.activity-feed2 > li > div:first-of-type {
+.activity-feed2 li.event > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
@@ -1589,7 +1599,7 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
-.activity-feed2 > li > div:last-of-type {
+.activity-feed2 li.event > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -1597,18 +1607,18 @@ ul.spaced-list > li:nth-child(odd) {
     width: calc(100% - 58px) !important;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li {
+.activity-feed2 li.event > div:last-of-type > ul > li {
     line-height: 16px;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li:first-of-type {
+.activity-feed2 li.event > div:last-of-type > ul > li:first-of-type {
     margin-top: 8px;
     color: #666666;
 }
 
-.activity-feed2 > li > div:last-of-type > ul > li:last-of-type {
-    text-transform: uppercase;
-    font-size: 10px;
+.activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 /* Document Status */
@@ -1642,10 +1652,10 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 14px;
 }
 .activityBlock td.time {
-    font-size: 10px;
+    font-size: 12px;
     font-family:'FS Elliot Web Regular', sans-serif;
     color: rgb(166, 166, 166);
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock td.item {
     padding-bottom: 15px;
@@ -1857,11 +1867,11 @@ ul.spaced-list > li:nth-child(odd) {
     -webkit-border-radius: 50%;
     border-radius: 50%;
     color: white;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .status-toggle > .circle:before {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .status-toggle > .circle > span {
@@ -1910,16 +1920,17 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child {
-    font-size: 12px;
+    font-size: 14px;
     color: #666666;
     line-height: 18px;
 }
 
-.status-table > tbody > tr > td.shareholder-column > ul > li:last-child {
-    font-size: 10px;
-    text-transform: uppercase;
+.status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
+    font-size: 12px;
+    text-transform: capitalize;
     color: #A6A6A6;
     line-height: 14px;
+    min-width: 40px;
 }
 
 .status-table > tbody > tr > td > .statusTableButton {
@@ -2066,7 +2077,7 @@ tr.preparedDoc {
     color: rgb(141, 141, 141);
 }
 .status-detail > td:last-of-type > span {
-    font-size: 10px;
+    font-size: 12px;
     float: right;
     margin-right: 60px;
     text-align: center;
@@ -2076,7 +2087,7 @@ tr.preparedDoc {
     border: 1px solid rgb(26, 188, 150);
     color: rgb(26, 188, 150);
     background-color: rgb(255, 255, 255);
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock {
     width: 220px;
@@ -2086,7 +2097,7 @@ tr.preparedDoc {
     color: rgb(102, 102, 102);
 }
 .activityBlock span:last-of-type {
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .activityBlock > li {
     margin-bottom: 15px;
@@ -2105,7 +2116,7 @@ tr.preparedDoc {
     min-height:150px;
 }
 .push {
-    height: 112px;
+    height: 170px;
 }
 .container.scaling {
     width: 100%;
@@ -2175,7 +2186,7 @@ tr.preparedDoc {
 .copyrightLinks li a {
     color: rgb(141, 141, 141);
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: normal;
     text-decoration: none;
 }
@@ -2241,7 +2252,7 @@ tr.preparedDoc {
 }
 .box-button {
     width: 76px;
-    height: 60px;
+    height: 59px;
     margin-top: -14px;
     color: #34495E;
     -moz-box-sizing: border-box;
@@ -2261,7 +2272,7 @@ tr.preparedDoc {
     padding-top: 14px;
 }
 .box-button > ul > li:nth-child(1) > span {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .box-button > ul > li {
@@ -2269,7 +2280,7 @@ tr.preparedDoc {
 }
 
 .box-button > ul > li:nth-child(2) > span {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .box-button.disabledme {
@@ -2531,6 +2542,10 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     line-height: 15px;
 }
 
+.overall-nav {
+    z-index: 999;
+}
+
 .topnav.navbar .nav.dropdown-list.notifications > li > .dropdown-menu:before {
     right: 155px;
     top: -7px;
@@ -2539,7 +2554,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 .topnav .nav.dropdown-list.notifications > li > ul {
     border: 1px solid #33485D;
     border-radius: 3px;
-
+    max-height: 300px;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:first-of-type {
@@ -2557,7 +2572,21 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #FFFFFF;
 }
 
-.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a{
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) {
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: auto;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul {
+    max-height: 258px;
+    min-height: 56px;
+    overflow-y: auto;
+    border-radius: 3px;
+}
+
+.topnav .nav.dropdown-list.notifications > li > ul > li:not(:first-of-type) > ul > li, .topnav .nav.dropdown-list.notifications > li > ul > li > a {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -2565,13 +2594,15 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     color: #656565;
     height: 50px;
     cursor: default;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul > li:not(:nth-of-type(-n+3)) {
     border-top: 1px solid #E3E3E3;
 }
 
-.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type):hover, .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
+.topnav .nav.dropdown-list.notifications > .standard.menu-drop .dropdown-menu > li:not(:first-of-type), .topnav .nav.dropdown-list.notifications > li > ul > li > a:hover {
     background-color: #FFFFFF;
     color: #656565;
 }
@@ -2584,15 +2615,15 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
     margin-right: -135px;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:first-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:first-of-type {
     display: inline-block;
     width: 50px;
     text-align: center;
-    margin-top: 7px;
+    margin-top: 11px;
     vertical-align: top;
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type {
     display: inline-block;
     min-height: 50px;
     width: -moz-calc(100% - 58px) !important;
@@ -2601,17 +2632,17 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 }
 
-.nav.dropdown-list.notifications > li > ul > li > div:last-of-type > ul > li {
-    line-height: 44px;
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div:last-of-type > ul > li {
+    line-height: 50px;
 }
 
 .nav.dropdown-list.notifications > li > ul > li a {
     color: #3397DA;
 }
-.nav.dropdown-list.notifications > li > ul > li > div.no-notifications {
+.nav.dropdown-list.notifications > li > ul > li > ul > li > div.no-notifications {
     text-align: center;
     width: 301px !important;
-    line-height: 45px;
+    line-height: 55px;
     margin: 0;
 }
 
@@ -2639,7 +2670,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
 .standard.menu-drop .dropdown-menu > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
@@ -2663,7 +2694,7 @@ ul.dropdown-list > .dropdown.standard.menu-drop > ul.dropdown-menu {
     background-color: #C7C7C7;
 }
 
-.standard.menu-drop .dropdown-menu > li {
+.standard.menu-drop .dropdown-menu > li, .notifications .standard.menu-drop .dropdown-menu > li > ul > li {
     padding: 3px 0 3px 10px;
     line-height: 24px;
     text-align: left;
@@ -3200,6 +3231,53 @@ button.icon-button:hover {
     width: 360px;
     display: inline-block;
 }
+.tagsModal {
+    width: 100%;
+    display: inline-block;
+}
+.tagsModal > div {
+    width: 500px;
+    margin: 0 auto;
+}
+.tagsModal > div > ul {
+    text-align: left;
+    color: #666666;
+    font-size: 12px;
+}
+.tagsModal .bootstrap-tagsinput {
+    width: 100%;
+    min-height: 35px;
+    text-align: left;
+    color: inherit;
+    box-sizing: border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-shadow: none !important;
+}
+.tagsModal .bootstrap-tagsinput input {
+    float: none;
+}
+.bootstrap-tagsinput .badge {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-shadow: none !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
+}
+.bootstrap-tagsinput .badge-info {
+    background-color: #E3E3E3;
+}
+.bootstrap-tagsinput .tag {
+    vertical-align: middle;
+    color: #666666;
+}
+.bootstrap-tagsinput input,
+.bootstrap-tagsinput input:active,
+.bootstrap-tagsinput input:focus {
+    border: none;
+}
 /* Styling file uploads with fake overlay */
 .modal div.fileinputs {
     position: relative;
@@ -3234,6 +3312,8 @@ button.icon-button:hover {
     height: 100%;
     margin: 0;
 }
+
+
 /* Modal CSS */
 .modal {
     margin-left: -180px;
@@ -3289,9 +3369,9 @@ button.icon-button:hover {
 }
 .modal label {
     display: inline;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-family:'FS Elliot Web Regular', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     padding: 15px 0 15px 20px;
 }
 .modal input {
@@ -3425,8 +3505,8 @@ button.icon-button:hover {
 }
 .compose-modal.modal > div.modalText .input-list>div>span {
     margin-right: 10px;
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 .compose-modal.modal > div.modalText .input-list>div>div,
 .compose-modal.modal > div.modalText .input-list>div>input,
@@ -3486,7 +3566,8 @@ button.icon-button:hover {
 
 .profile-modal.modal > div.modalText .input-list > span {
     float: left;
-    margin-left: 132px;
+    margin-left: 65px;
+    margin-top: -20px;
 }
 
 .profile-modal.modal > div.modalText > div > div.profile-image {
@@ -3517,12 +3598,12 @@ button.icon-button:hover {
 }
 
 .profile-modal.modal > div.modalText .input-list > div > span:first-of-type {
-    text-transform: uppercase;
-    font-size: 10px;
-    width: 80px;
-//    display: inline-block;
-//    text-align: right;
+    text-transform: capitalize;
+    font-size: 12px;
+    width: 60px;
     margin-right: 5px;
+    display: inline-block;
+    text-align: right;
 }
 .profile-modal.modal > div.modalText.ccmodal .input-list > div > span:first-of-type {
     width: 120px;
@@ -3629,8 +3710,8 @@ button.icon-button:hover {
     width: 100px;
     text-align: right;
     line-height: 32px;
-    text-transform: uppercase;
-    font-size: 10px;
+    text-transform: capitalize;
+    font-size: 12px;
 }
 
 .modal .input-row-new > input {
@@ -3932,12 +4013,18 @@ h2.onboard {
 
 /* Overwriting the usersnap buttons */
 
-div#us_report_button button.us_button_horizontal {
-    height: 24px !important;
-    width: 100px !important;
+.classic.us-button-c50731562836a85c59cfa515f8f8ab70, .medic.us-button-c50731562836a85c59cfa515f8f8ab70, .pinkabell.us-button-c50731562836a85c59cfa515f8f8ab70, .lemon.us-button-c50731562836a85c59cfa515f8f8ab70, .redalert.us-button-c50731562836a85c59cfa515f8f8ab70, .snow_notready.us-button-c50731562836a85c59cfa515f8f8ab70, .snapbugz.us-button-c50731562836a85c59cfa515f8f8ab70 {
     background-image: none !important;
-    background-color: #E3E3E3 !important;
-    padding: 0 !important ;
+}
+
+.classic.us-button-c50731562836a85c59cfa515f8f8ab70 {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    border-top: 2px solid #cccccc !important;
+}
+
+.classic.us-button-c50731562836a85c59cfa515f8f8ab70:hover, .classic.us-button-c50731562836a85c59cfa515f8f8ab70.hover {
+    background-color: #cccccc !important;
 }
 
 .newreg {
@@ -4020,9 +4107,9 @@ div#us_report_button button.us_button_horizontal {
 }
 .big-input-list .input-list span {
     display: block;
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .big-input-list .input-list div.span6 {
     width: -moz-calc(50% - 10px);
@@ -4102,7 +4189,9 @@ div#us_report_button button.us_button_horizontal {
     height: 50px;
     background-color: #FBC68E;
     border-bottom:1px solid #F78D1E;
+    z-index: 998;
 }
+
 .persistentNotification > div > div {
     height: 100%;
     margin: 0 40px 0 60px;
@@ -4192,4 +4281,92 @@ div.upgradeWarning > span {
 .dropdown-menu li + div.tooltip.bottom {
    margin-top: -11px;
 }
+
+.tag {
+    color: #3498DB;
+}
+.tag:hover {
+    color: #2980B9;
+    cursor: pointer;
+}
+
+/*Sidebar CSS */
+.sidebarHeader {
+    display: block;
+    text-align: left;
+    padding-top: 23px;
+    padding-bottom: 40px;
+    margin: 0;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.sidebarText {
+   /* padding: 10px 0 0 0;*/
+  /*  margin: 5px 0 20px 0;*/
+    display: block;
+    text-align: left;
+}
+.sidebarText p {
+    text-align: left;
+    margin: 0 10px 0 10px;
+    padding-bottom: 10px;
+}
+
+.sidebarFooter {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding-top: 20px;
+
+}
+
+.standard-button.white > button{
+    width: 130px;
+    background-color: white;
+    color: #2980B9;
+}
+
+
+.preview-message {
+    text-align: left;
+    display: block;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    color: #2980B9;
+    padding-bottom: 10px;
+}
+
+.sidebarText span{
+    font-size: 12px;
+}
+
+.footer-headline-left{
+    width: 45%;
+    float: left;
+}
+
+.footer-headline-right {
+    width: 45%;
+    float: right;
+}
+
+
+.check-box-side {
+    float:left;
+    text-align: center;
+    line-height: 26px;
+    padding-right: 20px;
+    margin-top: 2px;
+}
+
+.person-info{
+    margin-left: 40px;
+}
+
+
+
+
+
 

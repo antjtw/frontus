@@ -653,7 +653,6 @@ textarea.email-text {
     margin-left: 0;
     width: 350px;
     border-left: 6px solid white;
-    padding-top: 14px;
     padding-left: 20px;
     padding-right: 40px;
 }
@@ -1391,7 +1390,7 @@ doc-viewer > .modal-backdrop {
     box-shadow: none;
 }
 
-.docViewerTitle div.small-standard-button {
+.docViewerTitle div.standard-button {
     padding-top: 14px;
     padding-right: 20px;
 }
@@ -1459,8 +1458,10 @@ doc-viewer > .modal-backdrop {
     color: #1E2D3D;
 }
 
-.confirmBody > .radioOption > li:last-child > span {
+.confirmBody > .radioOption > li:last-child > span:last-child {
     color: #666666;
+    margin-left: 35px;
+    display: inline-block;
 }
 
 .confirmBody > .radioOption textarea.messageText {
@@ -1472,15 +1473,21 @@ doc-viewer > .modal-backdrop {
 }
 
 .confirmBody > .checkboxOption {
-    width: 320px;
+    width: 360px;
     margin: 0 auto;
 }
 
 .confirmBody > .checkboxOption > li:last-child {
-    padding-left: 20px;
+    padding-left: 30px;
+    float: inherit;
 }
 
-.confirmBody > .checkboxOption > li:last-child > span {
+.confirmBody > .checkboxOption > li:last-child > span:first-child {
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.confirmBody > .checkboxOption > li:last-child > span:last-child {
     color: #666666;
 }
 
@@ -1790,8 +1797,8 @@ doc-viewer > .modal-backdrop {
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
     color: #FFFFFF;
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .sticky-menu ul.required-row > li {
