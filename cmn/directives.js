@@ -142,14 +142,17 @@ m.directive('composeMessage', function() {
                 }
             };
 
-            $scope.previewModalOpen = function() {
+            $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
                 console.log("modal to open");
+                $scope.subject = msg.subject;
+                $scope.messagetext = msg.text;
+                console.log($scope.messagetext);
             };
 
             $scope.previewModalClose = function(){
                 $scope.previewModal = false
-            }
+            };
 
         }]
     };
