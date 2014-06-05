@@ -24,10 +24,11 @@
                     </div>
                 </div>
                 <div>
-                    {{fromtran}}
-                </div>
-                <div>
                     <ul>
+                        <li>
+                            <span>Amount</span>
+                            <input ng-change="conversion()" ng-model="fromtran.amount">
+                        </li>
                         <li>
                             <span>Valuation Cap</span>
                             <input ng-change="conversion()" ng-model="fromtran.valcap">
@@ -41,13 +42,26 @@
                             <input ng-change="conversion()" ng-model="convertTran.ppshare">
                         </li>
                         <li>
-                            <span>Premoney valuation</span>
-                            <input ng-change="conversion()" ng-model="convertTran.ppshare">
+                            <span>To Issue Premoney valuation</span>
+                            <input ng-change="conversion()" ng-model="convertTran.toissue.premoney">
+                        </li>
+                        <li>
+                            <span>To Issue Postmoney valuation</span>
+                            <input ng-change="conversion()" ng-model="convertTran.toissue.postmoney">
                         </li>
                     </ul>
                 </div>
                 <div>
-                    {{convertTran.newtran}}
+                    <ul>
+                        <li>
+                            <span>Converted Units</span>
+                            {{convertTran.newtran.units}}
+                        </li>
+                        <li>
+                            <span>Price per unit</span>
+                            {{convertTran.newtran.ppshare}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
