@@ -134,7 +134,8 @@ m.directive('composeMessage', function() {
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
-                    console.log("notreadytosend")
+                    console.log($scope.msg.subject)
+
                 }
                 else {
                     return true;
