@@ -434,6 +434,12 @@ address {
 
 /* External Cap Table */
 
+.features .try-me-button {
+    position: absolute;
+    left: -45px;
+    top: -20px;
+}
+
 .features .demo-captable {
     position: relative;
     border: 1px solid #C6C6C6;
