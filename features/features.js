@@ -15,6 +15,10 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
           controller: 'FeaturesCtrl',
           templateUrl:'/features/partials/documents.html'
       }).
+      when('/features/debt', {
+          controller: 'FeaturesDebtCtrl',
+          templateUrl:'/features/partials/debt.html'
+      }).
       otherwise({redirectTo:'/features'});
 });
 
@@ -23,6 +27,29 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
 
     $scope.gotopage = function (link) {
         $location.url("/features/" + link);
+        };
+    }
+]);
+
+app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
+
+        $scope.gotopage = function (link) {
+            $location.url("/features/" + link);
+        };
+
+        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":1.0,"converted":false,"valcap":null,"lastupdated":new Date(1401829600758),"partpref":null,"units":50000.0,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.convertTran = {"toissue": {}};
+        $scope.conversion = function() {
+            $scope.convertTran.method = "Valuation";
+            if ($scope.convertTran.method == "Valuation") {
+                $scope.convertTran.toissue.ppshare = $scope.convertTran.ppshare;
+            }
+            $scope.convertTran.date = new Date(1401768000000);
+            $scope.convertTran.tran = $scope.fromtran;
+            $scope.convertTran.newtran = angular.copy($scope.fromtran);
+            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
+            $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         };
     }
 ]);

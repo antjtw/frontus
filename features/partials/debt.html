@@ -1,0 +1,69 @@
+<div ng-class="{'fixednavoffset':!navState.userid, 'homedrop': homecollapsed}" class="wrap">
+    <div class="features static">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="header-section">
+                    <div class="header">
+                        <h1>Features</h1>
+
+                        <ul>
+                            <li ng-click="gotopage('')">
+                                <img src="/img/overview-grey.png">
+                                <span>Overview</span>
+                            </li>
+                            <li ng-click="gotopage('cap')">
+                                <img src="/img/cap-grey.png">
+                                <span>Cap Table</span>
+                            </li>
+                            <li ng-click="gotopage('doc')">
+                                <img src="/img/docs-grey.png">
+                                <span>Documents</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div>
+                    {{fromtran}}
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            <span>Valuation Cap</span>
+                            <input ng-change="conversion()" ng-model="fromtran.valcap">
+                        </li>
+                        <li>
+                            <span>Discount (%)</span>
+                            <input ng-change="conversion()" ng-model="fromtran.discount">
+                        </li>
+                        <li>
+                            <span>Conversion price per share</span>
+                            <input ng-change="conversion()" ng-model="convertTran.ppshare">
+                        </li>
+                        <li>
+                            <span>Premoney valuation</span>
+                            <input ng-change="conversion()" ng-model="convertTran.ppshare">
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    {{convertTran.newtran}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spacer110"></div>
+    <div id="register">
+        <div class="row-fluid">
+            <div class="span10 offset1 text-center">
+                <div class="CompanyRegister-form large-standard-button standard-button">
+                    <button class="btn" onclick="window.location.href='/pricing'">Sign Up</button>
+                </div>
+            </div>
+        </div>
+        <div class="spacer30"></div>
+    </div>
+
+
+    <div class="push"></div>
+</div>
