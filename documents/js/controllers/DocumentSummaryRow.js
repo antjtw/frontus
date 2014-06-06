@@ -3,8 +3,6 @@
 function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
     // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
-    
-    $scope.access_token = $rootScope.access_token;
 
     // load the versions
     $scope.versions = [];
@@ -169,7 +167,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
     };
     $scope.exportOriginalToDropbox = function(doc) {
-        if ($scope.access_token)
+        if ($rootScope.access_token)
         {
             SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
                 $scope.$emit("notification:success", "Successfully Exported to Dropbox");
