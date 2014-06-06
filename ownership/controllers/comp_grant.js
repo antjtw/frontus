@@ -939,7 +939,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     };
 
     $scope.manualdeleteTran = function (tran) {
-        SWBrijj.proc('ownership.delete_transaction', tran['tran_id']).then(function (data) {
+        SWBrijj.proc('ownership.delete_transaction', parseInt(tran['tran_id'])).then(function (data) {
             angular.forEach($scope.issues, function(issue) {
                 var index = -1;
                 angular.forEach(issue.trans, function(transaction) {
