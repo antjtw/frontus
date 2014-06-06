@@ -4369,36 +4369,17 @@ div.upgradeWarning > span {
     margin-bottom: 20px;
 }
 
-/*.compose-modal.modal > div.modalText .input-list > div {
-    margin: 0 0 20px 0;
-    line-height: 32px;
-    overflow: auto;
-}
-.compose-modal.modal > div.modalText {
+.previewModal.modal > div.modalText {
     padding: 0 20px 0 20px;
-    text-align: right;
 }
-.compose-modal.modal > div.modalText .input-list>div>span {
-    margin-right: 10px;
-    text-transform: capitalize;
-    font-size: 12px;
-}
-.compose-modal.modal > div.modalText .input-list>div>div,
-.compose-modal.modal > div.modalText .input-list>div>input,
-.compose-modal.modal > div.modalText .input-list>div>textarea {
-    float: right;
-    width: 476px;
-    margin-right: 0;
-}
-.compose-modal.modal > div.modalText .input-list>div>input {
-    height: 24px;
-}
-.compose-modal.modal > div.modalText .input-list>div>div.select2-container {
-    width: 490px;
-*/
+
 .modal.preview-modal{
-    background-color: red;
-    width: 200px;
+    width: 350px;
+    height: 400px;
+}
+
+.preview-modal {
+    text-align: center;
 }
 
 
