@@ -178,7 +178,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         else 
         {
             console.log("Link Dropbox");
-            $scope.modals.exportLinkDropboxOpen();
+            $scope.modals.exportLinkDropboxOpen(doc);
         }
     };
 }

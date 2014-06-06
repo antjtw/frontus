@@ -672,7 +672,8 @@ app.controller('CompanyDocumentListController',
                 $scope.deleteDocModal = false;
             };
             
-            $scope.modals.exportLinkDropboxOpen = function() {
+            $scope.modals.exportLinkDropboxOpen = function(doc) {
+                $scope.docForModal = doc;
                 $scope.exportLinkDropboxModal = true;
             };
 
@@ -680,7 +681,12 @@ app.controller('CompanyDocumentListController',
                 $scope.exportLinkDropboxModal = false;
             };
             
-            $scope.startOauth = function(svc) {
+            $scope.exportOtDcallback = function(doc){
+                console.log("callback");
+                $scope.exportOriginalToDropbox(doc);
+            };
+            
+            $scope.startOauth = function(svc, doc) {
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
@@ -691,6 +697,7 @@ app.controller('CompanyDocumentListController',
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
+                        $scope.exportOtDcallback(doc);
                     };
                     window.open(x);
                     console.log(x);
