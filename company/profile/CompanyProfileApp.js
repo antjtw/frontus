@@ -1,9 +1,9 @@
 'use strict';
 app.controller('CompContactCtrl',
     ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-        'payments', '$route', '$filter', '$location', '$http',
+        'payments', '$route', '$filter', '$location', '$http', 'oauth',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
-                 payments, $route, $filter, $location, $http) {
+                 payments, $route, $filter, $location, $http, oauth) {
             if (navState.role == 'investor') {
                 document.location.href = "/app/home";
                 return;
@@ -347,31 +347,24 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                if (!(navState.userid && navState.company && navState.role)) {
-                    alert("User role not selected.");
-                    $scope.response = "User role not selected.";
-                    return;
+                var resp = oauth.start_oauth(svc, navState);
+                var x = resp.value;
+                if (resp.success)
+                {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function (){
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                    };
+                    window.open(x);
+                    console.log(x);
                 }
-                document.domain = "sharewave.com";
-                $http.post('/cgi/suDbProc.py', {
-                    'proc': 'oauth.request_authorization',
-                    'service': svc,
-                    'userid': navState.userid,
-                    'company': navState.company,
-                    'role': navState.role
-                }).success(function(x) {
-                        window.oauthSuccessCallback = function (){
-                            $rootScope.access_token = 1;
-                            $scope.$apply();
-                            $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        };
-                        window.open(x);
-                        console.log(x);
-                    })
-                    .error(function(x) {
-                        console.log(x);
-                        $scope.response = x;
-                    });
+                else
+                {
+                    console.log(x);
+                    $scope.response = x;
+                }
             };
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();

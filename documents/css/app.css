@@ -422,6 +422,45 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.linkDropboxModal {
+    width: 360px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.span.linkDropboxModalSpan {
+    margin-left: 15px;
+}
+
+.span.linkDropboxModalSpan.smaller {
+    margin-top: 12px;
+    width: 300px;
+    padding-left: 75px;
+}
+
+.span.linkDropboxModalSpan.larger {
+    width: 400px;
+}
+
+.modalText.linkDropboxModalText {
+    width: 300px;
+    margin-bottom: 1px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+}
+
+.modalText.linkDropboxModalText.header {
+    font-weight: bold;
+}
+
+.modalText.linkDropboxModalText.header.greenLabel {
+    color: #1ABC96;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
 .modalText.deleteDocModal.retractModal {
     margin-bottom: 50px;
 }

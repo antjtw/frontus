@@ -169,11 +169,19 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
     };
     $scope.exportOriginalToDropbox = function(doc) {
-        SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
-            $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-        }).except(function(x) {
-            $scope.response = x;
-        });
+        if ($scope.access_token)
+        {
+            SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
+                $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+            }).except(function(x) {
+                $scope.response = x;
+            });
+        }
+        else 
+        {
+            console.log("Link Dropbox");
+            $scope.modals.exportLinkDropboxOpen();
+        }
     };
 }
 DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];

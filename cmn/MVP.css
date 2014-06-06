@@ -3490,6 +3490,11 @@ button.icon-button:hover {
     margin-left: -300px;
 }
 
+.evenWiderModal.modal {
+    width: 720px;
+    margin-left: -360px;
+}
+
 .compose-modal.modal > .modalHeader {
     margin-bottom: 20px;
 }

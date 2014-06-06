@@ -13,6 +13,37 @@ service.filter('caplength', function () {
     };
 });
 
+service.service('oauth', function($http) {
+    var s = {};
+    
+    s.start_oauth = function(svc, navState)
+    {
+        console.log("service");
+        if (!(navState.userid && navState.company && navState.role)) {
+            alert("User role not selected.");
+            $scope.response = "User role not selected.";
+            return;
+        }
+        var ret = {};
+        $http.post('/cgi/suDbProc.py', {
+            'proc': 'oauth.request_authorization',
+            'service': svc,
+            'userid': navState.userid,
+            'company': navState.company,
+            'role': navState.role
+        }).success(function(x) {
+            ret.success = true;
+            ret.value = x;
+        }).error(function(x) {
+            ret.success = false;
+            ret.value = x;
+        });
+        return ret;
+    }
+    
+    return s;
+});
+
 service.service('payments', function(SWBrijj) {
     var s = {};
     s.available_plans = function() {

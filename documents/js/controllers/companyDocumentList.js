@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http',
+        'basics', '$http', 'oauth',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http) {
+                 basics, $http, oauth) {
             $scope.docShareState={};
             $scope.state = {
                 hideSharebar: true,
@@ -311,6 +311,11 @@ app.controller('CompanyDocumentListController',
                 backdropFade: true,
                 dialogFade: true,
                 dialogClass: 'wideModal modal'
+            };
+            $scope.verywideopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'evenWiderModal modal'
             };
             $scope.opts = {
                 backdropFade: true,
@@ -665,6 +670,35 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
+            };
+            
+            $scope.modals.exportLinkDropboxOpen = function() {
+                $scope.exportLinkDropboxModal = true;
+            };
+
+            $scope.modals.exportLinkDropboxClose = function() {
+                $scope.exportLinkDropboxModal = false;
+            };
+            
+            $scope.startOauth = function(svc) {
+                var resp = oauth.start_oauth(svc, navState);
+                var x = resp.value;
+                if (resp.success)
+                {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function (){
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                    };
+                    window.open(x);
+                    console.log(x);
+                }
+                else
+                {
+                    console.log(x);
+                    $scope.response = x;
+                }
             };
 
             $scope.reallyDeleteDoc = function(doc) {
