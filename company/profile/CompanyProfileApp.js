@@ -347,24 +347,23 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                var resp = oauth.start_oauth(svc, navState);
-                var x = resp.value;
-                if (resp.success)
-                {
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
+                    return;
+                post.success(function(x) {
                     document.domain = "sharewave.com";
-                    window.oauthSuccessCallback = function (){
+                    window.oauthSuccessCallback = function(x){
+                        console.log("success");
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                     };
                     window.open(x);
                     console.log(x);
-                }
-                else
-                {
+                }).error(function(x) {
                     console.log(x);
                     $scope.response = x;
-                }
+                });
             };
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();

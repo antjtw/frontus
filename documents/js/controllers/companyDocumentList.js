@@ -687,6 +687,7 @@ app.controller('CompanyDocumentListController',
                 post.success(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
+                        console.log("success");
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
