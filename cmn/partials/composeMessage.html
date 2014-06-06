@@ -61,15 +61,16 @@
 </div>
 
 <div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
-    <div class="modalHeader">To</div>
-        <span><div ng-repeat="recipient in recipients"></span>
-            {{recipient}}
-        </div>
+    <div class="sidebarText"> RECIPIENT</div>
+    <span ng-repeat="recipient in recipients" class="email-preview-recipients">{{recipient}} </span>
  
-    <div class="modalHeader">Subject</div>
-        <div class="modalText">{{subject}}</div>
-    <div class="modalHeader">Text</div>
-        <textarea class="email-text" rows="10" cols="70" ng-model="message.text">{{messagetext}}</textarea>
+    <div class="sidebarText">  SUBJECT </div>
+    <span>{{subject}}</span>
+
+     
+    <div class="sidebarText">TEXT</div>
+        <div> {{messagetext}}</div>
+       <!--  <textarea class="email-text" rows="10" cols="70" ng-model="message.text">{{messagetext}}</textarea> -->
 </div>
 
 
