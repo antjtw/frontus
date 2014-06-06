@@ -690,7 +690,6 @@ app.controller('CompanyDocumentListController',
                         console.log("success");
                         $rootScope.access_token = 1;
                         $scope.$apply();
-                        console.log(
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                     };
                     window.open(x);
