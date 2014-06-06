@@ -43,13 +43,17 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         $scope.conversion = function() {
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
-                $scope.convertTran.toissue.ppshare = $scope.convertTran.ppshare;
+                $scope.convertTran.toissue.ppshare = 1;
+                if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && isNaN(parseFloat($scope.convertTran.postmoney))) {
+                    $scope.convertTran.toissue.postmoney = parseFloat($scope.convertTran.amountsold) / (parseFloat($scope.convertTran.percentsold)/100);
+                    $scope.convertTran.toissue.premoney = $scope.convertTran.toissue.postmoney - parseFloat($scope.convertTran.amountsold);
+                }
+                $scope.convertTran.date = new Date(1401768000000);
+                $scope.convertTran.tran = $scope.fromtran;
+                $scope.convertTran.newtran = angular.copy($scope.fromtran);
+                $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
+                $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
             }
-            $scope.convertTran.date = new Date(1401768000000);
-            $scope.convertTran.tran = $scope.fromtran;
-            $scope.convertTran.newtran = angular.copy($scope.fromtran);
-            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
-            $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         };
     }
 ]);

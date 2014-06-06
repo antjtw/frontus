@@ -12,7 +12,7 @@ app.controller('CompanyDocumentListController',
                 hideSharebar: true,
                 maxRatio: 1000,
                 show_archived: false,
-                query: $routeParams.q || "",
+                query: $routeParams.q || ""
             };
             $scope.modals = {};
 

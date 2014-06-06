@@ -38,8 +38,12 @@
                             <input ng-change="conversion()" ng-model="fromtran.discount">
                         </li>
                         <li>
-                            <span>Conversion price per share</span>
-                            <input ng-change="conversion()" ng-model="convertTran.ppshare">
+                            <span>Percentage Sold</span>
+                            <input ng-change="conversion()" ng-model="convertTran.percentsold">
+                        </li>
+                        <li>
+                            <span>Investment Amount</span>
+                            <input ng-change="conversion()" ng-model="convertTran.amountsold">
                         </li>
                         <li>
                             <span>To Issue Premoney valuation</span>
@@ -60,6 +64,10 @@
                         <li>
                             <span>Price per unit</span>
                             {{convertTran.newtran.ppshare}}
+                        </li>
+                        <li>
+                            <span>% Discount</span>
+                            {{convertTran.newtran.valcappercentage}}
                         </li>
                     </ul>
                 </div>
