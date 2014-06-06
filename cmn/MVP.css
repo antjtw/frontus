@@ -4380,16 +4380,14 @@ div.upgradeWarning > span {
 }
 
 .preview-modal {
-    text-align: center;
+/*    text-align: center;*/
     max-height: 100%;
     overflow-y: scroll;
     overflow-x: scroll;
     padding-left: 20px;
 }
 
-.email-preview-recipients {
-   color: red;
-}
+
 .preview-modal .modalHeader > span {
     text-transform: none;
     display: inline-block;
@@ -4400,7 +4398,14 @@ div.upgradeWarning > span {
 
 .preview-modal .sidebarText{
     padding-top: 20px;
-    padding-left: 20px;
+    /*padding-left: 20px;
+*/}
+
+.preview-modal .sidebarHeader {
+    padding-bottom: 10px;
 }
 
+.preview-modal textarea.email-text {
+    width: 315px;
+}
 
