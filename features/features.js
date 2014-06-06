@@ -1,5 +1,5 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
-    'ownerDirectives', 'ownerServices', '$strap.directives'], function($routeProvider, $locationProvider){
+    'ownerDirectives', 'ownerServices', '$strap.directives', 'n3-line-chart'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -38,19 +38,55 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $location.url("/features/" + link);
         };
 
-        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":null,"lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.options = {
+            axes: {
+                x: {key: 'x', labelFunction: function(value) {return value;}, type: 'linear', tooltipFormatter: function(x) {return x;}},
+                y: {type: 'linear'}
+            },
+            series: [
+                {y: 'y', type: 'line', label: 'Percentage Discount'},
+            ],
+            lineMode: 'linear'
+        };
+
+        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":4000000,"lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":20,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
+        $scope.intervals = 10;
         $scope.conversion = function() {
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
+                //Empty Graph data
+                $scope.graphdata = [];
+                //Default ppshare to 1 we're not displaying this for now
                 $scope.convertTran.toissue.ppshare = 1;
-                if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && isNaN(parseFloat($scope.convertTran.postmoney))) {
-                    $scope.convertTran.toissue.postmoney = parseFloat($scope.convertTran.amountsold) / (parseFloat($scope.convertTran.percentsold)/100);
-                    $scope.convertTran.toissue.premoney = $scope.convertTran.toissue.postmoney - parseFloat($scope.convertTran.amountsold);
-                }
+                //Bottom limit for the range calculation
+                $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
+                //Default values before the loop (will allow for date changing
                 $scope.convertTran.date = new Date(1401768000000);
                 $scope.convertTran.tran = $scope.fromtran;
                 $scope.convertTran.newtran = angular.copy($scope.fromtran);
+
+                // Work out the intervals for the graph's x axis.
+                var increasing = angular.copy($scope.convertTran.bottomamount);
+                var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
+                increasing -= interval;
+
+
+                for (var i = 0; i <= $scope.intervals; i++) {
+                    increasing += interval;
+                    var graphpointtran = angular.copy($scope.convertTran);
+                    graphpointtran.amountsold = increasing;
+                    if (!isNaN(parseFloat(graphpointtran.percentsold)) && !isNaN(parseFloat(graphpointtran.amountsold))) {
+                        graphpointtran.toissue.postmoney = parseFloat(graphpointtran.amountsold) / (parseFloat(graphpointtran.percentsold)/100);
+                        graphpointtran.toissue.premoney = graphpointtran.toissue.postmoney - parseFloat(graphpointtran.amountsold);
+                    }
+                    var percentdiscount = parseFloat(calculate.conversion(graphpointtran).prevalcappercentage);
+                    if (percentdiscount < parseFloat($scope.fromtran.discount)) {
+                        percentdiscount = parseFloat($scope.fromtran.discount);
+                    }
+                    $scope.graphdata.push({x:increasing, y:percentdiscount});
+                }
+
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
             }

@@ -45,31 +45,11 @@
                             <span>Investment Amount</span>
                             <input ng-change="conversion()" ng-model="convertTran.amountsold">
                         </li>
-                        <li>
-                            <span>To Issue Premoney valuation</span>
-                            <input ng-change="conversion()" ng-model="convertTran.toissue.premoney">
-                        </li>
-                        <li>
-                            <span>To Issue Postmoney valuation</span>
-                            <input ng-change="conversion()" ng-model="convertTran.toissue.postmoney">
-                        </li>
                     </ul>
                 </div>
+
                 <div>
-                    <ul>
-                        <li>
-                            <span>Converted Units</span>
-                            {{convertTran.newtran.units}}
-                        </li>
-                        <li>
-                            <span>Price per unit</span>
-                            {{convertTran.newtran.ppshare}}
-                        </li>
-                        <li>
-                            <span>% Discount</span>
-                            {{convertTran.newtran.valcappercentage}}
-                        </li>
-                    </ul>
+                    <linechart data="graphdata" options="options" mode=""></linechart>
                 </div>
             </div>
         </div>
