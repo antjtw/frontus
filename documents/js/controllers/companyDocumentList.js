@@ -699,11 +699,6 @@ app.controller('CompanyDocumentListController',
                 }
             };
             
-            $scope.exportOtDcallback = function(doc){
-                console.log("callback");
-                $scope.exportOriginalToDropbox(doc);
-            };
-            
             $scope.startOauth = function(svc, doc) {
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
@@ -715,7 +710,7 @@ app.controller('CompanyDocumentListController',
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        $scope.exportOtDcallback(doc);
+                        $scope.modals.exportOriginalToDropbox(doc);
                     };
                     window.open(x);
                     console.log(x);
