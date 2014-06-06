@@ -1,7 +1,4 @@
 <div>
-<!-- 
-    <div ng-class="for-r0ml">{{recipients.length}}</div> -->
-
     <div class="sidebarHeader">
         <span>SEND MESSAGE</span>
     </div>
@@ -60,20 +57,19 @@
         </div>
         </div>
      
-    </div>
-
-   
-</div>
-
-<div modal="previewModal" close="previewModalClose()" options="narrowopts">
-    <div class="modalHeader">To
+    </div>  
+    <div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
+    To
         <span><div ng-repeat="recipient in recipients"></span>
         {{recipient}}
-    </div>
-    <div class="modalHeader">Subject</div>
+ 
+    Subject
         {{subject}}
-    <div class="modalHeader">Text</div>
+    Text
         {{messagetext}}
+    </div>
+ 
 </div>
+
 
 
