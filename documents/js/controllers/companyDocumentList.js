@@ -681,25 +681,22 @@ app.controller('CompanyDocumentListController',
             };
             
             $scope.startOauth = function(svc) {
-                var resp = oauth.start_oauth(svc, navState);
-                console.log(resp);
-                var x = resp.value;
-                if (resp.success)
-                {
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
+                    return;
+                post.success(function(x) {
                     document.domain = "sharewave.com";
-                    window.oauthSuccessCallback = function (){
+                    window.oauthSuccessCallback = function(x){
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                     };
                     window.open(x);
                     console.log(x);
-                }
-                else
-                {
+                }).error(function(x) {
                     console.log(x);
                     $scope.response = x;
-                }
+                });
             };
 
             $scope.reallyDeleteDoc = function(doc) {
