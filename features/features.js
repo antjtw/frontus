@@ -34,6 +34,15 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
 app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
     function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
 
+        $('input.money').keyup(function(event){
+            if(event.which >= 37 && event.which <= 40){
+                event.preventDefault();
+            }
+            var $this = $(this);
+            var num = $this.val().replace(/\D/g,'');
+            $this.val(num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        });
+
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
         };
@@ -51,7 +60,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":4000000,"lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":20,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.intervals = 10;
+        $scope.intervals = 50;
         $scope.conversion = function() {
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
