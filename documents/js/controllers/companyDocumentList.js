@@ -681,8 +681,6 @@ app.controller('CompanyDocumentListController',
                 $scope.exportLinkDropboxModal = false;
             };
             
-            $scope.exportToDropbox = {};
-            
             $scope.modals.exportOriginalToDropbox = function(doc) {
                 if ($rootScope.access_token)
                 {
@@ -694,7 +692,6 @@ app.controller('CompanyDocumentListController',
                 }
                 else 
                 {
-                    console.log("Link Dropbox");
                     $scope.modals.exportLinkDropboxOpen(doc);
                 }
             };
@@ -706,14 +703,12 @@ app.controller('CompanyDocumentListController',
                 post.success(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
-                        console.log("success");
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                         $scope.modals.exportOriginalToDropbox(doc);
                     };
                     window.open(x);
-                    console.log(x);
                 }).error(function(x) {
                     console.log(x);
                     $scope.response = x;
