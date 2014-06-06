@@ -682,6 +682,7 @@ app.controller('CompanyDocumentListController',
             
             $scope.startOauth = function(svc) {
                 var resp = oauth.start_oauth(svc, navState);
+                console.log(resp);
                 var x = resp.value;
                 if (resp.success)
                 {

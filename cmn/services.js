@@ -18,13 +18,16 @@ service.service('oauth', function($http) {
     
     s.start_oauth = function(svc, navState)
     {
+        var ret = {};
         console.log("service");
         if (!(navState.userid && navState.company && navState.role)) {
             alert("User role not selected.");
             $scope.response = "User role not selected.";
-            return;
+            ret.success = false;
+            ret.value = "User role not selected.";
+            return ret;
         }
-        var ret = {};
+        console.log("User role defined.");
         $http.post('/cgi/suDbProc.py', {
             'proc': 'oauth.request_authorization',
             'service': svc,
