@@ -346,11 +346,10 @@ navm.controller('NavCtrl',
         });
 
         $rootScope.$on('dblog:updated', function(event, message) {
-            // TODO is there a better way to aggregate these?
-            if (logService.log.length >= 5) {
-                SWBrijj.logAccess(JSON.stringify(logService.log));
-                logService.clearLog();
-            }
+            angular.forEach(logService.log, function(item) {
+                analytics.track(item.args, {label: navState.userid, value: item.time, category: 'dblatency'});
+            });
+            logService.clearLog();
         });
 
         $scope.notiFn = function(color, message, callback) {
