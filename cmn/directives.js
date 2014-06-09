@@ -134,7 +134,6 @@ m.directive('composeMessage', function() {
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
-                    console.log($scope.msg.subject)
 
                 }
                 else {
@@ -144,10 +143,10 @@ m.directive('composeMessage', function() {
 
             $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
-                console.log("modal to open");
                 $scope.subject = msg.subject;
                 $scope.messagetext = msg.text;
                 $scope.sender = $rootScope.person.name
+                $scope.company = $rootScope.navState.name
                 console.log($scope.messagetext);
             };
 
