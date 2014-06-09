@@ -8,13 +8,9 @@ app.directive('d3Discount', ['d3', function(d3) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var margin = {top: 20, right: 50, bottom: 50, left: 100},
+            var margin = {top: 20, right: 150, bottom: 50, left: 50},
                 width = 700 - margin.left - margin.right,
                 height = 350 - margin.top - margin.bottom;
-
-            var line = d3.svg.line()
-                .x(function(d) { return x(d[1]);})
-                .y(function(d) { return y(d[0]); });
 
             var svg = d3.select(iElement[0])
                 .append("svg")
@@ -27,6 +23,8 @@ app.directive('d3Discount', ['d3', function(d3) {
                 .append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
+
+            var bisectX = d3.bisector(function(d) { return d.x; }).left
 
 
             scope.$watch('data', function(newVals, oldVals) {
@@ -41,6 +39,7 @@ app.directive('d3Discount', ['d3', function(d3) {
                 svg.selectAll('g').remove();
                 svg.selectAll('circle').remove();
                 svg.selectAll('text').remove();
+                svg.selectAll('rect').remove();
 
                 var color = d3.scale.category10();
                 var maxy = 0;
@@ -53,6 +52,10 @@ app.directive('d3Discount', ['d3', function(d3) {
                 });
                 var y = d3.scale.linear().domain([0, maxy]).range([height, 0]);
                 var x = d3.scale.linear().domain([minx, maxx]).range([0, width]);
+
+                var line = d3.svg.line()
+                    .x(function(d) { return x(d[1]);})
+                    .y(function(d) { return y(d[0]); });
 
 
                 var xAxis = d3.svg.axis()
@@ -89,7 +92,9 @@ app.directive('d3Discount', ['d3', function(d3) {
                 var points = [];
                 var i = 0;
                 angular.forEach(data, function(point) {
-                    points.push([point.y, point.x]);
+                    if (!isNaN(parseFloat(point.y)) && !isNaN(parseFloat(point.x))) {
+                        points.push([point.y, point.x]);
+                    }
                     i++;
                 });
                 var linecolour = color(points);
@@ -109,7 +114,7 @@ app.directive('d3Discount', ['d3', function(d3) {
                         .attr("cy", function(d) {
                             return y(point[0]);
                         })
-                        .attr("r", 3)
+                        .attr("r", 0.1)
                         .on("mouseover", function(d) {
                             div.transition()
                                 .duration(200)
@@ -127,13 +132,73 @@ app.directive('d3Discount', ['d3', function(d3) {
                         .style("fill", "white");
                 });
 
+                var focus = svg.append("g")
+                    .attr("class", "focus")
+                    .style("display", "none");
+
+                focus.append("circle")
+                    .attr("r", 4.5);
+
+                focus.append("text")
+                    .attr("x", 9)
+                    .attr("dy", ".35em");
+
+                var headline = svg.append("g")
+                    .attr("class", "headline")
+                    .style("display", "none");
+
+                headline.append("text")
+                    .attr("x", 9)
+                    .attr("dy", ".35em");
+
+                var percentage = svg.append("g")
+                    .attr("class", "headline")
+                    .style("display", "none");
+
+                percentage.append("text")
+                    .attr("x", 9)
+                    .attr("dy", ".35em");
+
+
+                svg.append("rect")
+                    .attr("class", "overlay")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .on("mouseover", function() {
+                        focus.style("display", null);
+                        headline.style("display", null);
+                        percentage.style("display", null);
+                    })
+                    .on("mouseout", function() {
+                        focus.style("display", "none");
+                        headline.style("display", "none");
+                        percentage.style("display", "none");
+                    })
+                    .on("mousemove", mousemove);
+
+                function mousemove() {
+                    var x0 = x.invert(d3.mouse(this)[0]),
+                        i = bisectX(data, x0, 1),
+                        d0 = data[i - 1],
+                        d1 = data[i],
+                        d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+                    focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+                    focus.select("text").text(d.y);
+
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String(parseFloat(height)/2) + ")");
+                    headline.select("text").text(d.headline);
+
+                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String((parseFloat(height)/2) + 50) + ")");
+                    percentage.select("text").text(d.percentage);
+                }
+
 
                 svg.append("text")
                     .attr("class", "x label")
                     .attr("text-anchor", "middle")
                     .attr("x", width/2)
                     .attr("y", height + 40)
-                    .text("Exit Price");
+                    .text("Investment amount");
 
                 svg.append("text")
                     .attr("class", "y label")
@@ -142,7 +207,7 @@ app.directive('d3Discount', ['d3', function(d3) {
                     .attr("x",0 - (height / 2))
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
-                    .text("Returns for Party");
+                    .text("Percentage Discount");
 
             };
         }

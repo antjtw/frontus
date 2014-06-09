@@ -47,24 +47,10 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $location.url("/features/" + link);
         };
 
-        $scope.options = {
-            axes: {
-                x: {key: 'x', labelFunction: function(value) {return value;}, type: 'linear', tooltipFormatter: function(x) {return x;}},
-                y: {type: 'linear'}
-            },
-            series: [
-                {y: 'y', type: 'line', label: 'Percentage Discount'},
-            ],
-            lineMode: 'linear'
-        };
-
         $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"50,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
         $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount};
-        $scope.intervals = 100;
-
-
-
+        $scope.intervals = 200;
 
         $scope.conversion = function() {
             //Clear out commas and assign to the correct transaction fields;
@@ -94,6 +80,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
                 increasing -= interval;
 
+                if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
+                    $scope.postmoney = parseFloat($scope.convertTran.amountsold) / (parseFloat($scope.convertTran.percentsold)/100);
+                    $scope.premoney = $scope.postmoney - parseFloat($scope.convertTran.amountsold);
+                }
+
 
                 for (var i = 0; i <= $scope.intervals; i++) {
                     increasing += interval;
@@ -103,11 +94,17 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                         graphpointtran.toissue.postmoney = parseFloat(graphpointtran.amountsold) / (parseFloat(graphpointtran.percentsold)/100);
                         graphpointtran.toissue.premoney = graphpointtran.toissue.postmoney - parseFloat(graphpointtran.amountsold);
                     }
-                    var percentdiscount = parseFloat(calculate.conversion(graphpointtran).prevalcappercentage);
+                    var convertedpoint = calculate.conversion(graphpointtran);
+                    var percentdiscount = parseFloat(convertedpoint.prevalcappercentage);
                     if (percentdiscount < parseFloat($scope.fromtran.discount)) {
                         percentdiscount = parseFloat($scope.fromtran.discount);
                     }
-                    $scope.graphdata.push({x:increasing, y:percentdiscount});
+                    var convalue = convertedpoint.units;
+                    var fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
+                    var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ graphpointtran.toissue.postmoney);
+                    var ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage);
+                    var topline = ownership * graphpointtran.toissue.postmoney;
+                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, percentage: ownership*100});
                 }
 
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);

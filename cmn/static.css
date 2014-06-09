@@ -497,6 +497,16 @@ address {
     margin-left: -40px;
 }
 
+.features .discount-chart .overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.features .discount-chart .focus circle {
+    fill: none;
+    stroke: steelblue;
+}
+
 
 @media (min-width: 1000px) {
     .feature-block .screen {

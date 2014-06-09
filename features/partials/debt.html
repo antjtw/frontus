@@ -45,11 +45,15 @@
                             <span>Investment Amount</span>
                             <input class="money" ng-change="conversion()" ng-model="fields.convertTranamountsold">
                         </li>
+                        <li>
+                            <span>Pre-money</span>
+                            <input class="money" ng-change="conversion()" ng-model="premoney">
+                        </li>
                     </ul>
                 </div>
 
                 <div>
-                    <d3-discount data="graphdata"></d3-discount>
+                    <d3-discount class="discount-chart" data="graphdata"></d3-discount>
                 </div>
             </div>
         </div>
