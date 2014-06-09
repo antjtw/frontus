@@ -422,6 +422,46 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.linkDropboxModal {
+    width: 360px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.span.linkDropboxModalSpan {
+    margin-left: 15px;
+}
+
+.span.linkDropboxModalSpan.smaller {
+    margin-top: 12px;
+    width: 300px;
+    padding-left: 75px;
+}
+
+.span.linkDropboxModalSpan.larger {
+    width: 400px;
+}
+
+.modalText.linkDropboxModalText {
+    width: 300px;
+    margin-bottom: 5px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+}
+
+.modalText.linkDropboxModalText.header {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+
+.modalText.linkDropboxModalText.header.greenLabel {
+    color: #1ABC96;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
 .modalText.deleteDocModal.retractModal {
     margin-bottom: 50px;
 }
@@ -653,7 +693,6 @@ textarea.email-text {
     margin-left: 0;
     width: 350px;
     border-left: 6px solid white;
-    padding-top: 14px;
     padding-left: 20px;
     padding-right: 40px;
 }
@@ -1391,7 +1430,7 @@ doc-viewer > .modal-backdrop {
     box-shadow: none;
 }
 
-.docViewerTitle div.small-standard-button {
+.docViewerTitle div.standard-button {
     padding-top: 14px;
     padding-right: 20px;
 }
@@ -1798,8 +1837,8 @@ doc-viewer > .modal-backdrop {
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
     color: #FFFFFF;
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .sticky-menu ul.required-row > li {

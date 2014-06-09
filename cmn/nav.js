@@ -77,12 +77,12 @@ navm.directive('notifications', function() {
                 if (name.length > 20){
                     return name;
                 }
-                    
+
                 else{
                     return null;
-                }        
+                }
             };
-                
+
 
 
         }]
@@ -431,7 +431,6 @@ navm.controller('NavCtrl',
 
         $scope.verifyPayment = function(status, response) {
             if (response.error) {
-                console.log(response);
                 $scope.$emit("notification:fail",
                              "Invalid credit card. Please try again.");
             } else {
@@ -475,14 +474,23 @@ navm.controller('NavCtrl',
 
         $scope.notifications = function() {
             if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                _kmq.push(['identify', $rootScope.navState.userid]);
+                //_kmq.push(['identify', $rootScope.navState.company]);
             }
             if ($rootScope.navState.role == "issuer") {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    Intercom('boot', {email:$rootScope.navState.userid, user_hash: $rootScope.navState.userhash,  app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa", company:{id: $rootScope.navState.company, name: $rootScope.navState.name}});
-                    _kmq.push(['set', {'role':'issuer', 'company':$rootScope.navState.name}]);
-                    analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
+                    Intercom('boot', {email:$rootScope.navState.userid,
+                                      user_hash: $rootScope.navState.userhash,
+                                      app_id: "e89819d5ace278b2b2a340887135fa7bb33c4aaa",
+                                      company: {id: $rootScope.navState.company,
+                                                name: $rootScope.navState.name}
+                                      }
+                    );
+                 //   _kmq.push(['set', {'role':'issuer', 'companyName':$rootScope.navState.name, 'emailId':$rootScope.navState.userid}]);
+                    //analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "issuer"});
                 }
+                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
+                                                                        "emailId": $rootScope.navState.userid,
+                                                                        "role":"issuer"});
 
                 // Get Notifications for docs
                 SWBrijj.tblm('document.action_library').then(function (x) {
@@ -493,12 +501,15 @@ navm.controller('NavCtrl',
                     $scope.notes = $scope.actionablenotes($scope.notes, navState.role);
                 });
             }
-            
+
             else {
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == "sharewave.com") {
-                    _kmq.push(['set', {'role':'shareholder', 'company':$rootScope.navState.name}]);
+                   // _kmq.push(['set', {'role':'shareholder', 'companyName':$rootScope.navState.name, 'emailId': $rootScope.navState.userid}]);
                     analytics.identify($rootScope.navState.userid, {"company" : $rootScope.navState.company,"companyName" : $rootScope.navState.name , "role" : "shareholder"});
                 }
+                window.analytics.identify($rootScope.navState.company, {"companyName": $rootScope.navState.name,
+                                                                        "emailId": $rootScope.navState.userid,
+                                                                        "role":"shareholder"});
                 SWBrijj.tblm('document.investor_action_library').then(function (x) {
                     $scope.notes = x;
                     angular.forEach($scope.notes, function(note) {
@@ -627,7 +638,7 @@ navm.controller('NavCtrl',
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
-                            console.log(x);
+                            $rootScope.billingLoaded = true;
                         }
                     });
                 } else {
@@ -664,7 +675,6 @@ navm.controller('NavCtrl',
                         $scope.load_upcoming_invoice();
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };
@@ -678,7 +688,6 @@ navm.controller('NavCtrl',
                         $rootScope.billing.next_invoice_received = true;
                     }
                 } else {
-                    console.log(x);
                 }
             });
         };
@@ -722,35 +731,35 @@ navm.controller('NavCtrl',
                 return null;
             }
         };
+        SWBrijj.procm('oauth.token_num').then(function(data) {
+            $rootScope.access_token = data[0]['token_num'];
+        });
 
         //I don't love this but it works, should probably make a directive.
-        if ($rootScope.companyIsZombie()) {
-            $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-        } else {
-            $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-            $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
-        }
-        $rootScope.$on('billingLoaded', function() {
-            if ($rootScope.companyIsZombie()) {
-                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
-            } else {
-                $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
-                $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+
+        $rootScope.$watch('billingLoaded', function() {
+            if ($scope.billingLoaded == true) {
+                $scope.windowheight = $window.innerHeight;
             }
         });
+
         window.onresize = function() {
+            $scope.windowheight = $window.innerHeight;
+            $scope.$apply();
+        };
+
+        $scope.$watch('windowheight', function() {
             if ($rootScope.companyIsZombie()) {
                 $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 191) + "px", 'overflow-y': 'auto'};
             } else {
                 $scope.viewportheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 40) + "px", 'overflow-y': 'auto'};
+                $scope.viewportactivity = {'height': String($window.innerHeight - 141) + "px", 'overflow-y': 'auto'};
             }
-            $scope.$apply();
-        };
-        
+        });
+
     }
 ]);
 
@@ -785,7 +794,7 @@ navm.filter('notifications', function () {
         var url = "";
         if (note.signature_status == -1) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "View <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
@@ -794,23 +803,23 @@ navm.filter('notifications', function () {
             else {
                 url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 2) {
             url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
-            return "Review and sign <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
             url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
-            return "Review and Finalize <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
         else if (note.signature_status == 5 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "Review and void <a href=" + url + ">" + caplength(document, 20) + "</a>"
+            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
         }
     };
 });
