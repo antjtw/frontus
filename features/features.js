@@ -1,5 +1,5 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
-    'ownerDirectives', 'ownerServices', '$strap.directives', 'n3-line-chart'], function($routeProvider, $locationProvider){
+    'ownerDirectives', 'ownerServices', '$strap.directives'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
