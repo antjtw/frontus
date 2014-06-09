@@ -292,8 +292,17 @@ app.controller('CompanyDocumentListController',
 
             // Document Upload pieces
             // Modal Up and Down Functions
-
+            
             $scope.modals.documentUploadOpen = function() {
+                $scope.files = [];
+                $scope.documentUploadModal = true;
+            };
+
+            $scope.modals.documentUploadClose = function() {
+                $scope.documentUploadModal = false;
+            };
+
+            /*$scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
                 $scope.showProgress = false;
                 $scope.showProcessing = false;
@@ -305,7 +314,7 @@ app.controller('CompanyDocumentListController',
                 $scope.showProcessing = false;
                 $rootScope.errorMessage = '';
                 $scope.documentUploadModal = false;
-            };
+            };*/
 
             $scope.wideopts = {
                 backdropFade: true,
@@ -316,6 +325,11 @@ app.controller('CompanyDocumentListController',
                 backdropFade: true,
                 dialogFade: true,
                 dialogClass: 'evenWiderModal modal'
+            };
+            $scope.doubleopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'twoPieceModal modal'
             };
             $scope.opts = {
                 backdropFade: true,
@@ -361,6 +375,8 @@ app.controller('CompanyDocumentListController',
                     }
                     $scope.$apply();
                 }
+                $scope.uploadFile($scope.files);
+                $scope.modals.documentUploadClose();
             };
 
             $scope.checkReady = function() {
