@@ -681,11 +681,13 @@ app.controller('CompanyDocumentListController',
                 $scope.exportLinkDropboxModal = false;
             };
             
-            $scope.modals.exportOriginalToDropbox = function(doc) {
+            $scope.modals.exportToDropbox = function(doc, role) {
+                console.log(role);
                 if ($rootScope.access_token)
                 {
-                    SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
+                    SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, role).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                        console.log(x);
                     }).except(function(x) {
                         $scope.response = x;
                     });
@@ -693,6 +695,7 @@ app.controller('CompanyDocumentListController',
                 else 
                 {
                     $scope.modals.exportLinkDropboxOpen(doc);
+                    $scope.roleForModal = role;
                 }
             };
             
@@ -706,7 +709,7 @@ app.controller('CompanyDocumentListController',
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        $scope.modals.exportOriginalToDropbox(doc);
+                        $scope.modals.exportOriginalToDropbox(doc, role);
                     };
                     window.open(x);
                 }).error(function(x) {
