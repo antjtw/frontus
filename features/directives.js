@@ -12,6 +12,10 @@ app.directive('d3Discount', ['d3', function(d3) {
                 width = 700 - margin.left - margin.right,
                 height = 350 - margin.top - margin.bottom;
 
+            var line = d3.svg.line()
+                .x(function(d) { return x(d[1]);})
+                .y(function(d) { return y(d[0]); });
+
             var svg = d3.select(iElement[0])
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
