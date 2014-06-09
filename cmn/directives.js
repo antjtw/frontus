@@ -99,11 +99,10 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace(/\n/g, "<br />");
+                var newtext = msg.text.replace(/\n/g, "<br/>");
+                console.log(newtext)
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
-                console.log(recipients)
-             
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -135,6 +134,7 @@ m.directive('composeMessage', function() {
                     || msg.text==="") {
                     return false;
 
+
                 }
                 else {
                     return true;
@@ -142,11 +142,15 @@ m.directive('composeMessage', function() {
             };
 
             $scope.previewModalOpen = function(msg) {
+                console.log(msg)
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                $scope.messagetext = msg.text;
-                $scope.sender = $rootScope.person.name
-                $scope.company = $rootScope.navState.name
+                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
+                // var re = /<br *\/?>/gi;
+                // $scope.messagetext = message.replace(re, '\n')
+                $scope.messagetext=msg.text
+                $scope.sender = $rootScope.person.name;
+                $scope.company = $rootScope.navState.name;
                 console.log($scope.messagetext);
             };
 

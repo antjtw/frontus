@@ -4372,8 +4372,9 @@ div.upgradeWarning > span {
     overflow-x: scroll;*/
     min-height: 300px;
     max-height: 500px;
-    overflow-y: scroll;
+    overflow-y: auto;
     min-width: 600px;
+    left: 40%;
 }
 
 
