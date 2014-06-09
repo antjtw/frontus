@@ -147,6 +147,7 @@ m.directive('composeMessage', function() {
                 console.log("modal to open");
                 $scope.subject = msg.subject;
                 $scope.messagetext = msg.text;
+                $scope.sender = $rootScope.person.name
                 console.log($scope.messagetext);
             };
 
