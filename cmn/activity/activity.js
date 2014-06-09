@@ -45,6 +45,7 @@ active.directive('activityFeed', function() {
             }
             $scope.load = function() {
                 $scope.loading = true;
+                console.log($scope.view);
                 if ($scope.filter == null) {
                     SWBrijj.tblmlimit($scope.view, quantity, $scope.iteration * quantity).then(processFeed);
                 } else {
