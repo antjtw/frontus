@@ -58,10 +58,24 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             lineMode: 'linear'
         };
 
-        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":50000.0,"debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":4000000,"lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":20,"postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"50,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.intervals = 50;
+        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount};
+        $scope.intervals = 100;
+
+
+
+
         $scope.conversion = function() {
+            //Clear out commas and assign to the correct transaction fields;
+            $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/\D/g,''));
+            $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/\D/g,''));
+            $scope.fromtran.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/\D/g,''));
+            $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/\D/g,''));
+            $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/\D/g,''));
+
+            //Hard code the valuation type of conversion for now.
+            //TODO implement price per share conversion.
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
                 //Empty Graph data

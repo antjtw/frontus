@@ -27,27 +27,23 @@
                     <ul>
                         <li>
                             <span>Amount</span>
-                            <input class="money" ng-change="conversion()" ng-model="fromtran.amount">
+                            <input class="money" ng-change="conversion()" ng-model="fields.fromtranamount">
                         </li>
                         <li>
                             <span>Valuation Cap</span>
-                            <input class="money" ng-change="conversion()" ng-model="fromtran.valcap">
+                            <input class="money" ng-change="conversion()" ng-model="fields.fromtranvalcap">
                         </li>
                         <li>
                             <span>Discount (%)</span>
-                            <input ng-change="conversion()" ng-model="fromtran.discount">
+                            <input ng-change="conversion()" ng-model="fields.fromtrandiscount">
                         </li>
                         <li>
                             <span>Percentage Sold</span>
-                            <input ng-change="conversion()" ng-model="convertTran.percentsold">
+                            <input ng-change="conversion()" ng-model="fields.convertTranpercentsold">
                         </li>
                         <li>
                             <span>Investment Amount</span>
-                            <input class="money" ng-change="conversion()" ng-model="convertTran.amountsold">
-                        </li>
-                        <li>
-                            <span>Investment Amount</span>
-                            <input class="money" ng-model="amount">
+                            <input class="money" ng-change="conversion()" ng-model="fields.convertTranamountsold">
                         </li>
                     </ul>
                 </div>
