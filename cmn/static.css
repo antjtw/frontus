@@ -532,9 +532,21 @@ address {
     fill: none;
 }
 
-.features .discount-chart .ticks.y {
+.features .discount-chart .ticks {
     stroke: lightgrey;
     opacity: 0.7;
+}
+
+.features .discount-chart .ticks.y .tick:first-child {
+    display: none;
+}
+
+.features .discount-chart .y.axis > .tick:first-child {
+    display: none;
+}
+
+.features .discount-chart .ticks .domain {
+    opacity: 0;
 }
 
 .features .discount-chart .overlay {
@@ -543,8 +555,18 @@ address {
 }
 
 .features .discount-chart .focus circle {
-    fill: none;
-    stroke: steelblue;
+    fill: white;
+    stroke: #00c399;
+    stroke-width: 3;
+}
+
+.features .discount-chart .label {
+    fill: #C6C6C6;
+    /* stroke: none; */
+    font-weight: normal;
+    font-size: 12px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    text-shadow: none;
 }
 
 

@@ -8,9 +8,9 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
         },
         link: function(scope, iElement, iAttrs) {
 
-            var margin = {top: 20, right: 150, bottom: 50, left: 50},
-                width = 700 - margin.left - margin.right,
-                height = 350 - margin.top - margin.bottom;
+            var margin = {top: 60, right: 200, bottom: 90, left: 80},
+                width = 763 - margin.left - margin.right,
+                height = 425 - margin.top - margin.bottom;
 
             var svg = d3.select(iElement[0])
                 .append("svg")
@@ -67,6 +67,12 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .ticks(5)
                     .orient("bottom");
 
+                var xTicks = d3.svg.axis()
+                    .scale(x)
+                    .ticks(5)
+                    .tickSize(height)
+                    .orient("bottom");
+
                 var yTicks = d3.svg.axis()
                     .scale(y)
                     .tickSize(width)
@@ -93,6 +99,14 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 gy.selectAll("text")
                     .attr("display", "none");
 
+                var gx = svg.append("g")
+                    .attr("class", "x ticks")
+                    .call(xTicks)
+                    .style("fill", "transparent");
+
+                gx.selectAll("text")
+                    .attr("display", "none");
+
                 var points = [];
                 var i = 0;
                 angular.forEach(data, function(point) {
@@ -101,12 +115,12 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     }
                     i++;
                 });
-                var linecolour = color(points);
+                var linecolour = "#00c399";
 
                 svg.append("path")
                     .attr("d", line(points))
                     .style("stroke", linecolour)
-                    .style("stroke-width", 1)
+                    .style("stroke-width", 3)
                     .style("fill", "transparent");
 
                 angular.forEach(points, function(point) {
@@ -141,7 +155,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .style("display", "none");
 
                 focus.append("circle")
-                    .attr("r", 4.5);
+                    .attr("r", 5);
 
                 focus.append("text")
                     .attr("x", 9)
@@ -174,9 +188,6 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         percentage.style("display", null);
                     })
                     .on("mouseout", function() {
-                        focus.style("display", "none");
-                        headline.style("display", "none");
-                        percentage.style("display", "none");
                     })
                     .on("mousemove", mousemove);
 
@@ -201,13 +212,13 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("class", "x label")
                     .attr("text-anchor", "middle")
                     .attr("x", width/2)
-                    .attr("y", height + 40)
+                    .attr("y", height + 60)
                     .text("Investment amount");
 
                 svg.append("text")
                     .attr("class", "y label")
                     .attr("transform", "rotate(-90)")
-                    .attr("y", -margin.left)
+                    .attr("y", (20-margin.left))
                     .attr("x",0 - (height / 2))
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
