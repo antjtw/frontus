@@ -532,6 +532,11 @@ address {
     fill: none;
 }
 
+.features .discount-chart .ticks.y {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+
 .features .discount-chart .overlay {
     fill: none;
     pointer-events: all;
