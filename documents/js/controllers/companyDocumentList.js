@@ -117,76 +117,8 @@ app.controller('CompanyDocumentListController',
                     $scope.saveShareState();
                 }
             };
-            function mergeSmartIntoDumb(smarttemplates) {
-                var smartdocs = [];
-                var prepared = null;
-                // need company name and state to prep the Investor Suitability Questionnaire
-                SWBrijj.tblm('account.my_company', ['name', 'state']
-                    ).then(function(data) {
-                        if (data[0].name && data[0].state && data[0].state!=="  ") {
-                            prepared=true;
-                        }
-                        angular.forEach($scope.documents, function(doc) {
-                            if (doc.template_id) {
-                                smartdocs.push(doc.template_id);
-                                doc.is_prepared = prepared;
-                            }
-                        });
-                        angular.forEach(smarttemplates, function(smart) {
-                            if (smartdocs.indexOf(smart.template_id) === -1) {
-                                $scope.documents.push({
-                                    "docname": smart.template_name,
-                                    "uploaded_by": null,
-                                    "company": null,
-                                    "doc_id": null,
-                                    "template_id": smart.template_id,
-                                    "last_updated": null,
-                                    "annotations": null,
-                                    "versions": null,
-                                    "is_prepared": prepared,
-                                    "version_count": 0,
-                                    "complete_count": 0,
-                                    "archive_count": 0,
-                                    "archive_complete_count": 0,
-                                    "type": "doc",
-                                    "last_event_time": null,
-                                });
-                            }
-                        });
-                    });
 
-            }
-
-            function loadSmartDocuments() {
-                SWBrijj.tblm('smartdoc.document').then(function(data) {
-                    mergeSmartIntoDumb(data);
-                }).except(function(x) {
-                });
-            }
-
-            function loadDocuments() {
-                // TODO: page w/ infinite scroll
-                // order is alpha right now
-                // need # versions total, archived, and completed for later calculations
-                // will need to calculate statusRatio for sorting (can be alpha, statusRatio, or tags)
-                // will need to merge list of documents received into current list
-                SWBrijj.tblm('document.my_company_library_view_list').then(function(data) {
-                    $scope.documents = data;
-                    angular.forEach($scope.documents, function(d) {
-                        if (d.tags !== null) {
-                            d.tags = JSON.parse(d.tags);
-                        }
-                        d.type = "doc";
-                        d.statusRatio = d.status_ratio;
-                    });
-                    loadSmartDocuments();
-                    initShareState();
-                });
-            }
-            // loadDocuments is now replaced by loadDocs (called by infinite scroll
-            // TODO: load and merge smartDocs with known state of the world
-            // TODO: fix initShareState
-            //loadDocuments();
+            // TODO: initShareState();
             loadTags();
 
             function initShareState() {
@@ -978,5 +910,34 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('state.query', stateChangeTrigger);
             $scope.$watch('state.maxRatio', stateChangeTrigger);
             $scope.$watch('state.show_archived', stateChangeTrigger);
+
+            // Smart docs
+            SWBrijj.tblm('smartdoc.document_view').then(function(data) {
+                angular.forEach(data, function(template) {
+                    var doc = {
+                        "docname": template.template_name,
+                        "uploaded_by": null,
+                        "company": null,
+                        "doc_id": null,
+                        "template_id": template.template_id,
+                        "last_updated": null,
+                        "annotations": null,
+                        "versions": null,
+                        "is_prepared": template.is_prepared,
+                        "version_count": 0,
+                        "complete_count": 0,
+                        "archive_count": 0,
+                        "archive_complete_count": 0,
+                        "type": "doc",
+                        "last_event_time": null,
+                    };
+                    // add to each list of documents
+                    loadState.document.docname.forwardList.push(doc);
+                    loadState.document.docname.reverseList.push(doc);
+                    loadState.document.statusRatio.forwardList.push(doc);
+                    loadState.document.statusRatio.reverseList.push(doc);
+                });
+            }).except(function(x) {
+            });
         }
     ]);
