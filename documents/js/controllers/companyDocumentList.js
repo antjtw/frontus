@@ -725,7 +725,8 @@ app.controller('CompanyDocumentListController',
                         $rootScope.access_token = 1;
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        $scope.modals.exportOriginalToDropbox(doc, role);
+                        if (doc != null)
+                            $scope.modals.exportOriginalToDropbox(doc, $scope.roleForModal);
                     };
                     window.open(x);
                 }).error(function(x) {
