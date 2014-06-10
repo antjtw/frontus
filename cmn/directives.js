@@ -99,10 +99,9 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace(/\n/g, "<br />");
+                var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
-             
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
                               category,
@@ -137,13 +136,34 @@ m.directive('composeMessage', function() {
                 else {
                     return true;
                 }
+            };
 
-                // angular.forEach(msg.recipients, function(e) {
-                //     if ($scope.investors.indexOf(e) === -1) {
-                //         anybad = true;
-                //     }
-                // });
-                // return !anybad;
+            $scope.readyToPreview = function(msg){
+                var text = msg.text
+                if(text ===""){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+
+          
+
+            $scope.previewModalOpen = function(msg) {
+                $scope.previewModal = true;
+                $scope.subject = msg.subject;
+                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
+                // var re = /<br *\/?>/gi;
+                // $scope.messagetext = message.replace(re, '\n')
+                $scope.messagetext=msg.text
+                $scope.sendername = $rootScope.person.name;
+                $scope.company = $rootScope.navState.name;
+                console.log($scope.messagetext);
+            };
+
+            $scope.previewModalClose = function(){
+                $scope.previewModal = false
             };
 
         }]
