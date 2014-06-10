@@ -177,7 +177,7 @@ app.controller('CompanyDocumentListController',
                             d.tags = JSON.parse(d.tags);
                         }
                         d.type = "doc";
-                        d.statusRatio = docStatusRatio(d);
+                        d.statusRatio = d.status_ratio;
                     });
                     loadSmartDocuments();
                     initShareState();
@@ -454,22 +454,6 @@ app.controller('CompanyDocumentListController',
             $scope.momentFromNow = function(date, zerodate) {
                 return moment(date).from(zerodate);
             };
-
-            function docStatusRatio(doc) {
-                if (doc.version_count === 0) {
-                    // This ensure documents with no versions appear before completed documents.
-                    // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-                    return 0;
-                }
-                // 0 / x == 0, so bump up the complete number a bit so that the 0 completes can be ordered as well
-                var complete = ((doc.complete_count === 0) ? 0.001 : doc.complete_count);
-                var initRatio = (complete / doc.version_count);
-                if (initRatio == 1) {
-                    // all completed
-                    initRatio += doc.version_count;
-                }
-                return initRatio;
-            }
 
             // TODO is it necessary to wrap with new functions?
             $scope.isCompleteSigned = function(version) {
@@ -858,7 +842,7 @@ app.controller('CompanyDocumentListController',
                     "statusRatio": {
                         iteration: 0,
                         fullyLoaded: false,
-                        orderKey: "docname", // TODO: fix
+                        orderKey: "status_ratio",
                     },
                 },
                 "name": {
@@ -870,12 +854,12 @@ app.controller('CompanyDocumentListController',
                     "(name || email)": {
                         iteration: 0,
                         fullyLoaded: false,
-                        orderKey: "display_name"
+                        orderKey: "display_name",
                     },
                     "statusRatio": {
                         iteration: 0,
                         fullyLoaded: false,
-                        orderKey: "display_name"
+                        orderKey: "status_ratio",
                     },
                 },
             };
@@ -886,6 +870,7 @@ app.controller('CompanyDocumentListController',
                 // TODO: handle '-' in docOrder and investorOrder
                 var loopState = typeVars[($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder)];
                 if (loopState.fullyLoaded) {
+                    $scope.loadingDocs = false;
                     return;
                 }
                 SWBrijj.tblmlimitorder(typeVars.view, loadState.quantity, loadState.quantity * loopState.iteration, loopState.orderKey).then(function(data) {
@@ -900,7 +885,7 @@ app.controller('CompanyDocumentListController',
                             s.tags = JSON.parse(s.tags);
                         }
                         s.type = typeVars.type;
-                        s.statusRatio = docStatusRatio(s);
+                        s.statusRatio = s.status_ratio;
 
                         // check for existing item in typeVars.list and update instead of duplicating
                         if (!typeVars.list.some(function(val, idx, arr) {
@@ -918,7 +903,6 @@ app.controller('CompanyDocumentListController',
                 });
             };
             // fire loaddocs whenever the sort order or viewby type changes
-            // TODO: watch q, hide completed, and show archived and fire a few scroll events when they change
             function loadDocsTrigger() {
                 if (!$scope.loadingDocs) {
                     $scope.loaddocs();
@@ -929,5 +913,14 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('viewBy', loadDocsTrigger);
             $scope.$watch('docOrder', loadDocsTrigger);
             $scope.$watch('investorOrder', loadDocsTrigger);
+
+            // watch q, hide completed, and show archived and fire a few scroll events when they change
+            function stateChangeTrigger() {
+                console.log("stateChangeTrigger");
+                $('.recipientInfo').scroll();
+            }
+            $scope.$watch('state.query', stateChangeTrigger);
+            $scope.$watch('state.maxRatio', stateChangeTrigger);
+            $scope.$watch('state.show_archived', stateChangeTrigger);
         }
     ]);
