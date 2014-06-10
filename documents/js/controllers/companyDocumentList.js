@@ -279,7 +279,11 @@ app.controller('CompanyDocumentListController',
                     // if !show_archived and all versions are archived then return false
                     return false;
                 } else {
-                    return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                    if (obj.type == "doc") {
+                        return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                    } else {
+                        return !$scope.state.query || re.test(obj.name) || re.test(obj.email);
+                    }
                 }
             };
             $scope.versionFilter = function(obj) {
