@@ -726,7 +726,7 @@ app.controller('CompanyDocumentListController',
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                         if (doc != null)
-                            $scope.modals.exportOriginalToDropbox(doc, role);
+                            $scope.modals.exportToDropbox(doc, role);
                     };
                     console.log(typeof(window.oauthSuccessCallback));
                     window.open(x);
