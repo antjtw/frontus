@@ -140,6 +140,7 @@ m.directive('composeMessage', function() {
             };
 
             $scope.readyToPreview = function(msg){
+                var text = msg.text
                 if(text ===""){
                     return false;
                 }
