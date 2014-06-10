@@ -367,10 +367,12 @@ app.controller('CompContactCtrl',
             };
             
             $scope.exportAllToDropbox = function() {
+                console.log("Starting export");
                 SWBrijj.document_dropbox_export_all().then(function(x) {
                     $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                 }).except(function(x) {
                     $scope.response = x;
+                    console.log(x);
                 });
             };
             
