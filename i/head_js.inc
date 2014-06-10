@@ -50,7 +50,7 @@ window.analytics.page()
 <script type="text/javascript"
         src="/lib/angular-payments/angular-payments.min.js"></script>
 <script>
-    if (document.location.hostname == 'sharewave.com') {
+    if (document.location.hostname == 'sharewave.com' || document.location.hostname == 'www.sharewave.com') {
         Stripe.setPublishableKey('pk_live_nFUfhjAz1rauxbHxrShrOf5Q');
     } else {
         Stripe.setPublishableKey('pk_test_IEFI9xd56qv5jt1Cta9ODSL4');
