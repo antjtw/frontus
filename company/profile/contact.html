@@ -215,6 +215,9 @@
             </div>
         </div>
     </div>
+    <div class="row-fluid" ng-if="access_token">
+        Click here to <span class="red pointer" ng-click="exportAllToDropbox()">backup all of your documents to Dropbox.</span>
+    </div>
     <div class="row-fluid cancel" ng-if="billing.currentPlan && billing.currentPlan!=='000' && billing.last_status!='cancel'">
         Click here to <span class="red pointer" ng-click="cancelSubscriptionModalOpen()">cancel your subscription.</span>
     </div>

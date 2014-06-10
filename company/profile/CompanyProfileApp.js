@@ -365,6 +365,15 @@ app.controller('CompContactCtrl',
                     $scope.response = x;
                 });
             };
+            
+            $scope.exportAllToDropbox = function() {
+                SWBrijj.document_dropbox_export_all().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                });
+            };
+            
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
             });

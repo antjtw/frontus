@@ -704,7 +704,7 @@ app.controller('CompanyDocumentListController',
                     var filename = doc.docname;
                     if ('undefined' !== typeof(doc.investor))
                     {
-                        filename = doc.investor + "_" + doc.docname;
+                        filename = doc.investor + "-" + doc.docname;
                     }
                     SWBrijj.document_dropbox_export(doc.doc_id, filename, role).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
