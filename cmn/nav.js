@@ -347,7 +347,10 @@ navm.controller('NavCtrl',
 
         $rootScope.$on('dblog:updated', function(event, message) {
             angular.forEach(logService.log, function(item) {
-                analytics.track(item.method, {label: navState.userid, value: item.time, category: 'dblatency'});
+                var x = item.method.substring(0, 4);
+                var y = (x == "tblm" || x == "proc") ? ": " + JSON.parse(item.args)[0] : "";
+                var evt = item.method + y;
+                analytics.track(evt, {label: navState.userid, value: item.time, category: 'dblatency'});
             });
             logService.clearLog();
         });
