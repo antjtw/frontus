@@ -701,7 +701,12 @@ app.controller('CompanyDocumentListController',
             $scope.modals.exportToDropbox = function(doc, role) {
                 if ($rootScope.access_token)
                 {
-                    SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, role).then(function(x) {
+                    var filename = doc.docname;
+                    if ('undefined' !== typeof(doc.investor))
+                    {
+                        filename = doc.investor + "_" + doc.docname;
+                    }
+                    SWBrijj.document_dropbox_export(doc.doc_id, filename, role).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                     }).except(function(x) {
                         $scope.response = x;
