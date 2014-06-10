@@ -528,6 +528,13 @@ address {
     border-right: 1px solid #C6C6C6;
 }
 
+.features .calc-inputs input {
+    height: 26px;
+    width: 200px;
+    border: 1px solid #E3E3E3;
+    border-radius: 3px;
+}
+
 .features .discount-chart .axis > .domain {
     fill: none;
 }
