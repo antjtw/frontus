@@ -4371,8 +4371,8 @@ div.upgradeWarning > span {
 /*    text-align: center;*/
 /*    overflow-y: scroll;
     overflow-x: scroll;*/
-    min-height: 300px;
-    max-height: 500px;
+    min-height: 400px;
+    max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
     min-width: 600px;
