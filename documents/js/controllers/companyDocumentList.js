@@ -26,7 +26,7 @@ app.controller('CompanyDocumentListController',
                 } else {
                     $scope.state.hideSharebar = true;
                 }
-            };
+            }
             $scope.$on('$routeChangeSuccess', function(current, previous) {
                 syncShareAndURL();
             });
@@ -62,16 +62,16 @@ app.controller('CompanyDocumentListController',
             function getShareState() {
                 var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
                 sessionStorage.removeItem("sharewave");
-                if (!st || st==[] || st.length===0
-                    || !st.doclist) {
+                if (!st || st==[] || st.length===0 ||
+                    !st.doclist) {
                     $scope.docShareState = emptyShareState();
                 } else {
                     $scope.docShareState = st;
                 }
-            };
+            }
             function emptyShareState() {
                 return {doclist: [], emails: [], message: ""};
-            };
+            }
             function loadPrepareState() {
                 var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
                 sessionStorage.removeItem("docPrepareState");
@@ -92,7 +92,7 @@ app.controller('CompanyDocumentListController',
                 }
                 $scope.finishedLoading = true;
                 return st1;
-            };
+            }
             $scope.saveShareState = function(clear) {
                 if (clear) {
                     sessionStorage.removeItem("sharewave");
@@ -155,14 +155,14 @@ app.controller('CompanyDocumentListController',
                         });
                     });
 
-            };
+            }
 
             function loadSmartDocuments() {
                 SWBrijj.tblm('smartdoc.document').then(function(data) {
                     mergeSmartIntoDumb(data);
                 }).except(function(x) {
                 });
-            };
+            }
 
             function loadDocuments() {
                 // TODO: page w/ infinite scroll
@@ -182,7 +182,7 @@ app.controller('CompanyDocumentListController',
                     loadSmartDocuments();
                     initShareState();
                 });
-            };
+            }
             // loadDocuments is now replaced by loadDocs (called by infinite scroll
             // TODO: load and merge smartDocs with known state of the world
             // TODO: fix initShareState
@@ -205,14 +205,14 @@ app.controller('CompanyDocumentListController',
                 }
                 $scope.messageText = $scope.docShareState.message;
                 $scope.multipeople = $scope.docShareState.emails;
-            };
+            }
             function loadTags() {
                 SWBrijj.tblm('document.my_company_tags').then(function(x) {
                     $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
                         return el.replace(/"/g, "");
                     });
                 });
-            };
+            }
             $scope.getAvailableTags = function() {return $scope.available_tags;};
             $scope.getTagClass = function() {return 'badge badge-info';};
 
@@ -456,13 +456,13 @@ app.controller('CompanyDocumentListController',
             };
 
             function docStatusRatio(doc) {
-                if (doc.version_count == 0) {
+                if (doc.version_count === 0) {
                     // This ensure documents with no versions appear before completed documents.
                     // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
                     return 0;
                 }
                 // 0 / x == 0, so bump up the complete number a bit so that the 0 completes can be ordered as well
-                var complete = ((doc.complete_count == 0) ? .001 : doc.complete_count);
+                var complete = ((doc.complete_count === 0) ? 0.001 : doc.complete_count);
                 var initRatio = (complete / doc.version_count);
                 if (initRatio == 1) {
                     // all completed
@@ -486,9 +486,9 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.versionIsComplete = function(version) {
-                return $scope.isCompleteSigned(version)
-                    || $scope.isCompleteViewed(version)
-                    || $scope.isCompleteRetracted(version);
+                return $scope.isCompleteSigned(version) ||
+                       $scope.isCompleteViewed(version) ||
+                       $scope.isCompleteRetracted(version);
             };
 
             $scope.defaultDocStatus = function (doc) {
@@ -504,9 +504,9 @@ app.controller('CompanyDocumentListController',
                 var updated = false;
                 var listcopy = angular.copy(list);
                 angular.forEach(listcopy, function(el) {
-                    if (el.doc_id == item.doc_id
-                        || (!el.doc_id && !item.doc_id
-                            && el.template_id==item.template_id)) {
+                    if (el.doc_id == item.doc_id ||
+                        (!el.doc_id && !item.doc_id &&
+                            el.template_id==item.template_id)) {
                         el.signature_flow = item.signature_flow;
                         updated = true;
                     }
@@ -523,8 +523,8 @@ app.controller('CompanyDocumentListController',
             };
             $scope.modals.removeShareItem = function(item, list) {
                 return list.filter(function(el) {
-                    return !(item.doc_id==el.doc_id
-                        && item.template_id==el.template_id);
+                    return !(item.doc_id==el.doc_id &&
+                             item.template_id==el.template_id);
                 });
             };
             $scope.modals.updateShareType = function(doc, tp) {
@@ -674,7 +674,7 @@ app.controller('CompanyDocumentListController',
 
 
             $scope.voidDocument = function(doc, message) {
-                if (!message || message.length == 0) {
+                if (!message || message.length === 0) {
                     message = " ";
                 }
                 SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
@@ -709,7 +709,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.remindDocument = function(doc, message) {
-                if (!message || message.length == 0) {
+                if (!message || message.length === 0) {
                     message = " ";
                 }
                 SWBrijj.procm("document.remind_investor", doc.doc_id, message).then(function(data) {
@@ -814,7 +814,7 @@ app.controller('CompanyDocumentListController',
                 var regExp = /\(([^)]+)\)/;
                 angular.forEach($scope.docShareState.emails, function(person) {
                     var matches = regExp.exec(person);
-                    if (matches == null) {
+                    if (matches === null) {
                         matches = ["", person];
                     }
                     tosee += "," +  matches[1];
