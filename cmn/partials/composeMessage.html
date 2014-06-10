@@ -32,7 +32,7 @@
 
         <div class="preview-message" 
             ng-click= "previewModalOpen(message)"
-            ng-show="readyToPreview(message)">
+            ng-hide="!readyToPreview(message)">
             Preview Message 
         </div>
 

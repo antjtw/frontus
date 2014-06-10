@@ -4302,6 +4302,10 @@ div.upgradeWarning > span {
     color: #1E2D3D;
 }
 
+textarea.email-text {
+    color: #555555;
+}
+
 .sidebarText {
    /* padding: 10px 0 0 0;*/
   /*  margin: 5px 0 20px 0;*/
@@ -4337,6 +4341,7 @@ div.upgradeWarning > span {
     color: #2980B9;
     padding-bottom: 10px;
     cursor: pointer;
+    position: absolute;
 }
 
 .sidebarText span{
@@ -4346,11 +4351,13 @@ div.upgradeWarning > span {
 .footer-headline-left{
     width: 45%;
     float: left;
+    padding-top: 40px;
 }
 
 .footer-headline-right {
     width: 45%;
     float: right;
+    padding-top: 40px;
 }
 
 
