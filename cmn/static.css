@@ -511,6 +511,27 @@ address {
     margin-left: -40px;
 }
 
+/* Features Debt Calculator */
+
+.features .debt-calculator {
+    max-width: 1024px;
+    margin: 0 auto 0 auto;
+    border: 1px solid #C6C6C6;
+    height: 425px;
+}
+
+.features .calc-inputs {
+    width: 260px;
+    float: left;
+    height: 425px;
+    background-color: #F1F1F1;
+    border-right: 1px solid #C6C6C6;
+}
+
+.features .discount-chart .axis > .domain {
+    fill: none;
+}
+
 .features .discount-chart .overlay {
     fill: none;
     pointer-events: all;

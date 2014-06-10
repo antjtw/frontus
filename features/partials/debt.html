@@ -8,37 +8,48 @@
 
                     </div>
                 </div>
-                <div>
-                    <ul>
-                        <li>
-                            <span>Amount</span>
-                            <input class="money" ng-change="conversion()" ng-model="fields.fromtranamount">
-                        </li>
-                        <li>
-                            <span>Valuation Cap</span>
-                            <input class="money" ng-change="conversion()" ng-model="fields.fromtranvalcap">
-                        </li>
-                        <li>
-                            <span>Discount (%)</span>
-                            <input ng-change="conversion()" ng-model="fields.fromtrandiscount">
-                        </li>
-                        <li>
-                            <span>Percentage Sold</span>
-                            <input ng-change="conversion()" ng-model="fields.convertTranpercentsold">
-                        </li>
-                        <li>
-                            <span>Investment Amount</span>
-                            <input class="money" ng-change="conversion()" ng-model="fields.convertTranamountsold">
-                        </li>
-                        <li>
-                            <span>Pre-money</span>
-                            <input class="money" ng-change="conversion()" ng-model="premoney">
-                        </li>
-                    </ul>
+
+
+                <div class='grey-stripe white-stripe'>
+                    <div>
+                        <h2>Editing as you'd expect it, in real-time. As you enter transactions, the totals for your securities and
+                            shareholder ownership will update automatically.</h2>
+                    </div>
                 </div>
 
-                <div>
-                    <d3-discount class="discount-chart" data="graphdata"></d3-discount>
+                <div class="debt-calculator">
+                    <div class="calc-inputs">
+                        <ul>
+                            <li>
+                                <span>Amount</span>
+                                <input class="money" ng-change="conversion()" ng-model="fields.fromtranamount">
+                            </li>
+                            <li>
+                                <span>Valuation Cap</span>
+                                <input class="money" ng-change="conversion()" ng-model="fields.fromtranvalcap">
+                            </li>
+                            <li>
+                                <span>Discount (%)</span>
+                                <input ng-change="conversion()" ng-model="fields.fromtrandiscount">
+                            </li>
+                            <li>
+                                <span>Percentage Sold</span>
+                                <input ng-change="conversion()" ng-model="fields.convertTranpercentsold">
+                            </li>
+                            <li>
+                                <span>Investment Amount</span>
+                                <input class="money" ng-change="conversion()" ng-model="fields.convertTranamountsold">
+                            </li>
+                            <li>
+                                <span>Pre-money</span>
+                                <input class="money" ng-change="conversion()" ng-model="premoney">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="calc-outputs">
+                        <d3-discount class="discount-chart" data="graphdata"></d3-discount>
+                    </div>
                 </div>
             </div>
         </div>
