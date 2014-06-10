@@ -99,7 +99,7 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace(/\n/g, "<br />");
+                var newtext = msg.text.replace(/\n/g, "<br/>");
                 console.log(newtext)
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
@@ -145,9 +145,13 @@ m.directive('composeMessage', function() {
                 console.log(msg)
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                $scope.message=msg.text;
+                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
+                // var re = /<br *\/?>/gi;
+                // $scope.messagetext = message.replace(re, '\n')
+                $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
+                console.log($scope.messagetext);
             };
 
             $scope.previewModalClose = function(){
