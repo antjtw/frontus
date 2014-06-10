@@ -52,13 +52,14 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount};
         $scope.intervals = 200;
 
-        $scope.conversion = function() {
+        $scope.conversion = function(changed) {
             //Clear out commas and assign to the correct transaction fields;
             $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/[^0-9.]/g,''));
             $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/[^0-9.]/g,''));
             $scope.fromtran.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/[^0-9.]/g,''));
             $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/[^0-9.]/g,''));
             $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/[^0-9.]/g,''));
+            $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
 
             //Hard code the valuation type of conversion for now.
             //TODO implement price per share conversion.
@@ -83,7 +84,13 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) / (parseFloat($scope.convertTran.percentsold)/100);
                     $scope.premoney = $scope.postmoney - parseFloat($scope.convertTran.amountsold);
+                    $scope.fields.premoney = String($scope.premoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
                 }
+                /* if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && isNaN(parseFloat($scope.convertTran.percentsold))) {
+                    $scope.postmoney = $scope.premoney + parseFloat($scope.convertTran.amountsold);
+                    $scope.convertTran.percentsold = parseFloat(($scope.convertTran.amountsold) / (parseFloat($scope.postmoney)) * 100);
+                    $scope.fields.convertTranpercentsold = $scope.convertTran.percentsold;
+                } */
 
 
                 for (var i = 0; i <= $scope.intervals; i++) {

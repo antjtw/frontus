@@ -560,13 +560,23 @@ address {
     stroke-width: 3;
 }
 
+.features .discount-chart .headline {
+    font-size: 26px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    fill: #00c399;
+    stroke: none;
+    text-shadow: none;
+    shape-rendering: crispEdges;
+}
+
 .features .discount-chart .label {
     fill: #C6C6C6;
-    /* stroke: none; */
+    stroke: none;
     font-weight: normal;
     font-size: 12px;
     font-family: 'FS Elliot Web Regular', sans-serif;
     text-shadow: none;
+    shape-rendering: crispEdges;
 }
 
 

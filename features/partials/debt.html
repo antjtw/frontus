@@ -21,28 +21,28 @@
                     <div class="calc-inputs">
                         <ul>
                             <li>
-                                <span>Amount</span>
-                                <input class="money" ng-change="conversion()" ng-model="fields.fromtranamount">
+                                <span>Convertible Note Amount</span>
+                                <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
                             </li>
                             <li>
                                 <span>Valuation Cap</span>
-                                <input class="money" ng-change="conversion()" ng-model="fields.fromtranvalcap">
+                                <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
                             </li>
                             <li>
                                 <span>Discount (%)</span>
-                                <input ng-change="conversion()" ng-model="fields.fromtrandiscount">
+                                <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
                             </li>
                             <li>
                                 <span>Percentage Sold</span>
-                                <input ng-change="conversion()" ng-model="fields.convertTranpercentsold">
+                                <input ng-change="conversion('convertTranpercentsold')" ng-model="fields.convertTranpercentsold">
                             </li>
                             <li>
                                 <span>Investment Amount</span>
-                                <input class="money" ng-change="conversion()" ng-model="fields.convertTranamountsold">
+                                <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
                             </li>
                             <li>
                                 <span>Pre-money</span>
-                                <input class="money" ng-change="conversion()" ng-model="premoney">
+                                <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
                             </li>
                         </ul>
                     </div>

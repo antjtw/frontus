@@ -30,6 +30,12 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 return calculate.funcformatAmount(amount);
             };
 
+            var formatShortAmount = function (amount) {
+                var decimal = calculate.funcformatAmount(amount);
+                var nodecimal = decimal.split(".")[0];
+                return nodecimal
+            };
+
 
             scope.$watch('data', function(newVals, oldVals) {
                 if (newVals) {
@@ -117,11 +123,21 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 });
                 var linecolour = "#00c399";
 
-                svg.append("path")
+                var path = svg.append("path")
                     .attr("d", line(points))
                     .style("stroke", linecolour)
                     .style("stroke-width", 3)
                     .style("fill", "transparent");
+
+                var totalLength = path.node().getTotalLength();
+
+                path
+                    .attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(300)
+                    .ease("linear")
+                    .attr("stroke-dashoffset", 0);
 
                 angular.forEach(points, function(point) {
                     svg.append("circle")
@@ -132,7 +148,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         .attr("cy", function(d) {
                             return y(point[0]);
                         })
-                        .attr("r", 0.1)
+                        .attr("r", 0)
                         .on("mouseover", function(d) {
                             div.transition()
                                 .duration(200)
@@ -151,8 +167,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 });
 
                 var focus = svg.append("g")
-                    .attr("class", "focus")
-                    .style("display", "none");
+                    .attr("class", "focus");
 
                 focus.append("circle")
                     .attr("r", 5);
@@ -162,34 +177,63 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("dy", ".35em");
 
                 var headline = svg.append("g")
-                    .attr("class", "headline")
-                    .style("display", "none");
+                    .attr("class", "headline");
 
                 headline.append("text")
+                    .attr("text-anchor", "middle")
                     .attr("x", 9)
                     .attr("dy", ".35em");
 
                 var percentage = svg.append("g")
-                    .attr("class", "headline")
-                    .style("display", "none");
+                    .attr("class", "headline");
 
                 percentage.append("text")
+                    .attr("text-anchor", "middle")
                     .attr("x", 9)
                     .attr("dy", ".35em");
+
+                var totalvalue = svg.append("g")
+                    .attr("class", "subheading");
+
+                totalvalue.append("text")
+                    .attr("text-anchor", "middle")
+                    .attr("x", 9)
+                    .attr("dy", ".35em")
+                    .text("Converted Value")
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 25) + ")");
+
+                var totalvalue = svg.append("g")
+                    .attr("class", "subheading");
+
+                totalvalue.append("text")
+                    .attr("text-anchor", "middle")
+                    .attr("x", 9)
+                    .attr("dy", ".35em")
+                    .text("Ownership")
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 75) + ")");
 
 
                 svg.append("rect")
                     .attr("class", "overlay")
                     .attr("width", width)
                     .attr("height", height)
-                    .on("mouseover", function() {
-                        focus.style("display", null);
-                        headline.style("display", null);
-                        percentage.style("display", null);
-                    })
-                    .on("mouseout", function() {
-                    })
                     .on("mousemove", mousemove);
+
+                var middlepoint = data[100];
+                if (!isNaN(middlepoint.x) && !isNaN(middlepoint.y)) {
+                    focus.attr("transform", "translate(" + x(middlepoint.x) + "," + y(middlepoint.y) + ")");
+                    focus.select("text").text(formatAmount(middlepoint.y) + "%");
+
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 50) + ")");
+                    headline.select("text").text(formatShortAmount(middlepoint.headline));
+
+                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 50) + ")");
+                    percentage.select("text").text(formatAmount(middlepoint.percentage) + "%");
+                } else {
+                    focus.attr("display", "none");
+                }
+
+
 
                 function mousemove() {
                     var x0 = x.invert(d3.mouse(this)[0]),
@@ -200,10 +244,10 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
                     focus.select("text").text(formatAmount(d.y) + "%");
 
-                    headline.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String(parseFloat(height)/2) + ")");
-                    headline.select("text").text(formatAmount(d.headline));
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 50) + ")");
+                    headline.select("text").text(formatShortAmount(d.headline));
 
-                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String((parseFloat(height)/2) + 50) + ")");
+                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 50) + ")");
                     percentage.select("text").text(formatAmount(d.percentage) + "%");
                 }
 
