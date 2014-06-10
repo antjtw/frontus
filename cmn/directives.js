@@ -100,7 +100,6 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
-                console.log(newtext)
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
@@ -134,15 +133,24 @@ m.directive('composeMessage', function() {
                     || msg.text==="") {
                     return false;
 
-
                 }
                 else {
                     return true;
                 }
             };
 
+            $scope.readyToPreview = function(msg){
+                if(text ===""){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+
+          
+
             $scope.previewModalOpen = function(msg) {
-                console.log(msg)
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
                 // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");

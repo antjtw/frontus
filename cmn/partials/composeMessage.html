@@ -32,7 +32,7 @@
 
         <div class="preview-message" 
             ng-click= "previewModalOpen(message)"
-            ng-class="{'disabledme':companyIsZombie()}">   
+            ng-show="readyToPreview(message)">
             Preview Message 
         </div>
 
