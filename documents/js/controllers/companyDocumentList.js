@@ -237,23 +237,13 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            SWBrijj.tblm("document.my_company_library_view_recipient_list").then(function(data) {
-                $scope.investorDocs = data;
-                angular.forEach($scope.investorDocs, function(investor) {
-                    investor.type = "investor";
-                    investor.statusRatio = docStatusRatio(investor);
-                });
-            });
-
             $scope.toggleMaxRatio = function() {
                 $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
             };
 
             $scope.viewBy = 'document';
             $scope.docOrder = 'docname';
-            $scope.shareOrder = 'docname';
-            $scope.versionOrder = 'statusRank';
-            $scope.investorOrder = 'name';
+            $scope.investorOrder = '(name || email)';
             $scope.selectedDoc = 0;
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
@@ -263,7 +253,7 @@ app.controller('CompanyDocumentListController',
                 $scope.state.show_archived = !$scope.state.show_archived;
             };
 
-            // only allow docOrder to be set -- versionOrder is fixed
+            // only allow docOrder to be set
             $scope.setOrder = function(field) {
                 $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
             };
@@ -526,7 +516,7 @@ app.controller('CompanyDocumentListController',
                         "doc_id": item.doc_id,
                         "template_id": item.template_id,
                         "signature_flow": item.signature_flow
-                    }
+                    };
                     listcopy.push(obj);
                 }
                 return listcopy;
@@ -785,8 +775,8 @@ app.controller('CompanyDocumentListController',
             };
             $scope.docsReadyToShare = function(docs) {
                 if (!docs || docs.length===0) {
-		    return false;
-		}
+                    return false;
+                }
                 var count = 0;
                 angular.forEach($scope.documents, function(doc) {
                     if (doc.forShare) {
@@ -850,30 +840,94 @@ app.controller('CompanyDocumentListController',
             };
 
             // Infinite Scroll
+            $scope.documents = [];
+            $scope.investorDocs = [];
             var loadState = {
                 quantity: 10,
-                docsIteration: 0
+                "document": {
+                    doTags: true,
+                    list: $scope.documents,
+                    type: "doc",
+                    view: "document.my_company_library_view_list",
+                    identifier: "doc_id",
+                    "docname": {
+                        iteration: 0,
+                        fullyLoaded: false,
+                        orderKey: "docname",
+                    },
+                    "statusRatio": {
+                        iteration: 0,
+                        fullyLoaded: false,
+                        orderKey: "docname", // TODO: fix
+                    },
+                },
+                "name": {
+                    doTags: false,
+                    list: $scope.investorDocs,
+                    type: "investor",
+                    view: "document.my_company_library_view_recipient_list",
+                    identifier: "email",
+                    "(name || email)": {
+                        iteration: 0,
+                        fullyLoaded: false,
+                        orderKey: "display_name"
+                    },
+                    "statusRatio": {
+                        iteration: 0,
+                        fullyLoaded: false,
+                        orderKey: "display_name"
+                    },
+                },
             };
-            $scope.documents = [];
             $scope.loadingDocs = false;
             $scope.loaddocs = function() {
-		$scope.loadingDocs = true;
-                SWBrijj.tblmlimit('document.my_company_library_view_list', loadState.quantity, loadState.quantity * loadState.docsIteration).then(function(data) {
-		    loadState.docsIteration += 1;
-		    if (data.length >= loadState.quantity) {
-			$scope.loadingDocs = false;
-		    }
+                $scope.loadingDocs = true;
+                var typeVars = loadState[$scope.viewBy];
+                // TODO: handle '-' in docOrder and investorOrder
+                var loopState = typeVars[($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder)];
+                if (loopState.fullyLoaded) {
+                    return;
+                }
+                SWBrijj.tblmlimitorder(typeVars.view, loadState.quantity, loadState.quantity * loopState.iteration, loopState.orderKey).then(function(data) {
+                    loopState.iteration += 1;
+                    if (data.length < loadState.quantity) {
+                        loopState.fullyLoaded = true;
+                    }
+                    $scope.loadingDocs = false;
                     $scope.finishedLoading = true;
-                    angular.forEach(data, function(d) {
-                        if (d.tags !== null) {
-                            d.tags = JSON.parse(d.tags);
+                    angular.forEach(data, function(s) {
+                        if (typeVars.doTags && s.tags !== null) {
+                            s.tags = JSON.parse(s.tags);
                         }
-                        d.type = "doc";
-                        d.statusRatio = docStatusRatio(d);
-                        $scope.documents.push(d);
+                        s.type = typeVars.type;
+                        s.statusRatio = docStatusRatio(s);
+
+                        // check for existing item in typeVars.list and update instead of duplicating
+                        if (!typeVars.list.some(function(val, idx, arr) {
+                            if (val[typeVars.identifier] == s[typeVars.identifier]) {
+                                s.versions = val.versions;
+                                val = s;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        })) {
+                            typeVars.list.push(s);
+                        }
                     });
                 });
             };
+            // fire loaddocs whenever the sort order or viewby type changes
+            // TODO: watch q, hide completed, and show archived and fire a few scroll events when they change
+            function loadDocsTrigger() {
+                if (!$scope.loadingDocs) {
+                    $scope.loaddocs();
+                } else {
+                    window.setTimeout(loadDocsTrigger, 50);
+                }
+            }
+            $scope.$watch('viewBy', loadDocsTrigger);
+            $scope.$watch('docOrder', loadDocsTrigger);
+            $scope.$watch('investorOrder', loadDocsTrigger);
         }
     ]);
-
