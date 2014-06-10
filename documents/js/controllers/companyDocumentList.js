@@ -7,7 +7,9 @@ app.controller('CompanyDocumentListController',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
                  basics, $http) {
-            $scope.docShareState={};
+            $scope.docShareState = {
+                doclist:[],
+            };
             $scope.state = {
                 hideSharebar: true,
                 maxRatio: 1000,
