@@ -243,7 +243,7 @@ app.controller('CompanyDocumentListController',
 
             $scope.viewBy = 'document';
             $scope.docOrder = 'docname';
-            $scope.investorOrder = '(name || email)';
+            $scope.investorOrder = 'display_name';
             $scope.selectedDoc = 0;
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
@@ -830,6 +830,8 @@ app.controller('CompanyDocumentListController',
             // Infinite Scroll
             $scope.documents = [];
             $scope.investorDocs = [];
+            // TODO: we maintain 8 seperate lists because it's hard to tell when to scroll otherwise
+            // would be much better to maintain only 2 lists and share the data
             var loadState = {
                 quantity: 10,
                 "document": {
@@ -838,14 +840,19 @@ app.controller('CompanyDocumentListController',
                     type: "doc",
                     view: "document.my_company_library_view_list",
                     identifier: "doc_id",
+                    fullyLoaded: false,
                     "docname": {
                         iteration: 0,
-                        fullyLoaded: false,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
                         orderKey: "docname",
                     },
                     "statusRatio": {
                         iteration: 0,
-                        fullyLoaded: false,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
                         orderKey: "status_ratio",
                     },
                 },
@@ -855,14 +862,19 @@ app.controller('CompanyDocumentListController',
                     type: "investor",
                     view: "document.my_company_library_view_recipient_list",
                     identifier: "email",
-                    "(name || email)": {
+                    fullyLoaded: false,
+                    "display_name": {
                         iteration: 0,
-                        fullyLoaded: false,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
                         orderKey: "display_name",
                     },
                     "statusRatio": {
                         iteration: 0,
-                        fullyLoaded: false,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
                         orderKey: "status_ratio",
                     },
                 },
@@ -871,19 +883,35 @@ app.controller('CompanyDocumentListController',
             $scope.loaddocs = function() {
                 $scope.loadingDocs = true;
                 var typeVars = loadState[$scope.viewBy];
-                // TODO: handle '-' in docOrder and investorOrder
-                var loopState = typeVars[($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder)];
-                if (loopState.fullyLoaded) {
+                // handle '-' in docOrder and investorOrder
+                var sortkey = ($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder);
+                var ascending = true;
+                if (sortkey[0] == '-') {
+                    sortkey = sortkey.slice(1);
+                    ascending = false;
+                }
+                var loopState = typeVars[sortkey];
+                if (typeVars.fullyLoaded) {
                     $scope.loadingDocs = false;
                     return;
                 }
-                SWBrijj.tblmlimitorder(typeVars.view, loadState.quantity, loadState.quantity * loopState.iteration, loopState.orderKey).then(function(data) {
-                    loopState.iteration += 1;
-                    if (data.length < loadState.quantity) {
-                        loopState.fullyLoaded = true;
+                SWBrijj.tblmlimitorder(typeVars.view,
+                                       loadState.quantity,
+                                       loadState.quantity * (ascending? loopState.iteration : loopState.reverseIteration),
+                                       loopState.orderKey + (ascending? "" : " DESC")).then(function(data) {
+                    if (ascending) {
+                        loopState.iteration += 1;
+                    } else {
+                        loopState.reverseIteration += 1;
                     }
                     $scope.loadingDocs = false;
                     $scope.finishedLoading = true;
+                    var myList;
+                    if (ascending) {
+                        myList = loopState.forwardList;
+                    } else {
+                        myList = loopState.reverseList;
+                    }
                     angular.forEach(data, function(s) {
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
@@ -892,7 +920,7 @@ app.controller('CompanyDocumentListController',
                         s.statusRatio = s.status_ratio;
 
                         // check for existing item in typeVars.list and update instead of duplicating
-                        if (!typeVars.list.some(function(val, idx, arr) {
+                        if (!myList.some(function(val, idx, arr) {
                             if (val[typeVars.identifier] == s[typeVars.identifier]) {
                                 s.versions = val.versions;
                                 val = s;
@@ -901,17 +929,42 @@ app.controller('CompanyDocumentListController',
                                 return false;
                             }
                         })) {
-                            typeVars.list.push(s);
+                            myList.push(s);
                         }
                     });
+                    if (data.length < loadState.quantity) {
+                        typeVars.fullyLoaded = true;
+                        // have all the summary rows, so populate all the lists
+                        // TODO: un-hardcode these list assignments
+                        if ($scope.viewBy == "document") {
+                            typeVars.docname.forwardList = myList;
+                            typeVars.docname.reverseList = myList;
+                            typeVars.statusRatio.forwardList = myList;
+                            typeVars.statusRatio.reverseList = myList;
+                        } else if ($scope.viewBy == "name") {
+                            typeVars.display_name.forwardList = myList;
+                            typeVars.display_name.reverseList = myList;
+                            typeVars.statusRatio.forwardList = myList;
+                            typeVars.statusRatio.reverseList = myList;
+                        }
+                    }
+                    if ($scope.viewBy == "document") {
+                        $scope.documents = myList;
+                    } else if ($scope.viewBy == "name") {
+                        $scope.investorDocs = myList;
+                    }
                 });
             };
             // fire loaddocs whenever the sort order or viewby type changes
-            function loadDocsTrigger() {
+            function loadDocsTrigger(newval, oldval) {
+                if (!oldval || oldval == newval) {
+                    // inital setting, do nothing
+                    return;
+                }
                 if (!$scope.loadingDocs) {
                     $scope.loaddocs();
                 } else {
-                    window.setTimeout(loadDocsTrigger, 50);
+                    window.setTimeout(loadDocsTrigger(newval, oldval), 50);
                 }
             }
             $scope.$watch('viewBy', loadDocsTrigger);
@@ -920,7 +973,6 @@ app.controller('CompanyDocumentListController',
 
             // watch q, hide completed, and show archived and fire a few scroll events when they change
             function stateChangeTrigger() {
-                console.log("stateChangeTrigger");
                 $('.recipientInfo').scroll();
             }
             $scope.$watch('state.query', stateChangeTrigger);
