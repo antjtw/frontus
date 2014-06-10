@@ -688,8 +688,9 @@ app.controller('CompanyDocumentListController',
                 $scope.deleteDocModal = false;
             };
             
-            $scope.modals.exportLinkDropboxOpen = function(doc) {
+            $scope.modals.exportLinkDropboxOpen = function(doc, role) {
                 $scope.docForModal = doc;
+                $scope.roleForModal = role;
                 $scope.exportLinkDropboxModal = true;
             };
 
@@ -698,7 +699,6 @@ app.controller('CompanyDocumentListController',
             };
             
             $scope.modals.exportToDropbox = function(doc, role) {
-                console.log(role);
                 if ($rootScope.access_token)
                 {
                     SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, role).then(function(x) {
@@ -710,12 +710,12 @@ app.controller('CompanyDocumentListController',
                 }
                 else 
                 {
-                    $scope.modals.exportLinkDropboxOpen(doc);
-                    $scope.roleForModal = role;
+                    $scope.modals.exportLinkDropboxOpen(doc, role);
                 }
             };
             
-            $scope.startOauth = function(svc, doc) {
+            $scope.startOauth = function(svc, doc, role) {
+                console.log(role);
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
@@ -726,8 +726,9 @@ app.controller('CompanyDocumentListController',
                         $scope.$apply();
                         $rootScope.$emit("notification:success", "Linked to Dropbox");
                         if (doc != null)
-                            $scope.modals.exportOriginalToDropbox(doc, $scope.roleForModal);
+                            $scope.modals.exportOriginalToDropbox(doc, role);
                     };
+                    console.log(typeof(window.oauthSuccessCallback));
                     window.open(x);
                 }).error(function(x) {
                     console.log(x);
