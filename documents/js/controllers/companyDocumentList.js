@@ -703,7 +703,6 @@ app.controller('CompanyDocumentListController',
                 {
                     SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, role).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-                        console.log(x);
                     }).except(function(x) {
                         $scope.response = x;
                     });
@@ -715,7 +714,6 @@ app.controller('CompanyDocumentListController',
             };
             
             $scope.startOauth = function(svc, doc, role) {
-                console.log(role);
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
@@ -728,7 +726,6 @@ app.controller('CompanyDocumentListController',
                         if (doc != null)
                             $scope.modals.exportToDropbox(doc, role);
                     };
-                    console.log(typeof(window.oauthSuccessCallback));
                     window.open(x);
                 }).error(function(x) {
                     console.log(x);
