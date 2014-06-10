@@ -39,7 +39,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 event.preventDefault();
             }
             var $this = $(this);
-            var num = $this.val().replace(/\D/g,'');
+            var num = $this.val().replace(/[^0-9.]/g,'');
             $this.val(num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
         });
 
@@ -54,11 +54,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         $scope.conversion = function() {
             //Clear out commas and assign to the correct transaction fields;
-            $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/\D/g,''));
-            $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/\D/g,''));
-            $scope.fromtran.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/\D/g,''));
-            $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/\D/g,''));
-            $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/\D/g,''));
+            $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/[^0-9.]/g,''));
+            $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/[^0-9.]/g,''));
+            $scope.fromtran.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/[^0-9.]/g,''));
+            $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/[^0-9.]/g,''));
+            $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/[^0-9.]/g,''));
 
             //Hard code the valuation type of conversion for now.
             //TODO implement price per share conversion.

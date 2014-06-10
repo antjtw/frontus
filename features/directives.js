@@ -1,4 +1,4 @@
-app.directive('d3Discount', ['d3', function(d3) {
+app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
     return {
         restrict: 'EA',
         scope: {
@@ -24,7 +24,11 @@ app.directive('d3Discount', ['d3', function(d3) {
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-            var bisectX = d3.bisector(function(d) { return d.x; }).left
+            var bisectX = d3.bisector(function(d) { return d.x; }).left;
+
+            var formatAmount = function (amount) {
+                return calculate.funcformatAmount(amount);
+            };
 
 
             scope.$watch('data', function(newVals, oldVals) {
@@ -183,13 +187,13 @@ app.directive('d3Discount', ['d3', function(d3) {
                         d1 = data[i],
                         d = x0 - d0.date > d1.date - x0 ? d1 : d0;
                     focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
-                    focus.select("text").text(d.y);
+                    focus.select("text").text(formatAmount(d.y) + "%");
 
                     headline.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String(parseFloat(height)/2) + ")");
-                    headline.select("text").text(d.headline);
+                    headline.select("text").text(formatAmount(d.headline));
 
                     percentage.attr("transform", "translate(" + String(parseFloat(width) + 20) + "," + String((parseFloat(height)/2) + 50) + ")");
-                    percentage.select("text").text(d.percentage);
+                    percentage.select("text").text(formatAmount(d.percentage) + "%");
                 }
 
 
