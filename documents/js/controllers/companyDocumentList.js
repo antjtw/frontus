@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http',
+        'basics', '$http', 'oauth',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http) {
+                 basics, $http, oauth) {
             $scope.docShareState={};
             $scope.state = {
                 hideSharebar: true,
@@ -311,6 +311,11 @@ app.controller('CompanyDocumentListController',
                 backdropFade: true,
                 dialogFade: true,
                 dialogClass: 'wideModal modal'
+            };
+            $scope.verywideopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'evenWiderModal modal'
             };
             $scope.opts = {
                 backdropFade: true,
@@ -665,6 +670,49 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
+            };
+            
+            $scope.modals.exportLinkDropboxOpen = function(doc) {
+                $scope.docForModal = doc;
+                $scope.exportLinkDropboxModal = true;
+            };
+
+            $scope.modals.exportLinkDropboxClose = function() {
+                $scope.exportLinkDropboxModal = false;
+            };
+            
+            $scope.modals.exportOriginalToDropbox = function(doc) {
+                if ($rootScope.access_token)
+                {
+                    SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
+                        $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                    }).except(function(x) {
+                        $scope.response = x;
+                    });
+                }
+                else 
+                {
+                    $scope.modals.exportLinkDropboxOpen(doc);
+                }
+            };
+            
+            $scope.startOauth = function(svc, doc) {
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
+                    return;
+                post.success(function(x) {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function(x){
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                        $scope.modals.exportOriginalToDropbox(doc);
+                    };
+                    window.open(x);
+                }).error(function(x) {
+                    console.log(x);
+                    $scope.response = x;
+                });
             };
 
             $scope.reallyDeleteDoc = function(doc) {

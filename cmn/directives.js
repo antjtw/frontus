@@ -80,7 +80,7 @@ m.directive('composeMessage', function() {
             $scope.resetMessage();
             $scope.composeopts = {
                 backdropFade: true,
-                dialogFade: true,
+                dialogFade: true
             };
 
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
@@ -88,7 +88,7 @@ m.directive('composeMessage', function() {
             $scope.howMany = function (){
                 if(location.host == 'share.wave'){
                     console.log($scope.recipients + "i'm at sharewave!");
-                };
+                }
             };
 
             // var rr = getCSSRule('.for-r0ml');
@@ -102,7 +102,6 @@ m.directive('composeMessage', function() {
                 var newtext = msg.text.replace(/\n/g, "<br />");
                 var recipients = $scope.recipients;
                 $scope.clicked = true;
-                console.log(recipients)
              
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
@@ -134,7 +133,6 @@ m.directive('composeMessage', function() {
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
-                    console.log("notreadytosend")
                 }
                 else {
                     return true;
@@ -200,7 +198,6 @@ m.directive('meter', function() {
                 $scope.meterStyle = {"width":
                                      ($scope.cur/$scope.tot)*100 + "%"};
                 if ($scope.cur/$scope.tot > 1) {
-                    console.log("here");
                     $scope.meterStyle["background-color"] = "#E74C3C";
                 }
             };
