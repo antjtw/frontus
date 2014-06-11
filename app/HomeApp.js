@@ -1015,6 +1015,8 @@ app.filter('fromNowSort', function () {
     };
 });
 
+
+
 function memoize( fn ) {
     return function () {
         var args = Array.prototype.slice.call(arguments),
@@ -1036,3 +1038,4 @@ function memoize( fn ) {
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
+

@@ -365,6 +365,27 @@ app.controller('CompContactCtrl',
                     $scope.response = x;
                 });
             };
+            
+            $scope.exportAllToDropbox = function() {
+                SWBrijj.document_dropbox_export_all().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
+            $scope.exportCaptableToDropbox = function() {
+                SWBrijj.document_dropbox_export_captable().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
             });
@@ -707,14 +728,16 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
         $scope.setDocsLastEvent = function(activityfeed) {
             angular.forEach($scope.docs, function(doc) {
+                //TODO This is not working currently - commented out to stop the errors occuring
                 var version_activity = activityfeed.filter(function(el) {
                     return el.doc_id === doc.doc_id;
                 });
                 doc.last_event = version_activity.sort($scope.compareEvents)[0];
-                if (doc.last_event.activity === 'finalized') {
+                /*if (doc.last_event.activity === 'finalized') {
                     doc.last_event.activity = 'approved';
                 }
                 $scope.setStatusRank(doc);
+                 */
             });
         };
 

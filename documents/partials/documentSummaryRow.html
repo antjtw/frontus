@@ -84,7 +84,7 @@
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewStatus(doc)">View Status</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="viewOriginal(doc)">View Original</li>
                         <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="exportOriginalToPdf(doc)">Export Original to PDF</li>
-                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="modals.exportOriginalToDropbox(doc);">Export to Dropbox</li>
+                        <li ng-show="!(doc.version_count == 0 && !doc.uploaded_by)" ng-click="modals.exportToDropbox(doc, 'company');">Export to Dropbox</li>
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="modals.updateTagsOpen(doc)">Edit Tags</li>
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.deleteDocOpen(doc)">Delete</li>
