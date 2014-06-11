@@ -20,6 +20,7 @@
                 <div class="debt-calculator">
                     <div class="calc-inputs">
                         <ul>
+                            <li>Debt Note</li>
                             <li>
                                 <span>Convertible Note Amount</span>
                                 <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
@@ -32,6 +33,9 @@
                                 <span>Discount (%)</span>
                                 <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
                             </li>
+                        </ul>
+                        <ul>
+                            <li>Conversion Series</li>
                             <li>
                                 <span>Investment Amount</span>
                                 <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">

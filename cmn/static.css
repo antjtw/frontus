@@ -523,7 +523,7 @@ address {
 
 .features .debt-calculator .try-me-button {
     top: -40px;
-    left: -55px;
+    left: -60px;
 }
 
 .features .calc-inputs {
@@ -544,11 +544,13 @@ address {
 
 .features .calc-inputs ul > li:first-child {
     margin-top: 20px;
+    color: #003045;
+    margin-bottom: 0;
 }
 
 .features .calc-inputs ul > li {
     margin-left: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .features .calc-inputs ul > li > span {
