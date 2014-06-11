@@ -1721,12 +1721,12 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
 }
 
-.status-table > tbody.empty-table > tr > td > span {
+.status-table > tbody.empty-table > tr > td span {
     font-size: 14px;
     text-transform:none;
 }
 
-.status-table > tbody.empty-table > tr > td > span.link {
+.status-table > tbody.empty-table > tr > td span.link {
     color:#3498DB;
     cursor:pointer;
 }
