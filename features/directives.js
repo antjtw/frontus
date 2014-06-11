@@ -81,11 +81,13 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
 
                 var yTicks = d3.svg.axis()
                     .scale(y)
+                    .ticks(5)
                     .tickSize(width)
                     .orient("right");
 
                 var yAxis = d3.svg.axis()
                     .scale(y)
+                    .ticks(5)
                     .orient("left");
 
                 svg.append("g")

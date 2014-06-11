@@ -699,6 +699,7 @@ ownership.service('calculate', function () {
                 convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
                 if (premoneypercent > (discount)) {
                     regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
+                    convertTran.newtran.caphit = true;
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {

@@ -33,10 +33,6 @@
                                 <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
                             </li>
                             <li>
-                                <span>Percentage Sold</span>
-                                <input ng-change="conversion('convertTranpercentsold')" ng-model="fields.convertTranpercentsold">
-                            </li>
-                            <li>
                                 <span>Investment Amount</span>
                                 <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
                             </li>
@@ -44,11 +40,28 @@
                                 <span>Pre-money</span>
                                 <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
                             </li>
+                            <li>
+                                <span>Post-money</span>
+                                <input class="money" ng-change="conversion('postmoney')" ng-model="fields.postmoney">
+                            </li>
                         </ul>
                     </div>
 
                     <div class="calc-outputs">
                         <d3-discount class="discount-chart" data="graphdata"></d3-discount>
+                    </div>
+
+                    <span class="try-me-button">
+                        <img src="/img/features/tryit.png">
+                    </span>
+                </div>
+
+                <div class='grey-stripe white-stripe'>
+                    <div>
+                        <h2>This debt note of value {{fields.fromtranamount}} with a valuation cap of {{fields.fromtranvalcap}} and a discount of {{fields.fromtrandiscount}}% is being converted. At a pre-money
+                        valuation of {{fields.premoney}} the valuation cap
+                            <span ng-show="convertTran.newtran.caphit">is in effect</span>
+                            <span ng-show="!convertTran.newtran.caphit">is not in effect</span></h2>
                     </div>
                 </div>
             </div>

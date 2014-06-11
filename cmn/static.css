@@ -518,6 +518,7 @@ address {
     margin: 0 auto 0 auto;
     border: 1px solid #C6C6C6;
     height: 425px;
+    position: relative;
 }
 
 .features .calc-inputs {
@@ -533,6 +534,19 @@ address {
     width: 200px;
     border: 1px solid #E3E3E3;
     border-radius: 3px;
+}
+
+.features .calc-inputs ul > li:first-child {
+    margin-top: 20px;
+}
+
+.features .calc-inputs ul > li {
+    margin-left: 35px;
+    margin-bottom: 10px;
+}
+
+.features .calc-inputs ul > li > span {
+    font-size: 12px;
 }
 
 .features .discount-chart .axis > .domain {

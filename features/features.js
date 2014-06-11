@@ -47,9 +47,9 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $location.url("/features/" + link);
         };
 
-        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"50,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount};
+        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000"};
         $scope.intervals = 200;
 
         $scope.conversion = function(changed) {
@@ -60,6 +60,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/[^0-9.]/g,''));
             $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/[^0-9.]/g,''));
             $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
+            $scope.postmoney = parseFloat(String($scope.fields.postmoney).replace(/[^0-9.]/g,''));
 
             //Hard code the valuation type of conversion for now.
             //TODO implement price per share conversion.
@@ -81,16 +82,17 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
                 increasing -= interval;
 
-                if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
-                    $scope.postmoney = parseFloat($scope.convertTran.amountsold) / (parseFloat($scope.convertTran.percentsold)/100);
-                    $scope.premoney = $scope.postmoney - parseFloat($scope.convertTran.amountsold);
-                    $scope.fields.premoney = String($scope.premoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-                }
-                /* if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && isNaN(parseFloat($scope.convertTran.percentsold))) {
+                if (changed != "postmoney" && !isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
                     $scope.postmoney = $scope.premoney + parseFloat($scope.convertTran.amountsold);
                     $scope.convertTran.percentsold = parseFloat(($scope.convertTran.amountsold) / (parseFloat($scope.postmoney)) * 100);
                     $scope.fields.convertTranpercentsold = $scope.convertTran.percentsold;
-                } */
+                    $scope.fields.postmoney = String($scope.postmoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                } else if (changed == "postmoney" && !isNaN(parseFloat($scope.postmoney)) && !isNaN(parseFloat($scope.premoney))) {
+                    $scope.convertTran.amountsold = $scope.postmoney - $scope.premoney;
+                    $scope.convertTran.percentsold = parseFloat(($scope.convertTran.amountsold) / (parseFloat($scope.postmoney)) * 100);
+                    $scope.fields.convertTranpercentsold = $scope.convertTran.percentsold;
+                    $scope.fields.convertTranamountsold = String($scope.convertTran.amountsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                }
 
 
                 for (var i = 0; i <= $scope.intervals; i++) {
@@ -114,10 +116,13 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, percentage: ownership*100});
                 }
 
+                console.log($scope.convertTran);
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
             }
         };
+
+        $scope.conversion("start");
     }
 ]);
 
