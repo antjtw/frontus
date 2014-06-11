@@ -762,6 +762,11 @@ app.controller('CompanyDocumentListController',
                     tosee += "," +  matches[1];
                 });
                 tosee = tosee === "" ? "!!!" : tosee;
+                angular.forEach(docsToShare, function(doc) {
+                    if (doc.signature_flow === undefined || doc.signature_flow === null) {
+                        doc.signature_flow = 0;
+                    }
+                });
                 SWBrijj.document_multishare(
                         tosee.substring(1).toLowerCase(),
                         JSON.stringify(docsToShare),
