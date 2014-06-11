@@ -61,7 +61,8 @@
                         <h2>This debt note of value {{fields.fromtranamount}} with a valuation cap of {{fields.fromtranvalcap}} and a discount of {{fields.fromtrandiscount}}% is being converted. At a pre-money
                         valuation of {{fields.premoney}} the valuation cap
                             <span ng-show="convertTran.newtran.caphit">is in effect</span>
-                            <span ng-show="!convertTran.newtran.caphit">is not in effect</span></h2>
+                            <span ng-show="!convertTran.newtran.caphit">is not in effect</span>.
+                        The converted value is {{convertTran.newtran.units}} which is {{convertTran.ownership}}% of the company.</h2>
                     </div>
                 </div>
             </div>

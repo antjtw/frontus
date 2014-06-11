@@ -94,6 +94,9 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     $scope.fields.convertTranamountsold = String($scope.convertTran.amountsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
                 }
 
+                $scope.convertTran.toissue.premoney = $scope.premoney;
+                $scope.convertTran.toissue.postmoney = $scope.postmoney;
+
 
                 for (var i = 0; i <= $scope.intervals; i++) {
                     increasing += interval;
@@ -119,6 +122,10 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 console.log($scope.convertTran);
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
+                var convalue = $scope.convertTran.newtran.units;
+                var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
+                var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ $scope.convertTran.toissue.postmoney);
+                $scope.convertTran.ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage) * 100;
             }
         };
 
