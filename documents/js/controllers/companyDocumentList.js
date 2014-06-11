@@ -61,40 +61,7 @@ app.controller('CompanyDocumentListController',
             if ($rootScope.person) {
                 $rootScope.$broadcast("profile_loaded");
             }
-            function getShareState() {
-                var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
-                sessionStorage.removeItem("sharewave");
-                if (!st || st==[] || st.length===0 ||
-                    !st.doclist) {
-                    $scope.docShareState = emptyShareState();
-                } else {
-                    $scope.docShareState = st;
-                }
-            }
-            function emptyShareState() {
-                return {doclist: [], emails: [], message: ""};
-            }
-            function loadPrepareState() {
-                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
-                sessionStorage.removeItem("docPrepareState");
-                if (st1) {
-                    angular.forEach($scope.documents, function(doc) {
-                        if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                            if (doc.is_prepared) {
-                                $scope.modals.updateShareType(doc, 2);
-                                $scope.$emit("notification:success",
-                                    "Success! Document prepared for signature.");
-                            } else {
-                                $scope.modals.updateShareType(doc, -1);
-                                $scope.$emit("notification:fail",
-                                    "Oops, the document is not ready for signature. Please try again.");
-                            }
-                        }
-                    });
-                }
-                $scope.finishedLoading = true;
-                return st1;
-            }
+
             $scope.saveShareState = function(clear) {
                 if (clear) {
                     sessionStorage.removeItem("sharewave");
@@ -120,26 +87,6 @@ app.controller('CompanyDocumentListController',
                 }
             };
 
-            // TODO: initShareState();
-            loadTags();
-
-            function initShareState() {
-                getShareState();
-                loadPrepareState();
-                if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
-                    // TODO: rewrite to not depend on having a fully loaded $scope.documents
-                    angular.forEach($scope.documents, function(doc) {
-                        angular.forEach($scope.docShareState.doclist, function(docToShare) {
-                            if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
-                                doc.forShare = true;
-                                doc.signature_flow = docToShare.signature_flow;
-                            }
-                        });
-                    });
-                }
-                $scope.messageText = $scope.docShareState.message;
-                $scope.multipeople = $scope.docShareState.emails;
-            }
             function loadTags() {
                 SWBrijj.tblm('document.my_company_tags').then(function(x) {
                     $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
@@ -147,6 +94,8 @@ app.controller('CompanyDocumentListController',
                     });
                 });
             }
+            loadTags();
+
             $scope.getAvailableTags = function() {return $scope.available_tags;};
             $scope.getTagClass = function() {return 'badge badge-info';};
 
@@ -762,6 +711,7 @@ app.controller('CompanyDocumentListController',
             };
 
             // Infinite Scroll
+            // TODO: move all of this into a service
             $scope.documents = [];
             $scope.investorDocs = [];
             // TODO: we maintain 8 seperate lists because it's hard to tell when to scroll otherwise
@@ -815,7 +765,11 @@ app.controller('CompanyDocumentListController',
             };
             $scope.loadingDocs = false;
             $scope.loaddocs = function() {
-                $scope.loadingDocs = true;
+                if ($scope.loadingDocs) {
+                    return;
+                } else {
+                    $scope.loadingDocs = true;
+                }
                 var typeVars = loadState[$scope.viewBy];
                 // handle '-' in docOrder and investorOrder
                 var sortkey = ($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder);
@@ -941,5 +895,73 @@ app.controller('CompanyDocumentListController',
                 });
             }).except(function(x) {
             });
+
+            // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
+            function fullyLoadDocuments(callback) {
+                if (loadState.document.fullyLoaded) {
+                    callback();
+                    return;
+                }
+                $scope.loaddocs();
+                window.setTimeout(function() {fullyLoadDocuments(callback);}, 250);
+                return 4;
+            }
+
+            function getShareState() {
+                var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
+                sessionStorage.removeItem("sharewave");
+                if (!st || st==[] || st.length===0 || !st.doclist) {
+                    $scope.docShareState = emptyShareState();
+                } else {
+                    $scope.docShareState = st;
+                }
+            }
+            function emptyShareState() {
+                return {doclist: [], emails: [], message: ""};
+            }
+            function loadPrepareState() {
+                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
+                sessionStorage.removeItem("docPrepareState");
+                if (st1) {
+                    fullyLoadDocuments(function() {
+                        angular.forEach($scope.documents, function(doc) {
+                            if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
+                                if (doc.is_prepared) {
+                                    $scope.modals.updateShareType(doc, 2);
+                                    $scope.$emit("notification:success",
+                                        "Success! Document prepared for signature.");
+                                } else {
+                                    $scope.modals.updateShareType(doc, -1);
+                                    $scope.$emit("notification:fail",
+                                        "Oops, the document is not ready for signature. Please try again.");
+                                }
+                            }
+                        });
+                        $scope.finishedLoading = true;
+                    });
+                }
+                return st1;
+            }
+            function initShareState() {
+                getShareState();
+                loadPrepareState();
+                if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
+                    fullyLoadDocuments(function() {
+                        // TODO: rewrite to not depend on having a fully loaded $scope.documents
+                        angular.forEach($scope.documents, function(doc) {
+                            angular.forEach($scope.docShareState.doclist, function(docToShare) {
+                                if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
+                                    doc.forShare = true;
+                                    doc.signature_flow = docToShare.signature_flow;
+                                }
+                            });
+                        });
+                    });
+                }
+                $scope.messageText = $scope.docShareState.message;
+                $scope.multipeople = $scope.docShareState.emails;
+            }
+
+            initShareState();
         }
     ]);
