@@ -627,7 +627,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .accordion-inner {
     border-top: none;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .transaction-accordion .capGuide.global {

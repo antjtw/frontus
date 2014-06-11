@@ -1,9 +1,9 @@
 'use strict';
 app.controller('CompContactCtrl',
     ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-        'payments', '$route', '$filter', '$location', '$http',
+        'payments', '$route', '$filter', '$location', '$http', 'oauth',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
-                 payments, $route, $filter, $location, $http) {
+                 payments, $route, $filter, $location, $http, oauth) {
             if (navState.role == 'investor') {
                 document.location.href = "/app/home";
                 return;
@@ -347,32 +347,45 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                if (!(navState.userid && navState.company && navState.role)) {
-                    alert("User role not selected.");
-                    $scope.response = "User role not selected.";
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
                     return;
-                }
-                document.domain = "sharewave.com";
-                $http.post('/cgi/suDbProc.py', {
-                    'proc': 'oauth.request_authorization',
-                    'service': svc,
-                    'userid': navState.userid,
-                    'company': navState.company,
-                    'role': navState.role
-                }).success(function(x) {
-                        window.oauthSuccessCallback = function (){
-                            $rootScope.access_token = 1;
-                            $scope.$apply();
-                            $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        };
-                        window.open(x);
-                        console.log(x);
-                    })
-                    .error(function(x) {
-                        console.log(x);
-                        $scope.response = x;
-                    });
+                post.success(function(x) {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function(x){
+                        console.log("success");
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                    };
+                    window.open(x);
+                    console.log(x);
+                }).error(function(x) {
+                    console.log(x);
+                    $scope.response = x;
+                });
             };
+            
+            $scope.exportAllToDropbox = function() {
+                SWBrijj.document_dropbox_export_all().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
+            $scope.exportCaptableToDropbox = function() {
+                SWBrijj.document_dropbox_export_captable().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
             });
@@ -715,14 +728,16 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
         $scope.setDocsLastEvent = function(activityfeed) {
             angular.forEach($scope.docs, function(doc) {
+                //TODO This is not working currently - commented out to stop the errors occuring
                 var version_activity = activityfeed.filter(function(el) {
                     return el.doc_id === doc.doc_id;
                 });
                 doc.last_event = version_activity.sort($scope.compareEvents)[0];
-                if (doc.last_event.activity === 'finalized') {
+                /*if (doc.last_event.activity === 'finalized') {
                     doc.last_event.activity = 'approved';
                 }
                 $scope.setStatusRank(doc);
+                 */
             });
         };
 

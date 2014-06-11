@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http',
+        'basics', '$http', 'oauth',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http) {
+                 basics, $http, oauth) {
             $scope.docShareState = {
                 doclist:[],
             };
@@ -175,8 +175,17 @@ app.controller('CompanyDocumentListController',
 
             // Document Upload pieces
             // Modal Up and Down Functions
-
+            
             $scope.modals.documentUploadOpen = function() {
+                $scope.files = [];
+                $scope.documentUploadModal = true;
+            };
+
+            $scope.modals.documentUploadClose = function() {
+                $scope.documentUploadModal = false;
+            };
+
+            /*$scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
                 $scope.showProgress = false;
                 $scope.showProcessing = false;
@@ -188,12 +197,22 @@ app.controller('CompanyDocumentListController',
                 $scope.showProcessing = false;
                 $rootScope.errorMessage = '';
                 $scope.documentUploadModal = false;
-            };
+            };*/
 
             $scope.wideopts = {
                 backdropFade: true,
                 dialogFade: true,
                 dialogClass: 'wideModal modal'
+            };
+            $scope.verywideopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'evenWiderModal modal'
+            };
+            $scope.doubleopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'twoPieceModal modal'
             };
             $scope.opts = {
                 backdropFade: true,
@@ -239,6 +258,8 @@ app.controller('CompanyDocumentListController',
                     }
                     $scope.$apply();
                 }
+                $scope.uploadFile($scope.files);
+                $scope.modals.documentUploadClose();
             };
 
             $scope.checkReady = function() {
@@ -530,6 +551,56 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
+            };
+            
+            $scope.modals.exportLinkDropboxOpen = function(doc, role) {
+                $scope.docForModal = doc;
+                $scope.roleForModal = role;
+                $scope.exportLinkDropboxModal = true;
+            };
+
+            $scope.modals.exportLinkDropboxClose = function() {
+                $scope.exportLinkDropboxModal = false;
+            };
+            
+            $scope.modals.exportToDropbox = function(doc, role) {
+                if ($rootScope.access_token)
+                {
+                    var filename = doc.docname;
+                    if ('undefined' !== typeof(doc.investor))
+                    {
+                        filename = doc.investor + "-" + doc.docname;
+                    }
+                    SWBrijj.document_dropbox_export(doc.doc_id, filename, role).then(function(x) {
+                        $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                    }).except(function(x) {
+                        $scope.response = x;
+                    });
+                }
+                else 
+                {
+                    $scope.modals.exportLinkDropboxOpen(doc, role);
+                }
+            };
+            
+            $scope.startOauth = function(svc, doc, role) {
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
+                    return;
+                post.success(function(x) {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function(x){
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                        if (doc != null)
+                            $scope.modals.exportToDropbox(doc, role);
+                    };
+                    window.open(x);
+                }).error(function(x) {
+                    console.log(x);
+                    $scope.response = x;
+                });
             };
 
             $scope.reallyDeleteDoc = function(doc) {

@@ -158,15 +158,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
     };
 
-    $scope.exportVersionToDropbox = function(version) {
-        SWBrijj.document_dropbox_export(version.doc_id, version.docname, 'investor').then(function(x) {
-            $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-            void(x);
-        }).except(function(x) {
-            $scope.response = x;
-        });
-    };
-
     $scope.exportVersionToPdf = function(version) {
         $scope.$emit("notification:success", "Export in progress.");
         SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {

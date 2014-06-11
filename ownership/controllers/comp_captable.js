@@ -418,7 +418,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             }
         });
-    }
+    };
 
     // Get the company's Issues
     SWBrijj.tblm('ownership.company_issue').then(function (data) {
@@ -546,7 +546,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             row[currentcolumn].state = true;
                         }
                         else {
-                            row[issue.issue].state = false;
+                            if (row[issue.issue]) {
+                                row[issue.issue].state = false;
+                            }
                             issue.state = false;
                         }
                     }
@@ -620,7 +622,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             issue[field] = i;
         }
         $scope.saveIssueCheck(issue, field)
-    }
+    };
 
     $scope.saveIssueCheckDate = function (issue, field, evt) {
         //Fix the dates to take into account timezone differences
@@ -1594,7 +1596,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             }
         });
         return total;
-    }
+    };
 
     $scope.singleTransaction = function(trans) {
         return (trans.length == 1);
