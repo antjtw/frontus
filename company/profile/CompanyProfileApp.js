@@ -373,7 +373,7 @@ app.controller('CompContactCtrl',
                     $scope.response = x;
                     console.log(x);
                 });
-                $scope.$emit("notification:success", "Starting Backup . . .");
+                $scope.$emit("notification:success", "Starting Export . . .");
             };
             
             $scope.exportCaptableToDropbox = function() {
@@ -383,7 +383,7 @@ app.controller('CompContactCtrl',
                     $scope.response = x;
                     console.log(x);
                 });
-                $scope.$emit("notification:success", "Starting Backup . . .");
+                $scope.$emit("notification:success", "Starting Export . . .");
             };
             
             $rootScope.$on('billingLoaded', function(x) {
