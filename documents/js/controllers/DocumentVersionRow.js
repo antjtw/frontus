@@ -132,6 +132,9 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         SWBrijj.procm("document.change_archive_state", version.doc_id, "true").then(function(data) {
             void(data);
             version.doc.archive_count += 1;
+            if ($scope.versionIsComplete(version)) {
+                version.doc.archive_complete_count += 1;
+            }
             version.archived = true;
             $scope.$emit("notification:success", "Document archived.");
         }).except(function(x) {
@@ -144,20 +147,14 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         SWBrijj.procm("document.change_archive_state", version.doc_id, "false").then(function(data) {
             void(data);
             version.doc.archive_count -= 1;
+            if ($scope.versionIsComplete(version)) {
+                version.doc.archive_complete_count -= 1;
+            }
             version.archived = false;
             $scope.$emit("notification:success", "Document unarchived.");
         }).except(function(x) {
             void(x);
             $scope.$emit("notification:fail", "Document unarchive failed.");
-        });
-    };
-
-    $scope.exportVersionToDropbox = function(version) {
-        SWBrijj.document_dropbox_export(version.doc_id, version.docname, 'investor').then(function(x) {
-            $scope.$emit("notification:success", "Successfully Exported to Dropbox");
-            void(x);
-        }).except(function(x) {
-            $scope.response = x;
         });
     };
 

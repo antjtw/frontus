@@ -71,12 +71,14 @@
 <div class="row-fluid leftTabWindow">
 <div ng-style="viewportheight" ng-class="{leftFullTableBlock:state.hideSharebar, widthtransition25:oldSafari()}"
      class="span8 recipientInfo statusBlock leftBlock">
-<div class="row-fluid listcontainer" my-loading-spinner="!finishedLoading">
+<div class="row-fluid listcontainer" infinite-scroll="loaddocs()" infinite-scroll-distance="1" infinite-scroll-disabled="loadingDocs" infinite-scroll-parent="">
 <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
     <tbody class="empty-table">
     <tr>
-        <td> <span>Welcome! </span><span class="link" ng-click="modals.documentUploadOpen();">Upload a document</span><span> to get started.</span>
-
+        <td>
+            <div my-loading-spinner="!finishedLoading">
+                <span>Welcome! </span><span class="link" ng-click="modals.documentUploadOpen();">Upload a document</span><span> to get started.</span>
+            </div>
         </td>
     </tr>
     </tbody>
@@ -105,12 +107,12 @@
 <table class="status-table" ng-show="investorDocs && viewBy==='name'">
     <tbody>
     <tr>
-        <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('name')">Name</th>
+        <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('display_name')">Name</th>
         <th colspan="2" class="left doc-status-header" ng-click="setInvestorOrder('statusRatio')">Status</th>
         <th></th>
     </tr>
     </tbody>
-    <tbody document-summary-row view-state="state" doc="investor" modals="modals" doc-share-state="docShareState" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder">
+    <tbody document-summary-row view-state="state" doc="investor" modals="modals" doc-share-state="docShareState" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder" class="animate">
     </tbody>
 </table>
 </div>
@@ -146,6 +148,60 @@
 </div>
 </div>
 
+<div modal="documentUploadModal" close="modals.documentUploadClose()" options="doubleopts">
+    <div class="modal-title">
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="modalText documentUploadFileInputs">
+                        <input multiple type="file" class='file'
+                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                            onchange="angular.element(this).scope().setFiles(this);"/>
+                        <div class="documentUpload fakefile">
+                            <div class="standard-button green">
+                                <button class="btn">Choose</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="span8">
+                <div class="modalText documentUploadText container">
+                    <div class="modalText documentUploadText header">
+                        <span>UPLOAD DOCUMENTS</span>
+                    </div>
+                    <div class="modalText documentUploadText">
+                        <span>Please select any document, presentation or image (20MB max per file)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="twoPieceModal body">
+        <div class="row-fluid">
+            <div class="span linkDropboxModalSpan smaller">
+                <img src="/img/ike-dropbox.png">
+            </div>
+            <div class="span linkDropboxModalSpan larger">
+                <div class="modalText linkDropboxModalText header greenLabel">
+                    <span>DID YOU KNOW YOU CAN ALSO...</span>
+                </div>
+                <div class="modalText linkDropboxModalText header">
+                    <span>Use Dropbox to upload your documents</span>
+                </div>
+                <div class="modalText linkDropboxModalText" ng-show="access_token==0">
+                    <span>Start by linking your Dropbox account with the link below.</span>
+                </div>
+                <div class="modalText linkDropboxModalText" ng-show="access_token>0">
+                    <span>Place the file in the uploads folder in your Dropbox, and we'll upload it.</span>
+                </div>
+                <div class="modalText linkDropboxModalText" ng-show="access_token==0">
+                    <p class='blue-link'><span ng-click="modals.exportLinkDropboxClose(); startOauth('dropbox', null, null);">Link Now</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
 <div modal="documentUploadModal" close="modals.documentUploadClose()" options="narrowopts">
     <div class="modalHeader">
         <span>Upload Documents</span>
@@ -166,7 +222,7 @@
                 <div ng-show="fileError" class="upload-errors">
                     <span>{{fileError}}</span>
                 </div>
-                -->
+
                 <div class="fileinputs">
                     <input multiple ng-hide="showProgress || showProcessing" type="file" class='file'
                            onchange="angular.element(this).scope().setFiles(this);"/>
@@ -201,6 +257,7 @@
         </div>
     </div>
 </div>
+-->
 
 <div modal="updateTitleModal" close="modals.updateTitleClose()" options="opts">
     <div class="modalHeader">
@@ -302,7 +359,7 @@
 </div>
 
 <div modal="exportLinkDropboxModal" close="modals.exportLinkDropboxClose()" options="verywideopts">
-    <div class="modalText">
+    <div class="modalText linkDropboxModal">
         <div class="row-fluid">
             <div class="span linkDropboxModalSpan smaller">
                 <img src="/img/ike-dropbox.png">
@@ -317,7 +374,7 @@
                 <div class="modalText linkDropboxModalText">
                     <span>Click the link below to connect now.</span>
                 </div>
-                    <p class='blue-link'><span ng-click="modals.exportLinkDropboxClose(); startOauth('dropbox', docForModal);">Link Now</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
+                    <p class='blue-link'><span ng-click="modals.exportLinkDropboxClose(); startOauth('dropbox', docForModal, roleForModal);">Link Now</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
             </div>
         </div>
     </div>

@@ -7,7 +7,9 @@ app.controller('CompanyDocumentListController',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
                  basics, $http, oauth) {
-            $scope.docShareState={};
+            $scope.docShareState = {
+                doclist:[],
+            };
             $scope.state = {
                 hideSharebar: true,
                 maxRatio: 1000,
@@ -26,7 +28,7 @@ app.controller('CompanyDocumentListController',
                 } else {
                     $scope.state.hideSharebar = true;
                 }
-            };
+            }
             $scope.$on('$routeChangeSuccess', function(current, previous) {
                 syncShareAndURL();
             });
@@ -59,40 +61,7 @@ app.controller('CompanyDocumentListController',
             if ($rootScope.person) {
                 $rootScope.$broadcast("profile_loaded");
             }
-            function getShareState() {
-                var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
-                sessionStorage.removeItem("sharewave");
-                if (!st || st==[] || st.length===0
-                    || !st.doclist) {
-                    $scope.docShareState = emptyShareState();
-                } else {
-                    $scope.docShareState = st;
-                }
-            };
-            function emptyShareState() {
-                return {doclist: [], emails: [], message: ""};
-            };
-            function loadPrepareState() {
-                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
-                sessionStorage.removeItem("docPrepareState");
-                if (st1) {
-                    angular.forEach($scope.documents, function(doc) {
-                        if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                            if (doc.is_prepared) {
-                                $scope.modals.updateShareType(doc, 2);
-                                $scope.$emit("notification:success",
-                                    "Success! Document prepared for signature.");
-                            } else {
-                                $scope.modals.updateShareType(doc, -1);
-                                $scope.$emit("notification:fail",
-                                    "Oops, the document is not ready for signature. Please try again.");
-                            }
-                        }
-                    });
-                }
-                $scope.finishedLoading = true;
-                return st1;
-            };
+
             $scope.saveShareState = function(clear) {
                 if (clear) {
                     sessionStorage.removeItem("sharewave");
@@ -117,96 +86,16 @@ app.controller('CompanyDocumentListController',
                     $scope.saveShareState();
                 }
             };
-            function mergeSmartIntoDumb(smarttemplates) {
-                var smartdocs = [];
-                var prepared = null;
-                SWBrijj.tblm('account.my_company', ['name', 'state']
-                    ).then(function(data) {
-                        if (data[0].name && data[0].state && data[0].state!=="  ") {
-                            prepared=true;
-                        }
-                        angular.forEach($scope.documents, function(doc) {
-                            if (doc.template_id) {
-                                smartdocs.push(doc.template_id);
-                                doc.is_prepared = prepared;
-                            }
-                        });
-                        angular.forEach(smarttemplates, function(smart) {
-                            if (smartdocs.indexOf(smart.template_id) === -1) {
-                                $scope.documents.push({
-                                    "docname": smart.template_name,
-                                    "uploaded_by": null,
-                                    "company": null,
-                                    "doc_id": null,
-                                    "template_id": smart.template_id,
-                                    "last_updated": null,
-                                    "annotations": null,
-                                    "versions": null,
-                                    "is_prepared": prepared,
-                                    "version_count": 0,
-                                    "complete_count": 0,
-                                    "archive_count": 0,
-                                    "type": "doc",
-                                    "last_event_time": null,
-                                });
-                            }
-                        });
-                    });
 
-            };
-
-            function loadSmartDocuments() {
-                SWBrijj.tblm('smartdoc.document').then(function(data) {
-                    mergeSmartIntoDumb(data);
-                }).except(function(x) {
-                });
-            };
-
-            function loadDocuments() {
-                // TODO: page w/ infinite scroll
-                // order is alpha right now
-                // need # versions total, archived, and completed for later calculations
-                // will need to calculate statusRatio for sorting (can be alpha, statusRatio, or tags)
-                // will need to merge list of documents received into current list
-                SWBrijj.tblm('document.my_company_library_view_list').then(function(data) {
-                    $scope.documents = data;
-                    angular.forEach($scope.documents, function(d) {
-                        if (d.tags !== null) {
-                            d.tags = JSON.parse(d.tags);
-                        }
-                        d.type = "doc";
-                        d.statusRatio = docStatusRatio(d);
-                    });
-                    loadSmartDocuments();
-                    initShareState();
-                    loadTags();
-                });
-            };
-            loadDocuments();
-
-            function initShareState() {
-                getShareState();
-                loadPrepareState();
-                if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
-                    angular.forEach($scope.documents, function(doc) {
-                        angular.forEach($scope.docShareState.doclist, function(docToShare) {
-                            if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
-                                doc.forShare = true;
-                                doc.signature_flow = docToShare.signature_flow;
-                            }
-                        });
-                    });
-                }
-                $scope.messageText = $scope.docShareState.message;
-                $scope.multipeople = $scope.docShareState.emails;
-            };
             function loadTags() {
                 SWBrijj.tblm('document.my_company_tags').then(function(x) {
                     $scope.available_tags = JSON.parse(x[0].tags).map(function(el) {
                         return el.replace(/"/g, "");
                     });
                 });
-            };
+            }
+            loadTags();
+
             $scope.getAvailableTags = function() {return $scope.available_tags;};
             $scope.getTagClass = function() {return 'badge badge-info';};
 
@@ -231,23 +120,13 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            SWBrijj.tblm("document.my_company_library_view_recipient_list").then(function(data) {
-                $scope.investorDocs = data;
-                angular.forEach($scope.investorDocs, function(investor) {
-                    investor.type = "investor";
-                    investor.statusRatio = docStatusRatio(investor);
-                });
-            });
-
             $scope.toggleMaxRatio = function() {
                 $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
             };
 
             $scope.viewBy = 'document';
             $scope.docOrder = 'docname';
-            $scope.shareOrder = 'docname';
-            $scope.versionOrder = 'statusRank';
-            $scope.investorOrder = 'name';
+            $scope.investorOrder = 'display_name';
             $scope.selectedDoc = 0;
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
@@ -257,7 +136,7 @@ app.controller('CompanyDocumentListController',
                 $scope.state.show_archived = !$scope.state.show_archived;
             };
 
-            // Only allow docOrder to be set -- versionOrder is fixed
+            // only allow docOrder to be set
             $scope.setOrder = function(field) {
                 $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
             };
@@ -283,7 +162,11 @@ app.controller('CompanyDocumentListController',
                     // if !show_archived and all versions are archived then return false
                     return false;
                 } else {
-                    return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                    if (obj.type == "doc") {
+                        return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                    } else {
+                        return !$scope.state.query || re.test(obj.name) || re.test(obj.email);
+                    }
                 }
             };
             $scope.versionFilter = function(obj) {
@@ -295,6 +178,15 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
+                $scope.documentUploadModal = true;
+            };
+
+            $scope.modals.documentUploadClose = function() {
+                $scope.documentUploadModal = false;
+            };
+
+            /*$scope.modals.documentUploadOpen = function() {
+                $scope.files = [];
                 $scope.showProgress = false;
                 $scope.showProcessing = false;
                 $scope.documentUploadModal = true;
@@ -305,7 +197,7 @@ app.controller('CompanyDocumentListController',
                 $scope.showProcessing = false;
                 $rootScope.errorMessage = '';
                 $scope.documentUploadModal = false;
-            };
+            };*/
 
             $scope.wideopts = {
                 backdropFade: true,
@@ -316,6 +208,11 @@ app.controller('CompanyDocumentListController',
                 backdropFade: true,
                 dialogFade: true,
                 dialogClass: 'evenWiderModal modal'
+            };
+            $scope.doubleopts = {
+                backdropFade: true,
+                dialogFade: true,
+                dialogClass: 'twoPieceModal modal'
             };
             $scope.opts = {
                 backdropFade: true,
@@ -347,20 +244,25 @@ app.controller('CompanyDocumentListController',
                 "text/plain", // .txt
                 "application/rtf" // .rtf
             ];
-
             $scope.setFiles = function(element) {
-                $scope.files = [];
-                $scope.fileError = "";
-                for (var i = 0; i < element.files.length; i++) {
-                    if (element.files[i].size > 20000000) {
-                        $scope.fileError = "Please choose a smaller file";
-                    } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                        $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
-                    } else {
-                        $scope.files.push(element.files[i]);
+                // called from outside of angular, so $apply it
+                $scope.$apply(function() {
+                    $scope.files = [];
+                    $scope.fileError = "";
+                    for (var i = 0; i < element.files.length; i++) {
+                        if (element.files[i].size > 20000000) {
+                            $scope.fileError = "Please choose a smaller file";
+                        } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                            $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                        } else {
+                            $scope.files.push(element.files[i]);
+                        }
                     }
-                    $scope.$apply();
-                }
+                    if ($scope.files.length > 0) {
+                        $scope.uploadFile($scope.files);
+                    }
+                    $scope.modals.documentUploadClose();
+                });
             };
 
             $scope.checkReady = function() {
@@ -392,7 +294,6 @@ app.controller('CompanyDocumentListController',
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
-                    $scope.$apply();
                 });
                 $scope.$on("upload:load", function(evt, arg) {
                     void(evt);
@@ -401,7 +302,6 @@ app.controller('CompanyDocumentListController',
                     $rootScope.showProcessing = true;
                     $scope.modals.documentUploadClose();
                     $scope.$emit("notification:success", "Success! We're preparing your file.");
-                    $scope.$apply();
                 });
                 $scope.$on(
                     "upload:error", function(evt, arg) {
@@ -409,14 +309,12 @@ app.controller('CompanyDocumentListController',
                         $scope.showProgress = false;
                         $scope.modals.documentUploadClose();
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
-                        $scope.$apply();
                         console.log(arg);
                     });
                 $scope.$on(
                     "upload:abort", function(evt, arg) {
                         $rootScope.errorMessage = arg;
                         $scope.showProgress = false;
-                        $scope.$apply();
                         console.log(evt);
                         console.log(arg);
                     });
@@ -441,6 +339,7 @@ app.controller('CompanyDocumentListController',
                             docname: files[i].name,
                             version_count: 0,
                             complete_count: 0,
+                            archive_complete_count: 0,
                             archive_count: 0,
                             statusRatio: 0,
                             uploading: true,
@@ -452,35 +351,15 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
 
                 }).except(function(x) {
-                        $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
-                        $scope.files = [];
-                        $scope.showProgress = false;
-                        $scope.$apply();
-                    });
+                    $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                    $scope.files = [];
+                    $scope.showProgress = false;
+                });
             };
 
             $scope.momentFromNow = function(date, zerodate) {
                 return moment(date).from(zerodate);
             };
-
-            function docStatusRatio(doc) {
-                if (doc.version_count == 0) {
-                    return 0;
-                }
-                var initRatio = (doc.complete_count / doc.version_count) + 1 || 0;
-                // This ensure documents with no versions appear before completed documents.
-                // The idea is that documents which have no versions are not done -- there is an implicit pending share to be completed
-                if (doc.version_count > 0 && initRatio == 0) {
-                    initRatio = (1 / doc.versions.length);
-                }
-                if (initRatio == 2) {
-                    initRatio += doc.version_count;
-                }
-                if (initRatio === Infinity) {
-                    initRatio = 0;
-                }
-                return initRatio;
-            }
 
             // TODO is it necessary to wrap with new functions?
             $scope.isCompleteSigned = function(version) {
@@ -497,9 +376,9 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.versionIsComplete = function(version) {
-                return $scope.isCompleteSigned(version)
-                    || $scope.isCompleteViewed(version)
-                    || $scope.isCompleteRetracted(version);
+                return $scope.isCompleteSigned(version) ||
+                       $scope.isCompleteViewed(version) ||
+                       $scope.isCompleteRetracted(version);
             };
 
             $scope.defaultDocStatus = function (doc) {
@@ -515,9 +394,9 @@ app.controller('CompanyDocumentListController',
                 var updated = false;
                 var listcopy = angular.copy(list);
                 angular.forEach(listcopy, function(el) {
-                    if (el.doc_id == item.doc_id
-                        || (!el.doc_id && !item.doc_id
-                            && el.template_id==item.template_id)) {
+                    if (el.doc_id == item.doc_id ||
+                        (!el.doc_id && !item.doc_id &&
+                            el.template_id==item.template_id)) {
                         el.signature_flow = item.signature_flow;
                         updated = true;
                     }
@@ -527,15 +406,15 @@ app.controller('CompanyDocumentListController',
                         "doc_id": item.doc_id,
                         "template_id": item.template_id,
                         "signature_flow": item.signature_flow
-                    }
+                    };
                     listcopy.push(obj);
                 }
                 return listcopy;
             };
             $scope.modals.removeShareItem = function(item, list) {
                 return list.filter(function(el) {
-                    return !(item.doc_id==el.doc_id
-                        && item.template_id==el.template_id);
+                    return !(item.doc_id==el.doc_id &&
+                             item.template_id==el.template_id);
                 });
             };
             $scope.modals.updateShareType = function(doc, tp) {
@@ -671,42 +550,51 @@ app.controller('CompanyDocumentListController',
             $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
             };
-            
-            $scope.modals.exportLinkDropboxOpen = function(doc) {
+
+            $scope.modals.exportLinkDropboxOpen = function(doc, role) {
                 $scope.docForModal = doc;
+                $scope.roleForModal = role;
                 $scope.exportLinkDropboxModal = true;
             };
 
             $scope.modals.exportLinkDropboxClose = function() {
                 $scope.exportLinkDropboxModal = false;
             };
-            
-            $scope.modals.exportOriginalToDropbox = function(doc) {
+
+            $scope.modals.exportToDropbox = function(doc, role) {
                 if ($rootScope.access_token)
                 {
-                    SWBrijj.document_dropbox_export(doc.doc_id, doc.docname, 'company').then(function(x) {
+                    var filename = doc.docname;
+                    if ('undefined' !== typeof(doc.investor))
+                    {
+                        filename = doc.investor + "-" + doc.docname;
+                    }
+                    SWBrijj.document_dropbox_export(doc.doc_id, filename, role).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                     }).except(function(x) {
                         $scope.response = x;
                     });
                 }
-                else 
+                else
                 {
-                    $scope.modals.exportLinkDropboxOpen(doc);
+                    $scope.modals.exportLinkDropboxOpen(doc, role);
                 }
             };
-            
-            $scope.startOauth = function(svc, doc) {
+
+            $scope.startOauth = function(svc, doc, role) {
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
                 post.success(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
-                        $rootScope.access_token = 1;
-                        $scope.$apply();
-                        $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        $scope.modals.exportOriginalToDropbox(doc);
+                        $scope.$apply(function() {
+                            $rootScope.access_token = 1;
+                            $rootScope.$emit("notification:success", "Linked to Dropbox");
+                            if (doc != null) {
+                                $scope.modals.exportToDropbox(doc, role);
+                            }
+                        });
                     };
                     window.open(x);
                 }).error(function(x) {
@@ -728,7 +616,7 @@ app.controller('CompanyDocumentListController',
 
 
             $scope.voidDocument = function(doc, message) {
-                if (!message || message.length == 0) {
+                if (!message || message.length === 0) {
                     message = " ";
                 }
                 SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
@@ -763,7 +651,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.remindDocument = function(doc, message) {
-                if (!message || message.length == 0) {
+                if (!message || message.length === 0) {
                     message = " ";
                 }
                 SWBrijj.procm("document.remind_investor", doc.doc_id, message).then(function(data) {
@@ -829,8 +717,8 @@ app.controller('CompanyDocumentListController',
             };
             $scope.docsReadyToShare = function(docs) {
                 if (!docs || docs.length===0) {
-		    return false;
-		}
+                    return false;
+                }
                 var count = 0;
                 angular.forEach($scope.documents, function(doc) {
                     if (doc.forShare) {
@@ -868,12 +756,17 @@ app.controller('CompanyDocumentListController',
                 var regExp = /\(([^)]+)\)/;
                 angular.forEach($scope.docShareState.emails, function(person) {
                     var matches = regExp.exec(person);
-                    if (matches == null) {
+                    if (matches === null) {
                         matches = ["", person];
                     }
                     tosee += "," +  matches[1];
                 });
                 tosee = tosee === "" ? "!!!" : tosee;
+                angular.forEach(docsToShare, function(doc) {
+                    if (doc.signature_flow === undefined || doc.signature_flow === null) {
+                        doc.signature_flow = 0;
+                    }
+                });
                 SWBrijj.document_multishare(
                         tosee.substring(1).toLowerCase(),
                         JSON.stringify(docsToShare),
@@ -892,6 +785,259 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
+
+            // Infinite Scroll
+            // TODO: move all of this into a service
+            $scope.documents = [];
+            $scope.investorDocs = [];
+            // TODO: we maintain 8 seperate lists because it's hard to tell when to scroll otherwise
+            // would be much better to maintain only 2 lists and share the data
+            var loadState = {
+                quantity: 10,
+                "document": {
+                    doTags: true,
+                    list: $scope.documents,
+                    type: "doc",
+                    view: "document.my_company_library_view_list",
+                    identifier: "doc_id",
+                    fullyLoaded: false,
+                    "docname": {
+                        iteration: 0,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
+                        orderKey: "docname",
+                    },
+                    "statusRatio": {
+                        iteration: 0,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
+                        orderKey: "status_ratio",
+                    },
+                },
+                "name": {
+                    doTags: false,
+                    list: $scope.investorDocs,
+                    type: "investor",
+                    view: "document.my_company_library_view_recipient_list",
+                    identifier: "email",
+                    fullyLoaded: false,
+                    "display_name": {
+                        iteration: 0,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
+                        orderKey: "display_name",
+                    },
+                    "statusRatio": {
+                        iteration: 0,
+                        reverseIteration: 0,
+                        forwardList: [],
+                        reverseList: [],
+                        orderKey: "status_ratio",
+                    },
+                },
+            };
+            $scope.loadingDocs = false;
+            $scope.loaddocs = function() {
+                if ($scope.loadingDocs) {
+                    return;
+                } else {
+                    $scope.loadingDocs = true;
+                }
+                var typeVars = loadState[$scope.viewBy];
+                // handle '-' in docOrder and investorOrder
+                var sortkey = ($scope.viewBy == "document" ? $scope.docOrder : $scope.investorOrder);
+                var ascending = true;
+                if (sortkey[0] == '-') {
+                    sortkey = sortkey.slice(1);
+                    ascending = false;
+                }
+                var loopState = typeVars[sortkey];
+                if (typeVars.fullyLoaded) {
+                    $scope.loadingDocs = false;
+                    return;
+                }
+                SWBrijj.tblmlimitorder(typeVars.view,
+                                       loadState.quantity,
+                                       loadState.quantity * (ascending? loopState.iteration : loopState.reverseIteration),
+                                       loopState.orderKey + (ascending? "" : " DESC")).then(function(data) {
+                    if (ascending) {
+                        loopState.iteration += 1;
+                    } else {
+                        loopState.reverseIteration += 1;
+                    }
+                    $scope.loadingDocs = false;
+                    $scope.finishedLoading = true;
+                    var myList;
+                    if (ascending) {
+                        myList = loopState.forwardList;
+                    } else {
+                        myList = loopState.reverseList;
+                    }
+                    angular.forEach(data, function(s) {
+                        if (typeVars.doTags && s.tags !== null) {
+                            s.tags = JSON.parse(s.tags);
+                        }
+                        s.type = typeVars.type;
+                        s.statusRatio = s.status_ratio;
+
+                        // check for existing item in typeVars.list and update instead of duplicating
+                        if (!myList.some(function(val, idx, arr) {
+                            if (val[typeVars.identifier] == s[typeVars.identifier]) {
+                                s.versions = val.versions;
+                                val = s;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        })) {
+                            myList.push(s);
+                        }
+                    });
+                    if (data.length < loadState.quantity) {
+                        typeVars.fullyLoaded = true;
+                        // have all the summary rows, so populate all the lists
+                        // TODO: un-hardcode these list assignments
+                        if ($scope.viewBy == "document") {
+                            typeVars.docname.forwardList = myList;
+                            typeVars.docname.reverseList = myList;
+                            typeVars.statusRatio.forwardList = myList;
+                            typeVars.statusRatio.reverseList = myList;
+                        } else if ($scope.viewBy == "name") {
+                            typeVars.display_name.forwardList = myList;
+                            typeVars.display_name.reverseList = myList;
+                            typeVars.statusRatio.forwardList = myList;
+                            typeVars.statusRatio.reverseList = myList;
+                        }
+                    }
+                    if ($scope.viewBy == "document") {
+                        $scope.documents = myList;
+                    } else if ($scope.viewBy == "name") {
+                        $scope.investorDocs = myList;
+                    }
+                });
+            };
+            // fire loaddocs whenever the sort order or viewby type changes
+            function loadDocsTrigger(newval, oldval) {
+                if (!oldval || oldval == newval) {
+                    // inital setting, do nothing
+                    return;
+                }
+                if (!$scope.loadingDocs) {
+                    $scope.loaddocs();
+                } else {
+                    window.setTimeout(loadDocsTrigger(newval, oldval), 50);
+                }
+            }
+            $scope.$watch('viewBy', loadDocsTrigger);
+            $scope.$watch('docOrder', loadDocsTrigger);
+            $scope.$watch('investorOrder', loadDocsTrigger);
+
+            // watch q, hide completed, and show archived and fire a few scroll events when they change
+            function stateChangeTrigger() {
+                $('.recipientInfo').scroll();
+            }
+            $scope.$watch('state.query', stateChangeTrigger);
+            $scope.$watch('state.maxRatio', stateChangeTrigger);
+            $scope.$watch('state.show_archived', stateChangeTrigger);
+
+            // Smart docs
+            SWBrijj.tblm('smartdoc.document_view').then(function(data) {
+                angular.forEach(data, function(template) {
+                    var doc = {
+                        "docname": template.template_name,
+                        "uploaded_by": null,
+                        "company": null,
+                        "doc_id": null,
+                        "template_id": template.template_id,
+                        "last_updated": null,
+                        "annotations": null,
+                        "versions": null,
+                        "is_prepared": template.is_prepared,
+                        "version_count": 0,
+                        "complete_count": 0,
+                        "archive_count": 0,
+                        "archive_complete_count": 0,
+                        "type": "doc",
+                        "last_event_time": null,
+                    };
+                    // add to each list of documents
+                    loadState.document.docname.forwardList.push(doc);
+                    loadState.document.docname.reverseList.push(doc);
+                    loadState.document.statusRatio.forwardList.push(doc);
+                    loadState.document.statusRatio.reverseList.push(doc);
+                });
+            }).except(function(x) {
+            });
+
+            // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
+            function fullyLoadDocuments(callback) {
+                if (loadState.document.fullyLoaded) {
+                    callback();
+                    return;
+                }
+                $scope.loaddocs();
+                window.setTimeout(function() {fullyLoadDocuments(callback);}, 250);
+                return 4;
+            }
+
+            function getShareState() {
+                var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
+                sessionStorage.removeItem("sharewave");
+                if (!st || st==[] || st.length===0 || !st.doclist) {
+                    $scope.docShareState = emptyShareState();
+                } else {
+                    $scope.docShareState = st;
+                }
+            }
+            function emptyShareState() {
+                return {doclist: [], emails: [], message: ""};
+            }
+            function loadPrepareState() {
+                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
+                sessionStorage.removeItem("docPrepareState");
+                if (st1) {
+                    fullyLoadDocuments(function() {
+                        angular.forEach($scope.documents, function(doc) {
+                            if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
+                                if (doc.is_prepared) {
+                                    $scope.modals.updateShareType(doc, 2);
+                                    $scope.$emit("notification:success",
+                                        "Success! Document prepared for signature.");
+                                } else {
+                                    $scope.modals.updateShareType(doc, -1);
+                                    $scope.$emit("notification:fail",
+                                        "Oops, the document is not ready for signature. Please try again.");
+                                }
+                            }
+                        });
+                        $scope.finishedLoading = true;
+                    });
+                }
+                return st1;
+            }
+            function initShareState() {
+                getShareState();
+                loadPrepareState();
+                if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
+                    fullyLoadDocuments(function() {
+                        // TODO: rewrite to not depend on having a fully loaded $scope.documents
+                        angular.forEach($scope.documents, function(doc) {
+                            angular.forEach($scope.docShareState.doclist, function(docToShare) {
+                                if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
+                                    doc.forShare = true;
+                                    doc.signature_flow = docToShare.signature_flow;
+                                }
+                            });
+                        });
+                    });
+                }
+                $scope.messageText = $scope.docShareState.message;
+                $scope.multipeople = $scope.docShareState.emails;
+            }
+
+            initShareState();
         }
     ]);
-

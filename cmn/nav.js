@@ -102,9 +102,9 @@ navm.directive('navbar', function () {
 
 navm.controller('NavCtrl',
                 ['$scope', '$route', '$rootScope', 'SWBrijj', '$q', '$window',
-                 'navState', '$location', '$filter', 'payments',
+                 'navState', '$location', '$filter', 'payments', 'logService',
     function($scope, $route, $rootScope, SWBrijj, $q, $window,
-             navState, $location, $filter, payments)
+             navState, $location, $filter, payments, logService)
     {
         $scope.companies = [];
 
@@ -343,6 +343,16 @@ navm.controller('NavCtrl',
 
         $rootScope.$on('notification:fail', function (event, message, callback) {
             $scope.notiFn('fail',message,callback);
+        });
+
+        $rootScope.$on('dblog:updated', function(event, message) {
+            angular.forEach(logService.log, function(item) {
+                var x = item.method.substring(0, 4);
+                var y = (x == "tblm" || x == "proc") ? ": " + JSON.parse(item.args)[0] : "";
+                var evt = item.method + y;
+                analytics.track(evt, {label: navState.company, value: item.time, category: 'dblatency'});
+            });
+            logService.clearLog();
         });
 
         $scope.notiFn = function(color, message, callback) {

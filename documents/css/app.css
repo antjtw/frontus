@@ -423,9 +423,8 @@ button.greyButton {
 }
 
 .modalText.linkDropboxModal {
-    width: 360px;
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .span.linkDropboxModalSpan {
@@ -1005,6 +1004,120 @@ input[type='text']:disabled, textarea:disabled {
 .templatePanel .check-box-button:disabled, .check-box-button:disabled:hover {
     background: url("/img/stripe-pattern.png") repeat;
 }
+
+.twoPieceModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.modalText .documentUploadText {
+    padding-top: 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.modalText .documentUploadText .container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.twoPieceModal {
+    margin-left: -360px;
+    width:718px;
+    z-index: 1060;
+    background-color: transparent;
+    box-shadow: none;
+    display: inline-block;
+}
+
+.twoPieceModal .modal-title {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    height: 80px;
+}
+
+.twoPieceModal .modal-title > p {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #1D2C3C;
+    line-height: 80px;
+}
+
+.twoPieceModal .modalText {
+    background-color: #FFFFFF;
+}
+
+.twoPieceModal ul > li {
+    text-align: left;
+    margin-left: 20px;
+    height: 100px;
+    overflow: auto;
+    font-size: 14px;
+    color: #666666;
+}
+
+.twoPieceModal ul > li > span {
+    display: inline-block;
+    width: 300px;
+    float: right;
+}
+
+.twoPieceModal .modalText h6 {
+    color: #15A085;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.twoPieceModal .body {
+    margin-left: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #FFFFFF;
+}
+
+.twoPieceModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.twoPieceModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
+
+.twoPieceModal div.modalText.documentUploadText.header {
+    padding-top: 10px;
+    font-weight: bolder;
+}
+
+.twoPieceModal .documentUpload {
+    display: inline-block;
+}
+
+.twoPieceModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
+.twoPieceModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
 
 .helpModal {
     margin-left: -360px;
