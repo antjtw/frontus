@@ -175,7 +175,7 @@ app.controller('CompanyDocumentListController',
 
             // Document Upload pieces
             // Modal Up and Down Functions
-            
+
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
                 $scope.documentUploadModal = true;
@@ -244,22 +244,25 @@ app.controller('CompanyDocumentListController',
                 "text/plain", // .txt
                 "application/rtf" // .rtf
             ];
-
             $scope.setFiles = function(element) {
-                $scope.files = [];
-                $scope.fileError = "";
-                for (var i = 0; i < element.files.length; i++) {
-                    if (element.files[i].size > 20000000) {
-                        $scope.fileError = "Please choose a smaller file";
-                    } else if (mimetypes.indexOf(element.files[i].type) == -1) {
-                        $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
-                    } else {
-                        $scope.files.push(element.files[i]);
+                // called from outside of angular, so $apply it
+                $scope.$apply(function() {
+                    $scope.files = [];
+                    $scope.fileError = "";
+                    for (var i = 0; i < element.files.length; i++) {
+                        if (element.files[i].size > 20000000) {
+                            $scope.fileError = "Please choose a smaller file";
+                        } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                            $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                        } else {
+                            $scope.files.push(element.files[i]);
+                        }
                     }
-                    $scope.$apply();
-                }
-                $scope.uploadFile($scope.files);
-                $scope.modals.documentUploadClose();
+                    if ($scope.files.length > 0) {
+                        $scope.uploadFile($scope.files);
+                    }
+                    $scope.modals.documentUploadClose();
+                });
             };
 
             $scope.checkReady = function() {
@@ -291,7 +294,6 @@ app.controller('CompanyDocumentListController',
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
-                    $scope.$apply();
                 });
                 $scope.$on("upload:load", function(evt, arg) {
                     void(evt);
@@ -300,7 +302,6 @@ app.controller('CompanyDocumentListController',
                     $rootScope.showProcessing = true;
                     $scope.modals.documentUploadClose();
                     $scope.$emit("notification:success", "Success! We're preparing your file.");
-                    $scope.$apply();
                 });
                 $scope.$on(
                     "upload:error", function(evt, arg) {
@@ -308,14 +309,12 @@ app.controller('CompanyDocumentListController',
                         $scope.showProgress = false;
                         $scope.modals.documentUploadClose();
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
-                        $scope.$apply();
                         console.log(arg);
                     });
                 $scope.$on(
                     "upload:abort", function(evt, arg) {
                         $rootScope.errorMessage = arg;
                         $scope.showProgress = false;
-                        $scope.$apply();
                         console.log(evt);
                         console.log(arg);
                     });
@@ -352,11 +351,10 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
 
                 }).except(function(x) {
-                        $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
-                        $scope.files = [];
-                        $scope.showProgress = false;
-                        $scope.$apply();
-                    });
+                    $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                    $scope.files = [];
+                    $scope.showProgress = false;
+                });
             };
 
             $scope.momentFromNow = function(date, zerodate) {
@@ -552,7 +550,7 @@ app.controller('CompanyDocumentListController',
             $scope.modals.deleteDocClose = function() {
                 $scope.deleteDocModal = false;
             };
-            
+
             $scope.modals.exportLinkDropboxOpen = function(doc, role) {
                 $scope.docForModal = doc;
                 $scope.roleForModal = role;
@@ -562,7 +560,7 @@ app.controller('CompanyDocumentListController',
             $scope.modals.exportLinkDropboxClose = function() {
                 $scope.exportLinkDropboxModal = false;
             };
-            
+
             $scope.modals.exportToDropbox = function(doc, role) {
                 if ($rootScope.access_token)
                 {
@@ -577,12 +575,12 @@ app.controller('CompanyDocumentListController',
                         $scope.response = x;
                     });
                 }
-                else 
+                else
                 {
                     $scope.modals.exportLinkDropboxOpen(doc, role);
                 }
             };
-            
+
             $scope.startOauth = function(svc, doc, role) {
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
@@ -590,11 +588,13 @@ app.controller('CompanyDocumentListController',
                 post.success(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
-                        $rootScope.access_token = 1;
-                        $scope.$apply();
-                        $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        if (doc != null)
-                            $scope.modals.exportToDropbox(doc, role);
+                        $scope.$apply(function() {
+                            $rootScope.access_token = 1;
+                            $rootScope.$emit("notification:success", "Linked to Dropbox");
+                            if (doc != null) {
+                                $scope.modals.exportToDropbox(doc, role);
+                            }
+                        });
                     };
                     window.open(x);
                 }).error(function(x) {

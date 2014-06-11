@@ -154,6 +154,7 @@
             <div class="span4">
                 <div class="modalText documentUploadFileInputs">
                         <input multiple type="file" class='file'
+                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
                             onchange="angular.element(this).scope().setFiles(this);"/>
                         <div class="documentUpload fakefile">
                             <div class="standard-button green">
@@ -221,7 +222,7 @@
                 <div ng-show="fileError" class="upload-errors">
                     <span>{{fileError}}</span>
                 </div>
-                
+
                 <div class="fileinputs">
                     <input multiple ng-hide="showProgress || showProcessing" type="file" class='file'
                            onchange="angular.element(this).scope().setFiles(this);"/>
