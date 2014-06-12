@@ -19,6 +19,10 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
           controller: 'FeaturesDebtCtrl',
           templateUrl:'/features/partials/debt.html'
       }).
+      when('/features/convertible-note', {
+          controller: 'FeaturesDebtCtrl',
+          templateUrl:'/features/partials/debt.html'
+      }).
       otherwise({redirectTo:'/features'});
 });
 
