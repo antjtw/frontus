@@ -526,6 +526,11 @@ address {
     margin-top: 40px;
 }
 
+.large-paragraph a {
+    font-size: 20px;
+    line-height: 28px;
+}
+
 /* Features Debt Calculator */
 
 .features .debt-calculator {
