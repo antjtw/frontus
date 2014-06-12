@@ -565,12 +565,8 @@ navm.controller('NavCtrl',
             });
         });
 
-        $scope.pricingregister = function() {
-            document.location.href = "/register/company-onestep";
-        };
-
-        $scope.pricingregisterchoose = function(which) {
-            document.location.href = "/register/company-onestep?plan=" + which;
+        $scope.pricingregister = function(args) {
+            document.location.href = "/register/company-onestep?" + args;
         };
 
         $rootScope.billing = {};
