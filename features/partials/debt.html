@@ -19,32 +19,32 @@
                 <div class="debt-calculator">
                     <div class="calc-inputs">
                         <ul>
-                            <li>Debt Note</li>
+                            <li>Convertible Note</li>
                             <li>
-                                <span>Convertible Note Amount</span>
+                                <span>Investment Amount</span>
                                 <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
-                            </li>
-                            <li>
-                                <span>Valuation Cap</span>
-                                <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
                             </li>
                             <li>
                                 <span>Discount (%)</span>
                                 <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
                             </li>
+                            <li>
+                                <span>Valuation Cap</span>
+                                <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
+                            </li>
                         </ul>
                         <ul>
-                            <li>Conversion Series</li>
+                            <li>Qualifying Financing</li>
                             <li>
                                 <span>Investment Amount</span>
                                 <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
                             </li>
                             <li>
-                                <span>Pre-money</span>
+                                <span>Pre-money Valuation</span>
                                 <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
                             </li>
                             <li>
-                                <span>Post-money</span>
+                                <span>Post-money Valuation</span>
                                 <input disabled class="money" ng-change="conversion('postmoney')" ng-model="fields.postmoney">
                             </li>
                         </ul>
@@ -66,6 +66,20 @@
                             <span ng-show="convertTran.newtran.caphit">is in effect</span>
                             <span ng-show="!convertTran.newtran.caphit">is not in effect</span>.
                         The converted value is {{convertTran.newtran.units}} which is {{convertTran.ownership}}% of the company.</h2>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            The example above returns both the monetary value and resulting ownership in the company (we've removed currency symbols so it's more friendly to everyone). The graph is a visualization of the effective discount on conversion, which gets interesting when the convertible note has a valuation cap.
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            For simplicity, we've rounded the Conversion Value to the nearest whole number and limited the precision of Ownership to the thousandths place. We've also witheld additional terms that can influence conversion, such as interest rate, which are available within Sharewave when you're running this against your own data. That means the math is also applicable to [Safe's](http://ycombinator.com/safe/), which were introduced by YCombinator.
+                        </div>
                     </div>
                 </div>
             </div>
