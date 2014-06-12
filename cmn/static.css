@@ -446,6 +446,13 @@ address {
     position: absolute;
     left: -45px;
     top: -20px;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
+.features .try-me-button.disappear {
+    opacity: 0;
 }
 
 .features .demo-captable {

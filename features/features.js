@@ -51,8 +51,12 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         $scope.convertTran = {"toissue": {}};
         $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000"};
         $scope.intervals = 200;
+        $scope.fiddled = false;
 
         $scope.conversion = function(changed) {
+            if (changed != "start") {
+                $scope.fiddled = "true"
+            }
             //Clear out commas and assign to the correct transaction fields;
             $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/[^0-9.]/g,''));
             $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/[^0-9.]/g,''));
