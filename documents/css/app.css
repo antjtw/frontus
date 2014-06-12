@@ -73,6 +73,10 @@ h2.large-h2 {
 
 .companyDocViewer {
     border-left: 1px solid #E3E3E3;
+    overflow: auto;
+    position: absolute;
+    top: 40px; /* header height */
+    bottom: 0;
 }
 
 .subnav-controls.flush-controls {
@@ -1211,16 +1215,8 @@ navbar .navbar + doc-viewer.modal-backdrop {
     display: none !important;
 }
 
-doc-viewer > .modal-backdrop {
-    background-color: #E3E3E3;
-}
 .docViewer {
     z-index: 1041 !important;
-    position: absolute;
-    top: 40px;
-    left: 0px;
-    right: 0px;
-    width: 928px;
     max-width: 928px;
     margin: 0 auto;
     background-color: white;

@@ -229,7 +229,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 $scope.rejectSignature(data[1]);
             }
         };
-        
+
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
@@ -299,5 +299,8 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.drawTime = function() {
             return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"));
         };
+
+        $scope.tabs = [{title: "hello"}];
+        $scope.activeTab = {};
     }
 ]);

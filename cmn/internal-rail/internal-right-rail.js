@@ -2,7 +2,7 @@
 
 app.directive('internalRightRail', function() {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         scope: {
             tabs: '=',
             selected: '='

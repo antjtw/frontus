@@ -1,7 +1,7 @@
 button.right-rail-button {
     position: absolute;
     right: 0;
-    top: 100px;
+    top: 0;
     height: 40px;
     width: 40px;
     border: none;
@@ -27,6 +27,9 @@ button.right-rail-button > span.arrow-flip {
     -o-transform: rotate(180deg);
 }
 
+.capright {
+    position: relative;
+}
 
 .capright input:disabled {
     background: url("/img/stripe-pattern.png") repeat;
@@ -49,10 +52,6 @@ button.right-rail-button > span.arrow-flip {
 }
 
 .span4.capright > button {
-    top: 330px;
-    position:relative;
-
-    left: -68px;
     -webkit-transform:rotate(90deg);
     -moz-transform:rotate(90deg);
     -o-transform:rotate(90deg);
@@ -214,6 +213,38 @@ button.right-rail-button > span.arrow-flip {
 
 .capright .in-brief .share-link div.profile-link:hover {
     background-color: #FFFFFF;
+}
+
+
+.tabbable .nav-tabs > li {
+    width: -moz-calc(50% - 20px);
+    width: -webkit-calc(50% - 20px);
+    width: calc(50% - 20px);
+}
+
+.singletab .tabbable .nav-tabs > li {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+}
+.trantabs .nav.nav-tabs, .tabbable .nav.nav-tabs {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: #E3E3E3;
+    border-color: #C6C6C6;
+}
+
+.tabbable .info-box > .head-box {
+    display: none;
+}
+
+.tabbable .tab-content {
+    padding-bottom: 0;
+}
+
+.tabbable .info-box {
+    margin-bottom: 0;
+    border-top: none;
 }
 
 /* Chrome visual bug fix */
