@@ -549,6 +549,10 @@ address {
     padding-left: 5px;
 }
 
+.features .calc-inputs input:disabled {
+    background-color: #E3E3E3;
+}
+
 .features .calc-inputs ul > li:first-child {
     margin-top: 20px;
     color: #003045;
