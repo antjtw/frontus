@@ -1589,5 +1589,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $window.onkeydown = null;
             }
         );
+
+        $scope.tabs = [{title: "hello"}];
+        $scope.activeTab = {};
     }
 ]);

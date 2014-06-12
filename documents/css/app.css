@@ -685,23 +685,6 @@ textarea.email-text {
     color: #3498DB;
 }
 
-/* CSS for the captable style sliding right panel */
-
-.span4.capright {
-    float: right;
-    margin-left: 0;
-    width: 350px;
-    border-left: 6px solid white;
-    padding-left: 20px;
-    padding-right: 40px;
-}
-.span4.capright.showSharebar {
-    border-left: 6px solid #E3E3E3;
-}
-.right-bar-header {
-    letter-spacing: 1px;
-}
-
 .slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
@@ -746,7 +729,7 @@ textarea.email-text {
     overflow: hidden;
     text-overflow: clip;
     white-space:nowrap;
-} 
+}
 
 .animate.ng-leave.animate.ng-leave-active,
 .animate.ng-enter {
@@ -765,7 +748,7 @@ textarea.email-text {
     height: 30px;
 */
 }
-    
+
 .subnav-controls.doclist-controls .fadeShow,
 .subnav-controls.doclist-controls .fadeShow + div {
     -webkit-animation: slideIn 0.25s ease-in-out;
@@ -2058,5 +2041,3 @@ div.imgsig > div > img {
 .standard-button.green.red-needed > button {
     background-color: #E74C3C;
 }
-
-

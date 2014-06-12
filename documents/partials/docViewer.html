@@ -1,6 +1,4 @@
-<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <script src="/cmn/spin.js"></script>
-<div class="modal-backdrop" style="opacity:0.9;"></div>
 
 <div modal="signatureModal" close="sigclose();" options="touropts">
     <div class="modal-title">
@@ -52,7 +50,7 @@
     </div>
 </div>
 
-<div class="docViewer" ng-hide="hidePage">
+<div class="docViewer">
     <div class="docViewerHeader">
         <div class="row-fluid docViewerTitle">
             <div>
@@ -188,9 +186,9 @@
         </div>
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
-        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"/>
+        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"></div>
 
-        <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"/>
+        <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
@@ -420,3 +418,7 @@
         <span><br>Use the arrow keys on the keyboard to<br>navigate between page</span>
     </div>
 </div>
+
+<internal-right-rail tabs="tabs" active="activeTab">
+    <div>"Hello World"</div>
+</internal-right-rail>
