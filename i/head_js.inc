@@ -26,7 +26,7 @@ window.analytics.page()
     </script>
 <![endif]-->
 
-<script src="http://cdn.optimizely.com/js/1296910003.js"></script>
+<script src="https://cdn.optimizely.com/js/1296910003.js"></script>
 <script src="/lib/bootstrap/bootstrap.js"></script>
 <script src="/lib/angular/angular.js"></script>
 <script src="/lib/angular/angular-route.js"></script>
