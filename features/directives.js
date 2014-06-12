@@ -169,14 +169,27 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 });
 
                 var focus = svg.append("g")
-                    .attr("class", "focus");
+                    .attr("class", "focus text-bubble");
 
                 focus.append("circle")
                     .attr("r", 5);
 
+                focus.append("rect")
+                    .attr("width", 80)
+                    .attr("height", 30)
+                    .attr("rx", 3)
+                    .attr("ry", 3)
+                    .attr("transform", "translate(-40,-45)");
+
+                focus.append("polygon")
+                    .attr("points", "-8,-16 0,-8 8,-16");
+
                 focus.append("text")
+                    .attr("text-anchor", "middle")
                     .attr("x", 9)
-                    .attr("dy", ".35em");
+                    .attr("dy", ".35em")
+                    .attr("transform", "translate(-9,-30)");
+
 
                 var headline = svg.append("g")
                     .attr("class", "headline");
@@ -202,7 +215,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("x", 9)
                     .attr("dy", ".35em")
                     .text("Converted Value")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 50) + ")");
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 70) + ")");
 
                 var totalvalue = svg.append("g")
                     .attr("class", "subheading");
@@ -212,7 +225,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("x", 9)
                     .attr("dy", ".35em")
                     .text("Ownership")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 100) + ")");
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 80) + ")");
 
 
                 svg.append("rect")
@@ -226,10 +239,10 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     focus.attr("transform", "translate(" + x(middlepoint.x) + "," + y(middlepoint.y) + ")");
                     focus.select("text").text(formatAmount(middlepoint.y) + "%");
 
-                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 75) + ")");
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 95) + ")");
                     headline.select("text").text(formatShortAmount(middlepoint.headline));
 
-                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 75) + ")");
+                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 55) + ")");
                     percentage.select("text").text(formatAmount(middlepoint.percentage) + "%");
                 } else {
                     focus.attr("display", "none");
@@ -244,12 +257,11 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         d1 = data[i],
                         d = x0 - d0.date > d1.date - x0 ? d1 : d0;
                     focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
-                    focus.select("text").text(formatAmount(d.y) + "%");
+                    focus.select("text")
+                        .text(formatAmount(d.y) + "%");
 
-                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 50) + ")");
                     headline.select("text").text(formatShortAmount(d.headline));
 
-                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 50) + ")");
                     percentage.select("text").text(formatAmount(d.percentage) + "%");
                 }
 

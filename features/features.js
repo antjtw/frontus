@@ -119,7 +119,6 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, percentage: ownership*100});
                 }
 
-                console.log($scope.convertTran);
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                 var convalue = $scope.convertTran.newtran.units;

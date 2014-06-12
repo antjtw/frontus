@@ -578,6 +578,19 @@ address {
     opacity: 0;
 }
 
+.text-bubble > rect {
+    fill: #1d2c3c;
+}
+
+.text-bubble > text {
+    fill: #c6c6c6;
+}
+
+.text-bubble > polygon {
+    fill: #1d2c3c;
+    stroke: none;
+}
+
 .features .discount-chart .overlay {
     fill: none;
     pointer-events: all;
