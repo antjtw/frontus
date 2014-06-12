@@ -27,7 +27,8 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
             var bisectX = d3.bisector(function(d) { return d.x; }).left;
 
             var formatAmount = function (amount) {
-                return calculate.funcformatAmount(amount);
+                var x = calculate.funcformatAmount(amount);
+                return x != null ? x : 0;
             };
 
             var formatShortAmount = function (amount) {

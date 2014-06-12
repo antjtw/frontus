@@ -70,6 +70,10 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
             $scope.postmoney = parseFloat(String($scope.fields.postmoney).replace(/[^0-9.]/g,''));
 
+            if (isNaN(parseFloat($scope.fromtran.discount))) {
+                $scope.fromtran.discount = 0;
+            }
+
             //Hard code the valuation type of conversion for now.
             //TODO implement price per share conversion.
             $scope.convertTran.method = "Valuation";
@@ -124,8 +128,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ graphpointtran.toissue.postmoney);
                     var ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage);
                     var topline = ownership * graphpointtran.toissue.postmoney;
+
                     $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, percentage: ownership*100});
                 }
+
+
 
                 $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
