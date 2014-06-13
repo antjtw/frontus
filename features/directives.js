@@ -120,29 +120,29 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                 var i = 0;
                 angular.forEach(data, function(point) {
                     if (!isNaN(parseFloat(point.y)) && !isNaN(parseFloat(point.x))) {
-                        points.push([point.y, point.x]);
+                        points.push([point.y, point.x, point.hit, point.num]);
                     }
                     i++;
                 });
                 var linecolour = "#00c399";
 
-                var path = svg.append("path")
-                    .attr("d", line(points))
-                    .style("stroke", linecolour)
-                    .style("stroke-width", 3)
-                    .style("fill", "transparent");
-
-                var totalLength = path.node().getTotalLength();
-
-                path
-                    .attr("stroke-dasharray", totalLength + " " + totalLength)
-                    .attr("stroke-dashoffset", totalLength)
-                    .transition()
-                    .duration(300)
-                    .ease("linear")
-                    .attr("stroke-dashoffset", 0);
-
                 angular.forEach(points, function(point) {
+                    if (point[2] && point[3] != 0) {
+                        svg.append("path")
+                            .attr("d", "M " + x(point[1]) + " 0 L " + x(point[1]) + " " + height)
+                            .attr("stroke", "red")
+                            .attr("stroke-dasharray","3,3");
+                        svg.append("text")
+                            .attr("text-anchor", "middle")
+                            .attr("class", "graph-flag")
+                            .attr("x", 9)
+                            .attr("dy", ".35em")
+                            .attr("fill", "#C6C6C6")
+                            .attr("shape-rendering", "crispEdges")
+                            .text("Valuation Cap Activated")
+                            .attr("transform", "translate(" + x(point[1]) + ",-15)");
+
+                    }
                     svg.append("circle")
                         .data(point)
                         .attr("cx", function(d) {
@@ -168,6 +168,22 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         .style("stroke", linecolour)
                         .style("fill", "white");
                 });
+
+                var path = svg.append("path")
+                    .attr("d", line(points))
+                    .style("stroke", linecolour)
+                    .style("stroke-width", 3)
+                    .style("fill", "transparent");
+
+                var totalLength = path.node().getTotalLength();
+
+                path
+                    .attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(300)
+                    .ease("linear")
+                    .attr("stroke-dashoffset", 0);
 
                 var focus = svg.append("g")
                     .attr("class", "focus text-bubble");
@@ -208,14 +224,6 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("x", 9)
                     .attr("dy", ".35em");
 
-                var postmoney = svg.append("g")
-                    .attr("class", "headline");
-
-                postmoney.append("text")
-                    .attr("text-anchor", "middle")
-                    .attr("x", 9)
-                    .attr("dy", ".35em");
-
                 var totalvalue = svg.append("g")
                     .attr("class", "subheading");
 
@@ -224,21 +232,14 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("x", 9)
                     .attr("dy", ".35em")
                     .text("Converted Value")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 100) + ")");
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 75) + ")");
 
                 totalvalue.append("text")
                     .attr("text-anchor", "middle")
                     .attr("x", 9)
                     .attr("dy", ".35em")
                     .text("Ownership")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 100) + ")");
-
-                totalvalue.append("text")
-                    .attr("text-anchor", "middle")
-                    .attr("x", 9)
-                    .attr("dy", ".35em")
-                    .text("Post-money valuation")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 0) + ")");
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 50) + ")");
 
 
                 svg.append("rect")
@@ -252,14 +253,11 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     focus.attr("transform", "translate(" + x(middlepoint.x) + "," + y(middlepoint.y) + ")");
                     focus.select("text").text(formatAmount(middlepoint.y) + "%");
 
-                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 125) + ")");
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 100) + ")");
                     headline.select("text").text(formatShortAmount(middlepoint.headline));
 
-                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 75) + ")");
+                    percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 25) + ")");
                     percentage.select("text").text(formatAmount(middlepoint.percentage) + "%");
-
-                    postmoney.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) - 25) + ")");
-                    postmoney.select("text").text(formatAmount(middlepoint.postmoney));
                 } else {
                     focus.attr("display", "none");
                 }
@@ -279,8 +277,6 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     headline.select("text").text(formatShortAmount(d.headline));
 
                     percentage.select("text").text(formatAmount(d.percentage) + "%");
-
-                    postmoney.select("text").text(formatAmount(d.postmoney));
                 }
 
 

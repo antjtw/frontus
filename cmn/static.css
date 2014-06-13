@@ -602,6 +602,10 @@ address {
     opacity: 0;
 }
 
+.graph-flag {
+    font-size: 12px;
+}
+
 .text-bubble > rect {
     fill: #1d2c3c;
 }
