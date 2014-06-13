@@ -2035,10 +2035,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             decrement.units = transferunits;
                             decrement.amount = x.amount * (transferunits/x.units);
                             decrement.investor = x.investor;
-
+                            x.units = x.units - decrement.units;
+                            x.amount = x.amount - decrement.amount;
                         }
                     });
-                    if (tran.units - transferunits == 0) {
+                    if (tran.units == 0) {
                         $scope.trans.splice(index, 1);
                     }
                     newtran.units = decrement.units;
