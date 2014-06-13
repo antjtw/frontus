@@ -2019,7 +2019,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 SWBrijj.proc('ownership.transfer', tran.tran_id, tran.transferto, transferunits, $scope.transfer.date).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var newtran = angular.copy(tran);
-                    newtran.tran_id = data[1][0];
+                    var returneddata = data[1][0].split("!!!");
+                    newtran.tran_id = returneddata[0];
                     newtran.investor = tran.transferto;
                     newtran.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "To", "date": $scope.transfer.date});
                     var tempunits = 0;
