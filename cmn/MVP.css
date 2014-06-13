@@ -4016,22 +4016,6 @@ h2.onboard {
     width: calc(100% - 80px) !important;
 }
 
-/* Overwriting the usersnap buttons */
-
-.classic.us-button-c50731562836a85c59cfa515f8f8ab70, .medic.us-button-c50731562836a85c59cfa515f8f8ab70, .pinkabell.us-button-c50731562836a85c59cfa515f8f8ab70, .lemon.us-button-c50731562836a85c59cfa515f8f8ab70, .redalert.us-button-c50731562836a85c59cfa515f8f8ab70, .snow_notready.us-button-c50731562836a85c59cfa515f8f8ab70, .snapbugz.us-button-c50731562836a85c59cfa515f8f8ab70 {
-    background-image: none !important;
-}
-
-.classic.us-button-c50731562836a85c59cfa515f8f8ab70 {
-    padding-right: 20px !important;
-    padding-left: 20px !important;
-    border-top: 2px solid #cccccc !important;
-}
-
-.classic.us-button-c50731562836a85c59cfa515f8f8ab70:hover, .classic.us-button-c50731562836a85c59cfa515f8f8ab70.hover {
-    background-color: #cccccc !important;
-}
-
 .newreg {
     background-color: white;
 }
