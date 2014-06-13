@@ -119,9 +119,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         }
 
-        function getNoteBounds(nx, pageBar, not_visible) {
+        function getNoteBounds(nx, not_visible) {
             // [LEFT, TOP, WIDTH, HEIGHT]
-            var top_padding = pageBar ? 161 : 120;
+            var top_padding = 120;
             var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
             var dp = document.querySelector('.docPanel');
             //if (!dp.offsetTop && not_visible) {
@@ -225,6 +225,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.pages = pages;
             $scope.template_original = false;
             refreshDocImage();
+            $scope.reqDocStatus($scope.docId); // sets $scope.doc_status
             $scope.loadPages();
             $scope.loadpreviousshares();
         });
@@ -240,16 +241,16 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-            $scope.loadpreviousshares = function() {
-                if ($rootScope.navState.role == 'issuer') {
-                    SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
-                        $scope.alreadyshared = [];
-                        angular.forEach(is, function(i) {
-                            $scope.alreadyshared.push(i.unretracted_shares);
-                        });
+        $scope.loadpreviousshares = function() {
+            if ($rootScope.navState.role == 'issuer') {
+                SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
+                    $scope.alreadyshared = [];
+                    angular.forEach(is, function(i) {
+                        $scope.alreadyshared.push(i.unretracted_shares);
                     });
-                }
-            };
+                });
+            }
+        };
 
 
         var regExp = /\(([^)]+)\)/;
@@ -330,6 +331,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             $scope.company_info = company_info[0];
 
                             //Sort through all the !!! and make the appropriate replacement
+                            // TODO: move to handlebars syntax and compile the doc
                             while (raw_html.match(/!!![^!]+!!!/g)) {
                                 var thing = raw_html.match(/!!![^!]+!!!/);
                                 thing = thing[0].substring(3,(thing[0].length)-3);
@@ -432,9 +434,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.notes = [];
-        $scope.annotatedPages = [];
         $scope.pageScroll = 0;
-        $scope.pageBarSize = 10;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
             offset: {top: 40}
@@ -473,10 +473,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.setAnnotable = function() {
-                $scope.isAnnotable = $scope.annotable();
-        };
-
         $scope.annotable = function() {
             return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
         };
@@ -488,14 +484,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.issuerCanAnnotate = function() {
             return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
                    ($scope.lib && $scope.prepare);
-        };
-
-        $scope.showPageBar = function() {
-            if ($scope.docLength > 1 && $scope.annotatedPages.length > 0) {
-                return true;
-            } else {
-                return false;
-            }
         };
 
         $scope.resetMsg = function() {
@@ -549,12 +537,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.docLength = data.length;
                 $scope.length_digits = data.length.toString().length * 8;
                 $scope.annotated = new Array(data.length);
-                $scope.annotatedPages = [];
                 for (var i = 0; i < data.length; i++) {
                     $scope.annotated[data[i].page - 1] = data[i].annotated;
-                    if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
                 }
-                $scope.annotatedPages.sort(function(a,b){return a-b;});
                 loadAnnotations();
             });
         };
@@ -823,8 +808,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         return;
                     }
                     $scope.lib = data;
-                    $scope.reqDocStatus($scope.docId);
-                    $scope.setAnnotable();
+                    $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
 
                     // data structure contents
@@ -851,29 +835,24 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     //
                     // [i][0][4] 956 dp.clientHeight
                     //
-                    // [i][1] type -> check or text or canvas
+                    // [i][1] type -> check or text or canvas (only text seems usable now)
                     //
                     // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
                     //
                     // [i][3] style -> font size -- anything else?
 
 
-                    var aa = data.annotations;
-                    if (aa) {
+                    if ($scope.lib.annotations) {
                         // restoreNotes
                         var annots;
-                        if ($scope.countersignable($scope.lib) && data.iss_annotations) {
-                            annots = JSON.parse(data.iss_annotations);
+                        if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
+                            annots = JSON.parse($scope.lib.iss_annotations);
                         }
                         else {
-                            annots = JSON.parse(aa);
+                            annots = JSON.parse($scope.lib.annotations);
                             if (data.iss_annotations) {
                                 annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
-                        }
-                        if (annots.length > 100) {
-                            //$scope.removeAllNotes();
-                            return;
                         }
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
@@ -884,16 +863,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             }
                             if ($scope.isAnnotable) {
                                 if ($scope.countersignable($scope.lib) && (newattr.whattype == "Signature" || newattr.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
-                                    $scope.annotatedPages.push(annot[0][0]);
                                     switch (annot[1]) {
-                                        case "check":
-                                            sticky = $scope.newCheckX(annot[0][0]);
-                                            break;
                                         case "text":
-                                            sticky = $scope.newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
-                                            break;
-                                        case "canvas":
-                                            sticky = $scope.newPadX(annot[0][0], annot[2][0]);
+                                            sticky = newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
                                             break;
                                     }
 
@@ -999,19 +971,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.morePages = function() {
-            return $scope.annotatedPages.length > $scope.pageScroll + $scope.pageBarSize + 1;
-        };
-
-        $scope.pageBarRight = function() {
-            $scope.pageScroll = Math.min($scope.annotatedPages.length - $scope.pageBarSize,
-                                         $scope.pageScroll + $scope.pageBarSize);
-        };
-
-        $scope.pageBarLeft = function() {
-            $scope.pageScroll = Math.max(0, $scope.pageScroll - $scope.pageBarSize);
-        };
-
         $scope.unsaved = function(page) {
             var nn = $scope.notes;
             for (var i = 0; i < nn.length; i++) {
@@ -1029,23 +988,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
             }
             $scope.notes = [];
-        };
-
-        $scope.closeMe = function(ev) {
-            var z = ev.currentTarget;
-            while (z.attributes.draggable === undefined) z = z.parentElement;
-            z.parentElement.removeChild(z);
-            var index = $scope.annotatedPages.indexOf($scope.currentPage);
-            if (index > -1) {
-                $scope.annotatedPages.splice(index, 1);
-            }
-            for (var i = 0; i < $scope.notes.length; i++) {
-                if ($scope.notes[i][0] === z) {
-                    $scope.notes.splice(i, 1);
-                    return;
-                }
-            }
-            $scope.$apply();
         };
 
         $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
@@ -1086,30 +1028,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
-        $scope.hasUnfilled = function(page) {
-            var unfilled = false;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i][0];
-                if (angular.element(n).scope().page == page) {
-                    var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent &&
-                            ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                             (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                            unfilled = true;
-                        }
-                    }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                            (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                            unfilled = true;
-                        }
-                    }
-                }
-            }
-            return unfilled;
-        };
-
+        // TODO: check against annotations service
         $scope.allUnfilled = function() {
             var unfilled = false;
             for (var i = 0; i < $scope.notes.length; i++) {
@@ -1132,57 +1051,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return unfilled;
         };
 
-        $scope.allFilled = function(page) {
-            var allfilled = true;
-            var some = false;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i][0];
-                if (angular.element(n).scope().page == page) {
-                    var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if ($scope.signaturepresent &&
-                            ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                             (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                            some = true;
-                            allfilled = false;
-                        }
-                    }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length !== 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                            (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                            allfilled = false;
-                            some = true;
-                        }
-                    }
-                }
-            }
-            return some && !allfilled;
-        };
-
-        $scope.range = function(start, stop, step) {
-            if (typeof stop == 'undefined') {
-                stop = start;
-                start = 0;
-            }
-            if (typeof step == 'undefined') {
-                step = 1;
-            }
-            if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) return [];
-            var result = [];
-            for (var i = start; step > 0 ? i < stop : i > stop; i += step) result.push(i);
-            return result;
-        };
-
-        $scope.newBox = function(event) {
-            var aa = $scope.newBoxX($scope.currentPage, '', null);
-            $scope.annotatedPages.push($scope.currentPage);
-            aa.scope().initdrag(event);
-        };
-
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var aa = $scope.newBoxX($scope.currentPage, '', null);
-                $scope.annotatedPages.push($scope.currentPage);
+                var aa = newBoxX($scope.currentPage, '', null);
                 aa.scope().newinitdrag(event);
             }
         };
@@ -1228,10 +1099,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.newBoxX = function(page, val, style, newattr) {
-            $scope.restoredPage = page;
+        function newBoxX(page, val, style, newattr) {
             var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
-                              '<fieldset><div class="textarea-container"><textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/></div></fieldset>' +
+                              '<fieldset>' +
+                              '<div class="textarea-container">' +
+                              '<textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/>' +
+                              '</div>' +
+                              '</fieldset>' +
                               '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
                                 '<ul>' +
                                     '<li>' +
@@ -1364,7 +1238,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             bb.value = val;
 
             return aa;
-        };
+        }
 
         $scope.smartValue = function ($event) {
             if (($rootScope.navState.role == "issuer" && $event.whosign == "Issuer") || $rootScope.navState.role == "investor" && $event.whosign == "Investor") {
@@ -1488,7 +1362,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
+                var bnds = getNoteBounds(nx, stamping);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
@@ -1549,6 +1423,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             var nd_iss = nd[1];
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
+                // possibly no document loaded?
                 return;
             }
             if (!$scope.isAnnotable) return;

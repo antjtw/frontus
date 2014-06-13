@@ -130,33 +130,42 @@ directive('draggable', ['$window', '$document',
                     };
 
                     $scope.newmouseup = function(ev) {
-                        if (document.detachEvent) {
-                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
-                        } else if (document.removeEventListener) {
-                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
-                        }
-                        var bb = $element[0].querySelector("textarea");
-                        $document.unbind('scroll', $scope.mousemove);
-                        $document.unbind('mousemove', $scope.newmousemove);
-                        $document.unbind('mouseup', $scope.newmouseup);
-                        if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
-                            var x = bb.parentElement.parentElement.parentElement.parentElement;
-                            x.parentElement.removeChild(x);
-                            var index = $scope.annotatedPages.indexOf($scope.currentPage);
-                            if (index > -1) {
-                                $scope.annotatedPages.splice(index, 1);
+                        $scope.$apply(function() {
+                            if (document.detachEvent) {
+                                document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                            } else if (document.removeEventListener) {
+                                document.removeEventListener(mousewheelevt, $scope.mousemove, false);
                             }
-                            for (var i = 0; i < $scope.notes.length; i++) {
-                                if ($scope.notes[i][0] === x) {
-                                    $scope.notes.splice(i, 1);
-                                    $scope.$apply();
-                                    return;
+                            var bb = $element[0].querySelector("textarea");
+                            $document.unbind('scroll', $scope.mousemove);
+                            $document.unbind('mousemove', $scope.newmousemove);
+                            $document.unbind('mouseup', $scope.newmouseup);
+                            if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
+                                var x = bb.parentElement.parentElement.parentElement.parentElement;
+                                x.parentElement.removeChild(x);
+                                for (var i = 0; i < $scope.notes.length; i++) {
+                                    if ($scope.notes[i][0] === x) {
+                                        $scope.notes.splice(i, 1);
+                                        return;
+                                    }
                                 }
                             }
+                            angular.element(bb.parentElement).scope().getme = true;
+                            return false;
+                        });
+                    };
+
+                    $scope.closeMe = function(ev) {
+                        var z = ev.currentTarget;
+                        while (z.attributes.draggable === undefined) z = z.parentElement;
+                        z.parentElement.removeChild(z);
+                        for (var i = 0; i < $scope.notes.length; i++) {
+                            if ($scope.notes[i][0] === z) {
+                                $scope.notes.splice(i, 1);
+                                return;
+                            }
                         }
-                        angular.element(bb.parentElement).scope().getme = true;
                         $scope.$apply();
-                        return false;
                     };
 
                     // Set startX/Y and initialMouseX/Y attributes.

@@ -172,20 +172,8 @@
                 </div>
             </div>
         </div>
-        <div ng-show="stage===0" class="page-bar">
-            <ul class="pull-left">
-                <li class="page-icons">Annotated Pages</li>
-                <li ng-repeat="page in annotatedPages | uniqueandorder track by $id($index)"
-                    ng-class="{'cur-page':page===currentPage, 'red-tab': hasUnfilled(page), 'green-tab': allFilled(page)}"
-                    class="page-tabs button"
-                    ng-click="jumpPage(page)">
-                    <span style="font-size:16px; vertical-align: middle;" data-icon="&#xe006;" aria-hidden="true"></span>
-                    <span> {{page}}</span>
-                </li>
-            </ul>
-        </div>
     </div>
-    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid annotatedPageBar">
+    <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"></div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>

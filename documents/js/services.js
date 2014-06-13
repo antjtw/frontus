@@ -48,3 +48,66 @@ docs.service('basics', function () {
 
 
 });
+
+docs.service('Annotations', function() {
+    // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
+    var doc_annotations = {};
+
+    this.hasUnfilled = function(page) {
+        var unfilled = false;
+        for (var i = 0; i < $scope.notes.length; i++) {
+            var n = $scope.notes[i][0];
+            if (angular.element(n).scope().page == page) {
+                var contents = n.querySelector("textarea");
+                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    if (!$scope.signaturepresent &&
+                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        unfilled = true;
+                    }
+                }
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        unfilled = true;
+                    }
+                }
+            }
+        }
+        return unfilled;
+    };
+
+    this.allFilled = function(page) {
+        var allfilled = true;
+        var some = false;
+        for (var i = 0; i < $scope.notes.length; i++) {
+            var n = $scope.notes[i][0];
+            if (angular.element(n).scope().page == page) {
+                var contents = n.querySelector("textarea");
+                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    if ($scope.signaturepresent &&
+                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        some = true;
+                        allfilled = false;
+                    }
+                }
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length !== 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        allfilled = false;
+                        some = true;
+                    }
+                }
+            }
+        }
+        return some && !allfilled;
+    };
+
+    this.getDocAnnotations = function(doc_id) {
+        if (!doc_annotations.doc_id) {
+            doc_annotations.doc_id = [];
+        }
+        return doc_annotations.doc_id
+    }
+});
