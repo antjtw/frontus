@@ -53,7 +53,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000"};
+        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000", "convertTranpercentsold": "20"};
         $scope.intervals = 200;
         $scope.fiddled = false;
 
@@ -94,22 +94,15 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
                 increasing -= interval;
 
-                if (changed != "postmoney" && !isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
-                    $scope.postmoney = $scope.premoney + parseFloat($scope.convertTran.amountsold);
-                    $scope.convertTran.percentsold = parseFloat(($scope.convertTran.amountsold) / (parseFloat($scope.postmoney)) * 100);
-                    $scope.fields.convertTranpercentsold = $scope.convertTran.percentsold;
-                    $scope.fields.postmoney = String($scope.postmoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-                } else if (changed == "postmoney" && !isNaN(parseFloat($scope.postmoney)) && !isNaN(parseFloat($scope.premoney))) {
-                    $scope.convertTran.amountsold = $scope.postmoney - $scope.premoney;
-                    $scope.convertTran.percentsold = parseFloat(($scope.convertTran.amountsold) / (parseFloat($scope.postmoney)) * 100);
-                    $scope.fields.convertTranpercentsold = $scope.convertTran.percentsold;
-                    $scope.fields.convertTranamountsold = String($scope.convertTran.amountsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
+                    $scope.postmoney = parseFloat($scope.convertTran.amountsold) / ($scope.convertTran.percentsold /100);
+                    $scope.premoney = parseFloat($scope.postmoney) - parseFloat($scope.convertTran.amountsold);
                 }
 
                 $scope.convertTran.toissue.premoney = $scope.premoney;
                 $scope.convertTran.toissue.postmoney = $scope.postmoney;
 
-
+                var valcaphit = false;
                 for (var i = 0; i <= $scope.intervals; i++) {
                     increasing += interval;
                     var graphpointtran = angular.copy($scope.convertTran);
@@ -126,10 +119,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     var convalue = convertedpoint.units;
                     var fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
                     var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ graphpointtran.toissue.postmoney);
+                    valcaphit = (fixedpercentage > shiftpercentage) && !valcaphit ? true : false;
                     var ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage);
                     var topline = ownership * graphpointtran.toissue.postmoney;
 
-                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100});
+                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit});
                 }
 
 
