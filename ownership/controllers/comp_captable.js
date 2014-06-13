@@ -2019,7 +2019,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 SWBrijj.proc('ownership.transfer', tran.tran_id, tran.transferto, transferunits, $scope.transfer.date).then(function (data) {
                     $scope.lastsaved = Date.now();
                     var newtran = angular.copy(tran);
-                    newtran.tran_id = data[1][0];
+                    var returneddata = data[1][0].split("!!!");
+                    newtran.tran_id = returneddata[0];
                     newtran.investor = tran.transferto;
                     newtran.convert.push({"investor_to": tran.transferto, "investor_from": tran.investor, "company": tran.company, "units": transferunits, "direction": "To", "date": $scope.transfer.date});
                     var tempunits = 0;
@@ -2034,10 +2035,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             decrement.units = transferunits;
                             decrement.amount = x.amount * (transferunits/x.units);
                             decrement.investor = x.investor;
-
+                            x.units = x.units - decrement.units;
+                            x.amount = x.amount - decrement.amount;
                         }
                     });
-                    if (tran.units - transferunits == 0) {
+                    if (tran.units == 0) {
                         $scope.trans.splice(index, 1);
                     }
                     newtran.units = decrement.units;
