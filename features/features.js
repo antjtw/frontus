@@ -129,7 +129,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     var ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage);
                     var topline = ownership * graphpointtran.toissue.postmoney;
 
-                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, percentage: ownership*100});
+                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100});
                 }
 
 
