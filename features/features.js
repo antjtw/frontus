@@ -44,6 +44,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             }
             var $this = $(this);
             var num = $this.val().replace(/[^0-9.]/g,'');
+            console.log(num);
             $this.val(num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
         });
 
@@ -56,6 +57,15 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000", "convertTranpercentsold": "20"};
         $scope.intervals = 200;
         $scope.fiddled = false;
+        $scope.debttab = "one";
+
+        $scope.$watch('fields', function(newval, oldval) {
+            if (newval && oldval && (parseFloat(newval.convertTranpercentsold) > 100 || parseFloat(newval.convertTranpercentsold) < 0)) {
+                $scope.fields.convertTranpercentsold = oldval.convertTranpercentsold;
+            } else if (newval && oldval && (parseFloat(newval.fromtrandiscount) > 100 || parseFloat(newval.fromtrandiscount) < 0)) {
+                $scope.fields.convertTranpercentsold = oldval.convertTranpercentsold;
+            }
+        }, true);
 
         $scope.conversion = function(changed) {
             if (changed != "start") {
@@ -79,7 +89,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
                 //Empty Graph data
-                $scope.graphdata = [];
+                $scope.graphdatadiscount = [];
+                $scope.graphdataequity = [];
                 //Default ppshare to 1 we're not displaying this for now
                 $scope.convertTran.toissue.ppshare = 1;
                 //Bottom limit for the range calculation
@@ -94,9 +105,14 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
                 increasing -= interval;
 
-                if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold))) {
+                if (!isNaN(parseFloat($scope.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "one") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) / ($scope.convertTran.percentsold /100);
                     $scope.premoney = parseFloat($scope.postmoney) - parseFloat($scope.convertTran.amountsold);
+                    $scope.fields.premoney = String($scope.premoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                } else if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "two") {
+                    $scope.postmoney = parseFloat($scope.convertTran.amountsold) + parseFloat($scope.premoney);
+                    $scope.convertTran.percentsold = (parseFloat($scope.convertTran.amountsold) / parseFloat($scope.postmoney)) * 100;
+                    $scope.fields.convertTranpercentsold = String($scope.convertTran.percentsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
                 }
 
                 $scope.convertTran.toissue.premoney = $scope.premoney;
@@ -111,7 +127,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     if (!isNaN(parseFloat(graphpointtran.percentsold)) && !isNaN(parseFloat(graphpointtran.amountsold))) {
                         graphpointtran.toissue.postmoney = parseFloat(graphpointtran.amountsold) / (parseFloat(graphpointtran.percentsold)/100);
                         graphpointtran.toissue.premoney = graphpointtran.toissue.postmoney - parseFloat(graphpointtran.amountsold);
-                    }
+                    };
                     var convertedpoint = calculate.conversion(graphpointtran);
                     var percentdiscount = parseFloat(convertedpoint.prevalcappercentage);
                     if (isNaN(percentdiscount)) {
@@ -133,7 +149,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     var ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage);
                     var topline = ownership * graphpointtran.toissue.postmoney;
 
-                    $scope.graphdata.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i});
+                    $scope.graphdatadiscount.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i});
+                    $scope.graphdataequity.push({x:increasing, y:ownership*100, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i});
                 }
 
 

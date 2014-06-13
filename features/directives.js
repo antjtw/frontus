@@ -4,10 +4,10 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
         scope: {
             data: "=",
             label: "@",
+            type: "@",
             onClick: "&"
         },
         link: function(scope, iElement, iAttrs) {
-
             var margin = {top: 60, right: 200, bottom: 90, left: 80},
                 width = 763 - margin.left - margin.right,
                 height = 425 - margin.top - margin.bottom;
@@ -287,14 +287,26 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("y", height + 60)
                     .text("Qualified Financing Investment Amount");
 
-                svg.append("text")
-                    .attr("class", "y label")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", (20-margin.left))
-                    .attr("x",0 - (height / 2))
-                    .attr("dy", "1em")
-                    .style("text-anchor", "middle")
-                    .text("Percentage Discount");
+                if (scope.type == "discount") {
+                    svg.append("text")
+                        .attr("class", "y label")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", (20-margin.left))
+                        .attr("x",0 - (height / 2))
+                        .attr("dy", "1em")
+                        .style("text-anchor", "middle")
+                        .text("Percentage Discount");
+                } else {
+                    svg.append("text")
+                        .attr("class", "y label")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", (20-margin.left))
+                        .attr("x",0 - (height / 2))
+                        .attr("dy", "1em")
+                        .style("text-anchor", "middle")
+                        .text("Ownership (%)");
+                }
+
 
             };
         }
