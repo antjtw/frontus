@@ -555,7 +555,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     if (data[i].annotated) {$scope.annotatedPages.push(data[i].page);}
                 }
                 $scope.annotatedPages.sort(function(a,b){return a-b;});
-                $scope.loadAnnotations();
+                loadAnnotations();
             });
         };
 
@@ -777,7 +777,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Investor") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Issuer") ? true : false;
         };
 
-        $scope.createAttributes = function (inv_attributes) {
+        function createAttributes(inv_attributes) {
             $scope.investor_attributes = {};
             $scope.attributelabels = {};
             angular.forEach(inv_attributes, function(attr) {
@@ -809,14 +809,14 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.signaturepresent = sig[0].have_signature;
         });
 
-        $scope.loadAnnotations = function() {
+        function loadAnnotations() {
             /** @name SWBrijj#tblm
              * @function
              * @param {string}
              * @param {...}
              */
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                $scope.createAttributes(inv_attributes);
+                createAttributes(inv_attributes);
                 SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                     if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                         // don't load annotations twice
@@ -910,10 +910,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         }
                     } // json struct
                 }).except(function(err) {
-                        $scope.leave();
-                    });
+                    $scope.leave();
+                });
             });
-        };
+        }
 
 
         $window.addEventListener('beforeunload', function(event) {

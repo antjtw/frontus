@@ -112,8 +112,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.getData();
 
         $scope.getVersion = function(doc) {
-            $scope.invq = false;
-            $scope.counterparty = true;
             /** @name doc#doc_id
              * @type {number} */
             /** @name doc#signature_deadline
@@ -134,7 +132,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.getOriginal = function() {
-            $scope.invq = false;
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
             $scope.library = "document.my_company_library";
