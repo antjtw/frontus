@@ -289,7 +289,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("text-anchor", "middle")
                     .attr("x", width/2)
                     .attr("y", height + 60)
-                    .text("Investment amount");
+                    .text("Qualified Financing Investment Amount");
 
                 svg.append("text")
                     .attr("class", "y label")
