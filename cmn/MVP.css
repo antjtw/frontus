@@ -4016,6 +4016,33 @@ h2.onboard {
     width: calc(100% - 80px) !important;
 }
 
+/* Zendesk Styling */
+
+#zenbox_tab {
+    border: none !important;
+    bottom: 0 !important;
+    top: inherit !important;
+    background-color: #E3E3E3;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* IE won't read ID-and-class selectors like #zenbox_tab.left, so we use just a class: */
+
+.ZenboxTabRight {
+    right: 80px !important;
+    background-position: left 0;
+}
+#zenbox_tab:hover {
+    background-color: #C7C7C7 !important;
+}
+#zenbox_tab img {
+    display: block;
+}
+
+#zenbox_body {
+    height: 500px !important;
+}
+
 .newreg {
     background-color: white;
 }
