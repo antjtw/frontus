@@ -144,6 +144,13 @@ function getNoteBounds(nx, pageBar, not_visible) {
     return [bds, ibds]; // [coords, size]
 }
 
+function boundBoxByPage(element) {
+    var docPanel = document.querySelector('.docPanel');
+    // FIXME does not work in firefox because position:absolute
+    element.style["max-width"] = (docPanel.offsetWidth) + 'px';
+    element.style["max-height"] = (docPanel.offsetHeight) + 'px';
+};
+
 app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
         $scope.image = {width: 0, height: 0};

@@ -58,7 +58,7 @@ directive('draggable', ['$window', '$document',
                         }
                     }, true);
 
-                    topLocation = function(elementHeight, mouseY) {
+                    var topLocation = function(elementHeight, mouseY) {
                         var docPanel = document.querySelector('.docPanel');
                         var topEdge = docPanel.offsetTop;
                         var panelHeight = docPanel.offsetHeight;
@@ -72,7 +72,7 @@ directive('draggable', ['$window', '$document',
                         }
                     };
 
-                    leftLocation = function(elementWidth, mouseX) {
+                    var leftLocation = function(elementWidth, mouseX) {
                         var docPanel = document.querySelector('.docPanel');
                         var leftEdge = docPanel.offsetLeft;
                         var panelWidth = docPanel.offsetWidth;
@@ -86,7 +86,7 @@ directive('draggable', ['$window', '$document',
                         }
                     };
 
-                    topFromBottomLocation = function(elementHeight, currBottom) {
+                    var topFromBottomLocation = function(elementHeight, currBottom) {
                         var docPanel = document.querySelector('.docPanel');
                         var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;
                         if (currBottom > bottomEdge) {
@@ -96,7 +96,7 @@ directive('draggable', ['$window', '$document',
                         }
                     };
 
-                    leftFromRightLocation = function(elementWidth, currRight) {
+                    var leftFromRightLocation = function(elementWidth, currRight) {
                         var docPanel = document.querySelector('.docPanel');
                         var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
                         if (currRight > rightEdge) {
@@ -104,13 +104,6 @@ directive('draggable', ['$window', '$document',
                         } else {
                             return currRight - elementWidth;
                         }
-                    };
-
-                    boundBoxByPage = function(element) {
-                        var docPanel = document.querySelector('.docPanel');
-                        // FIXME does not work in firefox because position:absolute
-                        element.style["max-width"] = (docPanel.offsetWidth) + 'px';
-                        element.style["max-height"] = (docPanel.offsetHeight) + 'px';
                     };
 
                     $scope.mousemove = function($event) {
@@ -166,7 +159,7 @@ directive('draggable', ['$window', '$document',
                         $document.unbind('scroll', $scope.mousemove);
                         $document.unbind('mousemove', $scope.newmousemove);
                         $document.unbind('mouseup', $scope.newmouseup);
-                        if (parseInt(bb.style.width) == 0 || parseInt(bb.style.height) < 12) {
+                        if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
                             var x = bb.parentElement.parentElement.parentElement.parentElement;
                             x.parentElement.removeChild(x);
                             var index = $scope.annotatedPages.indexOf($scope.currentPage);
@@ -256,7 +249,7 @@ directive('draggable', ['$window', '$document',
                         $scope.fixBox(elem[0]);
                     };
 
-                    restrictFontSize = function(proposedSize) {
+                    var restrictFontSize = function(proposedSize) {
                         if (proposedSize > 24) {
                             return 24;
                         } else if (proposedSize < 8) {
@@ -311,10 +304,10 @@ docs.directive('templateViewer', function($compile) {
             }, true);
 
             scope.add = function(raw_html) {
-            var html = angular.element($compile(raw_html)(scope));
-            iElement.append(html);
+                var html = angular.element($compile(raw_html)(scope));
+                iElement.append(html);
 
-            }
+            };
 
         }
     };
@@ -346,7 +339,7 @@ docs.filter('uniqueandorder', function() {
                 output.push(page);
             }
         });
-        output.sort(function(a,b){return a-b});
+        output.sort(function(a,b){return a-b;});
         return output;
     };
 });
