@@ -5,10 +5,11 @@
     <div class="row-fluid">
         <tabset ng-class="{'singletab': tabs.length == 1}">
             <tab ng-repeat="tab in tabs" active="tab.active" heading="{{tab.title}}">
-                <div><div ng-transclude></div></div>
+                <div ng-bind-html="tab.content"></div>
             </tab>
         </tabset>
     </div>
+    <div><div ng-transclude></div></div>
 </div>
 <button class="right-rail-button" ng-click="sideToggle = !sideToggle">
     <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>

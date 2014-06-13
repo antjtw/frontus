@@ -159,6 +159,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$watchCollection('image', $scope.updateDocPanelSize);
         window.onresize = $scope.updateDocPanelSize;
         $window.onkeydown = function(evt) {
+            // TODO: evt.which is read-only ("TypeError: setting a property that has only a getter")
             evt.which = evt.which || e.keyCode;
             // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
             if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {

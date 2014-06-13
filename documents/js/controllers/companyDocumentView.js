@@ -300,7 +300,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"));
         };
 
-        $scope.tabs = [{title: "hello"}];
+        $scope.tabs = [{title: "hello", content: "<span>asdfasdf</asdf>"}, {title: "world", content: "<div>\"Hello World\"</div>"}];
         $scope.activeTab = {};
     }
 ]);
