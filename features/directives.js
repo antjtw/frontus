@@ -224,7 +224,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("x", 9)
                     .attr("dy", ".35em")
                     .text("Converted Value")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 90) + ")");
+                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 100) + ")");
 
                 totalvalue.append("text")
                     .attr("text-anchor", "middle")
@@ -252,7 +252,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     focus.attr("transform", "translate(" + x(middlepoint.x) + "," + y(middlepoint.y) + ")");
                     focus.select("text").text(formatAmount(middlepoint.y) + "%");
 
-                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 115) + ")");
+                    headline.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 125) + ")");
                     headline.select("text").text(formatShortAmount(middlepoint.headline));
 
                     percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 75) + ")");
