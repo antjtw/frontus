@@ -86,26 +86,6 @@ directive('draggable', ['$window', '$document',
                         }
                     };
 
-                    var topFromBottomLocation = function(elementHeight, currBottom) {
-                        var docPanel = document.querySelector('.docPanel');
-                        var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;
-                        if (currBottom > bottomEdge) {
-                            return bottomEdge - elementHeight;
-                        } else {
-                            return currBottom - elementHeight;
-                        }
-                    };
-
-                    var leftFromRightLocation = function(elementWidth, currRight) {
-                        var docPanel = document.querySelector('.docPanel');
-                        var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
-                        if (currRight > rightEdge) {
-                            return rightEdge - elementWidth;
-                        } else {
-                            return currRight - elementWidth;
-                        }
-                    };
-
                     $scope.mousemove = function($event) {
                         // absolute mouse location (current): $event.clientX, $event.clientY
                         // absolute change in mouse location: dx, dy

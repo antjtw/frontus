@@ -175,7 +175,7 @@
         <div ng-show="stage===0" class="page-bar">
             <ul class="pull-left">
                 <li class="page-icons">Annotated Pages</li>
-                <li ng-repeat="page in showPages() | uniqueandorder track by $id($index)"
+                <li ng-repeat="page in annotatedPages | uniqueandorder track by $id($index)"
                     ng-class="{'cur-page':page===currentPage, 'red-tab': hasUnfilled(page), 'green-tab': allFilled(page)}"
                     class="page-tabs button"
                     ng-click="jumpPage(page)">

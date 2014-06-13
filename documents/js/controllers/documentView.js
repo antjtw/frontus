@@ -1,158 +1,178 @@
 'use strict';
 
-function ApplyLineBreaks(oTextarea) {
-    var max = Math.floor(parseInt(oTextarea.style.height)/12);
-    if (oTextarea.wrap) {
-        oTextarea.setAttribute("wrap", "off");
-    }
-    else {
-        oTextarea.setAttribute("wrap", "off");
-        var newArea = oTextarea.cloneNode(true);
-        newArea.value = oTextarea.value;
-        oTextarea.parentNode.replaceChild(newArea, oTextarea);
-        oTextarea = newArea;
-    }
-
-    var strRawValue = oTextarea.value;
-    oTextarea.value = "";
-    var nEmptyWidth = oTextarea.scrollWidth;
-    var nLastWrappingIndex = -1;
-
-    function testBreak(strTest) {
-        oTextarea.value = strTest;
-        return oTextarea.scrollWidth > nEmptyWidth;
-    }
-    function findNextBreakLength(strSource, nLeft, nRight) {
-        var nCurrent;
-        if(typeof(nLeft) == 'undefined') {
-            nLeft = 0;
-            nRight = -1;
-            nCurrent = 64;
-        }
-        else {
-            if (nRight == -1)
-                nCurrent = nLeft * 2;
-            else if (nRight - nLeft <= 1)
-                return Math.max(2, nRight);
-            else
-                nCurrent = nLeft + (nRight - nLeft) / 2;
-        }
-        var strTest = strSource.substr(0, nCurrent);
-        var bLonger = testBreak(strTest);
-        if(bLonger)
-            nRight = nCurrent;
-        else
-        {
-            if(nCurrent >= strSource.length)
-                return null;
-            nLeft = nCurrent;
-        }
-        return findNextBreakLength(strSource, nLeft, nRight);
-    }
-
-    var i = 0, j;
-    var strNewValue = "";
-    while (i < strRawValue.length) {
-        var breakOffset = findNextBreakLength(strRawValue.substr(i));
-        if (breakOffset === null) {
-            strNewValue += strRawValue.substr(i);
-            break;
-        }
-        nLastWrappingIndex = -1;
-        var nLineLength = breakOffset - 1;
-        for (j = nLineLength - 1; j >= 0; j--) {
-            var curChar = strRawValue.charAt(i + j);
-            if (curChar == ' ' || curChar == '-' || curChar == '+') {
-                nLineLength = j + 1;
-                break;
-            }
-        }
-        strNewValue += strRawValue.substr(i, nLineLength) + "\n";
-        i += nLineLength;
-    }
-    var re = /\n/g;
-    var lastre = /\n(?!.*\n)/;
-    var count = strNewValue.match(re);
-    if (count && max <= count.length) {
-        strNewValue = strNewValue.split("\n", max).join("\n");
-    }
-    oTextarea.value = strNewValue;
-    oTextarea.setAttribute("wrap", "hard");
-    return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
-}
-
-function getIntProperty(se, z) {
-    var lh = getComputed(se, z);
-    if(lh) {
-        lh = parseFloat(lh.replace("px", ""));
-    }
-    return lh;
-}
-
-function getComputed(se, z) {
-    originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-    return originalAnswer? originalAnswer : 1337;
-}
-
-function getCanvasOffset(ev) {
-    var offx, offy;
-    if (ev.offsetX === undefined) { // Firefox code
-        offx = ev.layerX-ev.target.offsetLeft;
-        offy = ev.layerY-ev.target.offsetTop;
-    } else {
-        offx = ev.offsetX;
-        offy = ev.offsetY;
-    }
-    return [offx, offy];
-}
-
-function countCRs(str) {
-    var z = str;
-    var cnt = 0;
-    while (true) {
-        var a = z.indexOf('\n');
-        if (a < 0) return cnt;
-        cnt++;
-        z = z.substring(a + 1);
-    }
-}
-
-function getNoteBounds(nx, pageBar, not_visible) {
-    // [LEFT, TOP, WIDTH, HEIGHT]
-    var top_padding = pageBar ? 161 : 120;
-    var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
-    var dp = document.querySelector('.docPanel');
-    //if (!dp.offsetTop && not_visible) {
-    //    bds[1]-=top_padding;
-    //}
-    // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
-    // this could be set as a static value during other pad calculations
-    var ntyp = nx.notetype;
-    var z, ibds;
-    if (ntyp == 'text') {
-        var t = nx.querySelector('textarea');
-        z = t.offset;
-        ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
-    } else if (ntyp == 'canvas') {
-        var c = nx.querySelector('canvas');
-        z = c.offset;
-        ibds = [z[0], z[1], z[2], z[3]];
-    } else if (ntyp == 'check') {
-        ibds = [12, 27, 14, 14];
-    }
-
-    return [bds, ibds]; // [coords, size]
-}
-
-function boundBoxByPage(element) {
-    var docPanel = document.querySelector('.docPanel');
-    // FIXME does not work in firefox because position:absolute
-    element.style["max-width"] = (docPanel.offsetWidth) + 'px';
-    element.style["max-height"] = (docPanel.offsetHeight) + 'px';
-};
-
 app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+        function ApplyLineBreaks(oTextarea) {
+            var max = Math.floor(parseInt(oTextarea.style.height)/12);
+            if (oTextarea.wrap) {
+                oTextarea.setAttribute("wrap", "off");
+            }
+            else {
+                oTextarea.setAttribute("wrap", "off");
+                var newArea = oTextarea.cloneNode(true);
+                newArea.value = oTextarea.value;
+                oTextarea.parentNode.replaceChild(newArea, oTextarea);
+                oTextarea = newArea;
+            }
+
+            var strRawValue = oTextarea.value;
+            oTextarea.value = "";
+            var nEmptyWidth = oTextarea.scrollWidth;
+            var nLastWrappingIndex = -1;
+
+            function testBreak(strTest) {
+                oTextarea.value = strTest;
+                return oTextarea.scrollWidth > nEmptyWidth;
+            }
+            function findNextBreakLength(strSource, nLeft, nRight) {
+                var nCurrent;
+                if(typeof(nLeft) == 'undefined') {
+                    nLeft = 0;
+                    nRight = -1;
+                    nCurrent = 64;
+                }
+                else {
+                    if (nRight == -1)
+                        nCurrent = nLeft * 2;
+                    else if (nRight - nLeft <= 1)
+                        return Math.max(2, nRight);
+                    else
+                        nCurrent = nLeft + (nRight - nLeft) / 2;
+                }
+                var strTest = strSource.substr(0, nCurrent);
+                var bLonger = testBreak(strTest);
+                if(bLonger)
+                    nRight = nCurrent;
+                else
+                {
+                    if(nCurrent >= strSource.length)
+                        return null;
+                    nLeft = nCurrent;
+                }
+                return findNextBreakLength(strSource, nLeft, nRight);
+            }
+
+            var i = 0, j;
+            var strNewValue = "";
+            while (i < strRawValue.length) {
+                var breakOffset = findNextBreakLength(strRawValue.substr(i));
+                if (breakOffset === null) {
+                    strNewValue += strRawValue.substr(i);
+                    break;
+                }
+                nLastWrappingIndex = -1;
+                var nLineLength = breakOffset - 1;
+                for (j = nLineLength - 1; j >= 0; j--) {
+                    var curChar = strRawValue.charAt(i + j);
+                    if (curChar == ' ' || curChar == '-' || curChar == '+') {
+                        nLineLength = j + 1;
+                        break;
+                    }
+                }
+                strNewValue += strRawValue.substr(i, nLineLength) + "\n";
+                i += nLineLength;
+            }
+            var re = /\n/g;
+            var lastre = /\n(?!.*\n)/;
+            var count = strNewValue.match(re);
+            if (count && max <= count.length) {
+                strNewValue = strNewValue.split("\n", max).join("\n");
+            }
+            oTextarea.value = strNewValue;
+            oTextarea.setAttribute("wrap", "hard");
+            return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
+        }
+
+        function getIntProperty(se, z) {
+            var lh = getComputed(se, z);
+            if(lh) {
+                lh = parseFloat(lh.replace("px", ""));
+            }
+            return lh;
+        }
+
+        function getComputed(se, z) {
+            var originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
+            return originalAnswer? originalAnswer : 1337;
+        }
+
+        function getCanvasOffset(ev) {
+            var offx, offy;
+            if (ev.offsetX === undefined) { // Firefox code
+                offx = ev.layerX-ev.target.offsetLeft;
+                offy = ev.layerY-ev.target.offsetTop;
+            } else {
+                offx = ev.offsetX;
+                offy = ev.offsetY;
+            }
+            return [offx, offy];
+        }
+
+        function countCRs(str) {
+            var z = str;
+            var cnt = 0;
+            while (true) {
+                var a = z.indexOf('\n');
+                if (a < 0) return cnt;
+                cnt++;
+                z = z.substring(a + 1);
+            }
+        }
+
+        function getNoteBounds(nx, pageBar, not_visible) {
+            // [LEFT, TOP, WIDTH, HEIGHT]
+            var top_padding = pageBar ? 161 : 120;
+            var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
+            var dp = document.querySelector('.docPanel');
+            //if (!dp.offsetTop && not_visible) {
+            //    bds[1]-=top_padding;
+            //}
+            // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
+            // this could be set as a static value during other pad calculations
+            var ntyp = nx.notetype;
+            var z, ibds;
+            if (ntyp == 'text') {
+                var t = nx.querySelector('textarea');
+                z = t.offset;
+                ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
+            } else if (ntyp == 'canvas') {
+                var c = nx.querySelector('canvas');
+                z = c.offset;
+                ibds = [z[0], z[1], z[2], z[3]];
+            } else if (ntyp == 'check') {
+                ibds = [12, 27, 14, 14];
+            }
+
+            return [bds, ibds]; // [coords, size]
+        }
+
+        function boundBoxByPage(element) {
+            var docPanel = document.querySelector('.docPanel');
+            // FIXME does not work in firefox because position:absolute
+            element.style["max-width"] = (docPanel.offsetWidth) + 'px';
+            element.style["max-height"] = (docPanel.offsetHeight) + 'px';
+        }
+
+        function topFromBottomLocation(elementHeight, currBottom) {
+            var docPanel = document.querySelector('.docPanel');
+            var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;
+            if (currBottom > bottomEdge) {
+                return bottomEdge - elementHeight;
+            } else {
+                return currBottom - elementHeight;
+            }
+        }
+
+        function leftFromRightLocation(elementWidth, currRight) {
+            var docPanel = document.querySelector('.docPanel');
+            var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
+            if (currRight > rightEdge) {
+                return rightEdge - elementWidth;
+            } else {
+                return currRight - elementWidth;
+            }
+        }
+
         $scope.image = {width: 0, height: 0};
         $scope.dp = {width: 0, height: 0};
         $scope.updateDocPanelSize = function() {
@@ -239,7 +259,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
             angular.forEach(email, function(person) {
                 var matches = regExp.exec(person);
-                if (matches == null) {
+                if (matches === null) {
                     matches = ["", person];
                 }
                 shareto += "," +  matches[1];
@@ -257,22 +277,22 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
             $scope.processing = true;
-            cleanatt = {};
+            var cleanatt = {};
             for (var key in attributes) {
                 if (key == 'investorName') {
-                    cleanatt['name'] = attributes[key];
+                    cleanatt.name = attributes[key];
                 }
                 else if (key == 'investorState') {
-                    cleanatt['state'] = attributes[key];
+                    cleanatt.state = attributes[key];
                 }
                 else if (key == 'investorCountry') {
-                    cleanatt['country'] = attributes[key];
+                    cleanatt.country = attributes[key];
                 }
                 else if (key == 'investorAddress') {
-                    cleanatt['street'] = attributes[key];
+                    cleanatt.street = attributes[key];
                 }
                 else if (key == 'investorPhone') {
-                    cleanatt['phone'] = attributes[key];
+                    cleanatt.phone = attributes[key];
                 }
                 cleanatt[key] = attributes[key];
             }
@@ -327,17 +347,17 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
                                             replace = $scope.get_attribute(attribute.attribute, "company", $scope.company_info);
                                             $scope.used_attributes[attribute.attribute] = replace;
-                                            replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>"
+                                            replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.used_attributes." + attribute.attribute + "'>";
                                         }
                                         else {
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span class='template-label'>" +attribute.label + "</span><input disabled type='text'>"
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input disabled type='text'>";
                                             }
                                             else if (attribute.attribute_type == "check-box") {
-                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' class='check-box-button'></button>"
+                                                replace = "<button disabled type='text' ng-class='{\"selected\":" + attribute.attribute +"==true}' class='check-box-button'></button>";
                                             }
                                             else if (attribute.attribute_type == "textarea") {
-                                                replace = "<textarea placeholder='" + attribute.label +"' disabled></textarea>"
+                                                replace = "<textarea placeholder='" + attribute.label +"' disabled></textarea>";
                                             }
                                         }
                                     }
@@ -358,15 +378,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
                             });
-                            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
-                            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-                            $scope.investor_attributes['investorAddress'] = angular.copy($rootScope.person.street);
-                            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
-                            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
-                            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
-                            $scope.investor_attributes['signatoryTitle'] = "";
-                            $scope.investor_attributes['signatoryName'] = "";
-                            $scope.investor_attributes['investorSignature'] = "";
+                            $scope.investor_attributes.investorName = angular.copy($rootScope.person.name);
+                            $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
+                            $scope.investor_attributes.investorAddress = angular.copy($rootScope.person.street);
+                            $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
+                            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+                            $scope.investor_attributes.signatoryTitle = "";
+                            $scope.investor_attributes.signatoryName = "";
+                            $scope.investor_attributes.investorSignature = "";
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -387,13 +407,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                             }
 
                                             if (attribute.attribute_type == "text") {
-                                                replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>"
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>";
                                             }
                                             else if (attribute.attribute_type == "check-box") {
-                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>"
+                                                replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>";
                                             }
                                             else if (attribute.attribute_type == "textarea") {
-                                                replace = "<span class='template-label'>" +attribute.label + "</span><textarea ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>"
+                                                replace = "<span class='template-label'>" +attribute.label + "</span><textarea ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>";
                                             }
                                         }
                                     }
@@ -411,7 +431,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.confirmValue = 0;
         $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
-        $scope.hidePage = false;
         $scope.notes = [];
         $scope.annotatedPages = [];
         $scope.pageScroll = 0;
@@ -467,8 +486,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.issuerCanAnnotate = function() {
-            return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2)
-                   || ($scope.lib && $scope.prepare);
+            return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
+                   ($scope.lib && $scope.prepare);
         };
 
         $scope.showPageBar = function() {
@@ -549,7 +568,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.fieldDisabled = function() {
-            return $scope.countersignable($scope.lib)
+            return $scope.countersignable($scope.lib);
         };
 
         $scope.openBox = function(ev, event) {
@@ -562,13 +581,14 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 var height = parseInt(textarea.style.height);
                 var boxwidth = 330;
                 var boxheight = 200;
+                var ratio;
                 if (height > width) {
-                    var ratio = boxheight / height;
+                    ratio = boxheight / height;
                     height = boxheight;
-                    width = width * ratio
+                    width = width * ratio;
                 }
                 else {
-                    var ratio = boxwidth / width;
+                    ratio = boxwidth / width;
                     width = boxwidth;
                     height = height * ratio;
                 }
@@ -593,14 +613,14 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 else {
                     element.style.backgroundImage = 'url(/photo/user?id=signature:)';
                 }
-            })
+            });
             $scope.$emit("notification:success", "Signature uploaded");
             $scope.scribblemode = false;
             $scope.$apply();
         };
 
         $scope.uploadFail = function() {
-            void(x);
+            void(0);
             $scope.progressVisible = false;
             $scope.signatureprocessing = false;
             $scope.signatureURL = '/photo/user?id=signature:';
@@ -613,9 +633,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.signatureURL = "/img/image-loader-140.gif";
                 $scope.signatureprocessing = true;
                 $scope.progressVisible = true;
+                var fd;
                 if ($scope.scribblemode) {
                     var canvas = document.getElementById("scribbleboard");
-                    var fd = canvas.toDataURL();
+                    fd = canvas.toDataURL();
                     $scope.signatureModal = false;
                     SWBrijj.uploadSignatureString(fd).then(function(x) {
                         $scope.uploadSuccess();
@@ -624,8 +645,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         });
                 }
                 else {
-                    var fd = new FormData();
-                    for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                    fd = new FormData();
+                    for (var i = 0; i < $scope.files.length; i++) {
+                        fd.append("uploadedFile", $scope.files[i]);
+                    }
                     $scope.signatureModal = false;
                     SWBrijj.uploadSignatureImage(fd).then(function(x) {
                         $scope.uploadSuccess();
@@ -761,24 +784,24 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.investor_attributes[attr.attribute] = attr.answer;
                 $scope.attributelabels[attr.attribute] = attr.label;
             });
-            $scope.investor_attributes['investorName'] = angular.copy($rootScope.person.name);
-            $scope.investor_attributes['investorState'] = angular.copy($rootScope.person.state);
-            $scope.investor_attributes['investorCountry'] = angular.copy($rootScope.person.country);
-            $scope.investor_attributes['investorStreet'] = angular.copy($rootScope.person.street);
-            $scope.investor_attributes['investorPhone'] = angular.copy($rootScope.person.phone);
-            $scope.investor_attributes['investorEmail'] = angular.copy($rootScope.person.email);
-            $scope.investor_attributes['investorPostalcode'] = angular.copy($rootScope.person.postalcode);
-            $scope.investor_attributes['signatureDate'] = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
-            $scope.attributelabels['investorName'] = "Name";
-            $scope.attributelabels['investorState'] = "State";
-            $scope.attributelabels['investorCountry'] = "Country";
-            $scope.attributelabels['investorStreet'] = "Address";
-            $scope.attributelabels['investorPhone'] = "Phone";
-            $scope.attributelabels['investorEmail'] = "Email";
-            $scope.attributelabels['investorPostalcode'] = "Zip code";
-            $scope.attributelabels['signatureDate'] = "Date";
-            $scope.attributelabels['ImgSignature'] = "Signature Image";
-            $scope.attributelabels['Signature'] = "Signature Text";
+            $scope.investor_attributes.investorName = angular.copy($rootScope.person.name);
+            $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
+            $scope.investor_attributes.investorCountry = angular.copy($rootScope.person.country);
+            $scope.investor_attributes.investorStreet = angular.copy($rootScope.person.street);
+            $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
+            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
+            $scope.investor_attributes.investorPostalcode = angular.copy($rootScope.person.postalcode);
+            $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+            $scope.attributelabels.investorName = "Name";
+            $scope.attributelabels.investorState = "State";
+            $scope.attributelabels.investorCountry = "Country";
+            $scope.attributelabels.investorStreet = "Address";
+            $scope.attributelabels.investorPhone = "Phone";
+            $scope.attributelabels.investorEmail = "Email";
+            $scope.attributelabels.investorPostalcode = "Zip code";
+            $scope.attributelabels.signatureDate = "Date";
+            $scope.attributelabels.ImgSignature = "Signature Image";
+            $scope.attributelabels.Signature = "Signature Text";
 
         };
 
@@ -838,7 +861,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     var aa = data.annotations;
                     if (aa) {
                         // restoreNotes
-                        var annots
+                        var annots;
                         if ($scope.countersignable($scope.lib) && data.iss_annotations) {
                             annots = JSON.parse(data.iss_annotations);
                         }
@@ -857,7 +880,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             var annot = annots[i];
                             var newattr = [null, null, null];
                             if (5 == annot.length) {
-                                newattr = annot[4]
+                                newattr = annot[4];
                             }
                             if ($scope.isAnnotable) {
                                 if ($scope.countersignable($scope.lib) && (newattr.whattype == "Signature" || newattr.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
@@ -955,10 +978,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on('event:leave', $scope.leave);
 
         $scope.leave = function() {
-            if ($rootScope.lastPage
-                    && ($rootScope.lastPage.indexOf("/register/") === -1)
-                    && ($rootScope.lastPage.indexOf("/login/") === -1)
-                    && ($rootScope.lastPage.indexOf("-view") === -1)) {
+            if ($rootScope.lastPage &&
+                ($rootScope.lastPage.indexOf("/register/") === -1) &&
+                ($rootScope.lastPage.indexOf("/login/") === -1) &&
+                ($rootScope.lastPage.indexOf("-view") === -1)) {
                 if (document.location.href.indexOf("share=true") !== -1) {
                     sessionStorage.setItem("docPrepareState",
                             angular.toJson({template_id: $scope.templateId,
@@ -974,10 +997,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             } else {
                 $location.url('/app/documents/company-list');
             }
-        };
-
-        $scope.showPages = function() {
-            return $scope.annotatedPages;
         };
 
         $scope.morePages = function() {
@@ -1074,21 +1093,21 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 if (angular.element(n).scope().page == page) {
                     var contents = n.querySelector("textarea");
                     if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent
-                                && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
-                                    || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        if (!$scope.signaturepresent &&
+                            ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                             (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             unfilled = true;
                         }
                     }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
-                                || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                            (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             unfilled = true;
                         }
                     }
                 }
             }
-            return unfilled
+            return unfilled;
         };
 
         $scope.allUnfilled = function() {
@@ -1097,20 +1116,20 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 var n = $scope.notes[i][0];
                 var contents = n.querySelector("textarea");
                 if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    if (!$scope.signaturepresent
-                        && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
-                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                    if (!$scope.signaturepresent &&
+                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                         unfilled = true;
                     }
                 }
-                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
-                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor')
-                        || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                         unfilled = true;
                     }
                 }
             }
-            return unfilled
+            return unfilled;
         };
 
         $scope.allFilled = function(page) {
@@ -1121,20 +1140,23 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 if (angular.element(n).scope().page == page) {
                     var contents = n.querySelector("textarea");
                     if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if ($scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        if ($scope.signaturepresent &&
+                            ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                             (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
                             some = true;
                             allfilled = false;
                         }
                     }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length != 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length !== 0) {
+                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+                            (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             allfilled = false;
                             some = true;
                         }
                     }
                 }
             }
-            return some && !allfilled
+            return some && !allfilled;
         };
 
         $scope.range = function(start, stop, step) {
@@ -1185,8 +1207,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
 
             // if the box is now off the page, move it over
-            currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
-            currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
+            var currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
+            var currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
 
             enclosingElement.style.top = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
             enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
@@ -1333,7 +1355,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             } else {
                 ta.scope().required = newattr ? newattr.required : null;
             }
-            ta.scope().annotext = val.length == 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[newattr.whattype] : val;
+            ta.scope().annotext = val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[newattr.whattype] : val;
 
             ta.width(ta.width());
             if (style) {
@@ -1346,10 +1368,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.smartValue = function ($event) {
             if (($rootScope.navState.role == "issuer" && $event.whosign == "Issuer") || $rootScope.navState.role == "investor" && $event.whosign == "Investor") {
-                $event.annotext = $event.annotext.length == 0 && $event.whattype in $scope.investor_attributes ? $scope.investor_attributes[$event.whattype] : $event.annotext;
+                $event.annotext = $event.annotext.length === 0 && $event.whattype in $scope.investor_attributes ? $scope.investor_attributes[$event.whattype] : $event.annotext;
             }
             else {
-                $event.annotext = $event.annotext.length == 0 ? "" : $event.annotext;
+                $event.annotext = $event.annotext.length === 0 ? "" : $event.annotext;
             }
         };
 
@@ -1422,15 +1444,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.doc_status = message;
         });
 
-        $scope.openModal = function(modal) {
-            $scope.hidePage = true;
-            $scope.$emit('open_modal', modal);
-        };
-
-        $scope.$on('close_modal', function(event) {
-            $scope.hidePage = false;
-        });
-
         $scope.clearNotes = function(event) {
             void(event);
             SWBrijj.procm($scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
@@ -1476,19 +1489,19 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 var n = $scope.notes[i];
                 var nx = n[0];
                 var bnds = getNoteBounds(nx, $scope.showPageBar(), stamping);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height]
+                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
                 var style = [];
-                var newstyle = {}
+                var newstyle = {};
                 var ndx = [pos, typ, val, style, newstyle];
                 var se, lh;
 
                 if (typ == 'text') {
-                    newstyle['investorfixed'] = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
-                    newstyle['whosign'] = (angular.element(nx).scope().$$nextSibling.whosign);
-                    newstyle['whattype'] = (angular.element(nx).scope().$$nextSibling.whattype);
-                    newstyle['required'] = (angular.element(nx).scope().$$nextSibling.required);
+                    newstyle.investorfixed = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
+                    newstyle.whosign = (angular.element(nx).scope().$$nextSibling.whosign);
+                    newstyle.whattype = (angular.element(nx).scope().$$nextSibling.whattype);
+                    newstyle.required = (angular.element(nx).scope().$$nextSibling.required);
                     se = nx.querySelector("textarea");
                     val.push(se.value);
                     style.push(getIntProperty(se, 'font-size'));
@@ -1507,7 +1520,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     divided[1].push(note);
                 }
                 else {
-                    divided[0].push(note)
+                    divided[0].push(note);
                 }
             });
             return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
@@ -1557,7 +1570,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.booleanUpdate = function(attribute, value) {
-            if (value == null) {
+            if (value === null) {
                 value = false;
             }
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
@@ -1574,14 +1587,14 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             returnvalue = true;
                         }
                     }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length == 0) {
+                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
                         if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
                             returnvalue = true;
                         }
                     }
                 }
             }
-            return returnvalue
+            return returnvalue;
         };
 
         $scope.sigModalUp = function () {
