@@ -38,13 +38,25 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
 app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
     function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
 
+        $scope.addCommas = function(num) {
+            var split = num.split('.');
+            split[0] = split[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+            if (split.length > 1) {
+                num = split[0] + "." + split[1];
+            } else {
+                num = split[0];
+            }
+            return num
+        };
+
         $('input.money').keyup(function(event){
             if(event.which >= 37 && event.which <= 40){
                 event.preventDefault();
             }
             var $this = $(this);
             var num = $this.val().replace(/[^0-9.]/g,'');
-            $this.val(num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            num = $scope.addCommas(num);
+            $this.val(num);
         });
 
         $scope.gotopage = function (link) {
@@ -109,11 +121,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) / ($scope.convertTran.percentsold /100);
                     $scope.premoney = parseFloat($scope.postmoney) - parseFloat($scope.convertTran.amountsold);
                     console.log($scope.premoney);
-                    $scope.fields.premoney = String($scope.premoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                    $scope.fields.premoney = $scope.addCommas(String($scope.premoney));
                 } else if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "two") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) + parseFloat($scope.premoney);
                     $scope.convertTran.percentsold = (parseFloat($scope.convertTran.amountsold) / parseFloat($scope.postmoney)) * 100;
-                    $scope.fields.convertTranpercentsold = String($scope.convertTran.percentsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                    $scope.fields.convertTranpercentsold = $scope.addCommas(String($scope.convertTran.percentsold));
                 }
 
                 if ($scope.debttab == "one") {
