@@ -4403,7 +4403,9 @@ textarea.email-text {
 }
 
 /*message sidebar*/
-.message-side ul{
-    padding-left: -20px;
+.span4.capright.showSharebar .message-side{
+    margin-left: -20px;
+    margin-right: -42px;
 }
+
 
