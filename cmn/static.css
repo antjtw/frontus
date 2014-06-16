@@ -686,6 +686,57 @@ address {
     shape-rendering: crispEdges;
 }
 
+.debt-calculator-mobile {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+
+    .features .debt-calculator .try-me-button {
+        display: none;
+    }
+
+    .features .debt-calculator {
+        display: block;
+        width: 100%;
+        margin: 0 auto 0 auto;
+    }
+
+    .features .calc-inputs {
+        width: 100%;
+        height: 250px;
+    }
+
+    .features .calc-inputs > ul {
+        width: 50%;
+        display: inline-block;
+        float: left;
+    }
+
+    .features .calc-inputs ul > li > span {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .features .debt-calculator > div.debt-block {
+        min-height: 425;
+        height: inherit;
+    }
+}
+
+@media (max-width: 320px) {
+    .debt-calculator {
+        display: none;
+    }
+
+    .debt-calculator-mobile {
+        display: block;
+        width: 80%;
+        margin: 0 auto 0 auto;
+    }
+
+}
+
 
 @media (min-width: 1000px) {
     .feature-block .screen {

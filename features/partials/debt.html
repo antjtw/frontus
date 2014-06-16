@@ -69,6 +69,47 @@
                     </span>
                 </div>
 
+                <div class="debt-calculator-mobile">
+                    <div class="debt-block">
+                        <div class="calc-inputs">
+                            <ul>
+                                <li>Convertible Note</li>
+                                <li>
+                                    <span>Investment Amount</span>
+                                    <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
+                                </li>
+                                <li>
+                                    <span>Discount (%)</span>
+                                    <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
+                                </li>
+                                <li>
+                                    <span>Valuation Cap</span>
+                                    <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>Qualified Financing</li>
+                                <li>
+                                    <span>Investment Amount</span>
+                                    <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
+                                </li>
+                                <li ng-show="debttab == 'one'">
+                                    <span>Percentage of Company Sold</span>
+                                    <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold">
+                                </li>
+                                <li ng-show="debttab == 'two'">
+                                    <span>Pre-money valuation</span>
+                                    <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <span ng-class="{disappear: fiddled}" class="try-me-button">
+                        <img src="/img/features/tryit.png">
+                    </span>
+                </div>
+
                 <div ng-show="false" class='grey-stripe white-stripe'>
                     <div>
                         <h2>This debt note of value {{fields.fromtranamount}} with a valuation cap of {{fields.fromtranvalcap}} and a discount of {{fields.fromtrandiscount}}% is being converted. At a pre-money
