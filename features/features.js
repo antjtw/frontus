@@ -44,7 +44,6 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             }
             var $this = $(this);
             var num = $this.val().replace(/[^0-9.]/g,'');
-            console.log(num);
             $this.val(num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
         });
 
@@ -93,26 +92,44 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 $scope.graphdataequity = [];
                 //Default ppshare to 1 we're not displaying this for now
                 $scope.convertTran.toissue.ppshare = 1;
-                //Bottom limit for the range calculation
-                $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
+
                 //Default values before the loop (will allow for date changing
                 $scope.convertTran.date = new Date(1401768000000);
                 $scope.convertTran.tran = $scope.fromtran;
                 $scope.convertTran.newtran = angular.copy($scope.fromtran);
 
+                //Bottom limit for the range calculation
+                $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
                 // Work out the intervals for the graph's x axis.
                 var increasing = angular.copy($scope.convertTran.bottomamount);
                 var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
                 increasing -= interval;
 
-                if (!isNaN(parseFloat($scope.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "one") {
+                if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "one") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) / ($scope.convertTran.percentsold /100);
                     $scope.premoney = parseFloat($scope.postmoney) - parseFloat($scope.convertTran.amountsold);
+                    console.log($scope.premoney);
                     $scope.fields.premoney = String($scope.premoney).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
                 } else if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "two") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) + parseFloat($scope.premoney);
                     $scope.convertTran.percentsold = (parseFloat($scope.convertTran.amountsold) / parseFloat($scope.postmoney)) * 100;
                     $scope.fields.convertTranpercentsold = String($scope.convertTran.percentsold).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+                }
+
+                if ($scope.debttab == "one") {
+                    //Bottom limit for the range calculation
+                    $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
+                    // Work out the intervals for the graph's x axis.
+                    var increasing = angular.copy($scope.convertTran.bottomamount);
+                    var interval = parseFloat($scope.convertTran.amountsold) / $scope.intervals;
+                    increasing -= interval;
+                } else {
+                    //Bottom limit for the range calculation
+                    $scope.convertTran.bottomamount = parseFloat($scope.premoney) - ($scope.premoney *0.5);
+                    // Work out the intervals for the graph's x axis.
+                    var increasing = angular.copy($scope.convertTran.bottomamount);
+                    var interval = parseFloat($scope.premoney) / $scope.intervals;
+                    increasing -= interval;
                 }
 
                 $scope.convertTran.toissue.premoney = $scope.premoney;
@@ -123,11 +140,14 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 for (var i = 0; i <= $scope.intervals; i++) {
                     increasing += interval;
                     var graphpointtran = angular.copy($scope.convertTran);
-                    graphpointtran.amountsold = increasing;
-                    if (!isNaN(parseFloat(graphpointtran.percentsold)) && !isNaN(parseFloat(graphpointtran.amountsold))) {
+                    if (!isNaN(parseFloat(graphpointtran.percentsold)) && !isNaN(parseFloat(graphpointtran.amountsold)) && $scope.debttab == "one") {
+                        graphpointtran.amountsold = increasing;
                         graphpointtran.toissue.postmoney = parseFloat(graphpointtran.amountsold) / (parseFloat(graphpointtran.percentsold)/100);
                         graphpointtran.toissue.premoney = graphpointtran.toissue.postmoney - parseFloat(graphpointtran.amountsold);
-                    };
+                    } else if ($scope.debttab == "two") {
+                        graphpointtran.toissue.premoney = increasing;
+                        graphpointtran.toissue.postmoney = increasing + parseFloat(graphpointtran.amountsold);
+                    }
                     var convertedpoint = calculate.conversion(graphpointtran);
                     var percentdiscount = parseFloat(convertedpoint.prevalcappercentage);
                     if (isNaN(percentdiscount)) {

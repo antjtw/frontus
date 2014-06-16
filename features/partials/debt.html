@@ -16,50 +16,52 @@
                     </div>
                 </div>
 
-                <div class="debt-calculator-tabs">
-                    <div ng-click="debttab = 'one'">Graph One</div>
-                    <div ng-click="debttab = 'two'">Graph Two</div>
-                </div>
                 <div class="debt-calculator">
-                    <div class="calc-inputs">
-                        <ul>
-                            <li>Convertible Note</li>
-                            <li>
-                                <span>Investment Amount</span>
-                                <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
-                            </li>
-                            <li>
-                                <span>Discount (%)</span>
-                                <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
-                            </li>
-                            <li>
-                                <span>Valuation Cap</span>
-                                <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>Qualified Financing</li>
-                            <li>
-                                <span>Investment Amount</span>
-                                <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
-                            </li>
-                            <li ng-show="debttab == 'one'">
-                                <span>Percentage of Company Sold</span>
-                                <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold">
-                            </li>
-                            <li ng-show="debttab == 'two'">
-                                <span>Pre-money valuation</span>
-                                <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
-                            </li>
-                        </ul>
+                    <div class="debt-calculator-tabs">
+                        <div ng-class="{'active-graph' : debttab == 'one'}" ng-click="debttab = 'one'; conversion('start')">Effective Discount</div>
+                        <div ng-class="{'active-graph' : debttab == 'two'}" ng-click="debttab = 'two'; conversion('start')">Resulting Equity</div>
                     </div>
+                    <div class="debt-block">
+                        <div class="calc-inputs">
+                            <ul>
+                                <li>Convertible Note</li>
+                                <li>
+                                    <span>Investment Amount</span>
+                                    <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
+                                </li>
+                                <li>
+                                    <span>Discount (%)</span>
+                                    <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
+                                </li>
+                                <li>
+                                    <span>Valuation Cap</span>
+                                    <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>Qualified Financing</li>
+                                <li>
+                                    <span>Investment Amount</span>
+                                    <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
+                                </li>
+                                <li ng-show="debttab == 'one'">
+                                    <span>Percentage of Company Sold</span>
+                                    <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold">
+                                </li>
+                                <li ng-show="debttab == 'two'">
+                                    <span>Pre-money valuation</span>
+                                    <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
+                                </li>
+                            </ul>
+                        </div>
 
-                    <div ng-if="debttab == 'one'" class="calc-outputs">
-                        <d3-discount class="discount-chart" type="discount" data="graphdatadiscount"></d3-discount>
-                    </div>
+                        <div ng-if="debttab == 'one'" class="calc-outputs">
+                            <d3-discount class="discount-chart" type="discount" data="graphdatadiscount"></d3-discount>
+                        </div>
 
-                    <div ng-if="debttab == 'two'" class="calc-outputs">
-                        <d3-discount class="discount-chart" type="equity" data="graphdataequity"></d3-discount>
+                        <div ng-if="debttab == 'two'" class="calc-outputs">
+                            <d3-discount class="discount-chart" type="equity" data="graphdataequity"></d3-discount>
+                        </div>
                     </div>
 
                     <span ng-class="{disappear: fiddled}" class="try-me-button">

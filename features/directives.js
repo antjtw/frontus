@@ -9,7 +9,7 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
         },
         link: function(scope, iElement, iAttrs) {
             var margin = {top: 60, right: 200, bottom: 90, left: 80},
-                width = 763 - margin.left - margin.right,
+                width = 760 - margin.left - margin.right,
                 height = 425 - margin.top - margin.bottom;
 
             var svg = d3.select(iElement[0])
@@ -234,12 +234,21 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .text("Converted Value")
                     .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 - 75) + ")");
 
-                totalvalue.append("text")
-                    .attr("text-anchor", "middle")
-                    .attr("x", 9)
-                    .attr("dy", ".35em")
-                    .text("Ownership")
-                    .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 50) + ")");
+                if (scope.type == "discount") {
+                    totalvalue.append("text")
+                        .attr("text-anchor", "middle")
+                        .attr("x", 9)
+                        .attr("dy", ".35em")
+                        .text("Ownership")
+                        .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 50) + ")");
+                } else {
+                    totalvalue.append("text")
+                        .attr("text-anchor", "middle")
+                        .attr("x", 9)
+                        .attr("dy", ".35em")
+                        .text("Post-money Valuation")
+                        .attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String(parseFloat(height)/2 + 50) + ")");
+                }
 
 
                 svg.append("rect")
@@ -257,7 +266,12 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     headline.select("text").text(formatShortAmount(middlepoint.headline));
 
                     percentage.attr("transform", "translate(" + String(parseFloat(width) + 80) + "," + String((parseFloat(height)/2) + 25) + ")");
-                    percentage.select("text").text(formatAmount(middlepoint.percentage) + "%");
+
+                    if (scope.type == "discount") {
+                        percentage.select("text").text(formatAmount(middlepoint.percentage) + "%");
+                    } else {
+                        percentage.select("text").text(formatAmount(middlepoint.postmoney));
+                    }
                 } else {
                     focus.attr("display", "none");
                 }
@@ -276,16 +290,12 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
 
                     headline.select("text").text(formatShortAmount(d.headline));
 
-                    percentage.select("text").text(formatAmount(d.percentage) + "%");
+                    if (scope.type == "discount") {
+                        percentage.select("text").text(formatAmount(d.percentage) + "%");
+                    } else {
+                        percentage.select("text").text(formatAmount(d.postmoney));
+                    }
                 }
-
-
-                svg.append("text")
-                    .attr("class", "x label")
-                    .attr("text-anchor", "middle")
-                    .attr("x", width/2)
-                    .attr("y", height + 60)
-                    .text("Qualified Financing Investment Amount");
 
                 if (scope.type == "discount") {
                     svg.append("text")
@@ -296,6 +306,13 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         .attr("dy", "1em")
                         .style("text-anchor", "middle")
                         .text("Percentage Discount");
+
+                    svg.append("text")
+                        .attr("class", "x label")
+                        .attr("text-anchor", "middle")
+                        .attr("x", width/2)
+                        .attr("y", height + 60)
+                        .text("Qualified Financing Investment Amount");
                 } else {
                     svg.append("text")
                         .attr("class", "y label")
@@ -305,6 +322,13 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                         .attr("dy", "1em")
                         .style("text-anchor", "middle")
                         .text("Ownership (%)");
+
+                    svg.append("text")
+                        .attr("class", "x label")
+                        .attr("text-anchor", "middle")
+                        .attr("x", width/2)
+                        .attr("y", height + 60)
+                        .text("Pre-money Valuation");
                 }
 
 
