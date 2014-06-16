@@ -144,8 +144,6 @@ app.directive('annotationList', function() {
                 $scope.$watch("docId", function(new_doc_id, old_doc_id) {
                     $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
                 });
-
-                $scope.page = Annotations.page;
             }
         ],
     };

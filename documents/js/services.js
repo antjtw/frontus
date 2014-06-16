@@ -53,8 +53,74 @@ docs.service('Documents', function() {
 
 });
 
+Annotation = function(json) {
+    this.page = json[0][0];
+    this.position = {
+        coords: {
+            x: json[0][1][0],
+            y: json[0][1][1]
+        },
+        size: {
+            width: json[0][2][2],
+            height: json[0][2][3]
+        }
+    };
+    this.type = json[1];
+    this.val = json[2][0];
+    this.fontsize = json[3][0];
+    this.investorfixed = json[4].investorfixed;
+    this.whosign = json[4].whosign;
+    // TODO: grab attributelabels logic from documentView.js
+    this.whattype = json[4].whattype;
+    this.required = json[4].required;
+
+    this.original = json; // just in case we need it
+}
+
+Annotation.prototype = {
+    unfilled: function() {
+        // TODO
+        return true;
+    }
+};
+
 docs.service('Annotations', function() {
     // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
+    // TODO: save / unmunge logic
+
+    // data structure contents
+    // aa -> [annot0...annotn-1]
+    // [i] annoti -> [position, type, value, style]
+    //
+    // [i][0] position -> [page, coords, size, 700, 956]
+    //
+    // [i][0][0] page -> 0...n-1
+    //
+    // [i][0][1] coords (bds) -> [x, y, _, _]
+    // [i][0][1][0] x
+    // [i][0][1][1] y
+    // [i][0][1][2] ?
+    // [i][0][1][3] ?
+    //
+    // [i][0][2] size (ibds) -> [_, _, width, height]
+    // [i][0][2][0] ?
+    // [i][0][2][1] ?
+    // [i][0][2][2] width or horizontal offset
+    // [i][0][2][3] height or vertical offset
+    //
+    // [i][0][3] 700 dp.clientWidth
+    //
+    // [i][0][4] 956 dp.clientHeight
+    //
+    // [i][1] type -> check or text or canvas (only text seems usable now)
+    //
+    // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
+    //
+    // [i][3] style -> font size -- anything else?
+    //
+    // [i][4] other -> investorfixed, whosign, whattype, and required
+
+
     var doc_annotations = {};
 
     this.hasUnfilled = function(page) {
@@ -125,15 +191,11 @@ docs.service('Annotations', function() {
             // if the array exists, make sure we return the same array reference so all copies update (meaning, modify, don't replace the object)
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
             annotations.forEach(function(annot) {
-                doc_annotations[doc_id].push(annot);
+                doc_annotations[doc_id].push(new Annotation(annot));
             });
         } else {
             doc_annotations[doc_id] = annotations;
         }
         return doc_annotations[doc_id];
-    };
-
-    this.page = function(annotation) {
-        return annotation[0][0];
     };
 });

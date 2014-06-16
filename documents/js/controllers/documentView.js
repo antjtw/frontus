@@ -783,7 +783,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.attributelabels.ImgSignature = "Signature Image";
             $scope.attributelabels.Signature = "Signature Text";
 
-        };
+        }
 
         SWBrijj.procm('account.have_signature').then(function(sig) {
             $scope.signaturepresent = sig[0].have_signature;
@@ -805,38 +805,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     $scope.lib = data;
                     $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
-
-                    // data structure contents
-                    // aa -> [annot0...annotn-1]
-                    // [i] annoti -> [position, type, value, style]
-                    //
-                    // [i][0] position -> [page, coords, size, 700, 956]
-                    //
-                    // [i][0][0] page -> 0...n-1
-                    //
-                    // [i][0][1] coords (bds) -> [x, y, _, _]
-                    // [i][0][1][0] x
-                    // [i][0][1][1] y
-                    // [i][0][1][2] ?
-                    // [i][0][1][3] ?
-                    //
-                    // [i][0][2] size (ibds) -> [_, _, width, height]
-                    // [i][0][2][0] ?
-                    // [i][0][2][1] ?
-                    // [i][0][2][2] width or horizontal offset
-                    // [i][0][2][3] height or vertical offset
-                    //
-                    // [i][0][3] 700 dp.clientWidth
-                    //
-                    // [i][0][4] 956 dp.clientHeight
-                    //
-                    // [i][1] type -> check or text or canvas (only text seems usable now)
-                    //
-                    // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
-                    //
-                    // [i][3] style -> font size -- anything else?
-
-
                     if ($scope.lib.annotations) {
                         $scope.lib.annotations = Annotations.setDocAnnotations($scope.docId, JSON.parse($scope.lib.annotations));
 
@@ -854,26 +822,22 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
-                            var newattr = [null, null, null];
-                            if (5 == annot.length) {
-                                newattr = annot[4];
-                            }
                             if ($scope.isAnnotable) {
-                                if ($scope.countersignable($scope.lib) && (newattr.whattype == "Signature" || newattr.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
-                                    switch (annot[1]) {
+                                if ($scope.countersignable($scope.lib) && (annot.whattype == "Signature" || annot.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
+                                    switch (annot.type) {
                                         case "text":
-                                            sticky = newBoxX(annot[0][0], annot[2][0], annot[3], newattr);
+                                            sticky = newBoxX(annot);
                                             break;
                                     }
 
                                     // the notes were pushed in the newXXX function
                                     sticky.css({
-                                        top: Math.max(0, annot[0][1][1]),
-                                        left: Math.max(0, annot[0][1][0])
+                                        top: Math.max(0, annot.position.coords.y),
+                                        left: Math.max(0, annot.position.coords.x)
                                     });
                                     var bb = sticky[0].querySelector("textarea");
-                                    bb.style.width = annot[0][2][2]-14 + "px";
-                                    bb.style.height = annot[0][2][3]-10 + "px";
+                                    bb.style.width = annot.position.size.width-14 + "px";
+                                    bb.style.height = annot.position.size.height-10 + "px";
                                 }
                             }
                         }
@@ -888,7 +852,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx = $scope.getNoteData();
+                var ndx = getNoteData();
                 var ndx_inv = ndx[0];
                 var ndx_iss = ndx[1];
                 /** @name $scope#lib#annotations
@@ -1050,7 +1014,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var aa = newBoxX($scope.currentPage, '', null);
+                var aa = newBoxX({"page": $scope.currentPage, "val": ''}); // TODO: make a new Annotation object
                 aa.scope().newinitdrag(event);
             }
         };
@@ -1096,8 +1060,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        function newBoxX(page, val, style, newattr) {
-            var aa = $compile('<div draggable ng-show="currentPage==' + page + '" class="row-fluid draggable">' +
+        function newBoxX(annot) {
+            var aa = $compile('<div draggable ng-show="currentPage==' + annot.page + '" class="row-fluid draggable">' +
                               '<fieldset>' +
                               '<div class="textarea-container">' +
                               '<textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/>' +
@@ -1216,23 +1180,23 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             });
 
             var ta = aa.find('textarea');
-            ta.scope().investorfixed = newattr ? newattr.investorfixed : null;
-            ta.scope().whosign = newattr ? newattr.whosign : "Investor";
+            ta.scope().investorfixed = annot.investorfixed ? annot.investorfixed : null;
+            ta.scope().whosign = annot.whosign ? annot.whosign : "Investor";
             ta.scope().whosignlabel = ta.scope().whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
-            ta.scope().whattype = newattr ? newattr.whattype : "Text";
+            ta.scope().whattype = annot.whattype ? annot.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
             if ($rootScope.navState.role == "issuer") {
-                ta.scope().required = newattr ? newattr.required : true;
+                ta.scope().required = annot.required === undefined ? true : annot.required;
             } else {
-                ta.scope().required = newattr ? newattr.required : null;
+                ta.scope().required = annot.required;
             }
-            ta.scope().annotext = val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[newattr.whattype] : val;
+            ta.scope().annotext = annot.val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[annot.whattype] : annot.val;
 
             ta.width(ta.width());
-            if (style) {
-                aa.find('textarea').css('fontSize', style[0]);
+            if (annot.fontsize) {
+                aa.find('textarea').css('fontSize', annot.fontsize);
             }
-            bb.value = val;
+            bb.value = annot.val;
 
             return aa;
         }
@@ -1415,7 +1379,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
-            var nd = $scope.getNoteData();
+            var nd = getNoteData();
             var nd_inv = nd[0];
             var nd_iss = nd[1];
             if ($scope.lib === undefined) {
