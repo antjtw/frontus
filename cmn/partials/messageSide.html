@@ -1,17 +1,21 @@
 <div class="message-side">
     <tabset>
         <tab heading="Filters">
-           <!--  sidebar info -->
+           <div class="messagefilter">
+           </div>
         </tab>
 
         <tab heading="Activity">
-            You have {{message_usage}} events
-            You have {{message_number}} sent messages
-            <div ng-repeat="sentmessage in sentmessages | filter:search:strict">
+            <!-- You have {{message_usage}} events -->
+            You have {{message_number}} message events
+            <!-- <div ng-repeat="sentmessage in sentmessages | filter:search:strict">
                 {{sentmessage.our_id}}, {{sentmessage.event}}, {{sentmessage.tox}}, {{sentmessage.subject}},
                  {{sentmessage.category}},
-                {{sentmessage.when_requested}}
-
+               {{sentmessage.when_requested}}
+            </div> -->
+            <div ng-repeat="message in messages | filter:search:strict">
+                Message event at {{message.when_requested}},  {{message.event}}
+                {{message.tox}}
             </div>
         </tab>
               

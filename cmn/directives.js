@@ -15,17 +15,18 @@ m.directive('messageSide', function(){
                 SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
                     $scope.sentmessages = data;
                     $scope.message_usage = data.length
+                    $scope.predicate = '-when_requested';
                 })
             }
             $scope.emailStatus();  
 
-            $scope.filterStatus = function(){
+            $scope.getStatus = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
-                    $scope.message=data;
+                    $scope.messages=data;
                     $scope.message_number = data.length
                 });
             }
-            $scope.filterStatus();
+            $scope.getStatus();
 
 
 
