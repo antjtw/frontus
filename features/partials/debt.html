@@ -55,12 +55,12 @@
                             </ul>
                         </div>
 
-                        <div ng-if="debttab == 'one'" class="calc-outputs">
-                            <d3-discount class="discount-chart" type="discount" data="graphdatadiscount"></d3-discount>
+                        <div ng-if="variablewidth && debttab == 'one'" class="calc-outputs">
+                            <d3-discount class="discount-chart" type="discount" width="variablewidth" data="graphdatadiscount"></d3-discount>
                         </div>
 
-                        <div ng-if="debttab == 'two'" class="calc-outputs">
-                            <d3-discount class="discount-chart" type="equity" data="graphdataequity"></d3-discount>
+                        <div ng-if="variablewidth && debttab == 'two'" class="calc-outputs">
+                            <d3-discount class="discount-chart" type="equity" width="variablewidth" data="graphdataequity"></d3-discount>
                         </div>
                     </div>
 

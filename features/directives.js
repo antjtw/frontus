@@ -5,12 +5,13 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
             data: "=",
             label: "@",
             type: "@",
-            onClick: "&"
+            onClick: "&",
+            width: "="
         },
         link: function(scope, iElement, iAttrs) {
 
             var margin = {top: 60, right: 200, bottom: 90, left: 80},
-                width = 760 - margin.left - margin.right,
+                width = scope.width - margin.left - margin.right,
                 height = 425 - margin.top - margin.bottom;
 
             var svg = d3.select(iElement[0])
@@ -345,16 +346,6 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
 
 
             };
-
-            scope.updateWindow = function (){
-                if (window.innerWidth < 1024) {
-                    var x = window.innerWidth;
-                    svg.attr("width", x - 265);
-                    scope.$apply();
-                }
-            };
-
-            window.onresize = scope.updateWindow;
         }
     };
 }]);

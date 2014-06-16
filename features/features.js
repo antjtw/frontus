@@ -49,6 +49,24 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             return num
         };
 
+        $scope.variablewidth = 760;
+        $scope.updateWindow = function (){
+            if (window.innerWidth < 1024) {
+                $scope.variablewidth = false;
+                $scope.$apply();
+                $scope.variablewidth = window.innerWidth;
+                $scope.$apply();
+            } else {
+                $scope.variablewidth = false;
+                $scope.$apply();
+                $scope.variablewidth = 760;
+                $scope.$apply();
+            }
+        };
+
+
+        window.onresize = $scope.updateWindow;
+
         $('input.money').keyup(function(event){
             if(event.which >= 37 && event.which <= 40){
                 event.preventDefault();

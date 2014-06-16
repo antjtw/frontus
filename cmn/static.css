@@ -612,6 +612,8 @@ address {
 
 .features .calc-inputs ul > li > span {
     font-size: 12px;
+    display: inline-block;
+    width: 100%;
 }
 
 .features .calc-outputs {
@@ -721,6 +723,10 @@ address {
     .features .debt-calculator > div.debt-block {
         min-height: 425;
         height: inherit;
+    }
+
+    .features .calc-inputs input {
+        width: 145px;
     }
 }
 
