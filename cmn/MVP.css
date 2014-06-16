@@ -4402,5 +4402,8 @@ textarea.email-text {
     left: 40%;
 }
 
-
+/*message sidebar*/
+.message-side ul{
+    padding-left: -20px;
+}
 

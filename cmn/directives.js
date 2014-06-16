@@ -1,5 +1,25 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('messageSide', function(){
+    return {
+        scope: false,
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/messageSide.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.test1 = function(){
+                console.log("testing123")
+            }
+
+
+
+        }]
+    };
+});
 m.directive('addPerson', function(){
     return {
         scope: false,
