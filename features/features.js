@@ -49,7 +49,12 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             return num
         };
 
-        $scope.variablewidth = 760;
+        if (window.innerWidth < 1024) {
+            $scope.variablewidth = window.innerWidth;
+        } else {
+            $scope.variablewidth = 760;
+        }
+
         $scope.updateWindow = function (){
             if (window.innerWidth < 1024) {
                 $scope.variablewidth = false;

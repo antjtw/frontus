@@ -70,17 +70,29 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .x(function(d) { return x(d[1]);})
                     .y(function(d) { return y(d[0]); });
 
+                if (scope.width < 480) {
+                    var xAxis = d3.svg.axis()
+                        .scale(x)
+                        .ticks(1)
+                        .orient("bottom");
 
-                var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .ticks(5)
-                    .orient("bottom");
+                    var xTicks = d3.svg.axis()
+                        .scale(x)
+                        .ticks(1)
+                        .tickSize(height)
+                        .orient("bottom");
+                } else {
+                    var xAxis = d3.svg.axis()
+                        .scale(x)
+                        .ticks(5)
+                        .orient("bottom");
 
-                var xTicks = d3.svg.axis()
-                    .scale(x)
-                    .ticks(5)
-                    .tickSize(height)
-                    .orient("bottom");
+                    var xTicks = d3.svg.axis()
+                        .scale(x)
+                        .ticks(5)
+                        .tickSize(height)
+                        .orient("bottom");
+                }
 
                 var yTicks = d3.svg.axis()
                     .scale(y)
