@@ -644,7 +644,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
+        $scope.toggleRail = function(){
 
+        };
 
         // email sidebar
         $scope.toggleSide = function(button) {
