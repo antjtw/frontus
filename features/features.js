@@ -65,7 +65,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "8,000,000", "postmoney" : "10,000,000", "convertTranpercentsold": "20"};
+        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "6,000,000", "postmoney" : "8,000,000", "convertTranpercentsold": "25"};
         $scope.intervals = 200;
         $scope.fiddled = false;
         $scope.debttab = "one";
@@ -182,7 +182,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     var topline = ownership * graphpointtran.toissue.postmoney;
 
                     $scope.graphdatadiscount.push({x:increasing, y:percentdiscount, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i});
-                    $scope.graphdataequity.push({x:increasing, y:ownership*100, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i});
+                    $scope.graphdataequity.push({x:increasing, y:ownership*100, headline:convalue, postmoney: graphpointtran.toissue.postmoney,  percentage: ownership*100, hit: valcaphit, num: i, altownership: shiftpercentage *100});
                 }
 
 

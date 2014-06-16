@@ -117,14 +117,25 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
                     .attr("display", "none");
 
                 var points = [];
+                var altpoints = []
                 var i = 0;
                 angular.forEach(data, function(point) {
                     if (!isNaN(parseFloat(point.y)) && !isNaN(parseFloat(point.x))) {
                         points.push([point.y, point.x, point.hit, point.num]);
+                        altpoints.push([point.altownership, point.x, point.hit, point.num]);
                     }
                     i++;
                 });
                 var linecolour = "#00c399";
+
+                if (scope.type == "equity") {
+                    var altpath = svg.append("path")
+                        .attr("d", line(altpoints))
+                        .attr("stroke", "#C6C6C6")
+                        .style("stroke-width", 3)
+                        .attr("stroke-dasharray","5,3")
+                        .style("fill", "transparent");
+                }
 
                 angular.forEach(points, function(point) {
                     if (point[2] && point[3] != 0) {
