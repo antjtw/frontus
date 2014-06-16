@@ -3,12 +3,18 @@
         <tab heading="Filters">
            <!--  sidebar info -->
         </tab>
+
         <tab heading="Activity">
-            Activity
+            You have {{message_usage}} events
+            You have {{message_number}} sent messages
+            <div ng-repeat="sentmessage in sentmessages | filter:search:strict">
+                {{sentmessage.our_id}}, {{sentmessage.event}}, {{sentmessage.tox}}, {{sentmessage.subject}},
+                 {{sentmessage.category}},
+                {{sentmessage.when_requested}}
+
+            </div>
         </tab>
               
          
-
-        </tab>
     </tabset>
 </div>

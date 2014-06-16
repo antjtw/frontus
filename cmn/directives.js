@@ -11,9 +11,22 @@ m.directive('messageSide', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
-            $scope.test1 = function(){
-                console.log("testing123")
+            $scope.emailStatus = function(){
+                SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
+                    $scope.sentmessages = data;
+                    $scope.message_usage = data.length
+                })
             }
+            $scope.emailStatus();  
+
+            $scope.filterStatus = function(){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
+                    $scope.message=data;
+                    $scope.message_number = data.length
+                });
+            }
+            $scope.filterStatus();
+
 
 
 
