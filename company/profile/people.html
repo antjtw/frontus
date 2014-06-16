@@ -112,6 +112,9 @@
                  </compose-message>
                 <add-person ng-switch-when= "people">
                     </add-person>
+                <div ng-switch-when="rail">
+                    hello
+                </div>
               
                <!--  <div ng-switch-when="people">
                     <div class="sidebarHeader">
@@ -130,8 +133,10 @@
 
 
     </section>
+
+<!--     rail toggle -->
 <button class="right-rail-button">
-    <span data-icon="&#xe033;" aria-hidden="true"></span>
+    <span data-icon="&#xe033;" ng-click="toggleSide('rail')" ng-class="arrow-flip" aria-hidden="true"></span>
 </button>
 </div>
 
