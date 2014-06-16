@@ -8,17 +8,33 @@
         <tab heading="Activity">
             <!-- You have {{message_usage}} events -->
             You have {{message_number}} message events
+            <ul class="activity-feed2">
+                <div infinite-scroll="load()" infinite-scroll-distance="2" infinite-scroll-disabled="loading" infinite-scroll-parent>
+                <li class="event" ng-repeat="message in messages">
+                    <div><img ng-src="/img/activity/received.png"></div>
+                    <div>
+                        <ul>
+                            <li>
+                                <span>{{message.event}}</span>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+            </div>
+            </ul>
             <!-- <div ng-repeat="sentmessage in sentmessages | filter:search:strict">
                 {{sentmessage.our_id}}, {{sentmessage.event}}, {{sentmessage.tox}}, {{sentmessage.subject}},
                  {{sentmessage.category}},
                {{sentmessage.when_requested}}
             </div> -->
-            <div ng-repeat="message in messages | filter:search:strict">
+            <!-- <div ng-repeat="message in messages | filter:search:strict">
                 Message event at {{message.when_requested}},  {{message.event}}
                 {{message.tox}}
-            </div>
+            </div> -->
         </tab>
               
          
     </tabset>
 </div>
+
