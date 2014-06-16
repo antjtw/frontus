@@ -114,7 +114,7 @@ app.directive('documentSummaryRow', function() {
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
-    }
+    };
 });
 
 app.directive('documentVersionRow', function() {
@@ -128,5 +128,25 @@ app.directive('documentVersionRow', function() {
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController
-    }
+    };
+});
+
+app.directive('annotationList', function() {
+    return {
+        restrict: "EA",
+        scope: {
+            docId: "=",
+        },
+        templateUrl: "/documents/partials/annotationList.html",
+        controller: ["$scope", "$element", "$rootScope", "Annotations",
+            function($scope, $element, $rootScope, Annotations) {
+                $scope.annotations = [];
+                $scope.$watch("docId", function(new_doc_id, old_doc_id) {
+                    $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
+                });
+
+                $scope.page = Annotations.page;
+            }
+        ],
+    };
 });

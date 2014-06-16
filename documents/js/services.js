@@ -49,6 +49,10 @@ docs.service('basics', function () {
 
 });
 
+docs.service('Documents', function() {
+
+});
+
 docs.service('Annotations', function() {
     // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
     var doc_annotations = {};
@@ -105,9 +109,31 @@ docs.service('Annotations', function() {
     };
 
     this.getDocAnnotations = function(doc_id) {
-        if (!doc_annotations.doc_id) {
-            doc_annotations.doc_id = [];
+        if (doc_id === void(0)) {
+            console.log("fetching undefined annotations");
+            return [];
         }
-        return doc_annotations.doc_id
-    }
+        if (!doc_annotations[doc_id]) {
+            console.log("fetched empty doc annotations.");
+            doc_annotations[doc_id] = [];
+        }
+        return doc_annotations[doc_id];
+    };
+
+    this.setDocAnnotations = function(doc_id, annotations) {
+        if (doc_annotations[doc_id]) {
+            // if the array exists, make sure we return the same array reference so all copies update (meaning, modify, don't replace the object)
+            doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
+            annotations.forEach(function(annot) {
+                doc_annotations[doc_id].push(annot);
+            });
+        } else {
+            doc_annotations[doc_id] = annotations;
+        }
+        return doc_annotations[doc_id];
+    };
+
+    this.page = function(annotation) {
+        return annotation[0][0];
+    };
 });

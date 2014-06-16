@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations) {
         function ApplyLineBreaks(oTextarea) {
             var max = Math.floor(parseInt(oTextarea.style.height)/12);
             if (oTextarea.wrap) {
@@ -119,16 +119,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         }
 
-        function getNoteBounds(nx, not_visible) {
+        function getNoteBounds(nx) {
             // [LEFT, TOP, WIDTH, HEIGHT]
             var top_padding = 120;
             var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
             var dp = document.querySelector('.docPanel');
-            //if (!dp.offsetTop && not_visible) {
-            //    bds[1]-=top_padding;
-            //}
-            // 161 is fixed above due to timing issues -- the docPanel element is not available when notes are saved right before stamping.
-            // this could be set as a static value during other pad calculations
             var ntyp = nx.notetype;
             var z, ibds;
             if (ntyp == 'text') {
@@ -843,13 +838,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
 
                     if ($scope.lib.annotations) {
+                        $scope.lib.annotations = Annotations.setDocAnnotations($scope.docId, JSON.parse($scope.lib.annotations));
+
                         // restoreNotes
                         var annots;
                         if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
+                            // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
                             annots = JSON.parse($scope.lib.iss_annotations);
-                        }
-                        else {
-                            annots = JSON.parse($scope.lib.annotations);
+                        } else {
+                            annots = $scope.lib.annotations;
                             if (data.iss_annotations) {
                                 annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
@@ -891,7 +888,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx = $scope.getNoteData(false);
+                var ndx = $scope.getNoteData();
                 var ndx_inv = ndx[0];
                 var ndx_iss = ndx[1];
                 /** @name $scope#lib#annotations
@@ -1356,13 +1353,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
 
-        $scope.getNoteData = function(stamping) {
+        function getNoteData() {
             var noteData = [];
 
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i];
                 var nx = n[0];
-                var bnds = getNoteBounds(nx, stamping);
+                var bnds = getNoteBounds(nx);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
                 var typ = nx.notetype;
                 var val = [];
@@ -1418,7 +1415,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
         $scope.saveNoteData = function(clicked) {
             $scope.last_save = new Date().getTime();
-            var nd = $scope.getNoteData(false);
+            var nd = $scope.getNoteData();
             var nd_inv = nd[0];
             var nd_iss = nd[1];
             if ($scope.lib === undefined) {
