@@ -93,6 +93,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         $scope.fiddled = false;
         $scope.debttab = "one";
 
+        $scope.resetDefaults = function() {
+            $scope.fields = {"fromtranamount": "500,000", "fromtranvalcap": "4,000,000", "fromtrandiscount": "20", "convertTranamountsold" : "2,000,000", "premoney" : "6,000,000", "postmoney" : "8,000,000", "convertTranpercentsold": "25"};
+            $scope.conversion("start");
+        };
+
         $scope.$watch('fields', function(newval, oldval) {
             if (newval && oldval && (parseFloat(newval.convertTranpercentsold) > 100 || parseFloat(newval.convertTranpercentsold) < 0)) {
                 $scope.fields.convertTranpercentsold = oldval.convertTranpercentsold;
