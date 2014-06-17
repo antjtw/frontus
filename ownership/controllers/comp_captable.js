@@ -12,6 +12,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
     $scope.maintoggle = true;
+    $scope.windowToggle = false;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
 
@@ -52,6 +53,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.termwarrant = "The term of the warrant before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock";
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
+    $scope.captabletips.evidence = "Tie documents to items in your captable.";
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
     $scope.activityView = "ownership.company_activity_feed";
@@ -64,6 +66,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
+    $scope.eligible_evidence = [];
 
     $scope.tourUp = function () {
         $scope.tourModal = true;
@@ -85,6 +88,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach(results, function (result) {
             $scope.freqtypes.push(result['get_freqtypes']);
         });
+    });
+
+    SWBrijj.tblm('document.my_company_eligible_evidence').then(function(data) {
+        console.log(data);
+        $scope.eligible_evidence = data;
+    }).except(function(e) {
+        console.log(e);
     });
 
     $scope.vInvestors = [];
@@ -151,6 +161,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
 
         angular.forEach($scope.issues, function(issue) {
+            // TODO fix up the evidence attribute
             issue.date = calculate.timezoneOffset(issue.date);
             if (issue.vestingbegins) {
                 issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
@@ -921,6 +932,29 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.showPari = function(list) {
         return (list.length > 0)
     };
+    $scope.availableEvidence = function(eligible_evidence, evidence) {
+        var list = [];
+        var used = [];
+        list.push("");
+        angular.forEach(evidence, function(e) {
+            used.push(e);
+        });
+        angular.forEach(eligible_evidence, function(e) {
+            if (used.indexOf(e)==-1) {
+                list.push(e);
+            }
+        });
+        return list;
+    };
+    $scope.showEvidence = function(list) {
+        return list.length > 0;
+    };
+    $scope.openEvidenceModal = function() {
+        $scope.evidenceModal = true;
+    };
+    $scope.closeEvidenceModal = function() {
+        $scope.evidenceModal = false;
+    };
 
     $scope.toggleCommon = function(issue) {
         issue.common = issue.common && issue.type == 'Equity' ? false : true;
@@ -1638,6 +1672,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.sideToggleName = "Details";
             return true
         }
+    };
+    $scope.toggleWindow = function() {
+        $scope.windowToggle = !$scope.windowToggle;
+        return $scope.windowToggle;
     };
 
 

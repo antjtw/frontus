@@ -2222,12 +2222,53 @@ tr.preparedDoc {
 /* Dynamic shifting of spans */
 .leftTabWindow {
     overflow-x: hidden;
+    margin-left: 0;
+    -webkit-transition: margin-left linear 0.25s;
+    -moz-transition: margin-left linear 0.25s;
+    -ms-transition: margin-left linear 0.25s;
+    -o-transition: margin-left linear 0.25s;
+    transition: margin-left linear 0.25s;
+}
+.leftTabWindow.showRightTab {
+    margin-left: calc(-100% + 350px);
+    margin-left: -moz-calc(-100% + 350px);
+    margin-left: -webkit-calc(-100% + 350px);
+    -webkit-transition: margin-left linear 0.25s;
+    -moz-transition: margin-left linear 0.25s;
+    -ms-transition: margin-left linear 0.25s;
+    -o-transition: margin-left linear 0.25s;
+    transition: margin-left linear 0.25s;
 }
 .leftFullTableBlock {
     width: 1017px !important;
 }
 .rightNoTableBlock {
     margin-right:-343px;
+}
+.rightTabWindow {
+    background-color: cyan;
+    position:absolute;
+    left: 0;
+    top: 100px;
+    margin-left: 100%;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: margin-left linear 0.25s;
+    -moz-transition: margin-left linear 0.25s;
+    -ms-transition: margin-left linear 0.25s;
+    -o-transition: margin-left linear 0.25s;
+    transition: margin-left linear 0.25s;
+}
+.rightTabWindow.showRightTab {
+    display: block;
+ //   margin-right: 0;
+    position:absolute;
+    margin-left: 390px;
+    -webkit-transition: margin-left linear 0.25s;
+    -moz-transition: margin-left linear 0.25s;
+    -ms-transition: margin-left linear 0.25s;
+    -o-transition: margin-left linear 0.25s;
+    transition: margin-left linear 0.25s;
 }
 /* Company People */
 .tableView.people-table th {
