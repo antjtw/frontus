@@ -14,9 +14,9 @@ m.directive('messageSide', function(){
             $scope.emailStatus = function(){
                 SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
                     $scope.sentmessages = data;
-                    $scope.message_usage = data.length
+                    $scope.message_usage = data.length;
                     $scope.predicate = '-when_requested';
-                })
+                });
             }
             $scope.emailStatus();  
 
@@ -24,13 +24,22 @@ m.directive('messageSide', function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
                     $scope.messages=data;
                     $scope.message_number = data.length
+                    console.log("messages")
+                    console.log($scope.messages)
                 });
             }
             $scope.getStatus();
 
-
-
-
+            $scope.forView = function(){
+                SWBrijj.tblm('mail.timedevents', ['when_requested', 'event', 'tox']).then(function(data){
+                    $scope.timedevents = data;
+                    console.log($scope.timedevents);
+                }).except(function(data){
+                    console.log(data);
+                });
+            };
+            $scope.forView();
+            
         }]
     };
 });
