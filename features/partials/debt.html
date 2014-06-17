@@ -10,7 +10,7 @@
                 </div>
 
 
-                <div class='grey-stripe white-stripe'>
+                <div class='grey-stripe white-stripe debt-stripe'>
                     <div>
                         <h2>A real-time calculator to evaluate the conversion value and resulting ownership percentage of your convertible note.</h2>
                     </div>
@@ -20,6 +20,7 @@
                     <div class="debt-calculator-tabs">
                         <div ng-class="{'active-graph' : debttab == 'one'}" ng-click="debttab = 'one'; conversion('start')">Effective Discount</div>
                         <div ng-class="{'active-graph' : debttab == 'two'}" ng-click="debttab = 'two'; conversion('start')">Resulting Equity</div>
+                        <div class="join-sharewave"><a target="_self" href='/pricing'>Want more from your shareholder data? Join Sharewave <span data-icon="&#xe016;" aria-hidden="true"></span></a></div>
                     </div>
                     <div class="debt-block">
                         <div class="calc-inputs">
@@ -81,31 +82,110 @@
                 </div>
 
                 <div class="container">
+
                     <div class="row-fluid">
                         <div class="span8 offset2 large-paragraph">
-                            The example above returns both the monetary value and resulting ownership in the company (we've removed currency symbols so it's more friendly to everyone). The graph is a visualization of the effective discount on conversion, which gets interesting when the convertible note has a valuation cap.
+                            This convertible note calculator returns conversion data in two graphs, each showing a different way to visualize the conversion event. To explain each, let’s break down the example that defaults when the page is loaded:
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2 features-blockquote">
+                            <div>A $500,000 convertible note, with a 20% discount and $4M valuation cap converting at a $6M pre-money valuation, with a $2M investment in the qualifying round.</div>
                         </div>
                     </div>
 
                     <div class="row-fluid">
                         <div class="span8 offset2 large-paragraph">
-                            For simplicity, we've rounded the Conversion Value to the nearest whole number and limited the precision of Ownership to the thousandths place. We've also witheld additional terms that can influence conversion, such as interest rate, which are available within Sharewave when you're running this against your own data. That means the math is also applicable to <a target="_blank" href="http://ycombinator.com/safe/">Safes</a>, which were introduced by YCombinator.
+                            <span>Graph One: Viewing the effective discount from the valuation cap</span>
+                            The convertible note has a 20% discount on the share price of the qualifying round, but the math gets interesting with a valuation cap as it can effectively increase the discount. In the default example, the converted value is $750,000 (from a 33.33% effective discount) as the $4M valuation cap took effect close to $1.7M invested. Here is what’s happening in plain english:
                         </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            The percentage of the company sold is held constant, in this example at 25%. So the pre-money and post-money valuations are changing dynamically as you move from left-to-right on the graph. The larger the investment amount in the qualifying round, the larger the effective discount, which leads to a higher converted value of the note.
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            Note that the percentage ownership stays constant after the breakpoint, but the converted value scales higher with the increasing effective discount. It’s easier to see why in the next graph.
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            <span>Graph Two: Viewing the resulting equity from the converted note</span>
+                            Another way to look at the valuation cap is that it protects the note holder from being diluted to zero on higher valuations, by effectively guaranteeing a minimum percentage ownership on conversion.
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            As you scroll from left to right on the plotted line you’re increasing the pre-money valuation of the qualified round along the x-axis. At the cross-section of the red dotted line identifying the valuation cap becoming active, the line splits in two directions. The green line visibly shows the minimum percentage ownership the note holders keep (9.375% in this example) from valuation cap protection, and the grey dotted line shows what would have happened without the cap.
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            <span>A few additional notes</span>
+                            For simplicity, we’ve rounded the Converted Value to the nearest whole number and limited the precision of Ownership percentage to the thousandths place. We’re also not including additional terms that can influence conversion, such as interest rate, which are available within Sharewave when you’re running this against your own data. That means the math above is also applicable to simpler instruments like <a target="_blank" href="http://ycombinator.com/safe/">Safes</a>, which were introduced by YCombinator. With these limitations in mind, consider this tool useful for exploring conversion events but not for official calculations–consult your legal counsel for the more serious stuff.
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph">
+                            Finally, thank you to Martin Kleppmann for inspiring the graphs above from his 2010 blog post <a href="http://martin.kleppmann.com/2010/05/05/valuation-caps-on-convertible-notes-explained-with-graphs.html">Valuation caps on convertible notes, explained with graphs</a>.
+                        </div>
+                    </div>
+
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2 large-paragraph term-explanations">
+                            <span>An explanation of terms</span>
+                            <ul>
+                                <li>Converted Value</li>
+                                <li>The monetary value of the investment after the note is converted.</li>
+
+                                <li>Ownership (%)</li>
+                                <li>The resulting percentage ownership from the converted note.</li>
+
+                                <li>Convertible Note Investment Amount</li>
+                                <li>The monetary value of your convertible note(s) to be converted.</li>
+
+                                <li>Valuation Cap</li>
+                                <li>An optional term that places a ceiling on the conversion price of the note, compared against the pre-money valuation.</li>
+
+                                <li>Discount (%)</li>
+                                <li>The percentage discount on the share price of the qualifying round.</li>
+
+                                <li>Qualifying Financing Investment Amount</li>
+                                <li>The total monetary amount being invested in the new financing round.</li>
+
+                                <li>Pre-money Valuation</li>
+                                <li>The valuation of the company before the qualified financing investment is added to the company.</li>
+
+                                <li>Post-money Valuation</li>
+                                <li>The valuation of the company after capital is added, which is the sum of the pre-money valuation and the investment amount in the financing.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="spacer110"></div>
+        <div id="register">
+            <div class="row-fluid">
+                <div class="span10 offset1 text-center">
+                    <h1>Want more from your shareholder data?</h1>
+
+                    <div class="CompanyRegister-form large-standard-button standard-button">
+                        <button class="btn" onclick="window.location.href='/pricing'">Sign Up</button>
                     </div>
                 </div>
             </div>
+            <div class="spacer30"></div>
         </div>
-    </div>
-    <div class="spacer110"></div>
-    <div id="register">
-        <div class="row-fluid">
-            <div class="span10 offset1 text-center">
-                <div class="CompanyRegister-form large-standard-button standard-button">
-                    <button class="btn" onclick="window.location.href='/pricing'">Sign Up</button>
-                </div>
-            </div>
-        </div>
-        <div class="spacer30"></div>
+
     </div>
 
 

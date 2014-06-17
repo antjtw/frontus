@@ -526,9 +526,43 @@ address {
     margin-top: 40px;
 }
 
+.large-paragraph > span:first-of-type {
+    font-family: "FS Elliot Web Regular", sans-serif;
+    color: #1d2c3c;
+    display: block;
+    margin-top: 30px;
+}
+
 .large-paragraph a {
     font-size: 20px;
     line-height: 28px;
+}
+
+.large-paragraph.term-explanations {
+    border-top: 1px solid #C6C6C6;
+}
+
+.large-paragraph.term-explanations > ul > li {
+    font-size: 14px;
+    font-family: "FS Elliot Web Regular", sans-serif;
+}
+
+.large-paragraph.term-explanations > ul > li:nth-child(odd) {
+    margin-top: 20px;
+    color: #1d2c3c;
+}
+
+.large-paragraph.term-explanations > ul > li:nth-child(event) {
+}
+
+.features .features-blockquote > div {
+    border-left: 1px solid #C6C6C6;
+    margin-left: 20px;
+    padding-left: 20px;
+    margin-top: 40px;
+    line-height: 28px;
+    font-size: 20px;
+    font-family: "FS Elliot Web Light Italic", sans-serif;
 }
 
 /* Features Debt Calculator */
@@ -553,14 +587,14 @@ address {
 
 .features .debt-calculator .debt-calculator-tabs {
     display: block;
-    width: 260px;
-    overflow: auto;
+    box-sizing: border-box;
     border-right: 1px solid #C6C6C6;
     border-left: 1px solid #C6C6C6;
     border-top: 1px solid #C6C6C6;
     cursor: pointer;
     position: absolute;
     top: -30px;
+    width: 100%;
 }
 
 .features .debt-calculator .debt-calculator-tabs > div {
@@ -577,6 +611,22 @@ address {
 
 .features .debt-calculator .debt-calculator-tabs > div.active-graph {
     background-color: #F1F1F1;
+}
+
+.features .debt-calculator .debt-calculator-tabs > div:nth-child(2) {
+    border-right: 1px solid #C6C6C6;
+}
+
+.features .debt-calculator .debt-calculator-tabs > div:last-child {
+    background-color: #FFFFFF;
+    width: -moz-calc(100% - 261px);
+    width: -webkit-calc(100% - 261px);
+    width: calc(100% - 261px);
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.features .debt-calculator .debt-calculator-tabs > div:last-child > a > span {
+    vertical-align: -10%;
 }
 
 .features .calc-inputs {
@@ -701,7 +751,7 @@ address {
     .features .debt-calculator {
         display: block;
         width: 100%;
-        margin: 0 auto 0 auto;
+        margin: 40px auto 0 auto;
     }
 
     .features .calc-inputs {
@@ -727,6 +777,16 @@ address {
 
     .features .calc-inputs input {
         width: 145px;
+    }
+}
+
+@media (max-width: 767px) {
+    .features .grey-stripe.white-stripe.debt-stripe > div {
+        padding-top: 0;
+    }
+
+    .features .debt-calculator > .debt-calculator-tabs .join-sharewave > a {
+        display: none;
     }
 }
 
