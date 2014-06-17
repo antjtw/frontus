@@ -679,24 +679,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.addLineBreaks = function(ev) {
-            ev.target = ApplyLineBreaks(ev.target);
-        };
-
-        $scope.closeBox = function(ev) {
-            if ($rootScope.navState.role == "issuer") {
-                ev.getme = false;
-            }
-        };
-
-        $scope.investorFixed= function(ev) {
-            return ev.$$nextSibling.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
-        };
-
-        $scope.stickyrequired = function(ev) {
-            return ev.$$nextSibling.required ? true : false;
-        };
-
         $scope.signatureField = function (element) {
             return element.$$nextSibling.whattype == "Signature"  ? true : false;
         };
@@ -968,7 +950,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.moveBox = function(aa) {
+        /*$scope.moveBox = function(aa) {
             var dp = $('.docPanel')[0];
             var dpBottom = dp.offsetTop + dp.offsetHeight;
             var dpRight = dp.offsetLeft + dp.offsetWidth;
@@ -980,7 +962,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
                 aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
-        };
+        };*/
 
         function newBoxX(annot) {
 /*            var aa = $compile(!!!annotation.html!!!)($scope);

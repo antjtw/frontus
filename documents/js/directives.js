@@ -163,7 +163,8 @@ app.directive('annotation', function() {
     return {
         restrict: "EA",
         scope: {
-            annot: "="
+            annot: "=",
+            isAnnotable: "=",
         },
         templateUrl: "/documents/partials/annotation.html",
         controller: ["$scope", "$element", "$rootScope", "$document",
@@ -205,11 +206,11 @@ app.directive('annotation', function() {
                     var panelHeight = docPanel.offsetHeight;
                     var bottomEdge = topEdge + panelHeight;
                     if (mouseY < topEdge) {
-                        return topEdge;
+                        return 0;
                     } else if (mouseY > bottomEdge - elementHeight) {
-                        return (bottomEdge - elementHeight);
+                        return (panelHeight - elementHeight);
                     } else {
-                        return mouseY;
+                        return mouseY - topEdge;
                     }
                 };
 
@@ -219,11 +220,11 @@ app.directive('annotation', function() {
                     var panelWidth = docPanel.offsetWidth;
                     var rightEdge = leftEdge + panelWidth;
                     if (mouseX < leftEdge) {
-                        return leftEdge;
+                        return 0;
                     } else if (mouseX > rightEdge - elementWidth) {
-                        return (rightEdge - elementWidth);
+                        return (panelWidth - elementWidth);
                     } else {
-                        return mouseX;
+                        return mouseX - leftEdge;
                     }
                 };
 
@@ -236,20 +237,24 @@ app.directive('annotation', function() {
                     var mousex = $scope.startX + dx;
                     var mousey = $scope.startY + dy;
                     $scope.annot.position.coords.y = topLocation($element.height(), mousey);
-                    $scope.annot.position.coords.y = leftLocation($element.width(), mousex);
+                    $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
                     return false;
                 };
                 $scope.newmousemove = function($event) {
-                    var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
-                    var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-                    /*$element.css({
-                        height: dy + 6 + 'px',
-                        width: dx + 6 + 'px'
-                    });*/
-                    var bb = $element[0].querySelector("textarea");
-                    bb.style.height = dy - 4 + "px";
-                    bb.style.width = dx - 8 + "px";
-                    return false;
+                    $scope.$apply(function() {
+                        var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                        var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
+                        /*$element.css({
+                            height: dy + 6 + 'px',
+                            width: dx + 6 + 'px'
+                        });*/
+                        $scope.annot.position.size.y = dy - 4;
+                        $scope.annot.position.size.x = dx - 8;
+                        /*var bb = $element[0].querySelector("textarea");
+                        bb.style.height = dy - 4 + "px";
+                        bb.style.width = dx - 8 + "px";*/
+                        return false;
+                    });
                 };
 
 
@@ -269,16 +274,16 @@ app.directive('annotation', function() {
                 };
 
                 $scope.newmouseup = function(ev) {
+                    if (document.detachEvent) {
+                        document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                    } else if (document.removeEventListener) {
+                        document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                    }
+                    $document.unbind('scroll', $scope.mousemove);
+                    $document.unbind('mousemove', $scope.newmousemove);
+                    $document.unbind('mouseup', $scope.newmouseup);
                     $scope.$apply(function() {
-                        if (document.detachEvent) {
-                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
-                        } else if (document.removeEventListener) {
-                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
-                        }
                         var bb = $element[0].querySelector("textarea");
-                        $document.unbind('scroll', $scope.mousemove);
-                        $document.unbind('mousemove', $scope.newmousemove);
-                        $document.unbind('mouseup', $scope.newmouseup);
                         if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
                             var x = bb.parentElement.parentElement.parentElement.parentElement;
                             x.parentElement.removeChild(x);
@@ -295,16 +300,17 @@ app.directive('annotation', function() {
                 };
 
                 $scope.closeMe = function(ev) {
-                    var z = ev.currentTarget;
-                    while (z.attributes.draggable === undefined) z = z.parentElement;
-                    z.parentElement.removeChild(z);
-                    for (var i = 0; i < $scope.notes.length; i++) {
-                        if ($scope.notes[i][0] === z) {
-                            $scope.notes.splice(i, 1);
-                            return;
+                    $scope.$apply(function() {
+                        var z = ev.currentTarget;
+                        while (z.attributes.draggable === undefined) z = z.parentElement;
+                        z.parentElement.removeChild(z);
+                        for (var i = 0; i < $scope.notes.length; i++) {
+                            if ($scope.notes[i][0] === z) {
+                                $scope.notes.splice(i, 1);
+                                return;
+                            }
                         }
-                    }
-                    $scope.$apply();
+                    });
                 };
 
                 // Set startX/Y and initialMouseX/Y attributes.
@@ -348,7 +354,7 @@ app.directive('annotation', function() {
                     var mousex = $scope.startX + dx;
                     var mousey = $scope.startY + dy;
                     $scope.annot.position.coords.y = topLocation($element.height(), mousey);
-                    $scope.annot.position.coords.y = topLocation($element.width(), mousex);
+                    $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
                     if (document.attachEvent) {
                         document.attachEvent('on'+mousewheelevt, $scope.mousemove);
                     } else if (document.addEventListener) {
@@ -387,26 +393,52 @@ app.directive('annotation', function() {
                     }
                 };
 
+                $scope.addLineBreaks = function() {
+                    $scope.val = ApplyLineBreaks($scope.val);
+                };
+
+                $scope.closeBox = function() {
+                    if ($rootScope.navState.role == "issuer") {
+                        $scope.getme = false;
+                    }
+                };
+
+                $scope.investorFixed= function() {
+                    return $scope.annot.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
+                };
+
+                $scope.stickyrequired = function() {
+                    return $scope.annot.required ? true : false;
+                };
+
                 $scope.$watch('annot.position.coords', function(new_coords) {
                     if (new_coords) {
-                        $scope.annotationCoordsStyle = "position: relative; top: " + Math.max(0, new_coords.y) + "; left: " + Math.max(0, new_coords.x) + ";";
-                    } else {
-                        $scope.annotationCoordsStyle = "position: relative;";
+                        $scope.annotationCoordsStyle = {
+                            top: Math.max(0, new_coords.y) + "px",
+                            left: Math.max(0, new_coords.x) + "px"
+                        };
                     }
-                });
+                }, true);
 
                 $scope.$watch('annot.position.size', function (new_size) {
                     if (new_size) {
-                        $scope.annotationSizeStyle = "width: " + (new_size.width - 14) + "px; height: " + (new_size.height - 10) + "px;";
-                    } else {
-                        $scope.annotationSizeStyle = "";
+                        $scope.annotationSizeStyle = {
+                            width: (new_size.x - 14) + "px",
+                            height: (new_size.y - 10) + "px"
+                        };
                     }
-                });
+                }, true);
 
                 if ($scope.annot.initDrag) {
                     $scope.newinitdrag($scope.annot.initDrag);
                     delete $scope.annot.initDrag;
                 }
+
+                // MOCKS
+                // TODO:
+                $scope.countersignable = function() {
+                    return false;
+                };
             }
         ]
     };
