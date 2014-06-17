@@ -730,19 +730,6 @@ address {
     }
 }
 
-@media (max-width: 320px) {
-    .debt-calculator {
-        display: none;
-    }
-
-    .debt-calculator-mobile {
-        display: block;
-        width: 80%;
-        margin: 0 auto 0 auto;
-    }
-
-}
-
 
 @media (min-width: 1000px) {
     .feature-block .screen {
