@@ -24,8 +24,6 @@ m.directive('messageSide', function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
                     $scope.messages=data;
                     $scope.message_number = data.length
-                    console.log("messages")
-                    console.log($scope.messages)
                 });
             }
             $scope.getStatus();
@@ -33,12 +31,41 @@ m.directive('messageSide', function(){
             $scope.forView = function(){
                 SWBrijj.tblm('mail.timedevents', ['when_requested', 'event', 'tox']).then(function(data){
                     $scope.timedevents = data;
-                    console.log($scope.timedevents);
                 }).except(function(data){
                     console.log(data);
                 });
             };
             $scope.forView();
+
+            $scope.getLogs = function(){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
+                    $scope.msgstatus = data
+                    $scope.thing = data.event
+                    // msgstatus is an array
+                    console.log($scope.msgstatus.length)
+                    var msgdata = []
+                    angular.forEach($scope.msgstatus, function(msgstatus){
+                        msgdata.push(msgstatus.tox);
+                    });
+                    // for(var i=0; i < $scope.msgstatus.length; i ++){
+                    //     msgdata.push($scope.msgstatus.tox)
+                    // };
+                    console.log(msgdata);
+                    // console.log($scope.thing)
+                    // for($scope.msgstatus.when_requested in $scope.msgstatus){
+                    //     if($scope.msgstatus.when_requested.hasOwnProperty()){
+                    //         msgdata.push($scope.msgstatus.when_requested)
+
+                    //     };
+                    // }
+                    // msgdata.timestamp = $scope.msgstatus.when_requested
+                    // console.log(msgdata)
+
+                }).except(function(data){
+                    console.log(data);
+                })
+            }
+            $scope.getLogs();
             
         }]
     };
