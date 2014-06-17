@@ -806,19 +806,18 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
                     if ($scope.lib.annotations) {
-                        $scope.lib.annotations = Annotations.setDocAnnotations($scope.docId, JSON.parse($scope.lib.annotations));
-
                         // restoreNotes
                         var annots;
                         if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
                             // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
                             annots = JSON.parse($scope.lib.iss_annotations);
                         } else {
-                            annots = $scope.lib.annotations;
+                            annots = JSON.parse($scope.lib.annotations);
                             if (data.iss_annotations) {
                                 annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
                         }
+                        annots = Annotations.setDocAnnotations($scope.docId, annots)
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
