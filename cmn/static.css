@@ -1,7 +1,7 @@
 /* Marketing Pages */
 
 #register h1 {
-    margin-top: 40px;
+    margin-top: 60px;
 }
 
 .static {
@@ -587,14 +587,14 @@ address {
 
 .features .debt-calculator .debt-calculator-tabs {
     display: block;
-    box-sizing: border-box;
+    width: 260px;
+    overflow: auto;
     border-right: 1px solid #C6C6C6;
     border-left: 1px solid #C6C6C6;
     border-top: 1px solid #C6C6C6;
     cursor: pointer;
     position: absolute;
     top: -30px;
-    width: 100%;
 }
 
 .features .debt-calculator .debt-calculator-tabs > div {
@@ -611,22 +611,6 @@ address {
 
 .features .debt-calculator .debt-calculator-tabs > div.active-graph {
     background-color: #F1F1F1;
-}
-
-.features .debt-calculator .debt-calculator-tabs > div:nth-child(2) {
-    border-right: 1px solid #C6C6C6;
-}
-
-.features .debt-calculator .debt-calculator-tabs > div:last-child {
-    background-color: #FFFFFF;
-    width: -moz-calc(100% - 261px);
-    width: -webkit-calc(100% - 261px);
-    width: calc(100% - 261px);
-    border-bottom: 1px solid #C6C6C6;
-}
-
-.features .debt-calculator .debt-calculator-tabs > div:last-child > a > span {
-    vertical-align: -10%;
 }
 
 .features .calc-inputs {
