@@ -380,6 +380,11 @@ address {
 .feature-block .screen {
     display: inline-block;
     vertical-align: top;
+    position: relative;
+}
+
+.screen.captable-click {
+    cursor: pointer;
 }
 
 .feature-block .screen:nth-child(odd) {

@@ -38,8 +38,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="screen">
-                        <img src="/img/features/screen-cap.png" class="hidden-phone"/>
+                    <div class="screen captable-click">
+                        <img ng-click="gotopage('cap')" src="/img/features/screen-cap.png" class="hidden-phone"/>
+                        <span class="try-me-button" class='hidden-phone'>
+                            <img ng-click="gotopage('cap')" src="/img/features/tryit.png">
+                        </span>
                     </div>
                 </div>
 
