@@ -1238,10 +1238,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     padding-top: 120px;
 }
 
-.affix + .docPanelContainer.annotatedPageBar {
-    padding-top: 160px;
-}
-
 .docViewerHeader.affix-top {
 }
 
@@ -1534,6 +1530,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-repeat: no-repeat;
     background-position: top center;
     margin: 0 auto 0 auto;
+    position: relative;
 }
 
 .docPanelContainer {
@@ -1708,9 +1705,15 @@ navbar .navbar + doc-viewer.modal-backdrop {
     font-weight: normal;
 }
 
+annotation {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .draggable {
     border: 0 solid red;
-    position:absolute;
+    position: relative;
     cursor: default;
     width: auto;
     height: auto;

@@ -177,6 +177,7 @@ app.directive('annotation', function() {
                     return false;
                 };
 
+                // TODO: shouldn't bind here, but ng-mousedown appears to not stop propagation
                 dragicon.bind('mousedown', $scope.mousedown);
 
                 $scope.$watch('annot.val', function(newValue, oldValue) {
@@ -236,8 +237,10 @@ app.directive('annotation', function() {
                     var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
                     var mousex = $scope.startX + dx;
                     var mousey = $scope.startY + dy;
-                    $scope.annot.position.coords.y = topLocation($element.height(), mousey);
-                    $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
+                    $scope.$apply(function() {
+                        $scope.annot.position.coords.y = topLocation($element.height(), mousey);
+                        $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
+                    });
                     return false;
                 };
                 $scope.newmousemove = function($event) {
@@ -283,6 +286,7 @@ app.directive('annotation', function() {
                     $document.unbind('mousemove', $scope.newmousemove);
                     $document.unbind('mouseup', $scope.newmouseup);
                     $scope.$apply(function() {
+                        // TODO: fix this logic (check size.x and size.y instead of style, and remove from parent annots list)
                         var bb = $element[0].querySelector("textarea");
                         if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
                             var x = bb.parentElement.parentElement.parentElement.parentElement;
@@ -299,18 +303,18 @@ app.directive('annotation', function() {
                     });
                 };
 
-                $scope.closeMe = function(ev) {
-                    $scope.$apply(function() {
-                        var z = ev.currentTarget;
-                        while (z.attributes.draggable === undefined) z = z.parentElement;
-                        z.parentElement.removeChild(z);
-                        for (var i = 0; i < $scope.notes.length; i++) {
-                            if ($scope.notes[i][0] === z) {
-                                $scope.notes.splice(i, 1);
-                                return;
-                            }
+                $scope.closeMe = function() {
+                    // TODO: remove annot from $scope.$parent.annots
+                    alert("remove me!");
+                    /*var z = ev.currentTarget;
+                    while (z.attributes.draggable === undefined) z = z.parentElement;
+                    z.parentElement.removeChild(z);
+                    for (var i = 0; i < $scope.notes.length; i++) {
+                        if ($scope.notes[i][0] === z) {
+                            $scope.notes.splice(i, 1);
+                            return;
                         }
-                    });
+                    }*/
                 };
 
                 // Set startX/Y and initialMouseX/Y attributes.
@@ -435,7 +439,8 @@ app.directive('annotation', function() {
                 }
 
                 // MOCKS
-                // TODO:
+                // TODO: fix these (probably references into parent scope)
+                $scope.lib = {};
                 $scope.countersignable = function() {
                     return false;
                 };

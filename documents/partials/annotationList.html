@@ -1,4 +1,4 @@
-<div ng-repeat="annotation in annotations | orderBy: position.coords.y | orderBy: page">
+<div ng-repeat="annotation in annotations | orderBy: page">
     <h6 ng-show="newPage(annotation)">{{annotation.page}}</h6>
     {{annotation.whattype}}
 </div>

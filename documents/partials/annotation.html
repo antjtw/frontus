@@ -1,8 +1,8 @@
 <div ng-class="{'redrequired':stickyrequired(this), 'greenrequired':stickyfilled(this), 'signature':signatureField(this), 'imagesignature':imageField(this), 'mysignature':imageMine(this), 'processing':signatureProcessing(), 'otherperson':whosignssticky(this)}" class="sticky" ng-style="annotationCoordsStyle">
-    <span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();">
+    <span class="dragger" ng-show="isAnnotable && investorFixed() && !countersignable(lib)" ng-mousedown="$event.stopPropagation();">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
-    <span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()">
+    <span class="close-button" ng-show="isAnnotable && investorFixed() && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
         <span data-icon="&#xe00f;"></span>
     </span>
     <div ng-show="currentPage = annot.page" class="row-fluid draggable">
