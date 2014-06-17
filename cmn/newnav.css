@@ -107,6 +107,15 @@
     text-align: center;
     color: #3397da;
     cursor: pointer;
+    border-bottom: 1px solid #34495E;
+}
+
+.blue-nav > ul > li:first-of-type {
+    border-top: 1px solid #34495E;
+}
+
+.blue-nav > ul > li.activepage:first-of-type {
+    border-top: 1px solid #3397da;
 }
 
 .blue-nav > ul > li:hover{
