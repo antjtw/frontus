@@ -134,10 +134,7 @@
 </div>
 
 
-<div ng-show="navState.userid" class="new-nav" ng-mouseenter="navhover=true" ng-mouseleave="navhover=false">
-    <div class="rail-menu show-hide-animation" ng-hide="navhover">
-        <span data-icon="&#xe609;" aria-hidden="true"></span>
-    </div>
+<div ng-show="navState.userid" ng-class="{'navopened': navhover}" class="new-nav">
     <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
         <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe011;" aria-hidden="true"></span>Admin</span>
         <accordion-group ng-class="{'opencomp': navState.company == company.company && navState.role == company.role, 'manycomp': companies.length > 1}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
@@ -185,4 +182,7 @@
             <li class="button" ng-click="gotoPage('/app/new-company')"><span data-icon="&#xe053;" aria-hidden="true" ></span>Add company</li>
         </ul>
     </div>
+</div>
+
+<div ng-show="navState.userid" class="blue-nav" ng-click="navhover= !navhover">
 </div>

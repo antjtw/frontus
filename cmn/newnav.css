@@ -12,8 +12,22 @@
     z-index: 999;
 }
 
-.new-nav:hover {
-    left: 0px;
+.new-nav.navopened {
+    left: 0;
+}
+
+.blue-nav {
+    position: fixed;
+    height: 100%;
+    top: 40px;
+    left: 0;
+    width:  80px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: left 0.35s ease;
+    -moz-transition: left 0.35s ease;
+    -o-transition: left 0.35s ease;
+    transition: left 0.35s ease;
+    z-index: 999;
 }
 
 .show-hide-animation.ng-hide-add,

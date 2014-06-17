@@ -2227,7 +2227,7 @@ tr.preparedDoc {
     width: 1017px !important;
 }
 .rightNoTableBlock {
-    margin-right:-343px;
+    margin-right:-350px;
 }
 /* Company People */
 .tableView.people-table th {
@@ -3942,10 +3942,10 @@ h2.onboard {
 
 .container.dynamic-page {
     min-width: 1024px;
-    width: -moz-calc(100% - 40px);
-    width: -webkit-calc(100% - 40px);
-    width: calc(100% - 40px);
-    margin-left: 40px;
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+    margin-left: 80px;
     overflow-x: hidden;
 }
 
@@ -3964,9 +3964,9 @@ h2.onboard {
 }
 
 .dynamic-page .leftFullTableBlock {
-    width: -moz-calc(100% - 7px) !important;
-    width: -webkit-calc(100% - 7px) !important;
-    width: calc(100% - 7px) !important;
+    width: -moz-calc(100%) !important;
+    width: -webkit-calc(100%) !important;
+    width: calc(100%) !important;
 }
 
 .dynamic-page .status-right {
