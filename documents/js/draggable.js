@@ -1,11 +1,10 @@
-'use strict'
+'use strict';
 
 angular.module('draggable', [], function() {}).
 directive('draggable', ['$window', '$document',
     function($window, $document) {
         return {
             restrict: 'EA',
-            replace: true,
             transclude: true,
             scope: true,
             template: '<div ng-class="{\'redrequired\':stickyrequired(this), \'greenrequired\':stickyfilled(this), \'signature\':signatureField(this), \'imagesignature\':imageField(this), \'mysignature\':imageMine(this), \'processing\':signatureProcessing(), \'otherperson\':whosignssticky(this)}" class="sticky">' +
@@ -19,7 +18,8 @@ directive('draggable', ['$window', '$document',
                 document.querySelector('.docPanel').appendChild(elm[0]);
                 scope.page = scope.restoredPage || scope.currentPage;
                 elm[0].page = scope.page;
-                scope.$parent.notes.push(elm);
+                //scope.$parent.notes.push(elm);
+                console.log(elm);
                 elm.css({
                     position: 'absolute'
                 });

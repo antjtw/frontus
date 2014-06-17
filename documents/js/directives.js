@@ -158,3 +158,256 @@ app.directive('annotationList', function() {
         ],
     };
 });
+
+app.directive('annotation', function() {
+    return {
+        restrict: "EA",
+        scope: {
+            annot: "="
+        },
+        templateUrl: "/documents/partials/annotation.html",
+        controller: ["$scope", "$element", "$rootScope", "$document",
+            function($scope, $element, $rootScope, $document) {
+                var dragicon = $element.find("span.dragger");
+
+                /* This is the drag - code -- its been moved to work on the drag widget */
+                $scope.mousedown = function($event) {
+                    $scope.initdrag($event);
+                    return false;
+                };
+
+                dragicon.bind('mousedown', $scope.mousedown);
+
+                $scope.$watch('annot.val', function(newValue, oldValue) {
+                    // prevent issuers from filling in the investor values
+                    if ($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Investor") {
+                        $scope.annot.val = "";
+                    }
+                });
+
+                $scope.$watch('$$nextSibling.whattype', function(newval, oldval) {
+                    var elem = $element.find('textarea');
+                    if (newval == "Signature") {
+                        elem.css('font-size', 18);
+                        if (elem.height() < 37) {
+                            elem.css('height', 37);
+                            elem[0].parentNode.parentNode.parentNode.parentNode.style.height = 47 + "px";
+                        }
+                    }
+                    else {
+                        elem.css('font-size', 12);
+                    }
+                }, true);
+
+                var topLocation = function(elementHeight, mouseY) {
+                    var docPanel = document.querySelector('.docPanel');
+                    var topEdge = docPanel.offsetTop;
+                    var panelHeight = docPanel.offsetHeight;
+                    var bottomEdge = topEdge + panelHeight;
+                    if (mouseY < topEdge) {
+                        return topEdge;
+                    } else if (mouseY > bottomEdge - elementHeight) {
+                        return (bottomEdge - elementHeight);
+                    } else {
+                        return mouseY;
+                    }
+                };
+
+                var leftLocation = function(elementWidth, mouseX) {
+                    var docPanel = document.querySelector('.docPanel');
+                    var leftEdge = docPanel.offsetLeft;
+                    var panelWidth = docPanel.offsetWidth;
+                    var rightEdge = leftEdge + panelWidth;
+                    if (mouseX < leftEdge) {
+                        return leftEdge;
+                    } else if (mouseX > rightEdge - elementWidth) {
+                        return (rightEdge - elementWidth);
+                    } else {
+                        return mouseX;
+                    }
+                };
+
+                $scope.mousemove = function($event) {
+                    // absolute mouse location (current): $event.clientX, $event.clientY
+                    // absolute change in mouse location: dx, dy
+                    // relative mouse location: mousex, mousey
+                    var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                    var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
+                    var mousex = $scope.startX + dx;
+                    var mousey = $scope.startY + dy;
+                    $scope.annot.position.coords.y = topLocation($element.height(), mousey);
+                    $scope.annot.position.coords.y = leftLocation($element.width(), mousex);
+                    return false;
+                };
+                $scope.newmousemove = function($event) {
+                    var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
+                    var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
+                    /*$element.css({
+                        height: dy + 6 + 'px',
+                        width: dx + 6 + 'px'
+                    });*/
+                    var bb = $element[0].querySelector("textarea");
+                    bb.style.height = dy - 4 + "px";
+                    bb.style.width = dx - 8 + "px";
+                    return false;
+                };
+
+
+                var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+
+                $scope.mouseup = function(ev) {
+                    $scope.mousemove(ev);
+                    if (document.detachEvent) {
+                        document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                    } else if (document.removeEventListener) {
+                        document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                    }
+                    $document.unbind('scroll', $scope.mousemove);
+                    $document.unbind('mousemove', $scope.mousemove);
+                    $document.unbind('mouseup', $scope.mouseup);
+                    return false;
+                };
+
+                $scope.newmouseup = function(ev) {
+                    $scope.$apply(function() {
+                        if (document.detachEvent) {
+                            document.detachEvent('on'+mousewheelevt, $scope.mousemove);
+                        } else if (document.removeEventListener) {
+                            document.removeEventListener(mousewheelevt, $scope.mousemove, false);
+                        }
+                        var bb = $element[0].querySelector("textarea");
+                        $document.unbind('scroll', $scope.mousemove);
+                        $document.unbind('mousemove', $scope.newmousemove);
+                        $document.unbind('mouseup', $scope.newmouseup);
+                        if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
+                            var x = bb.parentElement.parentElement.parentElement.parentElement;
+                            x.parentElement.removeChild(x);
+                            for (var i = 0; i < $scope.notes.length; i++) {
+                                if ($scope.notes[i][0] === x) {
+                                    $scope.notes.splice(i, 1);
+                                    return;
+                                }
+                            }
+                        }
+                        angular.element(bb.parentElement).scope().getme = true;
+                        return false;
+                    });
+                };
+
+                $scope.closeMe = function(ev) {
+                    var z = ev.currentTarget;
+                    while (z.attributes.draggable === undefined) z = z.parentElement;
+                    z.parentElement.removeChild(z);
+                    for (var i = 0; i < $scope.notes.length; i++) {
+                        if ($scope.notes[i][0] === z) {
+                            $scope.notes.splice(i, 1);
+                            return;
+                        }
+                    }
+                    $scope.$apply();
+                };
+
+                // Set startX/Y and initialMouseX/Y attributes.
+                // Bind mousemove and mousedown event callbacks.
+                //
+                $scope.initdrag = function(ev) {
+                    var dp = document.querySelector(".docPanel");
+                    var dpr = dp.getBoundingClientRect(); // top/left of docPanel
+                    var dprl = dpr.left - dp.offsetLeft; // left of document itself
+                    var dprt = dpr.top - dp.offsetTop; // top of document itself
+                    $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
+                    var bb = $element[0].querySelector("textarea");
+                    $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
+                    $scope.initialMouseX = ev.clientX;
+                    $scope.initialMouseY = ev.clientY;
+                    $scope.initialScrollX = document.documentElement.scrollLeft;
+                    $scope.initialScrollY = document.documentElement.scrollTop;
+                    if (document.attachEvent) {
+                        document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                    } else if (document.addEventListener) {
+                        document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                    }
+                    $document.bind('scroll', $scope.mousemove);
+                    $document.bind('mousemove', $scope.mousemove);
+                    $document.bind('mouseup', $scope.mouseup);
+                };
+
+                $scope.newinitdrag = function(ev) {
+                    var dp = document.querySelector(".docPanel");
+                    var dpr = dp.getBoundingClientRect(); // top/left of docPanel
+                    var dprl = dpr.left - dp.offsetLeft; // left of document itself
+                    var dprt = dpr.top - dp.offsetTop; // top of document itself
+                    $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
+                    $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+                    $scope.initialMouseX = ev.clientX;
+                    $scope.initialMouseY = ev.clientY;
+                    $scope.initialScrollX = document.documentElement.scrollLeft;
+                    $scope.initialScrollY = document.documentElement.scrollTop;
+                    var dx = ev.clientX - $scope.initialMouseX;
+                    var dy = ev.clientY - $scope.initialMouseY;
+                    var mousex = $scope.startX + dx;
+                    var mousey = $scope.startY + dy;
+                    $scope.annot.position.coords.y = topLocation($element.height(), mousey);
+                    $scope.annot.position.coords.y = topLocation($element.width(), mousex);
+                    if (document.attachEvent) {
+                        document.attachEvent('on'+mousewheelevt, $scope.mousemove);
+                    } else if (document.addEventListener) {
+                        document.addEventListener(mousewheelevt, $scope.mousemove, false);
+                    }
+                    $document.bind('scroll', $scope.mousemove);
+                    $document.bind('mousemove', $scope.newmousemove);
+                    $document.bind('mouseup', $scope.newmouseup);
+                };
+
+                $scope.openBox = function(ev, event) {
+                    if ($rootScope.navState.role == "issuer" && !ev.$parent.countersignable(ev.$parent.lib)) {
+                        $scope.getme = true;
+                    }
+                    if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        var textarea = event.currentTarget;
+                        var width = parseInt(textarea.style.width);
+                        var height = parseInt(textarea.style.height);
+                        var boxwidth = 330;
+                        var boxheight = 200;
+                        var ratio;
+                        if (height > width) {
+                            ratio = boxheight / height;
+                            height = boxheight;
+                            width = width * ratio;
+                        }
+                        else {
+                            ratio = boxwidth / width;
+                            width = boxwidth;
+                            height = height * ratio;
+                        }
+                        $scope.signaturestyle = {height: String(180), width: String(330) };
+                        $scope.currentsignature = textarea;
+                        $scope.signatureURL = '/photo/user?id=signature:';
+                        $scope.sigModalUp();
+                    }
+                };
+
+                $scope.$watch('annot.position.coords', function(new_coords) {
+                    if (new_coords) {
+                        $scope.annotationCoordsStyle = "position: relative; top: " + Math.max(0, new_coords.y) + "; left: " + Math.max(0, new_coords.x) + ";";
+                    } else {
+                        $scope.annotationCoordsStyle = "position: relative;";
+                    }
+                });
+
+                $scope.$watch('annot.position.size', function (new_size) {
+                    if (new_size) {
+                        $scope.annotationSizeStyle = "width: " + (new_size.width - 14) + "px; height: " + (new_size.height - 10) + "px;";
+                    } else {
+                        $scope.annotationSizeStyle = "";
+                    }
+                });
+
+                if ($scope.annot.initDrag) {
+                    $scope.newinitdrag($scope.annot.initDrag);
+                    delete $scope.annot.initDrag;
+                }
+            }
+        ]
+    };
+});

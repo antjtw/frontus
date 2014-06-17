@@ -1,0 +1,107 @@
+<div ng-class="{'redrequired':stickyrequired(this), 'greenrequired':stickyfilled(this), 'signature':signatureField(this), 'imagesignature':imageField(this), 'mysignature':imageMine(this), 'processing':signatureProcessing(), 'otherperson':whosignssticky(this)}" class="sticky" ng-style="annotationCoordsStyle">
+    <span class="dragger" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();">
+        <span><span data-icon="&#xe11a;"></span></span>
+    </span>
+    <span class="close-button" ng-show="isAnnotable && investorFixed(this) && !countersignable(lib)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe($event); $event.stopPropagation()">
+        <span data-icon="&#xe00f;"></span>
+    </span>
+    <div ng-show="currentPage = annot.page" class="row-fluid draggable">
+        <fieldset>
+            <div class="textarea-container">
+                <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid" ng-style="annotationSizeStyle"/>
+            </div>
+        </fieldset>
+        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == 'issuer' && getme">
+            <ul>
+                <li>
+                    <ul>
+                        <li>
+                            <span>Who needs to complete?</span>
+                        </li>
+                        <li>
+                            <ul class="dropdown-list drop-selector">
+                                <li class="dropdown standard">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        {{ whosignlabel }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a ng-click="setSign(this, 'Investor')" class="button">Recipient</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setSign(this, 'Issuer')" class="button">{{navState.name}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul>
+                        <li>
+                            <span>Type of Annotation?</span>
+                        </li>
+                        <li>
+                            <ul class="dropdown-list drop-selector">
+                                <li class="dropdown standard">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        {{ whattypelabel }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'Text')" class="button">Text</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'Signature')" class="button">Signature Text</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'ImgSignature')" class="button">Signature Image</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'investorName')" class="button">Name</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'investorStreet')" class="button">Address</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'investorState')" class="button">State</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'investorPostalcode')" class="button">Zip code</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'investorEmail')" class="button">Email</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="setAnnot($event, this, 'signatureDate')" class="button">Date</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="required-row">
+                        <li>
+                            <button ng-class="{'selected':required}" ng-click="toggleRequired(this)" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </li>
+                        <li class="required-text">
+                            Required?
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul>
+                        <li>
+                            <div class="standard-button">
+                                <button ng-click="closeBox(this)" class="btn">Close</button>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+    </div>
+</div>

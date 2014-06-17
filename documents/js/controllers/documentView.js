@@ -2,6 +2,7 @@
 
 app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations) {
+        $scope.annots = [];
         function ApplyLineBreaks(oTextarea) {
             var max = Math.floor(parseInt(oTextarea.style.height)/12);
             if (oTextarea.wrap) {
@@ -124,19 +125,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             var top_padding = 120;
             var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
             var dp = document.querySelector('.docPanel');
-            var ntyp = nx.notetype;
             var z, ibds;
-            if (ntyp == 'text') {
-                var t = nx.querySelector('textarea');
-                z = t.offset;
-                ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
-            } else if (ntyp == 'canvas') {
-                var c = nx.querySelector('canvas');
-                z = c.offset;
-                ibds = [z[0], z[1], z[2], z[3]];
-            } else if (ntyp == 'check') {
-                ibds = [12, 27, 14, 14];
-            }
+            var t = nx.querySelector('textarea');
+            z = t.offset;
+            ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
 
             return [bds, ibds]; // [coords, size]
         }
@@ -551,34 +543,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return $scope.countersignable($scope.lib);
         };
 
-        $scope.openBox = function(ev, event) {
-            if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
-                ev.getme = true;
-            }
-            if (ev.whattype == "ImgSignature" && ((ev.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (ev.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                var textarea = event.currentTarget;
-                var width = parseInt(textarea.style.width);
-                var height = parseInt(textarea.style.height);
-                var boxwidth = 330;
-                var boxheight = 200;
-                var ratio;
-                if (height > width) {
-                    ratio = boxheight / height;
-                    height = boxheight;
-                    width = width * ratio;
-                }
-                else {
-                    ratio = boxwidth / width;
-                    width = boxwidth;
-                    height = height * ratio;
-                }
-                $scope.signaturestyle = {height: String(180), width: String(330) };
-                $scope.currentsignature = textarea;
-                $scope.signatureURL = '/photo/user?id=signature:';
-                $scope.sigModalUp();
-            }
-        };
-
         $scope.uploadSuccess = function() {
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.signatureprocessing = false;
@@ -817,26 +781,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
                         }
-                        annots = Annotations.setDocAnnotations($scope.docId, annots)
+                        $scope.annots = Annotations.setDocAnnotations($scope.docId, annots)
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
                             if ($scope.isAnnotable) {
                                 if ($scope.countersignable($scope.lib) && (annot.whattype == "Signature" || annot.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
-                                    switch (annot.type) {
-                                        case "text":
-                                            sticky = newBoxX(annot);
-                                            break;
-                                    }
-
-                                    // the notes were pushed in the newXXX function
-                                    sticky.css({
-                                        top: Math.max(0, annot.position.coords.y),
-                                        left: Math.max(0, annot.position.coords.x)
-                                    });
-                                    var bb = sticky[0].querySelector("textarea");
-                                    bb.style.width = annot.position.size.width-14 + "px";
-                                    bb.style.height = annot.position.size.height-10 + "px";
+                                    // TODO: ensure everything in annots meets these criteria (only matters if $scope.countersignable)
                                 }
                             }
                         }
@@ -1013,36 +964,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var aa = newBoxX({"page": $scope.currentPage, "val": ''}); // TODO: make a new Annotation object
-                aa.scope().newinitdrag(event);
+                $scope.annots.push({page: $scope.currentPage, val: '', initDrag: event, whattype: "Text", position:{coords:{}, size:{}}}); // TODO: make a new Annotation object
             }
-        };
-
-        $scope.fixBox = function(bb) {
-            var pad;
-            var enclosingElement = bb.parentElement.parentElement.parentElement.parentElement;
-            var crs = countCRs(bb.value);
-            if (bb.clientHeight < bb.scrollHeight) {
-                pad = getIntProperty(bb, 'padding-top') + getIntProperty(bb, 'padding-bottom');
-                bb.style.height = (bb.scrollHeight - pad) + "px";
-            }
-            if (bb.clientWidth < bb.scrollWidth) {
-                // pad = getIntProperty(bb, 'padding-left') + getIntProperty(bb, 'padding-right');
-                bb.style.width = (bb.scrollWidth + 10) + "px";
-            }
-            bb.fontSize = getIntProperty(bb, 'font-size');
-            bb.lineHeight = Math.floor(bb.fontSize * 1.4);
-            bb.style.lineHeight = 1.4;
-            bb.rows = crs + 2;
-            bb.style.height = "auto";
-            bb.offset = [bb.offsetLeft, bb.offsetTop, bb.offsetWidth, bb.offsetHeight];
-
-            // if the box is now off the page, move it over
-            var currBottom = enclosingElement.offsetTop + enclosingElement.clientHeight;
-            var currRight = enclosingElement.offsetLeft + enclosingElement.clientWidth;
-
-            enclosingElement.style.top = topFromBottomLocation(enclosingElement.clientHeight, currBottom) + 'px';
-            enclosingElement.style.left = leftFromRightLocation(enclosingElement.clientWidth, currRight) + 'px';
         };
 
         $scope.moveBox = function(aa) {
@@ -1060,107 +983,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         function newBoxX(annot) {
-            var aa = $compile('<div draggable ng-show="currentPage==' + annot.page + '" class="row-fluid draggable">' +
-                              '<fieldset>' +
-                              '<div class="textarea-container">' +
-                              '<textarea wrap="hard" ng-class="{\'roundedcorners\': navState.role==\'investor\'}" ng-trim="false" ng-disabled="fieldDisabled()" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : \'openBox(this, $event)\'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid"/>' +
-                              '</div>' +
-                              '</fieldset>' +
-                              '<span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == \'issuer\' && getme">' +
-                                '<ul>' +
-                                    '<li>' +
-                                        '<ul>' +
-                                            '<li>' +
-                                                '<span>Who needs to complete?</span>' +
-                                            '</li>' +
-                                            '<li>' +
-                                                '<ul class="dropdown-list drop-selector">' +
-                                                    '<li class="dropdown standard">' +
-                                                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whosignlabel }}' +
-                                                        '</a>' +
-                                                        '<ul class="dropdown-menu">' +
-                                                            '<li>' +
-                                                                '<a ng-click="setSign(this, \'Investor\')" class="button">Recipient</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setSign(this, \'Issuer\')" class="button">{{navState.name}}</a>' +
-                                                            '</li>' +
-                                                        '</ul>' +
-                                                    '</li>' +
-                                                '</ul>' +
-                                            '</li>' +
-                                        '</ul>' +
-                                    '</li>' +
-                                    '<li>' +
-                                        '<ul>' +
-                                            '<li>' +
-                                                '<span>Type of Annotation?</span>' +
-                                            '</li>' +
-                                            '<li>' +
-                                                '<ul class="dropdown-list drop-selector">' +
-                                                    '<li class="dropdown standard">' +
-                                                        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
-                                                            '{{ whattypelabel }}' +
-                                                        '</a>' +
-                                                        '<ul class="dropdown-menu">' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'Text\')" class="button">Text</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'Signature\')" class="button">Signature Text</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                            '<a ng-click="setAnnot($event, this, \'ImgSignature\')" class="button">Signature Image</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'investorName\')" class="button">Name</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'investorStreet\')" class="button">Address</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'investorState\')" class="button">State</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                            '<a ng-click="setAnnot($event, this, \'investorPostalcode\')" class="button">Zip code</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'investorEmail\')" class="button">Email</a>' +
-                                                            '</li>' +
-                                                            '<li>' +
-                                                                '<a ng-click="setAnnot($event, this, \'signatureDate\')" class="button">Date</a>' +
-                                                            '</li>' +
-                                                        '</ul>' +
-                                                    '</li>' +
-                                                '</ul>' +
-                                            '</li>' +
-                                        '</ul>' +
-                                    '</li>' +
-                                    '<li>' +
-                                        '<ul class="required-row">' +
-                                            '<li>' +
-                                            '<button ng-class="{\'selected\':required}" ng-click="toggleRequired(this)" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>' +
-                                            '</li>' +
-                                            '<li class="required-text">' +
-                                            'Required?' +
-                                            '</li>' +
-                                        '</ul>' +
-                                    '</li>' +
-                                    '<li>' +
-                                        '<ul>' +
-                                            '<li>' +
-                                                '<div class="standard-button">' +
-                                                    '<button ng-click="closeBox(this)" class="btn">Close</button>' +
-                                                '</div>' +
-                                            '</li>' +
-                                        '</ul>' +
-                                    '</li>' +
-                                '</ul>' +
-                              '</span>' +
-                              '</div>')($scope);
+/*            var aa = $compile(!!!annotation.html!!!)($scope);
+            aa.scope().annot = annot;
             aa.scope().ntype = 'text';
-            aa[0].notetype = 'text';
             aa.scope().growable = true; // for the growable icons
 
             var bb = aa[0].querySelector("textarea");
@@ -1197,7 +1022,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
             bb.value = annot.val;
 
-            return aa;
+            return aa;*/
         }
 
         $scope.smartValue = function ($event) {
@@ -1324,28 +1149,20 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 var nx = n[0];
                 var bnds = getNoteBounds(nx);
                 var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
-                var typ = nx.notetype;
+
                 var val = [];
                 var style = [];
                 var newstyle = {};
-                var ndx = [pos, typ, val, style, newstyle];
+                var ndx = [pos, "text", val, style, newstyle];
                 var se, lh;
 
-                if (typ == 'text') {
-                    newstyle.investorfixed = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
-                    newstyle.whosign = (angular.element(nx).scope().$$nextSibling.whosign);
-                    newstyle.whattype = (angular.element(nx).scope().$$nextSibling.whattype);
-                    newstyle.required = (angular.element(nx).scope().$$nextSibling.required);
-                    se = nx.querySelector("textarea");
-                    val.push(se.value);
-                    style.push(getIntProperty(se, 'font-size'));
-                } else if (typ == 'check') {
-                    se = nx.querySelector("span.check-annotation");
-                    style.push(getIntProperty(se, 'font-size'));
-                } else if (typ == 'canvas') {
-                    se = nx.querySelector("canvas");
-                    val.push(se.strokes);
-                }
+                newstyle.investorfixed = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
+                newstyle.whosign = (angular.element(nx).scope().$$nextSibling.whosign);
+                newstyle.whattype = (angular.element(nx).scope().$$nextSibling.whattype);
+                newstyle.required = (angular.element(nx).scope().$$nextSibling.required);
+                se = nx.querySelector("textarea");
+                val.push(se.value);
+                style.push(getIntProperty(se, 'font-size'));
                 noteData.push(ndx);
             }
             var divided = [[], []];
@@ -1415,17 +1232,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             var returnvalue = false;
             for (var i = 0; i < $scope.notes.length; i++) {
                 var n = $scope.notes[i][0];
-                if (n.notetype == "text") {
-                    var contents = n.querySelector("textarea");
-                    if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                        if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                            returnvalue = true;
-                        }
+                var contents = n.querySelector("textarea");
+                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
+                    if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+                        returnvalue = true;
                     }
-                    else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
-                        if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                            returnvalue = true;
-                        }
+                }
+                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
+                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
+                        returnvalue = true;
                     }
                 }
             }

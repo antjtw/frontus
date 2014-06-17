@@ -174,7 +174,9 @@
         </div>
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
-        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)"></div>
+        <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
+            <annotation ng-repeat="annotation in annots" annot="annotation">
+        </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
     </div>
@@ -372,7 +374,7 @@
                                 <span>Save Info?</span>
                                 <br>
                                 <span>Choose yes or no below if you want like to save all this information for other investor requests.
-                                You can access and chnage information in your investor profile.</span>
+                                You can access and change information in your investor profile.</span>
                             </li>
                             <br>
                             <li>
