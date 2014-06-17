@@ -730,6 +730,13 @@ address {
     }
 }
 
+@media (max-width: 480px) {
+
+    .features .calc-inputs input {
+        width: 100px;
+    }
+}
+
 
 @media (min-width: 1000px) {
     .feature-block .screen {
