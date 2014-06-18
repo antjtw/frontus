@@ -3,14 +3,14 @@
         <span class="note-flag" data-icon="&#xe603;" aria-hidden="true"></span>
         <span ng-show="(notes.length > 0)" class="note-number">{{notes.length}}</span>
     </a>
-    <ul class="dropdown-menu">
+    <ul ng-class="{'scrolladded': notes.length > 7}" class="dropdown-menu">
         <li class="no-notifications" ng-show="notes.length == 0">
             <div>
                 Good Job! You're up to date.
             </div>
         </li>
         <li ng-repeat="note in notes | orderBy:oldestDate">
-            <span tooltip-placement="bottom" tooltip="{{nameIfLong(note.docname)}}" class="actionItemTooltip" class='a_nav_notification_link' ng-bind-html="note | notifications"></span>
+            <span title="{{note.docname}}" class='a_nav_notification_link' ng-bind-html="note | notifications"></span>
         </li>
     </ul>
 </li>
