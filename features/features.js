@@ -19,7 +19,7 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
           controller: 'FeaturesDebtCtrl',
           templateUrl:'/features/partials/debt.html'
       }).
-      when('/features/convertible-note', {
+      when('/features/convertible-notes', {
           controller: 'FeaturesDebtCtrl',
           templateUrl:'/features/partials/debt.html'
       }).
