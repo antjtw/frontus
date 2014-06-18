@@ -18,10 +18,11 @@
                             <ul>
                                 <li>
                                     <span>
-                                        Message sent at {{message_datum.time}} to {{message_datum.tox.length}} repicipients
-                                    </span>
-
+                                        Message sent at {{message_datum.time}} to {{message_datum.tox.length}} shareholder(s)
+                                    </span><br/>
+                                    <span ng-click = "showRecipients = !showRecipients">Recipients</span>
                                 </li>
+                                <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">{{tox}}
                             
                                 
                             </ul>
