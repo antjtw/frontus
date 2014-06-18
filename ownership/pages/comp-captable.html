@@ -950,15 +950,11 @@
                             -->
                             <div class="paripassu-list">
                                 <div class="rightTitle">
-                                    <span>Evidence</span>
                                     <span class="tooltip-icon" data-icon="&#xe044;"
                                           aria-hidden="true" data-placement="top"
                                           bs-tooltip="captabletips.evidence">
                                     </span>
                                 </div>
-                            </div>
-                            <div class="standard-button green">
-                                <button class="btn" ng-click="toggleWindow();">Add Evidence</button>
                             </div>
                               <!-- TODO edit evidence issue -->
 
@@ -1157,278 +1153,288 @@
 
                           </div>
 
-                          <span class="blue-link delete-link" ng-click="deleteIssueButton(activeIssue);">Delete security</span>
+                          <div><span class="blue-link delete-link" ng-click="deleteIssueButton(activeIssue);" data-icon="&#xe00c;">Delete security</span></div>
                       </span>
 
 <!-- Transaction Side Bar when Editable -->
                       <span ng-switch-when="2">
 
                         <accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
-                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
+                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
                             <accordion-heading>
                                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
                                 <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
                                 <span>{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
 
-                            <!-- Global Tab -->
-                            <div class="capGuide global">
+                            <div class="standard-button btn-group">
+                                <button class="btn" ng-click="switchCapTab('details');">Details</button>
+                                <button class="btn" ng-click="switchCapTab('documents');">Documents</button>
+                            </div>
 
-                                <div class="rightTitle security-type">
-                                    <span>Investor</span>
-                                    <span class="locked-security">
-                                        {{tran.investor}}
-                                    </span>
+                            <div class="capTab" ng-switch-when="details">
+                                <!-- Global Tab -->
+                                <div class="capGuide global">
 
-                                    <div ng-click="transferSharesUp(activeTran);" ng-show="activeTran[0].type == 'Equity'">
-                                        <span data-icon="&#xe60a;" aria-hidden="true"></span>
-                                        <span>Transfer</span>
+                                    <div class="rightTitle security-type">
+                                        <span>Investor</span>
+                                        <span class="locked-security">
+                                            {{tran.investor}}
+                                        </span>
+
+                                        <div ng-click="transferSharesUp(activeTran);" ng-show="activeTran[0].type == 'Equity'">
+                                            <span data-icon="&#xe60a;" aria-hidden="true"></span>
+                                            <span>Transfer</span>
+                                        </div>
+
+                                        <div ng-click="convertSharesUp(activeTran);" ng-show="activeTran[0].type == 'Debt'">
+                                            <span data-icon="&#xe60c;" aria-hidden="true"></span>
+                                            <span>Convert</span>
+                                        </div>
                                     </div>
 
-                                    <div ng-click="convertSharesUp(activeTran);" ng-show="activeTran[0].type == 'Debt'">
-                                        <span data-icon="&#xe60c;" aria-hidden="true"></span>
-                                        <span>Convert</span>
-                                    </div>
+                                    <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
+                                                                                  ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
+                                                                                  ng-change="saveTranDate(tran, 'date')"
+                                                                                  type="text" ng-model="tran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
+
+                                    </p>
+
+                                    <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
+                                                                                                                 maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                 ng-model="tran.units" onkeydown="testForEnter();"></p>
+
+                                    <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
+                                                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
                                 </div>
 
-                                <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
-                                                                              ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
-                                                                              ng-change="saveTranDate(tran, 'date')"
-                                                                              type="text" ng-model="tran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
+                                <div class="capGuide top10">
 
-                                </p>
+                                    <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                                                                                              ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
 
-                                <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
-                                                                                                             maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                             ng-model="tran.units" onkeydown="testForEnter();"></p>
-
-                                <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
-                                                                                    maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
-                            </div>
-
-                            <div class="capGuide top10">
-
-                                <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
-                                                                                                          ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
-
-                            </div>
-
-                            <!-- Equity Tab -->
-                            <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
-
-                                <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
-                                                                                     onkeydown="testForEnter();"
-                                                                                     ui-event="{blur : 'saveTran(tran)'}"
-                                                                                     ng-model="tran.ppshare">
-                                </p>
-
-
-                                <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Liquidation Preference</span>
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.liquidpref}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in liquidpref track by $index">
-                                                    <a ng-click="saveTranAssign(tran, 'liquidpref', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
                                 </div>
 
-                                <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Participating Preferred</span>
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in tf">
-                                                    <a ng-click="saveTranAssign(tran, 'partpref', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.partpref"></span>
-                                </div>
+                                <!-- Equity Tab -->
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
 
-                                <div ng-hide="commonstock(tran)" class="rightTitle"><span>Drag Along</span>
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.dragalong  | falseCheck}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in tf">
-                                                    <a ng-click="saveTranAssign(tran, 'dragalong', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
-                                </div>
-
-                                <div ng-hide="commonstock(tran)" class="rightTitle"><span>Tag Along</span>
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.tagalong  | falseCheck}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in tf track by $index">
-                                                    <a ng-click="saveTranAssign(tran, 'tagalong', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
-                                </div>
-                                <!-- TODO edit evidence transaction -->
-
-                            </div>
-                            <!-- Option Tab -->
-                            <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
-
-                                <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
-                                                                                      onkeydown="testForEnter();"
-                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                      ng-model="tran.price">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.price"></span>
-                                </p>
-
-                                <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-disabled="toggleView();"
-                                                                                                      onkeydown="testForEnter();"
-                                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                      ng-model="tran.terms">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
-                                </p>
-
-                                <p class="rightTitle double"><span>Vesting Cliff (months)</span><input type="text"
-                                                                                                       onkeydown="testForEnter();"
-                                                                                                       ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                       ng-model="tran.vestingbeginsdisplay">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
-                                </p>
-
-                                <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
                                                                                          onkeydown="testForEnter();"
                                                                                          ui-event="{blur : 'saveTran(tran)'}"
-                                                                                         ng-model="tran.vestcliff">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
-                                </p>
+                                                                                         ng-model="tran.ppshare">
+                                    </p>
 
 
-                                <div class="rightTitle double"><span>Post Cliff Frequency</span>
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.vestfreq}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in freqtypes track by $index">
-                                                    <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                                    <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Liquidation Preference</span>
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.liquidpref}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in liquidpref track by $index">
+                                                        <a ng-click="saveTranAssign(tran, 'liquidpref', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
+                                    </div>
+
+                                    <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Participating Preferred</span>
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.partpref  | falseCheck}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf">
+                                                        <a ng-click="saveTranAssign(tran, 'partpref', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.partpref"></span>
+                                    </div>
+
+                                    <div ng-hide="commonstock(tran)" class="rightTitle"><span>Drag Along</span>
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.dragalong  | falseCheck}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf">
+                                                        <a ng-click="saveTranAssign(tran, 'dragalong', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.dragalong"></span>
+                                    </div>
+
+                                    <div ng-hide="commonstock(tran)" class="rightTitle"><span>Tag Along</span>
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.tagalong  | falseCheck}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in tf track by $index">
+                                                        <a ng-click="saveTranAssign(tran, 'tagalong', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.tagalong"></span>
+                                    </div>
+                                    <!-- TODO edit evidence transaction -->
+
                                 </div>
-                                <!-- TODO edit evidence transaction -->
+                                <!-- Option Tab -->
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
 
-                            </div>
-                            <!-- Debt Tab -->
-                            <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
-
-                                <div class="rightTitle interest-rate">
-                                    <span>Interest Rate</span>
-                                    <input ng-disabled="toggleView();"
-                                         onkeydown="testForEnter();"
-                                         ui-event="{blur : 'saveTran(tran)'}"
-                                         ng-model="tran.interestrate">
-
-                                    <ul class="dropdown-list drop-selector">
-                                        <li class="dropdown standard">
-                                            <a class="dropdown-toggle">
-                                                {{tran.interestratefreq}}<span class="invisible-drop">'</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="i in freqtypes track by $index">
-                                                    <a ng-click="saveTranAssign(tran, 'interestratefreq', i)">{{i}}</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.interestrate"></span>
-                                </div>
-
-                                <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                                                    onkeydown="testForEnter();"
-                                                                                                                    ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                    ng-model="tran.valcap">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
-                                </p>
-
-                                <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                    <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
                                                                                           onkeydown="testForEnter();"
                                                                                           ui-event="{blur : 'saveTran(tran)'}"
-                                                                                          ng-model="tran.discount">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
-                                </p>
+                                                                                          ng-model="tran.price">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.price"></span>
+                                    </p>
 
-                                <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
-                                                                                       onkeydown="testForEnter();"
-                                                                                       ui-event="{blur : 'saveTran(tran)'}"
-                                                                                       ng-model="tran.term">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
-                                </p>
-                                <!-- TODO edit evidence transaction -->
-                            </div>
+                                    <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-disabled="toggleView();"
+                                                                                                          onkeydown="testForEnter();"
+                                                                                                          ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                          ng-model="tran.terms">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.terms"></span>
+                                    </p>
 
-                            <!-- Safe Tab -->
-                            <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
+                                    <p class="rightTitle double"><span>Vesting Cliff (months)</span><input type="text"
+                                                                                                           onkeydown="testForEnter();"
+                                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                           ng-model="tran.vestingbeginsdisplay">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                                    </p>
 
-                                <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
-                                                                                                                    onkeydown="testForEnter();"
-                                                                                                                    ui-event="{blur : 'saveTran(tran)'}"
-                                                                                                                    ng-model="tran.valcap">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcapsafe"></span>
-                                </p>
+                                    <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
+                                                                                             onkeydown="testForEnter();"
+                                                                                             ui-event="{blur : 'saveTran(tran)'}"
+                                                                                             ng-model="tran.vestcliff">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                                    </p>
 
-                                <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+
+                                    <div class="rightTitle double"><span>Post Cliff Frequency</span>
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.vestfreq}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in freqtypes track by $index">
+                                                        <a ng-click="saveTranAssign(tran, 'vestfreq', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                                    </div>
+                                    <!-- TODO edit evidence transaction -->
+
+                                </div>
+                                <!-- Debt Tab -->
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
+
+                                    <div class="rightTitle interest-rate">
+                                        <span>Interest Rate</span>
+                                        <input ng-disabled="toggleView();"
+                                             onkeydown="testForEnter();"
+                                             ui-event="{blur : 'saveTran(tran)'}"
+                                             ng-model="tran.interestrate">
+
+                                        <ul class="dropdown-list drop-selector">
+                                            <li class="dropdown standard">
+                                                <a class="dropdown-toggle">
+                                                    {{tran.interestratefreq}}<span class="invisible-drop">'</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="i in freqtypes track by $index">
+                                                        <a ng-click="saveTranAssign(tran, 'interestratefreq', i)">{{i}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.interestrate"></span>
+                                    </div>
+
+                                    <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                        onkeydown="testForEnter();"
+                                                                                                                        ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                        ng-model="tran.valcap">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                                    </p>
+
+                                    <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                              onkeydown="testForEnter();"
+                                                                                              ui-event="{blur : 'saveTran(tran)'}"
+                                                                                              ng-model="tran.discount">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                    </p>
+
+                                    <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                           onkeydown="testForEnter();"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.term">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.term"></span>
+                                    </p>
+                                    <!-- TODO edit evidence transaction -->
+                                </div>
+
+                                <!-- Safe Tab -->
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
+
+                                    <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input ng-disabled="toggleView();"
+                                                                                                                        onkeydown="testForEnter();"
+                                                                                                                        ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                        ng-model="tran.valcap">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.valcapsafe"></span>
+                                    </p>
+
+                                    <p class="rightTitle"><span>Percent Discount</span><input ng-disabled="toggleView();"
+                                                                                              onkeydown="testForEnter();"
+                                                                                              ui-event="{blur : 'saveTran(tran)'}"
+                                                                                              ng-model="tran.discount">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                    </p>
+
+                                    <!-- TODO edit evidence transaction -->
+                                </div>
+
+                                <!-- Warrant Tab -->
+                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
+
+                                    <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
+                                                                                           onkeydown="testForEnter();"
+                                                                                           ui-event="{blur : 'saveTran(tran)'}"
+                                                                                           ng-model="tran.term">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                                    </p>
+
+                                    <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
                                                                                           onkeydown="testForEnter();"
                                                                                           ui-event="{blur : 'saveTran(tran)'}"
-                                                                                          ng-model="tran.discount">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.discount"></span>
-                                </p>
+                                                                                          ng-model="tran.price">
+                                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                                    </p>
 
-                                <!-- TODO edit evidence transaction -->
+                                </div>
+                                    <!-- TODO edit evidence transaction -->
+
+                                <span class="blue-link delete-link" ng-click="tranDeleteUp(tran);">Delete transaction</span>
                             </div>
-
-                            <!-- Warrant Tab -->
-                            <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
-
-                                <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
-                                                                                       onkeydown="testForEnter();"
-                                                                                       ui-event="{blur : 'saveTran(tran)'}"
-                                                                                       ng-model="tran.term">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
-                                </p>
-
-                                <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
-                                                                                      onkeydown="testForEnter();"
-                                                                                      ui-event="{blur : 'saveTran(tran)'}"
-                                                                                      ng-model="tran.price">
-                                    <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
-                                </p>
+                            <div class="capTab" ng-switch-when="documents">
+                                <span class="blue-link delete-link" ng-click="editEvidence(tran);" data-icon="&#xe008;">Add Documents</span>
 
                             </div>
-                                <!-- TODO edit evidence transaction -->
-
-                            <span class="blue-link delete-link" ng-click="tranDeleteUp(tran);">Delete transaction</span>
-
                             </accordion-group>
                         </accordion>
                           <span class="add-transaction-link" ng-click="createTrantab()">
@@ -1732,12 +1738,72 @@
         </tabset>
 </div>
 </div>
-<button class="right-rail-button" ng-click="sideToggle = !sideToggle">
+<button class="right-rail-button" ng-click="sideToggle = !sideToggle" ng-class="{showRightTab:windowToggle}">
     <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
 </button>
 </div>
-<div class="rightTabWindow" ng-class="{showRightTab:windowToggle}">
-    hello
+<div class="rightTabWindow" ng-if="windowToggle" ng-class="{showRightTab:windowToggle}" ng-style="viewportheight">
+    <table class="status-table investor evidence">
+        <tbody>
+            <tr>
+                <th class="left"></th>
+                <th class="left">
+                    Document Name
+                </th>
+                <th></th>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="doc in eligible_evidence" ng-if="!doc.investor && !doc.doc_id">
+            <tr class="empty-row"/>
+            <tr>
+                <td ng-click="toggleShown(doc)" class="pointer">
+                    <div>
+                        <span class="toggle-icon" ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                        <span class="toggle-icon" ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    </div>
+                </td>
+                <td>
+                    <ul>
+                        <li title="{{doc.docname}}">{{doc.docname}}</li>
+                    </ul>
+                </td>
+                <td/>
+            </tr>
+            <tr class="version" ng-show="doc.shown">
+                <td>
+                </td>
+                <td>
+                    <div>
+                        <button class="check-box-button" ng-class="{selected:isEvidence(doc)}" ng-click="toggleForEvidence(doc);">
+                            <span data-icon="&#xe023;" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <ul>
+                        <li>Original</li>
+                    </ul>
+                </td>
+                <td/>
+            </tr>
+            <tr ng-repeat="invdoc in eligible_evidence"
+                ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
+                class="version" ng-show="doc.shown">
+                <td>
+                </td>
+                <td>
+                    <div>
+                        <button class="check-box-button" ng-class="{selected:isEvidence(invdoc)}" ng-click="toggleForEvidence(invdoc);">
+                            <span data-icon="&#xe023;" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <ul>
+                        <li>{{invdoc.investor}}</li>
+                    </ul>
+                </td>
+                <td/>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
 
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">

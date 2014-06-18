@@ -15,6 +15,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.windowToggle = false;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
+    $scope.currentTab = 'details';
 
     // Tour options
     $scope.tourshow = false;
@@ -67,6 +68,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
     $scope.eligible_evidence = [];
+    $scope.evidence_object = null;
 
     $scope.tourUp = function () {
         $scope.tourModal = true;
@@ -91,8 +93,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     });
 
     SWBrijj.tblm('document.my_company_eligible_evidence').then(function(data) {
-        console.log(data);
-        $scope.eligible_evidence = data;
+        $scope.eligible_evidence = data; //data.filter(function(el) {return !el.investor;});
     }).except(function(e) {
         console.log(e);
     });
@@ -153,7 +154,16 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             });
         });
     });
-
+    $scope.attachEvidence = function(data) {
+        angular.forEach($scope.trans, function(tran) {
+            var this_tran_evidence = data.filter(function(el) { return el.id==tran.evidence; });
+            tran.evidence_data = this_tran_evidence;
+            if (this_tran_evidence.length > 0) {
+                console.log(tran.evidence_data);
+            }
+        });
+        // TODO implement for issues
+    };
     $scope.generateCaptable = function(names) {
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -439,6 +449,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         SWBrijj.tblm('ownership.company_row_names').then(function (names) {
             // Get the company's Transactions
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
+                console.log(trans);
                 $scope.trans = trans;
                 if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
                     $rootScope.$on('billingLoaded', function(x) {
@@ -465,8 +476,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 // Get the company's Grants
                 SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                     $scope.grants = grants;
-                    $scope.generateCaptable(names);
-
+                    SWBrijj.tblm('ownership.my_company_evidence').then(function(evidence_data) {
+                        $scope.attachEvidence(evidence_data);
+                        $scope.generateCaptable(names);
+                    });
                 });
             });
         });
@@ -931,29 +944,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.showPari = function(list) {
         return (list.length > 0)
-    };
-    $scope.availableEvidence = function(eligible_evidence, evidence) {
-        var list = [];
-        var used = [];
-        list.push("");
-        angular.forEach(evidence, function(e) {
-            used.push(e);
-        });
-        angular.forEach(eligible_evidence, function(e) {
-            if (used.indexOf(e)==-1) {
-                list.push(e);
-            }
-        });
-        return list;
-    };
-    $scope.showEvidence = function(list) {
-        return list.length > 0;
-    };
-    $scope.openEvidenceModal = function() {
-        $scope.evidenceModal = true;
-    };
-    $scope.closeEvidenceModal = function() {
-        $scope.evidenceModal = false;
     };
 
     $scope.toggleCommon = function(issue) {
@@ -1673,11 +1663,66 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return true
         }
     };
-    $scope.toggleWindow = function() {
-        $scope.windowToggle = !$scope.windowToggle;
+    $scope.switchCapTab = function(tab) {
+        $scope.currentTab = tab;
+    };
+    $scope.toggleShown = function(obj) {
+        if (obj.shown == undefined) {
+            obj.shown = true;
+        } else {
+            obj.shown = !obj.shown;
+        }
+    };
+    $scope.editEvidence = function(obj) {
+        if (obj) {
+            $scope.evidence_object = obj;
+            $scope.windowToggle = true;
+        } else {
+            $scope.evidence_object = null;
+            $scope.windowToggle = false;
+        }
         return $scope.windowToggle;
     };
-
+    $scope.isEvidence = function(ev) {
+        var found_one = false;
+        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
+            angular.forEach($scope.evidence_object.evidence_data,
+            function(el) {
+                if ( (ev.doc_id && el.doc_id==ev.doc_id)
+                      || (!ev.doc_id && (el.doc_id==ev.original) || (el.original==ev.original)) ) {
+                    found_one = true;
+                }
+            });
+            return found_one;
+        } else {
+            return false;
+        }
+    };
+    $scope.toggleForEvidence = function(ev) {
+        if (ev && $scope.evidence_object.evidence_data) {
+            var evidence_location = $scope.evidence_object.evidence_data.indexOf(ev);
+            if (evidence_location===-1) {
+                $scope.evidence_object.evidence_data.push(ev);
+            } else {
+                $scope.evidence_object.evidence_data.splice(evidence_location);
+            }
+            var new_data = [];
+            angular.forEach($scope.evidence_object.evidence_data,
+            function(el) {
+                new_data.push({doc_id: el.doc_id ? el.doc_id : el.original});
+            });
+            SWBrijj.procm('ownership.upsert_transaction_evidence',
+                          $scope.evidence_object.tran_id,
+                          JSON.stringify(new_data)
+            ).then(function(r) {
+                console.log(r);
+                //success
+            }).except(function(e) {
+                console.log(e);
+                //fail
+            });
+        }
+    };
 
     // Captable Conversion Modal
 

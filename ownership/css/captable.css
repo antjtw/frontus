@@ -556,6 +556,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     background-color: #FFFFFF;
 }
 
+.tran-action {
+    color: #3498D8;
+}
 .paripassu-list > div.rightTitle > span {
     visibility: hidden;
 }
@@ -2324,4 +2327,26 @@ span.tour-icon.issue-cog + .tooltip {
 
 .span4.capright, .span4.capright span, .span4.capright input {
     -webkit-transform: translateZ(0);
+}
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td {
+    text-align: left;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:first-child {
+    width: 60px;
+    text-align: center;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
+    min-width: 300px;
+}
+
+.rightTabWindow > table.status-table.evidence > tbody > tr.version {
+    background-color: #F1F1F1;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > div {
+    float: left;
+    width: 30px;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
+    float: left;
 }

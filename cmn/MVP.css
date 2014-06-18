@@ -2223,21 +2223,24 @@ tr.preparedDoc {
 .leftTabWindow {
     overflow-x: hidden;
     margin-left: 0;
-    -webkit-transition: margin-left linear 0.25s;
-    -moz-transition: margin-left linear 0.25s;
-    -ms-transition: margin-left linear 0.25s;
-    -o-transition: margin-left linear 0.25s;
-    transition: margin-left linear 0.25s;
+    -webkit-transition: margin-left 0.25s linear 0s;
+    -moz-transition: margin-left 0.25s linear 0s;
+    -ms-transition: margin-left 0.25s linear 0s;
+    -o-transition: margin-left 0.25s linear 0s;
+    transition: margin-left 0.25s linear 0s;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
     margin-left: -moz-calc(-100% + 350px);
     margin-left: -webkit-calc(-100% + 350px);
-    -webkit-transition: margin-left linear 0.25s;
-    -moz-transition: margin-left linear 0.25s;
-    -ms-transition: margin-left linear 0.25s;
-    -o-transition: margin-left linear 0.25s;
-    transition: margin-left linear 0.25s;
+}
+.right-rail-button {
+}
+.right-rail-button.showRightTab {
+    right: inherit;
+    left: 350px;
+    transform: translate(0px);
+    -webkit-transform:translate(0px);
 }
 .leftFullTableBlock {
     width: 1017px !important;
@@ -2246,30 +2249,54 @@ tr.preparedDoc {
     margin-right:-343px;
 }
 .rightTabWindow {
-    background-color: cyan;
     position:absolute;
     left: 0;
     top: 100px;
-    margin-left: 100%;
-    width: 100%;
-    height: 100%;
+    width: -moz-calc(100% - 390px);
+    width: -webkit-calc(100% - 390px);
+    width: calc(100% - 390px);
+    padding: 20px 20px 20px 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    /*
     -webkit-transition: margin-left linear 0.25s;
     -moz-transition: margin-left linear 0.25s;
     -ms-transition: margin-left linear 0.25s;
     -o-transition: margin-left linear 0.25s;
     transition: margin-left linear 0.25s;
+    */
 }
 .rightTabWindow.showRightTab {
-    display: block;
- //   margin-right: 0;
-    position:absolute;
     margin-left: 390px;
-    -webkit-transition: margin-left linear 0.25s;
-    -moz-transition: margin-left linear 0.25s;
-    -ms-transition: margin-left linear 0.25s;
-    -o-transition: margin-left linear 0.25s;
-    transition: margin-left linear 0.25s;
+    opacity: 1;
 }
+.rightTabWindow.ng-leave.ng-leave-active {
+    margin-left: 100%;
+    opacity: 0;
+}
+.rightTabWindow.ng-enter {
+    //margin-left: 390px;
+    -webkit-transform(100%);
+}
+.rightTabWindow.ng-leave,
+.rightTabWindow.ng-enter.ng-enter.active {
+    margin-left: 390px;
+    opacity: 1;
+}
+.rightTabWindow.ng-leave {
+    -webkit-transition: all 0.25s linear 0;
+    -moz-transition: all 0.25s linear 0;
+    -ms-transition: all 0.25s linear 0;
+    -o-transition: all 0.25s linear 0;
+    transition: all 0.25s linear 0;
+}
+.rightTabWindow.ng-enter {
+    -webkit-transition: all 1s linear 0;
+    -moz-transition: all 1s linear 0;
+    -ms-transition: all 1s linear 0;
+    -o-transition: all 1s linear 0;
+    transition: all 1s linear 0;
+} 
 /* Company People */
 .tableView.people-table th {
     width: 470px;
