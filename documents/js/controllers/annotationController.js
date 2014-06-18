@@ -5,7 +5,6 @@ function annotationController($scope, $element, $rootScope, $document) {
     $scope.investor_attributes = []; // TODO
 
     function applyLineBreaks(oTextarea) {
-        // TODO: confirm this is setting $scope.annot.val correctly
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
             oTextarea.setAttribute("wrap", "off");
@@ -81,6 +80,7 @@ function annotationController($scope, $element, $rootScope, $document) {
             strNewValue = strNewValue.split("\n", max).join("\n");
         }
         oTextarea.value = strNewValue;
+        $scope.annot.val = strNewValue;
         oTextarea.setAttribute("wrap", "hard");
         return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
     }
@@ -106,14 +106,13 @@ function annotationController($scope, $element, $rootScope, $document) {
     $scope.$watch('annot.whattype', function(newval, oldval) {
         var elem = $element.find('textarea');
         if (newval == "Signature") {
-            elem.css('font-size', 18);
-            if (elem.height() < 37) {
-                elem.css('height', 37);
-                elem[0].parentNode.parentNode.parentNode.parentNode.style.height = 47 + "px";
+            $scope.annot.fontsize = 18;
+            if ($scope.annot.position.size.height < 37) {
+                $scope.annot.position.size.height = 37;
             }
         }
         else {
-            elem.css('font-size', 12);
+            $scope.annot.fontsize = 12;
         }
     });
 
@@ -333,23 +332,28 @@ function annotationController($scope, $element, $rootScope, $document) {
         return $scope.annot.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
     };
 
+    $scope.annotationCoordsStyle = {};
+    $scope.annotationSizeStyle = {};
+
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
-            $scope.annotationCoordsStyle = {
-                top: Math.max(0, new_coords.y) + "px",
-                left: Math.max(0, new_coords.x) + "px"
-            };
+            $scope.annotationCoordsStyle.top = Math.max(0, new_coords.y) + "px";
+            $scope.annotationCoordsStyle.left = Math.max(0, new_coords.x) + "px";
         }
     }, true);
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            $scope.annotationSizeStyle = {
-                width: (new_size.width - 14) + "px",
-                height: (new_size.height - 10) + "px"
-            };
+            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
         }
     }, true);
+
+    $scope.$watch('annot.fontsize', function(new_fontsize) {
+        if (new_fontsize) {
+            $scope.annotationSizeStyle["font-size"] = new_fontsize;
+        }
+    });
 
     $scope.$watch('annot.whosign', function(whosign) {
         $scope.whosignlabel = (whosign == "Investor") ? "Recipient" : $rootScope.navState.name;

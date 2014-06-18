@@ -40,19 +40,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         }
 
-        function getNoteBounds(nx) {
-            // [LEFT, TOP, WIDTH, HEIGHT]
-            var top_padding = 120;
-            var bds = [getIntProperty(nx, 'left'), getIntProperty(nx, 'top'), 0, 0];
-            var dp = document.querySelector('.docPanel');
-            var z, ibds;
-            var t = nx.querySelector('textarea');
-            z = t.offset;
-            ibds = [0,0, parseInt(t.style.width)+14, parseInt(t.style.height)+10];
-
-            return [bds, ibds]; // [coords, size]
-        }
-
         function boundBoxByPage(element) {
             // TODO: not applicable to new styling
             var docPanel = document.querySelector('.docPanel');
@@ -972,7 +959,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         function getNoteData() {
             var divided = [[], []];
-            console.log($scope.annots)
             angular.forEach($scope.annots, function (note) {
                 if (note.whosign == "Issuer") {
                     divided[1].push(note.toJson());
@@ -1001,12 +987,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            console.log("saveNoteData");
             var nd = getNoteData();
             var nd_inv = nd[0];
-            console.log(nd_inv);
             var nd_iss = nd[1];
-            console.log(nd_iss);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
@@ -1026,7 +1009,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {json}
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
-                console.log("saveNoteData sucess");
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved annotations");
             });
