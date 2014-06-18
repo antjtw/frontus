@@ -38,7 +38,7 @@ m.directive('messageSide', function(){
             $scope.forView();
 
             $scope.getLogs = function(){
-                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
                     function Message(time, event, tox, category){
                         this.time = time
