@@ -694,12 +694,12 @@ ownership.service('calculate', function () {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.toissue.postmoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
+            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
+                convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
                 if (premoneypercent > (discount)) {
-                    var postmoneypercent = (1- (parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.postmoney)));
-                    convertTran.newtran.valcappercentage = String(postmoneypercent*100);
-                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-postmoneypercent);
+                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
+                    convertTran.newtran.caphit = true;
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {

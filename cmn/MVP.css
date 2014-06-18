@@ -1228,6 +1228,7 @@ form.inputs {
 }
 .CompanyRegister-form {
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 .CompanyRegister-form.large-standard-button > button {
     width: 260px;
