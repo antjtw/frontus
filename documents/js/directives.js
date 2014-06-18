@@ -173,12 +173,12 @@ app.directive('annotation', function() {
                 $scope.annotext = "";
                 $scope.investor_attributes = []; // TODO
 
-                function ApplyLineBreaks(oTextarea) {
+                function applyLineBreaks(oTextarea) {
+                    // TODO: confirm this is setting $scope.annot.val correctly
                     var max = Math.floor(parseInt(oTextarea.style.height)/12);
                     if (oTextarea.wrap) {
                         oTextarea.setAttribute("wrap", "off");
-                    }
-                    else {
+                    } else {
                         oTextarea.setAttribute("wrap", "off");
                         var newArea = oTextarea.cloneNode(true);
                         newArea.value = oTextarea.value;
@@ -515,8 +515,8 @@ app.directive('annotation', function() {
                     setDefaultText();
                 };
 
-                $scope.addLineBreaks = function() {
-                    $scope.val = ApplyLineBreaks($scope.val);
+                $scope.addLineBreaks = function($event) {
+                    $event.target = applyLineBreaks($event.target);
                 };
 
                 $scope.closeBox = function() {
