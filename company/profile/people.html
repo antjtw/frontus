@@ -108,14 +108,12 @@
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                <!--  <message-side></message-side> -->
-
-                <div ng-switch on="sidebarPage">
-                    <message-side ng-switch-default="rail"></message-side>
-                    <compose-message  recipients="messageData.recipients" ng-switch-when="email">
-                    </compose-message>
-                    <add-person ng-switch-when= "people">
-                    </add-person> 
-                </div>        
+                <message-side></message-side>
+                      
+        </div>
+        <div style="position:absolute; right:0" ng-switch on="sidebarPage" >
+            <compose-message  recipients="messageData.recipients" ng-switch when="email" ng-show="sidebarPage">
+            </compose-message>
         </div>
 
     </div>
@@ -125,6 +123,7 @@
 
 <!--     rail toggle -->
 <button class="right-rail-button" ng-click="toggleSide()">
+ <!--    hide button -->
     <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideSharebar}"></span>
 </button>
 </div>
