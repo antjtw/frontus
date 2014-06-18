@@ -48,7 +48,6 @@ m.directive('messageSide', function(){
                     }
                    
                     // msgstatus is an array
-                    console.log($scope.msgstatus.length)
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
                         if(msgdata.indexOf(String(value.when_requested))== -1){
@@ -70,9 +69,10 @@ m.directive('messageSide', function(){
                                 myEvents[i].event.push(value.event);
                             }
                         }
-                        return myEvents;
+                        
                     })
-                    console.log(myEvents)
+                    $scope.message_data = myEvents;
+                    console.log($scope.message_data)
 
                 }).except(function(data){
                     console.log(data);
