@@ -3,87 +3,7 @@
 app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations) {
         $scope.annots = [];
-        function ApplyLineBreaks(oTextarea) {
-            var max = Math.floor(parseInt(oTextarea.style.height)/12);
-            if (oTextarea.wrap) {
-                oTextarea.setAttribute("wrap", "off");
-            }
-            else {
-                oTextarea.setAttribute("wrap", "off");
-                var newArea = oTextarea.cloneNode(true);
-                newArea.value = oTextarea.value;
-                oTextarea.parentNode.replaceChild(newArea, oTextarea);
-                oTextarea = newArea;
-            }
-
-            var strRawValue = oTextarea.value;
-            oTextarea.value = "";
-            var nEmptyWidth = oTextarea.scrollWidth;
-            var nLastWrappingIndex = -1;
-
-            function testBreak(strTest) {
-                oTextarea.value = strTest;
-                return oTextarea.scrollWidth > nEmptyWidth;
-            }
-            function findNextBreakLength(strSource, nLeft, nRight) {
-                var nCurrent;
-                if(typeof(nLeft) == 'undefined') {
-                    nLeft = 0;
-                    nRight = -1;
-                    nCurrent = 64;
-                }
-                else {
-                    if (nRight == -1)
-                        nCurrent = nLeft * 2;
-                    else if (nRight - nLeft <= 1)
-                        return Math.max(2, nRight);
-                    else
-                        nCurrent = nLeft + (nRight - nLeft) / 2;
-                }
-                var strTest = strSource.substr(0, nCurrent);
-                var bLonger = testBreak(strTest);
-                if(bLonger)
-                    nRight = nCurrent;
-                else
-                {
-                    if(nCurrent >= strSource.length)
-                        return null;
-                    nLeft = nCurrent;
-                }
-                return findNextBreakLength(strSource, nLeft, nRight);
-            }
-
-            var i = 0, j;
-            var strNewValue = "";
-            while (i < strRawValue.length) {
-                var breakOffset = findNextBreakLength(strRawValue.substr(i));
-                if (breakOffset === null) {
-                    strNewValue += strRawValue.substr(i);
-                    break;
-                }
-                nLastWrappingIndex = -1;
-                var nLineLength = breakOffset - 1;
-                for (j = nLineLength - 1; j >= 0; j--) {
-                    var curChar = strRawValue.charAt(i + j);
-                    if (curChar == ' ' || curChar == '-' || curChar == '+') {
-                        nLineLength = j + 1;
-                        break;
-                    }
-                }
-                strNewValue += strRawValue.substr(i, nLineLength) + "\n";
-                i += nLineLength;
-            }
-            var re = /\n/g;
-            var lastre = /\n(?!.*\n)/;
-            var count = strNewValue.match(re);
-            if (count && max <= count.length) {
-                strNewValue = strNewValue.split("\n", max).join("\n");
-            }
-            oTextarea.value = strNewValue;
-            oTextarea.setAttribute("wrap", "hard");
-            return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
-        }
-
+        $scope.signatureprocessing = false;
         function getIntProperty(se, z) {
             var lh = getComputed(se, z);
             if(lh) {
@@ -501,10 +421,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 }
                 $scope.leave();
             }).except(function(x) {
-                    console.log(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
-                });
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
+            });
         };
 
         $scope.$emit('docViewerReady');
@@ -677,30 +597,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.scribblemode = false;
                 $scope.$apply();
             }
-        };
-
-        $scope.signatureField = function (element) {
-            return element.$$nextSibling.whattype == "Signature"  ? true : false;
-        };
-
-        $scope.imageField = function (element) {
-            return element.$$nextSibling.whattype == "ImgSignature" ? true : false;
-        };
-
-        $scope.imageMine = function (element) {
-            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Investor") ? true : false;
-        };
-
-        $scope.signatureProcessing = function () {
-            return $scope.signatureprocessing;
-        };
-
-        $scope.stickyfilled = function(ev) {
-            return (ev.$$nextSibling.annotext && ev.$$nextSibling.annotext.length > 0) || (ev.$$nextSibling.whattype == "ImgSignature" && $scope.signaturepresent && (($rootScope.navState.role == "issuer" && ev.$$nextSibling.whosign == "Issuer") || ($rootScope.navState.role == "investor" && ev.$$nextSibling.whosign == "Investor"))) ? true : false;
-        };
-
-        $scope.whosignssticky = function(element) {
-            return ($rootScope.navState.role == "issuer" && element.$$nextSibling.whosign == "Investor") || ($rootScope.navState.role == "investor" && element.$$nextSibling.whosign == "Issuer") ? true : false;
         };
 
         function createAttributes(inv_attributes) {
@@ -946,7 +842,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                $scope.annots.push({page: $scope.currentPage, val: '', initDrag: event, whattype: "Text", position:{coords:{}, size:{}}}); // TODO: make a new Annotation object
+                var a = new Annotation();
+                a.page = $scope.currentPage;
+                a.initDrag = event;
+                $scope.annots.push(a);
             }
         };
 

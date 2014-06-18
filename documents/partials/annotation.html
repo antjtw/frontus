@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':stickyrequired(this), 'greenrequired':stickyfilled(this), 'signature':signatureField(this), 'imagesignature':imageField(this), 'mysignature':imageMine(this), 'processing':signatureProcessing(), 'otherperson':whosignssticky(this)}" class="sticky" ng-style="annotationCoordsStyle">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(signaturepresent, $root.navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':annot.imageMine($root.navState.role), 'processing':signatureprocessing, 'otherperson':whosignssticky(this)}" class="sticky" ng-style="annotationCoordsStyle">
     <span class="dragger" ng-show="isAnnotable && investorFixed() && !countersignable(lib)" ng-mousedown="$event.stopPropagation();">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>

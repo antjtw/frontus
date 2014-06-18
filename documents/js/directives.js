@@ -165,10 +165,92 @@ app.directive('annotation', function() {
         scope: {
             annot: "=",
             isAnnotable: "=",
+            signatureprocessing: "=",
         },
         templateUrl: "/documents/partials/annotation.html",
         controller: ["$scope", "$element", "$rootScope", "$document",
             function($scope, $element, $rootScope, $document) {
+                function ApplyLineBreaks(oTextarea) {
+                    var max = Math.floor(parseInt(oTextarea.style.height)/12);
+                    if (oTextarea.wrap) {
+                        oTextarea.setAttribute("wrap", "off");
+                    }
+                    else {
+                        oTextarea.setAttribute("wrap", "off");
+                        var newArea = oTextarea.cloneNode(true);
+                        newArea.value = oTextarea.value;
+                        oTextarea.parentNode.replaceChild(newArea, oTextarea);
+                        oTextarea = newArea;
+                    }
+
+                    var strRawValue = oTextarea.value;
+                    oTextarea.value = "";
+                    var nEmptyWidth = oTextarea.scrollWidth;
+                    var nLastWrappingIndex = -1;
+
+                    function testBreak(strTest) {
+                        oTextarea.value = strTest;
+                        return oTextarea.scrollWidth > nEmptyWidth;
+                    }
+                    function findNextBreakLength(strSource, nLeft, nRight) {
+                        var nCurrent;
+                        if(typeof(nLeft) == 'undefined') {
+                            nLeft = 0;
+                            nRight = -1;
+                            nCurrent = 64;
+                        }
+                        else {
+                            if (nRight == -1)
+                                nCurrent = nLeft * 2;
+                            else if (nRight - nLeft <= 1)
+                                return Math.max(2, nRight);
+                            else
+                                nCurrent = nLeft + (nRight - nLeft) / 2;
+                        }
+                        var strTest = strSource.substr(0, nCurrent);
+                        var bLonger = testBreak(strTest);
+                        if(bLonger)
+                            nRight = nCurrent;
+                        else
+                        {
+                            if(nCurrent >= strSource.length)
+                                return null;
+                            nLeft = nCurrent;
+                        }
+                        return findNextBreakLength(strSource, nLeft, nRight);
+                    }
+
+                    var i = 0, j;
+                    var strNewValue = "";
+                    while (i < strRawValue.length) {
+                        var breakOffset = findNextBreakLength(strRawValue.substr(i));
+                        if (breakOffset === null) {
+                            strNewValue += strRawValue.substr(i);
+                            break;
+                        }
+                        nLastWrappingIndex = -1;
+                        var nLineLength = breakOffset - 1;
+                        for (j = nLineLength - 1; j >= 0; j--) {
+                            var curChar = strRawValue.charAt(i + j);
+                            if (curChar == ' ' || curChar == '-' || curChar == '+') {
+                                nLineLength = j + 1;
+                                break;
+                            }
+                        }
+                        strNewValue += strRawValue.substr(i, nLineLength) + "\n";
+                        i += nLineLength;
+                    }
+                    var re = /\n/g;
+                    var lastre = /\n(?!.*\n)/;
+                    var count = strNewValue.match(re);
+                    if (count && max <= count.length) {
+                        strNewValue = strNewValue.split("\n", max).join("\n");
+                    }
+                    oTextarea.value = strNewValue;
+                    oTextarea.setAttribute("wrap", "hard");
+                    return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
+                }
+
                 var dragicon = $element.find("span.dragger");
 
                 /* This is the drag - code -- its been moved to work on the drag widget */
@@ -251,8 +333,8 @@ app.directive('annotation', function() {
                             height: dy + 6 + 'px',
                             width: dx + 6 + 'px'
                         });*/
-                        $scope.annot.position.size.y = dy - 4;
-                        $scope.annot.position.size.x = dx - 8;
+                        $scope.annot.position.size.height = dy - 4;
+                        $scope.annot.position.size.width = dx - 8;
                         /*var bb = $element[0].querySelector("textarea");
                         bb.style.height = dy - 4 + "px";
                         bb.style.width = dx - 8 + "px";*/
@@ -286,7 +368,7 @@ app.directive('annotation', function() {
                     $document.unbind('mousemove', $scope.newmousemove);
                     $document.unbind('mouseup', $scope.newmouseup);
                     $scope.$apply(function() {
-                        // TODO: fix this logic (check size.x and size.y instead of style, and remove from parent annots list)
+                        // TODO: fix this logic (check size.width and size.height instead of style, and remove from parent annots list)
                         var bb = $element[0].querySelector("textarea");
                         if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
                             var x = bb.parentElement.parentElement.parentElement.parentElement;
@@ -411,10 +493,6 @@ app.directive('annotation', function() {
                     return $scope.annot.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
                 };
 
-                $scope.stickyrequired = function() {
-                    return $scope.annot.required ? true : false;
-                };
-
                 $scope.$watch('annot.position.coords', function(new_coords) {
                     if (new_coords) {
                         $scope.annotationCoordsStyle = {
@@ -427,8 +505,8 @@ app.directive('annotation', function() {
                 $scope.$watch('annot.position.size', function (new_size) {
                     if (new_size) {
                         $scope.annotationSizeStyle = {
-                            width: (new_size.x - 14) + "px",
-                            height: (new_size.y - 10) + "px"
+                            width: (new_size.width - 14) + "px",
+                            height: (new_size.height - 10) + "px"
                         };
                     }
                 }, true);
@@ -437,6 +515,8 @@ app.directive('annotation', function() {
                     $scope.newinitdrag($scope.annot.initDrag);
                     delete $scope.annot.initDrag;
                 }
+
+                $scope.signaturepresent = $scope.$parent.signaturepresent;
 
                 // MOCKS
                 // TODO: fix these (probably references into parent scope)

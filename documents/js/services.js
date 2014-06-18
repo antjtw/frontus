@@ -49,40 +49,71 @@ docs.service('basics', function () {
 
 });
 
-docs.service('Documents', function() {
-
-});
-
-Annotation = function(json) {
-    this.page = json[0][0];
+Annotation = function() {
     this.position = {
         coords: {
-            x: json[0][1][0],
-            y: json[0][1][1]
+            //x: 0,
+            //y: 0,
         },
         size: {
-            width: json[0][2][2],
-            height: json[0][2][3]
+            //width: 0,
+            //height: 0
         }
     };
-    this.type = json[1];
-    this.val = json[2][0];
-    this.fontsize = json[3][0];
-    this.investorfixed = json[4].investorfixed;
-    this.whosign = json[4].whosign;
-    // TODO: grab attributelabels logic from documentView.js
-    this.whattype = json[4].whattype;
-    this.required = json[4].required;
-
-    this.original = json; // just in case we need it
+    this.type = "text";
+    this.val = '';
+    this.fontsize = 12;
+    this.whosign = "Investor";
+    this.whattype = "Text";
+    this.required = true;
 }
 
 Annotation.prototype = {
+    parseFromJson: function(json) {
+        this.page = json[0][0];
+        this.position = {
+            coords: {
+                x: json[0][1][0],
+                y: json[0][1][1]
+            },
+            size: {
+                width: json[0][2][2],
+                height: json[0][2][3]
+            }
+        };
+        this.type = json[1];
+        this.val = json[2][0];
+        this.fontsize = json[3][0];
+        this.investorfixed = json[4].investorfixed;
+        this.whosign = json[4].whosign;
+        // TODO: grab attributelabels logic from documentView.js
+        this.whattype = json[4].whattype;
+        this.required = json[4].required;
+
+        this.original = json; // just in case we need it
+        return this;
+    },
+    filled: function(signaturepresent, role) {
+        // signature present comes from the account
+        return (this.val && this.val.length > 0) ||
+               (this.whattype == "ImgSignature" && signaturepresent &&
+                   (this.whosign == "Issuer" && role == "issuer") ||
+                   (this.whosign == "Investor" && role == "investor")
+               );
+    },
     unfilled: function() {
         // TODO
         return true;
-    }
+    },
+    imageMine: function(role) {
+        return (role == "issuer" && this.whosign == "Issuer") || (role == "investor" && this.whosign == "Investor") ? true : false;
+    },
+    whosignssticky: function(role) {
+        return (role == "issuer" && this.whosign == "Investor") || (role == "investor" && this.whosign == "Issuer") ? true : false;
+    },
 };
+
+//'processing':signatureProcessing(), 'otherperson':whosignssticky(this)
 
 docs.service('Annotations', function() {
     // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
@@ -191,7 +222,7 @@ docs.service('Annotations', function() {
             // if the array exists, make sure we return the same array reference so all copies update (meaning, modify, don't replace the object)
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
             annotations.forEach(function(annot) {
-                doc_annotations[doc_id].push(new Annotation(annot));
+                doc_annotations[doc_id].push((new Annotation()).parseFromJson(annot));
             });
         } else {
             doc_annotations[doc_id] = annotations;
