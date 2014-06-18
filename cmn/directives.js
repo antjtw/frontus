@@ -40,12 +40,20 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
-                    $scope.thing = data.event
+                   
                     // msgstatus is an array
                     console.log($scope.msgstatus.length)
                     var msgdata = []
-                    angular.forEach($scope.msgstatus, function(msgstatus){
-                        msgdata.push(msgstatus.tox);
+                    var dups = []
+                    angular.forEach($scope.msgstatus, function(value){
+                        if(msgdata.indexOf(String(value.when_requested))== -1){
+                            msgdata.push(String(value.when_requested));
+                            console.log(typeof String(value.when_requested))
+                        }
+                        else {
+                            dups.push(value.when_requested);
+                        }
+                        
                     });
                     // for(var i=0; i < $scope.msgstatus.length; i ++){
                     //     msgdata.push($scope.msgstatus.tox)
