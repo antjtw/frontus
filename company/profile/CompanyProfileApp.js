@@ -465,6 +465,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         }
         $scope.hideSharebar = true;
         $scope.sidebarPage = null;
+        $scope.hideRail = false;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -643,6 +644,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return !$scope.hideShareBar;
         };
 
+        $scope.showRail = function(){
+            return !$scope.hideRail;
+        }
+
        
 
        
@@ -671,16 +676,15 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                // opens sidebar with email
             };
         };
-        // show siderail
-        $scope.sideRailName = "Hide"
-        $scope.sideRail = function(){
-            if(!scope.sideRail){
-                $scope.sideRailName = "Hide"
-                return false
+
+        $scope.toggleRail = function(){
+            if (!$scope.hideRail){
+                $scope.hideRail = true
+                console.log("show rail")
             }
-            else {
-                $scope.sideRailName = "Details"
-            }
+            else
+                $scope.hideRail = false;
+                console.log("hideRail")
         }
 
 
