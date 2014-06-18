@@ -641,6 +641,16 @@ ul.nav-logo > li > a > img {
     width: 140px;
     text-align: left;
 }
+
+.topnav .nav.nav-logo a.small-logo {
+
+}
+
+.topnav .nav.nav-logo a.small-logo > img {
+    width: 100px;
+    height: 17px;
+}
+
 .topnav .nav.nav-item > li > a:hover {
     background-color: rgb(52, 73, 94);
     color: rgb(199, 199, 199) !important;
