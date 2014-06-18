@@ -56,7 +56,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data) {
+                if (data && !isNaN(data[0].percent)) {
 
                     data.sort(function(a, b) { return b.percent - a.percent; });
 
@@ -174,8 +174,7 @@ app.directive('d3myownership', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data) {
-
+                if (data && data.length > 1) {
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
                         .enter().append("g")
@@ -251,7 +250,7 @@ app.directive('d3myvested', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data) {
+                if (data && (data[0].units > 0 || data[1].units > 1)) {
 
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
@@ -353,7 +352,6 @@ app.directive('d3vestedbar', ['d3', function(d3) {
             scope.render = function(data){
 
                 if (data && data.length > 0) {
-
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
                     y.domain([0, max]);

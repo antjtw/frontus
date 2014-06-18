@@ -4,27 +4,13 @@
         <span ng-show="(notes.length > 0)" class="note-number">{{notes.length}}</span>
     </a>
     <ul class="dropdown-menu">
-        <li>
-            Action Items
+        <li class="no-notifications" ng-show="notes.length == 0">
+            <div>
+                Good Job! You're up to date.
+            </div>
         </li>
-        <li>
-            <ul>
-                <li ng-show="notes.length == 0">
-                    <div class="no-notifications">
-                        Good Job! You're up to date.
-                    </div>
-                </li>
-                <li ng-repeat="note in notes | orderBy:oldestDate" tooltip-placement="bottom" tooltip="{{nameIfLong(note.docname)}}" class="actionItemTooltip">
-                    <div><img ng-src="/img/activity/{{note.signature_status | noteicon}}.png"></div>
-                    <div>
-                        <ul>
-                            <li>
-                                <span class='a_nav_notification_link' ng-bind-html="note | notifications"></span>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+        <li ng-repeat="note in notes | orderBy:oldestDate">
+            <span tooltip-placement="bottom" tooltip="{{nameIfLong(note.docname)}}" class="actionItemTooltip" class='a_nav_notification_link' ng-bind-html="note | notifications"></span>
         </li>
     </ul>
 </li>
