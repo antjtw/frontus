@@ -1097,9 +1097,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.scribblemode = false;
         };
 
+        $scope.removeannot = function(annotation) {
+            var idx = $scope.annots.indexOf(annotation);
+            $scope.annots.splice(idx, 1);
+        };
+
         $scope.$on("$destroy", function( event ) {
-                $window.onkeydown = null;
-            }
-        );
+            $window.onkeydown = null;
+        });
     }
 ]);

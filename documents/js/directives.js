@@ -166,6 +166,7 @@ app.directive('annotation', function() {
             annot: "=",
             isAnnotable: "=",
             signatureprocessing: "=",
+            removeannot: "&",
         },
         templateUrl: "/documents/partials/annotation.html",
         controller: ["$scope", "$element", "$rootScope", "$document",
@@ -272,7 +273,7 @@ app.directive('annotation', function() {
                     }
                 });
 
-                $scope.$watch('$$nextSibling.whattype', function(newval, oldval) {
+                $scope.$watch('annot.whattype', function(newval, oldval) {
                     var elem = $element.find('textarea');
                     if (newval == "Signature") {
                         elem.css('font-size', 18);
@@ -284,7 +285,7 @@ app.directive('annotation', function() {
                     else {
                         elem.css('font-size', 12);
                     }
-                }, true);
+                });
 
                 var topLocation = function(elementHeight, mouseY) {
                     var docPanel = document.querySelector('.docPanel');
@@ -332,19 +333,11 @@ app.directive('annotation', function() {
                     $scope.$apply(function() {
                         var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
                         var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-                        /*$element.css({
-                            height: dy + 6 + 'px',
-                            width: dx + 6 + 'px'
-                        });*/
                         $scope.annot.position.size.height = dy - 4;
                         $scope.annot.position.size.width = dx - 8;
-                        /*var bb = $element[0].querySelector("textarea");
-                        bb.style.height = dy - 4 + "px";
-                        bb.style.width = dx - 8 + "px";*/
                         return false;
                     });
                 };
-
 
                 var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
 
@@ -371,35 +364,17 @@ app.directive('annotation', function() {
                     $document.unbind('mousemove', $scope.newmousemove);
                     $document.unbind('mouseup', $scope.newmouseup);
                     $scope.$apply(function() {
-                        // TODO: fix this logic (check size.width and size.height instead of style, and remove from parent annots list)
-                        var bb = $element[0].querySelector("textarea");
-                        if (parseInt(bb.style.width) === 0 || parseInt(bb.style.height) < 12) {
-                            var x = bb.parentElement.parentElement.parentElement.parentElement;
-                            x.parentElement.removeChild(x);
-                            for (var i = 0; i < $scope.notes.length; i++) {
-                                if ($scope.notes[i][0] === x) {
-                                    $scope.notes.splice(i, 1);
-                                    return;
-                                }
-                            }
+                        if (parseInt($scope.annot.position.size.width) === 0 || parseInt($scope.annot.position.size.height) < 12) {
+                            $scope.closeMe();
                         }
                         angular.element(bb.parentElement).scope().getme = true;
-                        return false;
                     });
+                    return false;
                 };
 
                 $scope.closeMe = function() {
                     // TODO: remove annot from $scope.$parent.annots
-                    alert("remove me!");
-                    /*var z = ev.currentTarget;
-                    while (z.attributes.draggable === undefined) z = z.parentElement;
-                    z.parentElement.removeChild(z);
-                    for (var i = 0; i < $scope.notes.length; i++) {
-                        if ($scope.notes[i][0] === z) {
-                            $scope.notes.splice(i, 1);
-                            return;
-                        }
-                    }*/
+                    $scope.removeannot()($scope.annot);
                 };
 
                 // Set startX/Y and initialMouseX/Y attributes.

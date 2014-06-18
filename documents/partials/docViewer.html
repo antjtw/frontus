@@ -175,7 +175,7 @@
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots" annot="annotation" is-annotable="isAnnotable" current-page="currentPage" signatureprocessing="signatureprocessing"></annotation>
+            <annotation ng-repeat="annotation in annots" annot="annotation" is-annotable="isAnnotable" current-page="currentPage" signatureprocessing="signatureprocessing" removeannot="removeannot"></annotation>
         </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
