@@ -69,6 +69,7 @@ Annotation = function() {
 };
 
 Annotation.prototype = {
+    // to and from JSON hear doesn't refer to actual json, just the intermediary (legacy) format used for transport
     parseFromJson: function(json) {
         this.page = json[0][0];
         this.position = {
@@ -89,9 +90,27 @@ Annotation.prototype = {
         // TODO: grab attributelabels logic from documentView.js
         this.whattype = json[4].whattype;
         this.required = json[4].required;
-
-        this.original = json; // just in case we need it
         return this;
+    },
+    toJson: function() {
+        var json = [];
+        var position = [];
+        position.push(this.page);
+        position.push([this.position.coords.x, this.position.coords.y, 0, 0]);
+        position.push([0, 0, this.position.size.width, this.position.size.height]);
+        position.push(700); // document page width
+        position.push(956); // document page height
+        json.push(position);
+        json.push("text");
+        json.push([this.val]);
+        json.push([this.fontsize]);
+        json.push({
+            investorfixed: this.investorfixed,
+            whosign: this.whosign,
+            whattype: this.whattype,
+            required: this.required
+        });
+        return json;
     },
     filled: function(signaturepresent, role) {
         // signature present comes from the account
@@ -105,7 +124,6 @@ Annotation.prototype = {
 
 docs.service('Annotations', function() {
     // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
-    // TODO: save / unmunge logic
 
     // data structure contents
     // aa -> [annot0...annotn-1]
@@ -127,9 +145,9 @@ docs.service('Annotations', function() {
     // [i][0][2][2] width or horizontal offset
     // [i][0][2][3] height or vertical offset
     //
-    // [i][0][3] 700 dp.clientWidth
+    // [i][0][3] 700 dp.clientWidth (page width (fixed))
     //
-    // [i][0][4] 956 dp.clientHeight
+    // [i][0][4] 956 dp.clientHeight (page height (fixed))
     //
     // [i][1] type -> check or text or canvas (only text seems usable now)
     //

@@ -54,6 +54,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         }
 
         function boundBoxByPage(element) {
+            // TODO: not applicable to new styling
             var docPanel = document.querySelector('.docPanel');
             // FIXME does not work in firefox because position:absolute
             element.style["max-width"] = (docPanel.offsetWidth) + 'px';
@@ -857,33 +858,20 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
                 aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
             }
-        };*/
+        };
 
         function newBoxX(annot) {
-/*            var aa = $compile(!!!annotation.html!!!)($scope);
-            aa.scope().annot = annot;
-            aa.scope().ntype = 'text';
-            aa.scope().growable = true; // for the growable icons
-
-            var bb = aa[0].querySelector("textarea");
-            bb.style.width = 0 + "px";
-            bb.style.height = 0 + "px";
-            boundBoxByPage(bb);
-
             window.addEventListener('resize', function() {
-                $scope.moveBox(aa[0]);
+                $scope.moveBox(aa[0]); // TODO
             });
 
             bb.addEventListener('mousemove', function(e) {
                 if (e.which !== 0) {
-                    boundBoxByPage(bb);
+                    boundBoxByPage(bb); // TODO?
                 }
             });
 
             var ta = aa.find('textarea');
-            ta.scope().investorfixed = annot.investorfixed ? annot.investorfixed : null;
-            ta.scope().whosign = annot.whosign ? annot.whosign : "Investor";
-            ta.scope().whosignlabel = ta.scope().whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             ta.scope().whattype = annot.whattype ? annot.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
 
@@ -895,8 +883,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
             bb.value = annot.val;
 
-            return aa;*/
-        }
+            return aa;
+        }*/
 
         $scope.acceptSign = function(sig) {
             void(sig);
@@ -983,40 +971,18 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
 
         function getNoteData() {
-            var noteData = [];
-
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i];
-                var nx = n[0];
-                var bnds = getNoteBounds(nx);
-                var pos = [parseInt(nx.page, 10), bnds[0], bnds[1], $scope.dp.width, $scope.dp.height];
-
-                var val = [];
-                var style = [];
-                var newstyle = {};
-                var ndx = [pos, "text", val, style, newstyle];
-                var se, lh;
-
-                newstyle.investorfixed = $rootScope.navState.role == "issuer" || (angular.element(nx).scope().$$nextSibling.investorfixed) ? true : null;
-                newstyle.whosign = (angular.element(nx).scope().$$nextSibling.whosign);
-                newstyle.whattype = (angular.element(nx).scope().$$nextSibling.whattype);
-                newstyle.required = (angular.element(nx).scope().$$nextSibling.required);
-                se = nx.querySelector("textarea");
-                val.push(se.value);
-                style.push(getIntProperty(se, 'font-size'));
-                noteData.push(ndx);
-            }
             var divided = [[], []];
-            angular.forEach(noteData, function (note) {
-                if (note[4].whosign == "Issuer") {
-                    divided[1].push(note);
+            console.log($scope.annots)
+            angular.forEach($scope.annots, function (note) {
+                if (note.whosign == "Issuer") {
+                    divided[1].push(note.toJson());
                 }
                 else {
-                    divided[0].push(note);
+                    divided[0].push(note.toJson());
                 }
             });
             return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
-        };
+        }
 
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
@@ -1035,10 +1001,12 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            $scope.last_save = new Date().getTime();
+            console.log("saveNoteData");
             var nd = getNoteData();
             var nd_inv = nd[0];
+            console.log(nd_inv);
             var nd_iss = nd[1];
+            console.log(nd_iss);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
@@ -1046,6 +1014,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
             if (!$scope.isAnnotable) return;
             if ($scope.html) {
+                // template ...
                 return;
             }
 
@@ -1057,6 +1026,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {json}
              */
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
+                console.log("saveNoteData sucess");
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved annotations");
             });
