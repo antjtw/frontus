@@ -1,30 +1,30 @@
 <div class="message-side">
     <tabset>
-        <tab heading="Filters">
+     <!--    <tab heading="Filters">
            <div class="messagefilter">
            </div>
-        </tab>
+        </tab> -->
 
         <tab heading="Activity">
-            
-   
-
       
             <div class="messages">
                 <ul class="activity-feed2">
                     <li class="event" ng-repeat="message_datum in message_data">
-                        <div><img ng-src="/img/activity/received.png"></div>
+                        <div><img ng-src="/img/activity/message.png"></div>
                         <div>
                             <ul>
                                 <li>
                                     <span>
                                         Message sent at {{message_datum.time}} to {{message_datum.tox.length}} shareholder(s)
                                     </span><br/>
-                                    <span ng-click = "showRecipients = !showRecipients">Recipients</span>
+                                    <span ng-click = "showRecipients = !showRecipients"> Recipients</span>
                                 </li>
-                                <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">{{tox}}
-                            
-                                
+                            <ul>
+                                <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">    
+                                    <span>{{tox}}</span>
+                                </li>
+                            </ul>                            
+
                             </ul>
                         </div>
                     </li>
