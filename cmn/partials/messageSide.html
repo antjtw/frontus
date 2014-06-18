@@ -1,9 +1,6 @@
 <div class="message-side">
     <tabset>
-     <!--    <tab heading="Filters">
-           <div class="messagefilter">
-           </div>
-        </tab> -->
+
 
         <tab heading="Activity">
       
@@ -18,6 +15,7 @@
                                         Message sent at {{message_datum.time}} to {{message_datum.tox.length}} shareholder(s)
                                     </span><br/>
                                     <span ng-click = "showRecipients = !showRecipients"> Recipients</span>
+                                    <span ng-show="showRecipients" data-icon="&#xe033;" aria-hidden="true"></span>
                                 </li>
                             <ul>
                                 <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">    
@@ -30,15 +28,6 @@
                     </li>
                 </ul>
             </div>
-            <!-- <div ng-repeat="sentmessage in sentmessages | filter:search:strict">
-                {{sentmessage.our_id}}, {{sentmessage.event}}, {{sentmessage.tox}}, {{sentmessage.subject}},
-                 {{sentmessage.category}},
-               {{sentmessage.when_requested}}
-            </div> -->
-            <!-- <div ng-repeat="message in messages | filter:search:strict">
-                Message event at {{message.when_requested}},  {{message.event}}
-                {{message.tox}}
-            </div> -->
         </tab>
               
          
