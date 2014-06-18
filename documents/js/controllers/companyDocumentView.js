@@ -1,8 +1,8 @@
 //'use strict';
 
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
-        'navState',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
+        'navState', 'Annotations',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations) {
         if (navState.role == 'investor') {
             $location.path('/investor-view');
             return;
@@ -230,7 +230,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.document_countersign( $scope.docId, dce.getNoteData(true)[1]).then(function(data) {
+            SWBrijj.document_countersign( $scope.docId, JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId))).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');

@@ -4,18 +4,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations) {
         $scope.annots = [];
         $scope.signatureprocessing = false;
-        function getIntProperty(se, z) {
-            var lh = getComputed(se, z);
-            if(lh) {
-                lh = parseFloat(lh.replace("px", ""));
-            }
-            return lh;
-        }
-
-        function getComputed(se, z) {
-            var originalAnswer = se.currentStyle ? se.currentStyle[z] : document.defaultView.getComputedStyle(se, null).getPropertyValue(z);
-            return originalAnswer? originalAnswer : 1337;
-        }
 
         function getCanvasOffset(ev) {
             var offx, offy;
@@ -27,17 +15,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 offy = ev.offsetY;
             }
             return [offx, offy];
-        }
-
-        function countCRs(str) {
-            var z = str;
-            var cnt = 0;
-            while (true) {
-                var a = z.indexOf('\n');
-                if (a < 0) return cnt;
-                cnt++;
-                z = z.substring(a + 1);
-            }
         }
 
         function boundBoxByPage(element) {
@@ -664,9 +641,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx = getNoteData();
-                var ndx_inv = ndx[0];
-                var ndx_iss = ndx[1];
+                var ndx_inv = Annotations.getInvestorNotesForUpload($scope.docId);
+                var ndx_iss = Annotations.getIssuerNotesForUpload($scope.docId);
                 /** @name $scope#lib#annotations
                  * @type {[Object]}
                  */
@@ -956,20 +932,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return docPanel.offsetTop + docPanel.offsetHeight - currTop;
         };
 
-
-        function getNoteData() {
-            var divided = [[], []];
-            angular.forEach($scope.annots, function (note) {
-                if (note.whosign == "Issuer") {
-                    divided[1].push(note.toJson());
-                }
-                else {
-                    divided[0].push(note.toJson());
-                }
-            });
-            return [JSON.stringify(divided[0]), JSON.stringify(divided[1])];
-        }
-
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
             SWBrijj.proc("account.company_attribute_update",
@@ -987,9 +949,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            var nd = getNoteData();
-            var nd_inv = nd[0];
-            var nd_iss = nd[1];
+            var nd_inv = Annotations.getInvestorNotesForUpload($scope.docId);
+            var nd_iss = Annotations.getIssuerNotesForUpload($scope.docId);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?

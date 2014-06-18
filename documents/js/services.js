@@ -235,4 +235,30 @@ docs.service('Annotations', function() {
         }
         return doc_annotations[doc_id];
     };
+
+    this.getIssuerNotesForUpload = function(doc_id) {
+        doc_notes = doc_annotations[doc_id];
+        var notes = [];
+        if (doc_notes) {
+            angular.forEach(doc_notes, function (note) {
+                if (note.whosign == "Issuer") {
+                    notes.push(note.toJson());
+                }
+            });
+        }
+        return notes;
+    };
+
+    this.getInvestorNotesForUpload = function(doc_id) {
+        doc_notes = doc_annotations[doc_id];
+        var notes = [];
+        if (doc_notes) {
+            angular.forEach(doc_notes, function (note) {
+                if (note.whosign == "Investor") {
+                    notes.push(note.toJson());
+                }
+            });
+        }
+        return notes;
+    };
 });
