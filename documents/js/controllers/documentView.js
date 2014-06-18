@@ -459,10 +459,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.fieldDisabled = function() {
-            return $scope.countersignable($scope.lib);
-        };
-
         $scope.uploadSuccess = function() {
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.signatureprocessing = false;
@@ -890,11 +886,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             ta.scope().whosignlabel = ta.scope().whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
             ta.scope().whattype = annot.whattype ? annot.whattype : "Text";
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
-            if ($rootScope.navState.role == "issuer") {
-                ta.scope().required = annot.required === undefined ? true : annot.required;
-            } else {
-                ta.scope().required = annot.required;
-            }
+
             ta.scope().annotext = annot.val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[annot.whattype] : annot.val;
 
             ta.width(ta.width());
@@ -905,38 +897,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
             return aa;*/
         }
-
-        $scope.smartValue = function ($event) {
-            if (($rootScope.navState.role == "issuer" && $event.whosign == "Issuer") || $rootScope.navState.role == "investor" && $event.whosign == "Investor") {
-                $event.annotext = $event.annotext.length === 0 && $event.whattype in $scope.investor_attributes ? $scope.investor_attributes[$event.whattype] : $event.annotext;
-            }
-            else {
-                $event.annotext = $event.annotext.length === 0 ? "" : $event.annotext;
-            }
-        };
-
-        $scope.setSign = function($event, value) {
-            $event.whosign = value;
-            $event.whosignlabel = $event.whosign == "Investor" ? "Recipient" : $rootScope.navState.name;
-            if (value == "Investor") {
-                $event.annotext = "";
-            }
-            else {
-                $scope.smartValue($event);
-            }
-        };
-
-        $scope.setAnnot = function($event, sticky, value) {
-            sticky.whattype = value;
-            sticky.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
-            sticky.annotext = "";
-            $scope.smartValue(sticky);
-
-        };
-
-        $scope.toggleRequired = function($event) {
-            $event.required = $event.required ? null : "Yes";
-        };
 
         $scope.acceptSign = function(sig) {
             void(sig);

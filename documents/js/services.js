@@ -66,7 +66,7 @@ Annotation = function() {
     this.whosign = "Investor";
     this.whattype = "Text";
     this.required = true;
-}
+};
 
 Annotation.prototype = {
     parseFromJson: function(json) {
@@ -101,19 +101,7 @@ Annotation.prototype = {
                    (this.whosign == "Investor" && role == "investor")
                );
     },
-    unfilled: function() {
-        // TODO
-        return true;
-    },
-    imageMine: function(role) {
-        return (role == "issuer" && this.whosign == "Issuer") || (role == "investor" && this.whosign == "Investor") ? true : false;
-    },
-    whosignssticky: function(role) {
-        return (role == "issuer" && this.whosign == "Investor") || (role == "investor" && this.whosign == "Issuer") ? true : false;
-    },
 };
-
-//'processing':signatureProcessing(), 'otherperson':whosignssticky(this)
 
 docs.service('Annotations', function() {
     // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?

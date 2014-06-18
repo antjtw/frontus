@@ -170,6 +170,9 @@ app.directive('annotation', function() {
         templateUrl: "/documents/partials/annotation.html",
         controller: ["$scope", "$element", "$rootScope", "$document",
             function($scope, $element, $rootScope, $document) {
+                $scope.annotext = "";
+                $scope.investor_attributes = []; // TODO
+
                 function ApplyLineBreaks(oTextarea) {
                     var max = Math.floor(parseInt(oTextarea.style.height)/12);
                     if (oTextarea.wrap) {
@@ -451,8 +454,21 @@ app.directive('annotation', function() {
                     $document.bind('mouseup', $scope.newmouseup);
                 };
 
+                $scope.imageMine = function() {
+                    var role = $rootScope.navState.role;
+                    var whosign = $scope.annot.whosign;
+                    return (role == "issuer" && whosign == "Issuer") ||
+                           (role == "investor" && whosign == "Investor") ? true : false;
+                };
+                $scope.whosignssticky = function() {
+                    var role = $rootScope.navState.role;
+                    var whosign = $scope.annot.whosign;
+                    return (role == "issuer" && whosign == "Investor") ||
+                           (role == "investor" && whosign == "Issuer") ? true : false;
+                };
+
                 $scope.openBox = function(ev, event) {
-                    if ($rootScope.navState.role == "issuer" && !ev.$parent.countersignable(ev.$parent.lib)) {
+                    if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
                         $scope.getme = true;
                     }
                     if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
@@ -479,6 +495,26 @@ app.directive('annotation', function() {
                     }
                 };
 
+                function setDefaultText() {
+                    if (($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Issuer") || $rootScope.navState.role == "investor" && $scope.annot.whosign == "Investor") {
+                        $scope.annotext = $scope.annotext.length === 0 && $scope.annot.whattype in $scope.investor_attributes ? $scope.investor_attributes[$scope.annot.whattype] : $scope.annotext;
+                    }
+                    else {
+                        $scope.annotext = $scope.annotext.length === 0 ? "" : $scope.annotext;
+                    }
+                }
+
+                $scope.setSign = function($event, value) {
+                    $scope.annot.whosign = value;
+                    setDefaultText();
+                };
+
+                $scope.setAnnot = function($event, sticky, value) {
+                    $scope.annot.whattype = value;
+                    //sticky.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
+                    setDefaultText();
+                };
+
                 $scope.addLineBreaks = function() {
                     $scope.val = ApplyLineBreaks($scope.val);
                 };
@@ -502,7 +538,7 @@ app.directive('annotation', function() {
                     }
                 }, true);
 
-                $scope.$watch('annot.position.size', function (new_size) {
+                $scope.$watch('annot.position.size', function(new_size) {
                     if (new_size) {
                         $scope.annotationSizeStyle = {
                             width: (new_size.width - 14) + "px",
@@ -510,6 +546,15 @@ app.directive('annotation', function() {
                         };
                     }
                 }, true);
+
+                $scope.$watch('annot.whosign', function(whosign) {
+                    $scope.whosignlabel = (whosign == "Investor") ? "Recipient" : $rootScope.navState.name;
+                });
+
+                $scope.$watch('annot.whattype', function(whattype) {
+                    // TODO: apply "attributelabels" from documentView.js
+                    $scope.whattypelabel = whattype;
+                });
 
                 if ($scope.annot.initDrag) {
                     $scope.newinitdrag($scope.annot.initDrag);
