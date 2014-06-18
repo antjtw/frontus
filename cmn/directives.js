@@ -40,34 +40,32 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
+                    function Message(time, event, tox){
+                        this.time = time
+                        this.event = event
+                        this.tox = []
+                    }
                    
                     // msgstatus is an array
                     console.log($scope.msgstatus.length)
                     var msgdata = []
-                    var dups = []
                     angular.forEach($scope.msgstatus, function(value){
                         if(msgdata.indexOf(String(value.when_requested))== -1){
-                            msgdata.push(String(value.when_requested));
-                            console.log(typeof String(value.when_requested))
+                            var timestamp= String(value.when_requested);
+                            msgdata.push(timestamp);
                         }
-                        else {
-                            dups.push(value.when_requested);
-                        }
-                        
+                        // else if(value.when_requested = )
+                        // have an array of timestamps
+                         
                     });
-                    // for(var i=0; i < $scope.msgstatus.length; i ++){
-                    //     msgdata.push($scope.msgstatus.tox)
-                    // };
-                    console.log(msgdata);
-                    // console.log($scope.thing)
-                    // for($scope.msgstatus.when_requested in $scope.msgstatus){
-                    //     if($scope.msgstatus.when_requested.hasOwnProperty()){
-                    //         msgdata.push($scope.msgstatus.when_requested)
+                    myEvents = []
+                    // console.log(msgdata.time)
+                    console.log(msgdata.length)
 
-                    //     };
-                    // }
-                    // msgdata.timestamp = $scope.msgstatus.when_requested
-                    // console.log(msgdata)
+                    for (var i = 0; i < msgdata.length; i++){
+                       myEvents.push(new Message(msgdata[i]))
+                    }
+                    console.log(myEvents[1].time)
 
                 }).except(function(data){
                     console.log(data);
