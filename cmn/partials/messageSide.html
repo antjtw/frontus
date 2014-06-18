@@ -14,8 +14,9 @@
                                     <span>
                                         Message sent at {{message_datum.time}} to {{message_datum.tox.length}} shareholder(s)
                                     </span><br/>
-                                    <span ng-click = "showRecipients = !showRecipients"> Recipients</span>
-                                    <span ng-show="showRecipients" data-icon="&#xe033;" aria-hidden="true"></span>
+                                    <div ng-click = "showRecipients = !showRecipients"> Recipients
+                                        <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showRecipients"></span><span data-icon="&#xe034;"aria-hidden="true" ng-show="showRecipients"></span>
+                                    </div>
                                 </li>
                             <ul>
                                 <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">    
