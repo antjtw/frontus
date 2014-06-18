@@ -40,10 +40,11 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
-                    function Message(time, event, tox){
+                    function Message(time, event, tox, category){
                         this.time = time
-                        this.event = event
+                        this.event = []
                         this.tox = []
+                        this.category = category
                     }
                    
                     // msgstatus is an array
@@ -54,18 +55,24 @@ m.directive('messageSide', function(){
                             var timestamp= String(value.when_requested);
                             msgdata.push(timestamp);
                         }
-                        // else if(value.when_requested = )
-                        // have an array of timestamps
                          
                     });
-                    myEvents = []
-                    // console.log(msgdata.time)
-                    console.log(msgdata.length)
+                    var myEvents = []
 
                     for (var i = 0; i < msgdata.length; i++){
                        myEvents.push(new Message(msgdata[i]))
                     }
-                    console.log(myEvents[1].time)
+                    angular.forEach($scope.msgstatus, function(value){
+                        for (var i = 0; i < myEvents.length; i++){
+                            if(value.when_requested == myEvents[i].time){
+                                myEvents[i].category = value.event;
+                                myEvents[i].tox.push(value.tox);
+                                myEvents[i].event.push(value.event);
+                            }
+                        }
+                        return myEvents;
+                    })
+                    console.log(myEvents)
 
                 }).except(function(data){
                     console.log(data);
