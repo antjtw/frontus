@@ -116,16 +116,8 @@
                     </compose-message>
                     <add-person ng-switch-when= "people">
                     </add-person> 
-                </div>
-                <message-side ng-show="showStatus">"test"</message-side>        
+                </div>        
         </div>
-
-
-        <!-- <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
-                showSharebar:!hideSharebar,
-                slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-show="">
-                 <message-side ng-show="showStatus"></message-side>  
-        </div> -->
 
     </div>
 
@@ -133,7 +125,7 @@
     </section>
 
 <!--     rail toggle -->
-<button class="right-rail-button" ng-click="toggleSide(); showStatus =! showStatus" >
+<button class="right-rail-button" ng-click="toggleSide('rail')">
     <span data-icon="&#xe033;" aria-hidden="true"></span>
 </button>
 </div>

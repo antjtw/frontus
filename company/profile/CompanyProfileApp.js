@@ -463,9 +463,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
-        $scope.hideSharebar = true;
+        $scope.hideSharebar = false;
         $scope.sidebarPage = null;
-        $scope.hideRail = false;
+        // $scope.hideRail = false;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -644,9 +644,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return !$scope.hideShareBar;
         };
 
-        $scope.showRail = function(){
-            return !$scope.hideRail;
-        }
+        // $scope.showRail = function(){
+        //     return $scope.hideRail;
+        // }
 
        
 
@@ -679,11 +679,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.toggleRail = function(){
             if (!$scope.hideRail){
-                $scope.hideRail = true
+                $scope.hideRail = false
                 console.log("show rail")
             }
             else
-                $scope.hideRail = false;
+                $scope.hideRail = true;
                 console.log("hideRail")
         }
 
