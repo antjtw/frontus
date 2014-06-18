@@ -675,6 +675,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
           
                // opens sidebar with email
             };
+            console.log($scope.hideSharebar)
         };
 
         $scope.toggleRail = function(){
