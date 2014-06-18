@@ -103,15 +103,14 @@
                 </table>
             </div>
         </div>
-        <!-- this will be where the sidebar switch goes go -->
-           <!-- <div ng-style="viewportheight"  ng-class="{rightNoTableBlock:hideRail, 
-                slidingcss25:oldSafari()}" class="span4 capright button-offset">
-                <div ng-show="showStatus">test</div>
-            </div> -->
+
         <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
+               <!--  <message-side></message-side> -->
+
                 <div ng-switch on="sidebarPage">
+                    <message-side ng-switch-default="rail"></message-side>
                     <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                     </compose-message>
                     <add-person ng-switch-when= "people">
