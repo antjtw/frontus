@@ -571,6 +571,7 @@
         <div class="captable-controls subnav-controls">
             <div>
                 <div class="box-button pull-right"
+                     ng-if="!windowToggle"
                      ng-class="{'disabledme': companyIsZombie()}"
                      ng-click="companyIsZombie() || modalUp();"
                      id='a_own_tour_share_subnav'
@@ -587,6 +588,7 @@
                 </div>
 
                 <div class="box-button pull-right"
+                     ng-if="!windowToggle"
                      ng-class="{'disabledme': companyIsZombie()}"
                      ng-click="companyIsZombie() || editViewToggle();"
                      data-placement="bottom" bs-tooltip="zombiemessage">
@@ -1118,11 +1120,12 @@
                       <span ng-switch-when="2">
 
                         <accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
-                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
+                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);"
+                                         ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
                             <accordion-heading>
                                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
-                                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
-                                <span>{{tran.date | date:settings.shortdate}} Transaction</span>
+                                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1" ng-click="editEvidence()"></span>
+                                <span ng-click="editEvidence()">{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
 
                             <div class="standard-button btn-group darkgray">
@@ -1412,7 +1415,9 @@
                             </div>
                             </accordion-group>
                         </accordion>
-                          <span class="add-transaction-link" ng-click="createTrantab()">
+                          <span class="add-transaction-link"
+                                ng-click="createTrantab()"
+                                ng-if="!windowToggle">
                               <span data-icon="&#xe053;" aria-hidden="true"></span>
                               <span>Add Transaction</span>
                           </span>
@@ -1735,8 +1740,7 @@
                 <td/>
             </tr>
             <tr class="version" ng-show="doc.shown">
-                <td>
-                </td>
+                <td/>
                 <td>
                     <div>
                         <button class="check-box-button" ng-class="{selected:isEvidence(doc)}" ng-click="toggleForEvidence(doc);">
@@ -1752,8 +1756,7 @@
             <tr ng-repeat="invdoc in eligible_evidence"
                 ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
                 class="version" ng-show="doc.shown">
-                <td>
-                </td>
+                <td/>
                 <td>
                     <div>
                         <button class="check-box-button" ng-class="{selected:isEvidence(invdoc)}" ng-click="toggleForEvidence(invdoc);">
@@ -1768,7 +1771,6 @@
             </tr>
         </tbody>
     </table>
-
 </div>
 
 <div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">

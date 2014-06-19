@@ -2193,7 +2193,7 @@ tr.preparedDoc {
 }
 .right-rail-button.showRightTab {
     right: inherit;
-    left: 350px;
+    left: 389px;
     transform: translate(0px);
     -webkit-transform:translate(0px);
 }
@@ -2207,9 +2207,9 @@ tr.preparedDoc {
     position:absolute;
     left: 0;
     top: 100px;
-    width: -moz-calc(100% - 390px);
-    width: -webkit-calc(100% - 390px);
-    width: calc(100% - 390px);
+    width: -moz-calc(100% - 430px);
+    width: -webkit-calc(100% - 430px);
+    width: calc(100% - 430px);
     padding: 20px 20px 20px 20px;
     box-sizing: border-box;
     opacity: 0;
@@ -2222,7 +2222,7 @@ tr.preparedDoc {
     */
 }
 .rightTabWindow.showRightTab {
-    margin-left: 390px;
+    margin-left: 430px;
     opacity: 1;
 }
 .rightTabWindow.ng-leave.ng-leave-active {
@@ -2235,7 +2235,7 @@ tr.preparedDoc {
 }
 .rightTabWindow.ng-leave,
 .rightTabWindow.ng-enter.ng-enter.active {
-    margin-left: 390px;
+    margin-left: 430px;
     opacity: 1;
 }
 .rightTabWindow.ng-leave {

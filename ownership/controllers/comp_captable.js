@@ -1503,6 +1503,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Transaction failed to save, please try entering again");
+                        console.log(x);
                     });
             }
         }
@@ -1694,12 +1695,14 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.windowToggle = true;
         } else {
             $scope.evidence_object = null;
+            $scope.currentTab = 'details';
             $scope.windowToggle = false;
         }
         return $scope.windowToggle;
     };
     $scope.evidenceEquals = function(ev1, ev2) {
-        return (ev1.doc_id && ev2.doc_id && ev1.doc_id==ev2.doc_id && ev1.investor==ev2.investor) || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
+        return (ev1.doc_id && ev2.doc_id && ev1.doc_id==ev2.doc_id && ev1.investor==ev2.investor)
+            || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
     };
     $scope.isEvidence = function(ev) {
         if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
