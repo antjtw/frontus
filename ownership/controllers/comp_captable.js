@@ -92,7 +92,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
 
-    SWBrijj.tblm('document.my_company_eligible_evidence').then(function(data) {
+    SWBrijj.tblm('ownership.my_company_eligible_evidence').then(function(data) {
+        console.log(data);
         $scope.eligible_evidence = data; //data.filter(function(el) {return !el.investor;});
     }).except(function(e) {
         console.log(e);
@@ -155,8 +156,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
     $scope.attachEvidence = function(data) {
+        console.log(data);
         angular.forEach($scope.trans, function(tran) {
-            var this_tran_evidence = data.filter(function(el) { return el.id==tran.evidence; });
+            var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
             tran.evidence_data = this_tran_evidence;
             if (this_tran_evidence.length > 0) {
                 console.log(tran.evidence_data);
@@ -449,7 +451,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         SWBrijj.tblm('ownership.company_row_names').then(function (names) {
             // Get the company's Transactions
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
-                console.log(trans);
                 $scope.trans = trans;
                 if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
                     $rootScope.$on('billingLoaded', function(x) {
@@ -1663,6 +1664,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return true
         }
     };
+    $scope.complexSideToggleButton = function() {
+        if (!$scope.windowToggle) {
+            $scope.sideToggle = !$scope.sideToggle;
+        } else {
+            $scope.editEvidence();
+        }
+    };
     $scope.switchCapTab = function(tab) {
         $scope.currentTab = tab;
     };
@@ -1671,6 +1679,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             obj.shown = true;
         } else {
             obj.shown = !obj.shown;
+        }
+    };
+    $scope.viewEvidence = function(ev) {
+        if (ev.doc_id != null) {
+            window.open('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+        } else if (ev.original != null) {
+            window.open('/app/documents/company-view?doc='+ev.original+'&page=1');
         }
     };
     $scope.editEvidence = function(obj) {
@@ -1683,43 +1698,57 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         return $scope.windowToggle;
     };
+    $scope.evidenceEquals = function(ev1, ev2) {
+        return (ev1.doc_id && ev2.doc_id && ev1.doc_id==ev2.doc_id && ev1.investor==ev2.investor) || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
+    };
     $scope.isEvidence = function(ev) {
-        var found_one = false;
         if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
-            angular.forEach($scope.evidence_object.evidence_data,
-            function(el) {
-                if ( (ev.doc_id && el.doc_id==ev.doc_id)
-                      || (!ev.doc_id && (el.doc_id==ev.original) || (el.original==ev.original)) ) {
-                    found_one = true;
-                }
-            });
-            return found_one;
+            return $scope.evidence_object.evidence_data.filter(function(x) {return $scope.evidenceEquals(ev, x);}).length>0;
         } else {
             return false;
         }
     };
-    $scope.toggleForEvidence = function(ev) {
-        if (ev && $scope.evidence_object.evidence_data) {
-            var evidence_location = $scope.evidence_object.evidence_data.indexOf(ev);
-            if (evidence_location===-1) {
-                $scope.evidence_object.evidence_data.push(ev);
-            } else {
-                $scope.evidence_object.evidence_data.splice(evidence_location);
-            }
-            var new_data = [];
+    $scope.removeEvidence = function(ev) {
+        var index = null;
+        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
+            console.log($scope.evidence_object.evidence_data);
             angular.forEach($scope.evidence_object.evidence_data,
-            function(el) {
-                new_data.push({doc_id: el.doc_id ? el.doc_id : el.original});
+            function(el, idx) {
+                if ($scope.evidenceEquals(el, ev)) {
+                    console.log(el);
+                    console.log(ev);
+                    console.log(idx);
+                    index = idx;
+                }
             });
+            $scope.evidence_object.evidence_data.splice(index);
+        }
+    };
+    $scope.addEvidence = function(ev) {
+        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
+            // assumes ev is not already in evidence_data
+            $scope.evidence_object.evidence_data.push(ev);
+        }
+    };
+    $scope.toggleForEvidence = function(ev) {
+        if (ev && $scope.evidence_object && $scope.evidence_object.evidence_data) {
+            var action = "";
+            if ($scope.isEvidence(ev)) {
+                $scope.removeEvidence(ev);
+                action = "removed";
+            } else {
+                $scope.addEvidence(ev);
+                action = "added";
+            }
+            console.log(JSON.stringify($scope.evidence_object.evidence_data));
             SWBrijj.procm('ownership.upsert_transaction_evidence',
                           $scope.evidence_object.tran_id,
-                          JSON.stringify(new_data)
+                          JSON.stringify($scope.evidence_object.evidence_data)
             ).then(function(r) {
-                console.log(r);
-                //success
+                $scope.$emit("notification:success", "Evidence "+action);
             }).except(function(e) {
+                $scope.$emit("notification:fail", "Evidence "+action);
                 console.log(e);
-                //fail
             });
         }
     };

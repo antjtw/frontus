@@ -2315,8 +2315,16 @@ tr.preparedDoc {
     text-shadow: none;
     box-shadow: none;
 }
+.standard-button > button.btn > span:before {
+    padding-right: 5px;
+    vertical-align: middle;
+}
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
+}
+.standard-button.btn-group.darkgray > .btn.on{
+    background-color: white !important;
+    color: #A6A6A6;
 }
 .box-button {
     width: 76px;
@@ -4470,5 +4478,37 @@ textarea.email-text {
     left: 40%;
 }
 
+.capTab {
+    margin-top: 20px;
+}
+.linkedDocuments {
+    width: 260px;
+    margin-bottom: 20px;
+}
+.linkedDocuments > div > ul {
+    padding-bottom: 14px;
+}
+.linkedDocuments ul > li:first-child > span {
+    color: #3498DB;
+    font-size: 14px !important;
+    cursor: pointer;
+}
+.linkedDocuments ul > li:nth-child(2) > span {
+    font-size: 12px !important;
+}
+.linkedDocuments ul > li:nth-child(2) {
+    line-height: 12px;
+}
+.linkedDocuments > div > span.pull-right {
+    line-height: 32px;
+    cursor: pointer;
+}
+.capTab span.blue-link.delete-link {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
 
-
+.capTab > span.blue-link:before {
+    padding-right: 5px;
+    vertical-align: middle;
+}
