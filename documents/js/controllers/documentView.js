@@ -1026,5 +1026,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on("$destroy", function( event ) {
             $window.onkeydown = null;
         });
+
+        $scope.drawTime = function() {
+            return $scope.isAnnotable && $scope.lib && ((!$scope.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
+        };
     }
 ]);

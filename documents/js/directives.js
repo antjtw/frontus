@@ -163,6 +163,7 @@ app.directive('annotation', function() {
             isAnnotable: "=",
             signatureprocessing: "=",
             removeannot: "&",
+            sigModalUp: "&",
         },
         templateUrl: "/documents/partials/annotation.html",
         controller: annotationController
