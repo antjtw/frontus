@@ -4416,14 +4416,17 @@ textarea.email-text {
 
 /*message sidebar*/
 .span4.capright.showSharebar .message-side{
-    margin-left: -20px;
+   /* margin-left: -20px;*/
     margin-right: -42px;
-    height: 100%;
+
 }
 
 .messages .activity-feed2 {
     height: 100%;
 }
 
+.secondbar {
+    right: -350px;
+}
 
 
